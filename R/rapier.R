@@ -14,20 +14,16 @@ RapierEndpoint <- R6Class(
   public = list(
     verbs = NA,
     uri = NA,
-    includes = NA,
-    excludes = NA,
-    initialize = function(verbs, uri, expr, envir, includes, excludes, lines){
+    prior = NA,
+    initialize = function(verbs, uri, expr, envir, prior, lines){
       self$verbs <- verbs
       self$uri <- uri
 
       private$expr <- expr
       private$envir <- envir
 
-      if (!missing(includes) && !is.null(includes)){
-        self$includes <- includes
-      }
-      if (!missing(excludes) && !is.null(excludes)){
-        self$excludes <- excludes
+      if (!missing(prior) && !is.null(prior)){
+        self$prior <- prior
       }
       if (!missing(lines)){
         private$lines <- lines
@@ -55,6 +51,11 @@ RapierSource <- R6Class(
         stop("File does not exist: ", file)
       }
 
+
+      stopOnLine <- function(line, msg){
+        stop("Error on line #", line, ": '",private$fileLines[line],"' - ", msg)
+      }
+
       private$filename <- file
 
       private$fileLines <- readLines(file)
@@ -73,37 +74,40 @@ RapierSource <- R6Class(
 
         endpoint <- NULL
         verbs <- NULL
-        excludes <- NULL
-        includes <- NULL
+        prior <- NULL
         while (line > 0 && (stri_startswith(private$fileLines[line], fixed="#'") || stri_trim_both(private$fileLines[line]) == "")){
-          epMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*(@(get|put|post|use|delete)\\s+(.+)$)?")
+          epMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@(get|put|post|use|delete)(\\s+(.*)$)?")
           if (!is.na(epMat[1,2])){
             # A rapier annotation, add it.
-            verbs <- c(verbs, enumerateVerbs(epMat[1,3]))
-            endpoint <- epMat[1,4]
+
+            p <- stri_trim_both(epMat[1,4])
+
+            if (is.na(p) || p == ""){
+              stopOnLine(line, "No path specified.")
+            }
+
+            verbs <- c(verbs, enumerateVerbs(epMat[1,2]))
+            endpoint <- p
           }
 
-          inexcludeMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@(in|ex)clude\\s+(.+)\\s*$")
-          if (!is.na(inexcludeMat[1,2])){
-            if (identical(inexcludeMat[1,2], "ex")){
-              if (inexcludeMat[1,3] %in% excludes){
-                stop("Redundant @exclude: ", inexcludeMat[1,3])
-              }
-              excludes <- c(excludes, inexcludeMat[1,3])
+          priorMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@prior(\\s+(.*)\\s*$)?")
+          if (!is.na(priorMat[1,1])){
+            p <- stri_trim_both(priorMat[1,3])
+            if (is.na(p) || p == ""){
+              stopOnLine(line, "No @prior specified")
             }
-            if (identical(inexcludeMat[1,2], "in")){
-              if (inexcludeMat[1,3] %in% includes){
-                stop("Redundant @include: ", inexcludeMat[1,3])
-              }
-              includes <- c(includes, inexcludeMat[1,3])
+            if (!is.null(prior)){
+              # Must have already assigned.
+              stopOnLine(line, "Multiple @priors specified for one function.")
             }
+            prior <- p
           }
 
           line <- line - 1
         }
 
         if (!is.null(endpoint)){
-          self$endpoints <- c(self$endpoints, RapierEndpoint$new(verbs, endpoint, e, private$envir, unique(includes), unique(excludes), srcref))
+          self$endpoints <- c(self$endpoints, RapierEndpoint$new(verbs, endpoint, e, private$envir, prior, srcref))
         }
 
       }

@@ -20,13 +20,6 @@ foo <- function(req, res, forward){
   6
 }
 
-#' no uri, no endpoint
-#' @post
-function(req, res, forward){
-  45
-}
-
-
 #' @post /
 #' one line
 function(req, res, forward){x <- 9; x + 1}
