@@ -9,7 +9,7 @@ function(req, res, forward){
 #' @get /test
 #' @more stuff
 #' hey
-function(req, res, forward){
+foo <- function(req, res, forward){
   5
 }
 

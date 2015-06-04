@@ -13,6 +13,15 @@ test_that("The file is sourced in the envir", {
   expect_equal(r$endpoints[[1]]$exec(1), 15)
 })
 
+test_that("Verbs translate correctly", {
+  r <- RapierSource$new("files/verbs.R")
+  expect_equal(length(r$endpoints), 4)
+  expect_equal(r$endpoints[[1]]$verbs, c("get", "post", "delete"))
+  expect_equal(r$endpoints[[2]]$verbs, "get")
+  expect_equal(r$endpoints[[3]]$verbs, "post")
+  expect_equal(r$endpoints[[4]]$verbs, "delete")
+})
+
 test_that("Invalid file fails gracefully", {
   expect_error(RapierSource$new("asdfsadf"), regexp="File does not exist.*asdfsadf")
 })
