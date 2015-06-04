@@ -1,6 +1,6 @@
-
-library(stringi)
-library(R6)
+#' @import R6
+#' @import stringi
+NULL
 
 enumerateVerbs <- function(v){
   if (identical(v, "use")){
@@ -42,6 +42,10 @@ RapierSource <- R6Class(
   public = list(
     endpoints = NULL,
     initialize = function(file) {
+      if (!file.exists(file)){
+        stop("File does not exist: ", file)
+      }
+
       private$filename <- file
 
       private$fileLines <- readLines(file)
@@ -80,3 +84,10 @@ RapierSource <- R6Class(
     envir = NULL
   )
 )
+
+#' Generate a Rapier API
+#'
+#' @export
+rapier <- function(){
+
+}
