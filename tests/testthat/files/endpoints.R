@@ -7,6 +7,7 @@ function(req, res, forward){
 }
 
 #' @get /test
+#' @post /test
 #' @more stuff
 #' hey
 foo <- function(req, res, forward){

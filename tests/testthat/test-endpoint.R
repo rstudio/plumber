@@ -4,7 +4,7 @@ test_that("Endpoints execute in their environment", {
 
   foo <- parse(text="foo <- function(x){ x + a }")
 
-  r <- RapierEndpoint$new('verb', 'uri', foo, env, 1:2)
+  r <- RapierEndpoint$new('verb', 'uri', foo, env, "a", "b", 1:2)
   expect_equal(r$exec(4), 9)
 })
 
