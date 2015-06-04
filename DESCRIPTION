@@ -1,0 +1,13 @@
+Package: rapier
+Type: Package
+Title: An API Generator for R
+Version: 0.1
+Date: 2015-06-03
+Authors@R: c(
+  person(family="Trestle Technology, LLC", role="aut", email="cran@trestletechnology.net"),
+  person("Jeff", "Allen", role="cre", email="cran@trestletechnology.net"))
+License: MIT + file LICENSE
+Description: Gives the ability to automatically generate and serve an HTTP API from
+  R functions using the annotations in the R documentation around your functions.
+License: MIT + file LICENSE
+LazyData: TRUE
