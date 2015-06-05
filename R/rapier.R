@@ -2,9 +2,11 @@
 #' @import stringi
 NULL
 
+verbs <- c("get", "put", "post", "delete")
+
 enumerateVerbs <- function(v){
   if (identical(v, "use")){
-    return(c("get", "put", "post", "delete"))
+    return(verbs)
   }
   v
 }
@@ -16,6 +18,9 @@ RapierEndpoint <- R6Class(
     uri = NA,
     prior = NA,
     lines = NA,
+    canServe = function(req){
+      stri_startswith_fixed(req$path, self$uri)
+    },
     initialize = function(verbs, uri, expr, envir, prior, lines){
       self$verbs <- verbs
       self$uri <- uri
@@ -42,15 +47,14 @@ RapierEndpoint <- R6Class(
   )
 )
 
-RapierSource <- R6Class(
-  "RapierSource",
+RapierRouter <- R6Class(
+  "RapierRouter",
   public = list(
     endpoints = NULL,
     initialize = function(file) {
       if (!file.exists(file)){
         stop("File does not exist: ", file)
       }
-
 
       stopOnLine <- function(line, msg){
         stop("Error on line #", line, ": '",private$fileLines[line],"' - ", msg)
@@ -119,16 +123,31 @@ RapierSource <- R6Class(
       }
 
     },
-    addEndpoint = function(verbs, uri, expr){
-      self$endpoints <- c(self$endpoints, RapierEndpoint$new(verbs, uri, expr, private$envir))
+    addEndpoint = function(verbs, uri, expr, prior=NULL){
+      self$endpoints <- c(self$endpoints, RapierEndpoint$new(verbs, uri, expr, private$envir, prior))
+      invisible(self)
+    },
+    setErrorHandler = function(expr, prior=NULL){
+      private$errorHandler <- RapierEndpoint$new(verbs, "", expr, private$envir, NULL)
+      invisible(self)
+    },
+    set404Handler = function(expr, prior=NULL){
+      private$notFoundHandler = RapierEndpoint$new(verbs, "", expr, private$envir, NULL)
+    },
+    addFilter = function(filter){
+      private$filters <- c(private$filters, filter)
       invisible(self)
     }
+    #TODO: addRouter() to add sub-routers at a path.
   ),
   private = list(
+    errorHandler = NA,
+    notFoundHandler = NA,
     filename = NA,
     fileLines = NA,
     parsed = NA,
-    envir = NULL
+    envir = NULL,
+    filters = NULL
   )
 )
 

@@ -1,5 +1,5 @@
 test_that("Priors work", {
-  r <- RapierSource$new("files/prior.R")
+  r <- RapierRouter$new("files/prior.R")
   expect_equal(length(r$endpoints), 3)
 
   e <- r$endpoints[[1]]
@@ -13,13 +13,13 @@ test_that("Priors work", {
 })
 
 test_that("Redundant priors fail", {
-  expect_error(RapierSource$new("files/prior-redundant.R"), regexp="Multiple @priors")
+  expect_error(RapierRouter$new("files/prior-redundant.R"), regexp="Multiple @priors")
 })
 
 test_that("Empty priors fail", {
-  expect_error(RapierSource$new("files/prior-empty.R"), regexp="No @prior specified")
+  expect_error(RapierRouter$new("files/prior-empty.R"), regexp="No @prior specified")
 })
 
 test_that("Non-existant priors fail", {
-  expect_error(RapierSource$new("files/prior-nonexistent.R"), regexp="The given @prior")
+  expect_error(RapierRouter$new("files/prior-nonexistent.R"), regexp="The given @prior")
 })
