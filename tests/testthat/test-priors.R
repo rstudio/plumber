@@ -2,13 +2,13 @@ test_that("Priors work", {
   r <- RapierRouter$new("files/prior.R")
   expect_equal(length(r$endpoints), 3)
 
-  e <- r$endpoints[[1]]
+  e <- r$endpoints[["testFun"]][[1]]
   expect_equal(e$prior, "testFun")
 
-  e <- r$endpoints[[2]]
+  e <- r$endpoints[["testFun2"]][[1]]
   expect_equal(e$prior, "testFun2")
 
-  e <- r$endpoints[[3]]
+  e <- r$endpoints[["testFun3"]][[1]]
   expect_equal(e$prior, "testFun3")
 })
 

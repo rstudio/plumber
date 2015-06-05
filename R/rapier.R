@@ -106,7 +106,7 @@ RapierFilter <- R6Class(
 RapierRouter <- R6Class(
   "RapierRouter",
   public = list(
-    endpoints = NULL,
+    endpoints = list(),
     filters = NULL,
     initialize = function(file) {
       if (!file.exists(file)){
@@ -187,7 +187,8 @@ RapierRouter <- R6Class(
         }
 
         if (!is.null(path)){
-          self$endpoints <- c(self$endpoints, RapierEndpoint$new(verbs, path, e, private$envir, prior, srcref))
+          priorName <- ifelse(is.null(prior), "__no-prior__", prior)
+          self$endpoints[[priorName]] <- c(self$endpoints[[priorName]], RapierEndpoint$new(verbs, path, e, private$envir, prior, srcref))
         } else if (!is.null(filter)){
           self$filters <- c(self$filters, RapierFilter$new(filter, e, private$envir, srcref))
         }
@@ -198,11 +199,14 @@ RapierRouter <- R6Class(
         endpointNames <- c(endpointNames, f$name)
       }
 
-      for (e in self$endpoints){
-        if (!is.na(e$prior) && !e$prior %in% endpointNames){
-          stopOnLine(e$lines[1], paste0("The given @prior function does not exist in the rapier environment: '", e$prior, "'"))
+      for (n in names(self$endpoints)){
+        for (e in self$endpoints[[n]]){
+          if (!is.na(e$prior) && !e$prior %in% endpointNames){
+            stopOnLine(e$lines[1], paste0("The given @prior function does not exist in the rapier environment: '", e$prior, "'"))
+          }
         }
       }
+      # TODO check for colliding filter names and endpoint addresses.
 
     },
     addEndpoint = function(verbs, uri, expr, prior=NULL){
@@ -219,6 +223,10 @@ RapierRouter <- R6Class(
     addFilter = function(filter){
       private$filters <- c(private$filters, filter)
       invisible(self)
+    },
+    route = function(req, res){
+      # Start running through filters until we find a matching endpoint.
+
     }
     #TODO: addRouter() to add sub-routers at a path.
   ),
