@@ -16,6 +16,7 @@ RapierEndpoint <- R6Class(
     uri = NA,
     prior = NA,
     name = NA,
+    lines = NA,
     initialize = function(verbs, uri, expr, envir, prior, name, lines){
       self$verbs <- verbs
       self$uri <- uri
@@ -30,7 +31,7 @@ RapierEndpoint <- R6Class(
         self$name <- name
       }
       if (!missing(lines)){
-        private$lines <- lines
+        self$lines <- lines
       }
     }
   ),
@@ -41,8 +42,7 @@ RapierEndpoint <- R6Class(
   ),
   private = list(
     envir = NA,
-    expr = NA,
-    lines = NA
+    expr = NA
   )
 )
 
@@ -137,7 +137,11 @@ RapierSource <- R6Class(
         }
       }
 
-
+      for (e in self$endpoints){
+        if (!is.na(e$prior) && !e$prior %in% endpointNames){
+          stopOnLine(e$lines[1], paste0("No such @prior exists: '", e$prior, "'"))
+        }
+      }
 
     },
     addEndpoint = function(verbs, uri, expr){
