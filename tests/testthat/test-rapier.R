@@ -19,12 +19,12 @@ test_that("Verbs translate correctly", {
   r <- RapierRouter$new("files/verbs.R")
   expect_equal(length(r$endpoints), 1)
   expect_equal(length(r$endpoints[[1]]), 6)
-  expect_equal(r$endpoints[[1]][[1]]$verbs, c("get", "put", "post", "delete"))
-  expect_equal(r$endpoints[[1]][[2]]$verbs, "get")
-  expect_equal(r$endpoints[[1]][[3]]$verbs, "put")
-  expect_equal(r$endpoints[[1]][[4]]$verbs, "post")
-  expect_equal(r$endpoints[[1]][[5]]$verbs, "delete")
-  expect_equal(r$endpoints[[1]][[6]]$verbs, c("post", "get"))
+  expect_equal(r$endpoints[[1]][[1]]$verbs, c("GET", "PUT", "POST", "DELETE"))
+  expect_equal(r$endpoints[[1]][[2]]$verbs, "GET")
+  expect_equal(r$endpoints[[1]][[3]]$verbs, "PUT")
+  expect_equal(r$endpoints[[1]][[4]]$verbs, "POST")
+  expect_equal(r$endpoints[[1]][[5]]$verbs, "DELETE")
+  expect_equal(r$endpoints[[1]][[6]]$verbs, c("POST", "GET"))
 })
 
 test_that("Invalid file fails gracefully", {

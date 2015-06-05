@@ -2,13 +2,13 @@
 #' @import stringi
 NULL
 
-verbs <- c("get", "put", "post", "delete")
+verbs <- toupper(c("get", "put", "post", "delete"))
 
 enumerateVerbs <- function(v){
   if (identical(v, "use")){
     return(verbs)
   }
-  v
+  toupper(v)
 }
 
 RapierStep <- R6Class(
@@ -67,7 +67,8 @@ RapierEndpoint <- R6Class(
     verbs = NA,
     path = NA,
     canServe = function(req){
-      stri_startswith_fixed(req$path, self$path)
+      #TODO: support non-identical paths
+      req$REQUEST_METHOD %in% self$verbs && identical(req$PATH_INFO, self$path)
     },
     initialize = function(verbs, path, expr, envir, prior, lines){
       self$verbs <- verbs
@@ -194,7 +195,8 @@ RapierRouter <- R6Class(
         }
       }
 
-      endpointNames <- NULL
+      #TODO: This logic should probably be in addEndpoint which should be leveraged here.
+      endpointNames <- "__first__"
       for (f in self$filters){
         endpointNames <- c(endpointNames, f$name)
       }
@@ -213,20 +215,63 @@ RapierRouter <- R6Class(
       self$endpoints <- c(self$endpoints, RapierEndpoint$new(verbs, uri, expr, private$envir, prior))
       invisible(self)
     },
-    setErrorHandler = function(expr, prior=NULL){
-      private$errorHandler <- RapierEndpoint$new(verbs, "", expr, private$envir, NULL)
+    setErrorHandler = function(fun){
+      private$errorHandler <- fun
       invisible(self)
     },
-    set404Handler = function(expr, prior=NULL){
-      private$notFoundHandler = RapierEndpoint$new(verbs, "", expr, private$envir, NULL)
+    set404Handler = function(fun){
+      private$notFoundHandler = fun
     },
     addFilter = function(filter){
       private$filters <- c(private$filters, filter)
       invisible(self)
     },
     route = function(req, res){
-      # Start running through filters until we find a matching endpoint.
 
+      getHandle <- function(filt){
+        handlers <- self$endpoints[[filt]]
+        if (!is.null(handlers)){
+          for (h in handlers){
+            if (h$canServe(req)){
+              return(h)
+            }
+          }
+        }
+        NULL
+      }
+
+      tryCatch({
+        h <- getHandle("__first__")
+        if (!is.null(h)){
+          return(h$exec(req=req, res=res))
+        }
+
+        # Start running through filters until we find a matching endpoint.
+        for (i in 1:length(self$filters)){
+          fi <- self$filters[[i]]
+
+          fi$exec(req=req, res=res)
+          # Check for endpoints rooted in this filter.
+          h <- getHandle(fi$name)
+          if (!is.null(h)){
+            return(h$exec(req=req, res=res))
+          }
+        }
+
+        # If we still haven't found a match, check the un-prior'd endpoints.
+        h <- getHandle("__no-prior__")
+        if (!is.null(h)){
+          return(h$exec(req=req, res=res))
+        }
+
+        # No endpoint could handle this request. 404
+        private$notFoundHandler(req=req, res=res)
+        return(NULL)
+      }, error=function(e){
+        # Error when filtering
+        private$errorHandler(req, res, e)
+        return(NULL)
+      })
     }
     #TODO: addRouter() to add sub-routers at a path.
   ),
