@@ -63,22 +63,22 @@ RapierEndpoint <- R6Class(
   "RapierEndpoint",
   inherit = RapierStep,
   public = list(
-    prior = NA,
+    preempt = NA,
     verbs = NA,
     path = NA,
     canServe = function(req){
       #TODO: support non-identical paths
       req$REQUEST_METHOD %in% self$verbs && identical(req$PATH_INFO, self$path)
     },
-    initialize = function(verbs, path, expr, envir, prior, lines){
+    initialize = function(verbs, path, expr, envir, preempt, lines){
       self$verbs <- verbs
       self$path <- path
 
       private$expr <- expr
       private$envir <- envir
 
-      if (!missing(prior) && !is.null(prior)){
-        self$prior <- prior
+      if (!missing(preempt) && !is.null(preempt)){
+        self$preempt <- preempt
       }
       if (!missing(lines)){
         self$lines <- lines
@@ -136,7 +136,7 @@ RapierRouter <- R6Class(
 
         path <- NULL
         verbs <- NULL
-        prior <- NULL
+        preempt <- NULL
         filter <- NULL
         while (line > 0 && (stri_startswith(private$fileLines[line], fixed="#'") || stri_trim_both(private$fileLines[line]) == "")){
           epMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@(get|put|post|use|delete)(\\s+(.*)$)?")
@@ -167,17 +167,17 @@ RapierRouter <- R6Class(
             filter <- f
           }
 
-          priorMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@prior(\\s+(.*)\\s*$)?")
-          if (!is.na(priorMat[1,1])){
-            p <- stri_trim_both(priorMat[1,3])
+          preemptMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@preempt(\\s+(.*)\\s*$)?")
+          if (!is.na(preemptMat[1,1])){
+            p <- stri_trim_both(preemptMat[1,3])
             if (is.na(p) || p == ""){
-              stopOnLine(line, "No @prior specified")
+              stopOnLine(line, "No @preempt specified")
             }
-            if (!is.null(prior)){
+            if (!is.null(preempt)){
               # Must have already assigned.
-              stopOnLine(line, "Multiple @priors specified for one function.")
+              stopOnLine(line, "Multiple @preempts specified for one function.")
             }
-            prior <- p
+            preempt <- p
           }
 
           line <- line - 1
@@ -188,8 +188,8 @@ RapierRouter <- R6Class(
         }
 
         if (!is.null(path)){
-          priorName <- ifelse(is.null(prior), "__no-prior__", prior)
-          self$endpoints[[priorName]] <- c(self$endpoints[[priorName]], RapierEndpoint$new(verbs, path, e, private$envir, prior, srcref))
+          preemptName <- ifelse(is.null(preempt), "__no-preempt__", preempt)
+          self$endpoints[[preemptName]] <- c(self$endpoints[[preemptName]], RapierEndpoint$new(verbs, path, e, private$envir, preempt, srcref))
         } else if (!is.null(filter)){
           self$filters <- c(self$filters, RapierFilter$new(filter, e, private$envir, srcref))
         }
@@ -203,16 +203,16 @@ RapierRouter <- R6Class(
 
       for (n in names(self$endpoints)){
         for (e in self$endpoints[[n]]){
-          if (!is.na(e$prior) && !e$prior %in% endpointNames){
-            stopOnLine(e$lines[1], paste0("The given @prior function does not exist in the rapier environment: '", e$prior, "'"))
+          if (!is.na(e$preempt) && !e$preempt %in% endpointNames){
+            stopOnLine(e$lines[1], paste0("The given @preempt function does not exist in the rapier environment: '", e$preempt, "'"))
           }
         }
       }
       # TODO check for colliding filter names and endpoint addresses.
 
     },
-    addEndpoint = function(verbs, uri, expr, prior=NULL){
-      self$endpoints <- c(self$endpoints, RapierEndpoint$new(verbs, uri, expr, private$envir, prior))
+    addEndpoint = function(verbs, uri, expr, preempt=NULL){
+      self$endpoints <- c(self$endpoints, RapierEndpoint$new(verbs, uri, expr, private$envir, preempt))
       invisible(self)
     },
     setErrorHandler = function(fun){
@@ -250,16 +250,18 @@ RapierRouter <- R6Class(
         for (i in 1:length(self$filters)){
           fi <- self$filters[[i]]
 
-          fi$exec(req=req, res=res)
-          # Check for endpoints rooted in this filter.
+          # Check for endpoints preempting in this filter.
           h <- getHandle(fi$name)
           if (!is.null(h)){
             return(h$exec(req=req, res=res))
           }
+
+          # Execute this filter
+          fi$exec(req=req, res=res)
         }
 
-        # If we still haven't found a match, check the un-prior'd endpoints.
-        h <- getHandle("__no-prior__")
+        # If we still haven't found a match, check the un-preempt'd endpoints.
+        h <- getHandle("__no-preempt__")
         if (!is.null(h)){
           return(h$exec(req=req, res=res))
         }

@@ -1,6 +1,6 @@
 
 #' @get /
-#' @prior __first__
+#' @preempt __first__
 function(){
   "first"
 }
@@ -26,13 +26,13 @@ function(req, res){
 }
 
 #' @use /dog
-#' @prior filt2
+#' @preempt filt2
 function(){
   "dog use"
 }
 
 #' @get /dog
-#' @prior filt1
+#' @preempt filt1
 function(){
   "dog get"
 }

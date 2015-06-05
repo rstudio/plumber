@@ -7,19 +7,19 @@ function(){ }
 #' @filter testFun3
 function(){ }
 
-#' @prior testFun
+#' @preempt testFun
 #' @get /
 function(){
 
 }
 
-#' @prior test
+#' @preempt test
 #' Excluded
 function(){
 
 }
 
-#' @prior testFun2
+#' @preempt testFun2
 #' @get /
 #'
 
@@ -27,7 +27,7 @@ function(){
 
 }
 
-#'@prior testFun3
+#'@preempt testFun3
 #'@post /
 function(){
 
