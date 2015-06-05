@@ -23,11 +23,34 @@ RapierStep <- R6Class(
         self$lines <- lines
       }
     },
-    exec = function(){
-      # Extract the names of the arguments this function supports.
-#      args <- names(formals(eval(private$expr)))
+    exec = function(...){
+      # positional list with names where they were provided.
+      args <- list(...)
 
-      eval(private$expr, envir=private$envir)
+      if (length(args) == 0){
+        unnamedArgs <- NULL
+      } else if (is.null(names(args))){
+        unnamedArgs <- 1:length(args)
+      } else {
+        unnamedArgs <- which(names(args) == "")
+      }
+
+      if (length(unnamedArgs) > 0 ){
+        stop("Can't call a Rapier function with unnammed arguments. Missing names for argument(s) #",
+             paste0(unnamedArgs, collapse=", "),
+             ". Names of argument list was: \"",
+             paste0(names(args), collapse=","), "\"")
+      }
+
+      # Extract the names of the arguments this function supports.
+      fargs <- names(formals(eval(private$expr)))
+
+      if (!"..." %in% fargs){
+        # Use the named arguments that match, drop the rest.
+        args <- args[names(args) %in% fargs]
+      }
+
+      do.call(eval(private$expr, envir=private$envir), args)
     }
   ),
   private = list(

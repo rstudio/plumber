@@ -1,16 +1,16 @@
 test_that("Endpoints are properly identified", {
   r <- RapierRouter$new("files/endpoints.R")
   expect_equal(length(r$endpoints), 4)
-  expect_equal(r$endpoints[[1]]$exec()(), 5)
-  expect_equal(r$endpoints[[2]]$exec()(), 10)
-  expect_equal(r$endpoints[[3]]$exec()(), 12)
-  expect_equal(r$endpoints[[4]]$exec()(), 14)
+  expect_equal(r$endpoints[[1]]$exec(), 5)
+  expect_equal(r$endpoints[[2]]$exec(), 10)
+  expect_equal(r$endpoints[[3]]$exec(), 12)
+  expect_equal(r$endpoints[[4]]$exec(), 14)
 })
 
 test_that("The file is sourced in the envir", {
-  r <- RapierRouter$new("files/hello.R")
+  r <- RapierRouter$new("files/in-env.R")
   expect_equal(length(r$endpoints), 2)
-  expect_equal(r$endpoints[[1]]$exec()(1), 15)
+  expect_equal(r$endpoints[[1]]$exec(), 15)
 })
 
 test_that("Verbs translate correctly", {
