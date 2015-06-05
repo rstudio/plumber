@@ -17,12 +17,12 @@ function(){
 
 #' @filter filt1
 function(req, res){
-
+  forward()
 }
 
 #' @filter filt2
 function(req, res){
-
+  forward()
 }
 
 #' @use /dog

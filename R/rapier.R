@@ -2,6 +2,8 @@
 #' @import stringi
 NULL
 
+.globals <- new.env()
+
 verbs <- toupper(c("get", "put", "post", "delete"))
 
 enumerateVerbs <- function(v){
@@ -113,6 +115,9 @@ RapierRouter <- R6Class(
       if (!file.exists(file)){
         stop("File does not exist: ", file)
       }
+
+      private$errorHandler <- function(req, res, err){ print(err); stop ("Error Handler not implemented!") }
+      private$notFoundHandler <- function(req, res, err){ stop("404 Not Found Handler not implemented!") }
 
       stopOnLine <- function(line, msg){
         stop("Error on line #", line, ": '",private$fileLines[line],"' - ", msg)
@@ -246,6 +251,7 @@ RapierRouter <- R6Class(
           return(h$exec(req=req, res=res))
         }
 
+
         # Start running through filters until we find a matching endpoint.
         for (i in 1:length(self$filters)){
           fi <- self$filters[[i]]
@@ -257,7 +263,13 @@ RapierRouter <- R6Class(
           }
 
           # Execute this filter
-          fi$exec(req=req, res=res)
+          .globals$forwarded <- FALSE
+          fres <- fi$exec(req=req, res=res)
+          if (!.globals$forwarded){
+            # forward() wasn't called, presumably meaning the request was
+            # handled inside of this filter.
+            return(fres)
+          }
         }
 
         # If we still haven't found a match, check the un-preempt'd endpoints.
@@ -278,8 +290,8 @@ RapierRouter <- R6Class(
     #TODO: addRouter() to add sub-routers at a path.
   ),
   private = list(
-    errorHandler = NA,
-    notFoundHandler = NA,
+    errorHandler = NULL,
+    notFoundHandler = NULL,
     filename = NA,
     fileLines = NA,
     parsed = NA,
@@ -292,4 +304,9 @@ RapierRouter <- R6Class(
 #' @export
 rapier <- function(){
 
+}
+
+#' @export
+forward <- function(){
+  .globals$forwarded <- TRUE
 }

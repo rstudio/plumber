@@ -17,3 +17,16 @@ test_that("Empty filters fail", {
 test_that("Filter and path fails", {
   expect_error(RapierRouter$new("files/filterpath.R"), regexp="both a filter and an API endpoint")
 })
+
+make_req <- function(verb, path){
+  req <- new.env()
+  req$REQUEST_METHOD <- toupper(verb)
+  req$PATH_INFO <- path
+  req
+}
+
+test_that("Terminal filters indeed terminate", {
+  res <- list()
+  r <- RapierRouter$new("files/terminal-filter.R")
+  expect_equal(r$route(make_req("GET", "/"), res), 1)
+})
