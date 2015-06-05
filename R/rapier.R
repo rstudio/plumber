@@ -129,17 +129,10 @@ RapierSource <- R6Class(
         }
       }
 
-      # Get a list of named endpoints to make lookup easier momentarily.
-      endpointNames <- NULL
-      for (e in self$endpoints){
-        if (!is.na(e$name)){
-          endpointNames <- c(endpointNames, e$name)
-        }
-      }
-
+      endpointNames <- ls(envir=private$envir)
       for (e in self$endpoints){
         if (!is.na(e$prior) && !e$prior %in% endpointNames){
-          stopOnLine(e$lines[1], paste0("No such @prior exists: '", e$prior, "'"))
+          stopOnLine(e$lines[1], paste0("The given @prior function does not exist in the rapier environment: '", e$prior, "'"))
         }
       }
 

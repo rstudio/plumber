@@ -1,4 +1,14 @@
-#' @prior test
+testFun <- function(){
+  1
+}
+testFun2 <- function(){
+  2
+}
+testFun3 <- function(){
+  3
+}
+
+#' @prior testFun
 #' @get /
 function(){
 
@@ -10,7 +20,7 @@ function(){
 
 }
 
-#' @prior test2
+#' @prior testFun2
 #' @get /
 #'
 
@@ -18,7 +28,7 @@ function(){
 
 }
 
-#'@prior test3
+#'@prior testFun3
 #'@post /
 function(){
 

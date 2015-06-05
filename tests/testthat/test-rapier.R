@@ -31,4 +31,3 @@ test_that("Invalid file fails gracefully", {
 test_that("Empty endpoints error", {
   expect_error(RapierSource$new("files/endpoints-empty.R"), regexp="No path specified")
 })
-
