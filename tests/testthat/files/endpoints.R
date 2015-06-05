@@ -10,7 +10,7 @@ function(req, res, forward){
 #' @post /test
 #' @more stuff
 #' hey
-foo <- function(req, res, forward){
+foo <- function(a, b, ..., req, res, forward){
   5
 }
 

@@ -22,10 +22,11 @@ RapierStep <- R6Class(
       if (!missing(lines)){
         self$lines <- lines
       }
-    }
-  ),
-  active = list(
+    },
     exec = function(){
+      # Extract the names of the arguments this function supports.
+#      args <- names(formals(eval(private$expr)))
+
       eval(private$expr, envir=private$envir)
     }
   ),
