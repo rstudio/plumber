@@ -11,26 +11,14 @@ enumerateVerbs <- function(v){
   v
 }
 
-RapierEndpoint <- R6Class(
-  "RapierEndpoint",
+RapierStep <- R6Class(
+  "RapierStep",
   public = list(
-    verbs = NA,
-    uri = NA,
-    prior = NA,
     lines = NA,
-    canServe = function(req){
-      stri_startswith_fixed(req$path, self$uri)
-    },
-    initialize = function(verbs, uri, expr, envir, prior, lines){
-      self$verbs <- verbs
-      self$uri <- uri
-
+    initialize = function(expr, envir, lines){
       private$expr <- expr
       private$envir <- envir
 
-      if (!missing(prior) && !is.null(prior)){
-        self$prior <- prior
-      }
       if (!missing(lines)){
         self$lines <- lines
       }
@@ -47,10 +35,55 @@ RapierEndpoint <- R6Class(
   )
 )
 
+RapierEndpoint <- R6Class(
+  "RapierEndpoint",
+  inherit = RapierStep,
+  public = list(
+    prior = NA,
+    verbs = NA,
+    path = NA,
+    canServe = function(req){
+      stri_startswith_fixed(req$path, self$path)
+    },
+    initialize = function(verbs, path, expr, envir, prior, lines){
+      self$verbs <- verbs
+      self$path <- path
+
+      private$expr <- expr
+      private$envir <- envir
+
+      if (!missing(prior) && !is.null(prior)){
+        self$prior <- prior
+      }
+      if (!missing(lines)){
+        self$lines <- lines
+      }
+    }
+  )
+)
+
+RapierFilter <- R6Class(
+  "RapierFilter",
+  inherit = RapierStep,
+  public = list(
+    name = NA,
+    initialize = function(name, expr, envir, lines){
+      self$name <- name
+      private$expr <- expr
+      private$envir <- envir
+
+      if (!missing(lines)){
+        self$lines <- lines
+      }
+    }
+  )
+)
+
 RapierRouter <- R6Class(
   "RapierRouter",
   public = list(
     endpoints = NULL,
+    filters = NULL,
     initialize = function(file) {
       if (!file.exists(file)){
         stop("File does not exist: ", file)
@@ -76,14 +109,13 @@ RapierRouter <- R6Class(
         # Check to see if this function was annotated with a rapier annotation
         line <- srcref[1] - 1
 
-        endpoint <- NULL
+        path <- NULL
         verbs <- NULL
         prior <- NULL
+        filter <- NULL
         while (line > 0 && (stri_startswith(private$fileLines[line], fixed="#'") || stri_trim_both(private$fileLines[line]) == "")){
           epMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@(get|put|post|use|delete)(\\s+(.*)$)?")
           if (!is.na(epMat[1,2])){
-            # A rapier annotation, add it.
-
             p <- stri_trim_both(epMat[1,4])
 
             if (is.na(p) || p == ""){
@@ -91,7 +123,23 @@ RapierRouter <- R6Class(
             }
 
             verbs <- c(verbs, enumerateVerbs(epMat[1,2]))
-            endpoint <- p
+            path <- p
+          }
+
+          filterMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@filter(\\s+(.*)$)?")
+          if (!is.na(filterMat[1,1])){
+            f <- stri_trim_both(filterMat[1,3])
+
+            if (is.na(f) || f == ""){
+              stopOnLine(line, "No @filter name specified.")
+            }
+
+            if (!is.null(filter)){
+              # Must have already assigned.
+              stopOnLine(line, "Multiple @filters specified for one function.")
+            }
+
+            filter <- f
           }
 
           priorMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@prior(\\s+(.*)\\s*$)?")
@@ -110,12 +158,22 @@ RapierRouter <- R6Class(
           line <- line - 1
         }
 
-        if (!is.null(endpoint)){
-          self$endpoints <- c(self$endpoints, RapierEndpoint$new(verbs, endpoint, e, private$envir, prior, srcref))
+        if (!is.null(filter) && !is.null(path)){
+          stopOnLine(line, "A single function can't be both a filter and an API endpoint (@filter AND @get, @post, etc.)")
+        }
+
+        if (!is.null(path)){
+          self$endpoints <- c(self$endpoints, RapierEndpoint$new(verbs, path, e, private$envir, prior, srcref))
+        } else if (!is.null(filter)){
+          self$filters <- c(self$filters, RapierFilter$new(filter, e, private$envir, srcref))
         }
       }
 
-      endpointNames <- ls(envir=private$envir)
+      endpointNames <- NULL
+      for (f in self$filters){
+        endpointNames <- c(endpointNames, f$name)
+      }
+
       for (e in self$endpoints){
         if (!is.na(e$prior) && !e$prior %in% endpointNames){
           stopOnLine(e$lines[1], paste0("The given @prior function does not exist in the rapier environment: '", e$prior, "'"))
@@ -146,8 +204,7 @@ RapierRouter <- R6Class(
     filename = NA,
     fileLines = NA,
     parsed = NA,
-    envir = NULL,
-    filters = NULL
+    envir = NULL
   )
 )
 

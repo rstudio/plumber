@@ -1,12 +1,11 @@
-testFun <- function(){
-  1
-}
-testFun2 <- function(){
-  2
-}
-testFun3 <- function(){
-  3
-}
+#' @filter testFun
+function(){ }
+
+#' @filter testFun2
+function(){ }
+
+#' @filter testFun3
+function(){ }
 
 #' @prior testFun
 #' @get /
