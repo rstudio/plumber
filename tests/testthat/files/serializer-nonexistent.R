@@ -1,0 +1,5 @@
+#' @serializer flargdarg
+#' @get /
+function(){
+
+}

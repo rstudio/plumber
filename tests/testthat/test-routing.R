@@ -14,10 +14,10 @@ test_that("Routing to errors and 404s works", {
 
   res <- list()
 
-  expect_equal(r$route(make_req("GET", "/"), res), "first")
-  expect_equal(r$route(make_req("GET", "/abc"), res), "abc get")
-  expect_equal(r$route(make_req("GET", "/dog"), res), "dog get")
-  expect_equal(r$route(make_req("POST", "/dog"), res), "dog use")
+  expect_equal(r$route(make_req("GET", "/"), res)$value, "first")
+  expect_equal(r$route(make_req("GET", "/abc"), res)$value, "abc get")
+  expect_equal(r$route(make_req("GET", "/dog"), res)$value, "dog get")
+  expect_equal(r$route(make_req("POST", "/dog"), res)$value, "dog use")
 
   expect_equal(errors, 0)
   expect_equal(notFounds, 0)

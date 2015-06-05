@@ -28,5 +28,5 @@ make_req <- function(verb, path){
 test_that("Terminal filters indeed terminate", {
   res <- list()
   r <- RapierRouter$new("files/terminal-filter.R")
-  expect_equal(r$route(make_req("GET", "/"), res), 1)
+  expect_equal(r$route(make_req("GET", "/"), res)$value, 1)
 })

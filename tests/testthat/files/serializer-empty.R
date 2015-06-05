@@ -1,0 +1,5 @@
+#' @serializer
+#' @get /
+function(){
+
+}

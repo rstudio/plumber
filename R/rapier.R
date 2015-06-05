@@ -2,7 +2,33 @@
 #' @import stringi
 NULL
 
+jsonSerializer <- function(val, req, res, errorHandler){
+  tryCatch({
+    json <- jsonlite::toJSON(val)
+    return(list(
+      status = 200L,
+      headers = list( 'Content-Type' = 'application/json'),
+      body = json
+    ))
+  }, error=function(e){
+    errorHandler(req, res, e)
+  })
+}
+
+xmlSerializer <- function(val, req, res, errorHandler){
+  if (!requireNamespace("XML", quietly = TRUE)) {
+    stop("The XML package is not available but is required in order to use the XML serializer.",
+         call. = FALSE)
+  }
+
+  stop("XML serialization not yet implemented")
+}
+
 .globals <- new.env()
+.globals$serializers <- list(
+  "json" = jsonSerializer,
+  "xml" = xmlSerializer
+)
 
 verbs <- toupper(c("get", "put", "post", "delete"))
 
@@ -17,12 +43,17 @@ RapierStep <- R6Class(
   "RapierStep",
   public = list(
     lines = NA,
-    initialize = function(expr, envir, lines){
+    serializer = NULL,
+    initialize = function(expr, envir, lines, serializer){
       private$expr <- expr
       private$envir <- envir
 
       if (!missing(lines)){
         self$lines <- lines
+      }
+
+      if (!missing(serializer)){
+        self$serializer <- serializer
       }
     },
     exec = function(...){
@@ -72,7 +103,7 @@ RapierEndpoint <- R6Class(
       #TODO: support non-identical paths
       req$REQUEST_METHOD %in% self$verbs && identical(req$PATH_INFO, self$path)
     },
-    initialize = function(verbs, path, expr, envir, preempt, lines){
+    initialize = function(verbs, path, expr, envir, preempt, serializer, lines){
       self$verbs <- verbs
       self$path <- path
 
@@ -81,6 +112,9 @@ RapierEndpoint <- R6Class(
 
       if (!missing(preempt) && !is.null(preempt)){
         self$preempt <- preempt
+      }
+      if (!missing(serializer) && !is.null(serializer)){
+        self$serializer <- serializer
       }
       if (!missing(lines)){
         self$lines <- lines
@@ -94,11 +128,14 @@ RapierFilter <- R6Class(
   inherit = RapierStep,
   public = list(
     name = NA,
-    initialize = function(name, expr, envir, lines){
+    initialize = function(name, expr, envir, serializer, lines){
       self$name <- name
       private$expr <- expr
       private$envir <- envir
 
+      if (!missing(serializer)){
+        self$serializer <- serializer
+      }
       if (!missing(lines)){
         self$lines <- lines
       }
@@ -143,6 +180,7 @@ RapierRouter <- R6Class(
         verbs <- NULL
         preempt <- NULL
         filter <- NULL
+        serializer <- NULL
         while (line > 0 && (stri_startswith(private$fileLines[line], fixed="#'") || stri_trim_both(private$fileLines[line]) == "")){
           epMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@(get|put|post|use|delete)(\\s+(.*)$)?")
           if (!is.na(epMat[1,2])){
@@ -185,6 +223,24 @@ RapierRouter <- R6Class(
             preempt <- p
           }
 
+          serMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@serializer(\\s+(.*)\\s*$)?")
+          if (!is.na(serMat[1,1])){
+            s <- stri_trim_both(serMat[1,3])
+            if (is.na(s) || s == ""){
+              stopOnLine(line, "No @serializer specified")
+            }
+            if (!is.null(serializer)){
+              # Must have already assigned.
+              stopOnLine(line, "Multiple @serializers specified for one function.")
+            }
+
+            if (!s %in% names(.globals$serializers)){
+              stop("No such @serializer registered: ", s)
+            }
+
+            serializer <- s
+          }
+
           line <- line - 1
         }
 
@@ -194,9 +250,9 @@ RapierRouter <- R6Class(
 
         if (!is.null(path)){
           preemptName <- ifelse(is.null(preempt), "__no-preempt__", preempt)
-          self$endpoints[[preemptName]] <- c(self$endpoints[[preemptName]], RapierEndpoint$new(verbs, path, e, private$envir, preempt, srcref))
+          self$endpoints[[preemptName]] <- c(self$endpoints[[preemptName]], RapierEndpoint$new(verbs, path, e, private$envir, preempt, serializer, srcref))
         } else if (!is.null(filter)){
-          self$filters <- c(self$filters, RapierFilter$new(filter, e, private$envir, srcref))
+          self$filters <- c(self$filters, RapierFilter$new(filter, e, private$envir, serializer, srcref))
         }
       }
 
@@ -213,6 +269,7 @@ RapierRouter <- R6Class(
           }
         }
       }
+
       # TODO check for colliding filter names and endpoint addresses.
 
     },
@@ -231,8 +288,22 @@ RapierRouter <- R6Class(
       private$filters <- c(private$filters, filter)
       invisible(self)
     },
-    route = function(req, res){
+    serve = function(req, res){
+      ret <- self$route(req, res)
+      val <- ret$value
+      ser <- ret$serializer
 
+      if (is.null(ser) || ser == ""){
+        ser <- jsonSerializer
+      } else if (ser %in% names(.globals$serializers)){
+        ser <- .globals$serializers[[ser]]
+      } else {
+        stop("Can't identify serializer '", ser, "'")
+      }
+
+      ser(val, req, res, private$errorHandler)
+    },
+    route = function(req, res){
       getHandle <- function(filt){
         handlers <- self$endpoints[[filt]]
         if (!is.null(handlers)){
@@ -248,34 +319,36 @@ RapierRouter <- R6Class(
       tryCatch({
         h <- getHandle("__first__")
         if (!is.null(h)){
-          return(h$exec(req=req, res=res))
+          return(list(serializer = h$serializer, value = h$exec(req=req, res=res)))
         }
 
 
-        # Start running through filters until we find a matching endpoint.
-        for (i in 1:length(self$filters)){
-          fi <- self$filters[[i]]
+        if (length(self$filters) > 0){
+          # Start running through filters until we find a matching endpoint.
+          for (i in 1:length(self$filters)){
+            fi <- self$filters[[i]]
 
-          # Check for endpoints preempting in this filter.
-          h <- getHandle(fi$name)
-          if (!is.null(h)){
-            return(h$exec(req=req, res=res))
-          }
+            # Check for endpoints preempting in this filter.
+            h <- getHandle(fi$name)
+            if (!is.null(h)){
+              return(list(serializer = h$serializer, value = h$exec(req=req, res=res)))
+            }
 
-          # Execute this filter
-          .globals$forwarded <- FALSE
-          fres <- fi$exec(req=req, res=res)
-          if (!.globals$forwarded){
-            # forward() wasn't called, presumably meaning the request was
-            # handled inside of this filter.
-            return(fres)
+            # Execute this filter
+            .globals$forwarded <- FALSE
+            fres <- fi$exec(req=req, res=res)
+            if (!.globals$forwarded){
+              # forward() wasn't called, presumably meaning the request was
+              # handled inside of this filter.
+              return(list(serializer = fi$serializer, value = fres))
+            }
           }
         }
 
         # If we still haven't found a match, check the un-preempt'd endpoints.
         h <- getHandle("__no-preempt__")
         if (!is.null(h)){
-          return(h$exec(req=req, res=res))
+          return(list(serializer = h$serializer, value = h$exec(req=req, res=res)))
         }
 
         # No endpoint could handle this request. 404
@@ -309,4 +382,12 @@ rapier <- function(){
 #' @export
 forward <- function(){
   .globals$forwarded <- TRUE
+}
+
+#' @export
+addSerializer <- function(name, serializer){
+  if (!is.null(.globals$serializers[[name]])){
+    stop ("Already have a serializer by the name of ", name)
+  }
+  .globals$serializers[[name]] <- serializer
 }
