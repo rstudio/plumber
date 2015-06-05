@@ -15,9 +15,8 @@ RapierEndpoint <- R6Class(
     verbs = NA,
     uri = NA,
     prior = NA,
-    name = NA,
     lines = NA,
-    initialize = function(verbs, uri, expr, envir, prior, name, lines){
+    initialize = function(verbs, uri, expr, envir, prior, lines){
       self$verbs <- verbs
       self$uri <- uri
 
@@ -26,9 +25,6 @@ RapierEndpoint <- R6Class(
 
       if (!missing(prior) && !is.null(prior)){
         self$prior <- prior
-      }
-      if (!missing(name) && !is.null(name)){
-        self$name <- name
       }
       if (!missing(lines)){
         self$lines <- lines
@@ -79,7 +75,6 @@ RapierSource <- R6Class(
         endpoint <- NULL
         verbs <- NULL
         prior <- NULL
-        name <- NULL
         while (line > 0 && (stri_startswith(private$fileLines[line], fixed="#'") || stri_trim_both(private$fileLines[line]) == "")){
           epMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@(get|put|post|use|delete)(\\s+(.*)$)?")
           if (!is.na(epMat[1,2])){
@@ -108,24 +103,11 @@ RapierSource <- R6Class(
             prior <- p
           }
 
-          nameMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@name(\\s+(.*)\\s*$)?")
-          if (!is.na(nameMat[1,1])){
-            n <- stri_trim_both(nameMat[1,3])
-            if (is.na(n) || n == ""){
-              stopOnLine(line, "No @name specified")
-            }
-            if (!is.null(name)){
-              # Must have already assigned.
-              stopOnLine(line, "Multiple @names specified for one function.")
-            }
-            name <- n
-          }
-
           line <- line - 1
         }
 
         if (!is.null(endpoint)){
-          self$endpoints <- c(self$endpoints, RapierEndpoint$new(verbs, endpoint, e, private$envir, prior, name, srcref))
+          self$endpoints <- c(self$endpoints, RapierEndpoint$new(verbs, endpoint, e, private$envir, prior, srcref))
         }
       }
 
