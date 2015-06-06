@@ -143,6 +143,7 @@ RapierFilter <- R6Class(
   )
 )
 
+#' @export
 RapierRouter <- R6Class(
   "RapierRouter",
   public = list(
@@ -273,6 +274,16 @@ RapierRouter <- R6Class(
       # TODO check for colliding filter names and endpoint addresses.
 
     },
+    call = function(req){ #httpuv interface
+      res <- list()
+      self$serve(req, res)
+    },
+    onHeaders = function(req){ #httpuv interface
+      NULL
+    },
+    onWSOpen = function(ws){ #httpuv interface
+      warning("WebSockets not supported")
+    },
     addEndpoint = function(verbs, uri, expr, preempt=NULL){
       self$endpoints <- c(self$endpoints, RapierEndpoint$new(verbs, uri, expr, private$envir, preempt))
       invisible(self)
@@ -372,10 +383,14 @@ RapierRouter <- R6Class(
   )
 )
 
-#' Generate a Rapier API
-#'
 #' @export
-rapier <- function(){
+serve <- function(router, host='0.0.0.0', port=8000){
+  message("Starting server to listen on port ", 8000)
+  tryCatch( httpuv::runServer(host, port, router),
+            error=function(e){
+              print(str(e))
+            }
+  )
 
 }
 
