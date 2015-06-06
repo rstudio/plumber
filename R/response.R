@@ -11,9 +11,13 @@ RapierResponse <- R6Class(
       self$headers[[name]] <- value
     },
     toResponse = function(){
+      h <- self$headers
+      # httpuv doesn't like empty headers lists, and this is a useful field anyway...
+      h$Date <- format(Sys.time(), "%a, %d %b %Y %X %Z", tz="GMT")
+
       list(
         status = self$status,
-        headers = self$headers,
+        headers = h,
         body = self$body
       )
     }

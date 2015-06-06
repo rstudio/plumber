@@ -254,9 +254,9 @@ RapierRouter <- R6Class(
 )
 
 #' @export
-serve <- function(router, host='0.0.0.0', port=8000){
+serve <- function(router, host='0.0.0.0', port=8000, debug=TRUE){
+  .globals$debug <- debug
   message("Starting server to listen on port ", port)
   httpuv::runServer(host, port, router)
-
 }
 

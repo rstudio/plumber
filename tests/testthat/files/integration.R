@@ -25,3 +25,9 @@ function(req, res){
 function(req, res){
   list(name=req$username)
 }
+
+#' @get /error
+#' @preempt auth
+function(req, res){
+  stop("I throw an error!")
+}
