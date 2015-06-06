@@ -11,16 +11,17 @@ function(){
 function(req, res){
   if (!stri_startswith_fixed(req$QUERY_STRING, "?user=")){
     # Don't continue
-    stop("Unauthenticated")
+    res$status <- 401
+    return(list(err="Not authorized"))
   }
 
-  user <- substr(req$QUERY_STRING, 6, nchar(req$QUERY_STRING))
-  res$username <- user
+  user <- substr(req$QUERY_STRING, 7, nchar(req$QUERY_STRING))
+  req$username <- user
 
   forward()
 }
 
 #' @get /me
 function(req, res){
-  list(name=res$username)
+  list(name=req$username)
 }

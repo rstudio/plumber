@@ -6,7 +6,7 @@ make_req <- function(verb, path){
 }
 
 test_that("JSON is the default serializer", {
-  res <- list()
+  res <- RapierResponse$new()
 
   r <- RapierRouter$new("files/router.R")
   expect_equal(r$serve(make_req("GET", "/"), res)$headers$`Content-Type`, "application/json")

@@ -2,146 +2,16 @@
 #' @import stringi
 NULL
 
-jsonSerializer <- function(val, req, res, errorHandler){
-  tryCatch({
-    json <- jsonlite::toJSON(val)
-    return(list(
-      status = 200L,
-      headers = list( 'Content-Type' = 'application/json'),
-      body = json
-    ))
-  }, error=function(e){
-    errorHandler(req, res, e)
-  })
-}
-
-xmlSerializer <- function(val, req, res, errorHandler){
-  if (!requireNamespace("XML", quietly = TRUE)) {
-    stop("The XML package is not available but is required in order to use the XML serializer.",
-         call. = FALSE)
-  }
-
-  stop("XML serialization not yet implemented")
-}
-
 .globals <- new.env()
-.globals$serializers <- list(
-  "json" = jsonSerializer,
-  "xml" = xmlSerializer
-)
+.globals$serializers <- list()
 
-verbs <- toupper(c("get", "put", "post", "delete"))
-
+verbs <- c("GET", "PUT", "POST", "DELETE")
 enumerateVerbs <- function(v){
   if (identical(v, "use")){
     return(verbs)
   }
   toupper(v)
 }
-
-RapierStep <- R6Class(
-  "RapierStep",
-  public = list(
-    lines = NA,
-    serializer = NULL,
-    initialize = function(expr, envir, lines, serializer){
-      private$expr <- expr
-      private$envir <- envir
-
-      if (!missing(lines)){
-        self$lines <- lines
-      }
-
-      if (!missing(serializer)){
-        self$serializer <- serializer
-      }
-    },
-    exec = function(...){
-      # positional list with names where they were provided.
-      args <- list(...)
-
-      if (length(args) == 0){
-        unnamedArgs <- NULL
-      } else if (is.null(names(args))){
-        unnamedArgs <- 1:length(args)
-      } else {
-        unnamedArgs <- which(names(args) == "")
-      }
-
-      if (length(unnamedArgs) > 0 ){
-        stop("Can't call a Rapier function with unnammed arguments. Missing names for argument(s) #",
-             paste0(unnamedArgs, collapse=", "),
-             ". Names of argument list was: \"",
-             paste0(names(args), collapse=","), "\"")
-      }
-
-      # Extract the names of the arguments this function supports.
-      fargs <- names(formals(eval(private$expr)))
-
-      if (!"..." %in% fargs){
-        # Use the named arguments that match, drop the rest.
-        args <- args[names(args) %in% fargs]
-      }
-
-      do.call(eval(private$expr, envir=private$envir), args)
-    }
-  ),
-  private = list(
-    envir = NA,
-    expr = NA
-  )
-)
-
-RapierEndpoint <- R6Class(
-  "RapierEndpoint",
-  inherit = RapierStep,
-  public = list(
-    preempt = NA,
-    verbs = NA,
-    path = NA,
-    canServe = function(req){
-      #TODO: support non-identical paths
-      req$REQUEST_METHOD %in% self$verbs && identical(req$PATH_INFO, self$path)
-    },
-    initialize = function(verbs, path, expr, envir, preempt, serializer, lines){
-      self$verbs <- verbs
-      self$path <- path
-
-      private$expr <- expr
-      private$envir <- envir
-
-      if (!missing(preempt) && !is.null(preempt)){
-        self$preempt <- preempt
-      }
-      if (!missing(serializer) && !is.null(serializer)){
-        self$serializer <- serializer
-      }
-      if (!missing(lines)){
-        self$lines <- lines
-      }
-    }
-  )
-)
-
-RapierFilter <- R6Class(
-  "RapierFilter",
-  inherit = RapierStep,
-  public = list(
-    name = NA,
-    initialize = function(name, expr, envir, serializer, lines){
-      self$name <- name
-      private$expr <- expr
-      private$envir <- envir
-
-      if (!missing(serializer)){
-        self$serializer <- serializer
-      }
-      if (!missing(lines)){
-        self$lines <- lines
-      }
-    }
-  )
-)
 
 #' @export
 RapierRouter <- R6Class(
@@ -154,8 +24,8 @@ RapierRouter <- R6Class(
         stop("File does not exist: ", file)
       }
 
-      private$errorHandler <- function(req, res, err){ print(err); stop ("Error Handler not implemented!") }
-      private$notFoundHandler <- function(req, res, err){ stop("404 Not Found Handler not implemented!") }
+      private$errorHandler <- defaultErrorHandler
+      private$notFoundHandler <- default404Handler
 
       stopOnLine <- function(line, msg){
         stop("Error on line #", line, ": '",private$fileLines[line],"' - ", msg)
@@ -275,7 +145,7 @@ RapierRouter <- R6Class(
 
     },
     call = function(req){ #httpuv interface
-      res <- list()
+      res <- RapierResponse$new()
       self$serve(req, res)
     },
     onHeaders = function(req){ #httpuv interface
@@ -364,11 +234,11 @@ RapierRouter <- R6Class(
 
         # No endpoint could handle this request. 404
         private$notFoundHandler(req=req, res=res)
-        return(NULL)
+        return(list(serializer="null", value = res$body))
       }, error=function(e){
         # Error when filtering
         private$errorHandler(req, res, e)
-        return(NULL)
+        return(list(serializer="null", value = res$body))
       })
     }
     #TODO: addRouter() to add sub-routers at a path.
@@ -385,24 +255,8 @@ RapierRouter <- R6Class(
 
 #' @export
 serve <- function(router, host='0.0.0.0', port=8000){
-  message("Starting server to listen on port ", 8000)
-  tryCatch( httpuv::runServer(host, port, router),
-            error=function(e){
-              print(str(e))
-            }
-  )
+  message("Starting server to listen on port ", port)
+  httpuv::runServer(host, port, router)
 
 }
 
-#' @export
-forward <- function(){
-  .globals$forwarded <- TRUE
-}
-
-#' @export
-addSerializer <- function(name, serializer){
-  if (!is.null(.globals$serializers[[name]])){
-    stop ("Already have a serializer by the name of ", name)
-  }
-  .globals$serializers[[name]] <- serializer
-}
