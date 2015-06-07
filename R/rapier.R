@@ -201,11 +201,15 @@ RapierRouter <- R6Class(
       }
 
       tryCatch({
+        # Get args out of the query string, + req/res
+        args <- queryStringParser(req, res)
+        args[["res"]] <- res
+        args[["req"]] <- req
+
         h <- getHandle("__first__")
         if (!is.null(h)){
-          return(list(serializer = h$serializer, value = h$exec(req=req, res=res)))
+          return(list(serializer = h$serializer, value = do.call(h$exec, args)))
         }
-
 
         if (length(self$filters) > 0){
           # Start running through filters until we find a matching endpoint.
@@ -215,12 +219,12 @@ RapierRouter <- R6Class(
             # Check for endpoints preempting in this filter.
             h <- getHandle(fi$name)
             if (!is.null(h)){
-              return(list(serializer = h$serializer, value = h$exec(req=req, res=res)))
+              return(list(serializer = h$serializer, value = do.call(h$exec, args)))
             }
 
             # Execute this filter
             .globals$forwarded <- FALSE
-            fres <- fi$exec(req=req, res=res)
+            fres <- do.call(fi$exec, args)
             if (!.globals$forwarded){
               # forward() wasn't called, presumably meaning the request was
               # handled inside of this filter.
@@ -232,7 +236,7 @@ RapierRouter <- R6Class(
         # If we still haven't found a match, check the un-preempt'd endpoints.
         h <- getHandle("__no-preempt__")
         if (!is.null(h)){
-          return(list(serializer = h$serializer, value = h$exec(req=req, res=res)))
+          return(list(serializer = h$serializer, value = do.call(h$exec, args)))
         }
 
         # No endpoint could handle this request. 404

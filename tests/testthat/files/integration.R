@@ -3,8 +3,8 @@ library(stringi)
 
 #' @preempt auth
 #' @use /
-function(){
-  list(msg="Welcome to the root URL!")
+function(a=1){
+  list(msg=paste0("Welcome to the root URL! a = ", a))
 }
 
 #' @filter auth
