@@ -203,6 +203,7 @@ RapierRouter <- R6Class(
       tryCatch({
         # Get args out of the query string, + req/res
         args <- queryStringParser(req, res)
+        args <- c(args, postBodyParser(req, res))
         args[["res"]] <- res
         args[["req"]] <- req
 

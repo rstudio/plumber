@@ -1,6 +1,10 @@
 queryStringParser <- function(req, res){
   qs <- req$QUERY_STRING
-  if (is.null(qs) || qs == ""){
+  parseQS(qs)
+}
+
+parseQS <- function(qs){
+  if (is.null(qs) || length(qs) == 0 || qs == ""){
     return(list())
   }
   if (stri_startswith_fixed(qs, "?")){
