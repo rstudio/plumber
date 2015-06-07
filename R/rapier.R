@@ -169,13 +169,16 @@ RapierRouter <- R6Class(
       private$filters <- c(private$filters, filter)
       invisible(self)
     },
+    setSerializer = function(name){
+      private$defaultSerializer <- name
+    },
     serve = function(req, res){
       ret <- self$route(req, res)
       val <- ret$value
       ser <- ret$serializer
 
       if (is.null(ser) || ser == ""){
-        ser <- jsonSerializer
+        ser <- .globals$serializers[[private$defaultSerializer]]
       } else if (ser %in% names(.globals$serializers)){
         ser <- .globals$serializers[[ser]]
       } else {
@@ -249,7 +252,8 @@ RapierRouter <- R6Class(
     filename = NA,
     fileLines = NA,
     parsed = NA,
-    envir = NULL
+    envir = NULL,
+    defaultSerializer = "json"
   )
 )
 
