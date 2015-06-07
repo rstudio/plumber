@@ -17,7 +17,14 @@ addTwo <- function(a, b){
 }
 ```
 
-Calling `RapierRouter$new("myfile.R")` would make your R function available as an API endpoint. You can visit this URL to run your R function and get the results.
+These annotations allow rapier to make your R functions available as API endpoints. 
+
+```r
+r <- RapierRouter$new("myfile.R") # Where 'myfile.R' is the location of the file shown above
+serve(r, port=8000)
+```
+
+You can visit this URL using a browser or a terminal to run your R function and get the results. Here we're using `curl` via a Mac/Linux terminal.
 
 ```
 $ curl "http://localhost:8000/mean"
