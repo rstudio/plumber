@@ -13,7 +13,7 @@ normalMean <- function(samples=10){
 
 #' @post /sum
 addTwo <- function(a, b){
-  a + b
+  as.numeric(a) + as.numeric(b)
 }
 ```
 
