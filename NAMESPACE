@@ -3,6 +3,6 @@
 export(RapierRouter)
 export(addSerializer)
 export(forward)
-export(serve)
+export(rapier)
 import(R6)
 import(stringi)

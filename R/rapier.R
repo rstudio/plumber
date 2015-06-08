@@ -19,6 +19,7 @@ RapierRouter <- R6Class(
   public = list(
     endpoints = list(),
     filters = NULL,
+    debug = TRUE,
     initialize = function(file) {
       if (!file.exists(file)){
         stop("File does not exist: ", file)
@@ -248,6 +249,11 @@ RapierRouter <- R6Class(
         private$errorHandler(req, res, e)
         return(list(serializer="null", value = res$body))
       })
+    },
+    run = function(host='0.0.0.0', port=8000){
+      .globals$debug <- self$debug
+      message("Starting server to listen on port ", port)
+      httpuv::runServer(host, port, self)
     }
     #TODO: addRouter() to add sub-routers at a path.
   ),
@@ -262,10 +268,8 @@ RapierRouter <- R6Class(
   )
 )
 
+#' Create a new rapier router.
 #' @export
-serve <- function(router, host='0.0.0.0', port=8000, debug=TRUE){
-  .globals$debug <- debug
-  message("Starting server to listen on port ", port)
-  httpuv::runServer(host, port, router)
+rapier <- function(file){
+  RapierRouter$new(file)
 }
-
