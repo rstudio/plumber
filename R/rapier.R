@@ -52,6 +52,8 @@ RapierRouter <- R6Class(
         verbs <- NULL
         preempt <- NULL
         filter <- NULL
+        png <- FALSE
+        jpeg <- FALSE
         serializer <- NULL
         while (line > 0 && (stri_startswith(private$fileLines[line], fixed="#'") || stri_trim_both(private$fileLines[line]) == "")){
           epMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@(get|put|post|use|delete)(\\s+(.*)$)?")
@@ -113,7 +115,34 @@ RapierRouter <- R6Class(
             serializer <- s
           }
 
+          pngMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@png(\\s+(.*)\\s*$)?")
+          if (!is.na(pngMat[1,1])){
+            if (png){
+              # Must have already assigned.
+              stopOnLine(line, "Multiple @png annotations on one function.")
+            }
+            png <- TRUE
+          }
+
+          jpegMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@jpeg(\\s+(.*)\\s*$)?")
+          if (!is.na(jpegMat[1,1])){
+            if (jpeg){
+              # Must have already assigned.
+              stopOnLine(line, "Multiple @jpeg annotations on one function.")
+            }
+            jpeg <- TRUE
+          }
+
           line <- line - 1
+        }
+
+        if ((jpeg || png) && !is.null(serializer)){
+          warning("A @serializer definition on a @png/@jpeg function is meaningless and will be ignored.")
+          if (png){
+            serializer <- "png"
+          } else if (jpeg){
+            serializer <- "jpeg"
+          }
         }
 
         if (!is.null(filter) && !is.null(path)){
