@@ -9,7 +9,7 @@ RapierStep <- R6Class(
   public = list(
     lines = NA,
     serializer = NULL,
-    initialize = function(expr, envir, lines, serializer){
+    initialize = function(expr, envir, lines, serializer, processors){
       private$expr <- expr
       private$envir <- envir
 
@@ -20,10 +20,18 @@ RapierStep <- R6Class(
       if (!missing(serializer)){
         self$serializer <- serializer
       }
+
+      if (!missing(processors)){
+        private$processors <- processors
+      }
     },
     exec = function(...){
       # positional list with names where they were provided.
       args <- list(...)
+
+      for (p in private$processors){
+        p$pre()
+      }
 
       if (length(args) == 0){
         unnamedArgs <- NULL
@@ -48,12 +56,19 @@ RapierStep <- R6Class(
         args <- args[names(args) %in% fargs]
       }
 
-      do.call(eval(private$expr, envir=private$envir), args)
+      val <- do.call(eval(private$expr, envir=private$envir), args)
+
+      for (p in private$processors){
+        val <- p$post(val)
+      }
+
+      val
     }
   ),
   private = list(
     envir = NA,
-    expr = NA
+    expr = NA,
+    processors = NULL
   )
 )
 
@@ -68,7 +83,7 @@ RapierEndpoint <- R6Class(
       #TODO: support non-identical paths
       req$REQUEST_METHOD %in% self$verbs && identical(req$PATH_INFO, self$path)
     },
-    initialize = function(verbs, path, expr, envir, preempt, serializer, lines){
+    initialize = function(verbs, path, expr, envir, preempt, serializer, processors, lines){
       self$verbs <- verbs
       self$path <- path
 
@@ -84,6 +99,9 @@ RapierEndpoint <- R6Class(
       if (!missing(lines)){
         self$lines <- lines
       }
+      if (!missing(processors)){
+        private$processors <- processors
+      }
     }
   )
 )
@@ -93,7 +111,7 @@ RapierFilter <- R6Class(
   inherit = RapierStep,
   public = list(
     name = NA,
-    initialize = function(name, expr, envir, serializer, lines){
+    initialize = function(name, expr, envir, serializer, processors, lines){
       self$name <- name
       private$expr <- expr
       private$envir <- envir
@@ -103,6 +121,9 @@ RapierFilter <- R6Class(
       }
       if (!missing(lines)){
         self$lines <- lines
+      }
+      if (!missing(processors)){
+        private$processors <- processors
       }
     }
   )

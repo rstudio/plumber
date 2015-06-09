@@ -4,6 +4,7 @@ NULL
 
 .globals <- new.env()
 .globals$serializers <- list()
+.globals$processors <- list()
 
 verbs <- c("GET", "PUT", "POST", "DELETE")
 enumerateVerbs <- function(v){
@@ -52,8 +53,7 @@ RapierRouter <- R6Class(
         verbs <- NULL
         preempt <- NULL
         filter <- NULL
-        png <- FALSE
-        jpeg <- FALSE
+        image <- NULL
         serializer <- NULL
         while (line > 0 && (stri_startswith(private$fileLines[line], fixed="#'") || stri_trim_both(private$fileLines[line]) == "")){
           epMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@(get|put|post|use|delete)(\\s+(.*)$)?")
@@ -115,34 +115,23 @@ RapierRouter <- R6Class(
             serializer <- s
           }
 
-          pngMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@png(\\s+(.*)\\s*$)?")
-          if (!is.na(pngMat[1,1])){
-            if (png){
+          imageMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@(jpeg|png)(\\s+(.*)\\s*$)?")
+          if (!is.na(imageMat[1,1])){
+            if (!is.null(image)){
               # Must have already assigned.
-              stopOnLine(line, "Multiple @png annotations on one function.")
+              stopOnLine(line, "Multiple image annotations on one function.")
             }
-            png <- TRUE
-          }
-
-          jpegMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@jpeg(\\s+(.*)\\s*$)?")
-          if (!is.na(jpegMat[1,1])){
-            if (jpeg){
-              # Must have already assigned.
-              stopOnLine(line, "Multiple @jpeg annotations on one function.")
-            }
-            jpeg <- TRUE
+            image <- imageMat[1,2]
           }
 
           line <- line - 1
         }
 
-        if ((jpeg || png) && !is.null(serializer)){
-          warning("A @serializer definition on a @png/@jpeg function is meaningless and will be ignored.")
-          if (png){
-            serializer <- "png"
-          } else if (jpeg){
-            serializer <- "jpeg"
-          }
+        processors <- NULL
+        if (!is.null(image) && !is.null(.globals$processors[[image]])){
+          processors <- list(.globals$processors[[image]])
+        } else if (!is.null(image)){
+          stop("Image processor not found: ", image)
         }
 
         if (!is.null(filter) && !is.null(path)){
@@ -151,9 +140,9 @@ RapierRouter <- R6Class(
 
         if (!is.null(path)){
           preemptName <- ifelse(is.null(preempt), "__no-preempt__", preempt)
-          self$endpoints[[preemptName]] <- c(self$endpoints[[preemptName]], RapierEndpoint$new(verbs, path, e, private$envir, preempt, serializer, srcref))
+          self$endpoints[[preemptName]] <- c(self$endpoints[[preemptName]], RapierEndpoint$new(verbs, path, e, private$envir, preempt, serializer, processors, srcref))
         } else if (!is.null(filter)){
-          self$filters <- c(self$filters, RapierFilter$new(filter, e, private$envir, serializer, srcref))
+          self$filters <- c(self$filters, RapierFilter$new(filter, e, private$envir, serializer, processors, srcref))
         }
       }
 
@@ -230,16 +219,23 @@ RapierRouter <- R6Class(
         NULL
       }
 
+
+      structureArgs <- function(val, serializer){
+        list(serializer = serializer, value = val)
+      }
+
+      # Get args out of the query string, + req/res
+      args <- queryStringParser(req, res)
+      args <- c(args, postBodyParser(req, res))
+      args[["res"]] <- res
+      args[["req"]] <- req
+
       tryCatch({
-        # Get args out of the query string, + req/res
-        args <- queryStringParser(req, res)
-        args <- c(args, postBodyParser(req, res))
-        args[["res"]] <- res
-        args[["req"]] <- req
 
         h <- getHandle("__first__")
         if (!is.null(h)){
-          return(list(serializer = h$serializer, value = do.call(h$exec, args)))
+
+          return(structureArgs(do.call(h$exec, args), h$serializer))
         }
 
         if (length(self$filters) > 0){
@@ -250,7 +246,7 @@ RapierRouter <- R6Class(
             # Check for endpoints preempting in this filter.
             h <- getHandle(fi$name)
             if (!is.null(h)){
-              return(list(serializer = h$serializer, value = do.call(h$exec, args)))
+              return(structureArgs(do.call(h$exec, args), h$serializer))
             }
 
             # Execute this filter
@@ -259,7 +255,7 @@ RapierRouter <- R6Class(
             if (!.globals$forwarded){
               # forward() wasn't called, presumably meaning the request was
               # handled inside of this filter.
-              return(list(serializer = fi$serializer, value = fres))
+              return(structureArgs(fres, fi$serializer))
             }
           }
         }
@@ -267,16 +263,16 @@ RapierRouter <- R6Class(
         # If we still haven't found a match, check the un-preempt'd endpoints.
         h <- getHandle("__no-preempt__")
         if (!is.null(h)){
-          return(list(serializer = h$serializer, value = do.call(h$exec, args)))
+          return(structureArgs(do.call(h$exec, args), h$serializer))
         }
 
         # No endpoint could handle this request. 404
         private$notFoundHandler(req=req, res=res)
-        return(list(serializer="null", value = res$body))
+        return(structureArgs(res$body, "null"))
       }, error=function(e){
         # Error when filtering
         private$errorHandler(req, res, e)
-        return(list(serializer="null", value = res$body))
+        return(structureArgs(res$body, "null"))
       })
     },
     run = function(host='0.0.0.0', port=8000){
