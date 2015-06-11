@@ -206,5 +206,19 @@ pre {
 /**
  * Forms
  */
-#post {
+.empty-result {
+  color: #CCC;
+}
+
+.clear {
+  clear: both;
+}
+
+.right-title {
+  float: right;
+}
+
+
+.fixed-width {
+  font-family: monospace;
 }
