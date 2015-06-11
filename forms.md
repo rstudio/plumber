@@ -6,20 +6,20 @@ permalink: /forms/
 
 Web browser forms can easily encode the values of their inputs in either a GET or POST request. Modern browsers can also create other types of requests including PUT and DELETE. It's perfectly sensible to use rapier as an endpoint for these types of requests from the browser.
 
-Below you'll find a web application that uses [jQuery](http://jquery.com/) to send requests to a rapier API which processes those requests. You can edit the slider inputs to preview what the request would look like before submitting it to the API.
+Below on the left you'll find a web application that uses [jQuery](http://jquery.com/) to send requests to a rapier API which processes those requests. You can edit the slider inputs to preview what the request would look like before submitting it to the API. The code for the rapier API is included on the right so you can see how each endpoint would behave.
 
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 right-border">
       <h3 class="right-title fixed-width">POST /append</h3>
       <div class="clear"></div>
       <input type="text" name="val" value="" id="post-value" />
       <pre id="value-url"></pre>
       <div class="row">
         <div class="col-md-2">
-          <button id="post-btn" type="submit" class="btn btn-primary">Submit</button>
+          <button id="post-btn" type="submit" class="btn btn-primary">Post</button>
         </div>
         <div class="col-md-10">
-          <pre id="post-result" class="empty-result">Click "Submit" to see the response.</pre>
+          <pre id="post-result" class="empty-result">Click "Post" to see the response.</pre>
         </div>
       </div>
 
@@ -32,26 +32,36 @@ Below you'll find a web application that uses [jQuery](http://jquery.com/) to se
         <input type="text" name="val" value="" id="tail-value" />
         <div class="row">
           <div class="col-md-2">
-            <button id="tail-btn" type="submit" class="btn btn-primary">Submit</button>
+            <button id="tail-btn" type="submit" class="btn btn-primary">Get</button>
           </div>
           <div class="col-md-10">
             <pre id="tail-url"></pre>
           </div>
         </div>
-        <pre id="tail-result" class="empty-result">Click "Submit" to see the response.</pre>
+        <pre id="tail-result" class="empty-result">Click "Get" to see the response.</pre>
       </div>
       
       <hr />
 
       <h3 class="right-title fixed-width">GET /graph</h3>
       <div class="clear"></div>
-      <div>
-        <pre>GET {{ site.rapier_url }}/graph</pre>
+      <div class="row">
+        <div class="col-md-2">
+          <button id ="graph-btn" class="btn btn-primary">Get</button>
+        </div>
+        <div class="col-md-10">
+          <pre>GET {{ site.rapier_url }}/graph</pre>
+        </div>
         <img id="plot" />
       </div>
     </div>
+    <div class="col-md-6">
+      <h3 class="fixed-width">appender.R</h3>
+      {% highlight r %}
+        {% include R/appender.R %}
+      {% endhighlight %}
+    </div>
   </div>
-
 
 
 <script type="text/javascript">
@@ -74,7 +84,6 @@ Below you'll find a web application that uses [jQuery](http://jquery.com/) to se
       },
     });
 
-
     function updatePostURLs(){
       var val = $('#post-value').val();
       $('#value-url').text('POST {val: ' + val + '} -> {{ site.rapier_url }}/append');
@@ -87,15 +96,15 @@ Below you'll find a web application that uses [jQuery](http://jquery.com/) to se
 
     function updateOutput(res){
       if (res){
-        $('#post-result').text(JSON.stringify(res)).removeClass('empty-result');
+        $('#post-result').fadeOut(100).text(JSON.stringify(res)).removeClass('empty-result').fadeOut(100).fadeIn(100);
       }
 
       return $.get('{{ site.rapier_url }}/tail?n=' + $('#tail-value').val())
       .done(function(tail){
-        $('#tail-result').text(tail.val).removeClass('empty-result');
+        $('#tail-result').text(tail.val).removeClass('empty-result').fadeOut(100).fadeIn(100);
         return $.get('{{ site.rapier_url }}/graph')
         .done(function(img){
-          $('#plot').attr('src', 'data:image/png;base64,' + img);
+          $('#plot').attr('src', 'data:image/png;base64,' + img).fadeOut(100).fadeIn(100);
         });
       });
     }
@@ -108,7 +117,7 @@ Below you'll find a web application that uses [jQuery](http://jquery.com/) to se
     $('#tail-btn').click(function(){
       $.get('{{ site.rapier_url }}/tail?n=' + $('#tail-value').val())
       .done(function(tail){
-        $('#tail-result').text(tail.val).removeClass('empty-result');
+        $('#tail-result').text(tail.val).removeClass('empty-result').fadeOut(100).fadeIn(100);
       })
       .fail(function(err){
         console.log(err);
@@ -124,5 +133,13 @@ Below you'll find a web application that uses [jQuery](http://jquery.com/) to se
         console.log(err);
       });
     })
+
+    $('#graph-btn').click(function(){
+      return $.get('{{ site.rapier_url }}/graph')
+      .done(function(img){
+        $('#plot').attr('src', 'data:image/png;base64,' + img).fadeOut(100).fadeIn(100);
+      });
+    });
+
   });
 </script>
