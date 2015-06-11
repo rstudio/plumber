@@ -3,8 +3,8 @@ title: rapier
 email: rapier@trestletech.com
 description: > # this means to ignore newlines until "baseurl:"
   An R package that generates a web API from the R code you already have.
-baseurl: "/rapier" # the subpath of your site, e.g. /blog/
-url: "https://trestletech.github.io" # the base hostname & protocol for your site
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "https://rapier.trestletech.com" # the base hostname & protocol for your site
 twitter_username: trestleJeff
 github_username:  trestletech
 rapier_url: http://localhost:8000
