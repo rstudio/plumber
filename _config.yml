@@ -7,7 +7,7 @@ baseurl: "" # the subpath of your site, e.g. /blog/
 url: "https://rapier.trestletech.com" # the base hostname & protocol for your site
 twitter_username: trestleJeff
 github_username:  trestletech
-rapier_url: http://localhost:8000
+rapier_url: http://rapier.tres.tl/append
 
 # Build settings
 markdown: kramdown
