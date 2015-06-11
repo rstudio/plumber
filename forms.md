@@ -8,7 +8,6 @@ Web browser forms can easily encode the values of their inputs in either a GET o
 
 Below you'll find a web application that uses [jQuery](http://jquery.com/) to send requests to a rapier API which processes those requests. You can edit the slider inputs to preview what the request would look like before submitting it to the API.
 
-<div class="container">
   <div class="row">
     <div class="col-md-6">
       <h3 class="right-title fixed-width">POST /append</h3>
@@ -52,7 +51,7 @@ Below you'll find a web application that uses [jQuery](http://jquery.com/) to se
       </div>
     </div>
   </div>
-</div>
+
 
 
 <script type="text/javascript">
