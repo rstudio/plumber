@@ -1,0 +1,13 @@
+# Site settings
+title: rapier
+email: rapier@trestletech.com
+description: > # this means to ignore newlines until "baseurl:"
+  rapier allows you to create REST-like APIs by merely decorating your
+  R source code with special comments.
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "https://trestletech.github.io/rapier" # the base hostname & protocol for your site
+twitter_username: trestleJeff
+github_username:  trestletech
+
+# Build settings
+markdown: kramdown
