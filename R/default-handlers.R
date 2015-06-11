@@ -1,3 +1,4 @@
+#' @import rapier.R
 default404Handler <- function(req, res){
   res$status <- 404
   res$setHeader("Content-Type", "text/html")
