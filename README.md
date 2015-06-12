@@ -1,3 +1,5 @@
+![rapier logo](http://rapier.trestletech.com/components/images/rapier-med.png)
+
 # rapier
 
 > WARNING: rapier is under active development and function names, parameter names, and behavior are all subject to change. So don't go crazy...
