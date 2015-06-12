@@ -2,22 +2,15 @@
 layout: default
 ---
 
-<div class="home">
+<div class="container theme-showcase" role="main">
 
-  <h1 class="page-heading">Posts</h1>
+  <div class="jumbotron">
+  <img src="components/images/rapier.png" class="img-responsive center-block" />
+    <h1>rapier</h1>
+    <p>An R package that converts your existing R code to a web API using a handful of special one-line comments.</p>
+  </div>
 
-  <ul class="post-list">
-    {% for post in site.posts %}
-      <li>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
-
-        <h2>
-          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-        </h2>
-      </li>
-    {% endfor %}
-  </ul>
-
-  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
+{% capture intro %}{% include intro.md %}{% endcapture %}
+{{ intro | markdownify }}
 
 </div>

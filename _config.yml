@@ -1,6 +1,6 @@
 # Site settings
 title: rapier
-email: rapier@trestletech.com
+email: 
 description: > # this means to ignore newlines until "baseurl:"
   An R package that generates a web API from the R code you already have.
 baseurl: "" # the subpath of your site, e.g. /blog/

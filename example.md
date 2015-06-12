@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Forms
-permalink: /forms/
+title: Example
+permalink: /example/
 ---
 
 Web browser forms can easily encode the values of their inputs in either a GET or POST request. Modern browsers can also create other types of requests including PUT and DELETE. It's perfectly sensible to use rapier as an endpoint for these types of requests from the browser.
@@ -101,7 +101,7 @@ Below on the left you'll find a web application that uses [jQuery](http://jquery
 
       return $.get('{{ site.rapier_url }}/tail?n=' + $('#tail-value').val())
       .done(function(tail){
-        $('#tail-result').text(tail.val).removeClass('empty-result').fadeOut(100).fadeIn(100);
+        $('#tail-result').text(JSON.stringify(tail)).removeClass('empty-result').fadeOut(100).fadeIn(100);
         return $.get('{{ site.rapier_url }}/graph')
         .done(function(img){
           $('#plot').attr('src', 'data:image/png;base64,' + img).fadeOut(100).fadeIn(100);
@@ -117,7 +117,7 @@ Below on the left you'll find a web application that uses [jQuery](http://jquery
     $('#tail-btn').click(function(){
       $.get('{{ site.rapier_url }}/tail?n=' + $('#tail-value').val())
       .done(function(tail){
-        $('#tail-result').text(tail.val).removeClass('empty-result').fadeOut(100).fadeIn(100);
+        $('#tail-result').text(JSON.stringify(tail)).removeClass('empty-result').fadeOut(100).fadeIn(100);
       })
       .fail(function(err){
         console.log(err);
