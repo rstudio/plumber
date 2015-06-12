@@ -1,6 +1,6 @@
 # rapier
 
-rapier allows you to create a REST API by merely decorating your R source code with special annotations. Take a look at an example.
+rapier allows you to create a REST API by merely decorating your existing R source code with special comments. Take a look at an example.
 
 ```r
 # myfile.R
@@ -17,7 +17,7 @@ addTwo <- function(a, b){
 }
 ```
 
-These annotations allow rapier to make your R functions available as API endpoints. 
+These comments allow rapier to make your R functions available as API endpoints. 
 
 ```r
 > library(rapier)
@@ -39,4 +39,14 @@ As you might have guessed, the request's query string parameters are forwarded t
 ```
 $ curl --data "a=4&b=3" "http://localhost:8000/sum"
  [7]
+```
+
+## Installation
+
+Currently rapier is not available on CRAN, so you'll need to install it from GitHub. The easiest way to do that is by using `devtools`.
+
+```r
+library(devtools)
+install_github("trestletech/rapier")
+library(rapier)
 ```
