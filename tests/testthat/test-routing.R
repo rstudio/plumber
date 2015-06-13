@@ -10,8 +10,12 @@ test_that("Routing to errors and 404s works", {
   r <- RapierRouter$new("files/router.R")
   errors <- 0
   notFounds <- 0
-  r$setErrorHandler(function(req, res, err){ errors <<- errors + 1 })
-  r$set404Handler(function(req, res){ notFounds <<- notFounds + 1 })
+
+  errRes <- list(a=1)
+  notFoundRes <- list(b=2)
+
+  r$setErrorHandler(function(req, res, err){ errors <<- errors + 1; errRes })
+  r$set404Handler(function(req, res){ notFounds <<- notFounds + 1; notFoundRes })
 
   res <- list()
 
@@ -23,9 +27,13 @@ test_that("Routing to errors and 404s works", {
   expect_equal(errors, 0)
   expect_equal(notFounds, 0)
 
-  r$route(make_req("GET", "/something-crazy"), res)
+  nf <- r$route(make_req("GET", "/something-crazy"), res)
+  expect_equal(nf$serializer, "json")
+  expect_equal(nf$value, notFoundRes)
   expect_equal(notFounds, 1)
 
-  r$route(make_req("GET", "/error"), res)
+  er <- r$route(make_req("GET", "/error"), res)
+  expect_equal(er$serializer, "json")
+  expect_equal(er$value, errRes)
   expect_equal(errors, 1)
 })

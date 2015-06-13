@@ -267,12 +267,12 @@ RapierRouter <- R6Class(
         }
 
         # No endpoint could handle this request. 404
-        private$notFoundHandler(req=req, res=res)
-        return(structureArgs(res$body, "null"))
+        val <- private$notFoundHandler(req=req, res=res)
+        return(structureArgs(val, private$defaultSerializer))
       }, error=function(e){
         # Error when filtering
-        private$errorHandler(req, res, e)
-        return(structureArgs(res$body, "null"))
+        val <- private$errorHandler(req, res, e)
+        return(structureArgs(val, private$defaultSerializer))
       })
     },
     run = function(host='0.0.0.0', port=8000){
