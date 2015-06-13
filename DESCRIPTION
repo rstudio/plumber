@@ -29,6 +29,7 @@ Collate:
     'query-string.R'
     'rapier-step.R'
     'response.R'
+    'serializer-html.R'
     'serializer-json.R'
     'serializer-xml.R'
     'serializer.R'
