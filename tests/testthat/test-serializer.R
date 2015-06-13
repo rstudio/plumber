@@ -43,6 +43,14 @@ test_that("Overridden serializers apply on filters and endpoints", {
   res <- RapierResponse$new("json")
   expect_equal(r$serve(make_req("GET", "/another"), res)$body, "CUSTOM2")
   expect_equal(res$serializer, "custom2")
+
+  res <- RapierResponse$new()
+  expect_equal(r$serve(make_req("GET", "/short-json"), res)$body, jsonlite::toJSON("JSON"))
+  expect_equal(res$serializer, "json")
+
+  res <- RapierResponse$new()
+  expect_equal(r$serve(make_req("GET", "/short-html"), res)$body, "HTML")
+  expect_equal(res$serializer, "html")
 })
 
 test_that("Overridding the attached serializer in code works.", {

@@ -30,3 +30,15 @@ function(req, res){
   res$serializer <- "custom2"
   5
 }
+
+#' @get /short-json
+#' @json
+function(){
+  "JSON"
+}
+
+#' @get /short-html
+#' @html
+function(){
+  "HTML"
+}

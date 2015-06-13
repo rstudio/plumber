@@ -115,6 +115,21 @@ RapierRouter <- R6Class(
             serializer <- s
           }
 
+          shortSerMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@(json|html)")
+          if (!is.na(shortSerMat[1,2])){
+            s <- stri_trim_both(shortSerMat[1,2])
+            if (!is.null(serializer)){
+              # Must have already assigned.
+              stopOnLine(line, "Multiple @serializers specified for one function (shorthand serializers like @json count, too).")
+            }
+
+            if (!is.na(s) && !s %in% names(.globals$serializers)){
+              stop("No such @serializer registered: ", s)
+            }
+
+            serializer <- s
+          }
+
           imageMat <- stringi::stri_match(private$fileLines[line], regex="^#'\\s*@(jpeg|png)(\\s+(.*)\\s*$)?")
           if (!is.na(imageMat[1,1])){
             if (!is.null(image)){
