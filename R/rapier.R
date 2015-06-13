@@ -164,7 +164,7 @@ RapierRouter <- R6Class(
 
     },
     call = function(req){ #httpuv interface
-      res <- RapierResponse$new()
+      res <- RapierResponse$new(private$defaultSerializer)
       self$serve(req, res)
     },
     onHeaders = function(req){ #httpuv interface
@@ -192,9 +192,8 @@ RapierRouter <- R6Class(
       private$defaultSerializer <- name
     },
     serve = function(req, res){
-      ret <- self$route(req, res)
-      val <- ret$value
-      ser <- ret$serializer
+      val <- self$route(req, res)
+      ser <- res$serializer
 
       if (is.null(ser) || ser == ""){
         ser <- .globals$serializers[[private$defaultSerializer]]
@@ -219,11 +218,6 @@ RapierRouter <- R6Class(
         NULL
       }
 
-
-      structureArgs <- function(val, serializer){
-        list(serializer = serializer, value = val)
-      }
-
       # Get args out of the query string, + req/res
       args <- queryStringParser(req, res)
       args <- c(args, postBodyParser(req, res))
@@ -234,8 +228,10 @@ RapierRouter <- R6Class(
 
         h <- getHandle("__first__")
         if (!is.null(h)){
-
-          return(structureArgs(do.call(h$exec, args), h$serializer))
+          if (!is.null(h$serializer)){
+            res$serializer <- h$serializer
+          }
+          return(do.call(h$exec, args))
         }
 
         if (length(self$filters) > 0){
@@ -246,7 +242,10 @@ RapierRouter <- R6Class(
             # Check for endpoints preempting in this filter.
             h <- getHandle(fi$name)
             if (!is.null(h)){
-              return(structureArgs(do.call(h$exec, args), h$serializer))
+              if (!is.null(h$serializer)){
+                res$serializer <- h$serializer
+              }
+              return(do.call(h$exec, args))
             }
 
             # Execute this filter
@@ -255,7 +254,10 @@ RapierRouter <- R6Class(
             if (!.globals$forwarded){
               # forward() wasn't called, presumably meaning the request was
               # handled inside of this filter.
-              return(structureArgs(fres, fi$serializer))
+              if (!is.null(fi$serializer)){
+                res$serializer <- fi$serializer
+              }
+              return(fres)
             }
           }
         }
@@ -263,16 +265,19 @@ RapierRouter <- R6Class(
         # If we still haven't found a match, check the un-preempt'd endpoints.
         h <- getHandle("__no-preempt__")
         if (!is.null(h)){
-          return(structureArgs(do.call(h$exec, args), h$serializer))
+          if (!is.null(h$serializer)){
+            res$serializer <- h$serializer
+          }
+          return(do.call(h$exec, args))
         }
 
         # No endpoint could handle this request. 404
         val <- private$notFoundHandler(req=req, res=res)
-        return(structureArgs(val, private$defaultSerializer))
+        return(val)
       }, error=function(e){
         # Error when filtering
         val <- private$errorHandler(req, res, e)
-        return(structureArgs(val, private$defaultSerializer))
+        return(val)
       })
     },
     run = function(host='0.0.0.0', port=8000){

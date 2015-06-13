@@ -11,3 +11,22 @@ function(req, res){
     forward()
   }
 }
+
+#' @filter foo2
+function(req, res, type=""){
+  if (type == "json"){
+    res$serializer <- "json"
+  }
+  forward()
+}
+
+#' @get /something
+function(){
+  4
+}
+
+#' @get /another
+function(req, res){
+  res$serializer <- "custom2"
+  5
+}

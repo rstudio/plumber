@@ -1,12 +1,13 @@
 RapierResponse <- R6Class(
   "RapierResponse",
   public = list(
-    initialize = function(){
-
+    initialize = function(serializer="json"){
+      self$serializer <- serializer
     },
     status = 200L,
     body = NULL,
     headers = list(),
+    serializer = NULL,
     setHeader = function(name, value){
       self$headers[[name]] <- value
     },
