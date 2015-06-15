@@ -19,9 +19,11 @@ Imports:
 LazyData: TRUE
 Suggests:
     testthat,
-    XML
+    XML,
+    rmarkdown
 Collate:
     'default-handlers.R'
+    'includes.R'
     'post-body.R'
     'rapier.R'
     'processor.R'

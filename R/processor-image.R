@@ -19,7 +19,9 @@ RapierProcessor$new(
     con <- file(data$file, "rb")
     img <- readBin(con, "raw", file.info(data$file)$size)
     close(con)
-    httpuv::rawToBase64(img)
+    res$body <- httpuv::rawToBase64(img)
+    res$setHeader("Content-type", "image/jpeg")
+    res
   }
 )
 
@@ -42,6 +44,8 @@ RapierProcessor$new(
     con <- file(data$file, "rb")
     img <- readBin(con, "raw", file.info(data$file)$size)
     close(con)
-    httpuv::rawToBase64(img)
+    res$body <- httpuv::rawToBase64(img)
+    res$setHeader("Content-type", "image/png")
+    res
   }
 )

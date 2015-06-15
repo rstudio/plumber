@@ -41,3 +41,10 @@ function(){
 function(){
   stop("ERROR")
 }
+
+#' @get /response
+function(res){
+  res$body <- "overridden"
+  res$status <- 123
+  res
+}

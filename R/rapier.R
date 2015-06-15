@@ -221,7 +221,12 @@ RapierRouter <- R6Class(
         stop("Can't identify serializer '", ser, "'")
       }
 
-      ser(val, req, res, private$errorHandler)
+      if ("RapierResponse" %in% class(val)){
+        # They returned the response directly, don't serialize.
+        res$toResponse()
+      } else {
+        ser(val, req, res, private$errorHandler)
+      }
     },
     route = function(req, res){
       getHandle <- function(filt){
@@ -303,6 +308,7 @@ RapierRouter <- R6Class(
       })
     },
     run = function(host='0.0.0.0', port=8000){
+      # TODO: setwd to file path
       .globals$debug <- self$debug
       message("Starting server to listen on port ", port)
       httpuv::runServer(host, port, self)

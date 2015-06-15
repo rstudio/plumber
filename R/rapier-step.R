@@ -59,7 +59,7 @@ RapierStep <- R6Class(
       val <- do.call(eval(private$expr, envir=private$envir), args)
 
       for (p in private$processors){
-        val <- p$post(val)
+        val <- p$post(val, ...)
       }
 
       val
