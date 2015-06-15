@@ -316,7 +316,7 @@ RapierRouter <- R6Class(
       if (!is.null(private$filename)){
         cwd <- getwd()
         on.exit({ setwd(cwd) })
-        setwd(firname(private$filename))
+        setwd(dirname(private$filename))
       }
 
       httpuv::runServer(host, port, self)
