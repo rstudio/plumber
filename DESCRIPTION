@@ -22,10 +22,10 @@ Suggests:
     XML,
     rmarkdown
 Collate:
+    'rapier.R'
     'default-handlers.R'
     'includes.R'
     'post-body.R'
-    'rapier.R'
     'processor.R'
     'processor-image.R'
     'query-string.R'

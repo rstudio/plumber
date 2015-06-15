@@ -1,4 +1,4 @@
-#' @import rapier.R
+#' @include rapier.R
 default404Handler <- function(req, res){
   res$status <- 404
   list(error="404 - Resource Not Found")
