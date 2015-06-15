@@ -1,5 +1,8 @@
 #' @export
 addSerializer <- function(name, serializer){
+  if (is.null(.globals$serializers)){
+    .globals$serializers <- list()
+  }
   if (!is.null(.globals$serializers[[name]])){
     stop ("Already have a serializer by the name of ", name)
   }

@@ -36,6 +36,7 @@ test_that("Overridden serializers apply on filters and endpoints", {
   expect_equal(r$serve(req, res)$body, "CUSTOM")
   res$serializer <- "custom"
 
+  req <- make_req("GET", "/something")
   req$QUERY_STRING <- "type=json"
   expect_equal(r$serve(req, res)$body, jsonlite::toJSON(4))
   res$serializer <- "json"

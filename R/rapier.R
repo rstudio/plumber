@@ -33,6 +33,9 @@ RapierRouter <- R6Class(
         stop("Error on line #", line, ": '",private$fileLines[line],"' - ", msg)
       }
 
+      self$filters <- c(self$filters, RapierFilter$new("queryString", queryStringFilter, private$envir, private$defaultSerializer, NULL, NULL))
+      self$filters <- c(self$filters, RapierFilter$new("postBody", postBodyFilter, private$envir, private$defaultSerializer, NULL, NULL))
+
       private$filename <- file
 
       private$fileLines <- readLines(file)
@@ -238,10 +241,8 @@ RapierRouter <- R6Class(
       if (!is.null(req$args)){
         args <- req$args
       }
-      args <- c(args, queryStringParser(req, res))
-      args <- c(args, postBodyParser(req, res))
-      args[["res"]] <- res
-      args[["req"]] <- req
+      args$res <- res
+      args$req <- req
 
       req$args <- args
 
@@ -252,7 +253,7 @@ RapierRouter <- R6Class(
           if (!is.null(h$serializer)){
             res$serializer <- h$serializer
           }
-          return(do.call(h$exec, args))
+          return(do.call(h$exec, req$args))
         }
 
         if (length(self$filters) > 0){
@@ -266,12 +267,12 @@ RapierRouter <- R6Class(
               if (!is.null(h$serializer)){
                 res$serializer <- h$serializer
               }
-              return(do.call(h$exec, args))
+              return(do.call(h$exec, req$args))
             }
 
             # Execute this filter
             .globals$forwarded <- FALSE
-            fres <- do.call(fi$exec, args)
+            fres <- do.call(fi$exec, req$args)
             if (!.globals$forwarded){
               # forward() wasn't called, presumably meaning the request was
               # handled inside of this filter.
@@ -289,7 +290,7 @@ RapierRouter <- R6Class(
           if (!is.null(h$serializer)){
             res$serializer <- h$serializer
           }
-          return(do.call(h$exec, args))
+          return(do.call(h$exec, req$args))
         }
 
         # No endpoint could handle this request. 404

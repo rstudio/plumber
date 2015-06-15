@@ -1,6 +1,8 @@
-queryStringParser <- function(req, res){
+queryStringFilter <- function(req){
   qs <- req$QUERY_STRING
-  parseQS(qs)
+  args <- parseQS(qs)
+  req$args <- c(req$args, args)
+  forward()
 }
 
 parseQS <- function(qs){
