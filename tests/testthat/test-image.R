@@ -8,10 +8,10 @@ make_req <- function(verb, path){
 
 test_that("Images are properly rendered", {
   r <- RapierRouter$new("files/image.R")
-  resp <- r$serve(make_req("GET", "/png"), RapierResponse$new("json"))
+  resp <- r$serve(make_req("GET", "/png"), RapierResponse$new())
 
   expect_equal(length(resp$body), 13044) # This may change with changes to base graphics that slightly alter the plot format. But we'll start here.
 
-  resp <- r$serve(make_req("GET", "/jpeg"), RapierResponse$new("json"))
+  resp <- r$serve(make_req("GET", "/jpeg"), RapierResponse$new())
   expect_equal(length(resp$body), 13958) # This may change with changes to base graphics that slightly alter the plot format. But we'll start here.
 })

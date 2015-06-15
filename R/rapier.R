@@ -182,6 +182,10 @@ RapierRouter <- R6Class(
 
     },
     call = function(req){ #httpuv interface
+      # For some reason req$args is included in subsequent httpuv requests. Recycling req objects?
+      # TODO: ensure req objects aren't recycled so we don't have to sanitize here.
+      req$args <- list()
+
       res <- RapierResponse$new(private$defaultSerializer)
       self$serve(req, res)
     },

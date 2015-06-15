@@ -26,40 +26,16 @@ RapierStep <- R6Class(
       }
     },
     exec = function(...){
-      # positional list with names where they were provided.
-      args <- list(...)
-
       for (p in private$processors){
-        p$pre()
+        p$pre(...)
       }
 
-      if (length(args) == 0){
-        unnamedArgs <- NULL
-      } else if (is.null(names(args))){
-        unnamedArgs <- 1:length(args)
-      } else {
-        unnamedArgs <- which(names(args) == "")
-      }
-
-      if (length(unnamedArgs) > 0 ){
-        stop("Can't call a Rapier function with unnammed arguments. Missing names for argument(s) #",
-             paste0(unnamedArgs, collapse=", "),
-             ". Names of argument list was: \"",
-             paste0(names(args), collapse=","), "\"")
-      }
-
-      # Extract the names of the arguments this function supports.
-      fargs <- names(formals(eval(private$expr)))
-
-      if (!"..." %in% fargs){
-        # Use the named arguments that match, drop the rest.
-        args <- args[names(args) %in% fargs]
-      }
-
+      args <- getRelevantArgs(list(...), rapierExpression=private$expr)
       val <- do.call(eval(private$expr, envir=private$envir), args)
 
       for (p in private$processors){
-        val <- p$post(val, ...)
+        li <- c(list(value=val), ...)
+        val <- do.call(p$post, li)
       }
 
       val
@@ -71,6 +47,36 @@ RapierStep <- R6Class(
     processors = NULL
   )
 )
+
+getRelevantArgs <- function(args, rapierExpression){
+  # positional list with names where they were provided.
+  args
+
+  if (length(args) == 0){
+    unnamedArgs <- NULL
+  } else if (is.null(names(args))){
+    unnamedArgs <- 1:length(args)
+  } else {
+    unnamedArgs <- which(names(args) == "")
+  }
+
+  if (length(unnamedArgs) > 0 ){
+    stop("Can't call a Rapier function with unnammed arguments. Missing names for argument(s) #",
+         paste0(unnamedArgs, collapse=", "),
+         ". Names of argument list was: \"",
+         paste0(names(args), collapse=","), "\"")
+  }
+
+  # Extract the names of the arguments this function supports.
+  fargs <- names(formals(eval(rapierExpression)))
+
+  if (!"..." %in% fargs){
+    # Use the named arguments that match, drop the rest.
+    args <- args[names(args) %in% fargs]
+  }
+
+  args
+}
 
 RapierEndpoint <- R6Class(
   "RapierEndpoint",

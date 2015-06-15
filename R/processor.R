@@ -10,11 +10,15 @@ RapierProcessor <- R6Class(
 
       .globals$processors[[name]] <<- self
     },
-    pre = function(req, res){
-      private$preFun(req = req, res = res, data = private$data)
+    pre = function(...){
+      dat <- c(list(data=private$data), ...)
+
+      do.call(private$preFun, getRelevantArgs(dat, rapierExpression=private$preFun))
     },
-    post = function(val, req, res){
-      private$postFun(req = req, res = res, data = private$data, val = val)
+    post = function(value, ...){
+      dat <- c(list(data=private$data, value=value), ...)
+
+      do.call(private$postFun, getRelevantArgs(dat, rapierExpression=private$postFun))
     }
   ),
   private = list(
@@ -23,34 +27,4 @@ RapierProcessor <- R6Class(
     data = NULL,
     name = NULL
   )
-)
-
-RapierProcessor$new(
-  "jpeg",
-  function(req, res, data){
-    t <- tempfile()
-    data$file <- t
-    jpeg(t)
-  },
-  function(val, req, res, data){
-    dev.off()
-
-    # read base64 file
-    base64enc::base64decode(file(data$file))
-  }
-)
-
-RapierProcessor$new(
-  "png",
-  function(req, res, data){
-    t <- tempfile()
-    data$file <- t
-    png(t)
-  },
-  function(val, req, res, data){
-    dev.off()
-
-    # read base64 file
-    base64enc::base64decode(file(data$file))
-  }
 )
