@@ -102,10 +102,7 @@ Below on the left you'll find a web application that uses [jQuery](http://jquery
       return $.get('{{ site.rapier_url }}/tail?n=' + $('#tail-value').val())
       .done(function(tail){
         $('#tail-result').text(JSON.stringify(tail)).removeClass('empty-result').fadeOut(100).fadeIn(100);
-        return $.get('{{ site.rapier_url }}/graph')
-        .done(function(img){
-          $('#plot').attr('src', 'data:image/png;base64,' + img).fadeOut(100).fadeIn(100);
-        });
+        $('#plot').attr('src', '{{ site.rapier_url }}/graph?t=' + new Date().getTime()).fadeOut(100).fadeIn(100);
       });
     }
 
@@ -135,10 +132,7 @@ Below on the left you'll find a web application that uses [jQuery](http://jquery
     })
 
     $('#graph-btn').click(function(){
-      return $.get('{{ site.rapier_url }}/graph')
-      .done(function(img){
-        $('#plot').attr('src', 'data:image/png;base64,' + img).fadeOut(100).fadeIn(100);
-      });
+      $('#plot').attr('src', '{{ site.rapier_url }}/graph?t=' + new Date().getTime()).fadeOut(100).fadeIn(100);
     });
 
   });
