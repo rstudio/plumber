@@ -1,20 +1,20 @@
 #' @get /
 function(req, res){
-  include_file("files/include/test.txt", res)
+  include_file("include/test.txt", res)
 }
 
 #' @get /html
 function(req, res){
-  include_html("files/include/test.html", res)
+  include_html("include/test.html", res)
 }
 
 #' @get /rmd
 function(req, res){
-  include_rmd("files/include/test.Rmd", res)
+  include_rmd("include/test.Rmd", res)
 }
 
 #' @get /md
 function(req, res){
-  include_md("files/include/test.md", res)
+  include_md("include/test.md", res)
 }
 

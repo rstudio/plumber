@@ -9,6 +9,11 @@ make_req <- function(verb, path){
 test_that("Includes work", {
   r <- RapierRouter$new("files/includes.R")
 
+  # When running, we setwd to the file's dir. Simulate that here.
+  cwd <- getwd()
+  on.exit( { setwd(cwd) } )
+  setwd("files")
+
   res <- RapierResponse$new()
   val <- r$route(make_req("GET", "/"), res)
   expect_equal(val$body, "test.txt content")

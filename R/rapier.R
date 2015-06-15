@@ -311,6 +311,14 @@ RapierRouter <- R6Class(
       # TODO: setwd to file path
       .globals$debug <- self$debug
       message("Starting server to listen on port ", port)
+
+      # Set and restore the wd to make it appear that the proc is running local to the file's definition.
+      if (!is.null(private$filename)){
+        cwd <- getwd()
+        on.exit({ setwd(cwd) })
+        setwd(firname(private$filename))
+      }
+
       httpuv::runServer(host, port, self)
     }
     #TODO: addRouter() to add sub-routers at a path.
