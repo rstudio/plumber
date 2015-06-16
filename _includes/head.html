@@ -6,6 +6,25 @@
   <title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
   <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
 
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="57x57" href="/components/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/components/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/components/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/components/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/components/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/components/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/components/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/components/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/components/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/components/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/components/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/components/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/components/favicon-16x16.png">
+  <link rel="manifest" href="/components/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/components/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
   <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">
   <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
   <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}" />
