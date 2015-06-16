@@ -28,7 +28,7 @@ title: Filters Example
             <pre id="about-url"></pre>
           </div>
         </div>
-        <pre id="about-result" class="empty-result">Click "Get" to see the response.</pre>
+        <pre id="about-result" class="empty-result">Loading....</pre>
       </div>
 
       <hr />
@@ -40,7 +40,7 @@ title: Filters Example
           <pre id ="me-url"></pre>
         </div>
       </div>
-      <pre id="me-result" class="empty-result">Click "Get" to see the response.</pre>
+      <pre id="me-result" class="empty-result">Loading...</pre>
     </div>
     <div class="col-md-6">
       <h3 class="fixed-width">appender.R</h3>
@@ -63,16 +63,20 @@ title: Filters Example
 
       $('#me-result').addClass('empty-result');
       $('#about-result').addClass('empty-result');
-      $('#me-result').text('Click "Get" to see the response.');
-      $('#about-result').text('Click "Get" to see the response.');
+      $('#me-result').text('Loading...');
+      $('#about-result').text('Loading...');
 
       getAbout();
       getMe();
     }
 
-    function getUrl(endpoint){
+    function getUrl(endpoint, prefix){
       var sel = $('#username').val();
-      var url = '{{ site.rapier_url }}/' + endpoint;
+      var url = '{{ site.rapier_url }}/'
+      if (prefix){
+        url += 'filters/';
+      }
+      url += endpoint;
       if (sel){
         url += '?username=' + sel;
       }
@@ -82,7 +86,7 @@ title: Filters Example
     onUsernameChange();
 
     function getAbout(){
-      $.get(getUrl('about'))
+      $.get(getUrl('about', true))
       .then(function(about){
         $('#about-result').removeClass('empty-result').text(JSON.stringify(about)).fadeOut(100).fadeIn(100)
       })
@@ -92,7 +96,7 @@ title: Filters Example
     }
 
     function getMe(){
-      $.get(getUrl('me'))
+      $.get(getUrl('me', true))
       .then(function(me){
         $('#me-result').removeClass('empty-result').text(JSON.stringify(me)).fadeOut(100).fadeIn(100)
       })
