@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Example
-permalink: /example/
+title: Filters Example
+permalink: /example/filters
 ---
 
 Web browser forms can easily encode the values of their inputs in either a GET or POST request. Modern browsers can also create other types of requests including PUT and DELETE. It's perfectly sensible to use rapier as an endpoint for these types of requests from the browser.

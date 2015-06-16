@@ -12,9 +12,20 @@
   <div id="navbar" class="navbar-collapse collapse">
     <ul class="nav navbar-nav">
         {% assign url = page.url|remove:'index.html' %}
-        {% for page in site.pages %}
-          {% if page.title %}
-          <li {% if url == page.url %}class="active"{% endif %} ><a href="{{ page.url | prepend: site.baseurl }}">{{ page.title }}</a></li>
+        {% for name in site.data.nav %}
+          {% assign n = name[1] %}
+
+          {% if n.children.size > 0 %}
+            <li class="dropdown {% if url == n.permalink  %}active{% endif %}" >
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ n.name }} <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                {% for child in n.children %}
+                  <li><a href="{{ child.link }}">{{ child.name }}</a></li>
+                {% endfor %}
+              </ul>
+            </li>
+          {% else %}
+            <li {% if url == n.permalink  %}class="active"{% endif %} ><a href="{{ n.permalink | prepend: site.baseurl }}">{{ n.name }}</a></li>
           {% endif %}
         {% endfor %}
     </ul>

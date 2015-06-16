@@ -1,0 +1,9 @@
+examples:
+  name: Examples
+  children:
+    - link: example/simple
+      name: Simple
+    - link: example/filters
+      name: Filters
+      
+
