@@ -1,7 +1,6 @@
 ---
 layout: page
-title: Filters Example
-permalink: /example/filters
+title: Simple Example
 ---
 
 Web browser forms can easily encode the values of their inputs in either a GET or POST request. Modern browsers can also create other types of requests including PUT and DELETE. It's perfectly sensible to use rapier as an endpoint for these types of requests from the browser.
@@ -40,7 +39,7 @@ Below on the left you'll find a web application that uses [jQuery](http://jquery
         </div>
         <pre id="tail-result" class="empty-result">Click "Get" to see the response.</pre>
       </div>
-      
+
       <hr />
 
       <h3 class="right-title fixed-width">GET /graph</h3>
@@ -88,7 +87,7 @@ Below on the left you'll find a web application that uses [jQuery](http://jquery
       var val = $('#post-value').val();
       $('#value-url').text('POST {val: ' + val + '} -> {{ site.rapier_url }}/append');
     }
-    
+
     function updateTailURLs(){
       var val = $('#tail-value').val();
       $('#tail-url').text('GET {{ site.rapier_url }}/tail?n=' + val);
