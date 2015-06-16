@@ -98,10 +98,10 @@ Below on the left you'll find a web application that uses [jQuery](http://jquery
         $('#post-result').fadeOut(100).text(JSON.stringify(res)).removeClass('empty-result').fadeOut(100).fadeIn(100);
       }
 
-      return $.get('{{ site.rapier_url }}/tail?n=' + $('#tail-value').val())
+      return $.get('{{ site.rapier_url }}/append/tail?n=' + $('#tail-value').val())
       .done(function(tail){
         $('#tail-result').text(JSON.stringify(tail)).removeClass('empty-result').fadeOut(100).fadeIn(100);
-        $('#plot').attr('src', '{{ site.rapier_url }}/graph?t=' + new Date().getTime()).fadeOut(100).fadeIn(100);
+        $('#plot').attr('src', '{{ site.rapier_url }}/append/graph?t=' + new Date().getTime()).fadeOut(100).fadeIn(100);
       });
     }
 
@@ -111,7 +111,7 @@ Below on the left you'll find a web application that uses [jQuery](http://jquery
     updateOutput();
 
     $('#tail-btn').click(function(){
-      $.get('{{ site.rapier_url }}/tail?n=' + $('#tail-value').val())
+      $.get('{{ site.rapier_url }}/append/tail?n=' + $('#tail-value').val())
       .done(function(tail){
         $('#tail-result').text(JSON.stringify(tail)).removeClass('empty-result').fadeOut(100).fadeIn(100);
       })
@@ -121,7 +121,7 @@ Below on the left you'll find a web application that uses [jQuery](http://jquery
     });
 
     $('#post-btn').click(function(){
-      $.post('{{ site.rapier_url }}/append', {val: $('#post-value').val() })
+      $.post('{{ site.rapier_url }}/append/append', {val: $('#post-value').val() })
       .done(function(res){
         updateOutput(res);
       })
@@ -131,7 +131,7 @@ Below on the left you'll find a web application that uses [jQuery](http://jquery
     })
 
     $('#graph-btn').click(function(){
-      $('#plot').attr('src', '{{ site.rapier_url }}/graph?t=' + new Date().getTime()).fadeOut(100).fadeIn(100);
+      $('#plot').attr('src', '{{ site.rapier_url }}/append/graph?t=' + new Date().getTime()).fadeOut(100).fadeIn(100);
     });
 
   });

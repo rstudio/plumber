@@ -1,9 +1,9 @@
 examples:
   name: Examples
   children:
-    - link: example/simple
+    - link: /example/simple
       name: Simple
-    - link: example/filters
+    - link: /example/filters
       name: Filters
       
 
