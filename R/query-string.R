@@ -17,9 +17,11 @@ parseQS <- function(qs){
 
   parts <- strsplit(qs, "&", fixed=TRUE)[[1]]
   kv <- strsplit(parts, "=", fixed=TRUE)
-  keys <- sapply(kv, "[[", 1)
+  kv <- kv[sapply(kv, length) == 2] # Ignore incompletes
 
+  keys <- sapply(kv, "[[", 1)
   keys <- unname(sapply(keys, URLdecode))
+
   vals <- sapply(kv, "[[", 2)
   vals[is.na(vals)] <- ""
   vals <- unname(sapply(vals, URLdecode))
