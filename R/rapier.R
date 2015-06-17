@@ -254,6 +254,7 @@ RapierRouter <- R6Class(
       args$req <- req
 
       req$args <- args
+      path <- req$PATH_INFO
 
       tryCatch({
 
@@ -262,6 +263,7 @@ RapierRouter <- R6Class(
           if (!is.null(h$serializer)){
             res$serializer <- h$serializer
           }
+          req$args <- c(h$getPathParams(path), req$args)
           return(do.call(h$exec, req$args))
         }
 
@@ -276,6 +278,7 @@ RapierRouter <- R6Class(
               if (!is.null(h$serializer)){
                 res$serializer <- h$serializer
               }
+              req$args <- c(h$getPathParams(path), req$args)
               return(do.call(h$exec, req$args))
             }
 
@@ -299,6 +302,7 @@ RapierRouter <- R6Class(
           if (!is.null(h$serializer)){
             res$serializer <- h$serializer
           }
+          req$args <- c(h$getPathParams(path), req$args)
           return(do.call(h$exec, req$args))
         }
 

@@ -86,12 +86,13 @@ RapierEndpoint <- R6Class(
     verbs = NA,
     path = NA,
     canServe = function(req){
-      #TODO: support non-identical paths
-      req$REQUEST_METHOD %in% self$verbs && identical(req$PATH_INFO, self$path)
+      req$REQUEST_METHOD %in% self$verbs && !is.na(stringi::stri_match(req$PATH_INFO, regex=private$regex$regex)[1,1])
     },
     initialize = function(verbs, path, expr, envir, preempt, serializer, processors, lines){
       self$verbs <- verbs
       self$path <- path
+
+      private$regex <- createPathRegex(path)
 
       private$expr <- expr
       private$envir <- envir
@@ -108,7 +109,13 @@ RapierEndpoint <- R6Class(
       if (!missing(processors)){
         private$processors <- processors
       }
+    },
+    getPathParams = function(path){
+      extractPathParams(private$regex, path)
     }
+  ),
+  private = list(
+    regex = NULL
   )
 )
 
