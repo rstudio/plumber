@@ -5,6 +5,7 @@ requireRmd <- function(fun_name){
   }
 }
 
+#' Include any file
 #' @export
 include_file <- function(file, res, content_type){
   # TODO stream this directly to the request w/o loading in memory
@@ -20,11 +21,13 @@ include_file <- function(file, res, content_type){
   res
 }
 
+#' Include an HTML file
 #' @export
 include_html <- function(file, res){
   include_file(file, res, content_type="text/html; charset=utf-8")
 }
 
+#' Include a markdown file
 #' @export
 include_md <- function(file, res, format = NULL){
   requireRmd("include_md")
@@ -33,6 +36,7 @@ include_md <- function(file, res, format = NULL){
   include_html(f, res)
 }
 
+#' Include an R Markdown file
 #' @export
 include_rmd <- function(file, res, format = NULL){
   requireRmd("include_rmd")

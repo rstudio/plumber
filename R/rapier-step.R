@@ -1,3 +1,5 @@
+#' Forward Request to Future Handlers
+#'
 #' @export
 forward <- function(){
   .globals$forwarded <- TRUE

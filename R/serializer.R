@@ -1,3 +1,4 @@
+#' Add a Serializer
 #' @export
 addSerializer <- function(name, serializer){
   if (is.null(.globals$serializers)){

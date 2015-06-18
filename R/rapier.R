@@ -14,6 +14,7 @@ enumerateVerbs <- function(v){
   toupper(v)
 }
 
+#' Rapier Router
 #' @export
 RapierRouter <- R6Class(
   "RapierRouter",

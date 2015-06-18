@@ -40,7 +40,7 @@ createPathRegex <- function(pathDef){
 }
 
 # Extract the params from a given path
-#' @param def is the output from createPathRegex
+# @param def is the output from createPathRegex
 extractParams <- function(def, path){
   vals <- stringi::stri_match(path, regex = def$regex)[,-1]
   names(vals) <- def$names
