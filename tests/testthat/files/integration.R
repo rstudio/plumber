@@ -31,3 +31,34 @@ function(req, res){
 function(req, res){
   stop("I throw an error!")
 }
+
+#' @get /set
+#' @preempt auth
+function(req){
+  req$testVal <- 1
+}
+
+#' @get /get
+#' @preempt auth
+function(req){
+  req$testVal
+}
+
+#' This is an HTML file that will demonstrate the HTTPUV bug in which req's that
+#' share a TCP channel also share an environment. This is why we force connections
+#' to close for now.
+#' @get /test
+#' @preempt auth
+#' @html
+function(){
+  '<html><head></head><body><script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script>
+  $.get("/get").done(function(){
+    $.get("/set").done(function(){
+      $.get("/get").done(function(a){
+        console.log(a);
+      });
+    });
+  });
+  </script></body></html>'
+}

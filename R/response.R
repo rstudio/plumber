@@ -17,6 +17,10 @@ RapierResponse <- R6Class(
       h$Date <- format(Sys.time(), "%a, %d %b %Y %X %Z", tz="GMT")
       h$`Access-Control-Allow-Origin` <-  "*" # Be permissive with CORS
 
+      # Due to https://github.com/rstudio/httpuv/issues/49, we need each
+      # request to be on a separate TCP stream
+      h$Connection = "close"
+
       list(
         status = self$status,
         headers = h,
