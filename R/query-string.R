@@ -35,13 +35,16 @@ parseQS <- function(qs){
 createPathRegex <- function(pathDef){
   # Create a regex from the defined path, substituting variables where appropriate
   names <- stringi::stri_match_all(pathDef, regex="/:(\\.?[a-zA-Z][\\w_\\.]*)/?")[[1]][,2]
+  if (length(names) <= 1 && is.na(names)){
+    names <- character()
+  }
   re <- stringi::stri_replace_all(pathDef, "/([^\\\\./]+)$2", regex="/(:\\.?[a-zA-Z][\\w_\\.]*)(/?)")
-  list(names = names, regex = re)
+  list(names = names, regex = paste0("^", re, "$"))
 }
 
 # Extract the params from a given path
 # @param def is the output from createPathRegex
-extractParams <- function(def, path){
+extractPathParams <- function(def, path){
   vals <- stringi::stri_match(path, regex = def$regex)[,-1]
   names(vals) <- def$names
   vals
