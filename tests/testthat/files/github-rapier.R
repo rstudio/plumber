@@ -56,8 +56,17 @@ env_to_list <- function(env){
 #' https://developer.github.com/webhooks/
 #' @post /update
 function(req){
-  saveRDS(req, file="req.Rds")
-  print(env_to_list(req))
+  secret <- readLines("~/.github")[1]
+  hm <- digest::hmac(secret, req$postBody, algo="sha1")
+  hm <- paste0("sha1=", hm)
+  if (!identical(hm, req$HTTP_X_HUB_SIGNATURE)){
+    res$status <- 400
+    res$body <- "invalid GitHub signature."
+    return(res)
+  }
+  
+  # DO...
+  print("Valid")
 
-  1
+  TRUE
 }
