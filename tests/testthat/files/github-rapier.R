@@ -2,11 +2,15 @@
 #' @get /version
 function(){
   desc <- read.dcf(system.file("DESCRIPTION", package="rapier"))
-  list(
+  resp <- list(
     version = unname(desc[1,"Version"]),
-    built = unname(desc[1,"Built"]),
-    sha1 = unname(desc[1,"GithubSHA1"])
+    built = unname(desc[1,"Built"])
   )
+
+  if ("GithubSHA1" %in% colnames(desc)){
+    resp["sha1"] <- unname(desc[1,"GithubSHA1"])
+  }
+
 }
 
 #' Give GitHub Webhook a way to alert us about new pushes to the repo
