@@ -28,7 +28,7 @@ function(req){
   }
 
   # DO...
-  devtools::install_github("trestletech/rstudio")
+  devtools::install_github("trestletech/rapier")
 
   TRUE
 }
