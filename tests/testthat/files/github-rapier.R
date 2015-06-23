@@ -11,6 +11,7 @@ function(){
     resp["sha1"] <- unname(desc[1,"GithubSHA1"])
   }
 
+  resp
 }
 
 list_to_string <- function(the_list) {
@@ -64,9 +65,9 @@ function(req){
     res$body <- "invalid GitHub signature."
     return(res)
   }
-  
+
   # DO...
-  print("Valid")
+  devtools::install_github("trestletech/rstudio")
 
   TRUE
 }
