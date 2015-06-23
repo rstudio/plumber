@@ -54,7 +54,7 @@ env_to_list <- function(env){
 
 #' Give GitHub Webhook a way to alert us about new pushes to the repo
 #' https://developer.github.com/webhooks/
-#' @get /update
+#' @post /update
 function(req){
   saveRDS(req, file="req.Rds")
   print(env_to_list(req))
