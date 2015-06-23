@@ -1,9 +1,38 @@
 ---
 layout: page
-title: Simple Example
+title: Endpoints
 ---
 
-Web browser forms can easily encode the values of their inputs in either a GET or POST request. Modern browsers can also create other types of requests including PUT and DELETE. It's perfectly sensible to use rapier as an endpoint for these types of requests from the browser.
+Endpoints are the terminal step in process of serving a request. (See the [docs on filters](../filters/) to see what the intermediate steps might be.) An endpoint can simply be viewed as the logic that is ultimately responsible for generating a response to a particular request. You create an endpoint by annotating a function like so:
+
+{% highlight r %}
+#' @get /hello
+function(){
+  return("hello world")
+}
+{% endhighlight %}
+
+This annotation specifies that this function is responsible for generating the response to any `GET` request to `/hello`. (If you're unfamiliar with `GET` and `POST` HTTP requests, you can read up on them [here](http://www.restapitutorial.com/lessons/httpmethods.html).) Typically, the value returned from the function will be used as the response to the request (after being serialized through a serializer to e.g. convert the response into JSON). In this case, a `GET` response to `/hello` would return the content `["hello world"]` with a JSON content-type, unless you've changed the serializer type.
+
+### HTTP Methods
+
+Endpoints can be specified for any of the four major HTTP "verbs": `GET`, `POST`, `PUT`, and `DELETE` using the annotations `@get`, `@post`, `@put`, and `@delete`, respectively. As you might expect, a function annotated with `@get` will respond *only* to `GET` requests. So if you intend an endpoint to be accessed via multiple HTTP methods, you would need to annotate them with each relevant method as in:
+
+{% highlight r %}
+#' @get /vehicle
+#' @put /vehicle
+#' @post /vehicle
+function(req){
+  ...
+}
+{% endhighlight %}
+
+### Error Handling
+
+If an endpoint generates an error, the error handler will generate a response on behalf of the endpoint. By default, this involves capturing the error message and returning a serialized response with an HTTP status code of `500` to signify a server error.
+
+
+## Example
 
 Below on the left you'll find a web application that uses [jQuery](http://jquery.com/) to send requests to a rapier API which processes those requests. You can edit the slider inputs to preview what the request would look like before submitting it to the API. The code for the rapier API is included on the right so you can see how each endpoint would behave.
 

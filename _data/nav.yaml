@@ -1,8 +1,8 @@
 examples:
   name: Examples
   children:
-    - link: /example/simple
-      name: Simple
+    - link: /example/endpoints
+      name: Endpoints
     - link: /example/filters
       name: Filters
       
