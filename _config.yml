@@ -8,6 +8,7 @@ url: "https://rapier.trestletech.com" # the base hostname & protocol for your si
 twitter_username: trestleJeff
 github_username:  trestletech/rapier
 rapier_url: http://rapier.tres.tl
+disqus_id: rapier
 #rapier_url: http://localhost:8000
 
 # Build settings

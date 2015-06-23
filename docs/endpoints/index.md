@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Endpoints
+comments: true
 ---
 
 Endpoints are the terminal step in process of serving a request. (See the [docs on filters](../filters/) to see what the intermediate steps might be.) An endpoint can simply be viewed as the logic that is ultimately responsible for generating a response to a particular request. You create an endpoint by annotating a function like so:

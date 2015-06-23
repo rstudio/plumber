@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Filters
+comments: true
 ---
 
 rapier supports both "endpoints" and "filters." Endpoints use an annotation like `@get` or `@post` and are the serving functions you're probably accustomed to seeing in rapier. An incoming request will go through each of the available endpoints until it finds one that is willing to serve it. A request will only be served by a single endpoint (the first one it encounters that it "matches." Read more about endpoints [here](../endpoints/).
