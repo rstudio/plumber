@@ -1,9 +1,9 @@
 examples:
-  name: Examples
+  name: Docs
   children:
-    - link: /example/endpoints
+    - link: /docs/endpoints
       name: Endpoints
-    - link: /example/filters
+    - link: /docs/filters
       name: Filters
       
 

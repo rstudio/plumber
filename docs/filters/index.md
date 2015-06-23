@@ -1,11 +1,9 @@
 ---
 layout: page
-title: Filters Example
+title: Filters
 ---
 
-## Filters & Endpoints
-
-rapier supports both "endpoints" and "filters." Endpoints use an annotation like `@get` or `@post` and are the serving functions you're probably accustomed to seeing in rapier. An incoming request will go through each of the available endpoints until it finds one that is willing to serve it. A request will only be served by a single endpoint (the first one it encounters that it "matches." 
+rapier supports both "endpoints" and "filters." Endpoints use an annotation like `@get` or `@post` and are the serving functions you're probably accustomed to seeing in rapier. An incoming request will go through each of the available endpoints until it finds one that is willing to serve it. A request will only be served by a single endpoint (the first one it encounters that it "matches." Read more about endpoints [here](../endpoints/).
 
 Filters in rapier behave differently. A request may go through multiple filters *before* it is served by an endpoint. Thus, filters are your opportunity to transform the request as it passes through -- either modifying existing information or supplementing it with additional info. All the filters in your file will be evaluated in the order in which they're defined*. In the example below, you'll see two filters: `auth-user` and `require-auth`. 
 
