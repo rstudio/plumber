@@ -1,9 +1,13 @@
-examples:
+docs:
   name: Docs
   children:
     - link: /docs/endpoints
       name: Endpoints
     - link: /docs/filters
       name: Filters
-      
+examples:
+  name: Examples
+  children:
+    - link: /examples/github
+      name: GitHub Webhook
 
