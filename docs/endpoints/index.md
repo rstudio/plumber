@@ -37,6 +37,8 @@ If an endpoint generates an error, the error handler will generate a response on
 
 Below on the left you'll find a web application that uses [jQuery](http://jquery.com/) to send requests to a rapier API which processes those requests. You can edit the slider inputs to preview what the request would look like before submitting it to the API. The code for the rapier API is included on the right so you can see how each endpoint would behave.
 
+The rapier server is hosted at `{{ site.rapier_url }}/append/`.
+
   <div class="row">
     <div class="col-md-6 right-border">
       <h3 class="right-title fixed-width">POST /append</h3>
@@ -79,7 +81,7 @@ Below on the left you'll find a web application that uses [jQuery](http://jquery
           <button id ="graph-btn" class="btn btn-primary">Get</button>
         </div>
         <div class="col-md-10">
-          <pre>GET {{ site.rapier_url }}/graph</pre>
+          <pre>GET {{ site.rapier_url }}append/graph</pre>
         </div>
         <img id="plot" />
       </div>
@@ -115,12 +117,12 @@ Below on the left you'll find a web application that uses [jQuery](http://jquery
 
     function updatePostURLs(){
       var val = $('#post-value').val();
-      $('#value-url').text('POST {val: ' + val + '} -> {{ site.rapier_url }}/append');
+      $('#value-url').text('POST {val: ' + val + '} -> {{ site.rapier_url }}/append/append');
     }
 
     function updateTailURLs(){
       var val = $('#tail-value').val();
-      $('#tail-url').text('GET {{ site.rapier_url }}/tail?n=' + val);
+      $('#tail-url').text('GET {{ site.rapier_url }}/append/tail?n=' + val);
     }
 
     function updateOutput(res){

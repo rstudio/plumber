@@ -10,7 +10,7 @@ Filters in rapier behave differently. A request may go through multiple filters 
 
 ## Example Filters
 
-The definition of `auth-user` is contained on lines 11-34. It offers a simple, albeit silly, mechanism for determing whether or not a request is coming from a logged in user. Real authentication systems would rely on encrypted cookies or session tokens, but this filter merely looks to see if the request has a parameter named `username` which would be provided by our built-in query string filters. So a request like `http://{{ site.rapier_url }}/about?username=john` would pass in the username of `john` to this function, while a request without that parameter would leave `username` empty. So this filter examines the provided `username` and, if it finds one, looks it up in our "user database" (in this case, a data.frame defined on lines 1-5). If it doesn't find the username in the database, it `stop()`s to indicate that an error has occurred when processing this request. If it does find the username in the database, it modifies the `req` object as it's passing through. This is one of the key tricks of filters -- **filters allow you to attach new data on the `req` object as it's passing through and that new/updated data will be available to later filters and any endpoints this request encounters.**
+The definition of `auth-user` is contained on lines 11-34. It offers a simple, albeit silly, mechanism for determing whether or not a request is coming from a logged in user. Real authentication systems would rely on encrypted cookies or session tokens, but this filter merely looks to see if the request has a parameter named `username` which would be provided by our built-in query string filters. So a request like `http://{{ site.rapier_url }}/filters/about?username=john` would pass in the username of `john` to this function, while a request without that parameter would leave `username` empty. So this filter examines the provided `username` and, if it finds one, looks it up in our "user database" (in this case, a data.frame defined on lines 1-5). If it doesn't find the username in the database, it `stop()`s to indicate that an error has occurred when processing this request. If it does find the username in the database, it modifies the `req` object as it's passing through. This is one of the key tricks of filters -- **filters allow you to attach new data on the `req` object as it's passing through and that new/updated data will be available to later filters and any endpoints this request encounters.**
 
 The next filter is named `require-auth` and is defined on lines 38-48. This filter goes one step further than the previous filter; it doesn't just look to see if the username was provided, it requires that the user is logged in. If the user is not logged in, then it doesn't `forward()` the request. `forward()` is a critical call in rapier filters. When you call `forward()` in a filter, you're telling rapier to continue on in the flow of processing the request -- i.e. whatever remaining filters and endpoint are available for this request will be used. **If you do not call `forward()` in a filter, rapier assumes that your filter has finished processing the request itself, and will not continue the execution with the remaining filters and endpoints.** In this example, lines 42-43 show an example of this. You'll notice that if `req$user` is null, then we set the HTTP status of the response to `401` (a status code which means that authentication is required), then we return a list that has an error field in it, **and we do not `forward()`.** This means that whatever value was returned should be sent directly back to the user without any further evaluation. If you get to the `require-auth` filter and are not already authenticated (i.e. there is not `user` field added to your `req`), then you will proceed no further.
 
@@ -91,12 +91,10 @@ Try changing the username to see how it affects the results from the `GET` reque
       getMe();
     }
 
-    function getUrl(endpoint, prefix){
+    function getUrl(endpoint){
       var sel = $('#username').val();
       var url = '{{ site.rapier_url }}/'
-      if (prefix){
-        url += 'filters/';
-      }
+      url += 'filters/';
       url += endpoint;
       if (sel){
         url += '?username=' + sel;
@@ -107,7 +105,7 @@ Try changing the username to see how it affects the results from the `GET` reque
     onUsernameChange();
 
     function getAbout(){
-      $.get(getUrl('about', true))
+      $.get(getUrl('about'))
       .then(function(about){
         $('#about-result').removeClass('empty-result').text(JSON.stringify(about)).fadeOut(100).fadeIn(100)
       })
@@ -117,7 +115,7 @@ Try changing the username to see how it affects the results from the `GET` reque
     }
 
     function getMe(){
-      $.get(getUrl('me', true))
+      $.get(getUrl('me'))
       .then(function(me){
         $('#me-result').removeClass('empty-result').text(JSON.stringify(me)).fadeOut(100).fadeIn(100)
       })
