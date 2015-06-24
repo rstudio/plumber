@@ -12,6 +12,7 @@ function(val, res){
   if (is.na(v)){
     res$status <- 400
     res$body <- "val parameter must be a number"
+    return(res)
   }
   values <<- c(values, val)
 
@@ -30,6 +31,7 @@ function(n="10", res){
   if (is.na(n) || n < 1 || n > MAX_VALS){
     res$status <- 400
     res$body <- "parameter 'n' must be a number between 1 and 100"
+    return(res)
   }
 
   list(val=tail(values, n=n))
