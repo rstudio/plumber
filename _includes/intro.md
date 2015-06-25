@@ -41,7 +41,7 @@ $ curl --data "a=4&b=3" "http://localhost:8000/sum"
  [7]
 {% endhighlight %}
 
-If you're still interested, check out our [live, more thorough example](/example)
+If you're still interested, check out our [live, more thorough example](/docs/endpoints/)
 
 ## Installation
 
