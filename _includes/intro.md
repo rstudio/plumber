@@ -1,6 +1,6 @@
 # Introduction
 
-rapier allows you to create a REST API by merely decorating your existing R source code with special comments. Take a look at an example.
+plumbr allows you to create a REST API by merely decorating your existing R source code with special comments. Take a look at an example.
 
 {% highlight r %}
 # myfile.R
@@ -17,11 +17,11 @@ addTwo <- function(a, b){
 }
 {% endhighlight %}
 
-These comments allow rapier to make your R functions available as API endpoints. 
+These comments allow plumbr to make your R functions available as API endpoints. 
 
 {% highlight r %}
-> library(rapier)
-> r <- rapier("myfile.R")  # Where 'myfile.R' is the location of the file shown above
+> library(plumbr)
+> r <- plumb("myfile.R")  # Where 'myfile.R' is the location of the file shown above
 > r$run(port=8000)
 {% endhighlight %}
 
@@ -45,11 +45,11 @@ If you're still interested, check out our [live, more thorough example](/docs/en
 
 ## Installation
 
-Currently rapier is not available on CRAN, so you'll need to install it from GitHub. The easiest way to do that is by using `devtools`.
+Currently plumbr is not available on CRAN, so you'll need to install it from GitHub. The easiest way to do that is by using `devtools`.
 
 {% highlight bash %}
 library(devtools)
-install_github("trestletech/rapier")
-library(rapier)
+install_github("trestletech/plumbr")
+library(plumbr)
 {% endhighlight %}
 

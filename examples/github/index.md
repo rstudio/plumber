@@ -17,16 +17,16 @@ The best guide to setting up a GitHub Webhook is the <a href="https://developer.
 1. Navigate to the "Settings" page of your repository.
 2. Click the "Webhooks & Services" tab in the sidebar.
 3. Click the "Add webhook" button.
-4. For the "Payload URL", use the URL at which your rapier POST endpoint is exposed, set the "Content type" to `application/x-www-form-urlencoded`, and enter a secret key.
+4. For the "Payload URL", use the URL at which your plumbr POST endpoint is exposed, set the "Content type" to `application/x-www-form-urlencoded`, and enter a secret key.
 5. Click "Add webhook"
 
 At this point, any commits that are pushed to that repository will trigger a POST request to the URL you specified. You can use code like the example below to respond to these triggers.
 
 ## Example
 
-In this example, we'll demonstrate how to setup an rapier endpoint that is capable of listening for Webhook notifications from GitHub. The example will simply subscribe to `push` notitifications on the <a href="https://github.com/trestletech/rapier/" target="_blank">rapier repository</a> (which are triggered any time a commit is pushed to that repo) and, in response, will install the most up-to-date version of rapier.
+In this example, we'll demonstrate how to setup an plumbr endpoint that is capable of listening for Webhook notifications from GitHub. The example will simply subscribe to `push` notitifications on the <a href="https://github.com/trestletech/plumbr/" target="_blank">plumbr repository</a> (which are triggered any time a commit is pushed to that repo) and, in response, will install the most up-to-date version of plumbr.
 
-We'll add one additional endpoint that enables us to see what version of rapier is installed on the system at that moment. You should find that the `sha1` value of the response matches <a href="https://github.com/trestletech/rapier/commits/master" target="_blank">the latest commit hash in the master branch of rapier</a>.
+We'll add one additional endpoint that enables us to see what version of plumbr is installed on the system at that moment. You should find that the `sha1` value of the response matches <a href="https://github.com/trestletech/plumbr/commits/master" target="_blank">the latest commit hash in the master branch of plumbr</a>.
 
   <div class="row">
     <div class="col-md-6 right-border">
@@ -37,7 +37,7 @@ We'll add one additional endpoint that enables us to see what version of rapier 
           <button id="post-btn" type="submit" class="btn btn-primary">Get</button>
         </div>
         <div class="col-md-10">
-          <pre>GET {{ site.rapier_url }}/github/version</pre>
+          <pre>GET {{ site.plumbr_url }}/github/version</pre>
         </div>
       </div>
 
@@ -48,7 +48,7 @@ We'll add one additional endpoint that enables us to see what version of rapier 
     <div class="col-md-6">
       <h3 class="fixed-width">appender.R</h3>
       {% highlight r %}
-        {% include R/github-rapier.R %}
+        {% include R/github-plumbr.R %}
       {% endhighlight %}
     </div>
   </div>
@@ -57,7 +57,7 @@ We'll add one additional endpoint that enables us to see what version of rapier 
 <script type="text/javascript">
   $(function(){
     function updateVersion(){
-      $.get('{{ site.rapier_url }}/github/version')
+      $.get('{{ site.plumbr_url }}/github/version')
       .done(function(res){
         $('#get-result').text(JSON.stringify(res, null, 2)).removeClass('empty-result').fadeOut(100).fadeIn(100);
       })

@@ -2,7 +2,7 @@
 #' @get /version
 function(){
   desc <- read.dcf(
-    system.file("DESCRIPTION", package="rapier"))
+    system.file("DESCRIPTION", package="plumbr"))
   resp <- list(
     version = unname(desc[1,"Version"]),
     built = unname(desc[1,"Built"])
@@ -16,7 +16,7 @@ function(){
 }
 
 #' Give GitHub Webhook a way to alert us about 
-#' new pushes to the new rapier repo. See
+#' new pushes to the new plumbr repo. See
 #' https://developer.github.com/webhooks/
 #' @post /update
 function(req, res){
@@ -36,7 +36,7 @@ function(req, res){
   }
 
   # Install new package
-  devtools::install_github("trestletech/rapier")
+  devtools::install_github("trestletech/plumbr")
 
   TRUE
 }
