@@ -55,5 +55,5 @@ library(plumbr)
 
 ## Provenance
 
-plumbr was originally released as the `rapier` package and has since been renamed (7/13/1025).
+plumbr was originally released as the `rapier` package and has since been renamed (7/13/2015).
 
