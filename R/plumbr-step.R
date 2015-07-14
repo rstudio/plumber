@@ -6,8 +6,8 @@ forward <- function(){
 }
 
 
-RapierStep <- R6Class(
-  "RapierStep",
+PlumbrStep <- R6Class(
+  "PlumbrStep",
   public = list(
     lines = NA,
     serializer = NULL,
@@ -32,7 +32,7 @@ RapierStep <- R6Class(
         p$pre(...)
       }
 
-      args <- getRelevantArgs(list(...), rapierExpression=private$expr)
+      args <- getRelevantArgs(list(...), plumbrExpression=private$expr)
       val <- do.call(eval(private$expr, envir=private$envir), args)
 
       for (p in private$processors){
@@ -50,7 +50,7 @@ RapierStep <- R6Class(
   )
 )
 
-getRelevantArgs <- function(args, rapierExpression){
+getRelevantArgs <- function(args, plumbrExpression){
   # positional list with names where they were provided.
   args
 
@@ -63,14 +63,14 @@ getRelevantArgs <- function(args, rapierExpression){
   }
 
   if (length(unnamedArgs) > 0 ){
-    stop("Can't call a Rapier function with unnammed arguments. Missing names for argument(s) #",
+    stop("Can't call a Plumbr function with unnammed arguments. Missing names for argument(s) #",
          paste0(unnamedArgs, collapse=", "),
          ". Names of argument list was: \"",
          paste0(names(args), collapse=","), "\"")
   }
 
   # Extract the names of the arguments this function supports.
-  fargs <- names(formals(eval(rapierExpression)))
+  fargs <- names(formals(eval(plumbrExpression)))
 
   if (!"..." %in% fargs){
     # Use the named arguments that match, drop the rest.
@@ -80,9 +80,9 @@ getRelevantArgs <- function(args, rapierExpression){
   args
 }
 
-RapierEndpoint <- R6Class(
-  "RapierEndpoint",
-  inherit = RapierStep,
+PlumbrEndpoint <- R6Class(
+  "PlumbrEndpoint",
+  inherit = PlumbrStep,
   public = list(
     preempt = NA,
     verbs = NA,
@@ -121,9 +121,9 @@ RapierEndpoint <- R6Class(
   )
 )
 
-RapierFilter <- R6Class(
-  "RapierFilter",
-  inherit = RapierStep,
+PlumbrFilter <- R6Class(
+  "PlumbrFilter",
+  inherit = PlumbrStep,
   public = list(
     name = NA,
     initialize = function(name, expr, envir, serializer, processors, lines){

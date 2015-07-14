@@ -7,7 +7,7 @@ make_req <- function(verb, path){
 }
 
 test_that("Routing to errors and 404s works", {
-  r <- RapierRouter$new("files/router.R")
+  r <- PlumbrRouter$new("files/router.R")
   errors <- 0
   notFounds <- 0
 
@@ -17,7 +17,7 @@ test_that("Routing to errors and 404s works", {
   r$setErrorHandler(function(req, res, err){ errors <<- errors + 1; errRes })
   r$set404Handler(function(req, res){ notFounds <<- notFounds + 1; notFoundRes })
 
-  res <- RapierResponse$new("json")
+  res <- PlumbrResponse$new("json")
 
   expect_equal(r$route(make_req("GET", "/"), res), "first")
   expect_equal(r$route(make_req("GET", "/abc"), res), "abc get")

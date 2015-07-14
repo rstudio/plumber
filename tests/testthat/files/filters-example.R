@@ -11,9 +11,9 @@ users <- data.frame(
 function(req, username=""){
   # Since username is a querystring param, we can just
   # expect it to be available as a parameter to the
-  # filter (rapier magic).
+  # filter (plumbr magic).
 
-  # This is a work-around for https://github.com/trestletech/rapier/issues/12
+  # This is a work-around for https://github.com/trestletech/plumbr/issues/12
   # and shouldn't be necessary long-term
   req$user <- NULL
 

@@ -1,7 +1,7 @@
 #' Get information about the currently available
 #' @get /version
 function(){
-  desc <- read.dcf(system.file("DESCRIPTION", package="rapier"))
+  desc <- read.dcf(system.file("DESCRIPTION", package="plumbr"))
   resp <- list(
     version = unname(desc[1,"Version"]),
     built = unname(desc[1,"Built"])
@@ -28,7 +28,7 @@ function(req, res){
   }
 
   # DO...
-  devtools::install_github("trestletech/rapier")
+  devtools::install_github("trestletech/plumbr")
 
   TRUE
 }

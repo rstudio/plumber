@@ -1,4 +1,4 @@
-Package: rapier
+Package: plumbr
 Type: Package
 Title: An API Generator for R
 Version: 0.1
@@ -23,14 +23,14 @@ Suggests:
     XML,
     rmarkdown
 Collate:
-    'rapier.R'
+    'plumbr.R'
     'default-handlers.R'
     'includes.R'
+    'plumbr-step.R'
     'post-body.R'
     'processor.R'
     'processor-image.R'
     'query-string.R'
-    'rapier-step.R'
     'response.R'
     'serializer-html.R'
     'serializer-json.R'

@@ -1,4 +1,4 @@
-#' @include rapier.R
+#' @include plumbr.R
 default404Handler <- function(req, res){
   res$status <- 404
   list(error="404 - Resource Not Found")

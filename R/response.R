@@ -1,5 +1,5 @@
-RapierResponse <- R6Class(
-  "RapierResponse",
+PlumbrResponse <- R6Class(
+  "PlumbrResponse",
   public = list(
     initialize = function(serializer="json"){
       self$serializer <- serializer
