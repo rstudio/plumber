@@ -1,6 +1,6 @@
 #' @include processor.R
-#' @include plumbr.R
-PlumbrProcessor$new(
+#' @include plumber.R
+PlumberProcessor$new(
   "jpeg",
   function(req, res, data){
     t <- tempfile()
@@ -19,7 +19,7 @@ PlumbrProcessor$new(
   }
 )
 
-PlumbrProcessor$new(
+PlumberProcessor$new(
   "png",
   function(req, res, data){
     t <- tempfile()

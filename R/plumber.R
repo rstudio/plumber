@@ -14,10 +14,10 @@ enumerateVerbs <- function(v){
   toupper(v)
 }
 
-#' Plumbr Router
+#' Plumber Router
 #' @export
-PlumbrRouter <- R6Class(
-  "PlumbrRouter",
+PlumberRouter <- R6Class(
+  "PlumberRouter",
   public = list(
     endpoints = list(),
     filters = NULL,
@@ -34,8 +34,8 @@ PlumbrRouter <- R6Class(
         stop("Error on line #", line, ": '",private$fileLines[line],"' - ", msg)
       }
 
-      self$filters <- c(self$filters, PlumbrFilter$new("queryString", queryStringFilter, private$envir, private$defaultSerializer, NULL, NULL))
-      self$filters <- c(self$filters, PlumbrFilter$new("postBody", postBodyFilter, private$envir, private$defaultSerializer, NULL, NULL))
+      self$filters <- c(self$filters, PlumberFilter$new("queryString", queryStringFilter, private$envir, private$defaultSerializer, NULL, NULL))
+      self$filters <- c(self$filters, PlumberFilter$new("postBody", postBodyFilter, private$envir, private$defaultSerializer, NULL, NULL))
 
       private$filename <- file
 
@@ -50,7 +50,7 @@ PlumbrRouter <- R6Class(
 
         srcref <- attr(e, "srcref")[[1]][c(1,3)]
 
-        # Check to see if this function was annotated with a plumbr annotation
+        # Check to see if this function was annotated with a plumber annotation
         line <- srcref[1] - 1
 
         path <- NULL
@@ -159,9 +159,9 @@ PlumbrRouter <- R6Class(
 
         if (!is.null(path)){
           preemptName <- ifelse(is.null(preempt), "__no-preempt__", preempt)
-          self$endpoints[[preemptName]] <- c(self$endpoints[[preemptName]], PlumbrEndpoint$new(verbs, path, e, private$envir, preempt, serializer, processors, srcref))
+          self$endpoints[[preemptName]] <- c(self$endpoints[[preemptName]], PlumberEndpoint$new(verbs, path, e, private$envir, preempt, serializer, processors, srcref))
         } else if (!is.null(filter)){
-          self$filters <- c(self$filters, PlumbrFilter$new(filter, e, private$envir, serializer, processors, srcref))
+          self$filters <- c(self$filters, PlumberFilter$new(filter, e, private$envir, serializer, processors, srcref))
         }
       }
 
@@ -174,7 +174,7 @@ PlumbrRouter <- R6Class(
       for (n in names(self$endpoints)){
         for (e in self$endpoints[[n]]){
           if (!is.na(e$preempt) && !e$preempt %in% endpointNames){
-            stopOnLine(e$lines[1], paste0("The given @preempt function does not exist in the plumbr environment: '", e$preempt, "'"))
+            stopOnLine(e$lines[1], paste0("The given @preempt function does not exist in the plumber environment: '", e$preempt, "'"))
           }
         }
       }
@@ -191,7 +191,7 @@ PlumbrRouter <- R6Class(
       # Set the arguments to an empty list
       req$args <- list()
 
-      res <- PlumbrResponse$new(private$defaultSerializer)
+      res <- PlumberResponse$new(private$defaultSerializer)
       self$serve(req, res)
     },
     onHeaders = function(req){ #httpuv interface
@@ -201,7 +201,7 @@ PlumbrRouter <- R6Class(
       warning("WebSockets not supported")
     },
     addEndpoint = function(verbs, uri, expr, preempt=NULL){
-      self$endpoints <- c(self$endpoints, PlumbrEndpoint$new(verbs, uri, expr, private$envir, preempt))
+      self$endpoints <- c(self$endpoints, PlumberEndpoint$new(verbs, uri, expr, private$envir, preempt))
       invisible(self)
     },
     setErrorHandler = function(fun){
@@ -230,7 +230,7 @@ PlumbrRouter <- R6Class(
         stop("Can't identify serializer '", ser, "'")
       }
 
-      if ("PlumbrResponse" %in% class(val)){
+      if ("PlumberResponse" %in% class(val)){
         # They returned the response directly, don't serialize.
         res$toResponse()
       } else {
@@ -347,8 +347,8 @@ PlumbrRouter <- R6Class(
   )
 )
 
-#' Create a new plumbr router.
+#' Create a new plumber router.
 #' @export
 plumb <- function(file){
-  PlumbrRouter$new(file)
+  PlumberRouter$new(file)
 }

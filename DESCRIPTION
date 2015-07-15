@@ -1,4 +1,4 @@
-Package: plumbr
+Package: plumber
 Type: Package
 Title: An API Generator for R
 Version: 0.1
@@ -23,10 +23,10 @@ Suggests:
     XML,
     rmarkdown
 Collate:
-    'plumbr.R'
+    'plumber.R'
     'default-handlers.R'
     'includes.R'
-    'plumbr-step.R'
+    'plumber-step.R'
     'post-body.R'
     'processor.R'
     'processor-image.R'

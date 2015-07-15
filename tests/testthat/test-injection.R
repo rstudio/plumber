@@ -7,8 +7,8 @@ make_req <- function(verb, path){
 }
 
 test_that("Injected arguments on req$args get passed on.", {
-  r <- PlumbrRouter$new("files/filter-inject.R")
+  r <- PlumberRouter$new("files/filter-inject.R")
 
-  res <- PlumbrResponse$new()
+  res <- PlumberResponse$new()
   expect_equal(r$serve(make_req("GET", "/"), res)$body, jsonlite::toJSON(13))
 })

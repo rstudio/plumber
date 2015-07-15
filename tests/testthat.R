@@ -1,4 +1,4 @@
 library(testthat)
-library(plumbr)
+library(plumber)
 
-test_check("plumbr")
+test_check("plumber")

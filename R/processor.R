@@ -1,5 +1,5 @@
-#' @include plumbr.R
-PlumbrProcessor <- R6Class(
+#' @include plumber.R
+PlumberProcessor <- R6Class(
   "Processor",
   public = list(
     initialize = function(name, pre, post){
@@ -13,12 +13,12 @@ PlumbrProcessor <- R6Class(
     pre = function(...){
       dat <- c(list(data=private$data), ...)
 
-      do.call(private$preFun, getRelevantArgs(dat, plumbrExpression=private$preFun))
+      do.call(private$preFun, getRelevantArgs(dat, plumberExpression=private$preFun))
     },
     post = function(value, ...){
       dat <- c(list(data=private$data, value=value), ...)
 
-      do.call(private$postFun, getRelevantArgs(dat, plumbrExpression=private$postFun))
+      do.call(private$postFun, getRelevantArgs(dat, plumberExpression=private$postFun))
     }
   ),
   private = list(

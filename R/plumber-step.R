@@ -6,8 +6,8 @@ forward <- function(){
 }
 
 
-PlumbrStep <- R6Class(
-  "PlumbrStep",
+PlumberStep <- R6Class(
+  "PlumberStep",
   public = list(
     lines = NA,
     serializer = NULL,
@@ -32,7 +32,7 @@ PlumbrStep <- R6Class(
         p$pre(...)
       }
 
-      args <- getRelevantArgs(list(...), plumbrExpression=private$expr)
+      args <- getRelevantArgs(list(...), plumberExpression=private$expr)
       val <- do.call(eval(private$expr, envir=private$envir), args)
 
       for (p in private$processors){
@@ -50,7 +50,7 @@ PlumbrStep <- R6Class(
   )
 )
 
-getRelevantArgs <- function(args, plumbrExpression){
+getRelevantArgs <- function(args, plumberExpression){
   # positional list with names where they were provided.
   args
 
@@ -63,14 +63,14 @@ getRelevantArgs <- function(args, plumbrExpression){
   }
 
   if (length(unnamedArgs) > 0 ){
-    stop("Can't call a Plumbr function with unnammed arguments. Missing names for argument(s) #",
+    stop("Can't call a Plumber function with unnammed arguments. Missing names for argument(s) #",
          paste0(unnamedArgs, collapse=", "),
          ". Names of argument list was: \"",
          paste0(names(args), collapse=","), "\"")
   }
 
   # Extract the names of the arguments this function supports.
-  fargs <- names(formals(eval(plumbrExpression)))
+  fargs <- names(formals(eval(plumberExpression)))
 
   if (!"..." %in% fargs){
     # Use the named arguments that match, drop the rest.
@@ -80,9 +80,9 @@ getRelevantArgs <- function(args, plumbrExpression){
   args
 }
 
-PlumbrEndpoint <- R6Class(
-  "PlumbrEndpoint",
-  inherit = PlumbrStep,
+PlumberEndpoint <- R6Class(
+  "PlumberEndpoint",
+  inherit = PlumberStep,
   public = list(
     preempt = NA,
     verbs = NA,
@@ -121,9 +121,9 @@ PlumbrEndpoint <- R6Class(
   )
 )
 
-PlumbrFilter <- R6Class(
-  "PlumbrFilter",
-  inherit = PlumbrStep,
+PlumberFilter <- R6Class(
+  "PlumberFilter",
+  inherit = PlumberStep,
   public = list(
     name = NA,
     initialize = function(name, expr, envir, serializer, processors, lines){

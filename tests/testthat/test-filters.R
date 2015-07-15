@@ -7,7 +7,7 @@ make_req <- function(verb, path){
 }
 
 test_that("Filters work", {
-  r <- PlumbrRouter$new("files/filters.R")
+  r <- PlumberRouter$new("files/filters.R")
   expect_equal(length(r$filters), 2+2) #2 for post and query string filters
 
   expect_equal(r$filters[[3]]$name, "something")
@@ -15,27 +15,27 @@ test_that("Filters work", {
 })
 
 test_that("Filters can update req$args", {
-  r <- PlumbrRouter$new("files/filters.R")
+  r <- PlumberRouter$new("files/filters.R")
 
   req <- make_req("GET", "/")
-  res <- PlumbrResponse$new()
+  res <- PlumberResponse$new()
   expect_equal(r$serve(req, res)$body, jsonlite::toJSON(23))
 })
 
 test_that("Redundant filters fail", {
-  expect_error(PlumbrRouter$new("files/filter-redundant.R"), regexp="Multiple @filters")
+  expect_error(PlumberRouter$new("files/filter-redundant.R"), regexp="Multiple @filters")
 })
 
 test_that("Empty filters fail", {
-  expect_error(PlumbrRouter$new("files/filter-empty.R"), regexp="No @filter name specified")
+  expect_error(PlumberRouter$new("files/filter-empty.R"), regexp="No @filter name specified")
 })
 
 test_that("Filter and path fails", {
-  expect_error(PlumbrRouter$new("files/filterpath.R"), regexp="both a filter and an API endpoint")
+  expect_error(PlumberRouter$new("files/filterpath.R"), regexp="both a filter and an API endpoint")
 })
 
 test_that("Terminal filters indeed terminate", {
-  res <- PlumbrResponse$new()
-  r <- PlumbrRouter$new("files/terminal-filter.R")
+  res <- PlumberResponse$new()
+  r <- PlumberRouter$new("files/terminal-filter.R")
   expect_equal(r$route(make_req("GET", "/"), res), 1)
 })
