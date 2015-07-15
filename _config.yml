@@ -1,13 +1,13 @@
 # Site settings
-title: plumbr
+title: plumber
 email: 
 description: > # this means to ignore newlines until "baseurl:"
   An R package that generates a web API from the R code you already have.
 baseurl: "" # the subpath of your site, e.g. /blog/
-url: "https://plumbr.trestletech.com" # the base hostname & protocol for your site
+url: "https://plumber.trestletech.com" # the base hostname & protocol for your site
 twitter_username: trestleJeff
-github_username:  trestletech/plumbr
-plumbr_url: http://plumbr.tres.tl
+github_username:  trestletech/plumber
+plumber_url: http://plumber.tres.tl
 disqus_id: trestle-plumbr
 #plumbr_url: http://localhost:8000
 

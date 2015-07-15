@@ -35,9 +35,9 @@ If an endpoint generates an error, the error handler will generate a response on
 
 ## Example
 
-Below on the left you'll find a web application that uses [jQuery](http://jquery.com/) to send requests to a plumbr API which processes those requests. You can edit the slider inputs to preview what the request would look like before submitting it to the API. The code for the plumbr API is included on the right so you can see how each endpoint would behave.
+Below on the left you'll find a web application that uses [jQuery](http://jquery.com/) to send requests to a plumber API which processes those requests. You can edit the slider inputs to preview what the request would look like before submitting it to the API. The code for the plumber API is included on the right so you can see how each endpoint would behave.
 
-The plumbr server is hosted at `{{ site.plumbr_url }}/append/`.
+The plumber server is hosted at `{{ site.plumber_url }}/append/`.
 
   <div class="row">
     <div class="col-md-6 right-border">
@@ -81,7 +81,7 @@ The plumbr server is hosted at `{{ site.plumbr_url }}/append/`.
           <button id ="graph-btn" class="btn btn-primary">Get</button>
         </div>
         <div class="col-md-10">
-          <pre>GET {{ site.plumbr_url }}append/graph</pre>
+          <pre>GET {{ site.plumber_url }}append/graph</pre>
         </div>
         <img id="plot" />
       </div>
@@ -117,12 +117,12 @@ The plumbr server is hosted at `{{ site.plumbr_url }}/append/`.
 
     function updatePostURLs(){
       var val = $('#post-value').val();
-      $('#value-url').text('POST {val: ' + val + '} -> {{ site.plumbr_url }}/append/append');
+      $('#value-url').text('POST {val: ' + val + '} -> {{ site.plumber_url }}/append/append');
     }
 
     function updateTailURLs(){
       var val = $('#tail-value').val();
-      $('#tail-url').text('GET {{ site.plumbr_url }}/append/tail?n=' + val);
+      $('#tail-url').text('GET {{ site.plumber_url }}/append/tail?n=' + val);
     }
 
     function updateOutput(res){
@@ -130,10 +130,10 @@ The plumbr server is hosted at `{{ site.plumbr_url }}/append/`.
         $('#post-result').fadeOut(100).text(JSON.stringify(res)).removeClass('empty-result').fadeOut(100).fadeIn(100);
       }
 
-      return $.get('{{ site.plumbr_url }}/append/tail?n=' + $('#tail-value').val())
+      return $.get('{{ site.plumber_url }}/append/tail?n=' + $('#tail-value').val())
       .done(function(tail){
         $('#tail-result').text(JSON.stringify(tail)).removeClass('empty-result').fadeOut(100).fadeIn(100);
-        $('#plot').attr('src', '{{ site.plumbr_url }}/append/graph?t=' + new Date().getTime()).fadeOut(100).fadeIn(100);
+        $('#plot').attr('src', '{{ site.plumber_url }}/append/graph?t=' + new Date().getTime()).fadeOut(100).fadeIn(100);
       });
     }
 
@@ -143,7 +143,7 @@ The plumbr server is hosted at `{{ site.plumbr_url }}/append/`.
     updateOutput();
 
     $('#tail-btn').click(function(){
-      $.get('{{ site.plumbr_url }}/append/tail?n=' + $('#tail-value').val())
+      $.get('{{ site.plumber_url }}/append/tail?n=' + $('#tail-value').val())
       .done(function(tail){
         $('#tail-result').text(JSON.stringify(tail)).removeClass('empty-result').fadeOut(100).fadeIn(100);
       })
@@ -153,7 +153,7 @@ The plumbr server is hosted at `{{ site.plumbr_url }}/append/`.
     });
 
     $('#post-btn').click(function(){
-      $.post('{{ site.plumbr_url }}/append/append', {val: $('#post-value').val() })
+      $.post('{{ site.plumber_url }}/append/append', {val: $('#post-value').val() })
       .done(function(res){
         updateOutput(res);
       })
@@ -163,7 +163,7 @@ The plumbr server is hosted at `{{ site.plumbr_url }}/append/`.
     })
 
     $('#graph-btn').click(function(){
-      $('#plot').attr('src', '{{ site.plumbr_url }}/append/graph?t=' + new Date().getTime()).fadeOut(100).fadeIn(100);
+      $('#plot').attr('src', '{{ site.plumber_url }}/append/graph?t=' + new Date().getTime()).fadeOut(100).fadeIn(100);
     });
 
   });
