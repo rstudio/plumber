@@ -44,6 +44,11 @@ $on-laptop:        800px;
 
 
 
+.title-img-right {
+  float: right;
+  margin-bottom: -60px;
+}
+
 // Import partials from `sass_dir` (defaults to `_sass`)
 @import
         "base",
