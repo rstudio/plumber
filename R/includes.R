@@ -6,6 +6,8 @@ requireRmd <- function(fun_name){
 }
 
 #' Include any file
+#'
+#' More roxygen
 #' @export
 include_file <- function(file, res, content_type){
   # TODO stream this directly to the request w/o loading in memory

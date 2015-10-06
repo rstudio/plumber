@@ -1,5 +1,5 @@
 test_that("preempts work", {
-  r <- PlumberRouter$new("files/preempt.R")
+  r <- Plumber$new("files/preempt.R")
   expect_equal(length(r$endpoints), 3)
 
   e <- r$endpoints[["testFun"]][[1]]
@@ -13,13 +13,13 @@ test_that("preempts work", {
 })
 
 test_that("Redundant preempts fail", {
-  expect_error(PlumberRouter$new("files/preempt-redundant.R"), regexp="Multiple @preempts")
+  expect_error(Plumber$new("files/preempt-redundant.R"), regexp="Multiple @preempts")
 })
 
 test_that("Empty preempts fail", {
-  expect_error(PlumberRouter$new("files/preempt-empty.R"), regexp="No @preempt specified")
+  expect_error(Plumber$new("files/preempt-empty.R"), regexp="No @preempt specified")
 })
 
 test_that("Non-existant preempts fail", {
-  expect_error(PlumberRouter$new("files/preempt-nonexistent.R"), regexp="The given @preempt")
+  expect_error(Plumber$new("files/preempt-nonexistent.R"), regexp="The given @preempt")
 })

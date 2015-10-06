@@ -7,7 +7,7 @@ make_req <- function(verb, path){
 }
 
 test_that("Includes work", {
-  r <- PlumberRouter$new("files/includes.R")
+  r <- Plumber$new("files/includes.R")
 
   # When running, we setwd to the file's dir. Simulate that here.
   cwd <- getwd()

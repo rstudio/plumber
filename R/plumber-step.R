@@ -50,10 +50,8 @@ PlumberStep <- R6Class(
   )
 )
 
+# @param positional list with names where they were provided.
 getRelevantArgs <- function(args, plumberExpression){
-  # positional list with names where they were provided.
-  args
-
   if (length(args) == 0){
     unnamedArgs <- NULL
   } else if (is.null(names(args))){
