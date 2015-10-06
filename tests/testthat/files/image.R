@@ -1,11 +1,11 @@
-#' @png
-#' @get /png
+#! @png
+#! @get /png
 function() {
   plot(1:10)
 }
 
-#' @jpeg
-#' @get /jpeg
+#! @jpeg
+#! @get /jpeg
 function() {
   plot(1:10)
 }

@@ -1,13 +1,13 @@
 
 library(stringi)
 
-#' @preempt auth
-#' @use /
+#! @preempt auth
+#! @use /
 function(a=1){
   list(msg=paste0("Welcome to the root URL! a = ", a))
 }
 
-#' @filter auth
+#! @filter auth
 function(req, res){
   if (!stri_startswith_fixed(req$QUERY_STRING, "?user=")){
     # Don't continue
@@ -21,35 +21,35 @@ function(req, res){
   forward()
 }
 
-#' @get /me
+#! @get /me
 function(req, res){
   list(name=req$username)
 }
 
-#' @get /error
-#' @preempt auth
+#! @get /error
+#! @preempt auth
 function(req, res){
   stop("I throw an error!")
 }
 
-#' @get /set
-#' @preempt auth
+#! @get /set
+#! @preempt auth
 function(req){
   req$testVal <- 1
 }
 
-#' @get /get
-#' @preempt auth
+#! @get /get
+#! @preempt auth
 function(req){
   req$testVal
 }
 
-#' This is an HTML file that will demonstrate the HTTPUV bug in which req's that
-#' share a TCP channel also share an environment. This is why we force connections
-#' to close for now.
-#' @get /test
-#' @preempt auth
-#' @html
+#! This is an HTML file that will demonstrate the HTTPUV bug in which req's that
+#! share a TCP channel also share an environment. This is why we force connections
+#! to close for now.
+#! @get /test
+#! @preempt auth
+#! @html
 function(){
   '<html><head></head><body><script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
   <script>

@@ -1,5 +1,5 @@
-#' @filter a
-#' @filter b
+#! @filter a
+#! @filter b
 function(){
 
 }

@@ -1,34 +1,34 @@
-#' @filter testFun
+#! @filter testFun
 function(){ }
 
-#' @filter testFun2
+#! @filter testFun2
 function(){ }
 
-#' @filter testFun3
+#! @filter testFun3
 function(){ }
 
-#' @preempt testFun
-#' @get /
+#! @preempt testFun
+#! @get /
 function(){
 
 }
 
-#' @preempt test
-#' Excluded
+#! @preempt test
+#! Excluded
 function(){
 
 }
 
-#' @preempt testFun2
-#' @get /
-#'
+#! @preempt testFun2
+#! @get /
+#!
 
 function(){
 
 }
 
-#'@preempt testFun3
-#'@post /
+#!@preempt testFun3
+#!@post /
 function(){
 
 }

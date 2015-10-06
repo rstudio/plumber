@@ -1,5 +1,5 @@
-#' Get information about the currently available
-#' @get /version
+#! Get information about the currently available
+#! @get /version
 function(){
   desc <- read.dcf(system.file("DESCRIPTION", package="plumber"))
   resp <- list(
@@ -14,9 +14,9 @@ function(){
   resp
 }
 
-#' Give GitHub Webhook a way to alert us about new pushes to the repo
-#' https://developer.github.com/webhooks/
-#' @post /update
+#! Give GitHub Webhook a way to alert us about new pushes to the repo
+#! https://developer.github.com/webhooks/
+#! @post /update
 function(req, res){
   secret <- readLines("~/.github")[1]
   hm <- digest::hmac(secret, req$postBody, algo="sha1")

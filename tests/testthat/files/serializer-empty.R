@@ -1,5 +1,5 @@
-#' @serializer
-#' @get /
+#! @serializer
+#! @get /
 function(){
 
 }

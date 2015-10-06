@@ -1,48 +1,48 @@
 
-#' @get /
-#' @preempt __first__
+#! @get /
+#! @preempt __first__
 function(){
   "first"
 }
 
-#' @get /abc
+#! @get /abc
 function(){
   "abc get"
 }
 
-#' @post /abc
+#! @post /abc
 function(){
   "abc post"
 }
 
-#' @filter filt1
+#! @filter filt1
 function(req, res){
   forward()
 }
 
-#' @filter filt2
+#! @filter filt2
 function(req, res){
   forward()
 }
 
-#' @use /dog
-#' @preempt filt2
+#! @use /dog
+#! @preempt filt2
 function(){
   "dog use"
 }
 
-#' @get /dog
-#' @preempt filt1
+#! @get /dog
+#! @preempt filt1
 function(){
   "dog get"
 }
 
-#' @get /error
+#! @get /error
 function(){
   stop("ERROR")
 }
 
-#' @get /response
+#! @get /response
 function(res){
   res$body <- "overridden"
   res$status <- 123

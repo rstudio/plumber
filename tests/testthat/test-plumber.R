@@ -39,3 +39,14 @@ test_that("Invalid file fails gracefully", {
 test_that("Empty endpoints error", {
   expect_error(Plumber$new("files/endpoints-empty.R"), regexp="No path specified")
 })
+
+test_that("The old roxygen-style comments work", {
+  r <- Plumber$new("files/endpoints-old.R")
+  expect_equal(length(r$endpoints), 1)
+  expect_equal(length(r$endpoints[[1]]), 4)
+  expect_equal(r$endpoints[[1]][[1]]$exec(), 5)
+  expect_equal(r$endpoints[[1]][[2]]$exec(), 10)
+  expect_equal(r$endpoints[[1]][[3]]$exec(), 12)
+  expect_equal(r$endpoints[[1]][[4]]$exec(), 14)
+})
+
