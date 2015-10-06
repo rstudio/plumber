@@ -5,19 +5,19 @@ plumber allows you to create a REST API by merely decorating your existing R sou
 {% highlight r %}
 # myfile.R
 
-#' @get /mean
+#! @get /mean
 normalMean <- function(samples=10){
   data <- rnorm(samples)
   mean(data)
 }
 
-#' @post /sum
+#! @post /sum
 addTwo <- function(a, b){
   as.numeric(a) + as.numeric(b)
 }
 {% endhighlight %}
 
-These comments allow plumber to make your R functions available as API endpoints. 
+These comments allow plumber to make your R functions available as API endpoints. You can either prefix the comments with `#!` or `#'` but we recommend the former since `#'` will conflict with the Roxygen package.
 
 {% highlight r %}
 > library(plumber)

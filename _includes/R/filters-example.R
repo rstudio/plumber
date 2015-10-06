@@ -4,10 +4,10 @@ users <- data.frame(
   groups=c("users", "admin,users")
 )
 
-#' Filter that grabs the "username" querystring parameter.
-#' You should, of course, use a real auth system, but
-#' this shows the principles involved.
-#' @filter auth-user
+#! Filter that grabs the "username" querystring parameter.
+#! You should, of course, use a real auth system, but
+#! this shows the principles involved.
+#! @filter auth-user
 function(req, username=""){
   # Since username is a querystring param, we can just
   # expect it to be available as a parameter to the
@@ -33,8 +33,8 @@ function(req, username=""){
   forward()
 }
 
-#' Now require that all users must be authenticated.
-#' @filter require-auth
+#! Now require that all users must be authenticated.
+#! @filter require-auth
 function(req, res){
   if (is.null(req$user)){
     # User isn't logged in
@@ -47,7 +47,7 @@ function(req, res){
   }
 }
 
-#' @get /me
+#! @get /me
 function(req){
   # Safe to assume we have a user, since we've been
   # through all the filters and would have gotten an
@@ -55,12 +55,12 @@ function(req){
   list(user=req$user)
 }
 
-#' Get info about the service. We preempt the
-#' require-auth filter because we want authenticated and
-#' unauthenticated users alike to be able to access this
-#' endpoint.
-#' @preempt require-auth
-#' @get /about
+#! Get info about the service. We preempt the
+#! require-auth filter because we want authenticated and
+#! unauthenticated users alike to be able to access this
+#! endpoint.
+#! @preempt require-auth
+#! @get /about
 function(){
   list(descript="This is a demo service that uses authentication!")
 }

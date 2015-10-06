@@ -7,7 +7,7 @@ comments: true
 Endpoints are the terminal step in process of serving a request. (See the [docs on filters](../filters/) to see what the intermediate steps might be.) An endpoint can simply be viewed as the logic that is ultimately responsible for generating a response to a particular request. You create an endpoint by annotating a function like so:
 
 {% highlight r %}
-#' @get /hello
+#! @get /hello
 function(){
   return("hello world")
 }
@@ -20,9 +20,9 @@ This annotation specifies that this function is responsible for generating the r
 Endpoints can be specified for any of the four major HTTP "verbs": `GET`, `POST`, `PUT`, and `DELETE` using the annotations `@get`, `@post`, `@put`, and `@delete`, respectively. As you might expect, a function annotated with `@get` will respond *only* to `GET` requests. So if you intend an endpoint to be accessed via multiple HTTP methods, you would need to annotate them with each relevant method as in:
 
 {% highlight r %}
-#' @get /vehicle
-#' @put /vehicle
-#' @post /vehicle
+#! @get /vehicle
+#! @put /vehicle
+#! @post /vehicle
 function(req){
   ...
 }

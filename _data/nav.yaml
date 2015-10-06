@@ -5,6 +5,8 @@ docs:
       name: Endpoints
     - link: /docs/filters
       name: Filters
+    - link: /docs/programmatic
+      name: Programmatic Usage
 examples:
   name: Examples
   children:
