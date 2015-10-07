@@ -4,6 +4,7 @@ title: Endpoints
 comments: true
 ---
 
+<div class="row"><div class="col-sm-8" markdown="1">
 Endpoints are the terminal step in process of serving a request. (See the [docs on filters](../filters/) to see what the intermediate steps might be.) An endpoint can simply be viewed as the logic that is ultimately responsible for generating a response to a particular request. You create an endpoint by annotating a function like so:
 
 {% highlight r %}
@@ -32,13 +33,13 @@ function(req){
 
 If an endpoint generates an error, the error handler will generate a response on behalf of the endpoint. By default, this involves capturing the error message and returning a serialized response with an HTTP status code of `500` to signify a server error.
 
-
 ## Example
 
 Below on the left you'll find a web application that uses [jQuery](http://jquery.com/) to send requests to a plumber API which processes those requests. You can edit the slider inputs to preview what the request would look like before submitting it to the API. The code for the plumber API is included on the right so you can see how each endpoint would behave.
 
 The plumber server is hosted at `{{ site.plumber_url }}/append/`.
 
+</div></div>
   <div class="row">
     <div class="col-md-6 right-border">
       <h3 class="right-title fixed-width">POST /append</h3>

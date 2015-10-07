@@ -1,3 +1,6 @@
+
+<div class="row"><div class="col-sm-8 col-sm-offset-2" markdown="1">
+
 # Introduction
 
 plumber allows you to create a REST API by merely decorating your existing R source code with special comments. Take a look at an example.
@@ -53,3 +56,4 @@ install_github("trestletech/plumber")
 library(plumber)
 {% endhighlight %}
 
+</div></div>

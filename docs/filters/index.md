@@ -3,7 +3,7 @@ layout: page
 title: Filters
 comments: true
 ---
-
+<div class="row"><div class="col-sm-8" markdown="1">
 plumber supports both "endpoints" and "filters." Endpoints use an annotation like `@get` or `@post` and are the serving functions you're probably accustomed to seeing in plumber. An incoming request will go through each of the available endpoints until it finds one that is willing to serve it. A request will only be served by a single endpoint (the first one it encounters that it "matches." Read more about endpoints [here](../endpoints/).
 
 Filters in plumber behave differently. A request may go through multiple filters *before* it is served by an endpoint. Thus, filters are your opportunity to transform the request as it passes through -- either modifying existing information or supplementing it with additional info. All the filters in your file will be evaluated in the order in which they're defined*. In the example below, you'll see two filters: `auth-user` and `require-auth`. 
@@ -23,7 +23,7 @@ Lastly, we have the `@get /about` endpoint on lines 64-66. This endpoint looks s
 Try changing the username to see how it affects the results from the `GET` requests below.
 
 \* This is subject to change. For now, you should put define all of your filters **above** any endpoint in your R file. See [this GitHub issue](https://github.com/trestletech/plumber/issues/10) for more details.
-
+</div></div>
   <div class="row">
     <div class="col-md-6 right-border">
       <h3 class="right-title fixed-width">Set Username</h3>

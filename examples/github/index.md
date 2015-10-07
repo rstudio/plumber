@@ -4,6 +4,7 @@ title: GitHub Webhook
 comments: true
 ---
 
+<div class="row"><div class="col-sm-8" markdown="1">
 GitHub supports "Webhooks" to notify you of changes. In <a href="https://developer.github.com/webhooks/" target="_blank">their own words</a>:
 
 > Webhooks allow you to build or set up integrations which subscribe to certain events on GitHub.com. When one of those events is triggered, we’ll send a HTTP POST payload to the webhook’s configured URL. Webhooks can be used to update an external issue tracker, trigger CI builds, update a backup mirror, or even deploy to your production server. You’re only limited by your imagination.
@@ -28,6 +29,7 @@ In this example, we'll demonstrate how to setup an plumber endpoint that is capa
 
 We'll add one additional endpoint that enables us to see what version of plumber is installed on the system at that moment. You should find that the `sha1` value of the response matches <a href="https://github.com/trestletech/plumber/commits/master" target="_blank">the latest commit hash in the master branch of plumber</a>.
 
+</div></div>
   <div class="row">
     <div class="col-md-6 right-border">
       <h3 class="right-title fixed-width">GET /version</h3>
