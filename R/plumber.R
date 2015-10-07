@@ -186,6 +186,14 @@ Plumber <- R6Class(
     onWSOpen = function(ws){ #httpuv interface
       warning("WebSockets not supported")
     },
+    #' @param verbs The verb(s) which this endpoint supports
+    #' @param path The path for the endpoint
+    #' @param expr The expression encapsulating the endpoint's logic
+    #' @param serializer The name of the serializer to use (if not the default)
+    #' @param processors Any \code{PlumberProcessors} to apply to this endpoint
+    #' @param preempt The name of the filter before which this endpoint should
+    #'   be inserted. If not specified the endpoint will be added after all
+    #'   the filters.
     addEndpoint = function(verbs, path, expr, serializer, processors, preempt=NULL){
       private$addEndpointInternal(verbs, path, expr, serializer, processors, srcref, preempt)
     },

@@ -47,12 +47,7 @@ test_that("Programmatic endpoints work", {
     res$setHeader("pre", data$pre)
   })
 
-  serializer <- function(val, req, res, errorHandler){
-    res$setHeader("Serializer", "custom")
-    res$body <- val
-
-    res
-  }
+  serializer <- "ser"
   expr <- expression(function(req, res){res$setHeader("expr", TRUE)})
 
   r$addEndpoint("GET", "/", expr, serializer, list(processor), "queryString")

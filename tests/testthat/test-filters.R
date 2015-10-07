@@ -50,12 +50,7 @@ test_that("complete addFilter works", {
     res$setHeader("pre", data$pre)
   })
 
-  serializer <- function(val, req, res, errorHandler){
-    res$setHeader("Serializer", "custom")
-    res$body <- val
-
-    res
-  }
+  serializer <- "ser"
 
   name <- "fullFilter"
   expr <- expression(function(req, res){res$setHeader("expr", TRUE)})
