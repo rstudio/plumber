@@ -1,7 +1,7 @@
 
-#! @preempt inc
-#! @preempt inc
-#! @post here
+#* @preempt inc
+#* @preempt inc
+#* @post here
 function(){
 
 }

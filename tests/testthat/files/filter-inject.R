@@ -1,9 +1,9 @@
-#! @filter foo
+#* @filter foo
 function(req){
   req$args$hello <- 13
 }
 
-#! @get /
+#* @get /
 function(hello){
   hello
 }

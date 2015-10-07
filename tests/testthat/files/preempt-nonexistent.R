@@ -1,5 +1,5 @@
-#! @preempt flargdarg
-#! @get /
+#* @preempt flargdarg
+#* @get /
 function(){
 
 }

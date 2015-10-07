@@ -60,8 +60,8 @@ plumber <- R6Class(
           filter <- NULL
           image <- NULL
           serializer <- NULL
-          while (line > 0 && (stri_detect_regex(private$fileLines[line], pattern="^#['!]") || stri_trim_both(private$fileLines[line]) == "")){
-            epMat <- stringi::stri_match(private$fileLines[line], regex="^#['!]\\s*@(get|put|post|use|delete)(\\s+(.*)$)?")
+          while (line > 0 && (stri_detect_regex(private$fileLines[line], pattern="^#['\\*]") || stri_trim_both(private$fileLines[line]) == "")){
+            epMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@(get|put|post|use|delete)(\\s+(.*)$)?")
             if (!is.na(epMat[1,2])){
               p <- stri_trim_both(epMat[1,4])
 
@@ -73,7 +73,7 @@ plumber <- R6Class(
               path <- p
             }
 
-            filterMat <- stringi::stri_match(private$fileLines[line], regex="^#['!]\\s*@filter(\\s+(.*)$)?")
+            filterMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@filter(\\s+(.*)$)?")
             if (!is.na(filterMat[1,1])){
               f <- stri_trim_both(filterMat[1,3])
 
@@ -89,7 +89,7 @@ plumber <- R6Class(
               filter <- f
             }
 
-            preemptMat <- stringi::stri_match(private$fileLines[line], regex="^#['!]\\s*@preempt(\\s+(.*)\\s*$)?")
+            preemptMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@preempt(\\s+(.*)\\s*$)?")
             if (!is.na(preemptMat[1,1])){
               p <- stri_trim_both(preemptMat[1,3])
               if (is.na(p) || p == ""){
@@ -102,7 +102,7 @@ plumber <- R6Class(
               preempt <- p
             }
 
-            serMat <- stringi::stri_match(private$fileLines[line], regex="^#['!]\\s*@serializer(\\s+(.*)\\s*$)?")
+            serMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@serializer(\\s+(.*)\\s*$)?")
             if (!is.na(serMat[1,1])){
               s <- stri_trim_both(serMat[1,3])
               if (is.na(s) || s == ""){
@@ -120,7 +120,7 @@ plumber <- R6Class(
               serializer <- s
             }
 
-            shortSerMat <- stringi::stri_match(private$fileLines[line], regex="^#['!]\\s*@(json|html)")
+            shortSerMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@(json|html)")
             if (!is.na(shortSerMat[1,2])){
               s <- stri_trim_both(shortSerMat[1,2])
               if (!is.null(serializer)){
@@ -135,7 +135,7 @@ plumber <- R6Class(
               serializer <- s
             }
 
-            imageMat <- stringi::stri_match(private$fileLines[line], regex="^#['!]\\s*@(jpeg|png)(\\s+(.*)\\s*$)?")
+            imageMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@(jpeg|png)(\\s+(.*)\\s*$)?")
             if (!is.na(imageMat[1,1])){
               if (!is.null(image)){
                 # Must have already assigned.

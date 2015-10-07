@@ -1,14 +1,14 @@
-#! @filter something
+#* @filter something
 function(req){
   req$args$hello <- 23
 }
 
-#!@filter nospace
+#*@filter nospace
 function(){
 
 }
 
-#! @get /
+#* @get /
 function(req){
   req$args$hello
 }

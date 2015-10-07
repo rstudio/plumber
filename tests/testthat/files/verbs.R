@@ -1,31 +1,31 @@
-#! @use /some
+#* @use /some
 function(){
 
 }
 
-#! @get /get
+#* @get /get
 function() {
 
 }
 
 
-#! @put /put
+#* @put /put
 function(req, res, forward){
   7
 }
 
-#! @post /post
+#* @post /post
 function() {
 
 }
 
-#! @delete /delete
+#* @delete /delete
 function() {
 
 }
 
-#! @get /test
-#! @post /test
+#* @get /test
+#* @post /test
 function(){
 
 }

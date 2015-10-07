@@ -1,5 +1,5 @@
-#! @filter test
-#! @get /
+#* @filter test
+#* @get /
 function(){
 
 }
