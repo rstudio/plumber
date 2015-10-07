@@ -7,7 +7,7 @@ make_req <- function(verb, path){
 }
 
 test_that("Routing to errors and 404s works", {
-  r <- Plumber$new("files/router.R")
+  r <- plumber$new("files/router.R")
   errors <- 0
   notFounds <- 0
 

@@ -20,8 +20,8 @@ stopOnLine <- function(private, line, msg){
 
 #' Plumber Router
 #' @export
-Plumber <- R6Class(
-  "Plumber",
+plumber <- R6Class(
+  "plumber",
   public = list(
     endpoints = list(),
     filters = NULL,
@@ -372,5 +372,5 @@ Plumber <- R6Class(
 #' Create a new plumber router.
 #' @export
 plumb <- function(file){
-  Plumber$new(file)
+  plumber$new(file)
 }

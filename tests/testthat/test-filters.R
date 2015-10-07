@@ -7,7 +7,7 @@ make_req <- function(verb, path){
 }
 
 test_that("Filters work", {
-  r <- Plumber$new("files/filters.R")
+  r <- plumber$new("files/filters.R")
   expect_equal(length(r$filters), 2+2) #2 for post and query string filters
 
   expect_equal(r$filters[[3]]$name, "something")
@@ -15,7 +15,7 @@ test_that("Filters work", {
 })
 
 test_that("Filters can update req$args", {
-  r <- Plumber$new("files/filters.R")
+  r <- plumber$new("files/filters.R")
 
   req <- make_req("GET", "/")
   res <- PlumberResponse$new()
@@ -23,25 +23,25 @@ test_that("Filters can update req$args", {
 })
 
 test_that("Redundant filters fail", {
-  expect_error(Plumber$new("files/filter-redundant.R"), regexp="Multiple @filters")
+  expect_error(plumber$new("files/filter-redundant.R"), regexp="Multiple @filters")
 })
 
 test_that("Empty filters fail", {
-  expect_error(Plumber$new("files/filter-empty.R"), regexp="No @filter name specified")
+  expect_error(plumber$new("files/filter-empty.R"), regexp="No @filter name specified")
 })
 
 test_that("Filter and path fails", {
-  expect_error(Plumber$new("files/filterpath.R"), regexp="both a filter and an API endpoint")
+  expect_error(plumber$new("files/filterpath.R"), regexp="both a filter and an API endpoint")
 })
 
 test_that("Terminal filters indeed terminate", {
   res <- PlumberResponse$new()
-  r <- Plumber$new("files/terminal-filter.R")
+  r <- plumber$new("files/terminal-filter.R")
   expect_equal(r$route(make_req("GET", "/"), res), 1)
 })
 
 test_that("complete addFilter works", {
-  r <- Plumber$new()
+  r <- plumber$new()
 
   processor <- PlumberProcessor$new("proc1", function(req, res, data){
     data$pre <- TRUE
@@ -76,7 +76,7 @@ test_that("complete addFilter works", {
 
 # No processors or serializer
 test_that("sparse addFilter works", {
-  r <- Plumber$new()
+  r <- plumber$new()
 
   name <- "sparseFilter"
   expr <- expression(function(req, res){res$setHeader("expr", TRUE)})

@@ -7,7 +7,7 @@ make_req <- function(verb, path){
 }
 
 test_that("Images are properly rendered", {
-  r <- Plumber$new("files/image.R")
+  r <- plumber$new("files/image.R")
   resp <- r$serve(make_req("GET", "/png"), PlumberResponse$new())
 
   expect_equal(length(resp$body), 13044) # This may change with changes to base graphics that slightly alter the plot format. But we'll start here.

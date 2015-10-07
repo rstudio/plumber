@@ -39,7 +39,7 @@ test_that("Ellipses allow any named args through", {
 })
 
 test_that("Programmatic endpoints work", {
-  r <- Plumber$new()
+  r <- plumber$new()
   processor <- PlumberProcessor$new("proc1", function(req, res, data){
     data$pre <- TRUE
   }, function(val, req, res, data){
