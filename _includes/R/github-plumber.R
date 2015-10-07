@@ -1,5 +1,5 @@
-#! Get information about the currently available
-#! @get /version
+#* Get information about the currently available
+#* @get /version
 function(){
   desc <- read.dcf(
     system.file("DESCRIPTION", package="plumber"))
@@ -15,10 +15,10 @@ function(){
   resp
 }
 
-#! Give GitHub Webhook a way to alert us about 
-#! new pushes to the new plumber repo. See
-#! https://developer.github.com/webhooks/
-#! @post /update
+#* Give GitHub Webhook a way to alert us about 
+#* new pushes to the new plumber repo. See
+#* https://developer.github.com/webhooks/
+#* @post /update
 function(req, res){
 
   # Verify the provided signature to confirm this
