@@ -12,24 +12,46 @@ test_that("paths are properly converted", {
   expect_equal(p$names, character())
   expect_equal(p$regex, "^/car/$")
 
-  p <- createPathRegex("/car/:id")
+  p <- createPathRegex("/car/<id>")
   expect_equal(p$names, "id")
   expect_equal(p$regex, paste0("^/car/", varRegex, "$"))
 
-  p <- createPathRegex("/car/:id/sell")
+  p <- createPathRegex("/car/<id>/sell")
   expect_equal(p$names, "id")
   expect_equal(p$regex, paste0("^/car/", varRegex, "/sell$"))
 
-  p <- createPathRegex("/car/:id/sell/:price")
+  p <- createPathRegex("/car/<id>/sell/<price>")
   expect_equal(p$names, c("id", "price"))
   expect_equal(p$regex, paste0("^/car/", varRegex, "/sell/", varRegex, "$"))
 })
 
+test_that("variables are typed", {
+  p <- createPathRegex("/car/<id:int>")
+  expect_equal(p$names, "id")
+  expect_equal(p$regex, paste0("^/car/", "(\\d+)", "$"))
+
+  p <- createPathRegex("/car/<id:double>")
+  expect_equal(p$names, "id")
+  expect_equal(p$regex, paste0("^/car/", "(\\d*\\.?\\d*)", "$"))
+
+  p <- createPathRegex("/car/<id:numeric>")
+  expect_equal(p$names, "id")
+  expect_equal(p$regex, paste0("^/car/", "(\\d*\\.?\\d*)", "$"))
+
+  p <- createPathRegex("/car/<id:bool>")
+  expect_equal(p$names, "id")
+  expect_equal(p$regex, paste0("^/car/", "([01tfTF]|true|false|TRUE|FALSE)", "$"))
+
+  p <- createPathRegex("/car/<id:logical>")
+  expect_equal(p$names, "id")
+  expect_equal(p$regex, paste0("^/car/", "([01tfTF]|true|false|TRUE|FALSE)", "$"))
+})
+
 test_that("path regex's are created properly", {
-  expect_equivalent(extractPathParams(createPathRegex("/car/"), "/car/"),  character())
-  expect_equal(extractPathParams(createPathRegex("/car/:id"), "/car/15"), structure("15", names="id") )
-  expect_equal(extractPathParams(createPathRegex("/car/:id/sell"), "/car/12/sell"), structure("12", names="id") )
-  expect_equal(extractPathParams(createPathRegex("/car/:id/sell/:price"), "/car/15/sell/$15,000"), structure(c("15", "$15,000"), names=c("id", "price")) )
+  expect_equivalent(extractPathParams(createPathRegex("/car/"), "/car/"),  list())
+  expect_equal(extractPathParams(createPathRegex("/car/<id>"), "/car/15"), list(id="15") )
+  expect_equal(extractPathParams(createPathRegex("/car/<id>/sell"), "/car/12/sell"), list(id="12") )
+  expect_equal(extractPathParams(createPathRegex("/car/<id>/sell/<price>"), "/car/15/sell/$15,000"), list(id="15", price="$15,000"))
 })
 
 test_that("integration of path parsing works", {
@@ -37,4 +59,7 @@ test_that("integration of path parsing works", {
   expect_equal(r$route(make_req("GET", "/car/13"), PlumberResponse$new()), "13")
   expect_equal(r$route(make_req("GET", "/car/15/sell/$15,000"), PlumberResponse$new()), list(id="15", price="$15,000"))
   expect_equal(r$route(make_req("POST", "/car/13"), PlumberResponse$new()), "13")
+  expect_equal(r$route(make_req("GET", "/car/15/buy/$15,000"), PlumberResponse$new()), list(id=15, price="$15,000"))
+  expect_equal(r$route(make_req("GET", "/car/ratio/1.5"), PlumberResponse$new()), 1.5)
+  expect_equal(r$route(make_req("GET", "/car/sold/true"), PlumberResponse$new()), TRUE)
 })
