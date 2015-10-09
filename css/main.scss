@@ -43,6 +43,14 @@ $on-laptop:        800px;
   margin-bottom: -60px;
 }
 
+#routing-section table td{
+  border: 1px solid #444;
+}
+#routing-section table td{
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
 // Import partials from `sass_dir` (defaults to `_sass`)
 @import
         "base",

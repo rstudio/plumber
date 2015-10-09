@@ -7,6 +7,8 @@ docs:
       name: Filters
     - link: /docs/programmatic
       name: Programmatic Usage
+    - link: /docs/routing
+      name: Routing
 examples:
   name: Examples
   children:
