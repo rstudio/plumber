@@ -2,16 +2,25 @@
 % Please edit documentation in R/plumber.R
 \docType{data}
 \name{plumber}
+\alias{plumb}
 \alias{plumber}
 \title{Plumber Router}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x7fb73c7da120> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x7fa91fa55b20> 
  - attr(*, "name")= chr "plumber_generator"
 }}
 \usage{
 plumber
+
+plumb(file)
 }
 \description{
-Plumber Router
+Routers are the core request handler in plumber. A router is responsible for
+taking an incoming request, submitting it through the appropriate filters and
+eventually to a corresponding endpoint, if one is found.
+}
+\details{
+See \url{http://plumber.trestletech.com/docs/programmatic/} for additional
+details on the methods available on this object.
 }
 \keyword{datasets}
 

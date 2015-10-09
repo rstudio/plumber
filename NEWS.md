@@ -1,3 +1,8 @@
+plumber 0.2.1
+--------------------------------------------------------------------------------
+* Add more Roxygen documentation for exported functions
+* Remove the warning in the README as the API seems to be stabilizing.
+
 plumber 0.2.0
 --------------------------------------------------------------------------------
 * BREAKING: Changed variable-path routing to use bracketted format instead of

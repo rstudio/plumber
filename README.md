@@ -2,8 +2,6 @@
 
 <img align="right" src="http://plumber.trestletech.com/components/images/plumber.png" />
 
-> WARNING: plumber is under active development and function names, parameter names, and behavior are all subject to change. So don't go crazy...
-
 plumber allows you to create a REST API by merely decorating your existing R source code with special comments. Take a look at an example.
 
 ```r

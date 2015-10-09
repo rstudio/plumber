@@ -19,6 +19,13 @@ stopOnLine <- function(private, line, msg){
 }
 
 #' Plumber Router
+#'
+#' Routers are the core request handler in plumber. A router is responsible for
+#' taking an incoming request, submitting it through the appropriate filters and
+#' eventually to a corresponding endpoint, if one is found.
+#'
+#' See \url{http://plumber.trestletech.com/docs/programmatic/} for additional
+#' details on the methods available on this object.
 #' @export
 plumber <- R6Class(
   "plumber",
@@ -369,7 +376,7 @@ plumber <- R6Class(
   )
 )
 
-#' Create a new plumber router.
+#' @rdname plumber
 #' @export
 plumb <- function(file){
   plumber$new(file)

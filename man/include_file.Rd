@@ -2,11 +2,36 @@
 % Please edit documentation in R/includes.R
 \name{include_file}
 \alias{include_file}
-\title{Include any file}
+\alias{include_html}
+\alias{include_md}
+\alias{include_rmd}
+\title{Send File Contents as Response}
 \usage{
 include_file(file, res, content_type)
+
+include_html(file, res)
+
+include_md(file, res, format = NULL)
+
+include_rmd(file, res, format = NULL)
+}
+\arguments{
+\item{file}{The path to the file to return}
+
+\item{res}{The response object into which we'll write}
+
+\item{content_type}{If provided, the given value will be sent as the
+\code{Content-type} header in the response.}
+
+\item{format}{Passed as the \code{output_format} to \code{rmarkdown::render}}
 }
 \description{
-More roxygen
+Returns the file at the given path as the response.
+}
+\details{
+\code{include_html} will merely return the file with the proper
+\code{content_type} for HTML. \code{include_md} and \code{include_rmd} will
+process the given markdown file through \code{rmarkdown::render} and return
+the resultant HTML as a response.
 }
 

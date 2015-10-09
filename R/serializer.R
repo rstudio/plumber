@@ -1,4 +1,10 @@
 #' Add a Serializer
+#'
+#' A serializer is responsible for translating a generated R value into output
+#' that a remote user can understand. For instance, the \code{jsonSerializer}
+#' serializes R objects into JSON before returning them to the user. The list of
+#' available serializers in plumber is global.
+#'
 #' @export
 addSerializer <- function(name, serializer){
   if (is.null(.globals$serializers)){

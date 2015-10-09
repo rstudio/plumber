@@ -5,13 +5,23 @@ requireRmd <- function(fun_name){
   }
 }
 
-#' Include any file
+#' Send File Contents as Response
 #'
-#' More roxygen
+#' Returns the file at the given path as the response.
+#'
+#' \code{include_html} will merely return the file with the proper
+#' \code{content_type} for HTML. \code{include_md} and \code{include_rmd} will
+#' process the given markdown file through \code{rmarkdown::render} and return
+#' the resultant HTML as a response.
+#'
+#' @param file The path to the file to return
+#' @param res The response object into which we'll write
+#' @param content_type If provided, the given value will be sent as the
+#'  \code{Content-type} header in the response.
 #' @export
 include_file <- function(file, res, content_type){
   # TODO stream this directly to the request w/o loading in memory
-  # TODO set content type
+  # TODO set content type automatically
   lines <- paste(readLines(file), collapse="\n")
   res$serializer <- "null"
   res$body <- c(res$body, lines)
@@ -23,13 +33,14 @@ include_file <- function(file, res, content_type){
   res
 }
 
-#' Include an HTML file
+#' @rdname include_file
 #' @export
 include_html <- function(file, res){
   include_file(file, res, content_type="text/html; charset=utf-8")
 }
 
-#' Include a markdown file
+#' @rdname include_file
+#' @param format Passed as the \code{output_format} to \code{rmarkdown::render}
 #' @export
 include_md <- function(file, res, format = NULL){
   requireRmd("include_md")
@@ -38,7 +49,7 @@ include_md <- function(file, res, format = NULL){
   include_html(f, res)
 }
 
-#' Include an R Markdown file
+#' @rdname include_file
 #' @export
 include_rmd <- function(file, res, format = NULL){
   requireRmd("include_rmd")

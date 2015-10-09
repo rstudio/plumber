@@ -1,5 +1,10 @@
-#' Forward Request to Future Handlers
+#' Forward Request to The Next Handler
 #'
+#' This function is used when a filter is done processing a request and wishes
+#' to pass control off to the next handler in the chain. If this is not called
+#' by a filter, the assumption is that the filter fully handled the request
+#' itself and no other filters or endpoints should be evaluated for this
+#' request.
 #' @export
 forward <- function(){
   .globals$forwarded <- TRUE
