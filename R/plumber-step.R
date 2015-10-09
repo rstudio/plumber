@@ -16,9 +16,8 @@ PlumberStep <- R6Class(
   public = list(
     lines = NA,
     serializer = NULL,
-    initialize = function(expr, envir, lines, serializer, processors){
+    initialize = function(expr, lines, serializer, processors){
       private$expr <- expr
-      private$envir <- envir
 
       if (!missing(lines)){
         self$lines <- lines
@@ -38,7 +37,7 @@ PlumberStep <- R6Class(
       }
 
       args <- getRelevantArgs(list(...), plumberExpression=private$expr)
-      val <- do.call(eval(private$expr, envir=private$envir), args)
+      val <- do.call(private$expr, args)
 
       for (p in private$processors){
         li <- c(list(value=val), ...)
@@ -49,7 +48,6 @@ PlumberStep <- R6Class(
     }
   ),
   private = list(
-    envir = NA,
     expr = NA,
     processors = NULL
   )
@@ -73,7 +71,7 @@ getRelevantArgs <- function(args, plumberExpression){
   }
 
   # Extract the names of the arguments this function supports.
-  fargs <- names(formals(eval(plumberExpression)))
+  fargs <- names(formals(plumberExpression))
 
   if (!"..." %in% fargs){
     # Use the named arguments that match, drop the rest.
@@ -93,14 +91,13 @@ PlumberEndpoint <- R6Class(
     canServe = function(req){
       req$REQUEST_METHOD %in% self$verbs && !is.na(stringi::stri_match(req$PATH_INFO, regex=private$regex$regex)[1,1])
     },
-    initialize = function(verbs, path, expr, envir, preempt, serializer, processors, lines){
+    initialize = function(verbs, path, expr, preempt, serializer, processors, lines){
       self$verbs <- verbs
       self$path <- path
 
       private$regex <- createPathRegex(path)
 
       private$expr <- expr
-      private$envir <- envir
 
       if (!missing(preempt) && !is.null(preempt)){
         self$preempt <- preempt
@@ -129,10 +126,9 @@ PlumberFilter <- R6Class(
   inherit = PlumberStep,
   public = list(
     name = NA,
-    initialize = function(name, expr, envir, serializer, processors, lines){
+    initialize = function(name, expr, serializer, processors, lines){
       self$name <- name
       private$expr <- expr
-      private$envir <- envir
 
       if (!missing(serializer)){
         self$serializer <- serializer
