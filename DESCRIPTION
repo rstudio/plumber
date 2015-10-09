@@ -1,8 +1,8 @@
 Package: plumber
 Type: Package
 Title: An API Generator for R
-Version: 0.1
-Date: 2015-06-03
+Version: 0.2.0
+Date: 2015-10-09
 Authors@R: c(
   person(family="Trestle Technology, LLC", role="aut", email="cran@trestletechnology.net"),
   person("Jeff", "Allen", role="cre", email="cran@trestletechnology.net"))
