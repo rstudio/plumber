@@ -14,4 +14,10 @@ examples:
   children:
     - link: /examples/github
       name: GitHub Webhook
-
+hosting:
+  name: Hosting
+  children:
+    - link: /docs/hosting
+      name: Basic Hosting
+    - link: /docs/path-to-port
+      name: Path-To-Port Forwarding
