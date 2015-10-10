@@ -18,6 +18,12 @@ PlumberStep <- R6Class(
     serializer = NULL,
     initialize = function(expr, envir, lines, serializer, processors){
       private$expr <- expr
+      if (is.expression(expr)){
+        private$func <- eval(expr, envir)
+      } else {
+        private$func <- expr
+      }
+
       private$envir <- envir
 
       if (!missing(lines)){
@@ -38,7 +44,7 @@ PlumberStep <- R6Class(
       }
 
       args <- getRelevantArgs(list(...), plumberExpression=private$expr)
-      val <- do.call(eval(private$expr, envir=private$envir), args)
+      val <- do.call(private$func, args)
 
       for (p in private$processors){
         li <- c(list(value=val), ...)
@@ -51,6 +57,7 @@ PlumberStep <- R6Class(
   private = list(
     envir = NA,
     expr = NA,
+    func = NA,
     processors = NULL
   )
 )
@@ -100,6 +107,11 @@ PlumberEndpoint <- R6Class(
       private$regex <- createPathRegex(path)
 
       private$expr <- expr
+      if (is.expression(expr)){
+        private$func <- eval(expr, envir)
+      } else {
+        private$func <- expr
+      }
       private$envir <- envir
 
       if (!missing(preempt) && !is.null(preempt)){
@@ -132,6 +144,11 @@ PlumberFilter <- R6Class(
     initialize = function(name, expr, envir, serializer, processors, lines){
       self$name <- name
       private$expr <- expr
+      if (is.expression(expr)){
+        private$func <- eval(expr, envir)
+      } else {
+        private$func <- expr
+      }
       private$envir <- envir
 
       if (!missing(serializer)){
