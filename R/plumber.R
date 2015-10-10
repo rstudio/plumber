@@ -41,8 +41,8 @@ plumber <- R6Class(
       private$errorHandler <- defaultErrorHandler
       private$notFoundHandler <- default404Handler
 
-      self$filters <- c(self$filters, PlumberFilter$new("queryString", queryStringFilter, private$defaultSerializer, NULL, NULL))
-      self$filters <- c(self$filters, PlumberFilter$new("postBody", postBodyFilter, private$defaultSerializer, NULL, NULL))
+      self$filters <- c(self$filters, PlumberFilter$new("queryString", queryStringFilter, private$envir, private$defaultSerializer, NULL, NULL))
+      self$filters <- c(self$filters, PlumberFilter$new("postBody", postBodyFilter, private$envir, private$defaultSerializer, NULL, NULL))
 
       private$filename <- file
       private$envir <- new.env()
@@ -166,9 +166,9 @@ plumber <- R6Class(
           }
 
           if (!is.null(path)){
-            private$addEndpointInternal(verbs, path, eval(e, envir=private$envir), serializer, processors, srcref, preempt)
+            private$addEndpointInternal(verbs, path, e, serializer, processors, srcref, preempt)
           } else if (!is.null(filter)){
-            private$addFilterInternal(filter, eval(e, envir=private$envir), serializer, processors, srcref)
+            private$addFilterInternal(filter, e, serializer, processors, srcref)
           }
         }
       }
@@ -195,14 +195,14 @@ plumber <- R6Class(
     },
     #' @param verbs The verb(s) which this endpoint supports
     #' @param path The path for the endpoint
-    #' @param func The function encapsulating the endpoint's logic
+    #' @param expr The expression encapsulating the endpoint's logic
     #' @param serializer The name of the serializer to use (if not the default)
     #' @param processors Any \code{PlumberProcessors} to apply to this endpoint
     #' @param preempt The name of the filter before which this endpoint should
     #'   be inserted. If not specified the endpoint will be added after all
     #'   the filters.
-    addEndpoint = function(verbs, path, func, serializer, processors, preempt=NULL){
-      private$addEndpointInternal(verbs, path, func, serializer, processors, srcref, preempt)
+    addEndpoint = function(verbs, path, expr, serializer, processors, preempt=NULL){
+      private$addEndpointInternal(verbs, path, expr, serializer, processors, srcref, preempt)
     },
     setErrorHandler = function(fun){
       private$errorHandler <- fun
@@ -212,14 +212,14 @@ plumber <- R6Class(
       private$notFoundHandler = fun
     },
     #' @param name The name of the filter
-    #' @param func The function encapsulating the filter's logic
+    #' @param expr The expression encapsulating the filter's logic
     #' @param serializer (optional) A custom serializer to use when writing out
     #'   data from this filter.
     #' @param processors The \code{\link{PlumberProcessor}}s to apply to this
     #'   filter.
-    addFilter = function(name, func, serializer, processors){
+    addFilter = function(name, expr, serializer, processors){
       "Create a new filter and add it to the router"
-      private$addFilterInternal(name, func, serializer, processors)
+      private$addFilterInternal(name, expr, serializer, processors)
     },
     setSerializer = function(name){
       private$defaultSerializer <- name
@@ -350,13 +350,13 @@ plumber <- R6Class(
     parsed = NA,
     envir = NULL,
     defaultSerializer = "json",
-    addFilterInternal = function(name, func, serializer, processors, lines){
+    addFilterInternal = function(name, expr, serializer, processors, lines){
       "Create a new filter and add it to the router"
-      filter <- PlumberFilter$new(name, func, serializer, processors, lines)
+      filter <- PlumberFilter$new(name, expr, private$envir, serializer, processors, lines)
       self$filters <- c(self$filters, filter)
       invisible(self)
     },
-    addEndpointInternal = function(verbs, path, func, serializer, processors, srcref, preempt=NULL){
+    addEndpointInternal = function(verbs, path, expr, serializer, processors, srcref, preempt=NULL){
       filterNames <- "__first__"
       for (f in self$filters){
         filterNames <- c(filterNames, f$name)
@@ -371,7 +371,7 @@ plumber <- R6Class(
       }
 
       preempt <- ifelse(is.null(preempt), "__no-preempt__", preempt)
-      self$endpoints[[preempt]] <- c(self$endpoints[[preempt]], PlumberEndpoint$new(verbs, path, func, preempt, serializer, processors, srcref))
+      self$endpoints[[preempt]] <- c(self$endpoints[[preempt]], PlumberEndpoint$new(verbs, path, expr, private$envir, preempt, serializer, processors, srcref))
     }
   )
 )

@@ -53,7 +53,7 @@ test_that("complete addFilter works", {
   serializer <- "ser"
 
   name <- "fullFilter"
-  expr <- function(req, res){res$setHeader("expr", TRUE)}
+  expr <- expression(function(req, res){res$setHeader("expr", TRUE)})
 
   baseFilters <- length(r$filters)
   r$addFilter(name, expr, serializer, list(processor))
@@ -79,7 +79,7 @@ test_that("sparse addFilter works", {
   r <- plumber$new()
 
   name <- "sparseFilter"
-  expr <- function(req, res){res$setHeader("expr", TRUE)}
+  expr <- expression(function(req, res){res$setHeader("expr", TRUE)})
 
   baseFilters <- length(r$filters)
   r$addFilter(name, expr)

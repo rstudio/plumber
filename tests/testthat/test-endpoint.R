@@ -2,9 +2,9 @@ test_that("Endpoints execute in their environment", {
   env <- new.env()
   assign("a", 5, envir=env)
 
-  foo <- eval(quote(function(){ a }), envir=env)
+  foo <- parse(text="foo <- function(){ a }")
 
-  r <- PlumberEndpoint$new('verb', 'path', foo, "a", 1:2)
+  r <- PlumberEndpoint$new('verb', 'path', foo, env, "a", 1:2)
   expect_equal(r$exec(), 5)
 })
 
@@ -13,27 +13,27 @@ test_that("Missing lines are ok", {
 })
 
 test_that("Endpoints are exec'able with named arguments.", {
-  foo <- function(x){ x + 1 }
+  foo <- parse(text="foo <- function(x){ x + 1 }")
   r <- PlumberEndpoint$new('verb', 'path', foo, environment())
   expect_equal(r$exec(x=3), 4)
 })
 
 test_that("Unnamed arguments error", {
-  foo <- function(){ 1 }
+  foo <- parse(text="foo <- function(){ 1 }")
   r <- PlumberEndpoint$new('verb', 'path', foo, environment())
   expect_error(r$exec(3))
 
-  foo <- function(x, ...){ x + 1 }
+  foo <- parse(text="foo <- function(x, ...){ x + 1 }")
   r <- PlumberEndpoint$new('verb', 'path', foo, environment())
   expect_error(r$exec(x=1, 3))
 })
 
 test_that("Ellipses allow any named args through", {
-  foo <- function(...){ sum(unlist(list(...))) }
+  foo <- parse(text="function(...){ sum(unlist(list(...))) }")
   r <- PlumberEndpoint$new('verb', 'path', foo, environment())
   expect_equal(r$exec(a=1, b=2, c=3), 6)
 
-  foo <- function(...){ list(...) }
+  foo <- parse(text="function(...){ list(...) }")
   r <- PlumberEndpoint$new('verb', 'path', foo, environment())
   expect_equal(r$exec(a="aa", b="ba"), list(a="aa", b="ba"))
 })
@@ -48,7 +48,7 @@ test_that("Programmatic endpoints work", {
   })
 
   serializer <- "ser"
-  expr <- function(req, res){res$setHeader("expr", TRUE)}
+  expr <- expression(function(req, res){res$setHeader("expr", TRUE)})
 
   r$addEndpoint("GET", "/", expr, serializer, list(processor), "queryString")
   expect_equal(length(r$endpoints), 1)
