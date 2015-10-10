@@ -34,11 +34,19 @@ test_that("root requests are routed to index.html", {
 })
 
 test_that("static binary file is served", {
-
+  res <- PlumberResponse$new()
+  pr$route(make_req("GET", "/public2/test.txt.zip"), res)
+  expect_equal(res$headers$`Content-type`, "application/octet-stream")
+  bod <- res$body
+  bin <- readBin(file("files/static/test.txt.zip", "rb"), "raw", n=1000)
+  expect_equal(bin, bod)
 })
 
 test_that("path prefix is accounted for", {
-  #/public2
+  res <- PlumberResponse$new()
+  pr$route(make_req("GET", "/public2/test.txt"), res)
+  expect_equal(res$headers$`Content-type`, "text/plain")
+  expect_equal(rawToChar(res$body), "I am a text file.\n")
 })
 
 

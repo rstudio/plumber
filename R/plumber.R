@@ -407,7 +407,7 @@ plumber <- R6Class(
       expr <- function(req, res){
         # Adapted from shiny:::staticHandler
         if (!identical(req$REQUEST_METHOD, 'GET')){
-          return(NULL)
+          return(forward())
         }
 
         path <- req$PATH_INFO
@@ -429,7 +429,7 @@ plumber <- R6Class(
 
         abs.path <- resolve(direc, path)
         if (is.null(abs.path)){
-          return(NULL)
+          return(forward())
         }
 
         ext <- tools::file_ext(abs.path)
