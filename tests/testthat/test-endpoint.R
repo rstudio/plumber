@@ -68,3 +68,23 @@ test_that("Programmatic endpoints work", {
   expect_true(h$pre)
   expect_true(h$post)
 })
+
+test_that("Programmatic endpoints with functions work", {
+  r <- plumber$new()
+
+  expr <- function(req, res){res$setHeader("expr", TRUE)}
+
+  r$addEndpoint("GET", "/", expr)
+  expect_equal(length(r$endpoints), 1)
+
+  end <- r$endpoints[[1]][[1]]
+  expect_equal(end$verbs, "GET")
+  expect_equal(end$path, "/")
+
+  res <- PlumberResponse$new()
+  req <- list()
+  end$exec(req=req, res=res)
+
+  h <- res$headers
+  expect_true(h$expr)
+})

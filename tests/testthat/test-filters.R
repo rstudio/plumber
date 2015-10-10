@@ -96,3 +96,25 @@ test_that("sparse addFilter works", {
   h <- res$headers
   expect_true(h$expr)
 })
+
+test_that("sparse addFilter with a function works", {
+  r <- plumber$new()
+
+  name <- "sparseFilter"
+  expr <- function(req, res){res$setHeader("expr", TRUE)}
+
+  baseFilters <- length(r$filters)
+  r$addFilter(name, expr)
+  expect_equal(length(r$filters), baseFilters+1)
+
+  fil <- r$filters[[baseFilters+1]]
+  expect_equal(fil$name, "sparseFilter")
+  expect_equal(fil$lines, NA)
+
+  res <- PlumberResponse$new()
+  req <- list()
+  fil$exec(req=req, res=res)
+
+  h <- res$headers
+  expect_true(h$expr)
+})
