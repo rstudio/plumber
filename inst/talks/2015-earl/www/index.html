@@ -15,12 +15,13 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
 		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/plumber.css">
 		<link rel="stylesheet" href="css/theme/black.css" id="theme">
 
 		<!-- Code syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
 
-		<!-- Printing and PDF exports -->
+		<!-- Printing and PDF exports -->Ï
 		<script>
 			var link = document.createElement( 'link' );
 			link.rel = 'stylesheet';
@@ -41,15 +42,96 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
         <section>
-          <img src="images/plumber.png"></img>
+          <img src="images/plumber.png"/>
 					<h1>plumber</h1>
 					<h3>Turn R code into web APIs</h3>
 					<p>
-						<small>Jeff Allen / <a href="http://twitter.com/trestleJeff">@trestleJeff</a></small>
+						<small>Jeff Allen / <a href="http://twitter.com/trestleJeff">@trestleJeff</a></small> <br />
+						<small><a href="http://plumber.trestletech.com">http://plumber.trestletech.com</a></small>
 					</p>
 				</section>
-			</div>
 
+				<section>
+          <h2>You've got R code...</h2>
+          <pre class="big-code"><code class="hljs r">buildModel <- function(myData){
+  mcmcTheKmeansLogarithm(myData)
+}
+forecastSales <- function(date){
+  linearModel(sales, date)
+}
+</code></pre>
+				</section>
+
+				<section>
+          <h2>You've got a website...</h2>
+          <img src="images/hatsforcats.png" />
+				</section>
+
+				<section>
+          <h2>You want to combine them...</h2>
+          <img src="images/rhatsforcats.png" />
+				</section>
+
+				<section>
+          <h2>Plumber can help!</h2>
+          <ul>
+            <li>Convert existing R code to web APIs</li>
+            <li>Just add comments to your existing code</li>
+            <li>Leverage R from existing websites and APIs</li>
+          </ul>
+				</section>
+
+				<section data-transition="none">
+				  <h1>Overview</h1>
+				    <ul>
+				      <li>Decorating</li>
+				      <li>Running</li>
+				      <li>Routing</li>
+				      <li>Hosting</li>
+				    </ul>
+				</section>
+
+				<section data-transition="none">
+				  <h1>Overview</h1>
+				    <ul>
+				      <li class="selected">Decorating</li>
+				      <li>Running</li>
+				      <li>Routing</li>
+				      <li>Hosting</li>
+				    </ul>
+				</section>
+
+				<section>
+          <h2>Decorating</h2>
+          <pre class="medium-code"><code class="hljs r">#* @get /salesgraph
+#* @png
+function(){
+  par(mar = rep(2, 4)) # margins
+  dates <- seq(as.Date("2015-10-01"),
+      as.Date("2015-10-31"), by=1)
+  sold <- 1:31
+
+  plot(dates, sold, type="b", main="Sales")
+}
+          </code></pre>
+				</section>
+
+				<section>
+				  <h2>Decorating</h2>
+          <pre class="medium-code"><code class="hljs r">sales <- NULL
+
+#* @post /addsale
+function(qty){
+  sales <- rbind(sales, list(
+      time = Sys.time(),
+      item="hat",
+      qty = qty
+  ))
+}
+          </code></pre>
+				</section>
+
+			</div>
 		</div>
 
 		<script src="lib/js/head.min.js"></script>
