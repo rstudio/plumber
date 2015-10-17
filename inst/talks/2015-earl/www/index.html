@@ -4,10 +4,10 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>reveal.js - The HTML Presentation Framework</title>
+		<title>plumber - Convert your existing R code to a web API</title>
 
-		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
-		<meta name="author" content="Hakim El Hattab">
+		<meta name="description" content="plumber - Convert your existing R code to a web API">
+		<meta name="author" content="Jeff Allen">
 
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -87,7 +87,7 @@ forecastSales <- function(date){
 				      <li>Decorating</li>
 				      <li>Running</li>
 				      <li>Routing</li>
-				      <li>Hosting</li>
+				      <li>Filtering</li>
 				    </ul>
 				</section>
 
@@ -97,7 +97,7 @@ forecastSales <- function(date){
 				      <li class="selected">Decorating</li>
 				      <li>Running</li>
 				      <li>Routing</li>
-				      <li>Hosting</li>
+				      <li>Filtering</li>
 				    </ul>
 				</section>
 
@@ -121,21 +121,22 @@ function(){
           <pre class="medium-code"><code class="hljs r">sales <- NULL
 
 #* @post /addsale
-function(qty){
-  sales <- rbind(sales, list(
-      time = Sys.time(),
-      item="hat",
-      qty = qty
+function(qty, item, id){
+  sales <<- rbind(sales, data.frame(
+    id = id,
+    time = Sys.time(),
+    item = item,
+    qty = qty
   ))
-}
-          </code></pre>
+  id
+}</code></pre>
 				</section>
 
         <section>
           <h2>Automatic Parsing</h2>
-          <pre class="medium-code"><code class="hljs">POST www.plumber.trestletech.com HTTP/1.1
+          <pre class="medium-code"><code class="hljs">POST plumber.trestletech.com HTTP/1.1
 
-{qty: "3""}
+{"qty": "3"}
 </code></pre>
           <pre class="medium-code"><code class="hljs r">function(qty){
   qty == "3" # TRUE
@@ -144,11 +145,23 @@ function(qty){
         </section>
 
         <section>
-          <h2>With GETs, too!</h2>
-          <pre class="medium-code"><code class="hljs">GET www.plumber.trestletech.com?qty=2 HTTP/1.1
+          <h2>With Query Strings, too!</h2>
+          <pre class="medium-code"><code class="hljs">GET plumber.trestletech.com?qty=2 HTTP/1.1
 </code></pre>
           <pre class="medium-code"><code class="hljs r">function(qty){
   qty == "2" # TRUE
+}
+</code></pre>
+        </section>
+
+        <section>
+          <h2>You always get <code>req</code> and <code>res</code></h2>
+          <pre class="medium-code"><code class="hljs r">#* @get /
+function(req, res){
+  ip <- req$REMOTE_ADDR
+  res$setHeader("Last-Modified",
+        "Fri, 16 Oct 2015 12:45:26 GMT")
+  # ...
 }
 </code></pre>
         </section>
@@ -159,7 +172,7 @@ function(qty){
 				      <li>Decorating</li>
 				      <li class="selected">Running</li>
 				      <li>Routing</li>
-				      <li>Hosting</li>
+				      <li>Filtering</li>
 				    </ul>
 				</section>
 
@@ -182,6 +195,143 @@ pr$run(port=8000)
 				  -->
 				</section>
 
+				<section>
+				  <ul>
+				      <li>Decorating</li>
+				      <li>Running</li>
+				      <li class="selected">Routing</li>
+				      <li>Filtering</li>
+				    </ul>
+				</section>
+
+        <section>
+          <h2>Static Routes</h2>
+          <pre class="medium-code"><code class="hljs r">#* @post /transaction
+function(item, qty, id){
+  sales <- rbind(sales, list(time=Sys.time(),
+                   item=item, qty=qty, id=id))
+}
+</code></pre>
+<pre class="medium-code"><code class="hljs">POST myplumber.com/transaction HTTP/1.1
+
+{"qty": "3", "item": "blue-hat", "id": 429}
+</code></pre>
+        </section>
+
+        <section>
+          <h2>Variable Routes</h2>
+          <pre class="medium-code"><code class="hljs r">#* @get /transaction/&lt;id&gt;
+function(id){
+  id <- as.integer(id)
+  sales[sales$id == id, ]
+}
+</code></pre>
+<pre class="medium-code"><code class="hljs">GET myplumber.com/transaction/429 HTTP/1.1
+
+[{"id":429,"time":"2015-10-16 20:52:06",
+    "item":"blue-hat","qty":"3"}]
+</code></pre>
+        </section>
+
+        <section>
+          <h2>Typed Variable Routes</h2>
+          <pre class="medium-code"><code class="hljs r">#* @get /transaction/&lt;id:int&gt;
+function(id){
+  sales[sales$id == id, ]
+}
+</code></pre>
+<pre class="medium-code"><code class="hljs">GET myplumber.com/transaction/429 HTTP/1.1
+
+[{"id":429,"time":"2015-10-16 20:52:06",
+    "item":"blue-hat","qty":"3"}]
+</code></pre>
+        </section>
+
+        <section>
+          <h2>Complex Routes</h2>
+          <pre class="medium-code"><code class="hljs r">#* @get /hats/&lt;color&gt;/size/&lt;size:int&gt;
+function(color, size){
+  hats[hats$color == color
+        & hats$size == size]
+}
+</code></pre>
+        </section>
+
+
+        <section>
+				  <h1>Outline</h1>
+				    <ul>
+				      <li>Decorating</li>
+				      <li>Running</li>
+				      <li>Routing</li>
+				      <li class="selected">Filtering</li>
+				    </ul>
+				</section>
+
+        <section>
+          <h2>Endpoints</h2>
+          [Always serve things]
+          <pre class="medium-code"><code class="hljs r">#* @get /transaction/&lt;id&gt;
+function(id){
+  id <- as.integer(id)
+  sales[sales$id == id, ]
+}
+</code></pre>
+        </section>
+
+        <section>
+          <h2>Filters</h2>
+          [ 1. Passively do things ]
+          <pre class="medium-code"><code class="hljs r">#* @filter logger
+function(req){
+  print(paste0(date(), " - ",
+          req$REMOTE_ADDR, " - ",
+          req$REQUEST_METHOD, " ",
+          req$PATH_INFO))
+  forward()
+}
+</code></pre>
+        </section>
+
+        <section>
+          <h2>Filters</h2>
+          [ 2. Change things on the way by ]
+          <pre class="medium-code"><code class="hljs r">#* @filter setuser
+function(req){
+  un <- req$HTTP_COOKIE
+  # Make req$username available to endpoints
+  req$username <- un
+
+  forward()
+}
+</code></pre>
+        </section>
+
+        <section>
+          <h2>Filters</h2>
+          [ 3. Can serve a response ]
+          <pre class="medium-code"><code class="hljs r">#* @filter nochrome
+function(req){
+    if (grepl("Chrome", req$HTTP_USER_AGENT)){
+      res$status <- 400
+      res$body <- "NOT WELCOME HERE!"
+    } else {
+      forward()
+    }
+}
+</code></pre>
+        </section>
+
+
+        <section>
+          <h1>Extras</h1>
+          <ul>
+            <li class="fragment">Debug your web app on a REPL!</li>
+            <li class="fragment">Static asset server</li>
+            <li class="fragment">Helpers to serve HTML, Markdown, and RMD</li>
+            <li class="fragment">Composable API, if annotations aren't your thing</li>
+          </ul>
+        </section>
 
 
 			</div>
