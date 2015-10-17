@@ -101,11 +101,11 @@ forecastSales <- function(date){
 				    </ul>
 				</section>
 
-				<section>
+				<section data-transition="none">
           <h2>Decorating</h2>
-          <pre class="medium-code"><code class="hljs r">#* @get /salesgraph
-#* @png
-function(){
+          <pre class="medium-code"><code class="hljs r">
+
+makePlot <- function(){
   par(mar = rep(2, 4)) # margins
   dates <- seq(as.Date("2015-10-01"),
       as.Date("2015-10-31"), by=1)
@@ -116,10 +116,25 @@ function(){
           </code></pre>
 				</section>
 
+				<section data-transition="none">
+          <h2>Decorating</h2>
+          <pre class="medium-code"><code class="hljs r">#* @get /salesgraph
+#* @png
+makePlot <- function(){
+  par(mar = rep(2, 4)) # margins
+  dates <- seq(as.Date("2015-10-01"),
+      as.Date("2015-10-31"), by=1)
+  sold <- 1:31
+
+  plot(dates, sold, type="b", main="Sales")
+}
+          </code></pre>
+				</section>
+
+
 				<section>
 				  <h2>Decorating</h2>
           <pre class="medium-code"><code class="hljs r">sales <- NULL
-
 #* @post /addsale
 function(qty, item, id){
   sales <<- rbind(sales, data.frame(
@@ -134,22 +149,24 @@ function(qty, item, id){
 
         <section>
           <h2>Automatic Parsing</h2>
-          <pre class="medium-code"><code class="hljs">POST plumber.trestletech.com HTTP/1.1
-
-{"qty": "3"}
+          <pre class="medium-code"><code class="hljs">GET plumber.trestletech.com/sale?qty=2
 </code></pre>
-          <pre class="medium-code"><code class="hljs r">function(qty){
-  qty == "3" # TRUE
+          <pre class="medium-code"><code class="hljs r">#* @get /sale
+function(qty){
+  qty == "2" # TRUE
 }
 </code></pre>
         </section>
 
         <section>
-          <h2>With Query Strings, too!</h2>
-          <pre class="medium-code"><code class="hljs">GET plumber.trestletech.com?qty=2 HTTP/1.1
+          <h2>POST Forms too!</h2>
+          <pre class="medium-code"><code class="hljs">POST plumber.trestletech.com/ HTTP/1.1
+
+qty=3
 </code></pre>
-          <pre class="medium-code"><code class="hljs r">function(qty){
-  qty == "2" # TRUE
+          <pre class="medium-code"><code class="hljs r">#* @post /
+function(qty){
+  qty == "3" # TRUE
 }
 </code></pre>
         </section>
@@ -208,13 +225,13 @@ pr$run(port=8000)
           <h2>Static Routes</h2>
           <pre class="medium-code"><code class="hljs r">#* @post /transaction
 function(item, qty, id){
-  sales <- rbind(sales, list(time=Sys.time(),
+  sales <<- rbind(sales, list(time=Sys.time(),
                    item=item, qty=qty, id=id))
 }
 </code></pre>
 <pre class="medium-code"><code class="hljs">POST myplumber.com/transaction HTTP/1.1
 
-{"qty": "3", "item": "blue-hat", "id": 429}
+item=black-hat&qty=3&id=429
 </code></pre>
         </section>
 
@@ -326,11 +343,11 @@ function(req){
           [ 3. Can serve a response ]
           <pre class="medium-code"><code class="hljs r">#* @filter nochrome
 function(req){
-    if (grepl("Chrome", req$HTTP_USER_AGENT)){
+    if (!grepl("Chrome", req$HTTP_USER_AGENT)){
+      forward()
+    } else {
       res$status <- 400
       res$body <- "NOT WELCOME HERE!"
-    } else {
-      forward()
     }
 }
 </code></pre>
@@ -351,9 +368,9 @@ function(req){
           <ul>
             <li class="fragment">Website integration</li>
             <li class="fragment">Internal analytics APIs</li>
-            <li class="fragment">Webhooks (GitHub, Slack, ...)</li>
+            <li class="fragment">Webhooks (GitHub, Google Drive, Slack, ...)</li>
             <li class="fragment">Include a web-accessible demo in your packages</li>
-            <li class="fragment">Complete website host in R</li>
+            <li class="fragment">Complete website hosted in R</li>
           </ul>
         </section>
 
@@ -388,6 +405,10 @@ function(req){
 			});
 
 		</script>
+
+    <div style="position: absolute; bottom: 10px; left: 10px;">
+      <img src="images/earl.jpg" style="width: 40%; height: 40%;"/>
+    </div>
 
 	</body>
 </html>
