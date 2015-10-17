@@ -39,12 +39,10 @@ function(res){
   plumber::include_html("sales.html", res)
 }
 
-#* @filter nochrome
-function(req){
-  if (grepl("Chrome", req$HTTP_USER_AGENT)){
-    res$status <- 400
-    res$body <- "NOT WELCOME HERE!"
-  } else {
-    forward()
-  }
+#* @get /transaction/plot
+#* @png
+function(id){
+  plot(sales$time, sales$qty,
+       main="Qty/Purchase Over Time",
+       xlab="Date", ylab="Qty")
 }

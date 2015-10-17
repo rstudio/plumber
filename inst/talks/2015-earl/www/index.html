@@ -280,6 +280,20 @@ function(id){
         </section>
 
         <section>
+          <h2>Special Endpoints</h2>
+          [ Serve Images ]
+          <pre class="medium-code"><code class="hljs r">#* @get /transaction/plot
+#* @png
+function(id){
+  plot(sales$date, sales$qty,
+    main="Qty/Purchase Over Time",
+    xlab="Date", ylab="Qty")
+}
+</code></pre>
+          Returns a PNG image of your graph
+        </section>
+
+        <section>
           <h2>Filters</h2>
           [ 1. Passively do things ]
           <pre class="medium-code"><code class="hljs r">#* @filter logger
@@ -322,7 +336,6 @@ function(req){
 </code></pre>
         </section>
 
-
         <section>
           <h1>Extras</h1>
           <ul>
@@ -330,6 +343,17 @@ function(req){
             <li class="fragment">Static asset server</li>
             <li class="fragment">Helpers to serve HTML, Markdown, and RMD</li>
             <li class="fragment">Composable API, if annotations aren't your thing</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Go Forward and make your dreams come true!</h2>
+          <ul>
+            <li class="fragment">Website integration</li>
+            <li class="fragment">Internal analytics APIs</li>
+            <li class="fragment">Webhooks (GitHub, Slack, ...)</li>
+            <li class="fragment">Include a web-accessible demo in your packages</li>
+            <li class="fragment">Complete website host in R</li>
           </ul>
         </section>
 
