@@ -82,7 +82,7 @@ forecastSales <- function(date){
 				</section>
 
 				<section data-transition="none">
-				  <h1>Overview</h1>
+				  <h1>Outline</h1>
 				    <ul>
 				      <li>Decorating</li>
 				      <li>Running</li>
@@ -92,7 +92,7 @@ forecastSales <- function(date){
 				</section>
 
 				<section data-transition="none">
-				  <h1>Overview</h1>
+				  <h1>Outline</h1>
 				    <ul>
 				      <li class="selected">Decorating</li>
 				      <li>Running</li>
@@ -130,6 +130,59 @@ function(qty){
 }
           </code></pre>
 				</section>
+
+        <section>
+          <h2>Automatic Parsing</h2>
+          <pre class="medium-code"><code class="hljs">POST www.plumber.trestletech.com HTTP/1.1
+
+{qty: "3""}
+</code></pre>
+          <pre class="medium-code"><code class="hljs r">function(qty){
+  qty == "3" # TRUE
+}
+</code></pre>
+        </section>
+
+        <section>
+          <h2>With GETs, too!</h2>
+          <pre class="medium-code"><code class="hljs">GET www.plumber.trestletech.com?qty=2 HTTP/1.1
+</code></pre>
+          <pre class="medium-code"><code class="hljs r">function(qty){
+  qty == "2" # TRUE
+}
+</code></pre>
+        </section>
+
+        <section>
+				  <h1>Outline</h1>
+				    <ul>
+				      <li>Decorating</li>
+				      <li class="selected">Running</li>
+				      <li>Routing</li>
+				      <li>Hosting</li>
+				    </ul>
+				</section>
+
+        <section>
+				  <h2>Running</h2>
+				  <pre class="big-code"><code class="hljs r">library(plumber)
+
+pr <- plumber::plumb("myfile.R")
+pr$run(port=8000)
+</code></pre>
+				</section>
+
+				<section>
+				  <h1>Demo</h1>
+				  <!--
+				    1. Show R source file
+				    2. plumb() source file to start server
+				    3. Visit from browser
+				    4. Show form POSTing
+				  -->
+				</section>
+
+
 
 			</div>
 		</div>
