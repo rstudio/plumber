@@ -9,6 +9,8 @@ docs:
       name: Programmatic Usage
     - link: /docs/routing
       name: Routing
+    - link: /docs/static
+      name: Static File Server
 examples:
   name: Examples
   children:
