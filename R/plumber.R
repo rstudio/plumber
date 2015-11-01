@@ -67,6 +67,7 @@ plumber <- R6Class(
           filter <- NULL
           image <- NULL
           serializer <- NULL
+          assets <- NULL
           while (line > 0 && (stri_detect_regex(private$fileLines[line], pattern="^#['\\*]") || stri_trim_both(private$fileLines[line]) == "")){
             epMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@(get|put|post|use|delete)(\\s+(.*)$)?")
             if (!is.na(epMat[1,2])){
@@ -107,6 +108,23 @@ plumber <- R6Class(
                 stopOnLine(private, line, "Multiple @preempts specified for one function.")
               }
               preempt <- p
+            }
+
+            assetsMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@assets(\\s+(\\S*)(\\s+(\\S+))?\\s*)?$")
+            if (!is.na(assetsMat[1,1])){
+              dir <- stri_trim_both(assetsMat[1,3])
+              if (is.na(dir) || dir == ""){
+                stopOnLine(private, line, "No directory specified for @assets")
+              }
+              prefixPath <- stri_trim_both(assetsMat[1,5])
+              if (is.na(prefixPath) || prefixPath == ""){
+                prefixPath <- "/public"
+              }
+              if (!is.null(assets)){
+                # Must have already assigned.
+                stopOnLine(private, line, "Multiple @assets specified for one entity.")
+              }
+              assets <- list(dir=dir, path=prefixPath)
             }
 
             serMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@serializer(\\s+(.*)\\s*$)?")
@@ -161,14 +179,16 @@ plumber <- R6Class(
             stop("Image processor not found: ", image)
           }
 
-          if (!is.null(filter) && !is.null(path)){
-            stopOnLine(private, line, "A single function can't be both a filter and an API endpoint (@filter AND @get, @post, etc.)")
+          if (sum(!is.null(filter), !is.null(path), !is.null(assets)) > 1){
+            stopOnLine(private, line, "A single function can only be a filter, an API endpoint, or an asset (@filter AND @get, @post, @assets, etc.)")
           }
 
           if (!is.null(path)){
             private$addEndpointInternal(verbs, path, e, serializer, processors, srcref, preempt)
           } else if (!is.null(filter)){
             private$addFilterInternal(filter, e, serializer, processors, srcref)
+          } else if (!is.null(assets)){
+            private$addAssetsInternal(assets$dir, assets$path, e, srcref)
           }
         }
       }
@@ -203,6 +223,15 @@ plumber <- R6Class(
     #'   the filters.
     addEndpoint = function(verbs, path, expr, serializer, processors, preempt=NULL){
       private$addEndpointInternal(verbs, path, expr, serializer, processors, srcref, preempt)
+    },
+    #' Adds a static asset server
+    #'
+    #' @param dir The directory on disk from which to serve static assets
+    #' @param path The path prefix at which the assets should be made available
+    #' @param options A list of configuration options. Currently none are
+    #'   supported
+    addAssets = function(dir, path="/public", options=list()){
+      private$addAssetsInternal(dir, path, options)
     },
     setErrorHandler = function(fun){
       private$errorHandler <- fun
@@ -372,6 +401,64 @@ plumber <- R6Class(
 
       preempt <- ifelse(is.null(preempt), "__no-preempt__", preempt)
       self$endpoints[[preempt]] <- c(self$endpoints[[preempt]], PlumberEndpoint$new(verbs, path, expr, private$envir, preempt, serializer, processors, srcref))
+    },
+    addAssetsInternal = function(direc, pathPrefix="/public", options=list(), srcref){
+      if(missing(direc)){
+        stop("Cannot add asset directory when no directory was specified")
+      }
+
+      if(substr(direc, 1, 2) == "./"){
+        direc <- substr(direc, 3, nchar(direc))
+      }
+
+      if (substr(pathPrefix, 1,1) != "/"){
+        pathPrefix <- paste0("/", pathPrefix)
+      }
+
+      # Evaluate to convert to list
+      if (is.function(options)){
+        options <- options()
+      } else if (is.expression(options)){
+        options <- eval(options, private$envir)
+      }
+
+      expr <- function(req, res){
+        # Adapted from shiny:::staticHandler
+        if (!identical(req$REQUEST_METHOD, 'GET')){
+          return(forward())
+        }
+
+        path <- req$PATH_INFO
+
+        if (is.null(path)){
+          res$body <- "<h1>Bad Request</h1>"
+          res$status <- 400
+        }
+
+        # Trim off the prefix
+        if (!stri_startswith_fixed(path, pathPrefix)){
+          # Not ours to handle
+          return(forward())
+        }
+        path <- substr(path, nchar(pathPrefix)+1, nchar(path))
+
+        if (path == '/')
+          path <- '/index.html'
+
+        abs.path <- resolve(direc, path)
+        if (is.null(abs.path)){
+          return(forward())
+        }
+
+        ext <- tools::file_ext(abs.path)
+        contentType <- getContentType(ext)
+        responseContent <- readBin(abs.path, 'raw', n=file.info(abs.path)$size)
+
+        res$status <- 200
+        res$setHeader("Content-type", contentType)
+        res$body <- responseContent
+      }
+      private$addFilterInternal(paste("static-asset", direc, pathPrefix, sep="|"), expr, "null", NULL, srcref)
     }
   )
 )
