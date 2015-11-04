@@ -42,7 +42,12 @@ function(res){
 #* @get /transaction/plot
 #* @png
 function(id){
-  plot(sales$time, sales$qty,
-       main="Qty/Purchase Over Time",
-       xlab="Date", ylab="Qty")
+  if (is.null(sales) || nrow(sales) == 0){
+    # No data to plot.
+    plot(1,1, type="n", main="No sales yet :(")
+    return()
+  }
+  plot(sales$time, cumsum(as.integer(sales$qty)),
+       main="Purchases Over Time",
+       xlab="Date", ylab="Qty", type="b")
 }
