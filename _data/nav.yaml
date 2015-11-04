@@ -11,6 +11,8 @@ docs:
       name: Routing
     - link: /docs/static
       name: Static File Server
+    - link: /components/earl-2015/
+      name: EARL 2015 Talk
 examples:
   name: Examples
   children:
