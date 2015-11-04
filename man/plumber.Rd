@@ -5,7 +5,7 @@
 \alias{plumb}
 \alias{plumber}
 \title{Plumber Router}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x7fa91fa55b20> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x7f952bf5f800> 
  - attr(*, "name")= chr "plumber_generator"
 }}
 \usage{

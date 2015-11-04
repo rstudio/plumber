@@ -31,7 +31,11 @@ test_that("Empty filters fail", {
 })
 
 test_that("Filter and path fails", {
-  expect_error(plumber$new("files/filterpath.R"), regexp="both a filter and an API endpoint")
+  expect_error(plumber$new("files/filterpath.R"), regexp="can only be")
+})
+
+test_that("Filter and assets fails", {
+  expect_error(plumber$new("files/filterasset.R"), regexp="can only be")
 })
 
 test_that("Terminal filters indeed terminate", {

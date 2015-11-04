@@ -23,9 +23,11 @@ Suggests:
     XML,
     rmarkdown
 Collate:
+    'content-types.R'
     'plumber.R'
     'default-handlers.R'
     'includes.R'
+    'paths.R'
     'plumber-step.R'
     'post-body.R'
     'processor.R'
