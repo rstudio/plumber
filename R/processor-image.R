@@ -7,7 +7,7 @@ PlumberProcessor$new(
     data$file <- t
     jpeg(t)
   },
-  function(val, req, res, data){
+  function(value, req, res, data){
     dev.off()
 
     con <- file(data$file, "rb")
@@ -26,7 +26,7 @@ PlumberProcessor$new(
     data$file <- t
     png(t)
   },
-  function(val, req, res, data){
+  function(value, req, res, data){
     dev.off()
 
     con <- file(data$file, "rb")

@@ -1,0 +1,11 @@
+plumber 0.2.0
+--------------------------------------------------------------------------------
+
+* Added res$setCookie() function.
+
+* Added req$session encrypted cookie handler.
+
+plumber 0.1.0
+--------------------------------------------------------------------------------
+
+* Initial release

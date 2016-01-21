@@ -8,7 +8,7 @@ PlumberProcessor <- R6Class(
       private$name <- name
       private$data <- new.env()
 
-      .globals$processors[[name]] <<- self
+      assign(name, self, envir=.globals$processors)
     },
     pre = function(...){
       dat <- c(list(data=private$data), ...)

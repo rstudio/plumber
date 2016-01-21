@@ -4,7 +4,7 @@ NULL
 
 .globals <- new.env()
 .globals$serializers <- list()
-.globals$processors <- list()
+.globals$processors <- new.env()
 
 verbs <- c("GET", "PUT", "POST", "DELETE")
 enumerateVerbs <- function(v){
@@ -146,9 +146,9 @@ PlumberRouter <- R6Class(
           line <- line - 1
         }
 
-        processors <- NULL
+        processors <- list(sessionCookie=sessionCookie())
         if (!is.null(image) && !is.null(.globals$processors[[image]])){
-          processors <- list(.globals$processors[[image]])
+          processors <- c(processors, list(.globals$processors[[image]]))
         } else if (!is.null(image)){
           stop("Image processor not found: ", image)
         }
