@@ -38,3 +38,5 @@ Collate:
     'serializer-json.R'
     'serializer-xml.R'
     'serializer.R'
+    'session-cookie.R'
+RoxygenNote: 5.0.1
