@@ -5,8 +5,9 @@ r_binary_packages:
   - xml
   - base64enc
   - rmarkdown
-  - pki
   - stringi
   - jsonlite
   - httpuv
+r_packages:
+  - PKI
 warnings_are_errors: true
