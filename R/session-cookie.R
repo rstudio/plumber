@@ -1,10 +1,5 @@
 #' @include processor.R
 #' @include plumber.R
-#' @importFrom PKI PKI.encrypt
-#' @importFrom PKI PKI.decrypt
-#' @importFrom PKI PKI.digest
-#' @importFrom base64enc base64encode
-#' @importFrom base64enc base64decode
 #' @export
 sessionCookie <- function(key, name="plumber"){
   if (missing(key)){
@@ -13,7 +8,7 @@ sessionCookie <- function(key, name="plumber"){
 
   if (!is.null(key)){
     checkPKI()
-    key <- PKI.digest(charToRaw(key), "SHA256")
+    key <- PKI::PKI.digest(charToRaw(key), "SHA256")
   }
 
   PlumberProcessor$new(
@@ -40,8 +35,8 @@ sessionCookie <- function(key, name="plumber"){
       if (!is.null(session) && !identical(session, "")){
         if (!is.null(key)){
           tryCatch({
-            session <- base64decode(session)
-            session <- PKI.decrypt(session, key, "aes256")
+            session <- base64enc::base64decode(session)
+            session <- PKI::PKI.decrypt(session, key, "aes256")
             session <- rawToChar(session)
 
             session <- jsonlite::fromJSON(session)
@@ -57,8 +52,8 @@ sessionCookie <- function(key, name="plumber"){
       if (!is.null(req$session)){
         sess <- jsonlite::toJSON(req$session)
         if (!is.null(key)){
-          sess <- PKI.encrypt(charToRaw(sess), key, "aes256")
-          sess <- base64encode(sess)
+          sess <- PKI::PKI.encrypt(charToRaw(sess), key, "aes256")
+          sess <- base64enc::base64encode(sess)
         }
         res$setCookie(name, sess)
       }
