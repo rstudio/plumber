@@ -10,10 +10,10 @@ test_that("Images are properly rendered", {
   r <- plumber$new("files/image.R")
   resp <- r$serve(make_req("GET", "/png"), PlumberResponse$new())
 
-  expect_gt(length(resp$body), 13000) # This may change with changes to base graphics that slightly alter the plot format. But we'll start here.
-  expect_lt(length(resp$body), 13100)
+  expect_gt(length(resp$body), 4000) # This changes based on R ver/OS, may not be useful.
+  expect_lt(length(resp$body), 25000)
 
   resp <- r$serve(make_req("GET", "/jpeg"), PlumberResponse$new())
-  expect_gt(length(resp$body), 13900) # This may change with changes to base graphics that slightly alter the plot format. But we'll start here.
-  expect_lt(length(resp$body), 14100)
+  expect_gt(length(resp$body), 4000) # This changes based on R ver/OS, may not be useful.
+  expect_lt(length(resp$body), 25000)
 })

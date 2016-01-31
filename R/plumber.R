@@ -4,7 +4,7 @@ NULL
 
 .globals <- new.env()
 .globals$serializers <- list()
-.globals$processors <- list()
+.globals$processors <- new.env()
 
 verbs <- c("GET", "PUT", "POST", "DELETE")
 enumerateVerbs <- function(v){
@@ -27,6 +27,7 @@ stopOnLine <- function(private, line, msg){
 #' See \url{http://plumber.trestletech.com/docs/programmatic/} for additional
 #' details on the methods available on this object.
 #' @export
+#' @importFrom httpuv runServer
 plumber <- R6Class(
   "plumber",
   public = list(
@@ -254,32 +255,20 @@ plumber <- R6Class(
       private$defaultSerializer <- name
     },
     addGlobalProcessor = function(proc){
-      if (!is.null(private$globalProcessors)){
-        stop("Currently plumber only supports a single globalProcessor.")
-      }
-      # FIXME: incorporate the fix from the other branch where processors aren't
-      # bound to a locked env so we can create them dynamically. Then we can
-      # go back to array appending rather than this singleton.
-      private$globalProcessors <- proc
+      private$globalProcessors <- c(private$globalProcessors, proc)
     },
     serve = function(req, res){
       # Apply pre-routing logic
-      data <- new.env()
-      p <- private$globalProcessors # FIXME: loop over, don't use singleton
-      #for ( p in private$globalProcessors ) {
-      if (!is.null(p)){
-        p$pre(req, res, data)
+      for ( p in private$globalProcessors ) {
+        p$pre(req=req, res=res)
       }
-      #}
 
       val <- self$route(req, res)
 
       # Apply post-routing logic
-      #for ( p in private$globalProcessors ) {
-      if (!is.null(p)){
-        val <- p$post(val, req, res, data)
+      for ( p in private$globalProcessors ) {
+        val <- p$post(value=val, req=req, res=res)
       }
-      #}
 
       ser <- res$serializer
 
@@ -495,3 +484,4 @@ plumber <- R6Class(
 plumb <- function(file){
   plumber$new(file)
 }
+

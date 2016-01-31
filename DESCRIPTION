@@ -6,7 +6,7 @@ Date: 2015-10-09
 Authors@R: c(
   person(family="Trestle Technology, LLC", role="aut", email="cran@trestletechnology.net"),
   person("Jeff", "Allen", role="cre", email="cran@trestletechnology.net"))
-License: License: MIT + file LICENSE
+License: MIT + file LICENSE
 Description: Gives the ability to automatically generate and serve an HTTP API
     from R functions using the annotations in the R documentation around your
     functions.
