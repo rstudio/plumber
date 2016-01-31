@@ -4,7 +4,9 @@ r_binary_packages:
   - testthat
   - xml
   - base64enc
-r_packages:
   - rmarkdown
-  - PKI
+  - pki
+  - stringi
+  - jsonlite
+  - httpuv
 warnings_are_errors: true
