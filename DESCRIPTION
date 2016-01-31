@@ -21,7 +21,9 @@ LazyData: TRUE
 Suggests:
     testthat,
     XML,
-    rmarkdown
+    rmarkdown,
+    PKI,
+    base64enc
 Collate:
     'content-types.R'
     'plumber.R'
