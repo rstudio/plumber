@@ -16,14 +16,20 @@ test_that("cookies are set", {
 
   r$addEndpoint("GET", "/", expr)
 
-  sc <- sessionCookie(name="plcook")
+  sc <- sessionCookie("mysecret", name="plcook")
 
   r$addGlobalProcessor(sc)
 
-  res <- plumber:::PlumberResponse$new()
+  res <- PlumberResponse$new()
   r$serve(make_req("GET", "/"), res)
 
-  expect_equal(res$headers[["Set-Cookie"]], 'plcook={"abc":[123]}')
+  key <- PKI:::PKI.digest(charToRaw("mysecret"), "SHA256")
+  cook <- res$headers[["Set-Cookie"]]
+  expect_true(grepl("^plcook=", cook, perl=TRUE))
+  cook <- gsub("^plcook=", "", cook, perl=TRUE)
+  de <- PKI:::PKI.decrypt(base64decode(cook), key, "aes256")
+
+  expect_equal(rawToChar(de), '{"abc":[123]}')
 })
 
 test_that("cookies are read", {
@@ -33,12 +39,17 @@ test_that("cookies are read", {
 
   r$addEndpoint("GET", "/", expr)
 
-  sc <- sessionCookie(name="plcook")
+  sc <- sessionCookie("mysecret", name="plcook")
 
   r$addGlobalProcessor(sc)
 
-  res <- plumber:::PlumberResponse$new()
-  r$serve(make_req("GET", "/", 'plcook={"abc":[123]}'), res)
+  res <- PlumberResponse$new()
 
+  key <- PKI:::PKI.digest(charToRaw("mysecret"), "SHA256")
+  data <- '{"abc":[123]}'
+  enc <- PKI:::PKI.encrypt(charToRaw(data), key, "aes256")
+  r$serve(make_req("GET", "/", paste0('plcook=', base64encode(enc))), res)
+
+  de <- PKI:::PKI.decrypt(charToRaw(res$body), key, "aes256")
   expect_equal(res$body, jsonlite::toJSON(123))
 })
