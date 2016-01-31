@@ -254,6 +254,9 @@ plumber <- R6Class(
       private$defaultSerializer <- name
     },
     addGlobalProcessor = function(proc){
+      if (!is.null(private$globalProcessors)){
+        stop("Currently plumber only supports a single globalProcessor.")
+      }
       # FIXME: incorporate the fix from the other branch where processors aren't
       # bound to a locked env so we can create them dynamically. Then we can
       # go back to array appending rather than this singleton.
