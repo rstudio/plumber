@@ -1,5 +1,7 @@
 # plumber
 
+[![Build Status](https://travis-ci.org/trestletech/plumber.svg?branch=master)](https://travis-ci.org/trestletech/plumber)
+
 <img align="right" src="http://plumber.trestletech.com/components/images/plumber.png" />
 
 plumber allows you to create a REST API by merely decorating your existing R source code with special comments. Take a look at an example.
