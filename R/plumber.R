@@ -253,8 +253,34 @@ plumber <- R6Class(
     setSerializer = function(name){
       private$defaultSerializer <- name
     },
+    addGlobalProcessor = function(proc){
+      if (!is.null(private$globalProcessors)){
+        stop("Currently plumber only supports a single globalProcessor.")
+      }
+      # FIXME: incorporate the fix from the other branch where processors aren't
+      # bound to a locked env so we can create them dynamically. Then we can
+      # go back to array appending rather than this singleton.
+      private$globalProcessors <- proc
+    },
     serve = function(req, res){
+      # Apply pre-routing logic
+      data <- new.env()
+      p <- private$globalProcessors # FIXME: loop over, don't use singleton
+      #for ( p in private$globalProcessors ) {
+      if (!is.null(p)){
+        p$pre(req, res, data)
+      }
+      #}
+
       val <- self$route(req, res)
+
+      # Apply post-routing logic
+      #for ( p in private$globalProcessors ) {
+      if (!is.null(p)){
+        val <- p$post(val, req, res, data)
+      }
+      #}
+
       ser <- res$serializer
 
       if (is.null(ser) || ser == ""){
@@ -379,6 +405,7 @@ plumber <- R6Class(
     parsed = NA,
     envir = NULL,
     defaultSerializer = "json",
+    globalProcessors = NULL,
     addFilterInternal = function(name, expr, serializer, processors, lines){
       "Create a new filter and add it to the router"
       filter <- PlumberFilter$new(name, expr, private$envir, serializer, processors, lines)
