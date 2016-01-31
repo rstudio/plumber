@@ -267,14 +267,18 @@ plumber <- R6Class(
       data <- new.env()
       p <- private$globalProcessors # FIXME: loop over, don't use singleton
       #for ( p in private$globalProcessors ) {
+      if (!is.null(p)){
         p$pre(req, res, data)
+      }
       #}
 
       val <- self$route(req, res)
 
       # Apply post-routing logic
       #for ( p in private$globalProcessors ) {
+      if (!is.null(p)){
         val <- p$post(val, req, res, data)
+      }
       #}
 
       ser <- res$serializer
