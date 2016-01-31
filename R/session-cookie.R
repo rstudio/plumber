@@ -34,18 +34,21 @@ sessionCookie <- function(key, name="plumber"){
 
       req$cookies <- cookies
 
-      session <- cookies[[name]]
+      session <- URLdecode(cookies[[name]])
 
       if (!is.null(session) && !identical(session, "")){
         if (!is.null(key)){
-          # TODO: try-catch this
-          session <- base64decode(session)
-          session <- PKI.decrypt(session, key, "aes256")
-          session <- rawToChar(session)
-        }
+          tryCatch({
+            session <- base64decode(session)
+            session <- PKI.decrypt(session, key, "aes256")
+            session <- rawToChar(session)
 
-        # TODO: try-catch
-        session <- jsonlite::fromJSON(session)
+            session <- jsonlite::fromJSON(session)
+          }, error=function(e){
+            warning("Error processing session cookie. Perhaps your secret changed?")
+            session <<- NULL
+          })
+        }
       }
       req$session <- session
     },

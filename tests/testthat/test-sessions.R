@@ -45,11 +45,33 @@ test_that("cookies are read", {
 
   res <- PlumberResponse$new()
 
+  # Create the request with an encrypted cookie
   key <- PKI:::PKI.digest(charToRaw("mysecret"), "SHA256")
   data <- '{"abc":[123]}'
   enc <- PKI:::PKI.encrypt(charToRaw(data), key, "aes256")
   r$serve(make_req("GET", "/", paste0('plcook=', base64encode(enc))), res)
 
-  de <- PKI:::PKI.decrypt(charToRaw(res$body), key, "aes256")
   expect_equal(res$body, jsonlite::toJSON(123))
+})
+
+test_that("invalid cookies/JSON are handled", {
+  r <- plumber$new()
+
+  expr <- expression(function(req, res){ ifelse(is.null(req$session), "NULL", req$session) })
+
+  r$addEndpoint("GET", "/", expr)
+
+  sc <- sessionCookie("mysecret", name="plcook")
+
+  r$addGlobalProcessor(sc)
+
+  res <- PlumberResponse$new()
+
+  key <- PKI:::PKI.digest(charToRaw("thewrongkey"), "SHA256")
+  data <- '{"abc":[123]}'
+  enc <- PKI:::PKI.encrypt(charToRaw(data), key, "aes256")
+  expect_warning({
+    r$serve(make_req("GET", "/", paste0('plcook=', base64encode(enc))), res)
+  })
+  expect_equal(res$body, jsonlite::toJSON("NULL"))
 })
