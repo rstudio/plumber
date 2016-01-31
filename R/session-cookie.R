@@ -16,7 +16,8 @@ sessionCookie <- function(key, name="plumber"){
     key <- PKI.digest(charToRaw(key), "SHA256")
   }
 
-  list( #TODO: should be a Processor
+  PlumberProcessor$new(
+    "sessionCookie",
     pre=function(req, res, data){
       cookie <- req$HTTP_COOKIE
       if (is.null(cookie) || nchar(cookie) == 0){
