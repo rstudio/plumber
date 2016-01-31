@@ -1,0 +1,10 @@
+language: r
+sudo: required
+r_binary_packages:
+  - testthat
+  - xml
+  - base64enc
+r_packages:
+  - rmarkdown
+  - PKI
+warnings_are_errors: true
