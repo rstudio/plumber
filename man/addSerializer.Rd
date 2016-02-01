@@ -6,6 +6,11 @@
 \usage{
 addSerializer(name, serializer)
 }
+\arguments{
+\item{name}{The name of the serializer (character string)}
+
+\item{serializer}{The serializer to be added.}
+}
 \description{
 A serializer is responsible for translating a generated R value into output
 that a remote user can understand. For instance, the \code{jsonSerializer}

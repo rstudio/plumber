@@ -12,37 +12,7 @@ plumber
 plumb(file)
 }
 \arguments{
-\item{verbs}{The verb(s) which this endpoint supports}
-
-\item{path}{The path for the endpoint}
-
-\item{expr}{The expression encapsulating the endpoint's logic}
-
-\item{serializer}{The name of the serializer to use (if not the default)}
-
-\item{processors}{Any \code{PlumberProcessors} to apply to this endpoint}
-
-\item{preempt}{The name of the filter before which this endpoint should
-  be inserted. If not specified the endpoint will be added after all
-  the filters.
-Adds a static asset server}
-
-\item{dir}{The directory on disk from which to serve static assets}
-
-\item{path}{The path prefix at which the assets should be made available}
-
-\item{options}{A list of configuration options. Currently none are
-supported}
-
-\item{name}{The name of the filter}
-
-\item{expr}{The expression encapsulating the filter's logic}
-
-\item{serializer}{(optional) A custom serializer to use when writing out
-data from this filter.}
-
-\item{processors}{The \code{\link{PlumberProcessor}}s to apply to this
-filter.}
+\item{file}{The file to parse as the plumber router definition}
 }
 \description{
 Routers are the core request handler in plumber. A router is responsible for

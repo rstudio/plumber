@@ -1,4 +1,8 @@
 #' Store session data in encrypted cookies.
+#' @param key The secret key to use. This must be consistent across all sessions
+#'   where you want to save/restore encrypted cookies. It should be a long and
+#'   complex character string to bolster security.
+#' @param name The name of the cookie in the user's browser.
 #' @include processor.R
 #' @include plumber.R
 #' @export
