@@ -1,3 +1,15 @@
+plumber 0.2.2
+--------------------------------------------------------------------------------
+* Add `sessionCookie` function to define a processor that can be used as a
+  globalProcessor on a router to encrypt values from req$session and store them
+  as an encrypted cookie in on the user's browser.
+* Added `setCookie` method to response which (primitively) allows you to set
+  a cookie to be included in the response.
+* Add `addGlobalProcessor` method on `plumber` class to support a processor that
+  runs a processor only a single time, before and then after all other filters 
+  and the endpoint.
+* Document all public params so CHECK passes
+
 plumber 0.2.1
 --------------------------------------------------------------------------------
 * Add more Roxygen documentation for exported functions
