@@ -6,6 +6,13 @@
 \usage{
 sessionCookie(key, name = "plumber")
 }
+\arguments{
+\item{key}{The secret key to use. This must be consistent across all sessions
+where you want to save/restore encrypted cookies. It should be a long and
+complex character string to bolster security.}
+
+\item{name}{The name of the cookie in the user's browser.}
+}
 \description{
 Store session data in encrypted cookies.
 }

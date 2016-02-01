@@ -10,3 +10,4 @@ r_binary_packages:
   - httpuv
 r_packages:
   - PKI
+warnings_are_errors: true
