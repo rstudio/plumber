@@ -312,7 +312,10 @@ plumber <- R6Class(
       req$args <- args
       path <- req$PATH_INFO
 
+      oldWarn <- options("warn")[[1]]
       tryCatch({
+        # Set to show warnings immediately as they happen.
+        options(warn=1)
 
         h <- getHandle("__first__")
         if (!is.null(h)){
@@ -369,7 +372,7 @@ plumber <- R6Class(
         # Error when filtering
         val <- private$errorHandler(req, res, e)
         return(val)
-      })
+      }, finally= options(warn=oldWarn) )
     },
     run = function(host='0.0.0.0', port=8000){
       # TODO: setwd to file path
