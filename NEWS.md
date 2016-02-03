@@ -1,3 +1,9 @@
+plumber 0.2.3
+--------------------------------------------------------------------------------
+* Set options(warn=1) during execution of user code so that warnings are 
+  immediately visible in the console, rather than storing them until the server
+  is stopped.
+
 plumber 0.2.2
 --------------------------------------------------------------------------------
 * Add `sessionCookie` function to define a processor that can be used as a
