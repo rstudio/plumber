@@ -45,6 +45,7 @@ plumber <- R6Class(
 
       self$filters <- c(self$filters, PlumberFilter$new("queryString", queryStringFilter, private$envir, private$defaultSerializer, NULL, NULL))
       self$filters <- c(self$filters, PlumberFilter$new("postBody", postBodyFilter, private$envir, private$defaultSerializer, NULL, NULL))
+      self$filters <- c(self$filters, PlumberFilter$new("cookieParser", cookieFilter, private$envir, private$defaultSerializer, NULL, NULL))
 
       private$filename <- file
       private$envir <- new.env()

@@ -28,12 +28,13 @@ PlumberResponse <- R6Class(
       )
     },
     # TODO: support multiple setCoookies per response
+    # TODO: this should be a list
     setCookie = function(name, value){
       # TODO: support expiration
       # TODO: support path
       # TODO: support HTTP-only
       # TODO: support secure
-      value <- URLencode(value)
+      value <- URLencode(as.character(value))
       self$setHeader("Set-Cookie", paste0(name, "=", value))
     }
   )
