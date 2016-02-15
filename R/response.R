@@ -28,14 +28,30 @@ PlumberResponse <- R6Class(
       )
     },
     # TODO: support multiple setCoookies per response
-    # TODO: this should be a list
     setCookie = function(name, value){
       # TODO: support expiration
       # TODO: support path
       # TODO: support HTTP-only
       # TODO: support secure
-      value <- URLencode(as.character(value))
-      self$setHeader("Set-Cookie", paste0(name, "=", value))
+
+      private$cookies[[name]] <- value
+
+      # Keep headers up-to-date
+      self$setHeader("Set-Cookie", cookieListToStr(private$cookies))
     }
+  ),
+  private = list(
+    cookies = list()
   )
 )
+
+cookieListToStr <- function(li){
+  str <- ""
+  for (n in names(li)){
+    val <- URLencode(as.character(li[[n]]))
+    str <- paste0(str, n, "=", val, "; ")
+  }
+
+  # Trim last '; '
+  substr(str, 0, nchar(str)-2)
+}
