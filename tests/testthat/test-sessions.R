@@ -25,7 +25,7 @@ test_that("cookies are set", {
 
   key <- PKI::PKI.digest(charToRaw("mysecret"), "SHA256")
   cook <- res$headers[["Set-Cookie"]]
-  expect_true(grepl("^plcook=", cook, perl=TRUE))
+  expect_match(cook, "^plcook")
   cook <- gsub("^plcook=", "", cook, perl=TRUE)
   de <- PKI::PKI.decrypt(base64enc::base64decode(cook), key, "aes256")
 

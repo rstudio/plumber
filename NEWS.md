@@ -1,3 +1,11 @@
+plumber 0.2.4
+--------------------------------------------------------------------------------
+* Add a filter which parses and sets req$cookies to be a list corresponding to
+  the cookies provided with the request.
+* Responses can set multiple cookies and overwrite existing cookies 
+* Bug Fix: conver non-character arguments in setCookie to character before URL-
+  encoding.
+
 plumber 0.2.3
 --------------------------------------------------------------------------------
 * Set options(warn=1) during execution of user code so that warnings are 

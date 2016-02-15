@@ -19,23 +19,14 @@ sessionCookie <- function(key, name="plumber"){
   PlumberProcessor$new(
     "sessionCookie",
     pre=function(req, res, data){
-      cookie <- req$HTTP_COOKIE
-      if (is.null(cookie) || nchar(cookie) == 0){
-        req$cookies <- NULL
-        req$session <- NULL
-        return()
+
+      cookies <- req$cookies
+      if (is.null(cookies)){
+        # The cookie-parser filter has probably not run yet. Parse the cookies ourselves
+        # TODO: would be more performant not to run this cookie parsing twice.
+        cookies <- parseCookies(req$HTTP_COOKIE)
       }
-
-      cookie <- strsplit(cookie, ";", fixed=TRUE)[[1]]
-      cookie <- sub("\\s*([\\S*])\\s*", "\\1", cookie, perl=TRUE)
-
-      cookieList <- strsplit(cookie, "=", fixed=TRUE)
-      cookies <- lapply(cookieList, "[[", 2)
-      names(cookies) <- sapply(cookieList, "[[", 1)
-
-      req$cookies <- cookies
-
-      session <- URLdecode(cookies[[name]])
+      session <- cookies[[name]]
 
       if (!is.null(session) && !identical(session, "")){
         if (!is.null(key)){

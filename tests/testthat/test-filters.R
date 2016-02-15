@@ -8,10 +8,10 @@ make_req <- function(verb, path){
 
 test_that("Filters work", {
   r <- plumber$new("files/filters.R")
-  expect_equal(length(r$filters), 2+2) #2 for post and query string filters
+  expect_equal(length(r$filters), 3+2) #3 for post, query string, and cookie filters
 
-  expect_equal(r$filters[[3]]$name, "something")
-  expect_equal(r$filters[[4]]$name, "nospace")
+  expect_equal(r$filters[[4]]$name, "something")
+  expect_equal(r$filters[[5]]$name, "nospace")
 })
 
 test_that("Filters can update req$args", {
