@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="./js-cookie.js"></script>
+  </head>
+  <body>
+    <div class="row">
+      <div class="col-sm-2 text-center">
+        <button id="counter-btn" type="submit" class="btn btn-primary" style="margin-top: 25px;">Visit /counter</button>
+      </div>
+      <div class="col-sm-4">
+        <h4>Response text</h4>
+        <pre id="counter-result">Click "Visit /counter"</pre>
+      </div>
+      <div class="col-sm-4">
+        <h4>Cookie Value</h4>
+        <pre id="counter-cookie"></pre>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      function updateCookie(cookieName, id) {
+        $('#' + id).text(Cookies.get(cookieName) || '<empty>');
+      }
+      updateCookie('visitcounter', 'counter-cookie');
+      $(function(){
+        $("#counter-btn").click(function(){
+          $.ajax({
+            type: 'GET',
+            url: '../counter',
+            cache: false,
+            xhrFields: {
+              withCredentials: true
+            },
+            crossDomain: true,
+          })
+          .then(function(val, status, obj){
+            $('#counter-result').text(val[0]);
+            updateCookie('visitcounter', 'counter-cookie')
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

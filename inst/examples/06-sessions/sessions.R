@@ -20,3 +20,6 @@ function(req){
   req$session$counter <- count + 1
   return(paste0("This is visit #", count))
 }
+
+#* @assets static
+list()
