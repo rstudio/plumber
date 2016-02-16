@@ -12,7 +12,7 @@ function(req, res){
 #* to work:
 #* `pr <- plumb("file.R"); pr$addGlobalProcessor(sessionCookie("secret", "cookieName")); pr$run()`
 #* @get /sessionCounter
-function(req, res){
+function(req){
   count <- 0
   if (!is.null(req$session$counter)){
     count <- as.numeric(req$session$counter)
@@ -20,3 +20,6 @@ function(req, res){
   req$session$counter <- count + 1
   return(paste0("This is visit #", count))
 }
+
+#* @assets js
+list()
