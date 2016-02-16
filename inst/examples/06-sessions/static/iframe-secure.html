@@ -24,7 +24,7 @@
       function updateCookie(cookieName, id) {
         $('#' + id).text(Cookies.get(cookieName) || '<empty>');
       }
-      updateCookie('visitcounter', 'counter-cookie');
+      updateCookie('cookieName', 'counter-cookie');
       $(function(){
         $("#counter-btn").click(function(){
           $.ajax({
