@@ -3,10 +3,12 @@
 #'   where you want to save/restore encrypted cookies. It should be a long and
 #'   complex character string to bolster security.
 #' @param name The name of the cookie in the user's browser.
+#' @param ... Arguments passed on to the \code{response$setCookie} call to,
+#'   for instance, set the cookie's expiration.
 #' @include processor.R
 #' @include plumber.R
 #' @export
-sessionCookie <- function(key, name="plumber"){
+sessionCookie <- function(key, name="plumber", ...){
   if (missing(key)){
     stop("You must define an encryption key or set it to NULL to disable encryption")
   }
@@ -51,7 +53,7 @@ sessionCookie <- function(key, name="plumber"){
           sess <- PKI::PKI.encrypt(charToRaw(sess), key, "aes256")
           sess <- base64enc::base64encode(sess)
         }
-        res$setCookie(name, sess)
+        res$setCookie(name, sess, ...)
       }
       value
     }

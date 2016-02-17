@@ -31,10 +31,6 @@
             type: 'GET',
             url: '../counter',
             cache: false,
-            xhrFields: {
-              withCredentials: true
-            },
-            crossDomain: true,
           })
           .then(function(val, status, obj){
             $('#counter-result').text(val[0]);
