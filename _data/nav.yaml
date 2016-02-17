@@ -20,6 +20,8 @@ examples:
   children:
     - link: /examples/github
       name: GitHub Webhook
+    - link: /examples/mailgun
+      name: Receive Emails (mailgun)
 hosting:
   name: Hosting
   children:
