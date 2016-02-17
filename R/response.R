@@ -9,7 +9,9 @@ PlumberResponse <- R6Class(
     headers = list(),
     serializer = NULL,
     setHeader = function(name, value){
-      self$headers[[name]] <- value
+      he <- list()
+      he[[name]] <- value
+      self$headers <- c(self$headers, he)
     },
     toResponse = function(){
       h <- self$headers
@@ -31,28 +33,24 @@ PlumberResponse <- R6Class(
       )
     },
     # TODO: support multiple setCoookies per response
-    setCookie = function(name, value){
+    setCookie = function(name, value, path){
       # TODO: support expiration
-      # TODO: support path
       # TODO: support HTTP-only
       # TODO: support secure
 
-      private$cookies[[name]] <- value
-
       # Keep headers up-to-date
-      self$setHeader("Set-Cookie", cookieListToStr(private$cookies))
+
+      self$setHeader("Set-Cookie", cookieToStr(name, value, path))
     }
-  ),
-  private = list(
-    cookies = list()
   )
 )
 
-cookieListToStr <- function(li){
-  str <- ""
-  for (n in names(li)){
-    val <- URLencode(as.character(li[[n]]))
-    str <- paste0(str, n, "=", val, "; ")
+cookieToStr <- function(name, value, path){
+  val <- URLencode(as.character(value))
+  str <- paste0(name, "=", val, "; ")
+
+  if (!missing(path)){
+    str <- paste0(str, "Path=", path, "; ")
   }
 
   # Trim last '; '

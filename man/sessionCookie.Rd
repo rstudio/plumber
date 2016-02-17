@@ -4,7 +4,7 @@
 \alias{sessionCookie}
 \title{Store session data in encrypted cookies.}
 \usage{
-sessionCookie(key, name = "plumber")
+sessionCookie(key, name = "plumber", ...)
 }
 \arguments{
 \item{key}{The secret key to use. This must be consistent across all sessions
@@ -12,6 +12,9 @@ where you want to save/restore encrypted cookies. It should be a long and
 complex character string to bolster security.}
 
 \item{name}{The name of the cookie in the user's browser.}
+
+\item{...}{Arguments passed on to the \code{response$setCookie} call to,
+for instance, set the cookie's expiration.}
 }
 \description{
 Store session data in encrypted cookies.
