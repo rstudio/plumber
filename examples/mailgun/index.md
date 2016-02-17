@@ -23,7 +23,7 @@ This example will auto-refresh every 3 seconds with the latest emails the API ha
 </div></div>
   <div class="row">
     <div class="col-md-6 right-border">
-      <h3 class="right-title fixed-width">GET /version</h3>
+      <h3 class="right-title fixed-width">GET /tail</h3>
       <div class="clear"></div>
       <div class="row">
         <div class="col-md-10">
