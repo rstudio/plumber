@@ -33,22 +33,25 @@ PlumberResponse <- R6Class(
       )
     },
     # TODO: support multiple setCoookies per response
-    setCookie = function(name, value){
+    setCookie = function(name, value, path){
       # TODO: support expiration
-      # TODO: support path
       # TODO: support HTTP-only
       # TODO: support secure
 
       # Keep headers up-to-date
 
-      self$setHeader("Set-Cookie", cookieToStr(name, value))
+      self$setHeader("Set-Cookie", cookieToStr(name, value, path))
     }
   )
 )
 
-cookieToStr <- function(name, value){
+cookieToStr <- function(name, value, path){
   val <- URLencode(as.character(value))
   str <- paste0(name, "=", val, "; ")
+
+  if (!missing(path)){
+    str <- paste0(str, "Path=", path, "; ")
+  }
 
   # Trim last '; '
   substr(str, 0, nchar(str)-2)

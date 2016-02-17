@@ -5,6 +5,9 @@ function(req, res){
     count <- as.numeric(req$cookies$visitcounter)
   }
   res$setCookie("visitcounter", count+1)
+  # Most people won't need to concern themselves with the path argument.
+  # I do because of some peculiarities in how I'm hosting the examples.
+  res$setCookie("another", "testhere", path="/")
   return(paste0("This is visit #", count))
 }
 

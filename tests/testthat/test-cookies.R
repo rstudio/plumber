@@ -22,6 +22,7 @@ test_that("the cookies list is set", {
 test_that("cookies can convert to string", {
   expect_equal(cookieToStr("abc", 123), "abc=123")
   expect_equal(cookieToStr("complex", "string with spaces"), "complex=string%20with%20spaces")
+  expect_equal(cookieToStr("abc", 123, path="/somepath"), "abc=123; Path=/somepath")
 })
 
 
