@@ -265,6 +265,13 @@ plumber <- R6Class(
         p$pre(req=req, res=res)
       }
 
+      fork <- parallel:::mcfork()
+      if (inherits(fork, "childProcess")){
+        return(NULL)
+      } else {
+        # private$running <- FALSE
+      }
+
       val <- self$route(req, res)
 
       # Apply post-routing logic
@@ -387,11 +394,20 @@ plumber <- R6Class(
         setwd(dirname(private$filename))
       }
 
-      httpuv::runServer(host, port, self)
+      private$server <- httpuv::startServer(host, port, self)
+      private$running <- TRUE
+      while (private$running){
+        httpuv::service(100)
+        Sys.sleep(0.001)
+      }
+      print("Not running")
+
     }
     #TODO: addRouter() to add sub-routers at a path.
   ),
   private = list(
+    server = NULL,
+    running = FALSE,
     errorHandler = NULL,
     notFoundHandler = NULL,
     filename = NA,

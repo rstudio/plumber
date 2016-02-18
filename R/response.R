@@ -14,6 +14,9 @@ PlumberResponse <- R6Class(
       self$headers <- c(self$headers, he)
     },
     toResponse = function(){
+      if (self$status == 0){
+        return(NULL)
+      }
       h <- self$headers
       # httpuv doesn't like empty headers lists, and this is a useful field anyway...
       h$Date <- format(Sys.time(), "%a, %d %b %Y %X %Z", tz="GMT")
