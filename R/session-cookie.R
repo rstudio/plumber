@@ -60,6 +60,9 @@ sessionCookie <- function(key, name="plumber", ...){
   )
 }
 
+#' @importFrom utils packageVersion
+#' @importFrom utils compareVersion
+#' @noRd
 checkPKI <- function(){
   pkiVer <- tryCatch({as.character(packageVersion("PKI"))},
                      error=function(e){"0.0.0"});

@@ -5,6 +5,8 @@ queryStringFilter <- function(req){
   forward()
 }
 
+#' @importFrom utils URLdecode
+#' @noRd
 parseQS <- function(qs){
   if (is.null(qs) || length(qs) == 0 || qs == ""){
     return(list())

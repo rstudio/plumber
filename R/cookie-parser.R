@@ -4,6 +4,8 @@ cookieFilter <- function(req){
   forward()
 }
 
+#' @importFrom utils URLdecode
+#' @noRd
 parseCookies <- function(cookie){
   if (is.null(cookie) || nchar(cookie) == 0){
     return(list())

@@ -45,6 +45,8 @@ PlumberResponse <- R6Class(
   )
 )
 
+#' @importFrom utils URLencode
+#' @noRd
 cookieToStr <- function(name, value, path){
   val <- URLencode(as.character(value))
   str <- paste0(name, "=", val, "; ")
