@@ -1,5 +1,10 @@
 version: '2'
 services:
+  append: 
+    build: ../examples/01-append/
+    volumes:
+     - ../examples:/examples
+    restart: always
   sessions:
     build: ../examples/06-sessions/
     volumes:
@@ -18,4 +23,6 @@ services:
      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     restart: always
     depends_on:
+     - append
+     - sessions
      - mailgun
