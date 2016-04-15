@@ -18,7 +18,7 @@ function(){
 #* https://developer.github.com/webhooks/
 #* @post /update
 function(req, res){
-  secret <- readLines("~/.github")[1]
+  secret <- readLines("/github-key")[1]
   hm <- digest::hmac(secret, req$postBody, algo="sha1")
   hm <- paste0("sha1=", hm)
   if (!identical(hm, req$HTTP_X_HUB_SIGNATURE)){
