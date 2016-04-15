@@ -5,6 +5,16 @@ services:
     volumes:
      - ../examples:/examples
     restart: always
+  filters: 
+    build: ../examples/02-filters/
+    volumes:
+     - ../examples:/examples
+    restart: always
+  github: 
+    build: ../examples/03-github/
+    volumes:
+     - ../examples:/examples
+    restart: always
   sessions:
     build: ../examples/06-sessions/
     volumes:
@@ -26,3 +36,4 @@ services:
      - append
      - sessions
      - mailgun
+     - filters
