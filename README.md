@@ -47,7 +47,13 @@ $ curl --data "a=4&b=3" "http://localhost:8000/sum"
 
 ## Installation
 
-Currently plumber is not available on CRAN, so you'll need to install it from GitHub. The easiest way to do that is by using `devtools`.
+You can install the latest stable version from CRAN using the following command:
+
+```r
+install.packages("plumber")
+```
+
+If you want to try out the latest development version, you can install it from GitHub. The easiest way to do that is by using `devtools`.
 
 ```r
 library(devtools)
