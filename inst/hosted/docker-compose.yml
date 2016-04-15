@@ -1,0 +1,21 @@
+version: '2'
+services:
+  sessions:
+    build: ../examples/06-sessions/
+    volumes:
+     - ../examples:/examples
+    restart: always
+  mailgun:
+    build: ../examples/07-mailgun/
+    volumes:
+     - ../examples:/examples
+    restart: always
+  nginx:
+    image: nginx:1.9
+    ports:
+     - "80:80"
+    volumes:
+     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    restart: always
+    depends_on:
+     - mailgun
