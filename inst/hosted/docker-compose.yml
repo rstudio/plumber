@@ -25,6 +25,17 @@ services:
     volumes:
      - ../examples:/examples
     restart: always
+  identity:
+    build: ../examples/08-identity
+    volumes:
+     - ../examples:/examples
+    restart: always
+  lb:
+    image: 'dockercloud/haproxy:1.2.1'
+    links:
+     - identity
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   nginx:
     image: nginx:1.9
     ports:
