@@ -2,7 +2,7 @@ emails <- data.frame(from=character(0), time=character(0), subject=character(0),
 
 #* @post /mail
 function(from, subject){
-  emails <<- rbind(emails, data.frame(from=from, time=date(), subject=subject, stringsAsFactors=FALSE))
+  emails <<- rbind(emails, data.frame(from=from, time=date(), subject=htmltools::htmlEscape(subject), stringsAsFactors=FALSE))
   TRUE
 }
 
