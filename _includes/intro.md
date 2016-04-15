@@ -48,12 +48,18 @@ If you're still interested, check out our [live, more thorough example](/docs/en
 
 ## Installation
 
-Currently plumber is not available on CRAN, so you'll need to install it from GitHub. The easiest way to do that is by using `devtools`.
+You can install the latest stable version from CRAN using the following command:
+
+{% highlight bash %}
+install.packages("plumber")
+{% endhighlight %}
+
+If you want to try out the latest development version, you can install it from GitHub. The easiest way to do that is by using `devtools`.
 
 {% highlight bash %}
 library(devtools)
 install_github("trestletech/plumber")
-library(plumber)
 {% endhighlight %}
+
 
 </div></div>
