@@ -90,6 +90,12 @@ You could then build your custom Docker image from this Dockerfile using the com
 
 Then you'd be able to use `docker run --rm -v `pwd`:/app myCustomDocker` to run your custom image, passing in your application as a volume.
 
+## Automatically Run on Restart
+
+If you want your container to start automatically when your machine is booted, you can use the `-d` switch for `docker run`.
+
+`docker run -p 1234:8000 -d myCustomDocker` would run the custom image you created above automatically every time your machine boots and expose the plumber service on port `1234` of your host machine. You'll need to make sure that your firewall allows connections on port `1234` if you want others to be able to access your service.
+
 ## Conclusion
 
 You should now be able to run a single plumber application in Docker. If you're looking to run multiple plumber applications on the same server in Docker, continue on to the next section: [Advanced Docker](./advanced-docker).

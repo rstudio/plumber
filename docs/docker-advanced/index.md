@@ -1,0 +1,136 @@
+---
+layout: page
+title: Advanced Docker
+comments: true
+---
+
+<div class="row"><div class="col-sm-8" markdown="1">
+
+This article will go into detail about more advanced Docker configurations using Docker Compose to host multiple plumber applications on a single server and even load-balancing across multiple plumber processes. If you haven't already, you should go through the [Basic Docker](./docker) article to learn the basics of running plumber in Docker before continuing with this article.
+
+In order to run multiple applications on one server, **you will also need to install `docker-compose` on your system.** This is not included with some installations of Docker, so you will need to [follow these instructions](https://docs.docker.com/compose/install/) if you get an error when you try to run `docker-compose` on the command-line. Docker Compose helps orchestrate multiple Docker containers. If you're planning to run more than one plumber process, you'll want to use Docker Compose to keep them all alive and route traffic between them.
+
+## Multiple Plumber Applications
+
+Docker Compose will be used to help us organize multiple plumber processes. We won't go into detail about how to use Docker Compose, so if you're new you should familiarize yourself using the [official docs](https://docs.docker.com/compose). 
+
+You should define a Docker Compose configuration that defines the behavior of every plumber application that you want to run. You'll first want to setup a Dockerfile that defines the desired behavior for each of your applications (as [we outlined previously](./docker#custom-dockerfiles). You could use a `docker-compose.yml` configuration like the following:
+
+{% highlight yml %}
+version: '2'
+services:
+  app1:
+    build: ./app1/
+    volumes:
+     - ./data:/data
+     - ./app1:/app
+    restart: always
+    ports:
+     - "7000:8000"
+  app2:
+    image: trestletech/plumber
+    command: /app/plumber.R
+    volumes:
+     - ../app2:/app
+    restart: always
+    ports:
+     - "7001:8000"
+{% endhighlight %}
+
+More detail on what each of these options does and what other options exist can be found [here](https://docs.docker.com/compose/compose-file/). This configuration defines two docker containers that should run: `app1` and `app2`. They're layed out as follows:
+
+{% highlight txt %}
+docker-compose.yml
+app1
+├── Dockerfile
+├── api.R
+app2
+├── plumber.R
+data
+├── data.csv
+{% endhighlight %}
+
+You can see that app2 is the simpler of the two apps; it just has the plumber definition that should be run through `plumb()`. So we merely specify the `image` using the default plumber Docker image, and then customize the `command` to specify where the plumber API definition can be found on the container. Since we're mapping `./app2` to `/app`, the definition would be found in `/app/plumber.R`. We specify that it should `always` restart if anything ever happens to the container, and we export port `8000` from the container to port `7001` on the host.
+
+app1 is our more complicated app. If has some extra data in another directory that needs to be loaded, and it has a custom Dockerfile. This could be because it has additional R packages or system dependencies that it requires.
+
+If you now run `docker-compose up`, Docker Compose will build the referenced images in your config file and then run them. You'll find that app1 is available on port `7000` of your local machine, and app2 is available on port `7001`. If you want this to run in the background and survive restarts of your computer, you can use the `-d` switch just like with `docker run`. 
+
+## Multiple Applications on One Port
+
+In some cases, it's desirable to run all of your plumber services on a standard HTTP port like `80` or `443`. In that case, you'd prefer to have a router running on port 80 that can send traffic to the appropriate application by distinguishing based on a path prefix. Requests for `myserver.com/app1/` are sent to the `app1` container, and `myserver.org/app2/` targets the `app2` container, but both are available on port 80 on your server.
+
+In order to do this, we can use another Docker container running nginx which is configured to route traffic between the two app containers. We'd add the following entry to our `docker-compose.yml` alongside the app containers we have defined.
+
+{% highlight yml %}
+  nginx:
+    image: nginx:1.9
+    ports:
+     - "80:80"
+    volumes:
+     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    restart: always
+    depends_on:
+     - app1
+     - app2
+{% endhighlight %}
+
+This uses the nginx docker image that will be downloaded for you. In order to run nginx in a meaningful way, we have to provide a configuration file and place it in `/etc/nginx/nginx.conf`, which we do by mounting a local file at that location on the container. 
+
+A basic nginx config file could look something like the following:
+
+
+{% highlight conf %}
+events {
+  worker_connections  4096;  ## Default: 1024
+}
+
+http {
+        default_type application/octet-stream;
+        sendfile     on;
+        tcp_nopush   on;
+        server_names_hash_bucket_size 128; # this seems to be required for some vhosts
+
+        server {
+                listen 80 default_server;
+                listen [::]:80 default_server ipv6only=on;
+
+                root /usr/share/nginx/html;
+                index index.html index.htm;
+
+                server_name MYSERVER.ORG
+
+                location /app1/ {
+                        proxy_pass http://app1:8000/;
+                        proxy_set_header Host $host;
+                }
+
+                location /app2/ {
+                        proxy_pass http://app2:8000/;
+                        proxy_set_header Host $host;
+                }
+
+
+                location ~ /\.ht {
+                        deny all;
+                }
+        }
+}
+{% endhighlight %}
+
+You should set the `server_name` parameter above to be whatever the public address is of your server. You can save this file as `nginx.conf` in the same directory as your Compose config file.
+
+Docker Compose is intelligent enough to know to route traffic for `http://app1:8000/` to the `app1` container, port 8000, so we can leverage that in our config file. Docker containers are able to contact each other on their non-public ports, so we can go directly to port `8000` for both containers. This proxy configuration will trim the prefix off of the request before it sends it on to the applications, so your applications don't need to know anything about being hosted publicly at a URL that includes the `/app1/` or `/app2/` prefix
+
+We should also get rid of the previous port mappings to ports `7000` and `7001` on our other applications, as we don't want those to be publicly accessible anymore.
+
+If you now run `docker compose up` again, you'll see your two application servers running but now have a new nginx server running, as well. And you'll find that if you visit your server on port 80, you'll see the "welcome to Nginx!" page. If you access `/app1` you'll be sent to `app1` just like we had hoped. 
+
+## Load Balancing
+
+If you're expecting a lot of traffic on one application or have an API that's particularly computationally complex, you may want to distribute the load across multiple R processes running the same plumber application. Thankfully, we can use Docker Compose for this, as well.
+
+First, we'll want to create multiple instances of the same application
+
+
+</div>
