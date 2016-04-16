@@ -130,7 +130,45 @@ If you now run `docker compose up` again, you'll see your two application server
 
 If you're expecting a lot of traffic on one application or have an API that's particularly computationally complex, you may want to distribute the load across multiple R processes running the same plumber application. Thankfully, we can use Docker Compose for this, as well.
 
-First, we'll want to create multiple instances of the same application
+First, we'll want to create multiple instances of the same application. This is easily accomplished with the `docker-compose scale` command. You simple run `docker-compose scale app1=3` to run three instances of `app1`. Now we just need to load balance traffic across these three instances.
 
+You could setup the nginx configuration that we already have to balance traffic across this pool of workers, but you would need to manually re-configure and update your nginx instance every time that you need to scale the number up or down, which might be a hassle. Luckily, there's a more elegant solution.
 
+We can use the [dockercloud/haproxy](https://github.com/docker/dockercloud-haproxy) Docker image to automatically balance HTTP traffic across a pool of workers. This image is intelligent enough to listen for workers in your pool arriving or leaving and will automatically remove/add these containers into their pool. Let's add a new container into our configuration that defines this load balancer
+
+{% highlight yml %}
+  lb:
+    image: 'dockercloud/haproxy:1.2.1'
+    links:
+     - app1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+{% endhighlight %}
+
+The trick that allows this image to listen in to our scaling of `app1` is by passing in the docker socket as a shared volume. Note that this particular arrangement will differ based on your host OS. The above configuration is intended for Linux, but MacOS X users would require a (slightly different config](https://github.com/docker/dockercloud-haproxy#example-of-docker-composeyml-running-in-linux).
+
+We could export port `80` of our new load balancer to port `80` of our host machine if we solely wanted to load-balance a single application. Alternatively, we can actually use both nginx (to handle the routing of various applications) and HAProxy (to handle the load balancing of a particular application). To do that, we'd merely add a new `location` block to our `nginx.conf` file that knows how to send traffic to HAproxy, or modify the existing `location` block to send traffic to the load balancer instead of going directly to the application.
+
+So the `location /app1/` block becomes:
+
+{% highlight yml %}
+                location /app1/ {
+                        proxy_pass http://lb:8000/;
+                        proxy_set_header Host $host;
+                }
+{% endhighlight %}
+
+Where `lb` is the name of the HAProxy load balancer that we defined in our Compose configuration.
+
+The next time you start/redeploy your Docker Compose cluster, you'll be balancing your incoming requests to `/app1/` across a pool of 1 or more workers based on whatever you've set the `scale` to be for that application.
+
+Do keep in mind that when using load-balancing that it's not longer guaranteed that subsequent requests for a particular application will land on the same process. This means that if you maintain any state in your plumber application (like a global counter, or a user's session state), you can't expect that to be shared across the workers that the user might encounter. There are at least three possible solutions to this problem:
+
+ 1. Use a more robust means of maintaing your state. You could put the state in a database, for instance, that lives outside of your R processes and your plumber workers would get and save their state externally.
+ 2. You could serialize the state to the user using [(encrypted) session cookies](./sessions/), assuming it's small enough. In this scenario, your workers would write data back to the user in the form of a cookie, then the user would include that same cookie in its future requests. This works best if the state is going to be set rarely and read often (for instance, it could be written when the user logs in, then read on each request to detect the identity of this user).
+ 3. You can enable "sticky sessions" in the HAProxy load balancer. This would ensure that each user's traffic always gets routed to the same worker. The downside of this approach, of course, is that it's a less even means of distributing traffic. You could end up in a situation in which you have 2 workers but 90% of your traffic is hitting one of your workers, because it just so happens that the users triggering more requests were all "stuck" to one particular worker.
+
+## Conclusion
+
+You should now be able to run multiple plumber applications on a single server using multiple Docker containers organized in Docker Compose. You can either run each application on a separate port, or share a single port for multiple applications. You can also choose to have one process back your application or load-balance the incoming requests across a pool of workers for that application.
 </div>
