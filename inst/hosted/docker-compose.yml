@@ -48,3 +48,4 @@ services:
      - sessions
      - mailgun
      - filters
+     - lb
