@@ -27,5 +27,7 @@ hosting:
   children:
     - link: /docs/hosting
       name: Basic Hosting
-    - link: /docs/path-to-port
-      name: Path-To-Port Forwarding
+    - link: /docs/docker
+      name: Docker (Basic)
+    - link: /docs/docker-advanced
+      name: Advanced Docker
