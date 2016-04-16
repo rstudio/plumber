@@ -1,12 +1,14 @@
 version: '2'
 services:
   append: 
-    build: ../examples/01-append/
+    image: trestletech/plumber
+    command: '/examples/01-append/appender.R'
     volumes:
      - ../examples:/examples
     restart: always
   filters: 
-    build: ../examples/02-filters/
+    image: trestletech/plumber
+    command: '/examples/02-filters/filters.R'
     volumes:
      - ../examples:/examples
     restart: always
@@ -26,7 +28,8 @@ services:
      - ../examples:/examples
     restart: always
   identity:
-    build: ../examples/08-identity
+    image: trestletech/plumber
+    command: '/examples/08-identity/identity.R'
     volumes:
      - ../examples:/examples
     restart: always
