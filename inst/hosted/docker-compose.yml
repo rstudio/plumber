@@ -27,18 +27,6 @@ services:
     volumes:
      - ../examples:/examples
     restart: always
-  identity:
-    image: trestletech/plumber
-    command: '/examples/08-identity/identity.R'
-    volumes:
-     - ../examples:/examples
-    restart: always
-  lb:
-    image: 'dockercloud/haproxy:1.2.1'
-    links:
-     - identity
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
   nginx:
     image: nginx:1.9
     ports:
@@ -51,4 +39,3 @@ services:
      - sessions
      - mailgun
      - filters
-     - lb
