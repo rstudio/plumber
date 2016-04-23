@@ -8,6 +8,10 @@ r_binary_packages:
   - stringi
   - jsonlite
   - httpuv
+r_github_packages:
+  - jimhester/covr
+after_success:
+  - Rscript -e 'library(covr);codecov()'
 r_packages:
   - PKI
 warnings_are_errors: true
