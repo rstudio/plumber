@@ -39,3 +39,4 @@ services:
      - sessions
      - mailgun
      - filters
+     - github
