@@ -149,18 +149,7 @@ plumber <- R6Class(
 
               if (!is.na(serMat[1, 4]) && serMat[1,4] != ""){
                 # We have an arg to pass in to the serializer
-                namedArgs <- stringi::stri_split(serMat[1,4], regex="\\s+")[[1]]
-                args <- stringi::stri_split_fixed(namedArgs, "=")
-                if (any(sapply(args, length) != 2)){
-                  stop("Malformed argument list to provide to the serializer. All arguments must be named in the form of 'name=value'.")
-                }
-                argNames <- sapply(args, "[[", 1)
-                argVals <- sapply(args, "[[", 2)
-
-                argExpr <- sapply(argVals, function(stmt){ eval(parse(text=stmt)) })
-
-                argList <- as.list(argExpr)
-                names(argList) <- argNames
+                argList <- eval(parse(text=serMat[1,4]))
 
                 serializer <- do.call(ser, argList)
               } else {
