@@ -1,6 +1,6 @@
 test_that("JSON serializes properly", {
   l <- list(a=1, b=2, c="hi")
-  val <- jsonSerializer()(l, list(), PlumberResponse$new("json"), stop)
+  val <- jsonSerializer()(l, list(), PlumberResponse$new(), stop)
   expect_equal(val$status, 200L)
   expect_equal(val$headers$`Content-Type`, "application/json")
   expect_equal(val$body, jsonlite::toJSON(l))
