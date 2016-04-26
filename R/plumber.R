@@ -2,10 +2,6 @@
 #' @import stringi
 NULL
 
-.globals <- new.env()
-.globals$serializers <- list()
-.globals$processors <- new.env()
-
 verbs <- c("GET", "PUT", "POST", "DELETE")
 enumerateVerbs <- function(v){
   if (identical(v, "use")){
@@ -27,6 +23,8 @@ stopOnLine <- function(private, line, msg){
 #' See \url{http://plumber.trestletech.com/docs/programmatic/} for additional
 #' details on the methods available on this object.
 #' @param file The file to parse as the plumber router definition
+#' @include globals.R
+#' @include serializer-json.R
 #' @export
 #' @importFrom httpuv runServer
 plumber <- R6Class(
@@ -406,7 +404,7 @@ plumber <- R6Class(
     fileLines = NA,
     parsed = NA,
     envir = NULL,
-    defaultSerializer = "json",
+    defaultSerializer = jsonSerializer(),
     globalProcessors = NULL,
     addFilterInternal = function(name, expr, serializer, processors, lines){
       "Create a new filter and add it to the router"

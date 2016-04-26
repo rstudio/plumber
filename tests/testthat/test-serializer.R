@@ -15,13 +15,6 @@ test_that("Responses returned directly aren't serialized", {
   expect_equal(val$status, 123)
 })
 
-test_that("JSON is provided when serializer is NULL", {
-  res <- PlumberResponse$new(NULL)
-
-  r <- plumber$new("files/router.R")
-  expect_equal(r$serve(make_req("GET", "/"), res)$headers$`Content-Type`, "application/json")
-})
-
 test_that("JSON is the default serializer", {
   res <- PlumberResponse$new()
 

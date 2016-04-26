@@ -1,3 +1,5 @@
+#' @noRd
+#' @include globals.R
 jsonSerializer <- function(){
   function(val, req, res, errorHandler){
     tryCatch({

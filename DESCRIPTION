@@ -27,6 +27,8 @@ Suggests:
 Collate:
     'content-types.R'
     'cookie-parser.R'
+    'globals.R'
+    'serializer-json.R'
     'plumber.R'
     'default-handlers.R'
     'includes.R'
@@ -37,8 +39,8 @@ Collate:
     'processor-image.R'
     'query-string.R'
     'response.R'
+    'serializer-content-type.R'
     'serializer-html.R'
-    'serializer-json.R'
     'serializer-xml.R'
     'serializer.R'
     'session-cookie.R'
