@@ -130,7 +130,7 @@ plumber <- R6Class(
               assets <- list(dir=dir, path=prefixPath)
             }
 
-            serMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@serializer(\\s+(.*)\\s*$)?")
+            serMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@serializer(\\s+([^\\s]+)\\s*(.*)\\s*$)?")
             if (!is.na(serMat[1,1])){
               s <- stri_trim_both(serMat[1,3])
               if (is.na(s) || s == ""){
@@ -145,7 +145,27 @@ plumber <- R6Class(
                 stop("No such @serializer registered: ", s)
               }
 
-              serializer <- s
+              ser <- .globals$serializers[[s]]
+
+              if (!is.na(serMat[1, 4]) && serMat[1,4] != ""){
+                # We have an arg to pass in to the serializer
+                namedArgs <- stringi::stri_split(serMat[1,4], regex="\\s+")[[1]]
+                args <- stringi::stri_split_fixed(namedArgs, "=")
+                if (any(sapply(args, length) != 2)){
+                  stop("Malformed argument list to provide to the serializer. All arguments must be named in the form of 'name=value'.")
+                }
+                argNames <- sapply(args, "[[", 1)
+                argVals <- sapply(args, "[[", 2)
+
+                argExpr <- sapply(argVals, function(stmt){ eval(parse(text=stmt)) })
+
+                argList <- as.list(argExpr)
+                names(argList) <- argNames
+
+                serializer <- do.call(ser, argList)
+              } else {
+                serializer <- ser()
+              }
             }
 
             shortSerMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@(json|html)")
@@ -160,7 +180,8 @@ plumber <- R6Class(
                 stop("No such @serializer registered: ", s)
               }
 
-              serializer <- s
+              # TODO: support arguments to short serializers once they require them.
+              serializer <- .globals$serializers[[s]]()
             }
 
             imageMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@(jpeg|png)(\\s+(.*)\\s*$)?")
@@ -272,20 +293,18 @@ plumber <- R6Class(
         val <- p$post(value=val, req=req, res=res)
       }
 
-      ser <- res$serializer
-
-      if (is.null(ser) || ser == ""){
-        ser <- .globals$serializers[[private$defaultSerializer]]
-      } else if (ser %in% names(.globals$serializers)){
-        ser <- .globals$serializers[[ser]]
-      } else {
-        stop("Can't identify serializer '", ser, "'")
-      }
-
       if ("PlumberResponse" %in% class(val)){
         # They returned the response directly, don't serialize.
         res$toResponse()
       } else {
+        ser <- res$serializer
+
+        if (is.null(ser)){
+          ser <- .globals$serializers[[private$defaultSerializer]]()
+        } else if (typeof(ser) != "closure") {
+          stop("Serializers must be closures: '", ser, "'")
+        }
+
         ser(val, req, res, private$errorHandler)
       }
     },

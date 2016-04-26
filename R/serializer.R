@@ -19,14 +19,18 @@ addSerializer <- function(name, serializer){
   .globals$serializers[[name]] <- serializer
 }
 
-nullSerializer <- function(val, req, res, errorHandler){
-  tryCatch({
-    res$body <- val
 
-    return(res$toResponse())
-  }, error=function(e){
-    errorHandler(req, res, e)
-  })
+
+nullSerializer <- function(){
+  function(val, req, res, errorHandler){
+    tryCatch({
+      res$body <- val
+
+      return(res$toResponse())
+    }, error=function(e){
+      errorHandler(req, res, e)
+    })
+  }
 }
 
 .globals$serializers[["null"]] <- nullSerializer
