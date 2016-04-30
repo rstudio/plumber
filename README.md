@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/trestletech/plumber.svg?branch=master)](https://travis-ci.org/trestletech/plumber)
 [![](http://www.r-pkg.org/badges/version/plumber)](http://www.r-pkg.org/pkg/plumber)
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/plumber?color=brightgreen)](http://www.r-pkg.org/pkg/plumber)
-[![codecov.io](https://codecov.io/github/trestletech/plumber/coverage.svg?precision=0)](https://codecov.io/github/trestletech/plumber?branch=master)
+[![codecov](https://codecov.io/gh/trestletech/plumber/branch/master/graph/badge.svg)](https://codecov.io/gh/trestletech/plumber)
 
 <img align="right" src="http://plumber.trestletech.com/components/images/plumber.png" />
 
