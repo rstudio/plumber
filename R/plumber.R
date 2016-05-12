@@ -2,10 +2,6 @@
 #' @import stringi
 NULL
 
-.globals <- new.env()
-.globals$serializers <- list()
-.globals$processors <- new.env()
-
 verbs <- c("GET", "PUT", "POST", "DELETE")
 enumerateVerbs <- function(v){
   if (identical(v, "use")){
@@ -27,6 +23,8 @@ stopOnLine <- function(private, line, msg){
 #' See \url{http://plumber.trestletech.com/docs/programmatic/} for additional
 #' details on the methods available on this object.
 #' @param file The file to parse as the plumber router definition
+#' @include globals.R
+#' @include serializer-json.R
 #' @export
 #' @importFrom httpuv runServer
 plumber <- R6Class(
@@ -130,7 +128,7 @@ plumber <- R6Class(
               assets <- list(dir=dir, path=prefixPath)
             }
 
-            serMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@serializer(\\s+(.*)\\s*$)?")
+            serMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@serializer(\\s+([^\\s]+)\\s*(.*)\\s*$)?")
             if (!is.na(serMat[1,1])){
               s <- stri_trim_both(serMat[1,3])
               if (is.na(s) || s == ""){
@@ -145,7 +143,16 @@ plumber <- R6Class(
                 stop("No such @serializer registered: ", s)
               }
 
-              serializer <- s
+              ser <- .globals$serializers[[s]]
+
+              if (!is.na(serMat[1, 4]) && serMat[1,4] != ""){
+                # We have an arg to pass in to the serializer
+                argList <- eval(parse(text=serMat[1,4]))
+
+                serializer <- do.call(ser, argList)
+              } else {
+                serializer <- ser()
+              }
             }
 
             shortSerMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@(json|html)")
@@ -160,7 +167,8 @@ plumber <- R6Class(
                 stop("No such @serializer registered: ", s)
               }
 
-              serializer <- s
+              # TODO: support arguments to short serializers once they require them.
+              serializer <- .globals$serializers[[s]]()
             }
 
             imageMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@(jpeg|png)(\\s+(.*)\\s*$)?")
@@ -272,20 +280,18 @@ plumber <- R6Class(
         val <- p$post(value=val, req=req, res=res)
       }
 
-      ser <- res$serializer
-
-      if (is.null(ser) || ser == ""){
-        ser <- .globals$serializers[[private$defaultSerializer]]
-      } else if (ser %in% names(.globals$serializers)){
-        ser <- .globals$serializers[[ser]]
-      } else {
-        stop("Can't identify serializer '", ser, "'")
-      }
-
       if ("PlumberResponse" %in% class(val)){
         # They returned the response directly, don't serialize.
         res$toResponse()
       } else {
+        ser <- res$serializer
+
+        if (is.null(ser)){
+          ser <- .globals$serializers[[private$defaultSerializer]]()
+        } else if (typeof(ser) != "closure") {
+          stop("Serializers must be closures: '", ser, "'")
+        }
+
         ser(val, req, res, private$errorHandler)
       }
     },
@@ -398,7 +404,7 @@ plumber <- R6Class(
     fileLines = NA,
     parsed = NA,
     envir = NULL,
-    defaultSerializer = "json",
+    defaultSerializer = jsonSerializer(),
     globalProcessors = NULL,
     addFilterInternal = function(name, expr, serializer, processors, lines){
       "Create a new filter and add it to the router"

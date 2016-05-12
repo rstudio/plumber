@@ -1,8 +1,8 @@
 Package: plumber
 Type: Package
 Title: An API Generator for R
-Version: 0.2.4
-Date: 2016-04-13
+Version: 0.3.0
+Date: 2016-04-26
 Authors@R: c(
   person(family="Trestle Technology, LLC", role="aut", email="cran@trestletech.com"),
   person("Jeff", "Allen", role="cre", email="cran@trestletech.com"))
@@ -27,6 +27,8 @@ Suggests:
 Collate:
     'content-types.R'
     'cookie-parser.R'
+    'globals.R'
+    'serializer-json.R'
     'plumber.R'
     'default-handlers.R'
     'includes.R'
@@ -37,8 +39,8 @@ Collate:
     'processor-image.R'
     'query-string.R'
     'response.R'
+    'serializer-content-type.R'
     'serializer-html.R'
-    'serializer-json.R'
     'serializer-xml.R'
     'serializer.R'
     'session-cookie.R'

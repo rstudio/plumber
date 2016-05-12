@@ -15,7 +15,7 @@ function(req, res){
 #* @filter foo2
 function(req, res, type=""){
   if (type == "json"){
-    res$serializer <- "json"
+    res$serializer <- jsonSerializer()
   }
   forward()
 }
@@ -27,7 +27,9 @@ function(){
 
 #* @get /another
 function(req, res){
-  res$serializer <- "custom2"
+  res$serializer <-  function(val, req, res, errorHandler){
+    list(status=201L, headers=list(), body="CUSTOM3")
+  }
   5
 }
 
@@ -41,4 +43,16 @@ function(){
 #* @html
 function(){
   "HTML"
+}
+
+#* @get /single-arg-ser
+#* @serializer customOneArg list(single="hi there")
+function(){
+  "COA"
+}
+
+#* @get /multi-arg-ser
+#* @serializer   customMultiArg list(first=LETTERS[1], second=4+4, third=4.3)
+function(){
+  "MAS"
 }
