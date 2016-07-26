@@ -32,7 +32,7 @@ PlumberResponse <- R6Class(
         body = self$body
       )
     },
-    # TODO: support multiple setCoookies per response
+    # TODO: support multiple setCookies per response
     setCookie = function(name, value, path){
       # TODO: support expiration
       # TODO: support HTTP-only
