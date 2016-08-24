@@ -14,9 +14,9 @@ parseQS <- function(qs){
   }
  # Is it JSON data?
   if (stri_startswith_fixed(qs, "{")) {
-    qs <- substr(qs, 2, nchar(qs))
-    #TODO: add handling of JSON
-  } else {
+    # Handle JSON with jsonlite
+    ret <- jsonlite::fromJSON(qs)
+    } else {
     # If not handle it as & separated strings
     if (stri_startswith_fixed(qs, "?")) {
       qs <- substr(qs, 2, nchar(qs))
