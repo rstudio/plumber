@@ -16,5 +16,5 @@ test_that("incomplete query strings are ignored", {
 
 test_that("JSON is consumed", {
   expect_equivalent(parseQS("a="), list()) # It's technically a named list()
-  expect_equal(parseQS("{'a'='1'}"), list(a = "1"))
+  expect_equal(parseQS('{"a":"1"}'), list(a = "1"))
 })
