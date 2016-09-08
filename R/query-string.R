@@ -8,17 +8,17 @@ queryStringFilter <- function(req){
 #' @importFrom utils URLdecode
 #' @noRd
 parseQS <- function(qs){
-  if (is.null(qs) || length(qs) == 0 || qs == ""){
+  if (is.null(qs) || length(qs) == 0 || qs == "") {
     return(list())
   }
-  if (stri_startswith_fixed(qs, "?")){
+  if (stri_startswith_fixed(qs, "?")) {
     qs <- substr(qs, 2, nchar(qs))
   }
 
-  qs <- gsub("+", " ", qs, fixed=TRUE)
+  qs <- gsub("+", " ", qs, fixed = TRUE)
 
-  parts <- strsplit(qs, "&", fixed=TRUE)[[1]]
-  kv <- strsplit(parts, "=", fixed=TRUE)
+  parts <- strsplit(qs, "&", fixed = TRUE)[[1]]
+  kv <- strsplit(parts, "=", fixed = TRUE)
   kv <- kv[sapply(kv, length) == 2] # Ignore incompletes
 
   keys <- sapply(kv, "[[", 1)

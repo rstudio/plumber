@@ -1,3 +1,8 @@
+plumber 0.3.1
+--------------------------------------------------------------------------------
+* Add a method to consume JSON on post (you can still send a query string in
+  the body of a POST request as well).
+
 plumber 0.3.0
 --------------------------------------------------------------------------------
 * BREAKING CHANGE: serializer factories are now registered instead of the 
