@@ -1,4 +1,4 @@
-FROM rocker/r-devel
+FROM rocker/drd
 MAINTAINER Jeff Allen <cran@trestletech.com>
 
 RUN apt-get update -qq && apt-get install -y \
