@@ -24,7 +24,12 @@ PlumberProcessor$new(
   function(req, res, data){
     t <- tempfile()
     data$file <- t
-    png(t)
+    if(!is.null(req$width)) {
+      width <- req$width
+    } else {
+      req$width <- 480
+    }
+    png(t, width = req$width)
   },
   function(val, req, res, data){
     dev.off()
