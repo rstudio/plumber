@@ -13,7 +13,7 @@ Plumber supports different "routing" schemes which will direct incoming traffic 
 {% highlight r %}
 #* @get /user/me
 function(){
-  return list(id=1, name="Test User")
+  return (list(id=1, name="Test User"))
 }
 {% endhighlight %}
 
@@ -26,7 +26,7 @@ userNames <- list(1="Test User", 2="Different User")
 
 #* @get /user/<id>
 function(id){
-  return list(id=id, name=userNames[[id]])
+  return (list(id=id, name=userNames[[id]]))
 }
 {% endhighlight %}
 
