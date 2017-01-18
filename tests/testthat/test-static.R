@@ -12,6 +12,12 @@ pr <- plumber$new()
 pr$addAssets("files/static", "/public")
 pr$addAssets("files/static", "/public2")
 
+test_that("the response is reurned", {
+  res <- PlumberResponse$new()
+  val <- pr$route(make_req("GET", "/public/test.txt"), res)
+  expect_true(inherits(val, "PlumberResponse"))
+})
+
 test_that("static txt file is served", {
   res <- PlumberResponse$new()
   pr$route(make_req("GET", "/public/test.txt"), res)
