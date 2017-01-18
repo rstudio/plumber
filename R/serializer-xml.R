@@ -5,8 +5,8 @@ xmlSerializer <- function(){
     #       call. = FALSE)
     #}
 
-    stop("XML serialization not yet implemented")
+    stop("XML serialization not yet implemented. Please see the discussion at https://github.com/trestletech/plumber/issues/65")
   }
 }
 
-.globals[["xml"]] <- xmlSerializer
+.globals$serializers[["xml"]] <- xmlSerializer
