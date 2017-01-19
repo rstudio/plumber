@@ -46,4 +46,5 @@ Collate:
     'serializer-xml.R'
     'serializer.R'
     'session-cookie.R'
+    'shared-secret-filter.R'
 RoxygenNote: 5.0.1
