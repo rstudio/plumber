@@ -12,6 +12,8 @@ r_github_packages:
   - jimhester/covr
 after_success:
   - Rscript -e 'library(covr);codecov()'
+after_failure:
+  - ./travis-tool.sh dump_logs
 r_packages:
   - PKI
 warnings_are_errors: true
