@@ -47,15 +47,17 @@ pr <- plumb("myfile.R")
 pr$run(port=4500)
 {% endhighlight %}
 
-At the time of writing, pm2 doesn't understand R scripts natively, so you'll need to wrap the script in an interpreter that pm2 does understand, like a bash script. The following bash script will start R and run the two commands listed above.
+Unfortunately, pm2 doesn't understand R scripts natively, however, it is possible to specify a custom interpreter. We can use this feature to launch an R based wrapper for our plumber file using the `Rscript` scripting front-end that comes with R. The following script will run the two commands listed above.
 
-{% highlight bash %}
-#!/bin/bash
+{% highlight r %}
+#!/usr/bin/env Rscript
 
-R -e "library(plumber); pr <- plumb('myfile.R'); pr\$run(port=4000)"
+library(plumber)
+pr <- plumb('myfile.R')
+pr$run(port=4000)"
 {% endhighlight %}
 
-Save this bash file on your server as something like `run-myfile.sh`. You should also make it executable by changing the permissions on the file using a command like `chmod 755 run-myfile.sh`. You should now execute that file to make sure that it runs the service like you expect. You should be able to make requests to your server on the appropriate port and have the plumber service respond. You can kill the process using `Ctrl-c` when you're convinced that it's working. Make sure the shell script is in a permanent location so that it won't be erased or modified accidentally. You can consider creating a designated directory for all your plumber services in some directory like `/usr/local/plumber`, then put all services and their associated shell-script-runners in their own subdirectory like `/usr/local/plumber/myfile/`.
+Save this R script file on your server as something like `run-myfile.R`. You should also make it executable by changing the permissions on the file using a command like `chmod 755 run-myfile.R`. You should now execute that file to make sure that it runs the service like you expect. You should be able to make requests to your server on the appropriate port and have the plumber service respond. You can kill the process using `Ctrl-c` when you're convinced that it's working. Make sure the shell script is in a permanent location so that it won't be erased or modified accidentally. You can consider creating a designated directory for all your plumber services in some directory like `/usr/local/plumber`, then put all services and their associated Rscript-runners in their own subdirectory like `/usr/local/plumber/myfile/`.
 
 ## Introduce Our Service to pm2
 
@@ -66,7 +68,7 @@ You can use the `pm2 list` command to see which services pm2 is already running.
 Once you have the scripts and code stored in the directory where you want them, use the following command to tell pm2 about your service.
 
 {% highlight bash %}
-pm2 start /usr/local/plumber/myfile/run-myfile.sh
+pm2 start --interpreter="Rscript" /usr/local/plumber/myfile/run-myfile.R
 {% endhighlight %}
 
 You should see some output about pm2 starting an instance of your service, followed by some status information from pm2. If everything worked properly, you'll see that your new service has been registered and is running. You can see this same output by executing `pm2 list` again. 
