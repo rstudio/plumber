@@ -54,7 +54,7 @@ Unfortunately, pm2 doesn't understand R scripts natively; however, it is possibl
 
 library(plumber)
 pr <- plumb('myfile.R')
-pr$run(port=4000)"
+pr$run(port=4000)
 {% endhighlight %}
 
 Save this R script file on your server as something like `run-myfile.R`. You should also make it executable by changing the permissions on the file using a command like `chmod 755 run-myfile.R`. You should now execute that file to make sure that it runs the service like you expect. You should be able to make requests to your server on the appropriate port and have the plumber service respond. You can kill the process using `Ctrl-c` when you're convinced that it's working. Make sure the shell script is in a permanent location so that it won't be erased or modified accidentally. You can consider creating a designated directory for all your plumber services in some directory like `/usr/local/plumber`, then put all services and their associated Rscript-runners in their own subdirectory like `/usr/local/plumber/myfile/`.
