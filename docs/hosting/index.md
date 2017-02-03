@@ -47,7 +47,7 @@ pr <- plumb("myfile.R")
 pr$run(port=4500)
 {% endhighlight %}
 
-Unfortunately, pm2 doesn't understand R scripts natively, however, it is possible to specify a custom interpreter. We can use this feature to launch an R based wrapper for our plumber file using the `Rscript` scripting front-end that comes with R. The following script will run the two commands listed above.
+Unfortunately, pm2 doesn't understand R scripts natively; however, it is possible to specify a custom interpreter. We can use this feature to launch an R-based wrapper for our plumber file using the `Rscript` scripting front-end that comes with R. The following script will run the two commands listed above.
 
 {% highlight r %}
 #!/usr/bin/env Rscript
