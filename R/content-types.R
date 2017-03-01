@@ -41,7 +41,8 @@ knownContentTypes <- list(
   docx='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   dotx='application/vnd.openxmlformats-officedocument.wordprocessingml.template',
   xlam='application/vnd.ms-excel.addin.macroEnabled.12',
-  xlsb='application/vnd.ms-excel.sheet.binary.macroEnabled.12')
+  xlsb='application/vnd.ms-excel.sheet.binary.macroEnabled.12',
+  feather='application/feather')
 
 getContentType <- function(ext, defaultType='application/octet-stream') {
   ct <- knownContentTypes[[tolower(ext)]]
