@@ -1,5 +1,7 @@
 #' @import R6
 #' @import stringi
+#' @import feather
+#' @import webutils
 NULL
 
 verbs <- c("GET", "PUT", "POST", "DELETE")
@@ -41,9 +43,12 @@ plumber <- R6Class(
       private$errorHandler <- defaultErrorHandler
       private$notFoundHandler <- default404Handler
 
-      self$filters <- c(self$filters, PlumberFilter$new("queryString", queryStringFilter, private$envir, private$defaultSerializer, NULL, NULL))
-      self$filters <- c(self$filters, PlumberFilter$new("postBody", postBodyFilter, private$envir, private$defaultSerializer, NULL, NULL))
-      self$filters <- c(self$filters, PlumberFilter$new("cookieParser", cookieFilter, private$envir, private$defaultSerializer, NULL, NULL))
+      self$filters <- c(self$filters, PlumberFilter$new("queryString",
+          queryStringFilter, private$envir, private$defaultSerializer, NULL, NULL))
+      self$filters <- c(self$filters, PlumberFilter$new("postBody",
+          postBodyFilter, private$envir, private$defaultSerializer, NULL, NULL))
+      self$filters <- c(self$filters, PlumberFilter$new("cookieParser",
+          cookieFilter, private$envir, private$defaultSerializer, NULL, NULL))
 
       private$filename <- file
       private$envir <- new.env()
