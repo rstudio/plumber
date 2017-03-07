@@ -6,7 +6,7 @@ r_binary_packages:
   - base64enc
   - rmarkdown
   - stringi
-  - jsonlite
+  - rjson
   - httpuv
 r_github_packages:
   - jimhester/covr
