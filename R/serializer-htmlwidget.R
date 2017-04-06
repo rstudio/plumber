@@ -23,6 +23,9 @@ htmlwidgetSerializer <- function(){
       # Read the file back in as a single string and return.
       res$body <- paste(readLines(file), collapse="")
 
+      # Delete the temp file
+      file.remove(file)
+
       return(res$toResponse())
     }, error=function(e){
       errorHandler(req, res, e)
