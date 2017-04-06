@@ -11,11 +11,11 @@ r_binary_packages:
   - htmlwidgets
 r_github_packages:
   - jimhester/covr
-  - datastorm-open/visNetwork
 after_success:
   - Rscript -e 'library(covr);codecov()'
 after_failure:
   - ./travis-tool.sh dump_logs
 r_packages:
   - PKI
+  - visNetwork
 warnings_are_errors: true
