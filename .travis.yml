@@ -1,8 +1,8 @@
 language: r
-sudo: required
+cache: packages
 r_binary_packages:
   - testthat
-  - xml
+  - XML
   - base64enc
   - rmarkdown
   - stringi
