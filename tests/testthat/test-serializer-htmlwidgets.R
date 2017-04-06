@@ -12,7 +12,6 @@ renderWidget <- function(){
 }
 
 test_that("htmlwidgets serialize properly", {
-  print(installed.packages())
   w <- renderWidget()
   val <- htmlwidgetSerializer()(w, list(), PlumberResponse$new(), stop)
   expect_equal(val$status, 200L)
