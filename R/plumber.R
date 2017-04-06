@@ -484,6 +484,7 @@ plumber <- R6Class(
         res$status <- 200
         res$setHeader("Content-type", contentType)
         res$body <- responseContent
+        res
       }
       private$addFilterInternal(paste("static-asset", direc, pathPrefix, sep="|"), expr, "null", NULL, srcref)
     }

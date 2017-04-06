@@ -1,5 +1,5 @@
 requireRmd <- function(fun_name){
-  if (!requireNamespace("XML", quietly = TRUE)) {
+  if (!requireNamespace("rmarkdown", quietly = TRUE)) {
     stop("The rmarkdown package is not available but is required in order to use ", fun_name,
          call. = FALSE)
   }
