@@ -46,7 +46,7 @@ plumber <- R6Class(
       self$filters <- c(self$filters, PlumberFilter$new("cookieParser", cookieFilter, private$envir, private$defaultSerializer, NULL, NULL))
 
       private$filename <- file
-      private$envir <- new.env()
+      private$envir <- new.env(parent=.GlobalEnv)
 
       if (!is.null(file)){
         private$fileLines <- readLines(file)
