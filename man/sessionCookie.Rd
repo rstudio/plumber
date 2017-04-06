@@ -19,4 +19,3 @@ for instance, set the cookie's expiration.}
 \description{
 Store session data in encrypted cookies.
 }
-

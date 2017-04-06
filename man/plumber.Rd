@@ -2,8 +2,8 @@
 % Please edit documentation in R/plumber.R
 \docType{data}
 \name{plumber}
-\alias{plumb}
 \alias{plumber}
+\alias{plumb}
 \title{Plumber Router}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
@@ -24,4 +24,3 @@ See \url{http://plumber.trestletech.com/docs/programmatic/} for additional
 details on the methods available on this object.
 }
 \keyword{datasets}
-
