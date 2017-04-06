@@ -1,9 +1,9 @@
 language: r
 cache: packages
-sudo: false 
+sudo: false
 r_binary_packages:
   - testthat
-  - xml
+  - XML
   - base64enc
   - rmarkdown
   - stringi
