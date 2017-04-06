@@ -3,13 +3,13 @@ plumber 0.3.2
 * `source()` the referenced R file to plumb inside of a new environment that 
   inherits directly from the GlobalEnv. This provides more explicit control over
   exactly how this environment should behave.
+* Added `@serializer htmlwidget` to support rendering and returning a 
+  self-contained htmlwidget from a plumber endpoint.
 
 plumber 0.3.1
 --------------------------------------------------------------------------------
 * Add a method to consume JSON on post (you can still send a query string in
   the body of a POST request as well).
-* Added `@serializer htmlwidget` to support rendering and returning a 
-  self-contained htmlwidget from a plumber endpoint.
 
 plumber 0.3.0
 --------------------------------------------------------------------------------
