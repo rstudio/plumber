@@ -9,9 +9,9 @@ r_binary_packages:
   - jsonlite
   - httpuv
   - htmlwidgets
-  - visNetwork
 r_github_packages:
   - jimhester/covr
+  - datastorm-open/visNetwork
 after_success:
   - Rscript -e 'library(covr);codecov()'
 r_packages:
