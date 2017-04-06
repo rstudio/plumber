@@ -1,3 +1,5 @@
+context("JSON serializer")
+
 test_that("JSON serializes properly", {
   l <- list(a=1, b=2, c="hi")
   val <- jsonSerializer()(l, list(), PlumberResponse$new(), stop)

@@ -1,13 +1,5 @@
 language: r
 cache: packages
-r_binary_packages:
-  - testthat
-  - XML
-  - base64enc
-  - rmarkdown
-  - stringi
-  - jsonlite
-  - httpuv
 r_github_packages:
   - jimhester/covr
 after_success:
@@ -15,5 +7,14 @@ after_success:
 after_failure:
   - ./travis-tool.sh dump_logs
 r_packages:
+  - testthat
+  - XML
+  - base64enc
+  - rmarkdown
+  - stringi
+  - jsonlite
+  - httpuv
+  - htmlwidgets
   - PKI
+  - visNetwork
 warnings_are_errors: true
