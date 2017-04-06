@@ -1,6 +1,12 @@
 language: r
 cache: packages
-r_binary_packages:
+r_github_packages:
+  - jimhester/covr
+after_success:
+  - Rscript -e 'library(covr);codecov()'
+after_failure:
+  - ./travis-tool.sh dump_logs
+r_packages:
   - testthat
   - XML
   - base64enc
@@ -9,13 +15,6 @@ r_binary_packages:
   - jsonlite
   - httpuv
   - htmlwidgets
-r_github_packages:
-  - jimhester/covr
-after_success:
-  - Rscript -e 'library(covr);codecov()'
-after_failure:
-  - ./travis-tool.sh dump_logs
-r_packages:
   - PKI
   - visNetwork
 warnings_are_errors: true
