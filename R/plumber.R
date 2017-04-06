@@ -2,7 +2,7 @@
 #' @import stringi
 NULL
 
-verbs <- c("GET", "PUT", "POST", "DELETE")
+verbs <- c("GET", "PUT", "POST", "DELETE", "HEAD")
 enumerateVerbs <- function(v){
   if (identical(v, "use")){
     return(verbs)
@@ -70,7 +70,7 @@ plumber <- R6Class(
           serializer <- NULL
           assets <- NULL
           while (line > 0 && (stri_detect_regex(private$fileLines[line], pattern="^#['\\*]") || stri_trim_both(private$fileLines[line]) == "")){
-            epMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@(get|put|post|use|delete)(\\s+(.*)$)?")
+            epMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@(get|put|post|use|delete|head)(\\s+(.*)$)?")
             if (!is.na(epMat[1,2])){
               p <- stri_trim_both(epMat[1,4])
 

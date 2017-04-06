@@ -1,5 +1,5 @@
 test_that("enumerate returns all on 'use'", {
-  expect_equal(enumerateVerbs("use"), c("GET", "PUT", "POST", "DELETE"))
+  expect_equal(enumerateVerbs("use"), c("GET", "PUT", "POST", "DELETE", "HEAD"))
 })
 
 test_that("regular verbs return themselves", {
