@@ -2,8 +2,8 @@ Encoding: UTF-8
 Package: plumber
 Type: Package
 Title: An API Generator for R
-Version: 0.3.1
-Date: 2016-09-05
+Version: 0.3.2
+Date: 2017-04-05
 Authors@R: c(
   person(family="Trestle Technology, LLC", role="aut", email="cran@trestletech.com"),
   person("Jeff", "Allen", role="cre", email="cran@trestletech.com"),

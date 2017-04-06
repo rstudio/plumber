@@ -15,7 +15,7 @@ function(req, res){
 #* @filter foo2
 function(req, res, type=""){
   if (type == "json"){
-    res$serializer <- jsonSerializer()
+    res$serializer <- plumber:::jsonSerializer()
   }
   forward()
 }

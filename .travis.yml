@@ -1,8 +1,8 @@
 language: r
-sudo: required
+cache: packages
 r_binary_packages:
   - testthat
-  - xml
+  - XML
   - base64enc
   - rmarkdown
   - stringi
@@ -14,6 +14,8 @@ r_github_packages:
   - datastorm-open/visNetwork
 after_success:
   - Rscript -e 'library(covr);codecov()'
+after_failure:
+  - ./travis-tool.sh dump_logs
 r_packages:
   - PKI
 warnings_are_errors: true
