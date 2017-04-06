@@ -8,6 +8,8 @@ r_binary_packages:
   - stringi
   - jsonlite
   - httpuv
+  - htmlwidgets
+  - visNetwork
 r_github_packages:
   - jimhester/covr
 after_success:
