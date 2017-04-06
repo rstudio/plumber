@@ -1,5 +1,6 @@
 language: r
-sudo: required
+cache: packages
+sudo: false 
 r_binary_packages:
   - testthat
   - xml
