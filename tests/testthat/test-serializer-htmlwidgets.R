@@ -2,6 +2,7 @@ context("htmlwidgets serializer")
 
 # Render a simple HTML widget using the visNetwork package
 renderWidget <- function(){
+  library(visNetwork)
   nodes <- data.frame(id = 1:6, title = paste("node", 1:6),
                       shape = c("dot", "square"),
                       size = 10:15, color = c("blue", "red"))
@@ -26,6 +27,6 @@ test_that("Errors call error handler", {
   }
 
   expect_equal(errors, 0)
-  jsonSerializer()(parse(text="hi"), list(), PlumberResponse$new("json"), err = errHandler)
+  htmlwidgetSerializer()(parse(text="hi"), list(), PlumberResponse$new("htmlwidget"), err = errHandler)
   expect_equal(errors, 1)
 })
