@@ -381,7 +381,7 @@ plumber <- R6Class(
         return(val)
       }, finally= options(warn=oldWarn) )
     },
-    run = function(host='0.0.0.0', port=8000){
+    run = function(host='0.0.0.0', port=8000, swagger=FALSE){
       # TODO: setwd to file path
       .globals$debug <- self$debug
       message("Starting server to listen on port ", port)
@@ -393,7 +393,46 @@ plumber <- R6Class(
         setwd(dirname(private$filename))
       }
 
+      if (swagger){
+        sf <- self$swaggerFile()
+        # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
+        fun <- function(){}
+        body(fun) <- sf
+        self$addEndpoint("GET", "/swagger.json", fun, jsonUnboxedSerializer())
+        self$addAssets(system.file("swagger-ui", package = "plumber"), path="/__swagger__")
+      }
+
       httpuv::runServer(host, port, self)
+    },
+    swaggerFile = function(){
+      endpoints <- list()
+
+      for (fil in self$endpoints){
+        for (e in fil){
+          # TODO: we are sensitive to trailing slashes. Should we be?
+          # cleanedPath <- gsub("/$", "", e$path)
+          cleanedPath <- gsub("<([^:>]+)(:[^>]+)?>", "{\\1}", e$path)
+          if (is.null(endpoints[[cleanedPath]])){
+            endpoints[[cleanedPath]] <- list()
+          }
+          for (verb in e$verbs){
+            endpoints[[cleanedPath]][[tolower(verb)]] <- list(summary="test",
+                   responses=list("200"=list(description="worked")))
+          }
+        }
+      }
+
+      def <- list(
+        swagger = "2.0",
+        info = list(description="desc", title="title", version="1.0.0"),
+        host="127.0.0.1:8000",
+        schemes= I("http"),
+        produces=I("application/json"),
+        paths = endpoints
+        #securityDefinitions = list(),
+        #definitions = list()
+      )
+      def
     }
     #TODO: addRouter() to add sub-routers at a path.
   ),
