@@ -25,8 +25,9 @@ Suggests:
     XML,
     rmarkdown,
     PKI,
-    base64enc
-Collate:
+    base64enc,
+    htmlwidgets
+Collate: 
     'content-types.R'
     'cookie-parser.R'
     'globals.R'
@@ -43,6 +44,7 @@ Collate:
     'response.R'
     'serializer-content-type.R'
     'serializer-html.R'
+    'serializer-htmlwidget.R'
     'serializer-xml.R'
     'serializer.R'
     'session-cookie.R'

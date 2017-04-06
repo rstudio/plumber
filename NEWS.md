@@ -2,6 +2,8 @@ plumber 0.3.1
 --------------------------------------------------------------------------------
 * Add a method to consume JSON on post (you can still send a query string in
   the body of a POST request as well).
+* Added `@serializer htmlwidget` to support rendering and returning a 
+  self-contained htmlwidget from a plumber endpoint.
 
 plumber 0.3.0
 --------------------------------------------------------------------------------
