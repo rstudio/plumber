@@ -75,3 +75,7 @@ library(plumber)
 
 plumber was originally released as the `rapier` package and has since been renamed (7/13/2015).
 
+## License
+
+plumber is MIT licensed. The swagger-ui assets which are bundled are licensed under Apache 2.0.
+
