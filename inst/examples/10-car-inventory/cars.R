@@ -28,6 +28,12 @@ validateCar <- function(car){
 
 #' Add a car to the inventory
 #' @post /car/
+#' @param make:character The make of the car
+#' @param model:character The model of the car
+#' @param edition:character Edition of the car
+#' @param year:int Year the car was made
+#' @param miles:int The number of miles the car has
+#' @param price:numeric The price of the car in USD
 addCar <- function(make, model, edition, year, miles, price){
   newId <- max(inventory$id) + 1
   car <- list(
@@ -49,6 +55,12 @@ addCar <- function(make, model, edition, year, miles, price){
 
 #' Update a car in the inventory
 #' @param id:int The ID of the car to update
+#' @param make:character The make of the car
+#' @param model:character The model of the car
+#' @param edition:character Edition of the car
+#' @param year:int Year the car was made
+#' @param miles:int The number of miles the car has
+#' @param price:numeric The price of the car in USD
 #' @put /car/<id:int>
 updateCar <- function(id, make, model, edition, year, miles, price){
   updated <- list(
