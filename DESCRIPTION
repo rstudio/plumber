@@ -29,7 +29,7 @@ Suggests:
     base64enc,
     htmlwidgets,
     visNetwork
-Collate: 
+Collate:
     'content-types.R'
     'cookie-parser.R'
     'globals.R'
@@ -50,4 +50,5 @@ Collate:
     'serializer-xml.R'
     'serializer.R'
     'session-cookie.R'
+    'swagger.R'
 RoxygenNote: 6.0.1

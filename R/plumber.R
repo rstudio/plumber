@@ -69,6 +69,8 @@ plumber <- R6Class(
           image <- NULL
           serializer <- NULL
           assets <- NULL
+          params <- NULL
+          comments <- ""
           while (line > 0 && (stri_detect_regex(private$fileLines[line], pattern="^#['\\*]") || stri_trim_both(private$fileLines[line]) == "")){
             epMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@(get|put|post|use|delete|head)(\\s+(.*)$)?")
             if (!is.na(epMat[1,2])){
@@ -180,6 +182,28 @@ plumber <- R6Class(
               image <- imageMat[1,2]
             }
 
+            paramMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@param(\\s+([^\\s]+)(\\s+(.*))?\\s*$)?")
+            if (!is.na(paramMat[1,2])){
+              p <- stri_trim_both(paramMat[1,3])
+              if (is.na(p) || p == ""){
+                stopOnLine(private,line, "No parameter specified.")
+              }
+
+              nameType <- stringi::stri_match(paramMat[1,3], regex="^([^\\s]+):(\\w+)$")
+              if (is.na(nameType[1,1])){
+                stopOnLine(private,line, "No parameter type specified")
+              }
+              name <- nameType[1,2]
+              type <- plumberToSwaggerType(nameType[1,3])
+
+              params[[name]] <- list(desc=paramMat[1,5], type=type)
+            }
+
+            commentMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*([^@\\s].*$)")
+            if (!is.na(commentMat[1,2])){
+              comments <- paste(comments, commentMat[1,2])
+            }
+
             line <- line - 1
           }
 
@@ -195,7 +219,7 @@ plumber <- R6Class(
           }
 
           if (!is.null(path)){
-            private$addEndpointInternal(verbs, path, e, serializer, processors, srcref, preempt)
+            private$addEndpointInternal(verbs, path, e, serializer, processors, srcref, preempt, params, comments)
           } else if (!is.null(filter)){
             private$addFilterInternal(filter, e, serializer, processors, srcref)
           } else if (!is.null(assets)){
@@ -232,8 +256,11 @@ plumber <- R6Class(
     #* @param preempt The name of the filter before which this endpoint should
     #*   be inserted. If not specified the endpoint will be added after all
     #*   the filters.
-    addEndpoint = function(verbs, path, expr, serializer, processors, preempt=NULL){
-      private$addEndpointInternal(verbs, path, expr, serializer, processors, srcref, preempt)
+    #* @param params The documented parameters for this function in a list of
+    #*   list(paramsName=list(desc="description here") lists.
+    #* @param comments A description of the endpoint
+    addEndpoint = function(verbs, path, expr, serializer, processors, preempt=NULL, params=NULL, comments){
+      private$addEndpointInternal(verbs, path, expr, serializer, processors, srcref, preempt, params, comments)
     },
     #* Adds a static asset server
     #*
@@ -416,9 +443,44 @@ plumber <- R6Class(
           if (is.null(endpoints[[cleanedPath]])){
             endpoints[[cleanedPath]] <- list()
           }
+
+          # Get the params from the path
+          pathParams <- e$getTypedParams()
           for (verb in e$verbs){
-            endpoints[[cleanedPath]][[tolower(verb)]] <- list(summary="test",
-                   responses=list("200"=list(description="worked")))
+            params <- data.frame(name=character(0),
+                                 description=character(0),
+                                 `in`=character(0),
+                                 type=character(0), check.names = FALSE)
+
+            for (p in names(e$params)){
+              location <- "query"
+              if (p %in% pathParams$name){
+                location <- "path"
+              }
+
+              parDocs <- data.frame(name = p,
+                              description = e$params[[p]]$desc,
+                              `in`=location,
+                              type=e$params[[p]]$type,
+                              check.names = FALSE,
+                              required=FALSE)
+
+              if (location == "path"){
+                parDocs$required <- TRUE
+              }
+
+              params <- rbind(params, parDocs)
+            }
+
+            # If we haven't already documented a path param, we should add it here.
+            # FIXME: warning("Undocumented path parameters: ", paste0())
+
+            endptSwag <- list(summary=e$comments,
+                              responses=list("200"=list(description="worked")),
+                              parameters=params)
+
+            endpoints[[cleanedPath]][[tolower(verb)]] <- endptSwag
+
           }
         }
       }
@@ -452,7 +514,7 @@ plumber <- R6Class(
       self$filters <- c(self$filters, filter)
       invisible(self)
     },
-    addEndpointInternal = function(verbs, path, expr, serializer, processors, srcref, preempt=NULL){
+    addEndpointInternal = function(verbs, path, expr, serializer, processors, srcref, preempt=NULL, params=NULL, comments=NULL){
       filterNames <- "__first__"
       for (f in self$filters){
         filterNames <- c(filterNames, f$name)
@@ -467,7 +529,7 @@ plumber <- R6Class(
       }
 
       preempt <- ifelse(is.null(preempt), "__no-preempt__", preempt)
-      self$endpoints[[preempt]] <- c(self$endpoints[[preempt]], PlumberEndpoint$new(verbs, path, expr, private$envir, preempt, serializer, processors, srcref))
+      self$endpoints[[preempt]] <- c(self$endpoints[[preempt]], PlumberEndpoint$new(verbs, path, expr, private$envir, preempt, serializer, processors, srcref, params, comments))
     },
     addAssetsInternal = function(direc, pathPrefix="/public", options=list(), srcref){
       if(missing(direc)){

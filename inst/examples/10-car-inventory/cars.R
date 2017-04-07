@@ -7,6 +7,7 @@ listCars <- function(){
 }
 
 #' Lookup a car by ID
+#' @param id:int The ID of the car to get
 #' @get /car/<id:int>
 getCar <- function(id){
   inventory[inventory$id == id,]
@@ -47,6 +48,7 @@ addCar <- function(make, model, edition, year, miles, price){
 }
 
 #' Update a car in the inventory
+#' @param id:int The ID of the car to update
 #' @put /car/<id:int>
 updateCar <- function(id, make, model, edition, year, miles, price){
   updated <- list(
@@ -72,6 +74,7 @@ updateCar <- function(id, make, model, edition, year, miles, price){
 }
 
 #' Delete a car from the inventory
+#' @param id:int The ID of the car to delete
 #' @delete /car/<id:int>
 deleteCar <- function(id){
   if (!(id %in% inventory$id)){

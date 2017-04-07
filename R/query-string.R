@@ -54,7 +54,7 @@ createPathRegex <- function(pathDef){
 
   converters <- typeToConverters(type)
 
-  list(names = names, regex = paste0("^", re, "$"), converters=converters)
+  list(names = names, types=type, regex = paste0("^", re, "$"), converters=converters)
 }
 
 typeToRegex <- function(type){
