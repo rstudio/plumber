@@ -35,8 +35,8 @@ services:
      - "443:443"
     volumes:
      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    # - /etc/letsencrypt/live/plumber.tres.tl/cert.pem:/certs/cert.pem:ro
-    # - /etc/letsencrypt/live/plumber.tres.tl/privkey.pem:/certs/privkey.pem:ro
+     - /etc/letsencrypt/live/plumber.tres.tl/cert.pem:/certs/cert.pem:ro
+     - /etc/letsencrypt/live/plumber.tres.tl/privkey.pem:/certs/privkey.pem:ro
     restart: always
     depends_on:
      - append

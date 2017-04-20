@@ -1,10 +1,9 @@
 FROM nginx:1.9 
 MAINTAINER Jeff Allen <docker@trestletech.com>
 
-ADD privkey.pem /etc/certs/plumber/privkey.pem
-ADD cert.pem /etc/certs/plumber/cert.pem
-RUN chown -R nginx /etc/certs/plumber
-RUN chmod -R 700 /etc/certs/plumber
+RUN mkdir -p /certs && \
+	chown -R nginx /certs/ && \
+	chmod -R 600 /certs/
 
 EXPOSE 80 443
 
