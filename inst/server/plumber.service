@@ -1,0 +1,6 @@
+[Unit]
+Description=Plumber API
+
+[Service]
+ExecStart=/usr/bin/Rscript -e "pr <- plumber::plumb('/var/plumber/hello.R'); pr$run(port=8000)"
+Restart=on-abnormal

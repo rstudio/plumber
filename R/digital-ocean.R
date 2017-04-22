@@ -36,21 +36,53 @@ do_provision <- function(dropletId, unstable=FALSE, ...){
   }
 
   # Provision
-  d <- droplet %>%
+  droplet %>%
     debian_add_swap() %>%
-    install_new_r()
+    install_new_r() %>%
+    install_plumber(unstable) %>%
+    install_api() %>%
+    setup_systemctl()
 
+
+}
+
+install_plumber <- function(droplet, unstable){
   if (unstable){
-    d %>%
+    droplet %>%
       analogsea::debian_apt_get_install("libcurl4-openssl-dev") %>%
       analogsea::debian_apt_get_install("libgit2-dev") %>%
       analogsea::debian_apt_get_install("libssl-dev") %>%
       install_r_package("devtools", repo="https://cran.rstudio.com") %>%
       droplet_ssh("Rscript -e \"devtools::install_github('trestletech/plumber')\"")
   } else {
-    d %>%
+    droplet %>%
       install_r_package("plumber")
   }
+}
+
+install_api <- function(droplet){
+  droplet %>%
+    droplet_ssh("mkdir -p /var/plumber") %>%
+    droplet_upload(local=normalizePath(
+      paste0(system.file("examples", "10-welcome", package="plumber"), "/**"), mustWork=FALSE), #TODO: Windows support for **?
+                   remote="/var/plumber/",
+                   verbose = TRUE)
+}
+
+install_firewall <- function(droplet){
+  #TODO
+}
+
+install_nginx <- function(droplet){
+  #TODO
+}
+
+setup_systemctl <- function(droplet){
+  droplet %>%
+    droplet_upload(local=system.file("server", "plumber.service", package="plumber"),
+                   remote="/etc/systemd/system/plumber.service") %>%
+    droplet_ssh("systemctl start plumber && sleep 1") %>% #TODO: can systemctl listen for the port to come online so we don't have to guess at a sleep value?
+    droplet_ssh("systemctl status plumber")
 }
 
 install_new_r <- function(droplet){
