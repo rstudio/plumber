@@ -4,6 +4,7 @@ Type: Package
 Title: An API Generator for R
 Version: 0.3.2
 Date: 2017-04-05
+Roxygen: list(markdown = TRUE)
 Authors@R: c(
   person(family="Trestle Technology, LLC", role="aut", email="cran@trestletech.com"),
   person("Jeff", "Allen", role="cre", email="cran@trestletech.com"),
@@ -27,7 +28,8 @@ Suggests:
     PKI,
     base64enc,
     htmlwidgets,
-    visNetwork
+    visNetwork,
+    analogsea
 Collate: 
     'content-types.R'
     'cookie-parser.R'
@@ -35,6 +37,7 @@ Collate:
     'serializer-json.R'
     'plumber.R'
     'default-handlers.R'
+    'digital-ocean.R'
     'includes.R'
     'paths.R'
     'plumber-step.R'
