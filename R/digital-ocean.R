@@ -4,19 +4,30 @@
 #' Create (if required), install the necessary prerequisites, and
 #' deploy a sample plumber application on a DigitalOcean virtual machine.
 #' @param dropletId The numeric identifier of the DigitalOcean server that you want to provision (see [analogsea::droplets()]). If empty, a new DigitalOcean server will be created.
+#' @param unstable If `FALSE`, will install plumber from CRAN. If `TRUE`, will install the unstable version of plumber from GitHub.
 #' @param ... Arguments passed into the [analogsea::droplet_create()] function.
-do_provision <- function(dropletId, ...){
+do_provision <- function(dropletId, unstable=FALSE, ...){
   droplet <- NULL
   if (missing(dropletId)){
     # No dropletId provided; create a new server
-    message("THIS ACTION COSTS YOU MONEY! Provisioning a new server ",
-              "for which you will get a bill from DigitalOcean.")
+    message("THIS ACTION COSTS YOU MONEY!")
+    message("Provisioning a new server for which you will get a bill from DigitalOcean.")
 
     createArgs <- list(...)
     createArgs$tags <- c(createArgs$tags, "plumber")
     createArgs$image <- "ubuntu-16-04-x64"
 
     droplet <- do.call(analogsea::droplet_create, createArgs)
+
+    # Wait for the droplet to come online
+    analogsea::droplet_wait(droplet)
+
+    # I often still get a closed port after droplet_wait returns. Buffer for just a bit
+    Sys.sleep(15)
+
+    # Refresh the droplet; sometimes the original one doesn't yet have a network interface.
+    droplet <- analogsea::droplet(id=droplet$id)
+
   } else if (!is.numeric(dropletId)){
     stop("dropletId must be numeric; cannot use: '", dropletId, "' of type ", typeof(dropletId))
   } else {
@@ -24,17 +35,22 @@ do_provision <- function(dropletId, ...){
     droplet <- analogsea::droplet(id=dropletId)
   }
 
-  # Wait for the droplet to come online
-  analogsea::droplet_wait(droplet)
-
-  # I often still get a closed port after droplet_wait returns. Buffer for just a bit
-  Sys.sleep(15)
-
   # Provision
-  droplet %>%
+  d <- droplet %>%
     debian_add_swap() %>%
-    install_new_r() %>%
-    install_r_package("plumber")
+    install_new_r()
+
+  if (unstable){
+    d %>%
+      analogsea::debian_apt_get_install("libcurl4-openssl-dev") %>%
+      analogsea::debian_apt_get_install("libgit2-dev") %>%
+      analogsea::debian_apt_get_install("libssl-dev") %>%
+      install_r_package("devtools", repo="https://cran.rstudio.com") %>%
+      droplet_ssh("Rscript -e \"devtools::install_github('trestletech/plumber')\"")
+  } else {
+    d %>%
+      install_r_package("plumber")
+  }
 }
 
 install_new_r <- function(droplet){
