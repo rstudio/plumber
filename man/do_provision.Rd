@@ -4,14 +4,17 @@
 \alias{do_provision}
 \title{Provision a DigitalOcean plumber server}
 \usage{
-do_provision(dropletId, ...)
+do_provision(dropletId, unstable = FALSE, ...)
 }
 \arguments{
 \item{dropletId}{The numeric identifier of the DigitalOcean server that you want to provision (see \code{\link[analogsea:droplets]{analogsea::droplets()}}). If empty, a new DigitalOcean server will be created.}
+
+\item{unstable}{If \code{FALSE}, will install plumber from CRAN. If \code{TRUE}, will install the unstable version of plumber from GitHub.}
 
 \item{...}{Arguments passed into the \code{\link[analogsea:droplet_create]{analogsea::droplet_create()}} function.}
 }
 \description{
 Create (if required), install the necessary prerequisites, and
 deploy a sample plumber application on a DigitalOcean virtual machine.
+This command is idempotent, so feel free to run it on a single server multiple times.
 }

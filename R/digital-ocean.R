@@ -3,9 +3,11 @@
 #'
 #' Create (if required), install the necessary prerequisites, and
 #' deploy a sample plumber application on a DigitalOcean virtual machine.
+#' This command is idempotent, so feel free to run it on a single server multiple times.
 #' @param dropletId The numeric identifier of the DigitalOcean server that you want to provision (see [analogsea::droplets()]). If empty, a new DigitalOcean server will be created.
 #' @param unstable If `FALSE`, will install plumber from CRAN. If `TRUE`, will install the unstable version of plumber from GitHub.
 #' @param ... Arguments passed into the [analogsea::droplet_create()] function.
+#' @export
 do_provision <- function(dropletId, unstable=FALSE, ...){
   droplet <- NULL
   if (missing(dropletId)){
@@ -82,6 +84,7 @@ install_nginx <- function(droplet){
   droplet %>%
     debian_apt_get_install("nginx") %>%
     droplet_ssh("rm -f /etc/nginx/sites-enabled/default") %>% # Disable the default site
+    droplet_ssh("mkdir -p /var/certbot") %>%
     droplet_upload(local=system.file("server", "nginx.conf", package="plumber"),
                    remote="/etc/nginx/sites-available/plumber") %>%
     droplet_ssh("ln -sf /etc/nginx/sites-available/plumber /etc/nginx/sites-enabled/") %>%
@@ -106,4 +109,45 @@ install_new_r <- function(droplet){
     debian_install_r()
 }
 
+install_ssl <- function(droplet, domain, email, termsOfService=FALSE){
+  # FIXME: verify that DNS is properly configured
+
+  if(missing(domain)){
+    stop("You must provide a valid domain name which points to this server in order to get an SSL certificate.")
+  }
+  if (missing(email)){
+    stop("You must provide an email to letsencrypt -- the provider of your SSL certificate -- for 'urgent renewal and security notices'.")
+  }
+  if (!termsOfService){
+    stop("You must agree to the letsencrypt terms of service before running this function")
+  }
+
+  # Trim off any protocol prefix if one exists
+  domain <- sub("^https?://", "", domain)
+  # Trim off any trailing slash if one exists.
+  domain <- sub("/$", "", domain)
+
+  # Prepare the nginx conf file.
+  conf <- readLines(system.file("server", "nginx-ssl.conf", package="plumber"))
+  conf <- gsub("\\$DOMAIN\\$", domain, conf)
+
+  conffile <- tempfile()
+  writeLines(conf, conffile)
+
+  d <- droplet %>%
+    droplet_ssh("add-apt-repository ppa:certbot/certbot") %>%
+    debian_apt_get_update() %>%
+    debian_apt_get_install("certbot") %>%
+    droplet_ssh("ufw allow https") %>%
+    droplet_ssh(sprintf("certbot certonly --webroot -w /var/certbot/ -n -d %s --email %s --agree-tos", domain, email)) %>%
+    droplet_upload(conffile, "/etc/nginx/sites-available/plumber") %>%
+    droplet_ssh("systemctl reload nginx")
+
+  # TODO: add this as a catch()
+  file.remove(conffile)
+
+  # FIXME: schedule cert renewal
+
+  d
+}
 
