@@ -41,7 +41,9 @@ do_provision <- function(dropletId, unstable=FALSE, ...){
     install_new_r() %>%
     install_plumber(unstable) %>%
     install_api() %>%
-    setup_systemctl()
+    setup_systemctl() %>%
+    install_nginx() %>%
+    install_firewall()
 
 
 }
