@@ -65,16 +65,26 @@ install_api <- function(droplet){
     droplet_ssh("mkdir -p /var/plumber") %>%
     droplet_upload(local=normalizePath(
       paste0(system.file("examples", "10-welcome", package="plumber"), "/**"), mustWork=FALSE), #TODO: Windows support for **?
-                   remote="/var/plumber/",
-                   verbose = TRUE)
+      remote="/var/plumber/",
+      verbose = TRUE)
 }
 
 install_firewall <- function(droplet){
-  #TODO
+  droplet %>%
+    droplet_ssh("ufw allow http") %>%
+    droplet_ssh("ufw allow ssh") %>%
+    droplet_ssh("ufw -f enable")
 }
 
 install_nginx <- function(droplet){
-  #TODO
+  droplet %>%
+    debian_apt_get_install("nginx") %>%
+    droplet_ssh("rm -f /etc/nginx/sites-enabled/default") %>% # Disable the default site
+    droplet_upload(local=system.file("server", "nginx.conf", package="plumber"),
+                   remote="/etc/nginx/sites-available/plumber") %>%
+    droplet_ssh("ln -sf /etc/nginx/sites-available/plumber /etc/nginx/sites-enabled/") %>%
+    droplet_ssh("systemctl reload nginx")
+
 }
 
 setup_systemctl <- function(droplet){
@@ -82,6 +92,7 @@ setup_systemctl <- function(droplet){
     droplet_upload(local=system.file("server", "plumber.service", package="plumber"),
                    remote="/etc/systemd/system/plumber.service") %>%
     droplet_ssh("systemctl start plumber && sleep 1") %>% #TODO: can systemctl listen for the port to come online so we don't have to guess at a sleep value?
+    droplet_ssh("systemctl enable plumber") %>%
     droplet_ssh("systemctl status plumber")
 }
 
