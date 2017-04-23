@@ -139,14 +139,12 @@ install_ssl <- function(droplet, domain, email, termsOfService=FALSE){
     debian_apt_get_update() %>%
     debian_apt_get_install("certbot") %>%
     droplet_ssh("ufw allow https") %>%
-    droplet_ssh(sprintf("certbot certonly --webroot -w /var/certbot/ -n -d %s --email %s --agree-tos", domain, email)) %>%
+    droplet_ssh(sprintf("certbot certonly --webroot -w /var/certbot/ -n -d %s --email %s --agree-tos --renew-hook '/bin/systemctl reload nginx'", domain, email)) %>%
     droplet_upload(conffile, "/etc/nginx/sites-available/plumber") %>%
     droplet_ssh("systemctl reload nginx")
 
   # TODO: add this as a catch()
   file.remove(conffile)
-
-  # FIXME: schedule cert renewal
 
   d
 }
