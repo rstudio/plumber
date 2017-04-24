@@ -46,7 +46,7 @@ do_provision <- function(droplet, unstable=FALSE, ...){
 
   # Provision
   droplet %>%
-    debian_add_swap() %>%
+    debian_add_swap() %>% # TODO: don't do if already added, not idempotent.
     install_new_r() %>%
     install_plumber(unstable) %>%
     install_api() %>%
