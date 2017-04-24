@@ -126,14 +126,14 @@ install_new_r <- function(droplet){
 #' the Internet, but once complete you can then execute this function with the
 #' given domain to be granted a TLS/SSL certificate for that domain.
 #' @details Obtains a free TLS/SSL certificate from
-#'   (letsencrypt)[https://letsencrypt.org/] and installs it in nginx. It also
+#'   [letsencrypt](https://letsencrypt.org/) and installs it in nginx. It also
 #'   configures nginx to route all unencrypted HTTP traffic (port 80) to HTTPS.
 #'   Your TLS certificate will be automatically renewed and deployed. It also
 #'   opens port 443 in the firewall to allow incoming HTTPS traffic.
 #'
 #'   Historically, HTTPS certificates required payment in advance. If you
-#'   appreciate this service, consider (donating to the letsencrypt
-#'   project)[https://letsencrypt.org/donate/].
+#'   appreciate this service, consider [donating to the letsencrypt
+#'   project](https://letsencrypt.org/donate/).
 #' @param droplet The DigitalOcean droplet on which you wish to provision HTTPS
 #' @param domain The domain name associated with this instance. Used to obtain a
 #'   TLS/SSL certificate.
