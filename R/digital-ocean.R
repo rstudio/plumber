@@ -4,14 +4,27 @@
 #' Create (if required), install the necessary prerequisites, and
 #' deploy a sample plumber application on a DigitalOcean virtual machine.
 #' This command is idempotent, so feel free to run it on a single server multiple times.
-#' @param dropletId The numeric identifier of the DigitalOcean server that you want to provision (see [analogsea::droplets()]). If empty, a new DigitalOcean server will be created.
+#' @param droplet The DigitalOcean droplet that you want to provision (see [analogsea::droplet()]). If empty, a new DigitalOcean server will be created.
 #' @param unstable If `FALSE`, will install plumber from CRAN. If `TRUE`, will install the unstable version of plumber from GitHub.
 #' @param ... Arguments passed into the [analogsea::droplet_create()] function.
+#' @details Provisions a Ubuntu 16.04-x64 droplet with the following customizations:
+#'  - A recent version of R installed
+#'  - plumber installed globally in the system library
+#'  - An example plumber API deployed at `/var/plumber`
+#'  - A systemd definition for the above plumber API which will ensure that the plumber
+#'    API is started on machine boot and respawned if the R process ever crashes. On the
+#'    server you can use commands like `systemctl restart plumber` to manage your API, or
+#'    `journalctl -u plumber` to see the logs associated with your plumber process.
+#'  - The `nginx`` web server installed to route web traffic from port 80 (HTTP) to your plumber
+#'    process.
+#'  - `ufw` installed as a firewall to restrict access on the server. By default it only
+#'    allows incoming traffic on port 22 (SSH) and port 80 (HTTP).
+#'  - A 4GB swap file is created to ensure that machines with little RAM (the default) are
+#'    able to get through the necessary R package compilations.
 #' @export
-do_provision <- function(dropletId, unstable=FALSE, ...){
-  droplet <- NULL
-  if (missing(dropletId)){
-    # No dropletId provided; create a new server
+do_provision <- function(droplet, unstable=FALSE, ...){
+  if (missing(droplet)){
+    # No droplet provided; create a new server
     message("THIS ACTION COSTS YOU MONEY!")
     message("Provisioning a new server for which you will get a bill from DigitalOcean.")
 
@@ -29,12 +42,6 @@ do_provision <- function(dropletId, unstable=FALSE, ...){
 
     # Refresh the droplet; sometimes the original one doesn't yet have a network interface.
     droplet <- analogsea::droplet(id=droplet$id)
-
-  } else if (!is.numeric(dropletId)){
-    stop("dropletId must be numeric; cannot use: '", dropletId, "' of type ", typeof(dropletId))
-  } else {
-    # otherwise we were given a numeric droplet ID; use that.
-    droplet <- analogsea::droplet(id=dropletId)
   }
 
   # Provision
@@ -46,8 +53,6 @@ do_provision <- function(dropletId, unstable=FALSE, ...){
     setup_systemctl() %>%
     install_nginx() %>%
     install_firewall()
-
-
 }
 
 install_plumber <- function(droplet, unstable){
@@ -109,8 +114,60 @@ install_new_r <- function(droplet){
     debian_install_r()
 }
 
-install_ssl <- function(droplet, domain, email, termsOfService=FALSE){
-  # FIXME: verify that DNS is properly configured
+#' Add HTTPS to a plumber Droplet
+#'
+#' Adds TLS/SSL (HTTPS) to a droplet created using [do_provision()].
+#'
+#' In order to get a TLS/SSL certificate, you need to point a domain name to the
+#' IP address associated with your droplet. If you don't already have a domain
+#' name, you can register one [here](http://tres.tl/domain). Point a (sub)domain
+#' to the IP address associated with your plumber droplet before calling this
+#' function. These changes may take a few minutes or hours to propogate around
+#' the Internet, but once complete you can then execute this function with the
+#' given domain to be granted a TLS/SSL certificate for that domain.
+#' @details Obtains a free TLS/SSL certificate from
+#'   (letsencrypt)[https://letsencrypt.org/] and installs it in nginx. It also
+#'   configures nginx to route all unencrypted HTTP traffic (port 80) to HTTPS.
+#'   Your TLS certificate will be automatically renewed and deployed. It also
+#'   opens port 443 in the firewall to allow incoming HTTPS traffic.
+#'
+#'   Historically, HTTPS certificates required payment in advance. If you
+#'   appreciate this service, consider (donating to the letsencrypt
+#'   project)[https://letsencrypt.org/donate/].
+#' @param droplet The DigitalOcean droplet on which you wish to provision HTTPS
+#' @param domain The domain name associated with this instance. Used to obtain a
+#'   TLS/SSL certificate.
+#' @param email Your email address; given only to letsencrypt when requesting a
+#'   certificate to enable them to contact you about issues with renewal or
+#'   security.
+#' @param termsOfService Set to `TRUE` to agree to the letsencrypt subscriber
+#'   agreement. At the time of writing, the current version is available [here](https://letsencrypt.org/documents/LE-SA-v1.1.1-August-1-2016.pdf).
+#'   Must be set to true to obtain a certificate through letsencrypt.
+#' @param force If `FALSE`, will abort if it believes that the given domain name
+#'   is not yet pointing at the appropriate IP address for this droplet. If
+#'   `TRUE`, will ignore this check and attempt to proceed regardless.
+#' @export
+do_configure_https <- function(droplet, domain, email, termsOfService=FALSE, force=FALSE){
+  # This could be done locally, but I don't have a good way of testing cross-platform currently.
+  # I can't figure out how to capture the output of the system() call inside
+  # of droplet_ssh, so just write to and download a file :\
+  if (!force){
+    nslookup <- tempfile()
+    droplet_ssh(droplet, paste0("nslookup ", domain, " > /tmp/nslookup")) %>%
+      droplet_download("/tmp/nslookup", nslookup)
+    nsout <- readLines(nslookup)
+    file.remove(nslookup)
+    ips <- nsout[grepl("^Address: ", nsout)]
+    ip <- gsub("^Address: (.*)$", "\\1", ips)
+
+    do_ips <- unlist(lapply(droplet$networks, function(x){ lapply(x, "[[", "ip_address") }))
+    if (length(intersect(ip, do_ips)) == 0){
+      stop("It doesn't appear that the domain name '", domain, "' is pointed to an IP address associated with this droplet. ",
+           "This could be due to a DNS misconfiguration or because the changes just haven't propagated through the Internet yet. ",
+           "If you believe this is an error, you can override this check by setting force=TRUE.")
+    }
+    message("Confirmed that '", domain, "' references one of the available IP addresses.")
+  }
 
   if(missing(domain)){
     stop("You must provide a valid domain name which points to this server in order to get an SSL certificate.")

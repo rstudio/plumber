@@ -4,10 +4,10 @@
 \alias{do_provision}
 \title{Provision a DigitalOcean plumber server}
 \usage{
-do_provision(dropletId, unstable = FALSE, ...)
+do_provision(droplet, unstable = FALSE, ...)
 }
 \arguments{
-\item{dropletId}{The numeric identifier of the DigitalOcean server that you want to provision (see \code{\link[analogsea:droplets]{analogsea::droplets()}}). If empty, a new DigitalOcean server will be created.}
+\item{droplet}{The DigitalOcean droplet that you want to provision (see \code{\link[analogsea:droplet]{analogsea::droplet()}}). If empty, a new DigitalOcean server will be created.}
 
 \item{unstable}{If \code{FALSE}, will install plumber from CRAN. If \code{TRUE}, will install the unstable version of plumber from GitHub.}
 
@@ -17,4 +17,22 @@ do_provision(dropletId, unstable = FALSE, ...)
 Create (if required), install the necessary prerequisites, and
 deploy a sample plumber application on a DigitalOcean virtual machine.
 This command is idempotent, so feel free to run it on a single server multiple times.
+}
+\details{
+Provisions a Ubuntu 16.04-x64 droplet with the following customizations:
+\itemize{
+\item A recent version of R installed
+\item plumber installed globally in the system library
+\item An example plumber API deployed at \code{/var/plumber}
+\item A systemd definition for the above plumber API which will ensure that the plumber
+API is started on machine boot and respawned if the R process ever crashes. On the
+server you can use commands like \code{systemctl restart plumber} to manage your API, or
+\code{journalctl -u plumber} to see the logs associated with your plumber process.
+\item The `nginx`` web server installed to route web traffic from port 80 (HTTP) to your plumber
+process.
+\item \code{ufw} installed as a firewall to restrict access on the server. By default it only
+allows incoming traffic on port 22 (SSH) and port 80 (HTTP).
+\item A 4GB swap file is created to ensure that machines with little RAM (the default) are
+able to get through the necessary R package compilations.
+}
 }
