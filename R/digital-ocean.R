@@ -1,4 +1,11 @@
 
+checkAnalogSea <- function(){
+  if (!requireNamespace("analogsea", quietly = TRUE)) {
+    stop("The analogsea package is not available but is required in order to use the provisioning functions. Please install analogsea.",
+         call. = FALSE)
+  }
+}
+
 #' Provision a DigitalOcean plumber server
 #'
 #' Create (if required), install the necessary prerequisites, and
@@ -23,6 +30,8 @@
 #'    able to get through the necessary R package compilations.
 #' @export
 do_provision <- function(droplet, unstable=FALSE, ...){
+  checkAnalogSea()
+
   if (missing(droplet)){
     # No droplet provided; create a new server
     message("THIS ACTION COSTS YOU MONEY!")
@@ -45,73 +54,64 @@ do_provision <- function(droplet, unstable=FALSE, ...){
   }
 
   # Provision
-  droplet %>%
-    debian_add_swap() %>% # TODO: don't do if already added, not idempotent.
-    install_new_r() %>%
-    install_plumber(unstable) %>%
-    install_api() %>%
-    setup_systemctl() %>%
-    install_nginx() %>%
-    install_firewall()
+  analogsea::debian_add_swap(droplet) # FIXME: don't do if already added, not idempotent.
+  install_new_r(droplet)
+  install_plumber(droplet, unstable)
+  install_api(droplet)
+  setup_systemctl(droplet)
+  install_nginx(droplet)
+  install_firewall(droplet)
 }
 
 install_plumber <- function(droplet, unstable){
   if (unstable){
-    droplet %>%
-      analogsea::debian_apt_get_install("libcurl4-openssl-dev") %>%
-      analogsea::debian_apt_get_install("libgit2-dev") %>%
-      analogsea::debian_apt_get_install("libssl-dev") %>%
-      install_r_package("devtools", repo="https://cran.rstudio.com") %>%
-      droplet_ssh("Rscript -e \"devtools::install_github('trestletech/plumber')\"")
+    analogsea::debian_apt_get_install(droplet, "libcurl4-openssl-dev")
+    analogsea::debian_apt_get_install(droplet, "libgit2-dev")
+    analogsea::debian_apt_get_install(droplet, "libssl-dev")
+    analogsea::install_r_package(droplet, "devtools", repo="https://cran.rstudio.com")
+    analogsea::droplet_ssh(droplet, "Rscript -e \"devtools::install_github('trestletech/plumber')\"")
   } else {
-    droplet %>%
-      install_r_package("plumber")
+    analogsea::install_r_package(droplet, "plumber")
   }
 }
 
 install_api <- function(droplet){
-  droplet %>%
-    droplet_ssh("mkdir -p /var/plumber") %>%
-    droplet_upload(local=normalizePath(
+  analogsea::droplet_ssh(droplet, "mkdir -p /var/plumber")
+  analogsea::droplet_upload(droplet, local=normalizePath(
       paste0(system.file("examples", "10-welcome", package="plumber"), "/**"), mustWork=FALSE), #TODO: Windows support for **?
       remote="/var/plumber/",
       verbose = TRUE)
 }
 
 install_firewall <- function(droplet){
-  droplet %>%
-    droplet_ssh("ufw allow http") %>%
-    droplet_ssh("ufw allow ssh") %>%
-    droplet_ssh("ufw -f enable")
+  analogsea::droplet_ssh(droplet, "ufw allow http")
+  analogsea::droplet_ssh(droplet, "ufw allow ssh")
+  analogsea::droplet_ssh(droplet, "ufw -f enable")
 }
 
 install_nginx <- function(droplet){
-  droplet %>%
-    debian_apt_get_install("nginx") %>%
-    droplet_ssh("rm -f /etc/nginx/sites-enabled/default") %>% # Disable the default site
-    droplet_ssh("mkdir -p /var/certbot") %>%
-    droplet_upload(local=system.file("server", "nginx.conf", package="plumber"),
-                   remote="/etc/nginx/sites-available/plumber") %>%
-    droplet_ssh("ln -sf /etc/nginx/sites-available/plumber /etc/nginx/sites-enabled/") %>%
-    droplet_ssh("systemctl reload nginx")
-
+  analogsea::debian_apt_get_install(droplet, "nginx")
+  analogsea::droplet_ssh(droplet, "rm -f /etc/nginx/sites-enabled/default") # Disable the default site
+  analogsea::droplet_ssh(droplet, "mkdir -p /var/certbot")
+  analogsea::droplet_upload(droplet, local=system.file("server", "nginx.conf", package="plumber"),
+                 remote="/etc/nginx/sites-available/plumber")
+  analogsea::droplet_ssh(droplet, "ln -sf /etc/nginx/sites-available/plumber /etc/nginx/sites-enabled/")
+  analogsea::droplet_ssh(droplet, "systemctl reload nginx")
 }
 
 setup_systemctl <- function(droplet){
-  droplet %>%
-    droplet_upload(local=system.file("server", "plumber.service", package="plumber"),
-                   remote="/etc/systemd/system/plumber.service") %>%
-    droplet_ssh("systemctl start plumber && sleep 1") %>% #TODO: can systemctl listen for the port to come online so we don't have to guess at a sleep value?
-    droplet_ssh("systemctl enable plumber") %>%
-    droplet_ssh("systemctl status plumber")
+  analogsea::droplet_upload(droplet, local=system.file("server", "plumber.service", package="plumber"),
+                 remote="/etc/systemd/system/plumber.service")
+  analogsea::droplet_ssh(droplet, "systemctl start plumber && sleep 1") #TODO: can systemctl listen for the port to come online so we don't have to guess at a sleep value?
+  analogsea::droplet_ssh(droplet, "systemctl enable plumber")
+  analogsea::droplet_ssh(droplet, "systemctl status plumber")
 }
 
 install_new_r <- function(droplet){
-  droplet %>%
-    droplet_ssh(c("echo 'deb https://cran.rstudio.com/bin/linux/ubuntu trusty/' >> /etc/apt/sources.list",
-                  "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9")) %>%
-    debian_apt_get_update() %>%
-    debian_install_r()
+  analogsea::droplet_ssh(droplet, c("echo 'deb https://cran.rstudio.com/bin/linux/ubuntu trusty/' >> /etc/apt/sources.list",
+                  "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9"))
+  analogsea::debian_apt_get_update(droplet)
+  analogsea::debian_install_r(droplet)
 }
 
 #' Add HTTPS to a plumber Droplet
@@ -148,13 +148,17 @@ install_new_r <- function(droplet){
 #'   `TRUE`, will ignore this check and attempt to proceed regardless.
 #' @export
 do_configure_https <- function(droplet, domain, email, termsOfService=FALSE, force=FALSE){
+  checkAnalogSea()
+
   # This could be done locally, but I don't have a good way of testing cross-platform currently.
   # I can't figure out how to capture the output of the system() call inside
   # of droplet_ssh, so just write to and download a file :\
   if (!force){
     nslookup <- tempfile()
-    droplet_ssh(droplet, paste0("nslookup ", domain, " > /tmp/nslookup")) %>%
-      droplet_download("/tmp/nslookup", nslookup)
+
+    analogsea::droplet_ssh(droplet, paste0("nslookup ", domain, " > /tmp/nslookup"))
+    analogsea::droplet_download(droplet, "/tmp/nslookup", nslookup)
+
     nsout <- readLines(nslookup)
     file.remove(nslookup)
     ips <- nsout[grepl("^Address: ", nsout)]
@@ -191,18 +195,17 @@ do_configure_https <- function(droplet, domain, email, termsOfService=FALSE, for
   conffile <- tempfile()
   writeLines(conf, conffile)
 
-  d <- droplet %>%
-    droplet_ssh("add-apt-repository ppa:certbot/certbot") %>%
-    debian_apt_get_update() %>%
-    debian_apt_get_install("certbot") %>%
-    droplet_ssh("ufw allow https") %>%
-    droplet_ssh(sprintf("certbot certonly --webroot -w /var/certbot/ -n -d %s --email %s --agree-tos --renew-hook '/bin/systemctl reload nginx'", domain, email)) %>%
-    droplet_upload(conffile, "/etc/nginx/sites-available/plumber") %>%
-    droplet_ssh("systemctl reload nginx")
+  analogsea::droplet_ssh(droplet, "add-apt-repository ppa:certbot/certbot")
+  analogsea::debian_apt_get_update(droplet)
+  analogsea::debian_apt_get_install(droplet, "certbot")
+  analogsea::droplet_ssh(droplet, "ufw allow https")
+  analogsea::droplet_ssh(droplet, sprintf("certbot certonly --webroot -w /var/certbot/ -n -d %s --email %s --agree-tos --renew-hook '/bin/systemctl reload nginx'", domain, email))
+  analogsea::droplet_upload(droplet, conffile, "/etc/nginx/sites-available/plumber")
+  analogsea::droplet_ssh(droplet, "systemctl reload nginx")
 
   # TODO: add this as a catch()
   file.remove(conffile)
 
-  d
+  droplet
 }
 
