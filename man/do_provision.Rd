@@ -4,7 +4,7 @@
 \alias{do_provision}
 \title{Provision a DigitalOcean plumber server}
 \usage{
-do_provision(droplet, unstable = FALSE, ...)
+do_provision(droplet, unstable = FALSE, example = TRUE, ...)
 }
 \arguments{
 \item{droplet}{The DigitalOcean droplet that you want to provision (see \code{\link[analogsea:droplet]{analogsea::droplet()}}). If empty, a new DigitalOcean server will be created.}

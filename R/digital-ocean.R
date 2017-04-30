@@ -202,9 +202,12 @@ do_configure_https <- function(droplet, domain, email, termsOfService=FALSE, for
   # TODO: add this as a catch()
   file.remove(conffile)
 
-  droplet
+  invisible(droplet)
 }
 
+#' Deploy or Update an API
+#'
+#' @export
 do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE){
   # Trim off any leading slashes
   path <- sub("^/+", "", path)
@@ -236,12 +239,14 @@ do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE){
   remotePath <- file.path("/etc/systemd/system", paste0(serviceName, ".service"))
 
   analogsea::droplet_upload(droplet, servicefile, remotePath)
+  analogsea::droplet_ssh(droplet, "systemctl daemon-reload")
 
   # TODO: add this as a catch()
   file.remove(servicefile)
 
   analogsea::droplet_ssh(droplet, paste0("systemctl start ", serviceName, " && sleep 1")) #TODO: can systemctl listen for the port to come online so we don't have to guess at a sleep value?
   analogsea::droplet_ssh(droplet, paste0("systemctl enable ", serviceName))
+  analogsea::droplet_ssh(droplet, paste0("systemctl status ", serviceName))
 
   ### NGINX ###
   # Prepare the nginx conf file
@@ -260,21 +265,37 @@ do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE){
   file.remove(conffile)
 
   if (forward){
-    forward <- readLines(system.file("server", "forward.conf", package="plumber"))
-    forward <- gsub("\\$PATH\\$", paste0(path), forward)
-
-    forwardfile <- tempfile()
-    writeLines(forward, forwardfile)
-
-    analogsea::droplet_upload(droplet, forwardfile, "/etc/nginx/sites-available/plumber-apis/_forward.conf")
-
-    # TODO: add this as a catch()
-    file.remove(forwardfile)
+    do_forward(droplet, path)
   }
 
   analogsea::droplet_ssh(droplet, "systemctl reload nginx")
+}
 
-  droplet
+#' Forward Root Requests to an API
+#'
+#' @param droplet The droplet on which to act
+#' @param path The path to which root requests should be forwarded
+#' @export
+do_forward <- function(droplet, path){
+  # Trim off any leading slashes
+  path <- sub("^/+", "", path)
+  # Trim off any trailing slashes if any exist.
+  path <- sub("/+$", "", path)
+
+  if (grepl("/", path)){
+    stop("Can't deploy to nested paths. '", path, "' should not have a / in it.")
+  }
+
+  forward <- readLines(system.file("server", "forward.conf", package="plumber"))
+  forward <- gsub("\\$PATH\\$", paste0(path), forward)
+
+  forwardfile <- tempfile()
+  writeLines(forward, forwardfile)
+
+  analogsea::droplet_upload(droplet, forwardfile, "/etc/nginx/sites-available/plumber-apis/_forward.conf")
+
+  # TODO: add this as a catch()
+  file.remove(forwardfile)
 }
 
 #' Remove an API from the server
@@ -297,14 +318,17 @@ do_remove_api <- function(droplet, path, delete=FALSE){
   }
 
   # Given that we're about to `rm -rf`, let's just be safe...
-  if (grepl("..", path)){
+  if (grepl("\\.\\.", path)){
     stop("Paths don't allow '..'s.")
+  }
+  if (nchar(path)==0){
+    stop("Path cannot be empty.")
   }
 
   serviceName <- paste0("plumber-", path)
   analogsea::droplet_ssh(droplet, paste0("systemctl stop ", serviceName))
-  analogsea::droplet_ssh(droplet, paste0("systemctl disable", serviceName))
-  analogsea::droplet_ssh(droplet, paste0("rm /etc/systemd/system", serviceName, ".service"))
+  analogsea::droplet_ssh(droplet, paste0("systemctl disable ", serviceName))
+  analogsea::droplet_ssh(droplet, paste0("rm /etc/systemd/system/", serviceName, ".service"))
   analogsea::droplet_ssh(droplet, paste0("rm /etc/nginx/sites-available/plumber-apis/", path, ".conf"))
 
   analogsea::droplet_ssh(droplet, "systemctl reload nginx")
@@ -312,8 +336,6 @@ do_remove_api <- function(droplet, path, delete=FALSE){
   if(delete){
     analogsea::droplet_ssh(droplet, paste0("rm -rf /var/plumber/", path))
   }
-
-  droplet
 }
 
 #' Remove the forwarding rule
@@ -324,6 +346,5 @@ do_remove_api <- function(droplet, path, delete=FALSE){
 do_remove_forward <- function(droplet){
   analogsea::droplet_ssh(droplet, "rm /etc/nginx/sites-available/plumber-apis/_forward.conf")
   analogsea::droplet_ssh(droplet, "systemctl reload nginx")
-  droplet
 }
 
