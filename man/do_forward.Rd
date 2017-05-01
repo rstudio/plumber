@@ -7,7 +7,8 @@
 do_forward(droplet, path)
 }
 \arguments{
-\item{droplet}{The droplet on which to act}
+\item{droplet}{The droplet on which to act. It's expected that this droplet
+was provisioned using \code{\link[=do_provision]{do_provision()}}.}
 
 \item{path}{The path to which root requests should be forwarded}
 }

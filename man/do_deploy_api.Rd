@@ -6,6 +6,26 @@
 \usage{
 do_deploy_api(droplet, path, localPath, port, forward = FALSE)
 }
+\arguments{
+\item{droplet}{The droplet on which to act. It's expected that this droplet
+was provisioned using \code{\link[=do_provision]{do_provision()}}.  See \code{\link[analogsea:droplet]{analogsea::droplet()}} to obtain a reference to a running droplet.}
+
+\item{path}{The remote path/name of the application}
+
+\item{localPath}{The local path to the API that you want to deploy. The
+entire directory referenced will be deployed, and the \code{plumber.R} file
+inside of that directory will be used as the root plumber file. The directory
+MUST contain a \code{plumber.R} file.}
+
+\item{port}{The internal port on which this service should run. This will not
+be user visible, but must be unique and point to a port that is available
+on your server. If unsure, try a number around \code{8000}.}
+
+\item{forward}{If \code{TRUE}, will setup requests targeting the root URL on the
+server to point to this application. See the \code{\link[=do_forward]{do_forward()}} function for
+more details.}
+}
 \description{
-Deploy or Update an API
+Deploys an API from your local machine to make it available on the remote
+plumber server.
 }

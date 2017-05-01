@@ -8,7 +8,7 @@ do_configure_https(droplet, domain, email, termsOfService = FALSE,
   force = FALSE)
 }
 \arguments{
-\item{droplet}{The DigitalOcean droplet on which you wish to provision HTTPS}
+\item{droplet}{The droplet on which to act. See \code{\link[analogsea:droplet]{analogsea::droplet()}}.}
 
 \item{domain}{The domain name associated with this instance. Used to obtain a
 TLS/SSL certificate.}

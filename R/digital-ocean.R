@@ -13,6 +13,7 @@ checkAnalogSea <- function(){
 #' This command is idempotent, so feel free to run it on a single server multiple times.
 #' @param droplet The DigitalOcean droplet that you want to provision (see [analogsea::droplet()]). If empty, a new DigitalOcean server will be created.
 #' @param unstable If `FALSE`, will install plumber from CRAN. If `TRUE`, will install the unstable version of plumber from GitHub.
+#' @param example If `TRUE`, will deploy an example API named `hello` to the server on port 8000.
 #' @param ... Arguments passed into the [analogsea::droplet_create()] function.
 #' @details Provisions a Ubuntu 16.04-x64 droplet with the following customizations:
 #'  - A recent version of R installed
@@ -132,7 +133,7 @@ install_new_r <- function(droplet){
 #'   Historically, HTTPS certificates required payment in advance. If you
 #'   appreciate this service, consider [donating to the letsencrypt
 #'   project](https://letsencrypt.org/donate/).
-#' @param droplet The DigitalOcean droplet on which you wish to provision HTTPS
+#' @param droplet The droplet on which to act. See [analogsea::droplet()].
 #' @param domain The domain name associated with this instance. Used to obtain a
 #'   TLS/SSL certificate.
 #' @param email Your email address; given only to letsencrypt when requesting a
@@ -212,11 +213,12 @@ do_configure_https <- function(droplet, domain, email, termsOfService=FALSE, for
 #' Deploys an API from your local machine to make it available on the remote
 #' plumber server.
 #' @param droplet The droplet on which to act. It's expected that this droplet
-#'   was provisioned using [do_provision()].
+#'   was provisioned using [do_provision()].  See [analogsea::droplet()] to obtain a reference to a running droplet.
 #' @param path The remote path/name of the application
 #' @param localPath The local path to the API that you want to deploy. The
 #'   entire directory referenced will be deployed, and the `plumber.R` file
-#'   inside of that directory will be used as the root plumber file.
+#'   inside of that directory will be used as the root plumber file. The directory
+#'   MUST contain a `plumber.R` file.
 #' @param port The internal port on which this service should run. This will not
 #'   be user visible, but must be unique and point to a port that is available
 #'   on your server. If unsure, try a number around `8000`.
@@ -235,6 +237,10 @@ do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE){
   }
 
   # TODO: check local path for plumber.R file.
+  apiPath <- file.path(localPath, "plumber.R")
+  if (!file.exists(apiPath)){
+    stop("Your local API must contain a `plumber.R` file. ", apiPath, " does not exist")
+  }
 
   ### UPLOAD the API ###
   localPath <- sub("/+$", "", localPath)
@@ -322,7 +328,8 @@ do_forward <- function(droplet, path){
 #' Removes all services and routing rules associated with a particular service.
 #' Optionally purges the associated API directory from disk.
 #' @param droplet The droplet on which to act. It's expected that this droplet
-#'   was provisioned using [do_provision()].
+#'   was provisioned using [do_provision()]. See [analogsea::droplet()] to
+#'   obtain a reference to a running droplet.
 #' @param path The path/name of the plumber service
 #' @param delete If `TRUE`, will also delete the associated directory
 #'   (`/var/plumber/whatever`) from the server.
@@ -363,7 +370,7 @@ do_remove_api <- function(droplet, path, delete=FALSE){
 #' Removes the forwarding rule from the root path on the server. The server will
 #' no longer forward requests for `/` to an application.
 #' @param droplet The droplet on which to act. It's expected that this droplet
-#'   was provisioned using [do_provision()].
+#'   was provisioned using [do_provision()]. See [analogsea::droplet()] to obtain a reference to a running droplet.
 #' @export
 do_remove_forward <- function(droplet){
   analogsea::droplet_ssh(droplet, "rm /etc/nginx/sites-available/plumber-apis/_forward.conf")

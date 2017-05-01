@@ -6,6 +6,10 @@
 \usage{
 do_remove_forward(droplet)
 }
+\arguments{
+\item{droplet}{The droplet on which to act. It's expected that this droplet
+was provisioned using \code{\link[=do_provision]{do_provision()}}. See \code{\link[analogsea:droplet]{analogsea::droplet()}} to obtain a reference to a running droplet.}
+}
 \description{
 Removes the forwarding rule from the root path on the server. The server will
 no longer forward requests for \code{/} to an application.

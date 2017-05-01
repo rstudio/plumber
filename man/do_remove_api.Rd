@@ -7,7 +7,9 @@
 do_remove_api(droplet, path, delete = FALSE)
 }
 \arguments{
-\item{droplet}{The droplet on which to act}
+\item{droplet}{The droplet on which to act. It's expected that this droplet
+was provisioned using \code{\link[=do_provision]{do_provision()}}. See \code{\link[analogsea:droplet]{analogsea::droplet()}} to
+obtain a reference to a running droplet.}
 
 \item{path}{The path/name of the plumber service}
 

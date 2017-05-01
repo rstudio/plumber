@@ -11,6 +11,8 @@ do_provision(droplet, unstable = FALSE, example = TRUE, ...)
 
 \item{unstable}{If \code{FALSE}, will install plumber from CRAN. If \code{TRUE}, will install the unstable version of plumber from GitHub.}
 
+\item{example}{If \code{TRUE}, will deploy an example API named \code{hello} to the server on port 8000.}
+
 \item{...}{Arguments passed into the \code{\link[analogsea:droplet_create]{analogsea::droplet_create()}} function.}
 }
 \description{
