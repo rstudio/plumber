@@ -5,6 +5,9 @@ comments: true
 ---
 
 <div class="row"><div class="col-sm-8" markdown="1">
+
+> If you're just trying to get a plumber API running online, you may find the [DigitalOcean](../digitalocean/) documentation to be more approachable. This guide requires a intermediate-level comfort with Linux and the command line, whereas the DigitalOcean approach is much more automated and simple to get started.
+
 R is a traditionally a "single-threaded" environment, meaning that when R is busy evaluating a command or serving a request, nothing else can get done in the process. This makes R not particularly well-suited for hosting a large amount of incoming HTTP traffic on its own. But with a bit of help from external tools, R-backed servers like plumber or [Shiny](http://shiny.rstudio.com) can still be scaled to handle just about any amount of traffic you need it to handle.
 
 There are a variety of tools that were built to help manage web hosting in a single-threaded environment like R. Some of the most compelling tools were developed around Ruby (like [Phusion Passenger](https://www.phusionpassenger.com/)) or Node.js (like [Node Supervisor](https://github.com/petruisfan/node-supervisor), [forever](https://github.com/foreverjs/forever) or [pm2](http://pm2.keymetrics.io/)). Thankfully, many of these tools can be adapted to support managing processes in other languages like R.
