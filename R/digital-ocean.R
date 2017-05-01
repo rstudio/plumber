@@ -13,6 +13,7 @@ checkAnalogSea <- function(){
 #' This command is idempotent, so feel free to run it on a single server multiple times.
 #' @param droplet The DigitalOcean droplet that you want to provision (see [analogsea::droplet()]). If empty, a new DigitalOcean server will be created.
 #' @param unstable If `FALSE`, will install plumber from CRAN. If `TRUE`, will install the unstable version of plumber from GitHub.
+#' @param example If `TRUE`, will deploy an example API named `hello` to the server on port 8000.
 #' @param ... Arguments passed into the [analogsea::droplet_create()] function.
 #' @details Provisions a Ubuntu 16.04-x64 droplet with the following customizations:
 #'  - A recent version of R installed
@@ -29,7 +30,7 @@ checkAnalogSea <- function(){
 #'  - A 4GB swap file is created to ensure that machines with little RAM (the default) are
 #'    able to get through the necessary R package compilations.
 #' @export
-do_provision <- function(droplet, unstable=FALSE, ...){
+do_provision <- function(droplet, unstable=FALSE, example=TRUE, ...){
   checkAnalogSea()
 
   if (missing(droplet)){
@@ -58,9 +59,14 @@ do_provision <- function(droplet, unstable=FALSE, ...){
   install_new_r(droplet)
   install_plumber(droplet, unstable)
   install_api(droplet)
-  setup_systemctl(droplet)
   install_nginx(droplet)
   install_firewall(droplet)
+
+  if (example){
+    do_deploy_api(droplet, "hello", system.file("examples", "10-welcome", package="plumber"), port=8000, forward=TRUE)
+  }
+
+  invisible(droplet)
 }
 
 install_plumber <- function(droplet, unstable){
@@ -93,18 +99,11 @@ install_nginx <- function(droplet){
   analogsea::debian_apt_get_install(droplet, "nginx")
   analogsea::droplet_ssh(droplet, "rm -f /etc/nginx/sites-enabled/default") # Disable the default site
   analogsea::droplet_ssh(droplet, "mkdir -p /var/certbot")
+  analogsea::droplet_ssh(droplet, "mkdir -p /etc/nginx/sites-available/plumber-apis/")
   analogsea::droplet_upload(droplet, local=system.file("server", "nginx.conf", package="plumber"),
                  remote="/etc/nginx/sites-available/plumber")
   analogsea::droplet_ssh(droplet, "ln -sf /etc/nginx/sites-available/plumber /etc/nginx/sites-enabled/")
   analogsea::droplet_ssh(droplet, "systemctl reload nginx")
-}
-
-setup_systemctl <- function(droplet){
-  analogsea::droplet_upload(droplet, local=system.file("server", "plumber.service", package="plumber"),
-                 remote="/etc/systemd/system/plumber.service")
-  analogsea::droplet_ssh(droplet, "systemctl start plumber && sleep 1") #TODO: can systemctl listen for the port to come online so we don't have to guess at a sleep value?
-  analogsea::droplet_ssh(droplet, "systemctl enable plumber")
-  analogsea::droplet_ssh(droplet, "systemctl status plumber")
 }
 
 install_new_r <- function(droplet){
@@ -134,7 +133,7 @@ install_new_r <- function(droplet){
 #'   Historically, HTTPS certificates required payment in advance. If you
 #'   appreciate this service, consider [donating to the letsencrypt
 #'   project](https://letsencrypt.org/donate/).
-#' @param droplet The DigitalOcean droplet on which you wish to provision HTTPS
+#' @param droplet The droplet on which to act. See [analogsea::droplet()].
 #' @param domain The domain name associated with this instance. Used to obtain a
 #'   TLS/SSL certificate.
 #' @param email Your email address; given only to letsencrypt when requesting a
@@ -206,6 +205,175 @@ do_configure_https <- function(droplet, domain, email, termsOfService=FALSE, for
   # TODO: add this as a catch()
   file.remove(conffile)
 
-  droplet
+  invisible(droplet)
+}
+
+#' Deploy or Update an API
+#'
+#' Deploys an API from your local machine to make it available on the remote
+#' plumber server.
+#' @param droplet The droplet on which to act. It's expected that this droplet
+#'   was provisioned using [do_provision()].  See [analogsea::droplet()] to obtain a reference to a running droplet.
+#' @param path The remote path/name of the application
+#' @param localPath The local path to the API that you want to deploy. The
+#'   entire directory referenced will be deployed, and the `plumber.R` file
+#'   inside of that directory will be used as the root plumber file. The directory
+#'   MUST contain a `plumber.R` file.
+#' @param port The internal port on which this service should run. This will not
+#'   be user visible, but must be unique and point to a port that is available
+#'   on your server. If unsure, try a number around `8000`.
+#' @param forward If `TRUE`, will setup requests targeting the root URL on the
+#'   server to point to this application. See the [do_forward()] function for
+#'   more details.
+#' @export
+do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE){
+  # Trim off any leading slashes
+  path <- sub("^/+", "", path)
+  # Trim off any trailing slashes if any exist.
+  path <- sub("/+$", "", path)
+
+  if (grepl("/", path)){
+    stop("Can't deploy to nested paths. '", path, "' should not have a / in it.")
+  }
+
+  # TODO: check local path for plumber.R file.
+  apiPath <- file.path(localPath, "plumber.R")
+  if (!file.exists(apiPath)){
+    stop("Your local API must contain a `plumber.R` file. ", apiPath, " does not exist")
+  }
+
+  ### UPLOAD the API ###
+  localPath <- sub("/+$", "", localPath)
+  analogsea::droplet_ssh(droplet, paste0("mkdir -p /var/plumber/", path))
+  analogsea::droplet_upload(droplet, local=paste0(localPath, "/**"), #TODO: Windows support for **?
+      remote=paste0("/var/plumber/", path, "/"))
+
+  ### SYSTEMD ###
+  serviceName <- paste0("plumber-", path)
+
+  service <- readLines(system.file("server", "plumber.service", package="plumber"))
+  service <- gsub("\\$PORT\\$", port, service)
+  service <- gsub("\\$PATH\\$", paste0("/", path), service)
+
+  servicefile <- tempfile()
+  writeLines(service, servicefile)
+
+  remotePath <- file.path("/etc/systemd/system", paste0(serviceName, ".service"))
+
+  analogsea::droplet_upload(droplet, servicefile, remotePath)
+  analogsea::droplet_ssh(droplet, "systemctl daemon-reload")
+
+  # TODO: add this as a catch()
+  file.remove(servicefile)
+
+  analogsea::droplet_ssh(droplet, paste0("systemctl start ", serviceName, " && sleep 1")) #TODO: can systemctl listen for the port to come online so we don't have to guess at a sleep value?
+  analogsea::droplet_ssh(droplet, paste0("systemctl enable ", serviceName))
+  analogsea::droplet_ssh(droplet, paste0("systemctl status ", serviceName))
+
+  ### NGINX ###
+  # Prepare the nginx conf file
+  conf <- readLines(system.file("server", "plumber-api.conf", package="plumber"))
+  conf <- gsub("\\$PORT\\$", port, conf)
+  conf <- gsub("\\$PATH\\$", path, conf)
+
+  conffile <- tempfile()
+  writeLines(conf, conffile)
+
+  remotePath <- file.path("/etc/nginx/sites-available/plumber-apis", paste0(path, ".conf"))
+
+  analogsea::droplet_upload(droplet, conffile, remotePath)
+
+  # TODO: add this as a catch()
+  file.remove(conffile)
+
+  if (forward){
+    do_forward(droplet, path)
+  }
+
+  analogsea::droplet_ssh(droplet, "systemctl reload nginx")
+}
+
+#' Forward Root Requests to an API
+#'
+#' @param droplet The droplet on which to act. It's expected that this droplet
+#'   was provisioned using [do_provision()].
+#' @param path The path to which root requests should be forwarded
+#' @export
+do_forward <- function(droplet, path){
+  # Trim off any leading slashes
+  path <- sub("^/+", "", path)
+  # Trim off any trailing slashes if any exist.
+  path <- sub("/+$", "", path)
+
+  if (grepl("/", path)){
+    stop("Can't deploy to nested paths. '", path, "' should not have a / in it.")
+  }
+
+  forward <- readLines(system.file("server", "forward.conf", package="plumber"))
+  forward <- gsub("\\$PATH\\$", paste0(path), forward)
+
+  forwardfile <- tempfile()
+  writeLines(forward, forwardfile)
+
+  analogsea::droplet_upload(droplet, forwardfile, "/etc/nginx/sites-available/plumber-apis/_forward.conf")
+
+  # TODO: add this as a catch()
+  file.remove(forwardfile)
+
+  invisible(droplet)
+}
+
+#' Remove an API from the server
+#'
+#' Removes all services and routing rules associated with a particular service.
+#' Optionally purges the associated API directory from disk.
+#' @param droplet The droplet on which to act. It's expected that this droplet
+#'   was provisioned using [do_provision()]. See [analogsea::droplet()] to
+#'   obtain a reference to a running droplet.
+#' @param path The path/name of the plumber service
+#' @param delete If `TRUE`, will also delete the associated directory
+#'   (`/var/plumber/whatever`) from the server.
+#' @export
+do_remove_api <- function(droplet, path, delete=FALSE){
+  # Trim off any leading slashes
+  path <- sub("^/+", "", path)
+  # Trim off any trailing slashes if any exist.
+  path <- sub("/+$", "", path)
+
+  if (grepl("/", path)){
+    stop("Can't deploy to nested paths. '", path, "' should not have a / in it.")
+  }
+
+  # Given that we're about to `rm -rf`, let's just be safe...
+  if (grepl("\\.\\.", path)){
+    stop("Paths don't allow '..'s.")
+  }
+  if (nchar(path)==0){
+    stop("Path cannot be empty.")
+  }
+
+  serviceName <- paste0("plumber-", path)
+  analogsea::droplet_ssh(droplet, paste0("systemctl stop ", serviceName))
+  analogsea::droplet_ssh(droplet, paste0("systemctl disable ", serviceName))
+  analogsea::droplet_ssh(droplet, paste0("rm /etc/systemd/system/", serviceName, ".service"))
+  analogsea::droplet_ssh(droplet, paste0("rm /etc/nginx/sites-available/plumber-apis/", path, ".conf"))
+
+  analogsea::droplet_ssh(droplet, "systemctl reload nginx")
+
+  if(delete){
+    analogsea::droplet_ssh(droplet, paste0("rm -rf /var/plumber/", path))
+  }
+}
+
+#' Remove the forwarding rule
+#'
+#' Removes the forwarding rule from the root path on the server. The server will
+#' no longer forward requests for `/` to an application.
+#' @param droplet The droplet on which to act. It's expected that this droplet
+#'   was provisioned using [do_provision()]. See [analogsea::droplet()] to obtain a reference to a running droplet.
+#' @export
+do_remove_forward <- function(droplet){
+  analogsea::droplet_ssh(droplet, "rm /etc/nginx/sites-available/plumber-apis/_forward.conf")
+  analogsea::droplet_ssh(droplet, "systemctl reload nginx")
 }
 

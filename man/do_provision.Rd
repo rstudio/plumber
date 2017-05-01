@@ -4,12 +4,14 @@
 \alias{do_provision}
 \title{Provision a DigitalOcean plumber server}
 \usage{
-do_provision(droplet, unstable = FALSE, ...)
+do_provision(droplet, unstable = FALSE, example = TRUE, ...)
 }
 \arguments{
 \item{droplet}{The DigitalOcean droplet that you want to provision (see \code{\link[analogsea:droplet]{analogsea::droplet()}}). If empty, a new DigitalOcean server will be created.}
 
 \item{unstable}{If \code{FALSE}, will install plumber from CRAN. If \code{TRUE}, will install the unstable version of plumber from GitHub.}
+
+\item{example}{If \code{TRUE}, will deploy an example API named \code{hello} to the server on port 8000.}
 
 \item{...}{Arguments passed into the \code{\link[analogsea:droplet_create]{analogsea::droplet_create()}} function.}
 }
