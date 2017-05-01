@@ -64,6 +64,8 @@ do_provision <- function(droplet, unstable=FALSE, example=TRUE, ...){
   if (example){
     do_deploy_api(droplet, "hello", system.file("examples", "10-welcome", package="plumber"), port=8000, forward=TRUE)
   }
+
+  invisible(droplet)
 }
 
 install_plumber <- function(droplet, unstable){
@@ -207,6 +209,20 @@ do_configure_https <- function(droplet, domain, email, termsOfService=FALSE, for
 
 #' Deploy or Update an API
 #'
+#' Deploys an API from your local machine to make it available on the remote
+#' plumber server.
+#' @param droplet The droplet on which to act. It's expected that this droplet
+#'   was provisioned using [do_provision()].
+#' @param path The remote path/name of the application
+#' @param localPath The local path to the API that you want to deploy. The
+#'   entire directory referenced will be deployed, and the `plumber.R` file
+#'   inside of that directory will be used as the root plumber file.
+#' @param port The internal port on which this service should run. This will not
+#'   be user visible, but must be unique and point to a port that is available
+#'   on your server. If unsure, try a number around `8000`.
+#' @param forward If `TRUE`, will setup requests targeting the root URL on the
+#'   server to point to this application. See the [do_forward()] function for
+#'   more details.
 #' @export
 do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE){
   # Trim off any leading slashes
@@ -273,7 +289,8 @@ do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE){
 
 #' Forward Root Requests to an API
 #'
-#' @param droplet The droplet on which to act
+#' @param droplet The droplet on which to act. It's expected that this droplet
+#'   was provisioned using [do_provision()].
 #' @param path The path to which root requests should be forwarded
 #' @export
 do_forward <- function(droplet, path){
@@ -296,13 +313,16 @@ do_forward <- function(droplet, path){
 
   # TODO: add this as a catch()
   file.remove(forwardfile)
+
+  invisible(droplet)
 }
 
 #' Remove an API from the server
 #'
 #' Removes all services and routing rules associated with a particular service.
 #' Optionally purges the associated API directory from disk.
-#' @param droplet The droplet on which to act
+#' @param droplet The droplet on which to act. It's expected that this droplet
+#'   was provisioned using [do_provision()].
 #' @param path The path/name of the plumber service
 #' @param delete If `TRUE`, will also delete the associated directory
 #'   (`/var/plumber/whatever`) from the server.
@@ -342,6 +362,8 @@ do_remove_api <- function(droplet, path, delete=FALSE){
 #'
 #' Removes the forwarding rule from the root path on the server. The server will
 #' no longer forward requests for `/` to an application.
+#' @param droplet The droplet on which to act. It's expected that this droplet
+#'   was provisioned using [do_provision()].
 #' @export
 do_remove_forward <- function(droplet){
   analogsea::droplet_ssh(droplet, "rm /etc/nginx/sites-available/plumber-apis/_forward.conf")
