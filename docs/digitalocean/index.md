@@ -5,7 +5,7 @@ comments: true
 ---
 
 <div class="row"><div class="col-sm-8" markdown="1">
-plumber includes the ability to automatically provision a server on [DigitalOcean](https://www.digitalocean.com). DigitalOcean is a cloud hosting provider that's known for being low-cost and simple to use, so it's a great starting point if you're just getting into managing your own servers online.
+plumber includes the ability to automatically provision a server on [DigitalOcean](https://www.digitalocean.com/?refcode=0740f5169634). DigitalOcean is a cloud hosting provider that's known for being low-cost and simple to use, so it's a great starting point if you're just getting into managing your own servers online.
 
 If you're not looking to use DigitalOcean or Ubuntu 16.04, then you can look at one of the alternative hosting models: using [PM2](../hosting/) or [Docker](../docker/).
 
