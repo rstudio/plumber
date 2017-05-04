@@ -8,7 +8,7 @@ comments: true
 
 This article will guide you through setting up plumber applications in [Docker](https://docker.io). Docker is a platform built on top of Linux Containers that allow you to run processes in an isolated environment; that environment might have certain resources/software pre-configured or may emulate a particular Linux environment like Ubuntu 14.04 or CentOS 7.3. 
 
-The article on [Basic Hosting](./hosting) walks you through a deployment model that does not require Docker, if that's what you're looking for.
+The article on [Basic Hosting](../hosting) walks you through a deployment model that does not require Docker, if that's what you're looking for.
 
 ## Docker Background
 
@@ -98,6 +98,6 @@ If you want your container to start automatically when your machine is booted, y
 
 ## Conclusion
 
-You should now be able to run a single plumber application in Docker. If you're looking to run multiple plumber applications on the same server in Docker, continue on to the next section: [Advanced Docker](./advanced-docker).
+You should now be able to run a single plumber application in Docker. If you're looking to run multiple plumber applications on the same server in Docker, continue on to the next section: [Advanced Docker](../docker-advanced).
 
 </div>
