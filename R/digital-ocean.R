@@ -213,20 +213,25 @@ do_configure_https <- function(droplet, domain, email, termsOfService=FALSE, for
 #' Deploys an API from your local machine to make it available on the remote
 #' plumber server.
 #' @param droplet The droplet on which to act. It's expected that this droplet
-#'   was provisioned using [do_provision()].  See [analogsea::droplet()] to obtain a reference to a running droplet.
+#'   was provisioned using [do_provision()].  See [analogsea::droplet()] to
+#'   obtain a reference to a running droplet.
 #' @param path The remote path/name of the application
 #' @param localPath The local path to the API that you want to deploy. The
 #'   entire directory referenced will be deployed, and the `plumber.R` file
-#'   inside of that directory will be used as the root plumber file. The directory
-#'   MUST contain a `plumber.R` file.
+#'   inside of that directory will be used as the root plumber file. The
+#'   directory MUST contain a `plumber.R` file.
 #' @param port The internal port on which this service should run. This will not
 #'   be user visible, but must be unique and point to a port that is available
 #'   on your server. If unsure, try a number around `8000`.
 #' @param forward If `TRUE`, will setup requests targeting the root URL on the
 #'   server to point to this application. See the [do_forward()] function for
 #'   more details.
+#' @param preflight R commands to run after [plumb()]ing the `plumber.R` file,
+#'   but before `run()`ing the plumber service. This is an opportunity to e.g.
+#'   add new filters. If you need to specify multiple commands, they should be
+#'   semi-colon-delimited.
 #' @export
-do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE){
+do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE, preflight){
   # Trim off any leading slashes
   path <- sub("^/+", "", path)
   # Trim off any trailing slashes if any exist.
@@ -254,6 +259,16 @@ do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE){
   service <- readLines(system.file("server", "plumber.service", package="plumber"))
   service <- gsub("\\$PORT\\$", port, service)
   service <- gsub("\\$PATH\\$", paste0("/", path), service)
+
+  if (missing(preflight)){
+    preflight <- ""
+  } else {
+    # Append semicolon if necessary
+    if (!grepl(";\\s*$", preflight)){
+      preflight <- paste0(preflight, ";")
+    }
+  }
+  service <- gsub("\\$PREFLIGHT\\$", preflight, service)
 
   servicefile <- tempfile()
   writeLines(service, servicefile)
