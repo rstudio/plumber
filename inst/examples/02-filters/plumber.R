@@ -1,3 +1,5 @@
+library(plumber)
+
 users <- data.frame(
   id=1:2,
   username=c("joe", "kim"),
