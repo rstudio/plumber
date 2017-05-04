@@ -266,7 +266,9 @@ do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE){
   # TODO: add this as a catch()
   file.remove(servicefile)
 
+  # TODO: differentiate between new service (start) and existing service (restart)
   analogsea::droplet_ssh(droplet, paste0("systemctl start ", serviceName, " && sleep 1")) #TODO: can systemctl listen for the port to come online so we don't have to guess at a sleep value?
+  analogsea::droplet_ssh(droplet, paste0("systemctl restart ", serviceName, " && sleep 1"))
   analogsea::droplet_ssh(droplet, paste0("systemctl enable ", serviceName))
   analogsea::droplet_ssh(droplet, paste0("systemctl status ", serviceName))
 
