@@ -10,7 +10,7 @@ comments: true
 
 ## Mailgun Configuration
 
-After registering for a mailgun account, you'll eithr need to use their sandbox, or configure a (sub)domain name to be hosted by mailgun. In my case, I setup `plumber.tres.tl` to have its email hosted by mailgun. You could just as easily use `mailgun.myorg.com` if you don't want to disrupt email hosting on your production domain.
+After registering for a mailgun account, you'll either need to use their sandbox, or configure a (sub)domain name to be hosted by mailgun. In my case, I setup `plumber.tres.tl` to have its email hosted by mailgun. You could just as easily use `mailgun.myorg.com` if you don't want to disrupt email hosting on your production domain.
 
 Once you have a domain setup, you just add a route that tells mailgun what to do with your email. In my case, I said that it should listen for emails sent to `mailgun@plumber.tres.tl` and, when one comes in, convert it to an HTTP POST request and send it to `http://plumber.tres.tl/mailgun/mail`. 
 
