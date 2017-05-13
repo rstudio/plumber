@@ -15,8 +15,6 @@ parseQS <- function(qs){
     qs <- substr(qs, 2, nchar(qs))
   }
 
-  qs <- gsub("+", " ", qs, fixed = TRUE)
-
   parts <- strsplit(qs, "&", fixed = TRUE)[[1]]
   kv <- strsplit(parts, "=", fixed = TRUE)
   kv <- kv[sapply(kv, length) == 2] # Ignore incompletes
