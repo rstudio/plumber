@@ -5,6 +5,8 @@ plumber 0.3.2
   exactly how this environment should behave.
 * Added `@serializer htmlwidget` to support rendering and returning a 
   self-contained htmlwidget from a plumber endpoint.
+* Properly handle cookies with no value. (#88)
+* Don't convert `+` character in a query string to a space.
 
 plumber 0.3.1
 --------------------------------------------------------------------------------
