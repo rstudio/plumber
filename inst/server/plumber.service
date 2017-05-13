@@ -1,0 +1,9 @@
+[Unit]
+Description=Plumber API
+
+[Service]
+ExecStart=/usr/bin/Rscript -e "pr <- plumber::plumb('/var/plumber$PATH$/plumber.R'); $PREFLIGHT$ pr$run(port=$PORT$)"
+Restart=on-abnormal
+
+[Install]
+WantedBy=multi-user.target
