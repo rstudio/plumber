@@ -19,6 +19,14 @@ test_that("the cookies list is set", {
   expect_equal(req$cookies$abc, "123")
 })
 
+test_that("missing cookie values are empty string", {
+  req <- new.env()
+  req$HTTP_COOKIE <- "abc="
+  cookieFilter(req)
+
+  expect_equal(req$cookies$abc, "")
+})
+
 test_that("cookies can convert to string", {
   expect_equal(cookieToStr("abc", 123), "abc=123")
   expect_equal(cookieToStr("complex", "string with spaces"), "complex=string%20with%20spaces")
