@@ -1,5 +1,8 @@
 plumber 0.3.2
 --------------------------------------------------------------------------------
+* Introduced the `do_provision()`, `do_deploy_api()`, `do_remove_api()` and 
+  `do_configure_https()` functions to provision and manage your APIs on a 
+   cloud server running on DigitalOcean.
 * `source()` the referenced R file to plumb inside of a new environment that 
   inherits directly from the GlobalEnv. This provides more explicit control over
   exactly how this environment should behave.
