@@ -5,3 +5,5 @@
 .DS_Store
 *.swp
 .idea
+plumber.Rcheck
+plumber_*.tar.gz

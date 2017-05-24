@@ -9,10 +9,12 @@
 \usage{
 plumber
 
-plumb(file)
+plumb(file, dir)
 }
 \arguments{
 \item{file}{The file to parse as the plumber router definition}
+
+\item{dir}{The directory containing the \code{plumber.R} file to parse as the plumber router definition}
 }
 \description{
 Routers are the core request handler in plumber. A router is responsible for

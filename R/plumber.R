@@ -23,6 +23,7 @@ stopOnLine <- function(private, line, msg){
 #' See \url{http://plumber.trestletech.com/docs/programmatic/} for additional
 #' details on the methods available on this object.
 #' @param file The file to parse as the plumber router definition
+#' @param dir The directory containing the `plumber.R` file to parse as the plumber router definition
 #' @include globals.R
 #' @include serializer-json.R
 #' @export
