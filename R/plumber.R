@@ -23,7 +23,8 @@ stopOnLine <- function(private, line, msg){
 #' See \url{http://plumber.trestletech.com/docs/programmatic/} for additional
 #' details on the methods available on this object.
 #' @param file The file to parse as the plumber router definition
-#' @param dir The directory containing the `plumber.R` file to parse as the plumber router definition
+#' @param dir The directory containing the `plumber.R` file to parse as the
+#'   plumber router definition
 #' @include globals.R
 #' @include serializer-json.R
 #' @export
@@ -499,7 +500,7 @@ plumb <- function(file, dir){
     stop("plumber needs only one of a file or a directory with a `plumber.R` file in its root.")
   } else if (missing(file)){
     dir <- sub("/$", "", dir)
-    file <- base::file.path(dir,"plumber.R")
+    file <- file.path(dir,"plumber.R")
   }
   plumber$new(file)
 }
