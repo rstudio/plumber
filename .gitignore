@@ -4,3 +4,4 @@
 .RData
 .DS_Store
 *.swp
+.idea
