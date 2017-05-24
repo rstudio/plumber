@@ -41,9 +41,13 @@ test_that("#plumb accepts a directory with a `plumber.R` file", {
   # works without trailing slash
   r <- plumb(dir = 'files')
   expect_equal(length(r$endpoints), 1)
+  expect_equal(length(r$endpoints[[1]]), 4)
+
   # works with trailing slash
   r <- plumb(dir = 'files/')
   expect_equal(length(r$endpoints), 1)
+  expect_equal(length(r$endpoints[[1]]), 4)
+
   # errors when no plumber.R found
   expect_error(plumb(dir = 'files/static'), regexp="File does not exist: files/static/plumber.R")
   # errors when neither dir nor file given

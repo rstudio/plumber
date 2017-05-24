@@ -498,8 +498,8 @@ plumb <- function(file, dir){
   if(!xor(missing(file), missing(dir))){
     stop("plumber needs only one of a file or a directory with a `plumber.R` file in its root.")
   } else if (missing(file)){
-    stri_trim_right(dir, pattern = "[/]")
-    file <- stri_join(dir,"plumber.R", sep="/")
+    dir <- sub("/$", "", dir)
+    file <- base::file.path(dir,"plumber.R")
   }
   plumber$new(file)
 }
