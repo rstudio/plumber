@@ -23,6 +23,7 @@ enumerateVerbs <- function(v){
 #' @include globals.R
 #' @include serializer-json.R
 #' @include parse-block.R
+#' @include parse-globals.R
 #' @export
 #' @importFrom httpuv runServer
 plumber <- R6Class(
@@ -57,10 +58,11 @@ plumber <- R6Class(
 
           srcref <- attr(e, "srcref")[[1]][c(1,3)]
 
-          ## TODO
           activateBlock(srcref, private$fileLines, e, private$addEndpointInternal,
                         private$addFilterInternal, private$addAssetsInternal)
         }
+
+        private$globalSettings <- parseGlobals(private$fileLines)
       }
 
       # TODO check for colliding filter names and endpoint addresses.
@@ -260,7 +262,7 @@ plumber <- R6Class(
         # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
         fun <- function(){}
         body(fun) <- sf
-        self$addEndpoint("GET", "/swagger.json", fun, jsonUnboxedSerializer())
+        self$addEndpoint("GET", "/swagger.json", fun, unboxedJsonSerializer())
         self$addAssets(system.file("swagger-ui", package = "swaggerui"), path="/__swagger__")
         message("Running the swagger UI at http://127.0.0.1:", port, "/__swagger__/")
       }
@@ -320,17 +322,11 @@ plumber <- R6Class(
         }
       }
 
-      def <- list(
-        swagger = "2.0",
-        info = list(description="desc", title="title", version="1.0.0"),
-        host="127.0.0.1:8000",
-        schemes= I("http"),
-        produces=I("application/json"),
-        paths = endpoints
-        #securityDefinitions = list(),
-        #definitions = list()
-      )
-      def
+      # Extend the previously parsed settings with the endpoints
+      def <- modifyList(private$globalSettings, list(paths=endpoints))
+      # Lay those over the default globals so we ensure that the required fields
+      # (like API version) are satisfied.
+      modifyList(defaultGlobals, def)
     }
     #TODO: addRouter() to add sub-routers at a path.
   ),
@@ -341,6 +337,7 @@ plumber <- R6Class(
     fileLines = NA,
     parsed = NA,
     envir = NULL,
+    globalSettings = list(info=list()),
     defaultSerializer = jsonSerializer(),
     globalProcessors = NULL,
     addFilterInternal = function(name, expr, serializer, processors, lines){

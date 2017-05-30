@@ -1,5 +1,9 @@
 inventory <- read.csv("inventory.csv", stringsAsFactors = FALSE)
 
+#* @apiTitle Auto Inventory Manager
+#* @apiDescription Manage the inventory of an automobile
+#*   store using an API.
+
 #' List all cars in the inventory
 #' @get /car/
 listCars <- function(){

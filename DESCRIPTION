@@ -34,6 +34,7 @@ Suggests:
 Collate: 
     'content-types.R'
     'cookie-parser.R'
+    'parse-globals.R'
     'parse-block.R'
     'globals.R'
     'serializer-json.R'
