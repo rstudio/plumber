@@ -261,7 +261,7 @@ plumber <- R6Class(
         fun <- function(){}
         body(fun) <- sf
         self$addEndpoint("GET", "/swagger.json", fun, jsonUnboxedSerializer())
-        self$addAssets(system.file("swagger-ui", package = "plumber"), path="/__swagger__")
+        self$addAssets(system.file("swagger-ui", package = "swaggerui"), path="/__swagger__")
         message("Running the swagger UI at http://127.0.0.1:", port, "/__swagger__/")
       }
 

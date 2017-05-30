@@ -8,8 +8,7 @@ Roxygen: list(markdown = TRUE)
 Authors@R: c(
   person(family="Trestle Technology, LLC", role="aut", email="cran@trestletech.com"),
   person("Jeff", "Allen", role="cre", email="cran@trestletech.com"),
-  person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"),
-  person(family="SmartBear Software", role=c("ctb", "cph"), comment="swagger-ui"))
+  person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"))
 License: MIT + file LICENSE
 Description: Gives the ability to automatically generate and serve an HTTP API
     from R functions using the annotations in the R documentation around your
@@ -20,7 +19,8 @@ Imports:
     R6 (>= 2.0.0),
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
-    httpuv (>= 1.2.3)
+    httpuv (>= 1.2.3),
+    swaggerui
 LazyData: TRUE
 Suggests:
     testthat (>= 0.11.0),
