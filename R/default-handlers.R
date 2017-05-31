@@ -11,7 +11,7 @@ defaultErrorHandler <-function(req, res, err){
   li <- list(error="500 - Internal server error")
 
   if (.globals$debug){
-    li["message"] <- err
+    li["message"] <- as.character(err)
   }
 
   li
