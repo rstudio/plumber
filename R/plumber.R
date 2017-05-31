@@ -287,6 +287,7 @@ plumber <- R6Class(
             params <- data.frame(name=character(0),
                                  description=character(0),
                                  `in`=character(0),
+                                 required=logical(0),
                                  type=character(0), check.names = FALSE)
 
             for (p in names(e$params)){
@@ -295,10 +296,21 @@ plumber <- R6Class(
                 location <- "path"
               }
 
+              type <- e$params[[p]]$type
+              if (is.na(type)){
+                if (location == "path") {
+                  type <- pathParams[pathParams$name == p,"type"]
+                } else {
+                  type <- "string" # Default to string
+                }
+              }
+
+
               parDocs <- data.frame(name = p,
                               description = e$params[[p]]$desc,
                               `in`=location,
-                              type=e$params[[p]]$type,
+                              type=type,
+                              required=e$params[[p]]$required,
                               check.names = FALSE,
                               required=FALSE)
 

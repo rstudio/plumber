@@ -134,14 +134,17 @@ parseBlock <- function(lineNum, file){
         stopOnLine(lineNum, line, "No parameter specified.")
       }
 
-      nameType <- stringi::stri_match(paramMat[1,3], regex="^([^\\s]+):(\\w+)$")
-      if (is.na(nameType[1,1])){
-        stopOnLine(lineNum, line, "No parameter type specified")
-      }
-      name <- nameType[1,2]
-      type <- plumberToSwaggerType(nameType[1,3])
+      name <- paramMat[1,3]
+      type <- NA
 
-      params[[name]] <- list(desc=paramMat[1,5], type=type)
+      nameType <- stringi::stri_match(name, regex="^([^\\s]+):(\\w+)(\\*?)$")
+      if (!is.na(nameType[1,1])){
+        name <- nameType[1,2]
+        type <- plumberToSwaggerType(nameType[1,3])
+        #stopOnLine(lineNum, line, "No parameter type specified")
+      }
+
+      params[[name]] <- list(desc=paramMat[1,5], type=type, required=nameType[1,4] == "*")
     }
 
     commentMat <- stringi::stri_match(line, regex="^#['\\*]\\s*([^@\\s].*$)")

@@ -11,7 +11,7 @@ listCars <- function(){
 }
 
 #' Lookup a car by ID
-#' @param id:int The ID of the car to get
+#' @param id The ID of the car to get
 #' @get /car/<id:int>
 getCar <- function(id){
   inventory[inventory$id == id,]

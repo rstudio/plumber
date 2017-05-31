@@ -99,6 +99,7 @@ parseGlobals <- function(lines){
 
 #' The default set of Swagger API globals. Some of these properties are subject
 #' to being overridden by @api* annotations.
+#' @noRd
 defaultGlobals <- list(
   swagger = "2.0",
   info = list(description="API Description", title="API Title", version="1.0.0"),
