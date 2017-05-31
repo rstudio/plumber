@@ -305,7 +305,6 @@ plumber <- R6Class(
                 }
               }
 
-
               parDocs <- data.frame(name = p,
                               description = e$params[[p]]$desc,
                               `in`=location,
@@ -324,8 +323,16 @@ plumber <- R6Class(
             # If we haven't already documented a path param, we should add it here.
             # FIXME: warning("Undocumented path parameters: ", paste0())
 
+            resps <- e$responses
+            defaultResp <- list("default"=list(description="Default response."))
+            if (is.null(resps)){
+              resps <- defaultResp
+            } else if (!("default" %in% names(resps))){
+              resps <- c(resps, defaultResp)
+            }
+
             endptSwag <- list(summary=e$comments,
-                              responses=list("200"=list(description="worked")),
+                              responses=resps,
                               parameters=params)
 
             endpoints[[cleanedPath]][[tolower(verb)]] <- endptSwag
@@ -358,7 +365,7 @@ plumber <- R6Class(
       self$filters <- c(self$filters, filter)
       invisible(self)
     },
-    addEndpointInternal = function(verbs, path, expr, serializer, processors, srcref, preempt=NULL, params=NULL, comments=NULL){
+    addEndpointInternal = function(verbs, path, expr, serializer, processors, srcref, preempt=NULL, params=NULL, comments=NULL, responses=NULL){
       filterNames <- "__first__"
       for (f in self$filters){
         filterNames <- c(filterNames, f$name)
@@ -373,7 +380,7 @@ plumber <- R6Class(
       }
 
       preempt <- ifelse(is.null(preempt), "__no-preempt__", preempt)
-      self$endpoints[[preempt]] <- c(self$endpoints[[preempt]], PlumberEndpoint$new(verbs, path, expr, private$envir, preempt, serializer, processors, srcref, params, comments))
+      self$endpoints[[preempt]] <- c(self$endpoints[[preempt]], PlumberEndpoint$new(verbs, path, expr, private$envir, preempt, serializer, processors, srcref, params, comments, responses))
     },
     addAssetsInternal = function(direc, pathPrefix="/public", options=list(), srcref){
       if(missing(direc)){

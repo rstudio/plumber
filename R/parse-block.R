@@ -13,6 +13,7 @@ parseBlock <- function(lineNum, file){
   assets <- NULL
   params <- NULL
   comments <- ""
+  responses <- NULL
   while (lineNum > 0 && (stri_detect_regex(file[lineNum], pattern="^#['\\*]") || stri_trim_both(file[lineNum]) == "")){
 
     line <- file[lineNum]
@@ -127,6 +128,13 @@ parseBlock <- function(lineNum, file){
       image <- imageMat[1,2]
     }
 
+    responseMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@response\\s+(\\w+)\\s+(\\S.+)\\s*$")
+    if (!is.na(responseMat[1,1])){
+      resp <- list()
+      resp[[responseMat[1,2]]] <- list(description=responseMat[1,3])
+      responses <- c(responses, resp)
+    }
+
     paramMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@param(\\s+([^\\s]+)(\\s+(.*))?\\s*$)?")
     if (!is.na(paramMat[1,2])){
       p <- stri_trim_both(paramMat[1,3])
@@ -164,11 +172,12 @@ parseBlock <- function(lineNum, file){
     serializer = serializer,
     assets = assets,
     params = params,
-    comments = comments
+    comments = comments,
+    responses = responses
   )
 }
 
-#' Activate a "block "block" of code found in a plumber API.
+#' Activate a "block" of code found in a plumber API.
 #' @noRd
 activateBlock <- function(srcref, file, e, addEndpoint, addFilter, addAssets) {
   lineNum <- srcref[1] - 1
@@ -188,7 +197,8 @@ activateBlock <- function(srcref, file, e, addEndpoint, addFilter, addAssets) {
 
   if (!is.null(block$path)){
     addEndpoint(block$verbs, block$path, e, block$serializer,
-                                processors, srcref, block$preempt, block$params, block$comments)
+                                processors, srcref, block$preempt,
+                                block$params, block$comments, block$responses)
   } else if (!is.null(block$filter)){
     addFilter(block$filter, e, block$serializer, processors, srcref)
   } else if (!is.null(block$assets)){

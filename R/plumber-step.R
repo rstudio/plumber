@@ -98,6 +98,7 @@ PlumberEndpoint <- R6Class(
     verbs = NA,
     path = NA,
     comments = NA,
+    responses = NA,
     getTypedParams = function(){
       data.frame(name=private$regex$names, type=private$regex$types)
     },
@@ -105,7 +106,7 @@ PlumberEndpoint <- R6Class(
     canServe = function(req){
       req$REQUEST_METHOD %in% self$verbs && !is.na(stringi::stri_match(req$PATH_INFO, regex=private$regex$regex)[1,1])
     },
-    initialize = function(verbs, path, expr, envir, preempt, serializer, processors, lines, params, comments){
+    initialize = function(verbs, path, expr, envir, preempt, serializer, processors, lines, params, comments, responses){
       self$verbs <- verbs
       self$path <- path
 
@@ -136,6 +137,9 @@ PlumberEndpoint <- R6Class(
       }
       if (!missing(comments)){
         self$comments <- comments
+      }
+      if (!missing(responses)){
+        self$responses <- responses
       }
     },
     getPathParams = function(path){
