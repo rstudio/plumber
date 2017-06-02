@@ -1,3 +1,5 @@
+context("Content Types")
+
 test_that("contentType serializes properly", {
   l <- list(a=1, b=2, c="hi")
   val <- contentTypeSerializer("somethinghere")(l, list(), PlumberResponse$new(), stop)

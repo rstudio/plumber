@@ -1,3 +1,5 @@
+context("Preempts")
+
 test_that("preempts work", {
   r <- plumber$new("files/preempt.R")
   expect_equal(length(r$endpoints), 3)

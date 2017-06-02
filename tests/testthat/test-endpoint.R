@@ -1,3 +1,5 @@
+context("Endpoints")
+
 test_that("Endpoints execute in their environment", {
   env <- new.env()
   assign("a", 5, envir=env)

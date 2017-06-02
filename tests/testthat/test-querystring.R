@@ -1,3 +1,5 @@
+context("Query string")
+
 test_that("query strings are properly parsed", {
   expect_equal(parseQS("?a=1"), list(a="1"))
   expect_equal(parseQS("b=2"), list(b="2"))

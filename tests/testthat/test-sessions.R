@@ -1,3 +1,5 @@
+context("Sessions")
+
 make_req <- function(verb, path, cookie){
   req <- new.env()
   req$REQUEST_METHOD <- toupper(verb)

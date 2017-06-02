@@ -1,3 +1,5 @@
+context("Paths")
+
 make_req <- function(verb, path){
   req <- new.env()
   req$REQUEST_METHOD <- toupper(verb)
