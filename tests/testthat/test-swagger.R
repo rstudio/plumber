@@ -15,17 +15,42 @@ test_that("plumberToSwaggerType works", {
 })
 
 test_that("response attributes are parsed", {
-  testthat::fail()
+  lines <- c(
+    "#' @get /",
+    "#' @response 201 This is response 201",
+    "#' @response 202 Here's second",
+    "#' @response 203 Here's third",
+    "#' @response default And default")
+  b <- parseBlock(length(lines), lines)
+  expect_length(b$responses, 4)
+  expect_equal(b$responses$`201`, list(description="This is response 201"))
+  expect_equal(b$responses$`202`, list(description="Here's second"))
+  expect_equal(b$responses$`203`, list(description="Here's third"))
+  expect_equal(b$responses$default, list(description="And default"))
+
+  b <- parseBlock(1, "")
+  expect_null(b$responses)
 })
 
 test_that("params are parsed", {
-  # Name, type, required, description
-  testthat::fail()
+  lines <- c(
+    "#' @get /",
+    "#' @param test Test docs",
+    "#' @param required:character* Required param",
+    "#' @param another:int Another docs")
+  b <- parseBlock(length(lines), lines)
+  expect_length(b$params, 3)
+  expect_equal(b$params$another, list(desc="Another docs", type="integer", required=FALSE))
+  expect_equal(b$params$test, list(desc="Test docs", type=NA, required=FALSE))
+  expect_equal(b$params$required, list(desc="Required param", type="string", required=TRUE))
+
+  b <- parseBlock(1, "")
+  expect_null(b$params)
 })
 
-test_that("prepareSwaggerEndpoints works", {
-  testthat::fail()
-})
+# TODO
+#test_that("prepareSwaggerEndpoints works", {
+#})
 
 test_that("extractResponses works", {
   # Empty

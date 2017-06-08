@@ -3,6 +3,9 @@ stopOnLine <- function(lineNum, line, msg){
   stop("Error on line #", lineNum, ": '", line, "' - ", msg)
 }
 
+#' @param lineNum The line number just above the function we're documenting
+#' @param file A character vector representing all the lines in the file
+#' @noRd
 parseBlock <- function(lineNum, file){
   path <- NULL
   verbs <- NULL
@@ -152,7 +155,12 @@ parseBlock <- function(lineNum, file){
         #stopOnLine(lineNum, line, "No parameter type specified")
       }
 
-      params[[name]] <- list(desc=paramMat[1,5], type=type, required=nameType[1,4] == "*")
+
+      reqd <- FALSE
+      if (!is.na(nameType[1,4])){
+        reqd <- nameType[1,4] == "*"
+      }
+      params[[name]] <- list(desc=paramMat[1,5], type=type, required=reqd)
     }
 
     commentMat <- stringi::stri_match(line, regex="^#['\\*]\\s*([^@\\s].*$)")
