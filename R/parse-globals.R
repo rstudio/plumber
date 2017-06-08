@@ -19,6 +19,7 @@ parseOneGlobal <- function(fields, argument){
 
   name <- parsedLine[3]
   def <- parsedLine[4]
+  def <- gsub("^\\s*|\\s*$", "", def)
 
   switch(name,
          apiTitle={

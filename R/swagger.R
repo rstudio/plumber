@@ -50,8 +50,8 @@ prepareSwaggerEndpoints <- function(routerEndpoints){
   endpoints
 }
 
+defaultResp <- list("default"=list(description="Default response."))
 extractResponses <- function(resps){
-  defaultResp <- list("default"=list(description="Default response."))
   if (is.null(resps)){
     resps <- defaultResp
   } else if (!("default" %in% names(resps))){
@@ -62,13 +62,15 @@ extractResponses <- function(resps){
 
 #' Extract the swagger-friendly parameter definitions from the endpoint
 #' paramters.
+#' @noRd
 extractSwaggerParams <- function(endpointParams, pathParams){
   params <- data.frame(name=character(0),
                        description=character(0),
                        `in`=character(0),
                        required=logical(0),
                        type=character(0),
-                       check.names = FALSE)
+                       check.names = FALSE,
+                       stringsAsFactors = FALSE)
   for (p in names(endpointParams)){
     location <- "query"
     if (p %in% pathParams$name){
@@ -89,7 +91,8 @@ extractSwaggerParams <- function(endpointParams, pathParams){
                           `in`=location,
                           required=endpointParams[[p]]$required,
                           type=type,
-                          check.names = FALSE)
+                          check.names = FALSE,
+                          stringsAsFactors = FALSE)
 
     if (location == "path"){
       parDocs$required <- TRUE
