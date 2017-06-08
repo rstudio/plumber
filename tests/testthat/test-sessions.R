@@ -29,7 +29,7 @@ test_that("cookies are set", {
   cook <- gsub("^plcook=", "", cook, perl=TRUE)
   de <- PKI::PKI.decrypt(base64enc::base64decode(cook), key, "aes256")
 
-  expect_equal(rawToChar(de), '{"abc":[123]}')
+  expect_equal(rawToChar(de), '{"abc":123}')
 })
 
 test_that("cookies are read", {
@@ -51,7 +51,7 @@ test_that("cookies are read", {
   enc <- PKI::PKI.encrypt(charToRaw(data), key, "aes256")
   r$serve(make_req("GET", "/", paste0('plcook=', base64enc::base64encode(enc))), res)
 
-  expect_equal(res$body, jsonlite::toJSON(123))
+  expect_equal(res$body, rjson::toJSON(123))
 })
 
 test_that("invalid cookies/JSON are handled", {
@@ -73,5 +73,5 @@ test_that("invalid cookies/JSON are handled", {
   expect_warning({
     r$serve(make_req("GET", "/", paste0('plcook=', base64enc::base64encode(enc))), res)
   })
-  expect_equal(res$body, jsonlite::toJSON("NULL"))
+  expect_equal(res$body, rjson::toJSON("NULL"))
 })

@@ -37,7 +37,7 @@ sessionCookie <- function(key, name="plumber", ...){
             session <- PKI::PKI.decrypt(session, key, "aes256")
             session <- rawToChar(session)
 
-            session <- jsonlite::fromJSON(session)
+            session <- rjson::fromJSON(session)
           }, error=function(e){
             warning("Error processing session cookie. Perhaps your secret changed?")
             session <<- NULL
@@ -48,7 +48,7 @@ sessionCookie <- function(key, name="plumber", ...){
     },
     post=function(value, req, res, data){
       if (!is.null(req$session)){
-        sess <- jsonlite::toJSON(req$session)
+        sess <- rjson::toJSON(req$session)
         if (!is.null(key)){
           sess <- PKI::PKI.encrypt(charToRaw(sess), key, "aes256")
           sess <- base64enc::base64encode(sess)

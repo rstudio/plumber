@@ -16,8 +16,8 @@ parseBody <- function(body){
   }
   # Is it JSON data?
   if (stri_startswith_fixed(body, "{")) {
-    # Handle JSON with jsonlite
-    ret <- jsonlite::fromJSON(body)
+    # Handle JSON with rjson
+    ret <- rjson::fromJSON(body)
   } else {
     # If not handle it as a query string
       ret <- parseQS(body)

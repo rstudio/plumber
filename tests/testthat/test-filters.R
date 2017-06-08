@@ -19,7 +19,7 @@ test_that("Filters can update req$args", {
 
   req <- make_req("GET", "/")
   res <- PlumberResponse$new()
-  expect_equal(r$serve(req, res)$body, jsonlite::toJSON(23))
+  expect_equal(r$serve(req, res)$body, rjson::toJSON(23))
 })
 
 test_that("Redundant filters fail", {

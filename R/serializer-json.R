@@ -3,7 +3,7 @@
 jsonSerializer <- function(){
   function(val, req, res, errorHandler){
     tryCatch({
-      json <- jsonlite::toJSON(val)
+      json <- rjson::toJSON(val)
 
       res$setHeader("Content-Type", "application/json")
       res$body <- json

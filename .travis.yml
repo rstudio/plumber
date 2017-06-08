@@ -12,7 +12,7 @@ r_packages:
   - base64enc
   - rmarkdown
   - stringi
-  - jsonlite
+  - rjson
   - httpuv
   - htmlwidgets
   - PKI

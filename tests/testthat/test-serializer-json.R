@@ -5,7 +5,7 @@ test_that("JSON serializes properly", {
   val <- jsonSerializer()(l, list(), PlumberResponse$new(), stop)
   expect_equal(val$status, 200L)
   expect_equal(val$headers$`Content-Type`, "application/json")
-  expect_equal(val$body, jsonlite::toJSON(l))
+  expect_equal(val$body, rjson::toJSON(l))
 })
 
 test_that("Errors call error handler", {
