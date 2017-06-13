@@ -73,11 +73,11 @@ library(plumber)
 
 ## Hosting
 
-If you're just getting started with hosting cloud servers, the DigitalOcean integration included in plumber will be the best way to get started. You'll be able to get a server hosting your custom API in just two R commands. Full documentation is available at http://plumber.trestletech.com/docs/digitalocean/.
+If you're just getting started with hosting cloud servers, the DigitalOcean integration included in plumber will be the best way to get started. You'll be able to get a server hosting your custom API in just two R commands. Full documentation is available at https://plumber.trestletech.com/docs/digitalocean/.
 
 A couple of other approaches to hosting plumber are also made available:
- - PM2 - http://plumber.trestletech.com/docs/hosting/
- - Docker - http://plumber.trestletech.com/docs/docker/
+ - PM2 - https://plumber.trestletech.com/docs/hosting/
+ - Docker - https://plumber.trestletech.com/docs/docker/
 
 ## Provenance
 
