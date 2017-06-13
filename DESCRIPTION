@@ -20,8 +20,7 @@ Imports:
     R6 (>= 2.0.0),
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
-    httpuv (>= 1.2.3),
-    swaggerui
+    httpuv (>= 1.2.3)
 LazyData: TRUE
 Suggests:
     testthat (>= 0.11.0),
