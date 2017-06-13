@@ -1,3 +1,5 @@
+context("Cookies")
+
 test_that("cookies are parsed", {
   co <- parseCookies("spaced=cookie%20here; another=2")
 

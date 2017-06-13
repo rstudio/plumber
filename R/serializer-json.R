@@ -32,4 +32,5 @@ unboxedJsonSerializer <- function(){
     })
   }
 }
+
 .globals$serializers[["unboxedJSON"]] <- unboxedJsonSerializer

@@ -10,9 +10,6 @@ enumerateVerbs <- function(v){
   toupper(v)
 }
 
-stopOnLine <- function(private, line, msg){
-  stop("Error on line #", line, ": '",private$fileLines[line],"' - ", msg)
-}
 
 #' Plumber Router
 #'
@@ -27,6 +24,8 @@ stopOnLine <- function(private, line, msg){
 #'   plumber router definition
 #' @include globals.R
 #' @include serializer-json.R
+#' @include parse-block.R
+#' @include parse-globals.R
 #' @export
 #' @importFrom httpuv runServer
 plumber <- R6Class(
@@ -61,149 +60,11 @@ plumber <- R6Class(
 
           srcref <- attr(e, "srcref")[[1]][c(1,3)]
 
-          # Check to see if this function was annotated with a plumber annotation
-          line <- srcref[1] - 1
-
-          path <- NULL
-          verbs <- NULL
-          preempt <- NULL
-          filter <- NULL
-          image <- NULL
-          serializer <- NULL
-          assets <- NULL
-          while (line > 0 && (stri_detect_regex(private$fileLines[line], pattern="^#['\\*]") || stri_trim_both(private$fileLines[line]) == "")){
-            epMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@(get|put|post|use|delete|head)(\\s+(.*)$)?")
-            if (!is.na(epMat[1,2])){
-              p <- stri_trim_both(epMat[1,4])
-
-              if (is.na(p) || p == ""){
-                stopOnLine(private,line, "No path specified.")
-              }
-
-              verbs <- c(verbs, enumerateVerbs(epMat[1,2]))
-              path <- p
-            }
-
-            filterMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@filter(\\s+(.*)$)?")
-            if (!is.na(filterMat[1,1])){
-              f <- stri_trim_both(filterMat[1,3])
-
-              if (is.na(f) || f == ""){
-                stopOnLine(private, line, "No @filter name specified.")
-              }
-
-              if (!is.null(filter)){
-                # Must have already assigned.
-                stopOnLine(private, line, "Multiple @filters specified for one function.")
-              }
-
-              filter <- f
-            }
-
-            preemptMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@preempt(\\s+(.*)\\s*$)?")
-            if (!is.na(preemptMat[1,1])){
-              p <- stri_trim_both(preemptMat[1,3])
-              if (is.na(p) || p == ""){
-                stopOnLine(private, line, "No @preempt specified")
-              }
-              if (!is.null(preempt)){
-                # Must have already assigned.
-                stopOnLine(private, line, "Multiple @preempts specified for one function.")
-              }
-              preempt <- p
-            }
-
-            assetsMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@assets(\\s+(\\S*)(\\s+(\\S+))?\\s*)?$")
-            if (!is.na(assetsMat[1,1])){
-              dir <- stri_trim_both(assetsMat[1,3])
-              if (is.na(dir) || dir == ""){
-                stopOnLine(private, line, "No directory specified for @assets")
-              }
-              prefixPath <- stri_trim_both(assetsMat[1,5])
-              if (is.na(prefixPath) || prefixPath == ""){
-                prefixPath <- "/public"
-              }
-              if (!is.null(assets)){
-                # Must have already assigned.
-                stopOnLine(private, line, "Multiple @assets specified for one entity.")
-              }
-              assets <- list(dir=dir, path=prefixPath)
-            }
-
-            serMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@serializer(\\s+([^\\s]+)\\s*(.*)\\s*$)?")
-            if (!is.na(serMat[1,1])){
-              s <- stri_trim_both(serMat[1,3])
-              if (is.na(s) || s == ""){
-                stopOnLine(private, line, "No @serializer specified")
-              }
-              if (!is.null(serializer)){
-                # Must have already assigned.
-                stopOnLine(private, line, "Multiple @serializers specified for one function.")
-              }
-
-              if (!s %in% names(.globals$serializers)){
-                stop("No such @serializer registered: ", s)
-              }
-
-              ser <- .globals$serializers[[s]]
-
-              if (!is.na(serMat[1, 4]) && serMat[1,4] != ""){
-                # We have an arg to pass in to the serializer
-                argList <- eval(parse(text=serMat[1,4]))
-
-                serializer <- do.call(ser, argList)
-              } else {
-                serializer <- ser()
-              }
-            }
-
-            shortSerMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@(json|html)")
-            if (!is.na(shortSerMat[1,2])){
-              s <- stri_trim_both(shortSerMat[1,2])
-              if (!is.null(serializer)){
-                # Must have already assigned.
-                stopOnLine(private, line, "Multiple @serializers specified for one function (shorthand serializers like @json count, too).")
-              }
-
-              if (!is.na(s) && !s %in% names(.globals$serializers)){
-                stop("No such @serializer registered: ", s)
-              }
-
-              # TODO: support arguments to short serializers once they require them.
-              serializer <- .globals$serializers[[s]]()
-            }
-
-            imageMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@(jpeg|png)(\\s+(.*)\\s*$)?")
-            if (!is.na(imageMat[1,1])){
-              if (!is.null(image)){
-                # Must have already assigned.
-                stopOnLine(private, line, "Multiple image annotations on one function.")
-              }
-              image <- imageMat[1,2]
-            }
-
-            line <- line - 1
-          }
-
-          processors <- NULL
-          if (!is.null(image) && !is.null(.globals$processors[[image]])){
-            processors <- list(.globals$processors[[image]])
-          } else if (!is.null(image)){
-            stop("Image processor not found: ", image)
-          }
-
-          if (sum(!is.null(filter), !is.null(path), !is.null(assets)) > 1){
-            stopOnLine(private, line, "A single function can only be a filter, an API endpoint, or an asset (@filter AND @get, @post, @assets, etc.)")
-          }
-
-          if (!is.null(path)){
-            private$addEndpointInternal(verbs, path, e, serializer, processors, srcref, preempt)
-          } else if (!is.null(filter)){
-            private$addFilterInternal(filter, e, serializer, processors, srcref)
-          } else if (!is.null(assets)){
-            private$addAssetsInternal(assets$dir, assets$path, e, srcref)
-          }
+          activateBlock(srcref, private$fileLines, e, private$addEndpointInternal,
+                        private$addFilterInternal, private$addAssetsInternal)
         }
+
+        private$globalSettings <- parseGlobals(private$fileLines)
       }
 
       # TODO check for colliding filter names and endpoint addresses.
@@ -234,8 +95,11 @@ plumber <- R6Class(
     #* @param preempt The name of the filter before which this endpoint should
     #*   be inserted. If not specified the endpoint will be added after all
     #*   the filters.
-    addEndpoint = function(verbs, path, expr, serializer, processors, preempt=NULL){
-      private$addEndpointInternal(verbs, path, expr, serializer, processors, srcref, preempt)
+    #* @param params The documented parameters for this function in a list of
+    #*   list(paramsName=list(desc="description here") lists.
+    #* @param comments A description of the endpoint
+    addEndpoint = function(verbs, path, expr, serializer, processors, preempt=NULL, params=NULL, comments){
+      private$addEndpointInternal(verbs, path, expr, serializer, processors, srcref, preempt, params, comments)
     },
     #* Adds a static asset server
     #*
@@ -383,7 +247,7 @@ plumber <- R6Class(
         return(val)
       }, finally= options(warn=oldWarn) )
     },
-    run = function(host='0.0.0.0', port=8000){
+    run = function(host='0.0.0.0', port=8000, swagger=interactive()){
       # TODO: setwd to file path
       .globals$debug <- self$debug
       message("Starting server to listen on port ", port)
@@ -395,7 +259,26 @@ plumber <- R6Class(
         setwd(dirname(private$filename))
       }
 
+      if (swagger){
+        sf <- self$swaggerFile()
+        # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
+        fun <- function(){}
+        body(fun) <- sf
+        self$addEndpoint("GET", "/swagger.json", fun, unboxedJsonSerializer())
+        self$addAssets(system.file("swagger-ui", package = "plumber"), path="/__swagger__")
+        message("Running the swagger UI at http://127.0.0.1:", port, "/__swagger__/")
+      }
+
       httpuv::runServer(host, port, self)
+    },
+    swaggerFile = function(){
+      endpoints <- prepareSwaggerEndpoints(self$endpoints)
+
+      # Extend the previously parsed settings with the endpoints
+      def <- modifyList(private$globalSettings, list(paths=endpoints))
+      # Lay those over the default globals so we ensure that the required fields
+      # (like API version) are satisfied.
+      modifyList(defaultGlobals, def)
     }
     #TODO: addRouter() to add sub-routers at a path.
   ),
@@ -406,6 +289,7 @@ plumber <- R6Class(
     fileLines = NA,
     parsed = NA,
     envir = NULL,
+    globalSettings = list(info=list()),
     defaultSerializer = jsonSerializer(),
     globalProcessors = NULL,
     addFilterInternal = function(name, expr, serializer, processors, lines){
@@ -414,7 +298,7 @@ plumber <- R6Class(
       self$filters <- c(self$filters, filter)
       invisible(self)
     },
-    addEndpointInternal = function(verbs, path, expr, serializer, processors, srcref, preempt=NULL){
+    addEndpointInternal = function(verbs, path, expr, serializer, processors, srcref, preempt=NULL, params=NULL, comments=NULL, responses=NULL){
       filterNames <- "__first__"
       for (f in self$filters){
         filterNames <- c(filterNames, f$name)
@@ -422,14 +306,14 @@ plumber <- R6Class(
 
       if (!is.null(preempt) && !preempt %in% filterNames){
         if (!is.null(srcref)){
-          stopOnLine(private, srcref[1], paste0("The given @preempt filter does not exist in this plumber router: '", preempt, "'"))
+          stopOnLine(srcref[1], private$fileLines[srcref[1]], paste0("The given @preempt filter does not exist in this plumber router: '", preempt, "'"))
         } else {
           stop(paste0("The given preempt filter does not exist in this plumber router: '", preempt, "'"))
         }
       }
 
       preempt <- ifelse(is.null(preempt), "__no-preempt__", preempt)
-      self$endpoints[[preempt]] <- c(self$endpoints[[preempt]], PlumberEndpoint$new(verbs, path, expr, private$envir, preempt, serializer, processors, srcref))
+      self$endpoints[[preempt]] <- c(self$endpoints[[preempt]], PlumberEndpoint$new(verbs, path, expr, private$envir, preempt, serializer, processors, srcref, params, comments, responses))
     },
     addAssetsInternal = function(direc, pathPrefix="/public", options=list(), srcref){
       if(missing(direc)){

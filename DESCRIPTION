@@ -8,7 +8,8 @@ Roxygen: list(markdown = TRUE)
 Authors@R: c(
   person(family="Trestle Technology, LLC", role="aut", email="cran@trestletech.com"),
   person("Jeff", "Allen", role="cre", email="cran@trestletech.com"),
-  person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"))
+  person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"),
+  person(family="SmartBear Software", role=c("ctb", "cph"), comment="swagger-ui"))
 License: MIT + file LICENSE
 Description: Gives the ability to automatically generate and serve an HTTP API
     from R functions using the annotations in the R documentation around your
@@ -33,6 +34,8 @@ Suggests:
 Collate: 
     'content-types.R'
     'cookie-parser.R'
+    'parse-globals.R'
+    'parse-block.R'
     'globals.R'
     'serializer-json.R'
     'plumber.R'
@@ -52,4 +55,5 @@ Collate:
     'serializer-xml.R'
     'serializer.R'
     'session-cookie.R'
+    'swagger.R'
 RoxygenNote: 6.0.1

@@ -1,3 +1,5 @@
+context("Plumber")
+
 test_that("Endpoints are properly identified", {
   r <- plumber$new("files/endpoints.R")
   expect_equal(length(r$endpoints), 1)
