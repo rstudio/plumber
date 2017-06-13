@@ -45,7 +45,6 @@ validateCar <- function(car){
 #* @param price:numeric The price of the car in USD
 #* @response 400 Invalid user input provided
 addCar <- function(make, model, edition, year, miles, price, res){
-  browser()
   newId <- max(inventory$id) + 1
 
   #FIXME: If any of these args are missing then we fatally err when we reference
@@ -59,7 +58,6 @@ addCar <- function(make, model, edition, year, miles, price, res){
     miles = miles,
     price = price
   )
-  browser()
   valid <- validateCar(car)
   if (!is.null(valid)){
     res$status <- 400
