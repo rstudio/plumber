@@ -1,10 +1,21 @@
+plumber 0.3.3
+--------------------------------------------------------------------------------
+* `plumb()` now accepts an argument `dir`, referring to a directory containing
+  `plumber.R`, which may be provided instead of `file`.
+
+
 plumber 0.3.2
 --------------------------------------------------------------------------------
+* Introduced the `do_provision()`, `do_deploy_api()`, `do_remove_api()` and 
+  `do_configure_https()` functions to provision and manage your APIs on a 
+   cloud server running on DigitalOcean.
 * `source()` the referenced R file to plumb inside of a new environment that 
   inherits directly from the GlobalEnv. This provides more explicit control over
   exactly how this environment should behave.
 * Added `@serializer htmlwidget` to support rendering and returning a 
   self-contained htmlwidget from a plumber endpoint.
+* Properly handle cookies with no value. (#88)
+* Don't convert `+` character in a query string to a space.
 
 plumber 0.3.1
 --------------------------------------------------------------------------------

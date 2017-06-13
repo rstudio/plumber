@@ -1,9 +1,14 @@
-context("Query string")
+context("query strings")
 
 test_that("query strings are properly parsed", {
   expect_equal(parseQS("?a=1"), list(a="1"))
   expect_equal(parseQS("b=2"), list(b="2"))
   expect_equal(parseQS("a=1&b=2&c=url%20encoded"), list(a="1", b="2", c="url encoded"))
+})
+
+test_that("special characters in query strings are handled properly", {
+  expect_equal(parseQS("?a=1+.#"), list(a="1+.#"))
+  expect_equal(parseQS("?a=a%20b"), list(a="a b"))
 })
 
 test_that("null an empty strings return empty list", {
