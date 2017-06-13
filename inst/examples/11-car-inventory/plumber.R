@@ -22,14 +22,14 @@ getCar <- function(id, res){
   car
 }
 
-validateCar <- function(car){
-  if (nchar(car$make) == 0){
+validateCar <- function(make, model, year){
+  if (missing(make) || nchar(make) == 0){
     return("No make specified")
   }
-  if (nchar(car$model) == 0){
+  if (missing(model) || nchar(model) == 0){
     return("No make specified")
   }
-  if (as.integer(car$year) == 0){
+  if (missing(year) || as.integer(year) == 0){
     return("No year specified")
   }
   NULL
@@ -47,8 +47,12 @@ validateCar <- function(car){
 addCar <- function(make, model, edition, year, miles, price, res){
   newId <- max(inventory$id) + 1
 
-  #FIXME: If any of these args are missing then we fatally err when we reference
-  # them here.
+  valid <- validateCar(make, model, year)
+  if (!is.null(valid)){
+    res$status <- 400
+    return(list(errors=paste0("Invalid car: ", valid)))
+  }
+
   car <- list(
     id = newId,
     make = make,
@@ -58,11 +62,7 @@ addCar <- function(make, model, edition, year, miles, price, res){
     miles = miles,
     price = price
   )
-  valid <- validateCar(car)
-  if (!is.null(valid)){
-    res$status <- 400
-    return("Invalid car: ", valid)
-  }
+
   inventory <<- rbind(inventory, car)
   getCar(newId)
 }
@@ -76,7 +76,14 @@ addCar <- function(make, model, edition, year, miles, price, res){
 #* @param miles:int The number of miles the car has
 #* @param price:numeric The price of the car in USD
 #* @put /car/<id:int>
-updateCar <- function(id, make, model, edition, year, miles, price){
+updateCar <- function(id, make, model, edition, year, miles, price, res){
+
+  valid <- validateCar(make, model, year)
+  if (!is.null(valid)){
+    res$status <- 400
+    return(list(errors=paste0("Invalid car: ", valid)))
+  }
+
   updated <- list(
     id = id,
     make = make,
@@ -91,10 +98,6 @@ updateCar <- function(id, make, model, edition, year, miles, price){
     stop("No such ID: ", id)
   }
 
-  valid <- validateCar(updated)
-  if (!is.null(valid)){
-    stop("Invalid car: ", valid)
-  }
   inventory[inventory$id == id, ] <<- updated
   getCar(id)
 }
@@ -102,9 +105,10 @@ updateCar <- function(id, make, model, edition, year, miles, price){
 #* Delete a car from the inventory
 #* @param id:int The ID of the car to delete
 #* @delete /car/<id:int>
-deleteCar <- function(id){
+deleteCar <- function(id, res){
   if (!(id %in% inventory$id)){
-    stop("No such ID: ", id)
+    res$status <- 400
+    return(list(errors=paste0("No such ID: ", id)))
   }
   inventory <<- inventory[inventory$id != id,]
 }
