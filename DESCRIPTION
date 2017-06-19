@@ -2,15 +2,15 @@ Encoding: UTF-8
 Package: plumber
 Type: Package
 Title: An API Generator for R
-Version: 0.3.3
-Date: 2017-05-21
+Version: 0.3.4
+Date: 2017-06-19
 Roxygen: list(markdown = TRUE)
 Authors@R: c(
   person(family="Trestle Technology, LLC", role="aut", email="cran@trestletech.com"),
   person("Jeff", "Allen", role="cre", email="cran@trestletech.com"),
   person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"),
   person(family="SmartBear Software", role=c("ctb", "cph"), comment="swagger-ui"))
-License: MIT + file LICENSE
+License: Apache License 2.0 | file LICENSE
 Description: Gives the ability to automatically generate and serve an HTTP API
     from R functions using the annotations in the R documentation around your
     functions.

@@ -1,3 +1,7 @@
+plumber 0.3.4
+--------------------------------------------------------------------------------
+* Relicensed from MIT to Apache 2
+
 plumber 0.3.3
 --------------------------------------------------------------------------------
 * `plumb()` now accepts an argument `dir`, referring to a directory containing
