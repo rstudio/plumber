@@ -79,6 +79,11 @@ A couple of other approaches to hosting plumber are also made available:
  - PM2 - https://plumber.trestletech.com/docs/hosting/
  - Docker - https://plumber.trestletech.com/docs/docker/
 
+## Related Projects
+
+ - [jug](http://bart6114.github.io/jug/index.html) - an R package similar to Plumber but uses a more programmatic approach to constructing the API.
+ - [OpenCPU](https://www.opencpu.org/) - A server designed for hosting R APIs with an eye towards scientific research.
+
 ## Provenance
 
 plumber was originally released as the `rapier` package and has since been renamed (7/13/2015).
