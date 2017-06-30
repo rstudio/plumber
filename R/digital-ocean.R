@@ -107,7 +107,7 @@ install_nginx <- function(droplet){
 }
 
 install_new_r <- function(droplet){
-  analogsea::droplet_ssh(droplet, c("echo 'deb https://cran.rstudio.com/bin/linux/ubuntu trusty/' >> /etc/apt/sources.list",
+  analogsea::droplet_ssh(droplet, c("echo 'deb https://cran.rstudio.com/bin/linux/ubuntu xenial/' >> /etc/apt/sources.list",
                   "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9"))
   analogsea::debian_apt_get_update(droplet)
   analogsea::debian_install_r(droplet)
