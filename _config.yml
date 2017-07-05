@@ -13,3 +13,6 @@ disqus_id: trestle-plumbr
 
 # Build settings
 markdown: kramdown
+
+gems:
+  - jekyll-sitemap
