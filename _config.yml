@@ -16,3 +16,6 @@ markdown: kramdown
 
 gems:
   - jekyll-sitemap
+
+include:
+  - _redirects
