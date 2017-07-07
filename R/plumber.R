@@ -386,6 +386,17 @@ plumb <- function(file, dir){
     dir <- sub("/$", "", dir)
     file <- file.path(dir,"plumber.R")
   }
-  plumber$new(file)
+
+  if (file.exists(file.path(dir, "entrypoint.R"))){
+    old <- setwd(dir)
+    on.exit(setwd(old))
+
+    # Expect that entrypoint will provide us with the router
+    x <- source("entrypoint.R")
+    # source returns a list with value and visible elements, we want the (visible) value object.
+    x$value
+  } else {
+    plumber$new(file)
+  }
 }
 

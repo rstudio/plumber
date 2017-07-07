@@ -39,7 +39,7 @@ test_that("Invalid file fails gracefully", {
   expect_error(plumber$new("asdfsadf"), regexp="File does not exist.*asdfsadf")
 })
 
-test_that("#plumb accepts a directory with a `plumber.R` file", {
+test_that("plumb accepts a directory with a `plumber.R` file", {
   # works without trailing slash
   r <- plumb(dir = 'files')
   expect_equal(length(r$endpoints), 1)
@@ -56,6 +56,23 @@ test_that("#plumb accepts a directory with a `plumber.R` file", {
   expect_error(plumb(), regexp="plumber needs only one of a file or a directory*")
   # errors when both dir and file are given
   expect_error(plumb(file="files/endpoints.R", dir="files"), regexp="plumber needs only one of a file or a directory*")
+})
+
+test_that("plumb() a dir leverages `entrypoint.R`", {
+  expect_null(plumber:::.globals$serializers$fake, "This just that your Plumber environment is dirty. Restart your R session.")
+
+  # works without trailing slash
+  # works with trailing slash
+  r <- plumb(dir = 'files/entrypoint/')
+  expect_equal(length(r$endpoints), 1)
+  expect_equal(length(r$endpoints[[1]]), 1)
+
+  # A global serializer was added by entrypoint.R before parsing
+  expect_true(!is.null(plumber:::.globals$serializers$fake))
+
+  # Clean up after ourselves
+  gl <- plumber:::.globals
+  gl$serializers["fake"] <- NULL
 })
 
 test_that("Empty endpoints error", {
