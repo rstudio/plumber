@@ -94,7 +94,6 @@ PlumberEndpoint <- R6Class(
   "PlumberEndpoint",
   inherit = PlumberStep,
   public = list(
-    preempt = NA,
     verbs = NA,
     path = NA,
     comments = NA,
@@ -106,7 +105,7 @@ PlumberEndpoint <- R6Class(
     canServe = function(req){
       req$REQUEST_METHOD %in% self$verbs && !is.na(stringi::stri_match(req$PATH_INFO, regex=private$regex$regex)[1,1])
     },
-    initialize = function(verbs, path, expr, envir, preempt, serializer, processors, lines, params, comments, responses){
+    initialize = function(verbs, path, expr, envir, serializer, processors, lines, params, comments, responses){
       self$verbs <- verbs
       self$path <- path
 
@@ -120,9 +119,6 @@ PlumberEndpoint <- R6Class(
       }
       private$envir <- envir
 
-      if (!missing(preempt) && !is.null(preempt)){
-        self$preempt <- preempt
-      }
       if (!missing(serializer) && !is.null(serializer)){
         self$serializer <- serializer
       }
