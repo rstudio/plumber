@@ -381,7 +381,7 @@ plumber <- R6Class(
 #' @export
 plumb <- function(file, dir){
   if(!xor(missing(file), missing(dir))){
-    stop("plumber needs only one of a file or a directory with a `plumber.R` file in its root.")
+    stop("plumber needs only one of a file or a directory with a `plumber.R` or `entrypoint.R` file in its root.")
   } else if (missing(file)){
     dir <- sub("/$", "", dir)
     file <- file.path(dir,"plumber.R")
