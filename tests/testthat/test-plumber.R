@@ -61,8 +61,6 @@ test_that("plumb accepts a directory with a `plumber.R` file", {
 test_that("plumb() a dir leverages `entrypoint.R`", {
   expect_null(plumber:::.globals$serializers$fake, "This just that your Plumber environment is dirty. Restart your R session.")
 
-  # works without trailing slash
-  # works with trailing slash
   r <- plumb(dir = 'files/entrypoint/')
   expect_equal(length(r$endpoints), 1)
   expect_equal(length(r$endpoints[[1]]), 1)
@@ -73,6 +71,10 @@ test_that("plumb() a dir leverages `entrypoint.R`", {
   # Clean up after ourselves
   gl <- plumber:::.globals
   gl$serializers["fake"] <- NULL
+})
+
+test_that("bad `entrypoint.R`s throw", {
+  expect_error(plumb(dir = 'files/entrypoint-bad/'), "runnable Plumber router")
 })
 
 test_that("Empty endpoints error", {
