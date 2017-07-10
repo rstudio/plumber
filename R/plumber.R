@@ -21,7 +21,9 @@ enumerateVerbs <- function(v){
 #' details on the methods available on this object.
 #' @param file The file to parse as the plumber router definition
 #' @param dir The directory containing the `plumber.R` file to parse as the
-#'   plumber router definition
+#'   plumber router definition. Alternatively, if an `entrypoint.R` file is
+#'   found, it will take precedence and be responsible for returning a runnable
+#'   Plumber router.
 #' @include globals.R
 #' @include serializer-json.R
 #' @include parse-block.R
@@ -381,11 +383,35 @@ plumber <- R6Class(
 #' @export
 plumb <- function(file, dir){
   if(!xor(missing(file), missing(dir))){
-    stop("plumber needs only one of a file or a directory with a `plumber.R` file in its root.")
+    stop("plumber needs only one of a file or a directory with a `plumber.R` or `entrypoint.R` file in its root.")
   } else if (missing(file)){
     dir <- sub("/$", "", dir)
-    file <- file.path(dir,"plumber.R")
+    file <- file.path(dir, "plumber.R")
   }
-  plumber$new(file)
+
+  if (!missing(dir) && file.exists(file.path(dir, "entrypoint.R"))){
+    # Dir was specified and we found an entrypoint.R
+
+    old <- setwd(dir)
+    on.exit(setwd(old))
+
+    # Expect that entrypoint will provide us with the router
+    x <- source("entrypoint.R")
+
+    # source returns a list with value and visible elements, we want the (visible) value object.
+    pr <- x$value
+    if (!("plumber" %in% class(pr))){
+      stop("entrypoint.R must return a runnable Plumber router.")
+    }
+
+    pr
+  } else if (file.exists(file)) {
+    # Plumber file found
+
+    plumber$new(file)
+  } else {
+    # Couldn't find the Plumber file nor an entrypoint
+    stop("File does not exist: ", file)
+  }
 }
 
