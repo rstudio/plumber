@@ -1,3 +1,7 @@
+plumber 0.4.0
+--------------------------------------------------------------------------------
+* BREAKING: Listen on localhost instead of listening publicly by default.
+
 plumber 0.3.3
 --------------------------------------------------------------------------------
 * `plumb()` now accepts an argument `dir`, referring to a directory containing
