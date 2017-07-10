@@ -177,7 +177,7 @@ plumber <- R6Class(
     addEndpointInternal = function(ep, preempt){
       # PlumberEndpoint$new(verbs, path, expr, private$envir, serializer, processors, srcref, params, comments, responses)
       filterNames <- "__first__"
-      for (f in self$filters){
+      for (f in private$filts){
         filterNames <- c(filterNames, f$name)
       }
       if (!missing(preempt) && ! preempt %in% filterNames){
@@ -233,10 +233,10 @@ plumber <- R6Class(
           return(do.call(h$exec, req$args))
         }
 
-        if (length(self$filters) > 0){
+        if (length(private$filts) > 0){
           # Start running through filters until we find a matching endpoint.
-          for (i in 1:length(self$filters)){
-            fi <- self$filters[[i]]
+          for (i in 1:length(private$filts)){
+            fi <- private$filts[[i]]
 
             # Check for endpoints preempting in this filter.
             h <- getHandle(fi$name)
