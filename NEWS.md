@@ -5,6 +5,7 @@ plumber 0.4.0
   exists, it is expected to return a Plumber router representing the API
   contained in this directory. If it doesn't exist, the bahvior is unaltered.
   If both `plumber.R` and `entrypoint.R` exist, `entrypoint.R` takes precedence.
+* `plumb()` the current directory by default if no arguments are provided.
 
 plumber 0.3.3
 --------------------------------------------------------------------------------

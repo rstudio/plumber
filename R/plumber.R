@@ -381,15 +381,18 @@ plumber <- R6Class(
 
 #' @rdname plumber
 #' @export
-plumb <- function(file, dir){
-  if(!xor(missing(file), missing(dir))){
+plumb <- function(file, dir="."){
+
+  missingDir <- nchar(dir) == 0
+
+  if(!xor(missing(file), missingDir)){
     stop("plumber needs only one of a file or a directory with a `plumber.R` or `entrypoint.R` file in its root.")
   } else if (missing(file)){
     dir <- sub("/$", "", dir)
     file <- file.path(dir, "plumber.R")
   }
 
-  if (!missing(dir) && file.exists(file.path(dir, "entrypoint.R"))){
+  if (!missingDir && file.exists(file.path(dir, "entrypoint.R"))){
     # Dir was specified and we found an entrypoint.R
 
     old <- setwd(dir)
