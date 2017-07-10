@@ -52,8 +52,10 @@ test_that("plumb accepts a directory with a `plumber.R` file", {
 
   # errors when no plumber.R found
   expect_error(plumb(dir = 'files/static'), regexp="File does not exist: files/static/plumber.R")
-  # errors when neither dir nor file given
-  expect_error(plumb(), regexp="plumber needs only one of a file or a directory*")
+  # errors when neither dir is empty and file is not given
+  expect_error(plumb(dir=""), regexp="plumber needs only one of a file or a directory*")
+  # reads from working dir if no args
+  expect_error(plumb(), regexp="File does not exist: ./plumber.R")
   # errors when both dir and file are given
   expect_error(plumb(file="files/endpoints.R", dir="files"), regexp="plumber needs only one of a file or a directory*")
 })
