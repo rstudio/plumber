@@ -1,6 +1,9 @@
 plumber 0.4.0
 --------------------------------------------------------------------------------
 * BREAKING: Listen on localhost instead of listening publicly by default.
+* Add support for `entrypoint.R` when `plumb()`ing a directory. If this file 
+  exists, it is expected to return a Plumber router representing the API
+  contained in this directory. If it doesn't exist, the bahvior is unaltered.
 
 plumber 0.3.3
 --------------------------------------------------------------------------------
