@@ -4,6 +4,7 @@ plumber 0.4.0
 * Add support for `entrypoint.R` when `plumb()`ing a directory. If this file 
   exists, it is expected to return a Plumber router representing the API
   contained in this directory. If it doesn't exist, the bahvior is unaltered.
+  If both `plumber.R` and `entrypoint.R` exist, `entrypoint.R` takes precedence.
 
 plumber 0.3.3
 --------------------------------------------------------------------------------
