@@ -18,10 +18,10 @@
 > devtools::install_github("trestletech/plumber", ref="v0.3.3")
 > ```
 
-plumber allows you to create a REST API by merely decorating your existing R source code with special comments. Take a look at an example.
+Plumber allows you to create a REST API by merely decorating your existing R source code with special comments. Take a look at an example.
 
 ```r
-# myfile.R
+# plumber.R
 
 #* @get /mean
 normalMean <- function(samples=10){
@@ -39,7 +39,7 @@ These comments allow plumber to make your R functions available as API endpoints
 
 ```r
 > library(plumber)
-> r <- plumb("myfile.R")  # Where 'myfile.R' is the location of the file shown above
+> r <- plumb("plumber.R")  # Where 'plumber.R' is the location of the file shown above
 > r$run(port=8000)
 ```
 

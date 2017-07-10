@@ -247,7 +247,7 @@ plumber <- R6Class(
         return(val)
       }, finally= options(warn=oldWarn) )
     },
-    run = function(host='0.0.0.0', port=8000, swagger=interactive()){
+    run = function(host='127.0.0.1', port=8000, swagger=interactive()){
       # TODO: setwd to file path
       .globals$debug <- self$debug
       message("Starting server to listen on port ", port)
