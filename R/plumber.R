@@ -383,16 +383,29 @@ plumber <- R6Class(
 #' @export
 plumb <- function(file, dir="."){
 
-  missingDir <- nchar(dir) == 0
+  dirMode <- NULL
 
-  if(!xor(missing(file), missingDir)){
-    stop("plumber needs only one of a file or a directory with a `plumber.R` or `entrypoint.R` file in its root.")
+  if (!missing(file) && !missing(dir)){
+    # Both were explicitly set. Error
+    stop("You must set either the file or the directory parameter, not both")
+
   } else if (missing(file)){
+    if (identical(dir, "")){
+      # dir and file are both empty. Error
+      stop("You must specify either a file or directory parameter")
+    }
+
+    # Parse dir
+    dirMode <- TRUE
     dir <- sub("/$", "", dir)
     file <- file.path(dir, "plumber.R")
+
+  } else {
+    # File was specified
+    dirMode <- FALSE
   }
 
-  if (!missingDir && file.exists(file.path(dir, "entrypoint.R"))){
+  if (dirMode && file.exists(file.path(dir, "entrypoint.R"))){
     # Dir was specified and we found an entrypoint.R
 
     old <- setwd(dir)
