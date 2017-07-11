@@ -1,5 +1,6 @@
 
 # TODO: static asset router that can be mounted onto another router.
+
 #' @include query-string.R
 #' @include post-body.R
 #' #' @include cookie-parser.R
@@ -32,6 +33,9 @@ plumber <- R6Class(
   public = list(
     initialize = function(file=NULL, filters=defaultPlumberFilters){
 
+      # TODO: is this safe for sub-routers? Would be nice if all routers shared an env by default, no?
+      private$envir <- new.env(parent=.GlobalEnv)
+
       # Add in the initial filters
       for (fn in names(filters)){
         fil <- PlumberFilter$new(fn, filters[[fn]], private$envir, private$serializer, NULL, NULL)
@@ -50,15 +54,12 @@ plumber <- R6Class(
           srcref <- attr(e, "srcref")[[1]][c(1,3)]
 
           # FIXME: adjust signature here
-          activateBlock(srcref, private$lines, e, private$addEndpointInternal,
+          activateBlock(srcref, private$lines, e, private$envir, private$addEndpointInternal,
                         private$addFilterInternal, private$addAssetsInternal)
         }
 
         private$globalSettings <- parseGlobals(private$fileLines)
       }
-
-      # TODO: is this safe for sub-routers? Would be nice if all routers shared an env by default, no?
-      private$envir <- new.env(parent=.GlobalEnv)
 
     },
     run = function(host='127.0.0.1', port=8000, swagger=interactive()){
@@ -93,12 +94,14 @@ plumber <- R6Class(
       private$addEndpointInternal(ep, preempt)
     },
     print = function(...){
-      cat("# Plumber router with", length(private$ends), "endpoints and",
+      endCount <- sum(sapply(r$endpoints, length))
+      cat("# Plumber router with", endCount, "endpoints and",
           length(private$filts), "filters.\n")
       cat("# Call run() on this object to start the API.\n")
       invisible(self)
     },
 
+    # FIXME: private?
     serve = function(req, res){
       # FIXME: instead of global processors, could we use hooks that allow you to register custom
       # logic for "pre-route", "pre-serialize", "post-serialize", etc?
@@ -175,12 +178,14 @@ plumber <- R6Class(
     notFoundHandler = default404Handler,
 
     addEndpointInternal = function(ep, preempt){
+      noPreempt <- missing(preempt) || is.null(preempt)
+
       # PlumberEndpoint$new(verbs, path, expr, private$envir, serializer, processors, srcref, params, comments, responses)
       filterNames <- "__first__"
       for (f in private$filts){
         filterNames <- c(filterNames, f$name)
       }
-      if (!missing(preempt) && ! preempt %in% filterNames){
+      if (!noPreempt && ! preempt %in% filterNames){
         if (!is.null(ep$lines)){
           stopOnLine(ep$lines[1], private$fileLines[ep$lines[1]], paste0("The given @preempt filter does not exist in this plumber router: '", preempt, "'"))
         } else {
@@ -188,8 +193,7 @@ plumber <- R6Class(
         }
       }
 
-
-      if (missing(preempt)){
+      if (noPreempt){
         preempt <- "__no-preempt__"
       }
 

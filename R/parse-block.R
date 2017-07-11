@@ -185,9 +185,9 @@ parseBlock <- function(lineNum, file){
   )
 }
 
-#' Activate a "block" of code found in a plumber API.
+#' Activate a "block" of code found in a plumber API file.
 #' @noRd
-activateBlock <- function(srcref, file, e, addEndpoint, addFilter, addAssets) {
+activateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, addAssets) {
   lineNum <- srcref[1] - 1
 
   block <- parseBlock(lineNum, file)
@@ -204,12 +204,11 @@ activateBlock <- function(srcref, file, e, addEndpoint, addFilter, addAssets) {
   }
 
   if (!is.null(block$path)){
-    addEndpoint(block$verbs, block$path, e, block$serializer,
-                                processors, srcref, block$preempt,
-                                block$params, block$comments, block$responses)
+    ep <- PlumberEndpoint$new(block$verbs, block$path, expr, envir, block$serializer, processors, srcref, block$params, block$comments, block$responses)
+    addEndpoint(ep, block$preempt)
   } else if (!is.null(block$filter)){
-    addFilter(block$filter, e, block$serializer, processors, srcref)
+    addFilter(block$filter, expr, block$serializer, processors, srcref)
   } else if (!is.null(block$assets)){
-    addAssets(block$assets$dir, block$assets$path, e, srcref)
+    addAssets(block$assets$dir, block$assets$path, expr, srcref)
   }
 }
