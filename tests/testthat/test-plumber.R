@@ -39,6 +39,11 @@ test_that("Invalid file fails gracefully", {
   expect_error(plumber$new("asdfsadf"), regexp="File does not exist.*asdfsadf")
 })
 
+test_that("plumb accepts a file", {
+  r <- plumb("files/endpoints.R")
+  expect_length(r$endpoints[[1]], 4)
+})
+
 test_that("plumb accepts a directory with a `plumber.R` file", {
   # works without trailing slash
   r <- plumb(dir = 'files')
@@ -53,11 +58,11 @@ test_that("plumb accepts a directory with a `plumber.R` file", {
   # errors when no plumber.R found
   expect_error(plumb(dir = 'files/static'), regexp="File does not exist: files/static/plumber.R")
   # errors when neither dir is empty and file is not given
-  expect_error(plumb(dir=""), regexp="plumber needs only one of a file or a directory*")
+  expect_error(plumb(dir=""), regexp="You must specify either a file or directory*")
   # reads from working dir if no args
   expect_error(plumb(), regexp="File does not exist: ./plumber.R")
   # errors when both dir and file are given
-  expect_error(plumb(file="files/endpoints.R", dir="files"), regexp="plumber needs only one of a file or a directory*")
+  expect_error(plumb(file="files/endpoints.R", dir="files"), regexp="You must set either the file or the directory parameter, not both")
 })
 
 test_that("plumb() a dir leverages `entrypoint.R`", {
