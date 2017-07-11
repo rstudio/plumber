@@ -43,7 +43,8 @@ test_that("Filter and assets fails", {
 test_that("Terminal filters indeed terminate", {
   res <- PlumberResponse$new()
   r <- plumber$new("files/terminal-filter.R")
-  expect_equal(r$route(make_req("GET", "/"), res), 1)
+  route <- r$.__enclos_env__$private$route
+  expect_equal(route(make_req("GET", "/"), res), 1)
 })
 
 test_that("complete addFilter works", {

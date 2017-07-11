@@ -4,14 +4,9 @@ test_that("preempts work", {
   r <- plumber$new("files/preempt.R")
   expect_equal(length(r$endpoints), 3)
 
-  e <- r$endpoints[["testFun"]][[1]]
-  expect_equal(e$preempt, "testFun")
-
-  e <- r$endpoints[["testFun2"]][[1]]
-  expect_equal(e$preempt, "testFun2")
-
-  e <- r$endpoints[["testFun3"]][[1]]
-  expect_equal(e$preempt, "testFun3")
+  expect_length(r$endpoints[["testFun"]], 1)
+  expect_length(r$endpoints[["testFun2"]], 1)
+  expect_length(r$endpoints[["testFun3"]], 1)
 })
 
 test_that("Redundant preempts fail", {

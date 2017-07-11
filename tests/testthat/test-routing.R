@@ -21,20 +21,22 @@ test_that("Routing to errors and 404s works", {
 
   res <- PlumberResponse$new()
 
-  expect_equal(r$route(make_req("GET", "/"), res), "first")
-  expect_equal(r$route(make_req("GET", "/abc"), res), "abc get")
-  expect_equal(r$route(make_req("GET", "/dog"), res), "dog get")
-  expect_equal(r$route(make_req("POST", "/dog"), res), "dog use")
+  route <- r$.__enclos_env__$private$route
+
+  expect_equal(route(make_req("GET", "/"), res), "first")
+  expect_equal(route(make_req("GET", "/abc"), res), "abc get")
+  expect_equal(route(make_req("GET", "/dog"), res), "dog get")
+  expect_equal(route(make_req("POST", "/dog"), res), "dog use")
 
   expect_equal(errors, 0)
   expect_equal(notFounds, 0)
 
-  nf <- r$route(make_req("GET", "/something-crazy"), res)
+  nf <- route(make_req("GET", "/something-crazy"), res)
   expect_equal(res$serializer, jsonSerializer())
   expect_equal(nf, notFoundRes)
   expect_equal(notFounds, 1)
 
-  er <- r$route(make_req("GET", "/error"), res)
+  er <- route(make_req("GET", "/error"), res)
   expect_equal(res$serializer, jsonSerializer())
   expect_equal(er, errRes)
   expect_equal(errors, 1)

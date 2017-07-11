@@ -6,7 +6,7 @@ test_that("Endpoints execute in their environment", {
 
   foo <- parse(text="foo <- function(){ a }")
 
-  r <- PlumberEndpoint$new('verb', 'path', foo, env, "a", 1:2)
+  r <- PlumberEndpoint$new('verb', 'path', foo, env, 1:2)
   expect_equal(r$exec(), 5)
 })
 
@@ -58,7 +58,7 @@ test_that("Programmatic endpoints work", {
   end <- r$endpoints[[1]][[1]]
   expect_equal(end$verbs, "GET")
   expect_equal(end$path, "/")
-  expect_equal(end$preempt, "queryString")
+  expect_equal(names(r$endpoints)[1], "queryString")
   expect_equal(end$serializer, serializer)
 
   res <- PlumberResponse$new()

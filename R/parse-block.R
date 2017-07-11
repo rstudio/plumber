@@ -207,7 +207,8 @@ activateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, add
     ep <- PlumberEndpoint$new(block$verbs, block$path, expr, envir, block$serializer, processors, srcref, block$params, block$comments, block$responses)
     addEndpoint(ep, block$preempt)
   } else if (!is.null(block$filter)){
-    addFilter(block$filter, expr, block$serializer, processors, srcref)
+    filter <- PlumberFilter$new(block$filter, expr, envir, block$serializer, processors, srcref)
+    addFilter(filter)
   } else if (!is.null(block$assets)){
     addAssets(block$assets$dir, block$assets$path, expr, srcref)
   }

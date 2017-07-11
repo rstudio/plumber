@@ -33,6 +33,10 @@ plumber <- R6Class(
   public = list(
     initialize = function(file=NULL, filters=defaultPlumberFilters){
 
+      if (!is.null(file) && !file.exists(file)){
+        stop("File does not exist: ", file)
+      }
+
       # TODO: is this safe for sub-routers? Would be nice if all routers shared an env by default, no?
       private$envir <- new.env(parent=.GlobalEnv)
 
@@ -41,6 +45,9 @@ plumber <- R6Class(
         fil <- PlumberFilter$new(fn, filters[[fn]], private$envir, private$serializer, NULL, NULL)
         private$filts <- c(private$filts, fil)
       }
+
+      private$errorHandler <- defaultErrorHandler
+      private$notFoundHandler <- default404Handler
 
       if (!is.null(file)){
         private$lines <- readLines(file)
@@ -77,6 +84,7 @@ plumber <- R6Class(
     filter = function(){},
     mount = function(){},
 
+    # FIXME: tests
     delete = function(path, handler){ self$handle("DELETE", path, handler) },
     get = function(path, handler){ self$handle("GET", path, handler) },
     head = function(path, handler){ self$handle("HEAD", path, handler) },
@@ -84,7 +92,6 @@ plumber <- R6Class(
     patch = function(path, handler){ self$handle("PATCH", path, handler) },
     post = function(path, handler){ self$handle("POST", path, handler) },
     put = function(path, handler){ self$handle("PUT", path, handler) },
-
     handle = function(methods, path, handler, preempt, serializer){
       if (missing(serializer)){
         serializer <- private$serializer
@@ -144,23 +151,38 @@ plumber <- R6Class(
     # Legacy
     setSerializer = function(name){}, # Set a default serializer
     addGlobalProcessor = function(proc){}, #FIXME
-    set404Handler = function(fun){},
-    setErrorHandler = function(fun){},
+    set404Handler = function(fun){
+      private$notFoundHandler <- fun
+    },
+    setErrorHandler = function(fun){
+      private$errorHandler <- fun
+    },
     addAssets = function(dir, path="/public", options=list()){},
-    addEndpoint = function(verbs, path, expr, serializer, processors, preempt=NULL, params=NULL, comments){},
-    addFilter = function(name, expr, serializer, processors){},
+
+    addEndpoint = function(verbs, path, expr, serializer, processors, preempt=NULL, params=NULL, comments){
+      # FIXME: ignoring processors, params, comments
+
+      self$handle(verbs, path, expr, preempt, serializer)
+    },
+    addFilter = function(name, expr, serializer, processors){
+      filter <- PlumberFilter$new(name, expr, private$envir, serializer, processors)
+      private$addFilterInternal(filter)
+    },
     swaggerFile = function(){}
 
   ), active = list(
     mountpath = function(){ # read-only
 
     },
+
+    # LEGACY
     endpoints = function(){ # read-only
       # TODO
       private$ends
     },
     filters = function(){ # read-only
-
+      # TODO
+      private$filts
     },
     mounts = function(){ # read-only
 
@@ -174,13 +196,17 @@ plumber <- R6Class(
     parsed = NULL, # The parsed representation of the API
     globalSettings = list(info=list()), # Global settings for this API. Primarily used for Swagger docs.
 
-    errorHandler = defaultErrorHandler,
-    notFoundHandler = default404Handler,
+    errorHandler = NULL,
+    notFoundHandler = NULL,
 
+    addFilterInternal = function(filter){
+      # Create a new filter and add it to the router
+      private$filts <- c(private$filts, filter)
+      invisible(self)
+    },
     addEndpointInternal = function(ep, preempt){
       noPreempt <- missing(preempt) || is.null(preempt)
 
-      # PlumberEndpoint$new(verbs, path, expr, private$envir, serializer, processors, srcref, params, comments, responses)
       filterNames <- "__first__"
       for (f in private$filts){
         filterNames <- c(filterNames, f$name)
