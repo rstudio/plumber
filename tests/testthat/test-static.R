@@ -8,51 +8,54 @@ make_req <- function(verb, path){
   req
 }
 
-pr <- plumber$new()
-pr$addAssets("files/static", "/public")
-pr$addAssets("files/static", "/public2")
+pr <- PlumberStatic$new("files/static")
 
 test_that("the response is reurned", {
   res <- PlumberResponse$new()
-  val <- pr$route(make_req("GET", "/public/test.txt"), res)
+  val <- pr$route(make_req("GET", "/test.txt"), res)
   expect_true(inherits(val, "PlumberResponse"))
 })
 
 test_that("static txt file is served", {
   res <- PlumberResponse$new()
-  pr$route(make_req("GET", "/public/test.txt"), res)
+  pr$route(make_req("GET", "/test.txt"), res)
   expect_equal(res$headers$`Content-type`, "text/plain")
   expect_equal(rawToChar(res$body), "I am a text file.\n")
 })
 
 test_that("static html file is served", {
   res <- PlumberResponse$new()
-  pr$route(make_req("GET", "/public/index.html"), res)
+  pr$route(make_req("GET", "/index.html"), res)
   expect_equal(res$headers$`Content-type`, "text/html; charset=UTF-8")
   expect_equal(rawToChar(res$body), "<html>I am HTML</html>\n")
 })
 
 test_that("root requests are routed to index.html", {
   res <- PlumberResponse$new()
-  pr$route(make_req("GET", "/public/"), res)
+  pr$route(make_req("GET", "/"), res)
   expect_equal(res$headers$`Content-type`, "text/html; charset=UTF-8")
   expect_equal(rawToChar(res$body), "<html>I am HTML</html>\n")
 })
 
 test_that("static binary file is served", {
   res <- PlumberResponse$new()
-  pr$route(make_req("GET", "/public2/test.txt.zip"), res)
+  pr$route(make_req("GET", "/test.txt.zip"), res)
   expect_equal(res$headers$`Content-type`, "application/octet-stream")
   bod <- res$body
   bin <- readBin(file("files/static/test.txt.zip", "rb"), "raw", n=1000)
   expect_equal(bin, bod)
 })
 
-test_that("path prefix is accounted for", {
+test_that("404s are handled", {
   res <- PlumberResponse$new()
-  pr$route(make_req("GET", "/public2/test.txt"), res)
-  expect_equal(res$headers$`Content-type`, "text/plain")
-  expect_equal(rawToChar(res$body), "I am a text file.\n")
+  pr$route(make_req("GET", "/i-dont-exist"), res)
+  expect_equal(res$status, 404)
+})
+
+test_that("PUTs error", {
+  res <- PlumberResponse$new()
+  pr$route(make_req("PUT", "/"), res)
+  expect_equal(res$status, 400)
 })
 
 test_that("files are parsed properly", {

@@ -46,6 +46,7 @@ Collate:
     'post-body.R'
     'query-string.R'
     'plumber-new.R'
+    'plumber-static.R'
     'plumber-step.R'
     'processor.R'
     'processor-image.R'

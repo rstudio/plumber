@@ -187,7 +187,7 @@ parseBlock <- function(lineNum, file){
 
 #' Activate a "block" of code found in a plumber API file.
 #' @noRd
-activateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, addAssets) {
+activateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, mount) {
   lineNum <- srcref[1] - 1
 
   block <- parseBlock(lineNum, file)
@@ -210,6 +210,7 @@ activateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, add
     filter <- PlumberFilter$new(block$filter, expr, envir, block$serializer, processors, srcref)
     addFilter(filter)
   } else if (!is.null(block$assets)){
-    addAssets(block$assets$dir, block$assets$path, expr, srcref)
+    hand <- PlumberStatic$new(block$assets$dir, expr)
+    mount(block$assets$path, hand)
   }
 }

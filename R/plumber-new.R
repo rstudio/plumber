@@ -62,7 +62,7 @@ plumber <- R6Class(
 
           # FIXME: adjust signature here
           activateBlock(srcref, private$lines, e, private$envir, private$addEndpointInternal,
-                        private$addFilterInternal, private$addAssetsInternal)
+                        private$addFilterInternal, self$mount)
         }
 
         private$globalSettings <- parseGlobals(private$fileLines)
@@ -82,7 +82,10 @@ plumber <- R6Class(
       httpuv::runServer(host, port, self)
     },
     filter = function(){},
-    mount = function(){},
+    mount = function(path, router){
+      path <- gsub("/$", "", path)
+      private$mnts[[path]] <- router
+    },
 
     # FIXME: tests
     delete = function(path, handler){ self$handle("DELETE", path, handler) },
@@ -113,7 +116,7 @@ plumber <- R6Class(
       # FIXME: instead of global processors, could we use hooks that allow you to register custom
       # logic for "pre-route", "pre-serialize", "post-serialize", etc?
 
-      val <- private$route(req, res)
+      val <- self$route(req, res)
 
       if ("PlumberResponse" %in% class(val)){
         # They returned the response directly, don't serialize.
@@ -129,102 +132,8 @@ plumber <- R6Class(
       }
     },
 
-    # httpuv interface
-    call = function(req){
-      # Due to https://github.com/rstudio/httpuv/issues/49, we need to close
-      # the TCP channels via `Connection: close` header. Otherwise we would
-      # reuse the same environment for each request and potentially recycle
-      # old data here.
-      # Set the arguments to an empty list
-      req$args <- list()
-
-      res <- PlumberResponse$new(private$serializer)
-      self$serve(req, res)
-    },
-    onHeaders = function(req){
-      NULL
-    },
-    onWSOpen = function(ws){
-      warning("WebSockets not supported.")
-    },
-
-    # Legacy
-    setSerializer = function(name){}, # Set a default serializer
-    addGlobalProcessor = function(proc){}, #FIXME
-    set404Handler = function(fun){
-      private$notFoundHandler <- fun
-    },
-    setErrorHandler = function(fun){
-      private$errorHandler <- fun
-    },
-    addAssets = function(dir, path="/public", options=list()){},
-
-    addEndpoint = function(verbs, path, expr, serializer, processors, preempt=NULL, params=NULL, comments){
-      # FIXME: ignoring processors, params, comments
-
-      self$handle(verbs, path, expr, preempt, serializer)
-    },
-    addFilter = function(name, expr, serializer, processors){
-      filter <- PlumberFilter$new(name, expr, private$envir, serializer, processors)
-      private$addFilterInternal(filter)
-    },
-    swaggerFile = function(){}
-
-  ), active = list(
-    mountpath = function(){ # read-only
-
-    },
-
-    # LEGACY
-    endpoints = function(){ # read-only
-      # TODO
-      private$ends
-    },
-    filters = function(){ # read-only
-      # TODO
-      private$filts
-    },
-    mounts = function(){ # read-only
-
-    }
-  ), private = list(
-    serializer = jsonSerializer(), # The default serializer
-    ends = list(), # List of endpoints indexed by their pre-empted filter.
-    filts = NULL, # Array of filters
-    envir = NULL, # The environment in which all API execution will be conducted
-    lines = NULL, # The lines constituting the API
-    parsed = NULL, # The parsed representation of the API
-    globalSettings = list(info=list()), # Global settings for this API. Primarily used for Swagger docs.
-
-    errorHandler = NULL,
-    notFoundHandler = NULL,
-
-    addFilterInternal = function(filter){
-      # Create a new filter and add it to the router
-      private$filts <- c(private$filts, filter)
-      invisible(self)
-    },
-    addEndpointInternal = function(ep, preempt){
-      noPreempt <- missing(preempt) || is.null(preempt)
-
-      filterNames <- "__first__"
-      for (f in private$filts){
-        filterNames <- c(filterNames, f$name)
-      }
-      if (!noPreempt && ! preempt %in% filterNames){
-        if (!is.null(ep$lines)){
-          stopOnLine(ep$lines[1], private$fileLines[ep$lines[1]], paste0("The given @preempt filter does not exist in this plumber router: '", preempt, "'"))
-        } else {
-          stop(paste0("The given preempt filter does not exist in this plumber router: '", preempt, "'"))
-        }
-      }
-
-      if (noPreempt){
-        preempt <- "__no-preempt__"
-      }
-
-      private$ends[[preempt]] <- c(private$ends[[preempt]], ep)
-    },
+    # FIXME: private?
+    #   Unfortunately we have to call this on subrouters
     route = function(req, res){
       getHandle <- function(filt){
         handlers <- private$ends[[filt]]
@@ -302,6 +211,18 @@ plumber <- R6Class(
           return(do.call(h$exec, req$args))
         }
 
+        # We aren't going to serve this endpoint; see if any mounted routers will
+        for (mountPath in names(private$mnts)){
+          # TODO: support globbing?
+          if (nchar(path) > nchar(mountPath) && substr(path, 0, nchar(mountPath)) == mountPath){
+            # This is a prefix match. Let this router handle.
+
+            # First trim the prefix off of the PATH_INFO element
+            req$PATH_INFO <- substr(req$PATH_INFO, nchar(mountPath)+1, nchar(req$PATH_INFO))
+            return(private$mnts[[mountPath]]$route(req, res))
+          }
+        }
+
         # No endpoint could handle this request. 404
         val <- private$notFoundHandler(req=req, res=res)
         return(val)
@@ -310,6 +231,104 @@ plumber <- R6Class(
         val <- private$errorHandler(req, res, e)
         return(val)
       }, finally= options(warn=oldWarn) )
+    },
+
+    # httpuv interface
+    call = function(req){
+      # Due to https://github.com/rstudio/httpuv/issues/49, we need to close
+      # the TCP channels via `Connection: close` header. Otherwise we would
+      # reuse the same environment for each request and potentially recycle
+      # old data here.
+      # Set the arguments to an empty list
+      req$args <- list()
+
+      res <- PlumberResponse$new(private$serializer)
+      self$serve(req, res)
+    },
+    onHeaders = function(req){
+      NULL
+    },
+    onWSOpen = function(ws){
+      warning("WebSockets not supported.")
+    },
+
+    # Legacy
+    setSerializer = function(name){}, # Set a default serializer
+    addGlobalProcessor = function(proc){}, #FIXME
+    set404Handler = function(fun){
+      private$notFoundHandler <- fun
+    },
+    setErrorHandler = function(fun){
+      private$errorHandler <- fun
+    },
+    addAssets = function(dir, path="/public", options=list()){},
+
+    addEndpoint = function(verbs, path, expr, serializer, processors, preempt=NULL, params=NULL, comments){
+      # FIXME: ignoring processors, params, comments
+
+      self$handle(verbs, path, expr, preempt, serializer)
+    },
+    addFilter = function(name, expr, serializer, processors){
+      filter <- PlumberFilter$new(name, expr, private$envir, serializer, processors)
+      private$addFilterInternal(filter)
+    },
+    swaggerFile = function(){}
+
+  ), active = list(
+    mountPath = function(){ # read-only
+
+    },
+
+    # LEGACY
+    endpoints = function(){ # read-only
+      # TODO
+      private$ends
+    },
+    filters = function(){ # read-only
+      # TODO
+      private$filts
+    },
+    mounts = function(){ # read-only
+
+    }
+  ), private = list(
+    serializer = jsonSerializer(), # The default serializer
+    ends = list(), # List of endpoints indexed by their pre-empted filter.
+    filts = NULL, # Array of filters
+    envir = NULL, # The environment in which all API execution will be conducted
+    lines = NULL, # The lines constituting the API
+    parsed = NULL, # The parsed representation of the API
+    globalSettings = list(info=list()), # Global settings for this API. Primarily used for Swagger docs.
+    mnts = list(),
+
+    errorHandler = NULL,
+    notFoundHandler = NULL,
+
+    addFilterInternal = function(filter){
+      # Create a new filter and add it to the router
+      private$filts <- c(private$filts, filter)
+      invisible(self)
+    },
+    addEndpointInternal = function(ep, preempt){
+      noPreempt <- missing(preempt) || is.null(preempt)
+
+      filterNames <- "__first__"
+      for (f in private$filts){
+        filterNames <- c(filterNames, f$name)
+      }
+      if (!noPreempt && ! preempt %in% filterNames){
+        if (!is.null(ep$lines)){
+          stopOnLine(ep$lines[1], private$fileLines[ep$lines[1]], paste0("The given @preempt filter does not exist in this plumber router: '", preempt, "'"))
+        } else {
+          stop(paste0("The given preempt filter does not exist in this plumber router: '", preempt, "'"))
+        }
+      }
+
+      if (noPreempt){
+        preempt <- "__no-preempt__"
+      }
+
+      private$ends[[preempt]] <- c(private$ends[[preempt]], ep)
     }
   )
 )
