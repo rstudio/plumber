@@ -120,7 +120,8 @@ plumber <- R6Class(
       httpuv::runServer(host, port, self)
     },
     mount = function(path, router){
-      path <- gsub("/$", "", path)
+      # Don't trim if the path is only a / -- i.e. it's both trailing and leading.
+      path <- gsub("[^^]/$", "", path)
       private$mnts[[path]] <- router
     },
     registerHook = function(stage=c("preroute", "postroute",

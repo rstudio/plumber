@@ -2,7 +2,7 @@
 #' @include plumber.R
 #' @noRd
 PlumberStatic <- R6Class(
-  "PlumberStatic",
+  "plumberstatic",
   inherit = plumber,
   public = list(
     initialize = function(direc, options){
