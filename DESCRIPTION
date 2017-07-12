@@ -11,6 +11,9 @@ Authors@R: c(
   person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"),
   person(family="SmartBear Software", role=c("ctb", "cph"), comment="swagger-ui"))
 License: MIT + file LICENSE
+BugReports: https://github.com/trestletech/plumber/issues
+URL: https://www.rplumber.io (site)
+    https://github.com/trestletech/plumber (dev)
 Description: Gives the ability to automatically generate and serve an HTTP API
     from R functions using the annotations in the R documentation around your
     functions.
