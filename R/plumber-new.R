@@ -90,6 +90,11 @@ plumber <- R6Class(
       path <- gsub("/$", "", path)
       private$mnts[[path]] <- router
     },
+    registerHook = function(stage=c("preroute", "postroute",
+                                    "preserialize", "postserialize"), handler){
+      stage <- match.arg(stage)
+      private$hooks[[stage]] <- c(private$hooks[[stage]], handler)
+    },
 
     # FIXME: tests
     delete = function(path, handler){ self$handle("DELETE", path, handler) },
@@ -118,10 +123,13 @@ plumber <- R6Class(
 
     # FIXME: private?
     serve = function(req, res){
-      # FIXME: instead of global processors, could we use hooks that allow you to register custom
-      # logic for "pre-route", "pre-serialize", "post-serialize", etc?
+      hookEnv <- new.env()
+
+      private$runHooks("preroute", data=hookEnv, req=req, res=res)
 
       val <- self$route(req, res)
+
+      private$runHooks("postroute", data=hookEnv, req=req, res=res, value=val)
 
       if ("PlumberResponse" %in% class(val)){
         # They returned the response directly, don't serialize.
@@ -133,7 +141,10 @@ plumber <- R6Class(
           stop("Serializers must be closures: '", ser, "'")
         }
 
-        ser(val, req, res, private$errorHandler)
+        private$runHooks("preserialize", data=hookEnv, req=req, res=res, value=val)
+        out <- ser(val, req, res, private$errorHandler)
+        private$runHooks("postserialize", data=hookEnv, req=req, res=res, value=val, serialized=out)
+        out
       }
     },
 
@@ -260,7 +271,12 @@ plumber <- R6Class(
 
     # Legacy
     setSerializer = function(name){}, # Set a default serializer
-    addGlobalProcessor = function(proc){}, #FIXME
+
+    # Breaking: this isn't global anymore. Specific to router
+    addGlobalProcessor = function(proc){
+      self$registerHook("preroute", proc$pre)
+      self$registerHook("postroute", proc$post)
+    },
     set404Handler = function(fun){
       private$notFoundHandler <- fun
     },
@@ -313,6 +329,18 @@ plumber <- R6Class(
     parsed = NULL, # The parsed representation of the API
     globalSettings = list(info=list()), # Global settings for this API. Primarily used for Swagger docs.
     mnts = list(),
+    hooks = list(
+      preroute=NULL,
+      postroute=NULL,
+      preserialize=NULL,
+      postserialize=NULL
+    ),
+    runHooks = function(stage, ...){
+      for (h in private$hooks[[stage]]){
+        args <- getRelevantArgs(list(...), plumberExpression=h)
+        do.call(h, args)
+      }
+    },
 
     errorHandler = NULL,
     notFoundHandler = NULL,
