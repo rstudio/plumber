@@ -42,7 +42,9 @@ test_that("static binary file is served", {
   pr$route(make_req("GET", "/test.txt.zip"), res)
   expect_equal(res$headers$`Content-type`, "application/octet-stream")
   bod <- res$body
-  bin <- readBin(file("files/static/test.txt.zip", "rb"), "raw", n=1000)
+  zipf <- file("files/static/test.txt.zip", "rb")
+  bin <- readBin(zipf, "raw", n=1000)
+  close(zipf)
   expect_equal(bin, bod)
 })
 

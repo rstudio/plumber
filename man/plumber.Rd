@@ -18,27 +18,13 @@ plumber
 plumber router definition. Alternatively, if an \code{entrypoint.R} file is
 found, it will take precedence and be responsible for returning a runnable
 Plumber router.}
-
-\item{file}{The file to parse as the plumber router definition}
-
-\item{dir}{The directory containing the \code{plumber.R} file to parse as the
-plumber router definition. Alternatively, if an \code{entrypoint.R} file is
-found, it will take precedence and be responsible for returning a runnable
-Plumber router.}
 }
 \description{
 Routers are the core request handler in plumber. A router is responsible for
 taking an incoming request, submitting it through the appropriate filters and
 eventually to a corresponding endpoint, if one is found.
-
-Routers are the core request handler in plumber. A router is responsible for
-taking an incoming request, submitting it through the appropriate filters and
-eventually to a corresponding endpoint, if one is found.
 }
 \details{
-See \url{http://plumber.trestletech.com/docs/programmatic/} for additional
-details on the methods available on this object.
-
 See \url{http://plumber.trestletech.com/docs/programmatic/} for additional
 details on the methods available on this object.
 }
