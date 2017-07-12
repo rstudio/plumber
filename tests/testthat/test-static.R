@@ -60,37 +60,18 @@ test_that("PUTs error", {
 
 test_that("files are parsed properly", {
   p <- plumber$new("files/static.R")
-  staticFilt <- p$filters[grep("static-asset", sapply(p$filters, "[[", "name"))]
-  expect_equal(length(staticFilt), 4)
+  expect_length(p$mounts, 2)
 
-  expect_equal(staticFilt[[1]]$lines, c(2,2))
   res <- PlumberResponse$new()
-  req <- list(`PATH_INFO`="/static/test.txt", `REQUEST_METHOD`="GET")
-  staticFilt[[1]]$exec(req=req, res=res)
+  req <- make_req("GET", "/static/test.txt")
+  p$route(req=req, res=res)
   expect_equal(length(res$body), 18)
   expect_equal(res$status, 200)
   expect_equal(res$headers$`Content-type`, "text/plain")
 
-  expect_equal(staticFilt[[2]]$lines, c(5,5))
   res <- PlumberResponse$new()
-  req <- list(`PATH_INFO`="/static/test.txt", `REQUEST_METHOD`="GET")
-  staticFilt[[2]]$exec(req=req, res=res)
-  expect_equal(length(res$body), 18)
-  expect_equal(res$status, 200)
-  expect_equal(res$headers$`Content-type`, "text/plain")
-
-  expect_equal(staticFilt[[3]]$lines, c(8,8))
-  res <- PlumberResponse$new()
-  req <- list(`PATH_INFO`="/public/test.txt", `REQUEST_METHOD`="GET")
-  staticFilt[[3]]$exec(req=req, res=res)
-  expect_equal(length(res$body), 18)
-  expect_equal(res$status, 200)
-  expect_equal(res$headers$`Content-type`, "text/plain")
-
-  expect_equal(staticFilt[[4]]$lines, c(11,13))
-  res <- PlumberResponse$new()
-  req <- list(`PATH_INFO`="/public/test.txt", `REQUEST_METHOD`="GET")
-  staticFilt[[4]]$exec(req=req, res=res)
+  req <- make_req("GET", "/public/test.txt")
+  p$route(req=req, res=res)
   expect_equal(length(res$body), 18)
   expect_equal(res$status, 200)
   expect_equal(res$headers$`Content-type`, "text/plain")

@@ -40,6 +40,10 @@ plumber <- R6Class(
       # TODO: is this safe for sub-routers? Would be nice if all routers shared an env by default, no?
       private$envir <- new.env(parent=.GlobalEnv)
 
+      if (is.null(filters)){
+        filters <- list()
+      }
+
       # Add in the initial filters
       for (fn in names(filters)){
         fil <- PlumberFilter$new(fn, filters[[fn]], private$envir, private$serializer, NULL, NULL)
@@ -62,7 +66,7 @@ plumber <- R6Class(
 
           # FIXME: adjust signature here
           activateBlock(srcref, private$lines, e, private$envir, private$addEndpointInternal,
-                        private$addFilterInternal, self$mount)
+                        private$addFilterInternal, self$addAssets)
         }
 
         private$globalSettings <- parseGlobals(private$fileLines)
@@ -105,8 +109,9 @@ plumber <- R6Class(
     },
     print = function(...){
       endCount <- sum(sapply(r$endpoints, length))
-      cat("# Plumber router with", endCount, "endpoints and",
-          length(private$filts), "filters.\n")
+      cat("# Plumber router with", endCount, "endpoints,",
+          length(private$filts), "filters, and",
+          length(self$mounts), "sub-routers.\n")
       cat("# Call run() on this object to start the API.\n")
       invisible(self)
     },
@@ -189,6 +194,7 @@ plumber <- R6Class(
 
             # Execute this filter
             .globals$forwarded <- FALSE
+
             fres <- do.call(fi$exec, req$args)
             if (!.globals$forwarded){
               # forward() wasn't called, presumably meaning the request was
@@ -227,7 +233,7 @@ plumber <- R6Class(
         val <- private$notFoundHandler(req=req, res=res)
         return(val)
       }, error=function(e){
-        # Error when filtering
+        # Error when routing
         val <- private$errorHandler(req, res, e)
         return(val)
       }, finally= options(warn=oldWarn) )
@@ -261,7 +267,14 @@ plumber <- R6Class(
     setErrorHandler = function(fun){
       private$errorHandler <- fun
     },
-    addAssets = function(dir, path="/public", options=list()){},
+    addAssets = function(dir, path="/public", options=list()){
+      if (substr(path, 1,1) != "/"){
+        path <- paste0("/", path)
+      }
+
+      stat <- PlumberStatic$new(dir, options)
+      self$mount(path, stat)
+    },
 
     addEndpoint = function(verbs, path, expr, serializer, processors, preempt=NULL, params=NULL, comments){
       # FIXME: ignoring processors, params, comments
@@ -289,7 +302,7 @@ plumber <- R6Class(
       private$filts
     },
     mounts = function(){ # read-only
-
+      private$mnts
     }
   ), private = list(
     serializer = jsonSerializer(), # The default serializer

@@ -6,12 +6,13 @@ PlumberStatic <- R6Class(
   inherit = plumber,
   public = list(
     initialize = function(direc, options){
-      super$initialize()
+      super$initialize(filters=NULL)
 
       if(missing(direc)){
         stop("Cannot add asset directory when no directory was specified")
       }
 
+      # Relative paths
       if(substr(direc, 1, 2) == "./"){
         direc <- substr(direc, 3, nchar(direc))
       }
@@ -45,8 +46,9 @@ PlumberStatic <- R6Class(
           return(badRequest(res))
         }
 
-        if (path == '/')
+        if (path == '/'){
           path <- '/index.html'
+        }
 
         abs.path <- resolve(direc, path)
         if (is.null(abs.path)){
