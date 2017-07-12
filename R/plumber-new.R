@@ -1,6 +1,4 @@
 
-# TODO: static asset router that can be mounted onto another router.
-
 #' @include query-string.R
 #' @include post-body.R
 #' #' @include cookie-parser.R
@@ -151,9 +149,9 @@ plumber <- R6Class(
     },
     print = function(...){
       endCount <- sum(sapply(r$endpoints, length))
-      cat("# Plumber router with", endCount, "endpoints,",
-          length(private$filts), "filters, and",
-          length(self$mounts), "sub-routers.\n")
+      cat("# Plumber router with ", endCount, " endpoint", ifelse(endCount == 1, "", "s"),", ",
+          length(private$filts), " filter", ifelse(length(private$filts) == 1, "", "s"),", and ",
+          length(self$mounts), " sub-router", ifelse(length(self$mounts) == 1, "", "s"),".\n", sep="")
       cat("# Call run() on this object to start the API.\n")
       invisible(self)
     },
