@@ -42,17 +42,11 @@ test_that("Ellipses allow any named args through", {
 
 test_that("Programmatic endpoints work", {
   r <- plumber$new()
-  processor <- PlumberProcessor$new("proc1", function(req, res, data){
-    data$pre <- TRUE
-  }, function(val, req, res, data){
-    res$setHeader("post", TRUE)
-    res$setHeader("pre", data$pre)
-  })
 
   serializer <- "ser"
   expr <- expression(function(req, res){res$setHeader("expr", TRUE)})
 
-  r$addEndpoint("GET", "/", expr, serializer, list(processor), "queryString")
+  r$addEndpoint("GET", "/", expr, serializer, "queryString")
   expect_equal(length(r$endpoints), 1)
 
   end <- r$endpoints[[1]][[1]]
@@ -67,8 +61,6 @@ test_that("Programmatic endpoints work", {
 
   h <- res$headers
   expect_true(h$expr)
-  expect_true(h$pre)
-  expect_true(h$post)
 })
 
 test_that("Programmatic endpoints with functions work", {

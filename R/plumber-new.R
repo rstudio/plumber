@@ -9,6 +9,42 @@ defaultPlumberFilters <- list(
   postBody = postBodyFilter,
   cookieParser = cookieFilter)
 
+hookable <- R6Class(
+  "hookable",
+  public=list(
+    registerHook = function(stage, handler){
+      private$hooks[[stage]] <- c(private$hooks[[stage]], handler)
+    },
+    registerHooks = function(handlers){
+      for (i in 1:length(handlers)){
+        stage <- names(handlers)[i]
+        h <- handlers[[i]]
+
+        self$registerHook(stage, h)
+      }
+    }
+  ), private=list(
+    hooks = list( ),
+    runHooks = function(stage, args){
+      value <- args$value
+      for (h in private$hooks[[stage]]){
+        ar <- getRelevantArgs(args, plumberExpression=h)
+
+        value <- do.call(h, ar)
+
+        if ("value" %in% names(ar)){
+          # Special case, retain the returned value from the hook
+          # and pass it in as the value for the next handler.
+          # Ultimately, return value from this function
+          args$value <- value
+        }
+      }
+      value
+    }
+  )
+)
+
+
 #' Plumber Router
 #'
 #' Routers are the core request handler in plumber. A router is responsible for
@@ -30,6 +66,7 @@ defaultPlumberFilters <- list(
 #' @importFrom httpuv runServer
 plumber <- R6Class(
   "plumber",
+  inherit=hookable,
   public = list(
     initialize = function(file=NULL, filters=defaultPlumberFilters){
 
@@ -46,7 +83,7 @@ plumber <- R6Class(
 
       # Add in the initial filters
       for (fn in names(filters)){
-        fil <- PlumberFilter$new(fn, filters[[fn]], private$envir, private$serializer, NULL, NULL)
+        fil <- PlumberFilter$new(fn, filters[[fn]], private$envir, private$serializer, NULL)
         private$filts <- c(private$filts, fil)
       }
 
@@ -125,11 +162,11 @@ plumber <- R6Class(
     serve = function(req, res){
       hookEnv <- new.env()
 
-      private$runHooks("preroute", data=hookEnv, req=req, res=res)
+      private$runHooks("preroute", list(data=hookEnv, req=req, res=res))
 
       val <- self$route(req, res)
 
-      private$runHooks("postroute", data=hookEnv, req=req, res=res, value=val)
+      private$runHooks("postroute", list(data=hookEnv, req=req, res=res, value=val))
 
       if ("PlumberResponse" %in% class(val)){
         # They returned the response directly, don't serialize.
@@ -141,9 +178,9 @@ plumber <- R6Class(
           stop("Serializers must be closures: '", ser, "'")
         }
 
-        private$runHooks("preserialize", data=hookEnv, req=req, res=res, value=val)
+        private$runHooks("preserialize", list(data=hookEnv, req=req, res=res, value=val))
         out <- ser(val, req, res, private$errorHandler)
-        private$runHooks("postserialize", data=hookEnv, req=req, res=res, value=val, serialized=out)
+        private$runHooks("postserialize", list(data=hookEnv, req=req, res=res, value=val, serialized=out))
         out
       }
     },
@@ -292,20 +329,27 @@ plumber <- R6Class(
       self$mount(path, stat)
     },
 
-    addEndpoint = function(verbs, path, expr, serializer, processors, preempt=NULL, params=NULL, comments){
-      # FIXME: ignoring processors, params, comments
-
+    addEndpoint = function(verbs, path, expr, serializer, preempt=NULL){
+      # This function needs to support per-endpoint processors for e.g. png annotations
+      # This means that handle also has to support processors
+      # Which really points out that, more generally, our GET method, for instance,
+      # doesn't have a way to return PNGs.
+      # Perhaps we should consider these image processors being something that wrap the
+      # invocation of an endpoint definition? I really hate the idea that you have to
+      # specify processors manually when definining a GET endpoint. But maybe the question
+      # we should ask is: how do we want to define a GET endpoint that returns an image in
+      # R6?
       self$handle(verbs, path, expr, preempt, serializer)
     },
-    addFilter = function(name, expr, serializer, processors){
-      filter <- PlumberFilter$new(name, expr, private$envir, serializer, processors)
+    addFilter = function(name, expr, serializer){
+      filter <- PlumberFilter$new(name, expr, private$envir, serializer)
       private$addFilterInternal(filter)
     },
     swaggerFile = function(){}
 
   ), active = list(
     mountPath = function(){ # read-only
-
+      # FIXME: is this needed?
     },
 
     # LEGACY
@@ -329,18 +373,6 @@ plumber <- R6Class(
     parsed = NULL, # The parsed representation of the API
     globalSettings = list(info=list()), # Global settings for this API. Primarily used for Swagger docs.
     mnts = list(),
-    hooks = list(
-      preroute=NULL,
-      postroute=NULL,
-      preserialize=NULL,
-      postserialize=NULL
-    ),
-    runHooks = function(stage, ...){
-      for (h in private$hooks[[stage]]){
-        args <- getRelevantArgs(list(...), plumberExpression=h)
-        do.call(h, args)
-      }
-    },
 
     errorHandler = NULL,
     notFoundHandler = NULL,

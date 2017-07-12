@@ -186,28 +186,33 @@ parseBlock <- function(lineNum, file){
 }
 
 #' Activate a "block" of code found in a plumber API file.
+#' @include processor-image.R
 #' @noRd
 activateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, addAssets) {
   lineNum <- srcref[1] - 1
 
   block <- parseBlock(lineNum, file)
 
-  processors <- NULL
-  if (!is.null(block$image) && !is.null(.globals$processors[[block$image]])){
-    processors <- list(.globals$processors[[block$image]])
-  } else if (!is.null(block$image)){
-    stop("Image processor not found: ", block$image)
-  }
-
   if (sum(!is.null(block$filter), !is.null(block$path), !is.null(block$assets)) > 1){
     stopOnLine(lineNum, file[lineNum], "A single function can only be a filter, an API endpoint, or an asset (@filter AND @get, @post, @assets, etc.)")
   }
 
   if (!is.null(block$path)){
-    ep <- PlumberEndpoint$new(block$verbs, block$path, expr, envir, block$serializer, processors, srcref, block$params, block$comments, block$responses)
+    ep <- PlumberEndpoint$new(block$verbs, block$path, expr, envir, block$serializer, srcref, block$params, block$comments, block$responses)
+
+    if (!is.null(block$image)){
+      if (block$image == "png"){
+        ep$registerHooks(render_png)
+      } else if (block$image == "jpeg"){
+        ep$registerHooks(render_jpeg)
+      } else {
+        stop("Image format not found: ", block$image)
+      }
+    }
+
     addEndpoint(ep, block$preempt)
   } else if (!is.null(block$filter)){
-    filter <- PlumberFilter$new(block$filter, expr, envir, block$serializer, processors, srcref)
+    filter <- PlumberFilter$new(block$filter, expr, envir, block$serializer, srcref)
     addFilter(filter)
   } else if (!is.null(block$assets)){
     addAssets(block$assets$dir, block$assets$path, expr)

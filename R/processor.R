@@ -7,19 +7,14 @@ PlumberProcessor <- R6Class(
       private$preFun <- pre
       private$postFun <- post
       private$name <- name
-      private$data <- new.env()
 
       assign(name, self, envir=.globals$processors)
     },
     pre = function(...){
-      dat <- c(list(data=private$data), ...)
-
-      do.call(private$preFun, getRelevantArgs(dat, plumberExpression=private$preFun))
+      do.call(private$preFun, getRelevantArgs(list(...), plumberExpression=private$preFun))
     },
-    post = function(value, ...){
-      dat <- c(list(data=private$data, value=value), ...)
-
-      do.call(private$postFun, getRelevantArgs(dat, plumberExpression=private$postFun))
+    post = function(...){
+      do.call(private$postFun, getRelevantArgs(list(...), plumberExpression=private$postFun))
     }
   ),
   private = list(

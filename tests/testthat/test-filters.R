@@ -49,20 +49,13 @@ test_that("Terminal filters indeed terminate", {
 test_that("complete addFilter works", {
   r <- plumber$new()
 
-  processor <- PlumberProcessor$new("proc1", function(req, res, data){
-    data$pre <- TRUE
-  }, function(val, req, res, data){
-    res$setHeader("post", TRUE)
-    res$setHeader("pre", data$pre)
-  })
-
   serializer <- "ser"
 
   name <- "fullFilter"
   expr <- expression(function(req, res){res$setHeader("expr", TRUE)})
 
   baseFilters <- length(r$filters)
-  r$addFilter(name, expr, serializer, list(processor))
+  r$addFilter(name, expr, serializer)
   expect_equal(length(r$filters), baseFilters+1)
 
   fil <- r$filters[[baseFilters+1]]
@@ -76,8 +69,6 @@ test_that("complete addFilter works", {
 
   h <- res$headers
   expect_true(h$expr)
-  expect_true(h$pre)
-  expect_true(h$post)
 })
 
 # No processors or serializer
