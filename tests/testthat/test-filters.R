@@ -55,7 +55,7 @@ test_that("complete addFilter works", {
   expr <- expression(function(req, res){res$setHeader("expr", TRUE)})
 
   baseFilters <- length(r$filters)
-  r$addFilter(name, expr, serializer)
+  r$filter(name, expr, serializer)
   expect_equal(length(r$filters), baseFilters+1)
 
   fil <- r$filters[[baseFilters+1]]
@@ -79,7 +79,7 @@ test_that("sparse addFilter works", {
   expr <- expression(function(req, res){res$setHeader("expr", TRUE)})
 
   baseFilters <- length(r$filters)
-  r$addFilter(name, expr)
+  r$filter(name, expr)
   expect_equal(length(r$filters), baseFilters+1)
 
   fil <- r$filters[[baseFilters+1]]
@@ -101,7 +101,7 @@ test_that("sparse addFilter with a function works", {
   expr <- function(req, res){res$setHeader("expr", TRUE)}
 
   baseFilters <- length(r$filters)
-  r$addFilter(name, expr)
+  r$filter(name, expr)
   expect_equal(length(r$filters), baseFilters+1)
 
   fil <- r$filters[[baseFilters+1]]

@@ -46,7 +46,7 @@ test_that("Programmatic endpoints work", {
   serializer <- "ser"
   expr <- expression(function(req, res){res$setHeader("expr", TRUE)})
 
-  r$addEndpoint("GET", "/", expr, serializer, "queryString")
+  r$handle("GET", "/", expr, "queryString", serializer)
   expect_equal(length(r$endpoints), 1)
 
   end <- r$endpoints[[1]][[1]]
@@ -68,7 +68,7 @@ test_that("Programmatic endpoints with functions work", {
 
   expr <- function(req, res){res$setHeader("expr", TRUE)}
 
-  r$addEndpoint("GET", "/", expr)
+  r$handle("GET", "/", expr)
   expect_equal(length(r$endpoints), 1)
 
   end <- r$endpoints[[1]][[1]]

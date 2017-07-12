@@ -45,7 +45,7 @@ PlumberStep <- R6Class(
     },
     registerHook = function(stage=c("preexec", "postexec"), handler){
       stage <- match.arg(stage)
-      private$hooks[[stage]] <- c(private$hooks[[stage]], handler)
+      super$registerHook(stage, handler)
     }
   ),
   private = list(

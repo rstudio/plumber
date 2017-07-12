@@ -1,5 +1,10 @@
 plumber 0.4.0
 --------------------------------------------------------------------------------
+* BREAKING: Removed addGlobalProcessor method on Plumber routers
+* BREAKING: Removed `addAssets` method on Plumber routers. Use `PlumberStatic`
+  and the `mount` method to attach a static router.
+* BREAKING: Replaced `addEndpoint` method with `handle` method for Plumber 
+  routers.
 * BREAKING: Listen on localhost instead of listening publicly by default.
 * Add support for `entrypoint.R` when `plumb()`ing a directory. If this file 
   exists, it is expected to return a Plumber router representing the API

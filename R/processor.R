@@ -1,3 +1,5 @@
+# FIXME rip this out
+
 #' A plumber processor
 #' @include plumber.R
 PlumberProcessor <- R6Class(

@@ -8,6 +8,8 @@ PlumberStatic <- R6Class(
     initialize = function(direc, options){
       super$initialize(filters=NULL)
 
+      private$dir <- direc
+
       if(missing(direc)){
         stop("Cannot add asset directory when no directory was specified")
       }
@@ -69,6 +71,11 @@ PlumberStatic <- R6Class(
 
       filter <- PlumberFilter$new(paste("static-asset", direc, sep="|"), expr, private$envir)
       private$addFilterInternal(filter)
+    },
+    print = function(...){
+      cat("# Plumber static router serving from directory:", private$dir)
     }
+  ), private=list(
+    dir = NULL
   )
 )

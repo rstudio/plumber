@@ -64,7 +64,7 @@ hookable <- R6Class(
 #' @importFrom httpuv runServer
 plumber <- R6Class(
   "plumber",
-  inherit=hookable,
+  inherit = hookable,
   public = list(
     initialize = function(file=NULL, filters=defaultPlumberFilters){
 
@@ -99,9 +99,8 @@ plumber <- R6Class(
 
           srcref <- attr(e, "srcref")[[1]][c(1,3)]
 
-          # FIXME: adjust signature here
           activateBlock(srcref, private$lines, e, private$envir, private$addEndpointInternal,
-                        private$addFilterInternal, self$addAssets)
+                        private$addFilterInternal, self$mount)
         }
 
         private$globalSettings <- parseGlobals(private$fileLines)
@@ -120,7 +119,6 @@ plumber <- R6Class(
 
       httpuv::runServer(host, port, self)
     },
-    filter = function(){},
     mount = function(path, router){
       path <- gsub("/$", "", path)
       private$mnts[[path]] <- router
@@ -128,17 +126,10 @@ plumber <- R6Class(
     registerHook = function(stage=c("preroute", "postroute",
                                     "preserialize", "postserialize"), handler){
       stage <- match.arg(stage)
-      private$hooks[[stage]] <- c(private$hooks[[stage]], handler)
+      super$registerHook(stage, handler)
     },
 
     # FIXME: tests
-    delete = function(path, handler){ self$handle("DELETE", path, handler) },
-    get = function(path, handler){ self$handle("GET", path, handler) },
-    head = function(path, handler){ self$handle("HEAD", path, handler) },
-    options = function(path, handler){ self$handle("OPTIONS", path, handler) },
-    patch = function(path, handler){ self$handle("PATCH", path, handler) },
-    post = function(path, handler){ self$handle("POST", path, handler) },
-    put = function(path, handler){ self$handle("PUT", path, handler) },
     handle = function(methods, path, handler, preempt, serializer){
       if (missing(serializer)){
         serializer <- private$serializer
@@ -148,7 +139,7 @@ plumber <- R6Class(
       private$addEndpointInternal(ep, preempt)
     },
     print = function(...){
-      endCount <- sum(sapply(r$endpoints, length))
+      endCount <- sum(unlist(lapply(r$endpoints, length)))
       cat("# Plumber router with ", endCount, " endpoint", ifelse(endCount == 1, "", "s"),", ",
           length(private$filts), " filter", ifelse(length(private$filts) == 1, "", "s"),", and ",
           length(self$mounts), " sub-router", ifelse(length(self$mounts) == 1, "", "s"),".\n", sep="")
@@ -304,53 +295,24 @@ plumber <- R6Class(
       warning("WebSockets not supported.")
     },
 
-    # Legacy
-    setSerializer = function(name){}, # Set a default serializer
+    setSerializer = function(serlializer){
+      private$serializer <- serializer
+    }, # Set a default serializer
 
-    # Breaking: this isn't global anymore. Specific to router
-    addGlobalProcessor = function(proc){
-      self$registerHook("preroute", proc$pre)
-      self$registerHook("postroute", proc$post)
-    },
     set404Handler = function(fun){
       private$notFoundHandler <- fun
     },
     setErrorHandler = function(fun){
       private$errorHandler <- fun
     },
-    addAssets = function(dir, path="/public", options=list()){
-      if (substr(path, 1,1) != "/"){
-        path <- paste0("/", path)
-      }
 
-      stat <- PlumberStatic$new(dir, options)
-      self$mount(path, stat)
-    },
-
-    addEndpoint = function(verbs, path, expr, serializer, preempt=NULL){
-      # This function needs to support per-endpoint processors for e.g. png annotations
-      # This means that handle also has to support processors
-      # Which really points out that, more generally, our GET method, for instance,
-      # doesn't have a way to return PNGs.
-      # Perhaps we should consider these image processors being something that wrap the
-      # invocation of an endpoint definition? I really hate the idea that you have to
-      # specify processors manually when definining a GET endpoint. But maybe the question
-      # we should ask is: how do we want to define a GET endpoint that returns an image in
-      # R6?
-      self$handle(verbs, path, expr, preempt, serializer)
-    },
-    addFilter = function(name, expr, serializer){
+    filter = function(name, expr, serializer){
       filter <- PlumberFilter$new(name, expr, private$envir, serializer)
       private$addFilterInternal(filter)
     },
     swaggerFile = function(){}
 
   ), active = list(
-    mountPath = function(){ # read-only
-      # FIXME: is this needed?
-    },
-
-    # LEGACY
     endpoints = function(){ # read-only
       # TODO
       private$ends
@@ -363,14 +325,16 @@ plumber <- R6Class(
       private$mnts
     }
   ), private = list(
-    serializer = jsonSerializer(), # The default serializer
+    serializer = jsonSerializer(), # The default serializer for the router
+
     ends = list(), # List of endpoints indexed by their pre-empted filter.
     filts = NULL, # Array of filters
+    mnts = list(),
+
     envir = NULL, # The environment in which all API execution will be conducted
     lines = NULL, # The lines constituting the API
     parsed = NULL, # The parsed representation of the API
     globalSettings = list(info=list()), # Global settings for this API. Primarily used for Swagger docs.
-    mnts = list(),
 
     errorHandler = NULL,
     notFoundHandler = NULL,
