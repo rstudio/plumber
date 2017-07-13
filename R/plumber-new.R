@@ -62,6 +62,7 @@ hookable <- R6Class(
 #' @include parse-globals.R
 #' @export
 #' @importFrom httpuv runServer
+#' @import crayon
 plumber <- R6Class(
   "plumber",
   inherit = hookable,
@@ -151,15 +152,108 @@ plumber <- R6Class(
       ep <- PlumberEndpoint$new(methods, path, handler, private$envir, serializer)
       private$addEndpointInternal(ep, preempt)
     },
-    print = function(...){
-      endCount <- sum(unlist(lapply(r$endpoints, length)))
-      cat("# Plumber router with ", endCount, " endpoint", ifelse(endCount == 1, "", "s"),", ",
-          length(private$filts), " filter", ifelse(length(private$filts) == 1, "", "s"),", and ",
-          length(self$mounts), " sub-router", ifelse(length(self$mounts) == 1, "", "s"),".\n", sep="")
-      cat("# Call run() on this object to start the API.\n")
-      invisible(self)
+    print = function(prefix="", runHelp=TRUE, ...){
+      endCount <- as.character(sum(unlist(lapply(self$endpoints, length))))
+      cat(prefix, crayon::silver("# Plumber router with ", endCount, " endpoint", ifelse(endCount == 1, "", "s"),", ",
+          as.character(length(private$filts)), " filter", ifelse(length(private$filts) == 1, "", "s"),", and ",
+          as.character(length(self$mounts)), " sub-router", ifelse(length(self$mounts) == 1, "", "s"),".\n", sep=""), sep="")
+      if(runHelp){
+        cat(prefix, crayon::silver("# Call run() on this object to start the API.\n"), sep="")
+      }
 
-      # TODO: visualize the whole router. Colors? https://github.com/r-lib/crayon
+      # Filters
+      # TODO: scrub internal filters?
+      for (f in private$filts){
+        cat(prefix, "+--", crayon::green("[", f$name, "]", sep=""), "\n", sep="")
+      }
+
+      # Endpoints & Subrouters
+
+      paths <- list()
+
+      addPath <- function(node, children, endpoint){
+        if (length(children) == 0){
+          if (is.null(node)){
+            return(endpoint)
+          } else {
+            # Concat to existing.
+            return(c(node, endpoint))
+          }
+
+        }
+        if (is.null(node)){
+          node <- list()
+        }
+        node[[children[1]]] <- addPath(node[[children[1]]], children[-1], endpoint)
+        node
+      }
+
+      printEndpoints <- function(prefix, name, nodes){
+        if (is.list(nodes)){
+          verbs <- paste(sapply(nodes, function(n){ n$verbs }), collapse=", ")
+        } else {
+          verbs <- nodes$verbs
+        }
+        cat(prefix, crayon::blue("+--/", name, " (", verbs, ")\n", sep=""), sep="")
+      }
+
+      lapply(pr$endpoints, function(ends){
+        lapply(ends, function(e){
+          # Trim leading slash
+          path <- sub("^/", "", e$path)
+
+          levels <- strsplit(path, "/", fixed=TRUE)[[1]]
+          paths <<- addPath(paths, levels, e)
+        })
+      })
+
+      # Sub-routers
+      for(i in 1:length(self$mounts)){
+        # Trim leading slash
+        path <- sub("^/", "", names(self$mounts)[i])
+        levels <- strsplit(path, "/", fixed=TRUE)[[1]]
+
+        m <- self$mounts[[i]]
+        paths <- addPath(paths, levels, m)
+      }
+
+      # TODO: Sort lexicographically
+
+      printNode <- function(node, name="", prefix="", isRoot=FALSE){
+
+        childPref <- paste0(prefix, "|  ")
+        if (isRoot){
+          childPref <- prefix
+        }
+
+
+        if (is.list(node)){
+          if (is.null(names(node))) {
+            # This is a list of Plumber endpoints all mounted at this location. Collapse
+            printEndpoints(prefix, name, node)
+          } else{
+            # It's a list of other stuff.
+            if (!isRoot){
+              cat(prefix, "+--/", name, "\n", sep="")
+            }
+            for (i in 1:length(node)){
+              name <- names(node)[i]
+              printNode(node[[i]], name, childPref)
+            }
+          }
+        } else if ("plumber" %in% class(node)){
+          cat(prefix, "+--/", name, "\n", sep="")
+          # It's a router, let it print itself
+          print(node, prefix=childPref, runHelp=FALSE)
+        } else if ("PlumberEndpoint" %in% class(node)){
+          printEndpoints(prefix, name, node)
+        } else {
+          cat("??")
+        }
+      }
+      printNode(paths, "", prefix, TRUE)
+
+      invisible(self)
     },
 
     # FIXME: private?
