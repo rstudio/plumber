@@ -27,6 +27,8 @@ test_that("Errors call error handler", {
   }
 
   expect_equal(errors, 0)
-  htmlwidgetSerializer()(parse(text="hi"), list(), PlumberResponse$new("htmlwidget"), err = errHandler)
+  suppressWarnings(
+    htmlwidgetSerializer()(parse(text="hi"), list(), PlumberResponse$new("htmlwidget"), err = errHandler)
+  )
   expect_equal(errors, 1)
 })

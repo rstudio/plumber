@@ -16,11 +16,11 @@ test_that("cookies are set", {
 
   expr <- expression(function(req, res){ req$session <- list(abc=123); TRUE })
 
-  r$addEndpoint("GET", "/", expr)
+  r$handle("GET", "/", expr)
 
   sc <- sessionCookie("mysecret", name="plcook")
 
-  r$addGlobalProcessor(sc)
+  r$registerHooks(sc)
 
   res <- PlumberResponse$new()
   r$serve(make_req("GET", "/"), res)
@@ -39,11 +39,11 @@ test_that("cookies are read", {
 
   expr <- expression(function(req, res){ req$session$abc })
 
-  r$addEndpoint("GET", "/", expr)
+  r$handle("GET", "/", expr)
 
   sc <- sessionCookie("mysecret", name="plcook")
 
-  r$addGlobalProcessor(sc)
+  r$registerHooks(sc)
 
   res <- PlumberResponse$new()
 
@@ -61,11 +61,11 @@ test_that("invalid cookies/JSON are handled", {
 
   expr <- expression(function(req, res){ ifelse(is.null(req$session), "NULL", req$session) })
 
-  r$addEndpoint("GET", "/", expr)
+  r$handle("GET", "/", expr)
 
   sc <- sessionCookie("mysecret", name="plcook")
 
-  r$addGlobalProcessor(sc)
+  r$registerHooks(sc)
 
   res <- PlumberResponse$new()
 

@@ -85,7 +85,8 @@ test_that("no directory throws error", {
 
 test_that("expressions work as options", {
   pr <- plumber$new()
-  pr$addAssets("files/static", "/public", {list()})
+  stat <- PlumberStatic$new("files/static", {list()})
+  pr$mount("/public", stat)
 
   res <- PlumberResponse$new()
   pr$route(make_req("GET", "/public/test.txt"), res)

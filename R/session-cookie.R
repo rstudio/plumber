@@ -18,9 +18,9 @@ sessionCookie <- function(key, name="plumber", ...){
     key <- PKI::PKI.digest(charToRaw(key), "SHA256")
   }
 
-  PlumberProcessor$new(
-    "sessionCookie",
-    pre=function(req, res, data){
+  # Return a list that can be added to registerHooks()
+  list(
+    preroute = function(req, res, data){
 
       cookies <- req$cookies
       if (is.null(cookies)){
@@ -46,7 +46,7 @@ sessionCookie <- function(key, name="plumber", ...){
       }
       req$session <- session
     },
-    post=function(value, req, res, data){
+    postroute = function(value, req, res, data){
       if (!is.null(req$session)){
         sess <- jsonlite::toJSON(req$session)
         if (!is.null(key)){
