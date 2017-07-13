@@ -5,7 +5,6 @@
 #' @param name The name of the cookie in the user's browser.
 #' @param ... Arguments passed on to the \code{response$setCookie} call to,
 #'   for instance, set the cookie's expiration.
-#' @include processor.R
 #' @include plumber.R
 #' @export
 sessionCookie <- function(key, name="plumber", ...){

@@ -186,7 +186,7 @@ parseBlock <- function(lineNum, file){
 }
 
 #' Activate a "block" of code found in a plumber API file.
-#' @include processor-image.R
+#' @include images.R
 #' @noRd
 activateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, mount) {
   lineNum <- srcref[1] - 1
