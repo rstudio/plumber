@@ -117,6 +117,18 @@ plumber <- R6Class(
         setwd(dirname(private$filename))
       }
 
+      if (swagger){
+        sf <- self$swaggerFile()
+        # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
+        fun <- function(){}
+        body(fun) <- sf
+        self$handle("GET", "/swagger.json", fun, serializer=unboxedJsonSerializer())
+
+        plumberFileServer <- PlumberStatic$new(system.file("swagger-ui", package = "plumber"))
+        self$mount("/__swagger__", plumberFileServer)
+        message("Running the swagger UI at http://127.0.0.1:", port, "/__swagger__/")
+      }
+
       httpuv::runServer(host, port, self)
     },
     mount = function(path, router){
@@ -146,6 +158,8 @@ plumber <- R6Class(
           length(self$mounts), " sub-router", ifelse(length(self$mounts) == 1, "", "s"),".\n", sep="")
       cat("# Call run() on this object to start the API.\n")
       invisible(self)
+
+      # TODO: visualize the whole router. Colors? https://github.com/r-lib/crayon
     },
 
     # FIXME: private?
@@ -311,7 +325,16 @@ plumber <- R6Class(
       filter <- PlumberFilter$new(name, expr, private$envir, serializer)
       private$addFilterInternal(filter)
     },
-    swaggerFile = function(){}
+    swaggerFile = function(){
+        endpoints <- prepareSwaggerEndpoints(self$endpoints)
+
+        # Extend the previously parsed settings with the endpoints
+        def <- modifyList(private$globalSettings, list(paths=endpoints))
+
+        # Lay those over the default globals so we ensure that the required fields
+        # (like API version) are satisfied.
+        modifyList(defaultGlobals, def)
+    }
 
   ), active = list(
     endpoints = function(){ # read-only
