@@ -72,8 +72,12 @@ PlumberStatic <- R6Class(
       filter <- PlumberFilter$new(paste("static-asset", direc, sep="|"), expr, private$envir)
       private$addFilterInternal(filter)
     },
-    print = function(prefix="", ...){
-      cat(prefix, crayon::silver("# Plumber static router serving from directory:", private$dir, "\n"), sep="")
+    print = function(prefix="", topLevel=TRUE, ...){
+      cat(prefix)
+      if (!topLevel){
+        cat("\u2502 ")
+      }
+      cat(crayon::silver("# Plumber static router serving from directory:", private$dir, "\n"))
     }
   ), private=list(
     dir = NULL

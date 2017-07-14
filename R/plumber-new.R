@@ -152,101 +152,73 @@ plumber <- R6Class(
       ep <- PlumberEndpoint$new(methods, path, handler, private$envir, serializer)
       private$addEndpointInternal(ep, preempt)
     },
-    print = function(prefix="", runHelp=TRUE, ...){
+    print = function(prefix="", topLevel=TRUE, ...){
       endCount <- as.character(sum(unlist(lapply(self$endpoints, length))))
-      cat(prefix, crayon::silver("# Plumber router with ", endCount, " endpoint", ifelse(endCount == 1, "", "s"),", ",
+
+      # Reference on box characters: https://en.wikipedia.org/wiki/Box-drawing_character
+
+      cat(prefix)
+      if (!topLevel){
+        cat("\u2502 ") # "| "
+      }
+      cat(crayon::silver("# Plumber router with ", endCount, " endpoint", ifelse(endCount == 1, "", "s"),", ",
           as.character(length(private$filts)), " filter", ifelse(length(private$filts) == 1, "", "s"),", and ",
-          as.character(length(self$mounts)), " sub-router", ifelse(length(self$mounts) == 1, "", "s"),".\n", sep=""), sep="")
-      if(runHelp){
+          as.character(length(self$mounts)), " sub-router", ifelse(length(self$mounts) == 1, "", "s"),".\n", sep=""))
+
+      if(topLevel){
         cat(prefix, crayon::silver("# Call run() on this object to start the API.\n"), sep="")
       }
 
       # Filters
       # TODO: scrub internal filters?
       for (f in private$filts){
-        cat(prefix, "+--", crayon::green("[", f$name, "]", sep=""), "\n", sep="")
+        cat(prefix, "\u251c\u2500\u2500", crayon::green("[", f$name, "]", sep=""), "\n", sep="") # "+--"
       }
 
-      # Endpoints & Subrouters
+      paths <- self$routes
 
-      paths <- list()
-
-      addPath <- function(node, children, endpoint){
-        if (length(children) == 0){
-          if (is.null(node)){
-            return(endpoint)
-          } else {
-            # Concat to existing.
-            return(c(node, endpoint))
-          }
-
-        }
-        if (is.null(node)){
-          node <- list()
-        }
-        node[[children[1]]] <- addPath(node[[children[1]]], children[-1], endpoint)
-        node
-      }
-
-      printEndpoints <- function(prefix, name, nodes){
+      printEndpoints <- function(prefix, name, nodes, isLast){
         if (is.list(nodes)){
           verbs <- paste(sapply(nodes, function(n){ n$verbs }), collapse=", ")
         } else {
           verbs <- nodes$verbs
         }
-        cat(prefix, crayon::blue("+--/", name, " (", verbs, ")\n", sep=""), sep="")
+        cat(prefix)
+        if (isLast){
+          cat("\u2514") # "|_"
+        } else {
+          cat("\u251c")  # "+"
+        }
+        cat(crayon::blue("\u2500\u2500/", name, " (", verbs, ")\n", sep=""), sep="") # "+--"
       }
 
-      lapply(pr$endpoints, function(ends){
-        lapply(ends, function(e){
-          # Trim leading slash
-          path <- sub("^/", "", e$path)
+      printNode <- function(node, name="", prefix="", isRoot=FALSE, isLast = FALSE){
 
-          levels <- strsplit(path, "/", fixed=TRUE)[[1]]
-          paths <<- addPath(paths, levels, e)
-        })
-      })
-
-      # Sub-routers
-      for(i in 1:length(self$mounts)){
-        # Trim leading slash
-        path <- sub("^/", "", names(self$mounts)[i])
-        levels <- strsplit(path, "/", fixed=TRUE)[[1]]
-
-        m <- self$mounts[[i]]
-        paths <- addPath(paths, levels, m)
-      }
-
-      # TODO: Sort lexicographically
-
-      printNode <- function(node, name="", prefix="", isRoot=FALSE){
-
-        childPref <- paste0(prefix, "|  ")
+        childPref <- paste0(prefix, "\u2502  ")
         if (isRoot){
           childPref <- prefix
         }
 
-
         if (is.list(node)){
           if (is.null(names(node))) {
             # This is a list of Plumber endpoints all mounted at this location. Collapse
-            printEndpoints(prefix, name, node)
+            printEndpoints(prefix, name, node, isLast)
           } else{
             # It's a list of other stuff.
             if (!isRoot){
-              cat(prefix, "+--/", name, "\n", sep="")
+              cat(prefix, "\u251c\u2500\u2500/", name, "\n", sep="") # "+--"
             }
             for (i in 1:length(node)){
               name <- names(node)[i]
-              printNode(node[[i]], name, childPref)
+              printNode(node[[i]], name, childPref, isLast = i == length(node))
             }
           }
         } else if ("plumber" %in% class(node)){
-          cat(prefix, "+--/", name, "\n", sep="")
+          cat(prefix, "\u251c\u2500\u2500/", name, "\n", sep="") # "+--"
           # It's a router, let it print itself
-          print(node, prefix=childPref, runHelp=FALSE)
+          print(node, prefix=childPref, topLevel=FALSE)
         } else if ("PlumberEndpoint" %in% class(node)){
-          printEndpoints(prefix, name, node)
+          printEndpoints(prefix, name, node, isLast)
         } else {
           cat("??")
         }
@@ -441,6 +413,51 @@ plumber <- R6Class(
     },
     mounts = function(){ # read-only
       private$mnts
+    },
+
+    routes = function(){
+      paths <- list()
+
+      addPath <- function(node, children, endpoint){
+        if (length(children) == 0){
+          if (is.null(node)){
+            return(endpoint)
+          } else {
+            # Concat to existing.
+            return(c(node, endpoint))
+          }
+
+        }
+        if (is.null(node)){
+          node <- list()
+        }
+        node[[children[1]]] <- addPath(node[[children[1]]], children[-1], endpoint)
+        node
+      }
+
+      lapply(pr$endpoints, function(ends){
+        lapply(ends, function(e){
+          # Trim leading slash
+          path <- sub("^/", "", e$path)
+
+          levels <- strsplit(path, "/", fixed=TRUE)[[1]]
+          paths <<- addPath(paths, levels, e)
+        })
+      })
+
+      # Sub-routers
+      for(i in 1:length(self$mounts)){
+        # Trim leading slash
+        path <- sub("^/", "", names(self$mounts)[i])
+        levels <- strsplit(path, "/", fixed=TRUE)[[1]]
+
+        m <- self$mounts[[i]]
+        paths <- addPath(paths, levels, m)
+      }
+
+      # TODO: Sort lexicographically
+
+      paths
     }
   ), private = list(
     serializer = jsonSerializer(), # The default serializer for the router
