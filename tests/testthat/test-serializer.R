@@ -113,3 +113,22 @@ test_that("Empty serializers fail", {
 test_that("Non-existant serializers fail", {
   expect_error(plumber$new("files/serializer-nonexistent.R"), regexp="No such @serializer")
 })
+
+
+test_that("nullSerializer serializes properly", {
+  v <- "<html><h1>Hi!</h1></html>"
+  val <- nullSerializer()(v, list(), PlumberResponse$new(), stop)
+  expect_equal(val$status, 200L)
+  expect_equal(val$body, v)
+})
+
+test_that("nullSerializer errors call error handler", {
+  errors <- 0
+  errHandler <- function(req, res, err){
+    errors <<- errors + 1
+  }
+
+  expect_equal(errors, 0)
+  nullSerializer()(parse(stop("I crash")), list(), PlumberResponse$new("json"), err = errHandler)
+  expect_equal(errors, 1)
+})
