@@ -14,13 +14,6 @@ test_that("empty contentType errors", {
 
 test_that("contentType works in files", {
 
-  make_req <- function(verb, path){
-    req <- new.env()
-    req$REQUEST_METHOD <- toupper(verb)
-    req$PATH_INFO <- path
-    req$rook.input <- list(read_lines = function(){ "" })
-    req
-  }
   res <- PlumberResponse$new()
 
   r <- plumber$new("files/content-type.R")

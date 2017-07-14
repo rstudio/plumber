@@ -1,6 +1,6 @@
 context("Sessions")
 
-make_req <- function(verb, path, cookie){
+make_req_cookie <- function(verb, path, cookie){
   req <- new.env()
   req$REQUEST_METHOD <- toupper(verb)
   req$PATH_INFO <- path
@@ -23,7 +23,7 @@ test_that("cookies are set", {
   r$registerHooks(sc)
 
   res <- PlumberResponse$new()
-  r$serve(make_req("GET", "/"), res)
+  r$serve(make_req_cookie("GET", "/"), res)
 
   key <- PKI::PKI.digest(charToRaw("mysecret"), "SHA256")
   cook <- res$headers[["Set-Cookie"]]
@@ -51,7 +51,7 @@ test_that("cookies are read", {
   key <- PKI::PKI.digest(charToRaw("mysecret"), "SHA256")
   data <- '{"abc":[123]}'
   enc <- PKI::PKI.encrypt(charToRaw(data), key, "aes256")
-  r$serve(make_req("GET", "/", paste0('plcook=', base64enc::base64encode(enc))), res)
+  r$serve(make_req_cookie("GET", "/", paste0('plcook=', base64enc::base64encode(enc))), res)
 
   expect_equal(res$body, jsonlite::toJSON(123))
 })
@@ -73,7 +73,7 @@ test_that("invalid cookies/JSON are handled", {
   data <- '{"abc":[123]}'
   enc <- PKI::PKI.encrypt(charToRaw(data), key, "aes256")
   expect_warning({
-    r$serve(make_req("GET", "/", paste0('plcook=', base64enc::base64encode(enc))), res)
+    r$serve(make_req_cookie("GET", "/", paste0('plcook=', base64enc::base64encode(enc))), res)
   })
   expect_equal(res$body, jsonlite::toJSON("NULL"))
 })

@@ -198,12 +198,9 @@ plumber <- R6Class(
 
       httpuv::runServer(host, port, self)
     },
-    #FIXME: test
     mount = function(path, router){
-      # Don't trim if the path is only a / -- i.e. it's both trailing and leading.
-      if (!identical(path, "/")){
-        path <- gsub("/$", "", path)
-      }
+      path <- sub("([^/])$", "\\1/", path)
+
       private$mnts[[path]] <- router
     },
     #FIXME: test
@@ -222,7 +219,6 @@ plumber <- R6Class(
       ep <- PlumberEndpoint$new(methods, path, handler, private$envir, serializer)
       private$addEndpointInternal(ep, preempt)
     },
-    # FIXME: test
     print = function(prefix="", topLevel=TRUE, ...){
       endCount <- as.character(sum(unlist(lapply(self$endpoints, length))))
 
@@ -299,7 +295,6 @@ plumber <- R6Class(
       invisible(self)
     },
 
-    # FIXME: private?
     serve = function(req, res){
       hookEnv <- new.env()
 
@@ -326,8 +321,6 @@ plumber <- R6Class(
       }
     },
 
-    # FIXME: private?
-    #   Unfortunately we have to call this on subrouters
     route = function(req, res){
       getHandle <- function(filt){
         handlers <- private$ends[[filt]]
@@ -409,11 +402,12 @@ plumber <- R6Class(
         # We aren't going to serve this endpoint; see if any mounted routers will
         for (mountPath in names(private$mnts)){
           # TODO: support globbing?
-          if (nchar(path) > nchar(mountPath) && substr(path, 0, nchar(mountPath)) == mountPath){
-            # This is a prefix match. Let this router handle.
+
+          if (nchar(path) >= nchar(mountPath) && substr(path, 0, nchar(mountPath)) == mountPath){
+            # This is a prefix match or exact match. Let this router handle.
 
             # First trim the prefix off of the PATH_INFO element
-            req$PATH_INFO <- substr(req$PATH_INFO, nchar(mountPath)+1, nchar(req$PATH_INFO))
+            req$PATH_INFO <- substr(req$PATH_INFO, nchar(mountPath), nchar(req$PATH_INFO))
             return(private$mnts[[mountPath]]$route(req, res))
           }
         }
@@ -484,7 +478,7 @@ plumber <- R6Class(
       private$mnts
     },
 
-    routes = function(){  #FIXME: test
+    routes = function(){
       paths <- list()
 
       addPath <- function(node, children, endpoint){

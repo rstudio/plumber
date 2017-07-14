@@ -115,7 +115,7 @@ test_that("routes can be constructed correctly", {
   expect_true("plumberstatic" %in% class(pr$routes[["static"]]))
   expect_true("plumber" %in% class(pr$routes[["mysubpath"]]))
 
-  # 2 endpoints at the same location (different)
+  # 2 endpoints at the same location (different verbs)
   expect_length(pr$routes$nested$path$here, 2)
 })
 
@@ -133,12 +133,8 @@ test_that("mounts can be read correctly", {
   pr$mount("/static", stat)
 
   expect_length(pr$routes, 3)
-  expect_true("plumberstatic" %in% class(pr$mounts[["/static"]]))
-  expect_true("plumber" %in% class(pr$mounts[["/mysubpath"]]))
-})
-
-test_that("routes work when mounted at root path", {
-  testthat::skip("NYI")
+  expect_true("plumberstatic" %in% class(pr$mounts[["/static/"]]))
+  expect_true("plumber" %in% class(pr$mounts[["/mysubpath/"]]))
 })
 
 test_that("prints correctly", {
@@ -180,4 +176,54 @@ test_that("prints correctly", {
     expect_match(printed[i], regexps[i], info=paste0("on line ", i))
   }
 
+})
+
+test_that("mounts work", {
+  pr <- plumber$new()
+  sub <- plumber$new()
+  sub$handle("GET", "/", function(){ 1 })
+  sub$handle("GET", "/nested/path", function(){ 2 })
+
+  pr$mount("/subpath", sub)
+
+  res <- PlumberResponse$new()
+  pr$route(make_req("GET", "/nested/path"), res)
+  expect_equal(res$status, 404)
+
+  val <- pr$route(make_req("GET", "/subpath/nested/path"), PlumberResponse$new())
+  expect_equal(val, 2)
+
+  val <- pr$route(make_req("GET", "/subpath/"), PlumberResponse$new())
+  expect_equal(val, 1)
+})
+
+test_that("mounting at root path works", {
+  pr <- plumber$new()
+  sub <- plumber$new()
+  sub$handle("GET", "/", function(){ 1 })
+  sub$handle("GET", "/nested/path", function(){ 2 })
+
+  pr$mount("/", sub)
+
+  val <- pr$route(make_req("GET", "/nested/path"), PlumberResponse$new())
+  expect_equal(val, 2)
+
+  val <- pr$route(make_req("GET", "/"), PlumberResponse$new())
+  expect_equal(val, 1)
+})
+
+test_that("conflicting mounts behave consistently", {
+  pr <- plumber$new()
+
+  sub <- plumber$new()
+  sub$handle("GET", "/", function(){ 1 })
+  pr$mount("/subpath", sub)
+
+  val <- pr$route(make_req("GET", "/subpath/"), PlumberResponse$new())
+  expect_equal(val, 1)
+
+  pr$handle("GET", "/subpath/", function(){ 2 })
+
+  val <- pr$route(make_req("GET", "/subpath/"), PlumberResponse$new())
+  expect_equal(val, 2)
 })

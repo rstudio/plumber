@@ -1,13 +1,5 @@
 context("Images")
 
-make_req <- function(verb, path){
-  req <- new.env()
-  req$REQUEST_METHOD <- toupper(verb)
-  req$PATH_INFO <- path
-  req$rook.input <- list(read_lines = function(){ "" })
-  req
-}
-
 test_that("Images are properly rendered", {
   r <- plumber$new("files/image.R")
   resp <- r$serve(make_req("GET", "/png"), PlumberResponse$new())
