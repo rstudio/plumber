@@ -76,11 +76,11 @@ test_that("Overridden serializers apply on filters and endpoints", {
 
   res <- PlumberResponse$new()
   expect_equal(r$serve(make_req("GET", "/short-json"), res)$body, jsonlite::toJSON("JSON"))
-  expect_equal(res$serializer, jsonSerializer())
+  expect_equal_functions(res$serializer, jsonSerializer())
 
   res <- PlumberResponse$new()
   expect_equal(r$serve(make_req("GET", "/short-html"), res)$body, "HTML")
-  expect_equal(res$serializer, htmlSerializer())
+  expect_equal_functions(res$serializer, htmlSerializer())
 
   res <- PlumberResponse$new()
   body <- r$serve(make_req("GET", "/single-arg-ser"), res)$body
