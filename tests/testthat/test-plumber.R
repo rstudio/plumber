@@ -98,3 +98,86 @@ test_that("The old roxygen-style comments work", {
   expect_equal(r$endpoints[[1]][[4]]$exec(), 14)
 })
 
+test_that("routes can be constructed correctly", {
+  pr <- plumber$new()
+  pr$handle("GET", "/nested/path/here", function(){})
+  pr$handle("POST", "/nested/path/here", function(){})
+
+  pr2 <- plumber$new()
+  pr2$handle("POST", "/something", function(){})
+  pr2$handle("GET", "/", function(){})
+  pr$mount("/mysubpath", pr2)
+
+  stat <- PlumberStatic$new(".")
+  pr$mount("/static", stat)
+
+  expect_length(pr$routes, 3)
+  expect_true("plumberstatic" %in% class(pr$routes[["static"]]))
+  expect_true("plumber" %in% class(pr$routes[["mysubpath"]]))
+
+  # 2 endpoints at the same location (different)
+  expect_length(pr$routes$nested$path$here, 2)
+})
+
+test_that("mounts can be read correctly", {
+  pr <- plumber$new()
+  pr$handle("GET", "/nested/path/here", function(){})
+  pr$handle("POST", "/nested/path/here", function(){})
+
+  pr2 <- plumber$new()
+  pr2$handle("POST", "/something", function(){})
+  pr2$handle("GET", "/", function(){})
+  pr$mount("/mysubpath", pr2)
+
+  stat <- PlumberStatic$new(".")
+  pr$mount("/static", stat)
+
+  expect_length(pr$routes, 3)
+  expect_true("plumberstatic" %in% class(pr$mounts[["/static"]]))
+  expect_true("plumber" %in% class(pr$mounts[["/mysubpath"]]))
+})
+
+test_that("routes work when mounted at root path", {
+  testthat::skip("NYI")
+})
+
+test_that("prints correctly", {
+  pr <- plumber$new()
+  pr$handle("GET", "/nested/path/here", function(){})
+  pr$handle("POST", "/nested/path/here", function(){})
+
+  pr2 <- plumber$new()
+  pr2$handle("POST", "/something", function(){})
+  pr2$handle("GET", "/", function(){})
+  pr$mount("/mysubpath", pr2)
+
+  stat <- PlumberStatic$new(".")
+  pr$mount("/static", stat)
+
+  printed <- capture.output(print(pr))
+
+  regexps <- c(
+    "Plumber router with 2 endpoints, 3 filters, and 2 sub-routers",
+    "Call run\\(\\) on this object",
+    "├──\\[queryString\\]",
+    "├──\\[postBody\\]",
+    "├──\\[cookieParser\\]",
+    "├──/nested",
+    "│  ├──/path",
+    "│  │  └──/here \\(GET, POST\\)",
+    "├──/mysubpath",
+    "│  │ # Plumber router with 2 endpoints, 3 filters, and 0 sub-routers.",
+    "│  ├──\\[queryString\\]",
+    "│  ├──\\[postBody\\]",
+    "│  ├──\\[cookieParser\\]",
+    "│  ├──/something \\(POST\\)",
+    "│  └──/ \\(GET\\)",
+    "├──/static",
+    "│  │ # Plumber static router serving from directory: \\."
+  )
+
+  for (i in 1:length(regexps)){
+    expect_match(printed[i], regexps[i], info=paste0("on line ", i))
+  }
+
+})

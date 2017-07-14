@@ -201,7 +201,9 @@ plumber <- R6Class(
     #FIXME: test
     mount = function(path, router){
       # Don't trim if the path is only a / -- i.e. it's both trailing and leading.
-      path <- gsub("[^^]/$", "", path)
+      if (!identical(path, "/")){
+        path <- gsub("/$", "", path)
+      }
       private$mnts[[path]] <- router
     },
     #FIXME: test
@@ -502,7 +504,7 @@ plumber <- R6Class(
         node
       }
 
-      lapply(pr$endpoints, function(ends){
+      lapply(self$endpoints, function(ends){
         lapply(ends, function(e){
           # Trim leading slash
           path <- sub("^/", "", e$path)
@@ -513,13 +515,16 @@ plumber <- R6Class(
       })
 
       # Sub-routers
-      for(i in 1:length(self$mounts)){
-        # Trim leading slash
-        path <- sub("^/", "", names(self$mounts)[i])
-        levels <- strsplit(path, "/", fixed=TRUE)[[1]]
+      if (length(self$mounts) > 0){
+        for(i in 1:length(self$mounts)){
+          # Trim leading slash
+          path <- sub("^/", "", names(self$mounts)[i])
 
-        m <- self$mounts[[i]]
-        paths <- addPath(paths, levels, m)
+          levels <- strsplit(path, "/", fixed=TRUE)[[1]]
+
+          m <- self$mounts[[i]]
+          paths <- addPath(paths, levels, m)
+        }
       }
 
       # TODO: Sort lexicographically
