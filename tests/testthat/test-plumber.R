@@ -227,3 +227,45 @@ test_that("conflicting mounts behave consistently", {
   val <- pr$route(make_req("GET", "/subpath/"), PlumberResponse$new())
   expect_equal(val, 2)
 })
+
+test_that("hooks can be registered", {
+  pr <- plumber$new()
+  events <- NULL
+  pr$handle("GET", "/", function(){ events <<- c(events, "exec") })
+  pr$registerHook("preroute", function(){ events <<- c(events, "preroute") })
+  pr$registerHook("postroute", function(){ events <<- c(events, "postroute") })
+  pr$registerHook("preserialize", function(){ events <<- c(events, "preserialize") })
+  pr$registerHook("postserialize", function(){ events <<- c(events, "postserialize") })
+
+  pr$serve(make_req("GET", "/"), PlumberResponse$new())
+  expect_equal(events, c("preroute", "exec", "postroute", "preserialize", "postserialize"))
+})
+
+test_that("preroute hook gets the right data", {
+  pr <- plumber$new()
+  pr$handle("GET", "/", function(){ events <<- c(events, "exec") })
+
+  pr$registerHook("preroute", function(data, req, res){
+    print("PlumberResponse" %in% class(res))
+    print("PlumberRequest" %in% class(req))
+    expect_true(is.environment(data))
+  })
+  pr$serve(make_req("GET", "/"), PlumberResponse$new())
+})
+
+test_that("postroute hook gets the right data", {
+  testthat::skip("NYI")
+})
+
+test_that("preserialize hook gets the right data", {
+  testthat::skip("NYI")
+})
+
+test_that("postserialize hook gets the right data", {
+  testthat::skip("NYI")
+})
+
+test_that("invalid hooks err", {
+  pr <- plumber$new()
+  expect_error(pr$registerHook("flargdarg"))
+})
