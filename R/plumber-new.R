@@ -7,6 +7,7 @@ defaultPlumberFilters <- list(
   postBody = postBodyFilter,
   cookieParser = cookieFilter)
 
+# FIXME: test
 hookable <- R6Class(
   "hookable",
   public=list(
@@ -132,11 +133,13 @@ plumber <- R6Class(
 
       httpuv::runServer(host, port, self)
     },
+    #FIXME: test
     mount = function(path, router){
       # Don't trim if the path is only a / -- i.e. it's both trailing and leading.
       path <- gsub("[^^]/$", "", path)
       private$mnts[[path]] <- router
     },
+    #FIXME: test
     registerHook = function(stage=c("preroute", "postroute",
                                     "preserialize", "postserialize"), handler){
       stage <- match.arg(stage)
@@ -152,6 +155,7 @@ plumber <- R6Class(
       ep <- PlumberEndpoint$new(methods, path, handler, private$envir, serializer)
       private$addEndpointInternal(ep, preempt)
     },
+    # FIXME: test
     print = function(prefix="", topLevel=TRUE, ...){
       endCount <- as.character(sum(unlist(lapply(self$endpoints, length))))
 
@@ -391,7 +395,7 @@ plumber <- R6Class(
       filter <- PlumberFilter$new(name, expr, private$envir, serializer)
       private$addFilterInternal(filter)
     },
-    swaggerFile = function(){
+    swaggerFile = function(){ #FIXME: test
         endpoints <- prepareSwaggerEndpoints(self$endpoints)
 
         # Extend the previously parsed settings with the endpoints
@@ -404,18 +408,16 @@ plumber <- R6Class(
 
   ), active = list(
     endpoints = function(){ # read-only
-      # TODO
       private$ends
     },
     filters = function(){ # read-only
-      # TODO
       private$filts
     },
     mounts = function(){ # read-only
       private$mnts
     },
 
-    routes = function(){
+    routes = function(){  #FIXME: test
       paths <- list()
 
       addPath <- function(node, children, endpoint){
