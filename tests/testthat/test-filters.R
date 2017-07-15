@@ -1,13 +1,5 @@
 context("filters")
 
-make_req <- function(verb, path){
-  req <- new.env()
-  req$REQUEST_METHOD <- toupper(verb)
-  req$PATH_INFO <- path
-  req$rook.input <- list(read_lines = function(){ "" })
-  req
-}
-
 test_that("Filters work", {
   r <- plumber$new("files/filters.R")
   expect_equal(length(r$filters), 3+2) #3 for post, query string, and cookie filters
@@ -49,20 +41,13 @@ test_that("Terminal filters indeed terminate", {
 test_that("complete addFilter works", {
   r <- plumber$new()
 
-  processor <- PlumberProcessor$new("proc1", function(req, res, data){
-    data$pre <- TRUE
-  }, function(val, req, res, data){
-    res$setHeader("post", TRUE)
-    res$setHeader("pre", data$pre)
-  })
-
   serializer <- "ser"
 
   name <- "fullFilter"
   expr <- expression(function(req, res){res$setHeader("expr", TRUE)})
 
   baseFilters <- length(r$filters)
-  r$addFilter(name, expr, serializer, list(processor))
+  r$filter(name, expr, serializer)
   expect_equal(length(r$filters), baseFilters+1)
 
   fil <- r$filters[[baseFilters+1]]
@@ -76,8 +61,6 @@ test_that("complete addFilter works", {
 
   h <- res$headers
   expect_true(h$expr)
-  expect_true(h$pre)
-  expect_true(h$post)
 })
 
 # No processors or serializer
@@ -88,7 +71,7 @@ test_that("sparse addFilter works", {
   expr <- expression(function(req, res){res$setHeader("expr", TRUE)})
 
   baseFilters <- length(r$filters)
-  r$addFilter(name, expr)
+  r$filter(name, expr)
   expect_equal(length(r$filters), baseFilters+1)
 
   fil <- r$filters[[baseFilters+1]]
@@ -110,7 +93,7 @@ test_that("sparse addFilter with a function works", {
   expr <- function(req, res){res$setHeader("expr", TRUE)}
 
   baseFilters <- length(r$filters)
-  r$addFilter(name, expr)
+  r$filter(name, expr)
   expect_equal(length(r$filters), baseFilters+1)
 
   fil <- r$filters[[baseFilters+1]]

@@ -1,13 +1,5 @@
 context("Paths")
 
-make_req <- function(verb, path){
-  req <- new.env()
-  req$REQUEST_METHOD <- toupper(verb)
-  req$PATH_INFO <- path
-  req$rook.input <- list(read_lines = function(){ "" })
-  req
-}
-
 test_that("paths are properly converted", {
   varRegex <- "([^\\./]+)"
   p <- createPathRegex("/car/")
@@ -58,6 +50,7 @@ test_that("path regex's are created properly", {
 
 test_that("integration of path parsing works", {
   r <- plumber$new("files/path-params.R")
+
   expect_equal(r$route(make_req("GET", "/car/13"), PlumberResponse$new()), "13")
   expect_equal(r$route(make_req("GET", "/car/15/sell/$15,000"), PlumberResponse$new()), list(id="15", price="$15,000"))
   expect_equal(r$route(make_req("POST", "/car/13"), PlumberResponse$new()), "13")

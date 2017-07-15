@@ -10,6 +10,10 @@ defaultErrorHandler <-function(req, res, err){
 
   li <- list(error="500 - Internal server error")
 
+  # FIXME
+  .globals$debug <- FALSE
+  # Don't overly leak data unless they opt-in
+
   if (.globals$debug){
     li["message"] <- as.character(err)
   }
