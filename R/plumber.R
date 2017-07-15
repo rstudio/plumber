@@ -316,7 +316,7 @@ plumber <- R6Class(
 
         private$runHooks("preserialize", list(data=hookEnv, req=req, res=res, value=val))
         out <- ser(val, req, res, private$errorHandler)
-        private$runHooks("postserialize", list(data=hookEnv, req=req, res=res, value=val, serialized=out))
+        private$runHooks("postserialize", list(data=hookEnv, req=req, res=res, value=val))
         out
       }
     },

@@ -243,26 +243,54 @@ test_that("hooks can be registered", {
 
 test_that("preroute hook gets the right data", {
   pr <- plumber$new()
-  pr$handle("GET", "/", function(){ events <<- c(events, "exec") })
+  pr$handle("GET", "/", function(){ })
+  rqst <- make_req("GET", "/")
 
   pr$registerHook("preroute", function(data, req, res){
-    print("PlumberResponse" %in% class(res))
-    print("PlumberRequest" %in% class(req))
+    expect_true("PlumberResponse" %in% class(res))
+    expect_equal(rqst, req)
     expect_true(is.environment(data))
   })
-  pr$serve(make_req("GET", "/"), PlumberResponse$new())
+  pr$serve(rqst, PlumberResponse$new())
 })
 
 test_that("postroute hook gets the right data", {
-  testthat::skip("NYI")
+  pr <- plumber$new()
+  pr$handle("GET", "/abc", function(){ 123 })
+
+  pr$registerHook("postroute", function(data, req, res, value){
+    expect_true("PlumberResponse" %in% class(res))
+    expect_equal(req$PATH_INFO, "/abc")
+    expect_true(is.environment(data))
+    expect_equal(value, 123)
+  })
+  pr$serve(make_req("GET", "/abc"), PlumberResponse$new())
 })
 
 test_that("preserialize hook gets the right data", {
-  testthat::skip("NYI")
+  pr <- plumber$new()
+  pr$handle("GET", "/abc", function(){ 123 })
+
+  pr$registerHook("preserialize", function(data, req, res, value){
+    expect_true("PlumberResponse" %in% class(res))
+    expect_equal(req$PATH_INFO, "/abc")
+    expect_true(is.environment(data))
+    expect_equal(value, 123)
+  })
+  pr$serve(make_req("GET", "/abc"), PlumberResponse$new())
 })
 
 test_that("postserialize hook gets the right data", {
-  testthat::skip("NYI")
+  pr <- plumber$new()
+  pr$handle("GET", "/abc", function(){ 123 })
+
+  pr$registerHook("postserialize", function(data, req, res, value){
+    expect_true("PlumberResponse" %in% class(res))
+    expect_equal(req$PATH_INFO, "/abc")
+    expect_true(is.environment(data))
+    expect_equal(value, 123)
+  })
+  pr$serve(make_req("GET", "/abc"), PlumberResponse$new())
 })
 
 test_that("invalid hooks err", {
