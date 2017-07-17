@@ -1,11 +1,26 @@
 plumber 0.4.0
 --------------------------------------------------------------------------------
-* BREAKING: Removed addGlobalProcessor method on Plumber routers
-* BREAKING: Removed `addAssets` method on Plumber routers. Use `PlumberStatic`
-  and the `mount` method to attach a static router.
-* BREAKING: Replaced `addEndpoint` method with `handle` method for Plumber 
-  routers.
 * BREAKING: Listen on localhost instead of listening publicly by default.
+* BREAKING: Removed `PlumberProcessor` class and replaced with a notion of 
+  hooks. See `registerHook` and `registerHooks` on the Plumber router.
+* BREAKING: `addGlobalProcessor` method on Plumber routers now takes a list
+  which are added as hooks instead of a Processor. Note that `sessionCookie`
+  has also been updated to behave accordingly, meaning that the convention of
+  `pr$addGlobalProcessor(sessionCookie("secret", "cookieName"))` will continue
+  to work for this release.
+* BREAKING: `sessionCookie` now returns a list instead of a Processor. Note 
+  that `addGlobalProcessor` has also been updated to behave accordingly, 
+  meaning that the convention of 
+  `pr$addGlobalProcessor(sessionCookie("secret", "cookieName"))` will continue
+  to work for this release.
+* DEPRECATION: Deprecated the `addAssets` method on Plumber routers. Use 
+  `PlumberStatic` and the `mount` method to attach a static router.
+* DEPRECATION: Deprecated the `addEndpoint` method in favor of the `handle` 
+  method for Plumber routers. Removed support for the `processors`, `params`, 
+  and `comments` parameters are no longer supported.
+* DEPRECATION: Deprecated the `addFilter` method on Plumber routers in favor 
+  of the new `filter` method. Removed support for the processor parameter.
+* DEPRECATION: Deprecated the `addGlobalProcessor` method on Plumber routers.
 * Add support for `entrypoint.R` when `plumb()`ing a directory. If this file 
   exists, it is expected to return a Plumber router representing the API
   contained in this directory. If it doesn't exist, the bahvior is unaltered.
@@ -16,7 +31,6 @@ plumber 0.3.3
 --------------------------------------------------------------------------------
 * `plumb()` now accepts an argument `dir`, referring to a directory containing
   `plumber.R`, which may be provided instead of `file`.
-
 
 plumber 0.3.2
 --------------------------------------------------------------------------------

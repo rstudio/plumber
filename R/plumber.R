@@ -465,8 +465,39 @@ plumber <- R6Class(
       # Lay those over the default globals so we ensure that the required fields
       # (like API version) are satisfied.
       modifyList(defaultGlobals, def)
-    }
+    },
 
+    ### Legacy/Deprecated
+    addEndpoint = function(verbs, path, expr, serializer, processors, preempt=NULL, params=NULL, comments){
+      warning("addEndpoint has been deprecated in v0.4.0 and will be removed in a coming release. Please use `handle()` instead.")
+      if (!missing(processors) || !missing(params) || !missing(comments)){
+        stop("The processors, params, and comments parameters are no longer supported.")
+      }
+
+      self$handle(verbs, path, expr, preempt, serializer)
+    },
+    addAssets = function(dir, path="/public", options=list()){
+      warning("addAssets has been deprecated in v0.4.0 and will be removed in a coming release. Please use `mount` and `PlumberStatic$new()` instead.")
+      if (substr(path, 1,1) != "/"){
+        path <- paste0("/", path)
+      }
+
+      stat <- PlumberStatic$new(dir, options)
+      self$mount(path, stat)
+    },
+    addFilter = function(name, expr, serializer, processors){
+      warning("addFilter has been deprecated in v0.4.0 and will be removed in a coming release. Please use `filter` instead.")
+      if (!missing(processors)){
+        stop("The processors parameter is no longer supported.")
+      }
+
+      filter <- PlumberFilter$new(name, expr, private$envir, serializer)
+      private$addFilterInternal(filter)
+    },
+    addGlobalProcessor = function(proc){
+      warning("addGlobalProcessor has been deprecated in v0.4.0 and will be removed in a coming release. Please use `registerHook`(s) instead.")
+      self$registerHooks(proc)
+    }
   ), active = list(
     endpoints = function(){ # read-only
       private$ends
