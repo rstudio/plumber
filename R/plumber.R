@@ -72,7 +72,6 @@ defaultPlumberFilters <- list(
   postBody = postBodyFilter,
   cookieParser = cookieFilter)
 
-# FIXME: test
 hookable <- R6Class(
   "hookable",
   public=list(
@@ -90,6 +89,9 @@ hookable <- R6Class(
   ), private=list(
     hooks = list( ),
     runHooks = function(stage, args){
+      if (missing(args)){
+        args <- list()
+      }
       value <- args$value
       for (h in private$hooks[[stage]]){
         ar <- getRelevantArgs(args, plumberExpression=h)
@@ -111,6 +113,7 @@ hookable <- R6Class(
 
 #' Plumber Router
 #'
+#' FIXME: update docs
 #' Routers are the core request handler in plumber. A router is responsible for
 #' taking an incoming request, submitting it through the appropriate filters and
 #' eventually to a corresponding endpoint, if one is found.
@@ -203,7 +206,6 @@ plumber <- R6Class(
 
       private$mnts[[path]] <- router
     },
-    #FIXME: test
     registerHook = function(stage=c("preroute", "postroute",
                                     "preserialize", "postserialize"), handler){
       stage <- match.arg(stage)
