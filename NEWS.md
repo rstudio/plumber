@@ -21,11 +21,17 @@ plumber 0.4.0
 * DEPRECATION: Deprecated the `addFilter` method on Plumber routers in favor 
   of the new `filter` method. Removed support for the processor parameter.
 * DEPRECATION: Deprecated the `addGlobalProcessor` method on Plumber routers.
+* The undocumented `setDefaultErrorHandler` method on Plumber routers now takes
+  a function that returns the error handler function. The top-level function
+  takes a single param named `debug` which is managed by the `debug` parameter
+  in the `run()` method.
 * Add support for `entrypoint.R` when `plumb()`ing a directory. If this file 
   exists, it is expected to return a Plumber router representing the API
   contained in this directory. If it doesn't exist, the bahvior is unaltered.
   If both `plumber.R` and `entrypoint.R` exist, `entrypoint.R` takes precedence.
 * `plumb()` the current directory by default if no arguments are provided.
+* Added a `debug` parameter to the `run` method which can be set to `TRUE` in
+  order to get more insight into your API errors.
 
 plumber 0.3.3
 --------------------------------------------------------------------------------

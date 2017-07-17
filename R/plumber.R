@@ -154,7 +154,7 @@ plumber <- R6Class(
         private$filts <- c(private$filts, fil)
       }
 
-      private$errorHandler <- defaultErrorHandler
+      private$errorHandler <- defaultErrorHandler()
       private$notFoundHandler <- default404Handler
 
       if (!is.null(file)){
@@ -176,8 +176,11 @@ plumber <- R6Class(
       }
 
     },
-    run = function(host='127.0.0.1', port=8000, swagger=interactive()){
+    run = function(host='127.0.0.1', port=8000, swagger=interactive(),
+                   debug=interactive()){
       message("Starting server to listen on port ", port)
+
+      private$errorHandler <- defaultErrorHandler(debug)
 
       # Set and restore the wd to make it appear that the proc is running local to the file's definition.
       if (!is.null(private$filename)){
