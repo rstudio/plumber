@@ -297,3 +297,47 @@ test_that("invalid hooks err", {
   pr <- plumber$new()
   expect_error(pr$registerHook("flargdarg"))
 })
+
+test_that("handle invokes correctly", {
+  pr <- plumber$new()
+  pr$handle("GET", "/trailslash", function(){ "getter" })
+  pr$handle("POST", "/trailslash/", function(){ "poster" })
+
+  expect_equal(pr$route(make_req("GET", "/trailslash"), PlumberResponse$new()), "getter")
+  res <- PlumberResponse$new()
+  pr$route(make_req("GET", "/trailslash/"), res) # With trailing slash
+  expect_equal(res$status, 404)
+  res <- PlumberResponse$new()
+  pr$route(make_req("POST", "/trailslash"), res) # Wrong verb
+  expect_equal(res$status, 404)
+
+  expect_equal(pr$route(make_req("POST", "/trailslash/"), PlumberResponse$new()), "poster")
+  res <- PlumberResponse$new()
+  pr$route(make_req("POST", "/trailslash"), res) # w/o trailing slash
+  expect_equal(res$status, 404)
+  res <- PlumberResponse$new()
+  pr$route(make_req("GET", "/trailslash/"), res) # Wrong verb
+  expect_equal(res$status, 404)
+})
+
+test_that("full handle call works", {
+  pr <- plumber$new()
+  pr$filter("f1", function(req){ req$filtered <- TRUE; forward() })
+
+  pr$handle("GET", "/preempt", function(req){
+    expect_null(req$filtered)
+    "preempted"
+  }, "f1", unboxedJsonSerializer())
+
+  pr$handle("GET", "/dontpreempt", function(req){
+    expect_true(req$filtered)
+    "unpreempted"
+  }, serializer=unboxedJsonSerializer())
+
+  res <- PlumberResponse$new()
+  val <- pr$route(make_req("GET", "/preempt"), res)
+  expect_equal(val, "preempted") # no JSON box
+  res <- PlumberResponse$new()
+  val <- pr$route(make_req("GET", "/dontpreempt"), res)
+  expect_equal(val, "unpreempted") # no JSON box
+})

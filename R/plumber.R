@@ -212,7 +212,6 @@ plumber <- R6Class(
       super$registerHook(stage, handler)
     },
 
-    # FIXME: tests
     handle = function(methods, path, handler, preempt, serializer){
       if (missing(serializer)){
         serializer <- private$serializer
