@@ -341,3 +341,26 @@ test_that("full handle call works", {
   val <- pr$route(make_req("GET", "/dontpreempt"), res)
   expect_equal(val, "unpreempted") # no JSON box
 })
+
+test_that("Expressions and functions both work on handle", function(){
+  pr <- plumber$new()
+  pr$handle("GET", "/function", function(req){ req[["PATH_INFO"]] })
+  pr$handle("GET", "/expression", expression(function(req){ req[["PATH_INFO"]] }))
+
+  val <- pr$route(make_req("GET", "/function"), PlumberResponse$new())
+  expect_equal(val, "/function")
+  val <- pr$route(make_req("GET", "/expression"), PlumberResponse$new())
+  expect_equal(val, "/expression")
+})
+
+test_that("Expressions and functions both work on filter", function(){
+  pr <- plumber$new()
+  pr$filter("ff", function(req){ req$filteredF <- TRUE; forward() })
+  pr$filter("fe", expression(function(req){ req$filteredE <- TRUE; forward() }))
+  pr$handle("GET", "/", function(req){
+    req$filteredE && req$filteredF
+  })
+
+  val <- pr$route(make_req("GET", "/"), PlumberResponse$new())
+  expect_true(val)
+})
