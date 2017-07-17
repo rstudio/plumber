@@ -66,7 +66,7 @@ plumb <- function(file, dir="."){
 
 #' @include query-string.R
 #' @include post-body.R
-#' #' @include cookie-parser.R
+#' @include cookie-parser.R
 defaultPlumberFilters <- list(
   queryString = queryStringFilter,
   postBody = postBodyFilter,
