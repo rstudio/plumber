@@ -153,19 +153,21 @@ test_that("prints correctly", {
   printed <- capture.output(print(pr))
 
   regexps <- c(
-    "Plumber router with 2 endpoints, 3 filters, and 2 sub-routers",
+    "Plumber router with 2 endpoints, 4 filters, and 2 sub-routers",
     "Call run\\(\\) on this object",
     "├──\\[queryString\\]",
     "├──\\[postBody\\]",
     "├──\\[cookieParser\\]",
+    "├──\\[sharedSecret\\]",
     "├──/nested",
     "│  ├──/path",
     "│  │  └──/here \\(GET, POST\\)",
     "├──/mysubpath",
-    "│  │ # Plumber router with 2 endpoints, 3 filters, and 0 sub-routers.",
+    "│  │ # Plumber router with 2 endpoints, 4 filters, and 0 sub-routers.",
     "│  ├──\\[queryString\\]",
     "│  ├──\\[postBody\\]",
     "│  ├──\\[cookieParser\\]",
+    "│  ├──\\[sharedSecret\\]",
     "│  ├──/something \\(POST\\)",
     "│  └──/ \\(GET\\)",
     "├──/static",

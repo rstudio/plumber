@@ -43,6 +43,7 @@ Collate:
     'parse-block.R'
     'globals.R'
     'serializer-json.R'
+    'shared-secret-filter.R'
     'post-body.R'
     'query-string.R'
     'plumber.R'
@@ -59,6 +60,5 @@ Collate:
     'serializer-xml.R'
     'serializer.R'
     'session-cookie.R'
-    'shared-secret-filter.R'
     'swagger.R'
 RoxygenNote: 6.0.1
