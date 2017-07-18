@@ -67,10 +67,12 @@ plumb <- function(file, dir="."){
 #' @include query-string.R
 #' @include post-body.R
 #' @include cookie-parser.R
+#' @include shared-secret-filter.R
 defaultPlumberFilters <- list(
   queryString = queryStringFilter,
   postBody = postBodyFilter,
-  cookieParser = cookieFilter)
+  cookieParser = cookieFilter,
+  sharedSecret = sharedSecretFilter)
 
 hookable <- R6Class(
   "hookable",

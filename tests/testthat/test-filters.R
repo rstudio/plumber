@@ -2,10 +2,10 @@ context("filters")
 
 test_that("Filters work", {
   r <- plumber$new("files/filters.R")
-  expect_equal(length(r$filters), 3+2) #3 for post, query string, and cookie filters
+  expect_equal(length(r$filters), 4+2) #4 for post, query string, cookie, and shared secret filters
 
-  expect_equal(r$filters[[4]]$name, "something")
-  expect_equal(r$filters[[5]]$name, "nospace")
+  expect_equal(r$filters[[5]]$name, "something")
+  expect_equal(r$filters[[6]]$name, "nospace")
 })
 
 test_that("Filters can update req$args", {

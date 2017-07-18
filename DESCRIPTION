@@ -43,6 +43,7 @@ Collate:
     'parse-block.R'
     'globals.R'
     'serializer-json.R'
+    'shared-secret-filter.R'
     'post-body.R'
     'query-string.R'
     'plumber.R'
