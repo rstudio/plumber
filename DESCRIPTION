@@ -23,7 +23,8 @@ Imports:
     R6 (>= 2.0.0),
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
-    httpuv (>= 1.2.3)
+    httpuv (>= 1.2.3),
+    crayon
 LazyData: TRUE
 Suggests:
     testthat (>= 0.11.0),
@@ -38,19 +39,19 @@ Collate:
     'content-types.R'
     'cookie-parser.R'
     'parse-globals.R'
+    'images.R'
     'parse-block.R'
     'globals.R'
     'serializer-json.R'
+    'post-body.R'
+    'query-string.R'
     'plumber.R'
     'default-handlers.R'
     'digital-ocean.R'
     'includes.R'
     'paths.R'
+    'plumber-static.R'
     'plumber-step.R'
-    'post-body.R'
-    'processor.R'
-    'processor-image.R'
-    'query-string.R'
     'response.R'
     'serializer-content-type.R'
     'serializer-html.R'

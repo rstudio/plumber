@@ -1,4 +1,7 @@
 
+# can't really test these.
+# nocov start
+
 checkAnalogSea <- function(){
   if (!requireNamespace("analogsea", quietly = TRUE)) {
     stop("The analogsea package is not available but is required in order to use the provisioning functions. Please install analogsea.",
@@ -394,3 +397,4 @@ do_remove_forward <- function(droplet){
   analogsea::droplet_ssh(droplet, "systemctl reload nginx")
 }
 
+# nocov end
