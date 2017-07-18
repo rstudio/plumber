@@ -48,6 +48,7 @@ Collate:
     'plumber.R'
     'default-handlers.R'
     'digital-ocean.R'
+    'find-port.R'
     'includes.R'
     'paths.R'
     'plumber-static.R'
