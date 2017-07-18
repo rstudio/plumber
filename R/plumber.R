@@ -96,7 +96,7 @@ hookable <- R6Class(
       for (h in private$hooks[[stage]]){
         ar <- getRelevantArgs(args, plumberExpression=h)
 
-        value <- do.call(h, ar)
+        value <- do.call(h, ar) #TODO: envir=private$envir?
 
         if ("value" %in% names(ar)){
           # Special case, retain the returned value from the hook

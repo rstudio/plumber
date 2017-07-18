@@ -40,7 +40,7 @@ PlumberStep <- R6Class(
       hookEnv <- new.env()
 
       private$runHooks("preexec", c(list(data=hookEnv), list(...)))
-      val <- do.call(private$func, args)
+      val <- do.call(private$func, args, envir=private$envir)
       private$runHooks("postexec", c(list(data=hookEnv, value=val), list(...)))
     },
     registerHook = function(stage=c("preexec", "postexec"), handler){

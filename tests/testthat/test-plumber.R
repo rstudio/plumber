@@ -372,7 +372,7 @@ test_that("Expressions and functions both work on filter", function(){
   expect_true(val)
 })
 
-test_that("Injected environments work", function(){
+test_that("filters and endpoint expressions evaluated in the appropriate (possibly injected) environment", function(){
   # Create an environment that contains a variable named `y`.
   env <- new.env(parent=.GlobalEnv)
   env$y <- 10
@@ -387,4 +387,28 @@ test_that("Injected environments work", function(){
   # Send a request through and we should see an assign to our env.
   val <- pr$route(make_req("GET", "/"), PlumberResponse$new())
   expect_equal(val, "10 100")
+})
+
+test_that("filters and endpoints executed in the appropriate environment", function(){
+  # We've already seen that, if expressions, they're going to be evaluated in the
+  # appropriate environment, but we can also confirm that once they've been evaluated,
+  # they're then executed in the appropriate environment.
+
+  # This almost certainly doesn't matter unless a function is inspecting the call stack,
+  # but for the sake of consistency we not only ensure that any given expressions are
+  # evaluated in the appropriate environment, but also that they are then called in the
+  # given environment, as well.
+
+  env <- new.env(parent=.GlobalEnv)
+
+  pr <- plumber$new(envir=env)
+  pr$filter("ff", expression(function(req){ req$filterEnv <- parent.frame(); forward() }))
+  pr$handle("GET", "/", expression(function(req){
+    expect_identical(req$filterEnv, parent.frame())
+    parent.frame()
+  }))
+
+  # Send a request through and we should see an assign to our env.
+  val <- pr$route(make_req("GET", "/"), PlumberResponse$new())
+  expect_identical(env, val)
 })
