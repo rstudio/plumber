@@ -22,12 +22,12 @@ test_that("Routing to errors and 404s works", {
   expect_equal(notFounds, 0)
 
   nf <- r$route(make_req("GET", "/something-crazy"), res)
-  expect_equal(res$serializer, jsonSerializer())
+  expect_equal(res$serializer, serializer_json())
   expect_equal(nf, notFoundRes)
   expect_equal(notFounds, 1)
 
   er <- r$route(make_req("GET", "/error"), res)
-  expect_equal(res$serializer, jsonSerializer())
+  expect_equal(res$serializer, serializer_json())
   expect_equal(er, errRes)
   expect_equal(errors, 1)
 })

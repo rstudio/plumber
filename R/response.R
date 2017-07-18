@@ -1,7 +1,7 @@
 PlumberResponse <- R6Class(
   "PlumberResponse",
   public = list(
-    initialize = function(serializer=jsonSerializer()){
+    initialize = function(serializer=serializer_json()){
       self$serializer <- serializer
     },
     status = 200L,
