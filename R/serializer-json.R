@@ -1,5 +1,6 @@
-#' @noRd
 #' @include globals.R
+#' @rdname serializers
+#' @export
 jsonSerializer <- function(){
   function(val, req, res, errorHandler){
     tryCatch({
@@ -16,8 +17,9 @@ jsonSerializer <- function(){
 }
 .globals$serializers[["json"]] <- jsonSerializer
 
-#' @noRd
 #' @include globals.R
+#' @rdname serializers
+#' @export
 unboxedJsonSerializer <- function(){
   function(val, req, res, errorHandler){
     tryCatch({

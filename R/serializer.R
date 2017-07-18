@@ -1,3 +1,13 @@
+#' Plumber Serializers
+#'
+#' Serializers are used in Plumber to transform the R object produced by a
+#' filter/endpoint into an HTTP response that can be returned to the client. See
+#' [here](https://book.rplumber.io/rendering-and-output.html#serializers) for
+#' more details on Plumber serializers and how to customize their behavior.
+#' @name serializers
+#' @rdname serializers
+NULL
+
 #' Add a Serializer
 #'
 #' A serializer is responsible for translating a generated R value into output

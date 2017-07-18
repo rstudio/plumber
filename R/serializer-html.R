@@ -1,3 +1,5 @@
+#' @rdname serializers
+#' @export
 htmlSerializer <- function(){
   function(val, req, res, errorHandler){
     tryCatch({

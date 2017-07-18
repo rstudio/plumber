@@ -1,5 +1,6 @@
-#' @noRd
 #' @include globals.R
+#' @rdname serializers
+#' @export
 htmlwidgetSerializer <- function(){
   function(val, req, res, errorHandler){
     tryCatch({
