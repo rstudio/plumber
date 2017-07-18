@@ -26,10 +26,15 @@ PlumberResponse <- R6Class(
       # request to be on a separate TCP stream
       h$Connection = "close"
 
+      body <- self$body
+      if (is.null(body)){
+        body <- ""
+      }
+
       list(
         status = self$status,
         headers = h,
-        body = self$body
+        body = body
       )
     },
     # TODO: support multiple setCookies per response
