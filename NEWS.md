@@ -1,6 +1,9 @@
 plumber 0.4.0
 --------------------------------------------------------------------------------
 * BREAKING: Listen on localhost instead of listening publicly by default.
+* BREAKING: Listen on a random port by default instead of always on 8000. This
+  can be controlled using the `port` parameter in `run()`, or by setting the 
+  `plumber.port` option.
 * BREAKING: Removed `PlumberProcessor` class and replaced with a notion of 
   hooks. See `registerHook` and `registerHooks` on the Plumber router.
 * BREAKING: `addGlobalProcessor` method on Plumber routers now takes a list
