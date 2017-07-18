@@ -363,4 +363,28 @@ test_that("Expressions and functions both work on filter", function(){
 
   val <- pr$route(make_req("GET", "/"), PlumberResponse$new())
   expect_true(val)
+
+  pr$handle("GET", "/expr", expression(function(req){
+    req$filteredE && req$filteredF
+  }))
+
+  val <- pr$route(make_req("GET", "/expr"), PlumberResponse$new())
+  expect_true(val)
+})
+
+test_that("Injected environments work", function(){
+  # Create an environment that contains a variable named `y`.
+  env <- new.env(parent=.GlobalEnv)
+  env$y <- 10
+
+  # We provide expressions so that they get closurified in the right environment
+  # and will be able to find `y`.
+  # This would all fail without an injected environment that contains `y`.
+  pr <- plumber$new(envir=env)
+  pr$filter("ff", expression(function(req){ req$ys <- y^2; forward() }))
+  pr$handle("GET", "/", expression(function(req){ paste(y, req$ys) }))
+
+  # Send a request through and we should see an assign to our env.
+  val <- pr$route(make_req("GET", "/"), PlumberResponse$new())
+  expect_equal(val, "10 100")
 })

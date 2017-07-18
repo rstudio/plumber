@@ -135,14 +135,17 @@ plumber <- R6Class(
   "plumber",
   inherit = hookable,
   public = list(
-    initialize = function(file=NULL, filters=defaultPlumberFilters){
+    initialize = function(file=NULL, filters=defaultPlumberFilters, envir){
 
       if (!is.null(file) && !file.exists(file)){
         stop("File does not exist: ", file)
       }
 
-      # TODO: is this safe for sub-routers? Would be nice if all routers shared an env by default, no?
-      private$envir <- new.env(parent=.GlobalEnv)
+      if (missing(envir)){
+        private$envir <- new.env(parent=.GlobalEnv)
+      } else {
+        private$envir <- envir
+      }
 
       if (is.null(filters)){
         filters <- list()
