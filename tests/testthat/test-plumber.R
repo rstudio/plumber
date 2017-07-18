@@ -327,12 +327,12 @@ test_that("full handle call works", {
   pr$handle("GET", "/preempt", function(req){
     expect_null(req$filtered)
     "preempted"
-  }, "f1", unboxedJsonSerializer())
+  }, "f1", serializer_unboxed_json())
 
   pr$handle("GET", "/dontpreempt", function(req){
     expect_true(req$filtered)
     "unpreempted"
-  }, serializer=unboxedJsonSerializer())
+  }, serializer=serializer_unboxed_json())
 
   res <- PlumberResponse$new()
   val <- pr$route(make_req("GET", "/preempt"), res)

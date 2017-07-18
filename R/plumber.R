@@ -197,7 +197,7 @@ plumber <- R6Class(
         # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
         fun <- function(){}
         body(fun) <- sf
-        self$handle("GET", "/swagger.json", fun, serializer=unboxedJsonSerializer())
+        self$handle("GET", "/swagger.json", fun, serializer=serializer_unboxed_json())
 
         plumberFileServer <- PlumberStatic$new(system.file("swagger-ui", package = "plumber"))
         self$mount("/__swagger__", plumberFileServer)
@@ -563,7 +563,7 @@ plumber <- R6Class(
       paths
     }
   ), private = list(
-    serializer = jsonSerializer(), # The default serializer for the router
+    serializer = serializer_json(), # The default serializer for the router
 
     ends = list(), # List of endpoints indexed by their pre-empted filter.
     filts = NULL, # Array of filters

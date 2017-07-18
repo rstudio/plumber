@@ -2,7 +2,7 @@ context("JSON serializer")
 
 test_that("JSON serializes properly", {
   l <- list(a=1, b=2, c="hi")
-  val <- jsonSerializer()(l, list(), PlumberResponse$new(), stop)
+  val <- serializer_json()(l, list(), PlumberResponse$new(), stop)
   expect_equal(val$status, 200L)
   expect_equal(val$headers$`Content-Type`, "application/json")
   expect_equal(val$body, jsonlite::toJSON(l))
@@ -15,7 +15,7 @@ test_that("Errors call error handler", {
   }
 
   expect_equal(errors, 0)
-  jsonSerializer()(parse(text="hi"), list(), PlumberResponse$new("json"), err = errHandler)
+  serializer_json()(parse(text="hi"), list(), PlumberResponse$new("json"), err = errHandler)
   expect_equal(errors, 1)
 })
 
@@ -23,7 +23,7 @@ context("Unboxed JSON serializer")
 
 test_that("Unboxed JSON serializes properly", {
   l <- list(a=1, b=2, c="hi")
-  val <- unboxedJsonSerializer()(l, list(), PlumberResponse$new(), stop)
+  val <- serializer_unboxed_json()(l, list(), PlumberResponse$new(), stop)
   expect_equal(val$status, 200L)
   expect_equal(val$headers$`Content-Type`, "application/json")
   expect_equal(val$body, jsonlite::toJSON(l, auto_unbox = TRUE))
@@ -36,6 +36,6 @@ test_that("Unboxed JSON errors call error handler", {
   }
 
   expect_equal(errors, 0)
-  unboxedJsonSerializer()(parse(text="hi"), list(), PlumberResponse$new("json"), err = errHandler)
+  serializer_unboxed_json()(parse(text="hi"), list(), PlumberResponse$new("json"), err = errHandler)
   expect_equal(errors, 1)
 })

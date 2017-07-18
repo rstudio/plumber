@@ -13,7 +13,7 @@ renderWidget <- function(){
 
 test_that("htmlwidgets serialize properly", {
   w <- renderWidget()
-  val <- htmlwidgetSerializer()(w, list(), PlumberResponse$new(), stop)
+  val <- serializer_htmlwidget()(w, list(), PlumberResponse$new(), stop)
   expect_equal(val$status, 200L)
   expect_equal(val$headers$`Content-Type`, "text/html; charset=utf-8")
   # Check that content is encoded
@@ -28,7 +28,7 @@ test_that("Errors call error handler", {
 
   expect_equal(errors, 0)
   suppressWarnings(
-    htmlwidgetSerializer()(parse(text="hi"), list(), PlumberResponse$new("htmlwidget"), err = errHandler)
+    serializer_htmlwidget()(parse(text="hi"), list(), PlumberResponse$new("htmlwidget"), err = errHandler)
   )
   expect_equal(errors, 1)
 })
