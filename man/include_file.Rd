@@ -34,4 +34,3 @@ Returns the file at the given path as the response.
 process the given markdown file through \code{rmarkdown::render} and return
 the resultant HTML as a response.
 }
-

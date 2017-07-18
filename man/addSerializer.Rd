@@ -13,8 +13,7 @@ addSerializer(name, serializer)
 }
 \description{
 A serializer is responsible for translating a generated R value into output
-that a remote user can understand. For instance, the \code{jsonSerializer}
+that a remote user can understand. For instance, the \code{serializer_json}
 serializes R objects into JSON before returning them to the user. The list of
 available serializers in plumber is global.
 }
-

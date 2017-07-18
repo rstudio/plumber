@@ -2,7 +2,8 @@
 #' @import stringi
 NULL
 
-verbs <- c("GET", "PUT", "POST", "DELETE")
+# used to identify annotation flags.
+verbs <- c("GET", "PUT", "POST", "DELETE", "HEAD")
 enumerateVerbs <- function(v){
   if (identical(v, "use")){
     return(verbs)
@@ -10,9 +11,106 @@ enumerateVerbs <- function(v){
   toupper(v)
 }
 
-stopOnLine <- function(private, line, msg){
-  stop("Error on line #", line, ": '",private$fileLines[line],"' - ", msg)
+#' @rdname plumber
+#' @export
+plumb <- function(file, dir="."){
+
+  dirMode <- NULL
+
+  if (!missing(file) && !missing(dir)){
+    # Both were explicitly set. Error
+    stop("You must set either the file or the directory parameter, not both")
+
+  } else if (missing(file)){
+    if (identical(dir, "")){
+      # dir and file are both empty. Error
+      stop("You must specify either a file or directory parameter")
+    }
+
+    # Parse dir
+    dirMode <- TRUE
+    dir <- sub("/$", "", dir)
+    file <- file.path(dir, "plumber.R")
+
+  } else {
+    # File was specified
+    dirMode <- FALSE
+  }
+
+  if (dirMode && file.exists(file.path(dir, "entrypoint.R"))){
+    # Dir was specified and we found an entrypoint.R
+
+    old <- setwd(dir)
+    on.exit(setwd(old))
+
+    # Expect that entrypoint will provide us with the router
+    x <- source("entrypoint.R")
+
+    # source returns a list with value and visible elements, we want the (visible) value object.
+    pr <- x$value
+    if (!("plumber" %in% class(pr))){
+      stop("entrypoint.R must return a runnable Plumber router.")
+    }
+
+    pr
+  } else if (file.exists(file)) {
+    # Plumber file found
+
+    plumber$new(file)
+  } else {
+    # Couldn't find the Plumber file nor an entrypoint
+    stop("File does not exist: ", file)
+  }
 }
+
+
+#' @include query-string.R
+#' @include post-body.R
+#' @include cookie-parser.R
+defaultPlumberFilters <- list(
+  queryString = queryStringFilter,
+  postBody = postBodyFilter,
+  cookieParser = cookieFilter,
+  sharedSecret = sharedSecretFilter)
+
+hookable <- R6Class(
+  "hookable",
+  public=list(
+    registerHook = function(stage, handler){
+      private$hooks[[stage]] <- c(private$hooks[[stage]], handler)
+    },
+    registerHooks = function(handlers){
+      for (i in 1:length(handlers)){
+        stage <- names(handlers)[i]
+        h <- handlers[[i]]
+
+        self$registerHook(stage, h)
+      }
+    }
+  ), private=list(
+    hooks = list( ),
+    runHooks = function(stage, args){
+      if (missing(args)){
+        args <- list()
+      }
+      value <- args$value
+      for (h in private$hooks[[stage]]){
+        ar <- getRelevantArgs(args, plumberExpression=h)
+
+        value <- do.call(h, ar) #TODO: envir=private$envir?
+
+        if ("value" %in% names(ar)){
+          # Special case, retain the returned value from the hook
+          # and pass it in as the value for the next handler.
+          # Ultimately, return value from this function
+          args$value <- value
+        }
+      }
+      value
+    }
+  )
+)
+
 
 #' Plumber Router
 #'
@@ -23,34 +121,48 @@ stopOnLine <- function(private, line, msg){
 #' See \url{http://plumber.trestletech.com/docs/programmatic/} for additional
 #' details on the methods available on this object.
 #' @param file The file to parse as the plumber router definition
+#' @param dir The directory containing the `plumber.R` file to parse as the
+#'   plumber router definition. Alternatively, if an `entrypoint.R` file is
+#'   found, it will take precedence and be responsible for returning a runnable
+#'   Plumber router.
 #' @include globals.R
 #' @include serializer-json.R
+#' @include parse-block.R
+#' @include parse-globals.R
 #' @export
 #' @importFrom httpuv runServer
+#' @import crayon
 plumber <- R6Class(
   "plumber",
+  inherit = hookable,
   public = list(
-    endpoints = list(),
-    filters = NULL,
-    debug = TRUE,
-    initialize = function(file=NULL) {
+    initialize = function(file=NULL, filters=defaultPlumberFilters, envir){
+
       if (!is.null(file) && !file.exists(file)){
         stop("File does not exist: ", file)
       }
 
-      private$errorHandler <- defaultErrorHandler
+      if (missing(envir)){
+        private$envir <- new.env(parent=.GlobalEnv)
+      } else {
+        private$envir <- envir
+      }
+
+      if (is.null(filters)){
+        filters <- list()
+      }
+
+      # Add in the initial filters
+      for (fn in names(filters)){
+        fil <- PlumberFilter$new(fn, filters[[fn]], private$envir, private$serializer, NULL)
+        private$filts <- c(private$filts, fil)
+      }
+
+      private$errorHandler <- defaultErrorHandler()
       private$notFoundHandler <- default404Handler
 
-      self$filters <- c(self$filters, PlumberFilter$new("queryString", queryStringFilter, private$envir, private$defaultSerializer, NULL, NULL))
-      self$filters <- c(self$filters, PlumberFilter$new("postBody", postBodyFilter, private$envir, private$defaultSerializer, NULL, NULL))
-      self$filters <- c(self$filters, PlumberFilter$new("cookieParser", cookieFilter, private$envir, private$defaultSerializer, NULL, NULL))
-      self$filters <- c(self$filters, PlumberFilter$new("sharedSecret", sharedSecretFilter, private$envir, private$defaultSerializer, NULL, NULL))
-
-      private$filename <- file
-      private$envir <- new.env()
-
       if (!is.null(file)){
-        private$fileLines <- readLines(file)
+        private$lines <- readLines(file)
         private$parsed <- parse(file, keep.source=TRUE)
 
         source(file, local=private$envir, echo=FALSE, keep.source=TRUE)
@@ -60,226 +172,144 @@ plumber <- R6Class(
 
           srcref <- attr(e, "srcref")[[1]][c(1,3)]
 
-          # Check to see if this function was annotated with a plumber annotation
-          line <- srcref[1] - 1
+          activateBlock(srcref, private$lines, e, private$envir, private$addEndpointInternal,
+                        private$addFilterInternal, self$mount)
+        }
 
-          path <- NULL
-          verbs <- NULL
-          preempt <- NULL
-          filter <- NULL
-          image <- NULL
-          serializer <- NULL
-          assets <- NULL
-          while (line > 0 && (stri_detect_regex(private$fileLines[line], pattern="^#['\\*]") || stri_trim_both(private$fileLines[line]) == "")){
-            epMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@(get|put|post|use|delete)(\\s+(.*)$)?")
-            if (!is.na(epMat[1,2])){
-              p <- stri_trim_both(epMat[1,4])
+        private$globalSettings <- parseGlobals(private$fileLines)
+      }
 
-              if (is.na(p) || p == ""){
-                stopOnLine(private,line, "No path specified.")
-              }
+    },
+    run = function(host='127.0.0.1', port=8000, swagger=interactive(),
+                   debug=interactive()){
+      message("Starting server to listen on port ", port)
 
-              verbs <- c(verbs, enumerateVerbs(epMat[1,2]))
-              path <- p
+      private$errorHandler <- defaultErrorHandler(debug)
+
+      # Set and restore the wd to make it appear that the proc is running local to the file's definition.
+      if (!is.null(private$filename)){
+        cwd <- getwd()
+        on.exit({ setwd(cwd) })
+        setwd(dirname(private$filename))
+      }
+
+      if (swagger){
+        sf <- self$swaggerFile()
+        # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
+        fun <- function(){}
+        body(fun) <- sf
+        self$handle("GET", "/swagger.json", fun, serializer=serializer_unboxed_json())
+
+        plumberFileServer <- PlumberStatic$new(system.file("swagger-ui", package = "plumber"))
+        self$mount("/__swagger__", plumberFileServer)
+        message("Running the swagger UI at http://127.0.0.1:", port, "/__swagger__/")
+      }
+
+      httpuv::runServer(host, port, self)
+    },
+    mount = function(path, router){
+      path <- sub("([^/])$", "\\1/", path)
+
+      private$mnts[[path]] <- router
+    },
+    registerHook = function(stage=c("preroute", "postroute",
+                                    "preserialize", "postserialize"), handler){
+      stage <- match.arg(stage)
+      super$registerHook(stage, handler)
+    },
+
+    handle = function(methods, path, handler, preempt, serializer){
+      if (missing(serializer)){
+        serializer <- private$serializer
+      }
+
+      ep <- PlumberEndpoint$new(methods, path, handler, private$envir, serializer)
+      private$addEndpointInternal(ep, preempt)
+    },
+    print = function(prefix="", topLevel=TRUE, ...){
+      endCount <- as.character(sum(unlist(lapply(self$endpoints, length))))
+
+      # Reference on box characters: https://en.wikipedia.org/wiki/Box-drawing_character
+
+      cat(prefix)
+      if (!topLevel){
+        cat("\u2502 ") # "| "
+      }
+      cat(crayon::silver("# Plumber router with ", endCount, " endpoint", ifelse(endCount == 1, "", "s"),", ",
+                         as.character(length(private$filts)), " filter", ifelse(length(private$filts) == 1, "", "s"),", and ",
+                         as.character(length(self$mounts)), " sub-router", ifelse(length(self$mounts) == 1, "", "s"),".\n", sep=""))
+
+      if(topLevel){
+        cat(prefix, crayon::silver("# Call run() on this object to start the API.\n"), sep="")
+      }
+
+      # Filters
+      # TODO: scrub internal filters?
+      for (f in private$filts){
+        cat(prefix, "\u251c\u2500\u2500", crayon::green("[", f$name, "]", sep=""), "\n", sep="") # "+--"
+      }
+
+      paths <- self$routes
+
+      printEndpoints <- function(prefix, name, nodes, isLast){
+        if (is.list(nodes)){
+          verbs <- paste(sapply(nodes, function(n){ n$verbs }), collapse=", ")
+        } else {
+          verbs <- nodes$verbs
+        }
+        cat(prefix)
+        if (isLast){
+          cat("\u2514") # "|_"
+        } else {
+          cat("\u251c")  # "+"
+        }
+        cat(crayon::blue("\u2500\u2500/", name, " (", verbs, ")\n", sep=""), sep="") # "+--"
+      }
+
+      printNode <- function(node, name="", prefix="", isRoot=FALSE, isLast = FALSE){
+
+        childPref <- paste0(prefix, "\u2502  ")
+        if (isRoot){
+          childPref <- prefix
+        }
+
+        if (is.list(node)){
+          if (is.null(names(node))) {
+            # This is a list of Plumber endpoints all mounted at this location. Collapse
+            printEndpoints(prefix, name, node, isLast)
+          } else{
+            # It's a list of other stuff.
+            if (!isRoot){
+              cat(prefix, "\u251c\u2500\u2500/", name, "\n", sep="") # "+--"
             }
-
-            filterMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@filter(\\s+(.*)$)?")
-            if (!is.na(filterMat[1,1])){
-              f <- stri_trim_both(filterMat[1,3])
-
-              if (is.na(f) || f == ""){
-                stopOnLine(private, line, "No @filter name specified.")
-              }
-
-              if (!is.null(filter)){
-                # Must have already assigned.
-                stopOnLine(private, line, "Multiple @filters specified for one function.")
-              }
-
-              filter <- f
+            for (i in 1:length(node)){
+              name <- names(node)[i]
+              printNode(node[[i]], name, childPref, isLast = i == length(node))
             }
-
-            preemptMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@preempt(\\s+(.*)\\s*$)?")
-            if (!is.na(preemptMat[1,1])){
-              p <- stri_trim_both(preemptMat[1,3])
-              if (is.na(p) || p == ""){
-                stopOnLine(private, line, "No @preempt specified")
-              }
-              if (!is.null(preempt)){
-                # Must have already assigned.
-                stopOnLine(private, line, "Multiple @preempts specified for one function.")
-              }
-              preempt <- p
-            }
-
-            assetsMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@assets(\\s+(\\S*)(\\s+(\\S+))?\\s*)?$")
-            if (!is.na(assetsMat[1,1])){
-              dir <- stri_trim_both(assetsMat[1,3])
-              if (is.na(dir) || dir == ""){
-                stopOnLine(private, line, "No directory specified for @assets")
-              }
-              prefixPath <- stri_trim_both(assetsMat[1,5])
-              if (is.na(prefixPath) || prefixPath == ""){
-                prefixPath <- "/public"
-              }
-              if (!is.null(assets)){
-                # Must have already assigned.
-                stopOnLine(private, line, "Multiple @assets specified for one entity.")
-              }
-              assets <- list(dir=dir, path=prefixPath)
-            }
-
-            serMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@serializer(\\s+([^\\s]+)\\s*(.*)\\s*$)?")
-            if (!is.na(serMat[1,1])){
-              s <- stri_trim_both(serMat[1,3])
-              if (is.na(s) || s == ""){
-                stopOnLine(private, line, "No @serializer specified")
-              }
-              if (!is.null(serializer)){
-                # Must have already assigned.
-                stopOnLine(private, line, "Multiple @serializers specified for one function.")
-              }
-
-              if (!s %in% names(.globals$serializers)){
-                stop("No such @serializer registered: ", s)
-              }
-
-              ser <- .globals$serializers[[s]]
-
-              if (!is.na(serMat[1, 4]) && serMat[1,4] != ""){
-                # We have an arg to pass in to the serializer
-                argList <- eval(parse(text=serMat[1,4]))
-
-                serializer <- do.call(ser, argList)
-              } else {
-                serializer <- ser()
-              }
-            }
-
-            shortSerMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@(json|html)")
-            if (!is.na(shortSerMat[1,2])){
-              s <- stri_trim_both(shortSerMat[1,2])
-              if (!is.null(serializer)){
-                # Must have already assigned.
-                stopOnLine(private, line, "Multiple @serializers specified for one function (shorthand serializers like @json count, too).")
-              }
-
-              if (!is.na(s) && !s %in% names(.globals$serializers)){
-                stop("No such @serializer registered: ", s)
-              }
-
-              # TODO: support arguments to short serializers once they require them.
-              serializer <- .globals$serializers[[s]]()
-            }
-
-            imageMat <- stringi::stri_match(private$fileLines[line], regex="^#['\\*]\\s*@(jpeg|png)(\\s+(.*)\\s*$)?")
-            if (!is.na(imageMat[1,1])){
-              if (!is.null(image)){
-                # Must have already assigned.
-                stopOnLine(private, line, "Multiple image annotations on one function.")
-              }
-              image <- imageMat[1,2]
-            }
-
-            line <- line - 1
           }
-
-          processors <- NULL
-          if (!is.null(image) && !is.null(.globals$processors[[image]])){
-            processors <- list(.globals$processors[[image]])
-          } else if (!is.null(image)){
-            stop("Image processor not found: ", image)
-          }
-
-          if (sum(!is.null(filter), !is.null(path), !is.null(assets)) > 1){
-            stopOnLine(private, line, "A single function can only be a filter, an API endpoint, or an asset (@filter AND @get, @post, @assets, etc.)")
-          }
-
-          if (!is.null(path)){
-            private$addEndpointInternal(verbs, path, e, serializer, processors, srcref, preempt)
-          } else if (!is.null(filter)){
-            private$addFilterInternal(filter, e, serializer, processors, srcref)
-          } else if (!is.null(assets)){
-            private$addAssetsInternal(assets$dir, assets$path, e, srcref)
-          }
+        } else if ("plumber" %in% class(node)){
+          cat(prefix, "\u251c\u2500\u2500/", name, "\n", sep="") # "+--"
+          # It's a router, let it print itself
+          print(node, prefix=childPref, topLevel=FALSE)
+        } else if ("PlumberEndpoint" %in% class(node)){
+          printEndpoints(prefix, name, node, isLast)
+        } else {
+          cat("??")
         }
       }
+      printNode(paths, "", prefix, TRUE)
 
-      # TODO check for colliding filter names and endpoint addresses.
-    },
-    call = function(req){ #httpuv interface
-      # Due to https://github.com/rstudio/httpuv/issues/49, we need to close
-      # the TCP channels via `Connection: close` header. Otherwise we would
-      # reuse the same environment for each request and potentially recycle
-      # old data here.
-
-      # Set the arguments to an empty list
-      req$args <- list()
-
-      res <- PlumberResponse$new(private$defaultSerializer)
-      self$serve(req, res)
-    },
-    onHeaders = function(req){ #httpuv interface
-      NULL
-    },
-    onWSOpen = function(ws){ #httpuv interface
-      warning("WebSockets not supported")
-    },
-    #* @param verbs The verb(s) which this endpoint supports
-    #* @param path The path for the endpoint
-    #* @param expr The expression encapsulating the endpoint's logic
-    #* @param serializer The name of the serializer to use (if not the default)
-    #* @param processors Any \code{PlumberProcessors} to apply to this endpoint
-    #* @param preempt The name of the filter before which this endpoint should
-    #*   be inserted. If not specified the endpoint will be added after all
-    #*   the filters.
-    addEndpoint = function(verbs, path, expr, serializer, processors, preempt=NULL){
-      private$addEndpointInternal(verbs, path, expr, serializer, processors, srcref, preempt)
-    },
-    #* Adds a static asset server
-    #*
-    #* @param dir The directory on disk from which to serve static assets
-    #* @param path The path prefix at which the assets should be made available
-    #* @param options A list of configuration options. Currently none are
-    #*   supported
-    addAssets = function(dir, path="/public", options=list()){
-      private$addAssetsInternal(dir, path, options)
-    },
-    setErrorHandler = function(fun){
-      private$errorHandler <- fun
       invisible(self)
     },
-    set404Handler = function(fun){
-      private$notFoundHandler = fun
-    },
-    #* @param name The name of the filter
-    #* @param expr The expression encapsulating the filter's logic
-    #* @param serializer (optional) A custom serializer to use when writing out
-    #*   data from this filter.
-    #* @param processors The \code{\link{PlumberProcessor}}s to apply to this
-    #*   filter.
-    addFilter = function(name, expr, serializer, processors){
-      "Create a new filter and add it to the router"
-      private$addFilterInternal(name, expr, serializer, processors)
-    },
-    setSerializer = function(name){
-      private$defaultSerializer <- name
-    },
-    addGlobalProcessor = function(proc){
-      private$globalProcessors <- c(private$globalProcessors, proc)
-    },
+
     serve = function(req, res){
-      # Apply pre-routing logic
-      for ( p in private$globalProcessors ) {
-        p$pre(req=req, res=res)
-      }
+      hookEnv <- new.env()
+
+      private$runHooks("preroute", list(data=hookEnv, req=req, res=res))
 
       val <- self$route(req, res)
 
-      # Apply post-routing logic
-      for ( p in private$globalProcessors ) {
-        val <- p$post(value=val, req=req, res=res)
-      }
+      private$runHooks("postroute", list(data=hookEnv, req=req, res=res, value=val))
 
       if ("PlumberResponse" %in% class(val)){
         # They returned the response directly, don't serialize.
@@ -287,18 +317,20 @@ plumber <- R6Class(
       } else {
         ser <- res$serializer
 
-        if (is.null(ser)){
-          ser <- .globals$serializers[[private$defaultSerializer]]()
-        } else if (typeof(ser) != "closure") {
+        if (typeof(ser) != "closure") {
           stop("Serializers must be closures: '", ser, "'")
         }
 
-        ser(val, req, res, private$errorHandler)
+        private$runHooks("preserialize", list(data=hookEnv, req=req, res=res, value=val))
+        out <- ser(val, req, res, private$errorHandler)
+        private$runHooks("postserialize", list(data=hookEnv, req=req, res=res, value=val))
+        out
       }
     },
+
     route = function(req, res){
       getHandle <- function(filt){
-        handlers <- self$endpoints[[filt]]
+        handlers <- private$ends[[filt]]
         if (!is.null(handlers)){
           for (h in handlers){
             if (h$canServe(req)){
@@ -334,10 +366,10 @@ plumber <- R6Class(
           return(do.call(h$exec, req$args))
         }
 
-        if (length(self$filters) > 0){
+        if (length(private$filts) > 0){
           # Start running through filters until we find a matching endpoint.
-          for (i in 1:length(self$filters)){
-            fi <- self$filters[[i]]
+          for (i in 1:length(private$filts)){
+            fi <- private$filts[[i]]
 
             # Check for endpoints preempting in this filter.
             h <- getHandle(fi$name)
@@ -351,6 +383,7 @@ plumber <- R6Class(
 
             # Execute this filter
             .globals$forwarded <- FALSE
+
             fres <- do.call(fi$exec, req$args)
             if (!.globals$forwarded){
               # forward() wasn't called, presumably meaning the request was
@@ -373,127 +406,204 @@ plumber <- R6Class(
           return(do.call(h$exec, req$args))
         }
 
+        # We aren't going to serve this endpoint; see if any mounted routers will
+        for (mountPath in names(private$mnts)){
+          # TODO: support globbing?
+
+          if (nchar(path) >= nchar(mountPath) && substr(path, 0, nchar(mountPath)) == mountPath){
+            # This is a prefix match or exact match. Let this router handle.
+
+            # First trim the prefix off of the PATH_INFO element
+            req$PATH_INFO <- substr(req$PATH_INFO, nchar(mountPath), nchar(req$PATH_INFO))
+            return(private$mnts[[mountPath]]$route(req, res))
+          }
+        }
+
         # No endpoint could handle this request. 404
         val <- private$notFoundHandler(req=req, res=res)
         return(val)
       }, error=function(e){
-        # Error when filtering
+        # Error when routing
         val <- private$errorHandler(req, res, e)
         return(val)
       }, finally= options(warn=oldWarn) )
     },
-    run = function(host='0.0.0.0', port=8000){
-      # TODO: setwd to file path
-      .globals$debug <- self$debug
-      message("Starting server to listen on port ", port)
 
-      # Set and restore the wd to make it appear that the proc is running local to the file's definition.
-      if (!is.null(private$filename)){
-        cwd <- getwd()
-        on.exit({ setwd(cwd) })
-        setwd(dirname(private$filename))
+    # httpuv interface
+    call = function(req){
+      # Due to https://github.com/rstudio/httpuv/issues/49, we need to close
+      # the TCP channels via `Connection: close` header. Otherwise we would
+      # reuse the same environment for each request and potentially recycle
+      # old data here.
+      # Set the arguments to an empty list
+      req$args <- list()
+
+      res <- PlumberResponse$new(private$serializer)
+      self$serve(req, res)
+    },
+    onHeaders = function(req){
+      NULL
+    },
+    onWSOpen = function(ws){
+      warning("WebSockets not supported.")
+    },
+
+    setSerializer = function(serlializer){
+      private$serializer <- serializer
+    }, # Set a default serializer
+
+    set404Handler = function(fun){
+      private$notFoundHandler <- fun
+    },
+    setErrorHandler = function(fun){
+      private$errorHandler <- fun
+    },
+
+    filter = function(name, expr, serializer){
+      filter <- PlumberFilter$new(name, expr, private$envir, serializer)
+      private$addFilterInternal(filter)
+    },
+    swaggerFile = function(){ #FIXME: test
+      endpoints <- prepareSwaggerEndpoints(self$endpoints)
+
+      # Extend the previously parsed settings with the endpoints
+      def <- modifyList(private$globalSettings, list(paths=endpoints))
+
+      # Lay those over the default globals so we ensure that the required fields
+      # (like API version) are satisfied.
+      modifyList(defaultGlobals, def)
+    },
+
+    ### Legacy/Deprecated
+    addEndpoint = function(verbs, path, expr, serializer, processors, preempt=NULL, params=NULL, comments){
+      warning("addEndpoint has been deprecated in v0.4.0 and will be removed in a coming release. Please use `handle()` instead.")
+      if (!missing(processors) || !missing(params) || !missing(comments)){
+        stop("The processors, params, and comments parameters are no longer supported.")
       }
 
-      httpuv::runServer(host, port, self)
+      self$handle(verbs, path, expr, preempt, serializer)
+    },
+    addAssets = function(dir, path="/public", options=list()){
+      warning("addAssets has been deprecated in v0.4.0 and will be removed in a coming release. Please use `mount` and `PlumberStatic$new()` instead.")
+      if (substr(path, 1,1) != "/"){
+        path <- paste0("/", path)
+      }
+
+      stat <- PlumberStatic$new(dir, options)
+      self$mount(path, stat)
+    },
+    addFilter = function(name, expr, serializer, processors){
+      warning("addFilter has been deprecated in v0.4.0 and will be removed in a coming release. Please use `filter` instead.")
+      if (!missing(processors)){
+        stop("The processors parameter is no longer supported.")
+      }
+
+      filter <- PlumberFilter$new(name, expr, private$envir, serializer)
+      private$addFilterInternal(filter)
+    },
+    addGlobalProcessor = function(proc){
+      warning("addGlobalProcessor has been deprecated in v0.4.0 and will be removed in a coming release. Please use `registerHook`(s) instead.")
+      self$registerHooks(proc)
     }
-    #TODO: addRouter() to add sub-routers at a path.
-  ),
-  private = list(
+  ), active = list(
+    endpoints = function(){ # read-only
+      private$ends
+    },
+    filters = function(){ # read-only
+      private$filts
+    },
+    mounts = function(){ # read-only
+      private$mnts
+    },
+
+    routes = function(){
+      paths <- list()
+
+      addPath <- function(node, children, endpoint){
+        if (length(children) == 0){
+          if (is.null(node)){
+            return(endpoint)
+          } else {
+            # Concat to existing.
+            return(c(node, endpoint))
+          }
+
+        }
+        if (is.null(node)){
+          node <- list()
+        }
+        node[[children[1]]] <- addPath(node[[children[1]]], children[-1], endpoint)
+        node
+      }
+
+      lapply(self$endpoints, function(ends){
+        lapply(ends, function(e){
+          # Trim leading slash
+          path <- sub("^/", "", e$path)
+
+          levels <- strsplit(path, "/", fixed=TRUE)[[1]]
+          paths <<- addPath(paths, levels, e)
+        })
+      })
+
+      # Sub-routers
+      if (length(self$mounts) > 0){
+        for(i in 1:length(self$mounts)){
+          # Trim leading slash
+          path <- sub("^/", "", names(self$mounts)[i])
+
+          levels <- strsplit(path, "/", fixed=TRUE)[[1]]
+
+          m <- self$mounts[[i]]
+          paths <- addPath(paths, levels, m)
+        }
+      }
+
+      # TODO: Sort lexicographically
+
+      paths
+    }
+  ), private = list(
+    serializer = serializer_json(), # The default serializer for the router
+
+    ends = list(), # List of endpoints indexed by their pre-empted filter.
+    filts = NULL, # Array of filters
+    mnts = list(),
+
+    envir = NULL, # The environment in which all API execution will be conducted
+    lines = NULL, # The lines constituting the API
+    parsed = NULL, # The parsed representation of the API
+    globalSettings = list(info=list()), # Global settings for this API. Primarily used for Swagger docs.
+
     errorHandler = NULL,
     notFoundHandler = NULL,
-    filename = NA,
-    fileLines = NA,
-    parsed = NA,
-    envir = NULL,
-    defaultSerializer = jsonSerializer(),
-    globalProcessors = NULL,
-    addFilterInternal = function(name, expr, serializer, processors, lines){
-      "Create a new filter and add it to the router"
-      filter <- PlumberFilter$new(name, expr, private$envir, serializer, processors, lines)
-      self$filters <- c(self$filters, filter)
+
+    addFilterInternal = function(filter){
+      # Create a new filter and add it to the router
+      private$filts <- c(private$filts, filter)
       invisible(self)
     },
-    addEndpointInternal = function(verbs, path, expr, serializer, processors, srcref, preempt=NULL){
+    addEndpointInternal = function(ep, preempt){
+      noPreempt <- missing(preempt) || is.null(preempt)
+
       filterNames <- "__first__"
-      for (f in self$filters){
+      for (f in private$filts){
         filterNames <- c(filterNames, f$name)
       }
-
-      if (!is.null(preempt) && !preempt %in% filterNames){
-        if (!is.null(srcref)){
-          stopOnLine(private, srcref[1], paste0("The given @preempt filter does not exist in this plumber router: '", preempt, "'"))
+      if (!noPreempt && ! preempt %in% filterNames){
+        if (!is.null(ep$lines)){
+          stopOnLine(ep$lines[1], private$fileLines[ep$lines[1]], paste0("The given @preempt filter does not exist in this plumber router: '", preempt, "'"))
         } else {
           stop(paste0("The given preempt filter does not exist in this plumber router: '", preempt, "'"))
         }
       }
 
-      preempt <- ifelse(is.null(preempt), "__no-preempt__", preempt)
-      self$endpoints[[preempt]] <- c(self$endpoints[[preempt]], PlumberEndpoint$new(verbs, path, expr, private$envir, preempt, serializer, processors, srcref))
-    },
-    addAssetsInternal = function(direc, pathPrefix="/public", options=list(), srcref){
-      if(missing(direc)){
-        stop("Cannot add asset directory when no directory was specified")
+      if (noPreempt){
+        preempt <- "__no-preempt__"
       }
 
-      if(substr(direc, 1, 2) == "./"){
-        direc <- substr(direc, 3, nchar(direc))
-      }
-
-      if (substr(pathPrefix, 1,1) != "/"){
-        pathPrefix <- paste0("/", pathPrefix)
-      }
-
-      # Evaluate to convert to list
-      if (is.function(options)){
-        options <- options()
-      } else if (is.expression(options)){
-        options <- eval(options, private$envir)
-      }
-
-      expr <- function(req, res){
-        # Adapted from shiny:::staticHandler
-        if (!identical(req$REQUEST_METHOD, 'GET')){
-          return(forward())
-        }
-
-        path <- req$PATH_INFO
-
-        if (is.null(path)){
-          res$body <- "<h1>Bad Request</h1>"
-          res$status <- 400
-        }
-
-        # Trim off the prefix
-        if (!stri_startswith_fixed(path, pathPrefix)){
-          # Not ours to handle
-          return(forward())
-        }
-        path <- substr(path, nchar(pathPrefix)+1, nchar(path))
-
-        if (path == '/')
-          path <- '/index.html'
-
-        abs.path <- resolve(direc, path)
-        if (is.null(abs.path)){
-          return(forward())
-        }
-
-        ext <- tools::file_ext(abs.path)
-        contentType <- getContentType(ext)
-        responseContent <- readBin(abs.path, 'raw', n=file.info(abs.path)$size)
-
-        res$status <- 200
-        res$setHeader("Content-type", contentType)
-        res$body <- responseContent
-      }
-      private$addFilterInternal(paste("static-asset", direc, pathPrefix, sep="|"), expr, "null", NULL, srcref)
+      private$ends[[preempt]] <- c(private$ends[[preempt]], ep)
     }
   )
 )
-
-#' @rdname plumber
-#' @export
-plumb <- function(file){
-  plumber$new(file)
-}
 

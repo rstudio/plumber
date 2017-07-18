@@ -13,4 +13,3 @@ by a filter, the assumption is that the filter fully handled the request
 itself and no other filters or endpoints should be evaluated for this
 request.
 }
-

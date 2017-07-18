@@ -1,3 +1,5 @@
+context("Responses")
+
 test_that("response properly sets basic cookies", {
   res <- PlumberResponse$new()
   res$setCookie("abc", "two words")

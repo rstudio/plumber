@@ -1,10 +1,4 @@
-make_req <- function(verb, path){
-  req <- new.env()
-  req$REQUEST_METHOD <- toupper(verb)
-  req$PATH_INFO <- path
-  req$rook.input <- list(read_lines = function(){ "" })
-  req
-}
+context("Routing")
 
 test_that("Routing to errors and 404s works", {
   r <- plumber$new("files/router.R")
@@ -28,12 +22,12 @@ test_that("Routing to errors and 404s works", {
   expect_equal(notFounds, 0)
 
   nf <- r$route(make_req("GET", "/something-crazy"), res)
-  expect_equal(res$serializer, jsonSerializer())
+  expect_equal(res$serializer, serializer_json())
   expect_equal(nf, notFoundRes)
   expect_equal(notFounds, 1)
 
   er <- r$route(make_req("GET", "/error"), res)
-  expect_equal(res$serializer, jsonSerializer())
+  expect_equal(res$serializer, serializer_json())
   expect_equal(er, errRes)
   expect_equal(errors, 1)
 })

@@ -1,17 +1,20 @@
 language: r
-sudo: required
-r_binary_packages:
+cache: packages
+r_github_packages:
+  - jimhester/covr
+after_success:
+  - Rscript -e 'library(covr);codecov()'
+after_failure:
+  - ./travis-tool.sh dump_logs
+r_packages:
   - testthat
-  - xml
+  - XML
   - base64enc
   - rmarkdown
   - stringi
   - jsonlite
   - httpuv
-r_github_packages:
-  - jimhester/covr
-after_success:
-  - Rscript -e 'library(covr);codecov()'
-r_packages:
+  - htmlwidgets
   - PKI
+  - visNetwork
 warnings_are_errors: true

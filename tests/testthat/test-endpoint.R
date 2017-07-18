@@ -1,10 +1,12 @@
+context("Endpoints")
+
 test_that("Endpoints execute in their environment", {
   env <- new.env()
   assign("a", 5, envir=env)
 
   foo <- parse(text="foo <- function(){ a }")
 
-  r <- PlumberEndpoint$new('verb', 'path', foo, env, "a", 1:2)
+  r <- PlumberEndpoint$new('verb', 'path', foo, env, 1:2)
   expect_equal(r$exec(), 5)
 })
 
@@ -40,23 +42,17 @@ test_that("Ellipses allow any named args through", {
 
 test_that("Programmatic endpoints work", {
   r <- plumber$new()
-  processor <- PlumberProcessor$new("proc1", function(req, res, data){
-    data$pre <- TRUE
-  }, function(val, req, res, data){
-    res$setHeader("post", TRUE)
-    res$setHeader("pre", data$pre)
-  })
 
   serializer <- "ser"
   expr <- expression(function(req, res){res$setHeader("expr", TRUE)})
 
-  r$addEndpoint("GET", "/", expr, serializer, list(processor), "queryString")
+  r$handle("GET", "/", expr, "queryString", serializer)
   expect_equal(length(r$endpoints), 1)
 
   end <- r$endpoints[[1]][[1]]
   expect_equal(end$verbs, "GET")
   expect_equal(end$path, "/")
-  expect_equal(end$preempt, "queryString")
+  expect_equal(names(r$endpoints)[1], "queryString")
   expect_equal(end$serializer, serializer)
 
   res <- PlumberResponse$new()
@@ -65,8 +61,6 @@ test_that("Programmatic endpoints work", {
 
   h <- res$headers
   expect_true(h$expr)
-  expect_true(h$pre)
-  expect_true(h$post)
 })
 
 test_that("Programmatic endpoints with functions work", {
@@ -74,7 +68,7 @@ test_that("Programmatic endpoints with functions work", {
 
   expr <- function(req, res){res$setHeader("expr", TRUE)}
 
-  r$addEndpoint("GET", "/", expr)
+  r$handle("GET", "/", expr)
   expect_equal(length(r$endpoints), 1)
 
   end <- r$endpoints[[1]][[1]]

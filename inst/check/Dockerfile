@@ -5,7 +5,7 @@ RUN apt-get update -qq && apt-get install -y \
   libxml2-dev \
   git-core \
   libssl-dev/unstable \
-  libssh2-1-dev \
+  libssh2-1 \
   texlive-latex-base \
   texlive-fonts-recommended \
   texlive-fonts-extra
@@ -21,6 +21,13 @@ RUN mkdir /pandoc && \
 
 ENV RSTUDIO_PANDOC=/pandoc
 ENV PATH=$PATH:/pandoc
+
+RUN R -e "install.packages(c('htmlwidgets', 'visNetwork', 'analogsea'))"
+
+# rforge required because of some recent instability in PKI... disconcerting.
+# https://stat.ethz.ch/pipermail/r-help/2016-December/443572.html
+RUN R -e "install.packages('PKI',,'https://www.rforge.net/')"
+
 
 CMD git clone https://github.com/trestletech/plumber.git /plumber && \
   R CMD build /plumber && \

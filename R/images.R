@@ -1,13 +1,10 @@
-#' @include processor.R
-#' @include plumber.R
-PlumberProcessor$new(
-  "jpeg",
-  function(req, res, data){
+render_jpeg <- list(
+  pre = function(req, res, data){
     t <- tempfile()
     data$file <- t
     jpeg(t)
   },
-  function(val, req, res, data){
+  post = function(value, req, res, data){
     dev.off()
 
     con <- file(data$file, "rb")
@@ -19,14 +16,13 @@ PlumberProcessor$new(
   }
 )
 
-PlumberProcessor$new(
-  "png",
-  function(req, res, data){
+render_png <- list(
+  pre = function(req, res, data){
     t <- tempfile()
     data$file <- t
     png(t)
   },
-  function(val, req, res, data){
+  post = function(value, req, res, data){
     dev.off()
 
     con <- file(data$file, "rb")

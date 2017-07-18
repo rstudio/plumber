@@ -1,3 +1,5 @@
+context("Cookies")
+
 test_that("cookies are parsed", {
   co <- parseCookies("spaced=cookie%20here; another=2")
 
@@ -17,6 +19,14 @@ test_that("the cookies list is set", {
   cookieFilter(req)
 
   expect_equal(req$cookies$abc, "123")
+})
+
+test_that("missing cookie values are empty string", {
+  req <- new.env()
+  req$HTTP_COOKIE <- "abc="
+  cookieFilter(req)
+
+  expect_equal(req$cookies$abc, "")
 })
 
 test_that("cookies can convert to string", {

@@ -2,13 +2,18 @@ Encoding: UTF-8
 Package: plumber
 Type: Package
 Title: An API Generator for R
-Version: 0.3.1
-Date: 2016-09-05
+Version: 0.4.0
+Date: 2017-05-21
+Roxygen: list(markdown = TRUE)
 Authors@R: c(
   person(family="Trestle Technology, LLC", role="aut", email="cran@trestletech.com"),
   person("Jeff", "Allen", role="cre", email="cran@trestletech.com"),
-  person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"))
+  person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"),
+  person(family="SmartBear Software", role=c("ctb", "cph"), comment="swagger-ui"))
 License: MIT + file LICENSE
+BugReports: https://github.com/trestletech/plumber/issues
+URL: https://www.rplumber.io (site)
+    https://github.com/trestletech/plumber (dev)
 Description: Gives the ability to automatically generate and serve an HTTP API
     from R functions using the annotations in the R documentation around your
     functions.
@@ -18,33 +23,42 @@ Imports:
     R6 (>= 2.0.0),
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
-    httpuv (>= 1.2.3)
+    httpuv (>= 1.2.3),
+    crayon
 LazyData: TRUE
 Suggests:
     testthat (>= 0.11.0),
     XML,
     rmarkdown,
     PKI,
-    base64enc
-Collate:
+    base64enc,
+    htmlwidgets,
+    visNetwork,
+    analogsea
+Collate: 
     'content-types.R'
     'cookie-parser.R'
+    'parse-globals.R'
+    'images.R'
+    'parse-block.R'
     'globals.R'
     'serializer-json.R'
+    'post-body.R'
+    'query-string.R'
     'plumber.R'
     'default-handlers.R'
+    'digital-ocean.R'
     'includes.R'
     'paths.R'
+    'plumber-static.R'
     'plumber-step.R'
-    'post-body.R'
-    'processor.R'
-    'processor-image.R'
-    'query-string.R'
     'response.R'
     'serializer-content-type.R'
     'serializer-html.R'
+    'serializer-htmlwidget.R'
     'serializer-xml.R'
     'serializer.R'
     'session-cookie.R'
     'shared-secret-filter.R'
-RoxygenNote: 5.0.1
+    'swagger.R'
+RoxygenNote: 6.0.1

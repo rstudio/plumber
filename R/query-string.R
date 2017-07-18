@@ -15,8 +15,6 @@ parseQS <- function(qs){
     qs <- substr(qs, 2, nchar(qs))
   }
 
-  qs <- gsub("+", " ", qs, fixed = TRUE)
-
   parts <- strsplit(qs, "&", fixed = TRUE)[[1]]
   kv <- strsplit(parts, "=", fixed = TRUE)
   kv <- kv[sapply(kv, length) == 2] # Ignore incompletes
@@ -54,7 +52,7 @@ createPathRegex <- function(pathDef){
 
   converters <- typeToConverters(type)
 
-  list(names = names, regex = paste0("^", re, "$"), converters=converters)
+  list(names = names, types=type, regex = paste0("^", re, "$"), converters=converters)
 }
 
 typeToRegex <- function(type){
