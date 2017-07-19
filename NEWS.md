@@ -1,6 +1,10 @@
 plumber 0.4.0
 --------------------------------------------------------------------------------
 * BREAKING: Listen on localhost instead of listening publicly by default.
+* BREAKING: We no longer set the `Access-Control-Allow-Origin` HTTP header to 
+  `*`. This was previously done for convenience but we've decided to prioritize
+  security here by removing this default. You can still add this header to any
+  route you want to be accessible from other origins.
 * BREAKING: Listen on a random port by default instead of always on 8000. This
   can be controlled using the `port` parameter in `run()`, or by setting the 
   `plumber.port` option.
@@ -28,6 +32,7 @@ plumber 0.4.0
   a function that returns the error handler function. The top-level function
   takes a single param named `debug` which is managed by the `debug` parameter
   in the `run()` method.
+* Added support for `OPTIONS` HTTP requests via the `@options` annotation.
 * Add support for `entrypoint.R` when `plumb()`ing a directory. If this file 
   exists, it is expected to return a Plumber router representing the API
   contained in this directory. If it doesn't exist, the bahvior is unaltered.
