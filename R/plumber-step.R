@@ -83,6 +83,7 @@ getRelevantArgs <- function(args, plumberExpression){
   args
 }
 
+#' @export
 PlumberEndpoint <- R6Class(
   "PlumberEndpoint",
   inherit = PlumberStep,

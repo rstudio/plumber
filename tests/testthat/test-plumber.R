@@ -322,6 +322,21 @@ test_that("handle invokes correctly", {
   expect_equal(res$status, 404)
 })
 
+test_that("handle with an endpoint works", {
+  pr <- plumber$new()
+  ep <- PlumberEndpoint$new("GET", "/", function(){ "manual endpoint" }, pr$environment, serializer_json())
+  pr$handle(endpoint=ep)
+
+  val <- pr$route(make_req("GET", "/"), PlumberResponse$new())
+  expect_equal(val, "manual endpoint")
+})
+
+test_that("handle with and enpoint and endpoint def fails", {
+  pr <- plumber$new()
+  ep <- PlumberEndpoint$new("GET", "/", function(){ "manual endpoint" }, pr$environment, serializer_json())
+  expect_error(pr$handle("GET", "/", endpoint=ep))
+})
+
 test_that("full handle call works", {
   pr <- plumber$new()
   pr$filter("f1", function(req){ req$filtered <- TRUE; forward() })
