@@ -3,7 +3,7 @@
 NULL
 
 # used to identify annotation flags.
-verbs <- c("GET", "PUT", "POST", "DELETE", "HEAD")
+verbs <- c("GET", "PUT", "POST", "DELETE", "HEAD", "OPTIONS")
 enumerateVerbs <- function(v){
   if (identical(v, "use")){
     return(verbs)
