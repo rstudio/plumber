@@ -9,7 +9,7 @@ test_that("requests with shared secrets pass, w/o fail", {
   # No shared secret
   req <- make_req("GET", "/")
   res <- PlumberResponse$new()
-  pr$route(req, res)
+  capture.output(pr$route(req, res))
   expect_equal(res$status, 400)
 
   # Set shared secret
