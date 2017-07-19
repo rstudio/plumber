@@ -18,10 +18,6 @@ PlumberResponse <- R6Class(
       # httpuv doesn't like empty headers lists, and this is a useful field anyway...
       h$Date <- format(Sys.time(), "%a, %d %b %Y %X %Z", tz="GMT")
 
-      if (is.null(h$`Access-Control-Allow-Origin`)){
-        h$`Access-Control-Allow-Origin` <-  "*" # Be permissive with CORS
-      }
-
       # Due to https://github.com/rstudio/httpuv/issues/49, we need each
       # request to be on a separate TCP stream
       h$Connection = "close"
