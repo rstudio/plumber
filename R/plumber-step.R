@@ -83,6 +83,9 @@ getRelevantArgs <- function(args, plumberExpression){
   args
 }
 
+#' Plumber Endpoint
+#'
+#' Defines a terminal handler in a PLumber router.
 #' @export
 PlumberEndpoint <- R6Class(
   "PlumberEndpoint",
