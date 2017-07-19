@@ -177,7 +177,7 @@ plumber <- R6Class(
                         private$addFilterInternal, self$mount)
         }
 
-        private$globalSettings <- parseGlobals(private$fileLines)
+        private$globalSettings <- parseGlobals(private$lines)
       }
 
     },
@@ -198,6 +198,13 @@ plumber <- R6Class(
 
       if (swagger){
         sf <- self$swaggerFile()
+
+        if (is.na(sf$host)){
+          accessHost <- ifelse(host == "0.0.0.0", "127.0.0.1", host)
+          accessPath <- paste(accessHost, port, sep=":")
+          sf$host <- accessPath
+        }
+
         # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
         fun <- function(){}
         body(fun) <- sf
@@ -205,7 +212,7 @@ plumber <- R6Class(
 
         plumberFileServer <- PlumberStatic$new(system.file("swagger-ui", package = "plumber"))
         self$mount("/__swagger__", plumberFileServer)
-        message("Running the swagger UI at http://127.0.0.1:", port, "/__swagger__/")
+        message("Running the swagger UI at ", sf$schemes[1], "://", sf$host, "/__swagger__/", sep="")
       }
 
       httpuv::runServer(host, port, self)
