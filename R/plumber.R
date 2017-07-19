@@ -228,13 +228,20 @@ plumber <- R6Class(
       super$registerHook(stage, handler)
     },
 
-    handle = function(methods, path, handler, preempt, serializer){
-      if (missing(serializer)){
-        serializer <- private$serializer
+    handle = function(methods, path, handler, preempt, serializer, endpoint){
+      epdef <- !missing(methods) || !missing(path) || !missing(handler) || !missing(serializer)
+      if (!missing(endpoint) && epdef){
+        stop("You must provide either the components for an endpoint (handler and serializer) OR provide the endpoint yourself. You cannot do both.")
       }
 
-      ep <- PlumberEndpoint$new(methods, path, handler, private$envir, serializer)
-      private$addEndpointInternal(ep, preempt)
+      if (epdef){
+        if (missing(serializer)){
+          serializer <- private$serializer
+        }
+
+        endpoint <- PlumberEndpoint$new(methods, path, handler, private$envir, serializer)
+      }
+      private$addEndpointInternal(endpoint, preempt)
     },
     print = function(prefix="", topLevel=TRUE, ...){
       endCount <- as.character(sum(unlist(lapply(self$endpoints, length))))
@@ -525,7 +532,9 @@ plumber <- R6Class(
     mounts = function(){ # read-only
       private$mnts
     },
-
+    environment = function() { #read-only
+      private$envir
+    },
     routes = function(){
       paths <- list()
 
