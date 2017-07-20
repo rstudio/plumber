@@ -1,7 +1,8 @@
-plumber 0.4.2
+plumber 0.4.1
 --------------------------------------------------------------------------------
-* Skipped 0.4.1 release intentionally, CRAN release for 0.4.0. Will be working
-  to move to even/odd release cycles.
+* Development version for 0.4.2. Will be working to move to even/odd release
+  cycles, but I had prematurely bumped to 0.4.0 so that one might get skipped,
+  making the next CRAN release 0.4.2.
 
 plumber 0.4.0
 --------------------------------------------------------------------------------
