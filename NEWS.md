@@ -1,3 +1,8 @@
+plumber 0.4.2
+--------------------------------------------------------------------------------
+* Skipped 0.4.1 release intentionally, CRAN release for 0.4.0. Will be working
+  to move to even/odd release cycles.
+
 plumber 0.4.0
 --------------------------------------------------------------------------------
 * BREAKING: Listen on localhost instead of listening publicly by default.
