@@ -2,8 +2,8 @@ Encoding: UTF-8
 Package: plumber
 Type: Package
 Title: An API Generator for R
-Version: 0.4.0
-Date: 2017-05-21
+Version: 0.4.1
+Date: 2017-07-20
 Roxygen: list(markdown = TRUE)
 Authors@R: c(
   person(family="Trestle Technology, LLC", role="aut", email="cran@trestletech.com"),
