@@ -7,7 +7,7 @@
 \title{Plumber Router}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
-plumb(file, dir = ".")
+plumb(file, dir = ".", envir)
 
 plumber
 }
@@ -18,6 +18,11 @@ plumber
 plumber router definition. Alternatively, if an \code{entrypoint.R} file is
 found, it will take precedence and be responsible for returning a runnable
 Plumber router.}
+
+\item{envir}{The environment in which to evaluate all expressions, source any
+input files, and execute all filters/endpoints. If unspecified, a new
+environment will be created for you. Note that this setting has no effect if
+you create your own router using an \code{entrypoint.R} file.}
 }
 \description{
 Routers are the core request handler in plumber. A router is responsible for
