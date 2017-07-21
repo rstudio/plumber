@@ -203,6 +203,18 @@ plumber <- R6Class(
           accessHost <- ifelse(host == "0.0.0.0", "127.0.0.1", host)
           accessPath <- paste(accessHost, port, sep=":")
           sf$host <- accessPath
+
+          if (!is.null(getOption("plumber.apiHost"))){
+            sf$host <- getOption("plumber.apiHost")
+          }
+
+          if (!is.null(getOption("plumber.apiScheme"))){
+            sf$schemes <- getOption("plumber.apiScheme")
+          }
+
+          if (!is.null(getOption("plumber.apiPath"))){
+            sf$basePath <- getOption("plumber.apiPath")
+          }
         }
 
         # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
