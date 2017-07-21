@@ -13,7 +13,7 @@ enumerateVerbs <- function(v){
 
 #' @rdname plumber
 #' @export
-plumb <- function(file, dir="."){
+plumb <- function(file, dir=".", envir){
 
   dirMode <- NULL
 
@@ -56,7 +56,7 @@ plumb <- function(file, dir="."){
   } else if (file.exists(file)) {
     # Plumber file found
 
-    plumber$new(file)
+    plumber$new(file, envir=envir)
   } else {
     # Couldn't find the Plumber file nor an entrypoint
     stop("File does not exist: ", file)
@@ -126,6 +126,10 @@ hookable <- R6Class(
 #'   plumber router definition. Alternatively, if an `entrypoint.R` file is
 #'   found, it will take precedence and be responsible for returning a runnable
 #'   Plumber router.
+#' @param envir The environment in which to evaluate all expressions, source any
+#'   input files, and execute all filters/endpoints. If unspecified, a new
+#'   environment will be created for you. Note that this setting has no effect if
+#'   you create your own router using an `entrypoint.R` file.
 #' @include globals.R
 #' @include serializer-json.R
 #' @include parse-block.R

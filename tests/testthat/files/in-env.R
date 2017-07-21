@@ -14,3 +14,8 @@ useless <- function(req, res, forward){
   y <- 3
   y + a
 }
+
+#* @get /envir
+function(){
+  parent.frame()
+}

@@ -18,7 +18,7 @@ test_that("Empty file is OK", {
 test_that("The file is sourced in the envir", {
   r <- plumber$new("files/in-env.R")
   expect_equal(length(r$endpoints), 1)
-  expect_equal(length(r$endpoints[[1]]), 2)
+  expect_equal(length(r$endpoints[[1]]), 3)
   expect_equal(r$endpoints[[1]][[1]]$exec(), 15)
 })
 
@@ -429,4 +429,11 @@ test_that("filters and endpoints executed in the appropriate environment", funct
   # Send a request through and we should see an assign to our env.
   val <- pr$route(make_req("GET", "/"), PlumberResponse$new())
   expect_identical(env, val)
+})
+
+test_that("Injected plumb environment works", {
+  env <- new.env()
+  r <- plumb("files/in-env.R", envir=env)
+  val <- r$route(make_req("GET", "/envir"), PlumberResponse$new())
+  expect_identical(val, env)
 })
