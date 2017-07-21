@@ -75,7 +75,10 @@ window.onload = function() {
 
   var loc = window.location.href;
   if (loc.match(/\/__swagger__/)){
-    loc = loc.replace(/__swagger__\/?/, 'swagger.json');
+    loc = loc.replace(/__swagger__\/?/, 'swagger.json') + '?' +
+      'schemes=' + window.location.protocol +
+      '&host=' + window.location.host +
+      '&path=' + window.location.pathname.replace(/__swagger__\/?/, '');
   } else {
     console.log("Couldn't find __swagger__ in current location.");
     loc = "http://petstore.swagger.io/v2/swagger.json";
