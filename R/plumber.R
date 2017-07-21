@@ -218,8 +218,20 @@ plumber <- R6Class(
         }
 
         # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
-        fun <- function(){}
-        body(fun) <- sf
+        fun <- function(schemes, host, path){
+          if (!missing(schemes)){
+            sf$schemes <- schemes
+          }
+
+          if (!missing(host)){
+            sf$host <- host
+          }
+
+          if (!missing(path)){
+            sf$basePath <- path
+          }
+          sf
+        }
         self$handle("GET", "/swagger.json", fun, serializer=serializer_unboxed_json())
 
         plumberFileServer <- PlumberStatic$new(system.file("swagger-ui", package = "plumber"))
