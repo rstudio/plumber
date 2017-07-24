@@ -4,7 +4,7 @@ portBlacklist <- c(0, 3659, 4045, 6000, 6665, 6666, 6667, 6668, 6669)
 
 #' Get a random port between 3k and 10k, excluding the blacklist. If a preferred port
 #' has already been registered in .globals, use that instead.
-#' #' @importFrom stats runif
+#' @importFrom stats runif
 #' @noRd
 getRandomPort <- function(){
   port <- 0
