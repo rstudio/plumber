@@ -25,7 +25,7 @@ taking an incoming request, submitting it through the appropriate filters and
 eventually to a corresponding endpoint, if one is found.
 }
 \details{
-See \url{http://plumber.trestletech.com/docs/programmatic/} for additional
+See \url{http://www.rplumber.io/docs/programmatic/} for additional
 details on the methods available on this object.
 }
 \keyword{datasets}

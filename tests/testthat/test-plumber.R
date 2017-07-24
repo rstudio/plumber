@@ -139,6 +139,8 @@ test_that("mounts can be read correctly", {
 })
 
 test_that("prints correctly", {
+  skip_on_cran()
+
   pr <- plumber$new()
   pr$handle("GET", "/nested/path/here", function(){})
   pr$handle("POST", "/nested/path/here", function(){})
