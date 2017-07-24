@@ -139,6 +139,8 @@ test_that("mounts can be read correctly", {
 })
 
 test_that("prints correctly", {
+  skip_on_cran()
+
   pr <- plumber$new()
   pr$handle("GET", "/nested/path/here", function(){})
   pr$handle("POST", "/nested/path/here", function(){})
@@ -156,23 +158,23 @@ test_that("prints correctly", {
   regexps <- c(
     "Plumber router with 2 endpoints, 4 filters, and 2 sub-routers",
     "Call run\\(\\) on this object",
-    "\u251c\u2500\u2500\\[queryString\\]",
-    "\u251c\u2500\u2500\\[postBody\\]",
-    "\u251c\u2500\u2500\\[cookieParser\\]",
-    "\u251c\u2500\u2500\\[sharedSecret\\]",
-    "\u251c\u2500\u2500/nested",
-    "\u2502  \u251c\u2500\u2500/path",
-    "\u2502  \u2502  \u2514\u2500\u2500/here \\(GET, POST\\)",
-    "\u251c\u2500\u2500/mysubpath",
-    "\u2502  \u2502 # Plumber router with 2 endpoints, 4 filters, and 0 sub-routers.",
-    "\u2502  \u251c\u2500\u2500\\[queryString\\]",
-    "\u2502  \u251c\u2500\u2500\\[postBody\\]",
-    "\u2502  \u251c\u2500\u2500\\[cookieParser\\]",
-    "\u2502  \u251c\u2500\u2500\\[sharedSecret\\]",
-    "\u2502  \u251c\u2500\u2500/something \\(POST\\)",
-    "\u2502  \u2514\u2500\u2500/ \\(GET\\)",
-    "\u251c\u2500\u2500/static",
-    "\u2502  \u2502 # Plumber static router serving from directory: \\."
+    "├──\\[queryString\\]",
+    "├──\\[postBody\\]",
+    "├──\\[cookieParser\\]",
+    "├──\\[sharedSecret\\]",
+    "├──/nested",
+    "│  ├──/path",
+    "│  │  └──/here \\(GET, POST\\)",
+    "├──/mysubpath",
+    "│  │ # Plumber router with 2 endpoints, 4 filters, and 0 sub-routers.",
+    "│  ├──\\[queryString\\]",
+    "│  ├──\\[postBody\\]",
+    "│  ├──\\[cookieParser\\]",
+    "│  ├──\\[sharedSecret\\]",
+    "│  ├──/something \\(POST\\)",
+    "│  └──/ \\(GET\\)",
+    "├──/static",
+    "│  │ # Plumber static router serving from directory: \\."
   )
 
   for (i in 1:length(regexps)){
