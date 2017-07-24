@@ -5,3 +5,4 @@ Dockerfile
 inst/analog-keys.R
 inst/examples/03-github/github-key.txt
 .httr-oauth
+docs
