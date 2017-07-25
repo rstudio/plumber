@@ -6,7 +6,7 @@ comments: true
 
 <div class="row"><div class="col-sm-8" markdown="1">
 
-This article will go into detail about more advanced Docker configurations using Docker Compose to host multiple plumber applications on a single server and even load-balancing across multiple plumber processes. If you haven't already, you should go through the [Basic Docker](./docker) article to learn the basics of running plumber in Docker before continuing with this article.
+This article will go into detail about more advanced Docker configurations using Docker Compose to host multiple plumber applications on a single server and even load-balancing across multiple plumber processes. If you haven't already, you should go through the [Basic Docker](../docker) article to learn the basics of running plumber in Docker before continuing with this article.
 
 In order to run multiple applications on one server, **you will also need to install `docker-compose` on your system.** This is not included with some installations of Docker, so you will need to [follow these instructions](https://docs.docker.com/compose/install/) if you get an error when you try to run `docker-compose` on the command-line. Docker Compose helps orchestrate multiple Docker containers. If you're planning to run more than one plumber process, you'll want to use Docker Compose to keep them all alive and route traffic between them.
 
@@ -14,7 +14,7 @@ In order to run multiple applications on one server, **you will also need to ins
 
 Docker Compose will be used to help us organize multiple plumber processes. We won't go into detail about how to use Docker Compose, so if you're new you should familiarize yourself using the [official docs](https://docs.docker.com/compose). 
 
-You should define a Docker Compose configuration that defines the behavior of every plumber application that you want to run. You'll first want to setup a Dockerfile that defines the desired behavior for each of your applications (as [we outlined previously](./docker#custom-dockerfiles). You could use a `docker-compose.yml` configuration like the following:
+You should define a Docker Compose configuration that defines the behavior of every plumber application that you want to run. You'll first want to setup a Dockerfile that defines the desired behavior for each of your applications (as [we outlined previously](../docker#custom-dockerfiles). You could use a `docker-compose.yml` configuration like the following:
 
 {% highlight yml %}
 version: '2'
@@ -165,7 +165,7 @@ The next time you start/redeploy your Docker Compose cluster, you'll be balancin
 Do keep in mind that when using load-balancing that it's not longer guaranteed that subsequent requests for a particular application will land on the same process. This means that if you maintain any state in your plumber application (like a global counter, or a user's session state), you can't expect that to be shared across the workers that the user might encounter. There are at least three possible solutions to this problem:
 
  1. Use a more robust means of maintaing your state. You could put the state in a database, for instance, that lives outside of your R processes and your plumber workers would get and save their state externally.
- 2. You could serialize the state to the user using [(encrypted) session cookies](./sessions/), assuming it's small enough. In this scenario, your workers would write data back to the user in the form of a cookie, then the user would include that same cookie in its future requests. This works best if the state is going to be set rarely and read often (for instance, it could be written when the user logs in, then read on each request to detect the identity of this user).
+ 2. You could serialize the state to the user using [(encrypted) session cookies](../sessions/), assuming it's small enough. In this scenario, your workers would write data back to the user in the form of a cookie, then the user would include that same cookie in its future requests. This works best if the state is going to be set rarely and read often (for instance, it could be written when the user logs in, then read on each request to detect the identity of this user).
  3. You can enable "sticky sessions" in the HAProxy load balancer. This would ensure that each user's traffic always gets routed to the same worker. The downside of this approach, of course, is that it's a less even means of distributing traffic. You could end up in a situation in which you have 2 workers but 90% of your traffic is hitting one of your workers, because it just so happens that the users triggering more requests were all "stuck" to one particular worker.
 
 ## Conclusion

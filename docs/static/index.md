@@ -9,7 +9,7 @@ comments: true
 plumber includes a static file server which can be used to host directories of static assets such as JavaScript, CSS, or HTML files. These servers are fairly simple to configure and integrate into your plumber application.
 
 {% highlight r %}
-#* @static ./files/static
+#* @assets ./files/static
 list()
 {% endhighlight %}
 
@@ -18,7 +18,7 @@ This example would expose the local directory `./files/static` at the `/public` 
 You can optionally provide an additional argument to configure the public path used for your server. For instance
 
 {% highlight r %}
-#* @static ./files/static /static
+#* @assets ./files/static /static
 list()
 {% endhighlight %}
 

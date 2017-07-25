@@ -30,7 +30,7 @@ You'll find that if you access this endpoint from a browser, it will set a 'visi
 </div></div>
 
 <div class="row">
-<iframe src="http://plumber.tres.tl/sessions/public/iframe.html" width="100%" height="110px" frameBorder="0"></iframe>
+<iframe src="{{ site.plumber_url }}/sessions/public/iframe.html" width="100%" height="110px" frameBorder="0"></iframe>
 </div>
 
 <div class="row"><div class="col-sm-8" markdown="1">
@@ -71,7 +71,7 @@ You'll find that the behavior of the endpoint is the same as the unencrypted ver
 </div>
 
 <div class="row">
-<iframe src="http://plumber.tres.tl/sessions/public/iframe-secure.html" width="100%" height="110px" frameBorder="0"></iframe>
+<iframe src="{{ site.plumber_url }}/sessions/public/iframe-secure.html" width="100%" height="110px" frameBorder="0"></iframe>
 </div>
 
 <div class="row"><div class="col-sm-8" markdown="1">

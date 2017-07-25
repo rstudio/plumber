@@ -7,7 +7,7 @@ baseurl: "" # the subpath of your site, e.g. /blog/
 url: "https://plumber.trestletech.com" # the base hostname & protocol for your site
 twitter_username: trestleJeff
 github_username:  trestletech/plumber
-plumber_url: http://plumber.tres.tl
+plumber_url: https://demo.rplumber.io
 disqus_id: trestle-plumbr
 #plumbr_url: http://localhost:8000
 
@@ -16,3 +16,5 @@ markdown: kramdown
 
 include:
   - _redirects
+gems:
+  - jekyll-sitemap
