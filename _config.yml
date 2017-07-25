@@ -13,3 +13,6 @@ disqus_id: trestle-plumbr
 
 # Build settings
 markdown: kramdown
+
+include:
+  - _redirects
