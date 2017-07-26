@@ -1,0 +1,12 @@
+/docu/endpoints/* /docu/routing-and-input.html#endpoints 302
+/docu/clustering/* /docu/hosting.html#pm2 302
+/docu/digitalocean/* /docu/hosting.html#digitalocean 302
+/docu/docker/* /docu/hosting.html#docker 302
+/docu/docker-advanced/* /docu/hosting.html#docker-advanced 302
+/docu/filters/* /docu/routing-and-input.html#filters 302
+/docu/hosting/* /docu/hosting.html#pm2 302
+/docu/programmatic/* /docu/programmatic-usage.html 302
+/docu/routing/* /docu/routing-and-input.html 302
+/docu/sessions/* /docu/tips-tricks.html#cookies 302
+/docu/static/* /docu/routing-and-input.html#static-file-handler 302
+/docu/*  https://plumber-apis-book.netlify.com/:splat  200
