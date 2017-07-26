@@ -1,2 +1,2 @@
-/docu/endpoints/* https://www.rplumber.io/docu/routing-and-input.html#endpoints  200
-/docu/*  https://plumber-apis-book.netlify.com/  200
+/docu/endpoints/* /docu/routing-and-input.html#endpoints 302
+/docu/*  https://plumber-apis-book.netlify.com/:splat  200
