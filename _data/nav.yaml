@@ -1,20 +1,8 @@
 docs:
+  permalink: /docs/
   name: Docs
-  children:
-    - link: /docs/endpoints
-      name: Endpoints
-    - link: /docs/filters
-      name: Filters
-    - link: /docs/programmatic
-      name: Programmatic Usage
-    - link: /docs/routing
-      name: Routing
-    - link: /docs/sessions
-      name: Sessions
-    - link: /docs/static
-      name: Static File Server
-    - link: /components/earl-2015/
-      name: EARL 2015 Talk
+#    - link: /components/earl-2015/
+#      name: EARL 2015 Talk
 examples:
   name: Examples
   children:
@@ -22,14 +10,3 @@ examples:
       name: GitHub Webhook
     - link: /examples/mailgun
       name: Receive Emails (mailgun)
-hosting:
-  name: Hosting
-  children:
-    - link: /docs/digitalocean
-      name: Digital Ocean (Basic)
-    - link: /docs/hosting
-      name: PM2 (Custom)
-    - link: /docs/docker
-      name: Docker (Basic)
-    - link: /docs/docker-advanced
-      name: Advanced Docker
