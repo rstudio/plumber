@@ -7,7 +7,7 @@
 /docs/hosting/ /docs/hosting.html#pm2 302
 /docs/programmatic/ /docs/programmatic-usage.html 302
 /docs/routing/ /docs/routing-and-input.html 302
-/docs/sessions/ /docs/tips-tricks.html#cookies 302
+/docs/sessions/ /docs/rendering-and-output.html#setting-cookies 302
 /docs/static/ /docs/routing-and-input.html#static-file-handler 302
 
 /docs/*  https://plumber-apis-book.netlify.com/:splat  200
