@@ -1,6 +1,5 @@
 #' @import R6
 #' @import stringi
-#' @import webutils
 NULL
 
 # used to identify annotation flags.
