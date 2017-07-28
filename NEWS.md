@@ -41,7 +41,7 @@ plumber 0.4.0
 * Added support for `OPTIONS` HTTP requests via the `@options` annotation.
 * Add support for `entrypoint.R` when `plumb()`ing a directory. If this file 
   exists, it is expected to return a Plumber router representing the API
-  contained in this directory. If it doesn't exist, the bahvior is unaltered.
+  contained in this directory. If it doesn't exist, the behavior is unaltered.
   If both `plumber.R` and `entrypoint.R` exist, `entrypoint.R` takes precedence.
 * `plumb()` the current directory by default if no arguments are provided.
 * Added a `debug` parameter to the `run` method which can be set to `TRUE` in
@@ -87,7 +87,7 @@ plumber 0.2.4
 * Add a filter which parses and sets req$cookies to be a list corresponding to
   the cookies provided with the request.
 * Responses can set multiple cookies
-* Bug Fix: conver non-character arguments in setCookie to character before URL-
+* Bug Fix: convert non-character arguments in setCookie to character before URL-
   encoding.
 
 plumber 0.2.3
@@ -115,7 +115,7 @@ plumber 0.2.1
 
 plumber 0.2.0
 --------------------------------------------------------------------------------
-* BREAKING: Changed variable-path routing to use bracketted format instead of
+* BREAKING: Changed variable-path routing to use bracketed format instead of
   just a colon.
 * BREAKING: Renamed `PlumberRouter` R6 object to just `Plumber`.
 * Support `addEndpoint()` and `addFilter()` on the `Plumber` object.
