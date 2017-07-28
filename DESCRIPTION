@@ -24,7 +24,6 @@ Imports:
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
     httpuv (>= 1.2.3),
-    feather,
     webutils
 LazyData: TRUE
 Suggests:
@@ -35,7 +34,8 @@ Suggests:
     base64enc,
     htmlwidgets,
     visNetwork,
-    analogsea
+    analogsea,
+    feather
 Collate: 
     'content-types.R'
     'cookie-parser.R'

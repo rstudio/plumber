@@ -1,6 +1,5 @@
 #' @import R6
 #' @import stringi
-#' @import feather
 #' @import webutils
 NULL
 
