@@ -1,6 +1,7 @@
-#' @noRd
 #' @include globals.R
-htmlwidgetSerializer <- function(){
+#' @rdname serializers
+#' @export
+serializer_htmlwidget <- function(){
   function(val, req, res, errorHandler){
     tryCatch({
       if (!requireNamespace("htmlwidgets", quietly = TRUE)) {
@@ -33,4 +34,4 @@ htmlwidgetSerializer <- function(){
   }
 }
 
-.globals$serializers[["htmlwidget"]] <- htmlwidgetSerializer
+.globals$serializers[["htmlwidget"]] <- serializer_htmlwidget

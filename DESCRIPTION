@@ -2,8 +2,8 @@ Encoding: UTF-8
 Package: plumber
 Type: Package
 Title: An API Generator for R
-Version: 0.3.3
-Date: 2017-05-21
+Version: 0.4.3
+Date: 2017-07-24
 Roxygen: list(markdown = TRUE)
 Authors@R: c(
   person(family="Trestle Technology, LLC", role="aut", email="cran@trestletech.com"),
@@ -11,6 +11,9 @@ Authors@R: c(
   person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"),
   person(family="SmartBear Software", role=c("ctb", "cph"), comment="swagger-ui"))
 License: MIT + file LICENSE
+BugReports: https://github.com/trestletech/plumber/issues
+URL: https://www.rplumber.io (site)
+    https://github.com/trestletech/plumber (dev)
 Description: Gives the ability to automatically generate and serve an HTTP API
     from R functions using the annotations in the R documentation around your
     functions.
@@ -37,19 +40,21 @@ Collate:
     'content-types.R'
     'cookie-parser.R'
     'parse-globals.R'
+    'images.R'
     'parse-block.R'
     'globals.R'
     'serializer-json.R'
+    'shared-secret-filter.R'
+    'post-body.R'
+    'query-string.R'
     'plumber.R'
     'default-handlers.R'
     'digital-ocean.R'
+    'find-port.R'
     'includes.R'
     'paths.R'
+    'plumber-static.R'
     'plumber-step.R'
-    'post-body.R'
-    'processor.R'
-    'processor-image.R'
-    'query-string.R'
     'response.R'
     'serializer-content-type.R'
     'serializer-html.R'

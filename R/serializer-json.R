@@ -1,6 +1,7 @@
-#' @noRd
 #' @include globals.R
-jsonSerializer <- function(){
+#' @rdname serializers
+#' @export
+serializer_json <- function(){
   function(val, req, res, errorHandler){
     tryCatch({
       json <- jsonlite::toJSON(val)
@@ -14,11 +15,12 @@ jsonSerializer <- function(){
     })
   }
 }
-.globals$serializers[["json"]] <- jsonSerializer
+.globals$serializers[["json"]] <- serializer_json
 
-#' @noRd
 #' @include globals.R
-unboxedJsonSerializer <- function(){
+#' @rdname serializers
+#' @export
+serializer_unboxed_json <- function(){
   function(val, req, res, errorHandler){
     tryCatch({
       json <- jsonlite::toJSON(val, auto_unbox = TRUE)
@@ -33,4 +35,4 @@ unboxedJsonSerializer <- function(){
   }
 }
 
-.globals$serializers[["unboxedJSON"]] <- unboxedJsonSerializer
+.globals$serializers[["unboxedJSON"]] <- serializer_unboxed_json

@@ -1,4 +1,8 @@
-<!-- File obtained from swagger-ui project. Copyright 2017 SmartBear Software. See https://github.com/swagger-api/swagger-ui -->
+<!-- File obtained from swagger-ui project. Copyright 2017 SmartBear Software. See https://github.com/swagger-api/swagger-ui
+Changes to this file include:
+  1. Resolve default swagger.json URL using window.location, and inject query string params to help resolve to the client's view of things.
+All other assets served unmodified via CDN.
+-->
 <!-- HTML for static distribution bundle build -->
 <!DOCTYPE html>
 <html lang="en">
@@ -6,9 +10,9 @@
   <meta charset="UTF-8">
   <title>Swagger UI</title>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="./swagger-ui.css" >
-  <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
-  <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
+  <link rel="stylesheet" type="text/css" href="https://d1njj2isj9f6x9.cloudfront.net/swagger-ui/v3.0.14/swagger-ui.css" >
+  <link rel="icon" type="image/png" href="https://d1njj2isj9f6x9.cloudfront.net/swagger-ui/v3.0.14/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="https://d1njj2isj9f6x9.cloudfront.net/swagger-ui/v3.0.14/favicon-16x16.png" sizes="16x16" />
   <style>
     html
     {
@@ -75,7 +79,10 @@ window.onload = function() {
 
   var loc = window.location.href;
   if (loc.match(/\/__swagger__/)){
-    loc = loc.replace(/__swagger__\/?/, 'swagger.json');
+    loc = loc.replace(/__swagger__\/?/, 'swagger.json') + '?' +
+      'schemes=' + window.location.protocol +
+      '&host=' + window.location.host +
+      '&path=' + window.location.pathname.replace(/__swagger__\/?/, '');
   } else {
     console.log("Couldn't find __swagger__ in current location.");
     loc = "http://petstore.swagger.io/v2/swagger.json";

@@ -10,7 +10,7 @@ test_that("parseBlock works", {
   expect_equal(b$path, "/")
   expect_equal(b$verbs, c("POST", "GET"))
   expect_equal(b$filter, "test")
-  expect_equal(b$serializer, jsonSerializer())
+  expect_equal_functions(b$serializer, serializer_json())
 })
 
 test_that("Block can't be multiple mutually exclusive things", {

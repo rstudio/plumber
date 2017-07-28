@@ -104,7 +104,7 @@ parseGlobals <- function(lines){
 defaultGlobals <- list(
   swagger = "2.0",
   info = list(description="API Description", title="API Title", version="1.0.0"),
-  host="127.0.0.1:8000",
+  host=NA,
   schemes= I("http"),
   produces=I("application/json")
   #securityDefinitions = list(),

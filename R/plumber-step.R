@@ -10,13 +10,13 @@ forward <- function(){
   .globals$forwarded <- TRUE
 }
 
-
 PlumberStep <- R6Class(
   "PlumberStep",
+  inherit=hookable,
   public = list(
     lines = NA,
     serializer = NULL,
-    initialize = function(expr, envir, lines, serializer, processors){
+    initialize = function(expr, envir, lines, serializer){
       private$expr <- expr
       if (is.expression(expr)){
         private$func <- eval(expr, envir)
@@ -33,32 +33,25 @@ PlumberStep <- R6Class(
       if (!missing(serializer)){
         self$serializer <- serializer
       }
-
-      if (!missing(processors)){
-        private$processors <- processors
-      }
     },
     exec = function(...){
-      for (p in private$processors){
-        p$pre(...)
-      }
-
       args <- getRelevantArgs(list(...), plumberExpression=private$expr)
-      val <- do.call(private$func, args)
 
-      for (p in private$processors){
-        li <- c(list(value=val), ...)
-        val <- do.call(p$post, li)
-      }
+      hookEnv <- new.env()
 
-      val
+      private$runHooks("preexec", c(list(data=hookEnv), list(...)))
+      val <- do.call(private$func, args, envir=private$envir)
+      private$runHooks("postexec", c(list(data=hookEnv, value=val), list(...)))
+    },
+    registerHook = function(stage=c("preexec", "postexec"), handler){
+      stage <- match.arg(stage)
+      super$registerHook(stage, handler)
     }
   ),
   private = list(
     envir = NA,
     expr = NA,
-    func = NA,
-    processors = NULL
+    func = NA
   )
 )
 
@@ -90,11 +83,14 @@ getRelevantArgs <- function(args, plumberExpression){
   args
 }
 
+#' Plumber Endpoint
+#'
+#' Defines a terminal handler in a PLumber router.
+#' @export
 PlumberEndpoint <- R6Class(
   "PlumberEndpoint",
   inherit = PlumberStep,
   public = list(
-    preempt = NA,
     verbs = NA,
     path = NA,
     comments = NA,
@@ -106,7 +102,7 @@ PlumberEndpoint <- R6Class(
     canServe = function(req){
       req$REQUEST_METHOD %in% self$verbs && !is.na(stringi::stri_match(req$PATH_INFO, regex=private$regex$regex)[1,1])
     },
-    initialize = function(verbs, path, expr, envir, preempt, serializer, processors, lines, params, comments, responses){
+    initialize = function(verbs, path, expr, envir, serializer, lines, params, comments, responses){
       self$verbs <- verbs
       self$path <- path
 
@@ -120,17 +116,11 @@ PlumberEndpoint <- R6Class(
       }
       private$envir <- envir
 
-      if (!missing(preempt) && !is.null(preempt)){
-        self$preempt <- preempt
-      }
       if (!missing(serializer) && !is.null(serializer)){
         self$serializer <- serializer
       }
       if (!missing(lines)){
         self$lines <- lines
-      }
-      if (!missing(processors)){
-        private$processors <- processors
       }
       if (!missing(params)){
         self$params <- params
@@ -156,7 +146,7 @@ PlumberFilter <- R6Class(
   inherit = PlumberStep,
   public = list(
     name = NA,
-    initialize = function(name, expr, envir, serializer, processors, lines){
+    initialize = function(name, expr, envir, serializer, lines){
       self$name <- name
       private$expr <- expr
       if (is.expression(expr)){
@@ -171,9 +161,6 @@ PlumberFilter <- R6Class(
       }
       if (!missing(lines)){
         self$lines <- lines
-      }
-      if (!missing(processors)){
-        private$processors <- processors
       }
     }
   )

@@ -1,13 +1,5 @@
 context("Serializer")
 
-make_req <- function(verb, path){
-  req <- new.env()
-  req$REQUEST_METHOD <- toupper(verb)
-  req$PATH_INFO <- path
-  req$rook.input <- list(read_lines = function(){ "" })
-  req
-}
-
 test_that("Responses returned directly aren't serialized", {
   res <- PlumberResponse$new("")
 
@@ -69,18 +61,18 @@ test_that("Overridden serializers apply on filters and endpoints", {
   req <- make_req("GET", "/something")
   req$QUERY_STRING <- "type=json"
   expect_equal(r$serve(req, res)$body, jsonlite::toJSON(4))
-  res$serializer <- jsonSerializer()
+  res$serializer <- serializer_json()
 
   res <- PlumberResponse$new("json")
   expect_equal(r$serve(make_req("GET", "/another"), res)$body, "CUSTOM3")
 
   res <- PlumberResponse$new()
   expect_equal(r$serve(make_req("GET", "/short-json"), res)$body, jsonlite::toJSON("JSON"))
-  expect_equal(res$serializer, jsonSerializer())
+  expect_equal_functions(res$serializer, serializer_json())
 
   res <- PlumberResponse$new()
   expect_equal(r$serve(make_req("GET", "/short-html"), res)$body, "HTML")
-  expect_equal(res$serializer, htmlSerializer())
+  expect_equal_functions(res$serializer, serializer_html())
 
   res <- PlumberResponse$new()
   body <- r$serve(make_req("GET", "/single-arg-ser"), res)$body
@@ -112,4 +104,23 @@ test_that("Empty serializers fail", {
 
 test_that("Non-existant serializers fail", {
   expect_error(plumber$new("files/serializer-nonexistent.R"), regexp="No such @serializer")
+})
+
+
+test_that("nullSerializer serializes properly", {
+  v <- "<html><h1>Hi!</h1></html>"
+  val <- nullSerializer()(v, list(), PlumberResponse$new(), stop)
+  expect_equal(val$status, 200L)
+  expect_equal(val$body, v)
+})
+
+test_that("nullSerializer errors call error handler", {
+  errors <- 0
+  errHandler <- function(req, res, err){
+    errors <<- errors + 1
+  }
+
+  expect_equal(errors, 0)
+  nullSerializer()(parse(stop("I crash")), list(), PlumberResponse$new("json"), err = errHandler)
+  expect_equal(errors, 1)
 })

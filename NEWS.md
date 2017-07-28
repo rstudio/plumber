@@ -1,8 +1,56 @@
+plumber 0.4.1
+--------------------------------------------------------------------------------
+* Development version for 0.4.2. Will be working to move to even/odd release
+  cycles, but I had prematurely bumped to 0.4.0 so that one might get skipped,
+  making the next CRAN release 0.4.2.
+
+plumber 0.4.0
+--------------------------------------------------------------------------------
+* BREAKING: Listen on localhost instead of listening publicly by default.
+* BREAKING: We no longer set the `Access-Control-Allow-Origin` HTTP header to 
+  `*`. This was previously done for convenience but we've decided to prioritize
+  security here by removing this default. You can still add this header to any
+  route you want to be accessible from other origins.
+* BREAKING: Listen on a random port by default instead of always on 8000. This
+  can be controlled using the `port` parameter in `run()`, or by setting the 
+  `plumber.port` option.
+* BREAKING: Removed `PlumberProcessor` class and replaced with a notion of 
+  hooks. See `registerHook` and `registerHooks` on the Plumber router.
+* BREAKING: `addGlobalProcessor` method on Plumber routers now takes a list
+  which are added as hooks instead of a Processor. Note that `sessionCookie`
+  has also been updated to behave accordingly, meaning that the convention of
+  `pr$addGlobalProcessor(sessionCookie("secret", "cookieName"))` will continue
+  to work for this release.
+* BREAKING: `sessionCookie` now returns a list instead of a Processor. Note 
+  that `addGlobalProcessor` has also been updated to behave accordingly, 
+  meaning that the convention of 
+  `pr$addGlobalProcessor(sessionCookie("secret", "cookieName"))` will continue
+  to work for this release.
+* DEPRECATION: Deprecated the `addAssets` method on Plumber routers. Use 
+  `PlumberStatic` and the `mount` method to attach a static router.
+* DEPRECATION: Deprecated the `addEndpoint` method in favor of the `handle` 
+  method for Plumber routers. Removed support for the `processors`, `params`, 
+  and `comments` parameters are no longer supported.
+* DEPRECATION: Deprecated the `addFilter` method on Plumber routers in favor 
+  of the new `filter` method. Removed support for the processor parameter.
+* DEPRECATION: Deprecated the `addGlobalProcessor` method on Plumber routers.
+* The undocumented `setDefaultErrorHandler` method on Plumber routers now takes
+  a function that returns the error handler function. The top-level function
+  takes a single param named `debug` which is managed by the `debug` parameter
+  in the `run()` method.
+* Added support for `OPTIONS` HTTP requests via the `@options` annotation.
+* Add support for `entrypoint.R` when `plumb()`ing a directory. If this file 
+  exists, it is expected to return a Plumber router representing the API
+  contained in this directory. If it doesn't exist, the bahvior is unaltered.
+  If both `plumber.R` and `entrypoint.R` exist, `entrypoint.R` takes precedence.
+* `plumb()` the current directory by default if no arguments are provided.
+* Added a `debug` parameter to the `run` method which can be set to `TRUE` in
+  order to get more insight into your API errors.
+
 plumber 0.3.3
 --------------------------------------------------------------------------------
 * `plumb()` now accepts an argument `dir`, referring to a directory containing
   `plumber.R`, which may be provided instead of `file`.
-
 
 plumber 0.3.2
 --------------------------------------------------------------------------------

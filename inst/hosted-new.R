@@ -5,7 +5,7 @@ install_package_secure <- function(droplet, pkg){
   analogsea::install_r_package(droplet, pkg, repo="https://cran.rstudio.com")
 }
 
-drop <- plumber::do_provision(unstable=TRUE, example=FALSE)
+drop <- plumber::do_provision(unstable=TRUE, example=FALSE, name="hostedplumber")
 
 do_deploy_api(drop, "append", "./inst/examples/01-append/", 8001)
 do_deploy_api(drop, "filters", "./inst/examples/02-filters/", 8002)
