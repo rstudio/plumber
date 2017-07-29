@@ -1,6 +1,13 @@
 library(plumber)
 library(feather)
 
+# Illustration of binary uploads and post-processing of the file on receipt.
+# As a proof of concept we use a feather file: test.feather
+
+
+# To upload and use the content of the file in a function:
+# curl -X POST http://localhost:9080/upload -F 'myfile=@test.feather'
+
 #* @post /upload
 function(name, data) {
   # work with binary files after upload 
@@ -8,6 +15,10 @@ function(name, data) {
   content <- read_feather(data)
   return(content)
 }
+
+
+# To upload and use the properties of the file in a function:
+# curl -X POST http://localhost:9080/inspect -F 'myfile=@test.feather'
 
 #* @post /inspect
 function(name, data) {
