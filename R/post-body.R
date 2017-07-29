@@ -1,8 +1,11 @@
 postBodyFilter <- function(req){
 
-  if (!is.null(req$CONTENT_TYPE) && grepl("multipart/form-data; boundary=", req$CONTENT_TYPE, fixed = TRUE)) {
+  if (!is.null(req$CONTENT_TYPE) && grepl("multipart/form-data; boundary=",
+                                          req$CONTENT_TYPE, fixed = TRUE)) {
+
+    boundary <- strsplit(req$CONTENT_TYPE, split = "=")[[1]][2]
     body <- req$rook.input$read()
-    args <- parseMultipart(body)
+    args <- parseMultipart(body, boundary)
   } else {
     body <- req$rook.input$read_lines()
     args <- parseBody(body)
@@ -33,7 +36,7 @@ parseBody <- function(body){
 
 #' @importFrom utils URLdecode
 #' @noRd
-parseMultipart <- function(body){
+parseMultipart <- function(body, boundary){
   # This is not as generic as perhaps it should be, but should be relatively
   # easy to extend if more binary formats are required
   # Is there data in the request?
@@ -43,14 +46,17 @@ parseMultipart <- function(body){
   # This is something odd with webutils::parse_multipart. For some reason it
   # does not work when the boundary is set to the content type as per the
   # webutils docs.
-  boundary <- "-----------------"
   parsed_binary <- webutils::parse_multipart(body, boundary)
-  file_name <- parsed_binary[[1]][[1]]
-  file_data <- parsed_binary[[1]][[2]]
+#  file_name = "test.feather"
+  file_name <- parsed_binary$myfile$filename
+  file_data <- parsed_binary$myfile$value
 
   tmpfile <- tempfile()
   writeBin(file_data, tmpfile)
 
-  ret <- feather::read_feather(tmpfile)
-  ret
+ # ret <- feather::read_feather(tmpfile)
+  ret <- NULL
+  ret$name <- file_name
+  ret$data <- tmpfile
+  return(ret)
 }
