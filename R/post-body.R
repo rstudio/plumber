@@ -54,9 +54,8 @@ parseMultipart <- function(body, boundary){
   tmpfile <- tempfile()
   writeBin(file_data, tmpfile)
 
- # ret <- feather::read_feather(tmpfile)
   ret <- NULL
   ret$name <- file_name
   ret$data <- tmpfile
-  return(ret)
+  ret
 }
