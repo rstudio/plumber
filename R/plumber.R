@@ -182,12 +182,14 @@ plumber <- R6Class(
 
     },
     run = function(host='127.0.0.1', port=getOption('plumber.port'), swagger=interactive(),
-                   debug=interactive()){
+                   debug= getOption('plumber.debug') %||% interactive() ){
       port <- findPort(port)
 
       message("Starting server to listen on port ", port)
 
-      private$errorHandler <- defaultErrorHandler(debug)
+      on.exit({ options('plumber.debug' = getOption('plumber.debug')) })
+      options(plumber.debug = debug)
+
 
       # Set and restore the wd to make it appear that the proc is running local to the file's definition.
       if (!is.null(private$filename)){

@@ -4,7 +4,7 @@ default404Handler <- function(req, res){
   list(error="404 - Resource Not Found")
 }
 
-defaultErrorHandler <- function(debug=FALSE){
+defaultErrorHandler <- function(){
   function(req, res, err){
     print(err)
 
@@ -22,7 +22,7 @@ defaultErrorHandler <- function(debug=FALSE){
 
 
     # Don't overly leak data unless they opt-in
-    if (debug){
+    if (getOption('plumber.debug')){
       li["message"] <- as.character(err)
     }
 

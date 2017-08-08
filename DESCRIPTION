@@ -63,4 +63,5 @@ Collate:
     'serializer.R'
     'session-cookie.R'
     'swagger.R'
+    'utils.R'
 RoxygenNote: 6.0.1
