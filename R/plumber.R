@@ -182,7 +182,7 @@ plumber <- R6Class(
 
     },
     run = function(host='127.0.0.1', port=getOption('plumber.port'), swagger=interactive(),
-                   debug= getOption('plumber.debug') %||% interactive() ){
+                   debug=interactive() ){
       port <- findPort(port)
 
       message("Starting server to listen on port ", port)
