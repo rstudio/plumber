@@ -1,6 +1,9 @@
 
+#' Static file router
+#'
+#' Creates a router that is backed by a directory of files on disk.
 #' @include plumber.R
-#' @noRd
+#' @export
 PlumberStatic <- R6Class(
   "plumberstatic",
   inherit = plumber,
