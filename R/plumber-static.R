@@ -1,5 +1,6 @@
 
 #' @include plumber.R
+#' @export
 #' @noRd
 PlumberStatic <- R6Class(
   "plumberstatic",
