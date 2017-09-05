@@ -20,3 +20,7 @@ test_that("incomplete query strings are ignored", {
   expect_equivalent(parseQS("a="), list()) # It's technically a named list()
   expect_equal(parseQS("a=1&b=&c&d=1"), list(a="1", d="1"))
 })
+
+test_that("query strings with duplicates are made into vectors", {
+  expect_equal(parseQS("a=1&a=2&a=3&a=4"), list(a=c("1", "2", "3", "4")))
+})
