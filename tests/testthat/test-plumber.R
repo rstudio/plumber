@@ -187,7 +187,7 @@ test_that("mounts work", {
   pr <- plumber$new()
   sub <- plumber$new()
   sub$handle("GET", "/", function(){ 1 })
-  sub$handle("GET", "/nested/path", function(){ 2 })
+  sub$handle("GET", "/nested/path", function(a){ a })
 
   pr$mount("/subpath", sub)
 
@@ -195,8 +195,11 @@ test_that("mounts work", {
   pr$route(make_req("GET", "/nested/path"), res)
   expect_equal(res$status, 404)
 
-  val <- pr$route(make_req("GET", "/subpath/nested/path"), PlumberResponse$new())
-  expect_equal(val, 2)
+  val <- pr$route(make_req("GET", "/subpath/nested/path", qs="?a=123"), PlumberResponse$new())
+  expect_equal(val, "123")
+
+  val <- pr$route(make_req("GET", "/subpath/nested/path", body='{"a":123}'), PlumberResponse$new())
+  expect_equal(val, 123)
 
   val <- pr$route(make_req("GET", "/subpath/"), PlumberResponse$new())
   expect_equal(val, 1)
