@@ -1,8 +1,12 @@
 postBodyFilter <- function(req){
-  body <- req$rook.input$read_lines()
-  args <- parseBody(body)
-  req$postBody <- body
-  req$args <- c(req$args, args)
+  handled <- req$.internal$postBodyHandled
+  if (is.null(handled) || handled != TRUE){
+    body <- req$rook.input$read_lines()
+    args <- parseBody(body)
+    req$postBody <- body
+    req$args <- c(req$args, args)
+    req$.internal$postBodyHandled <- TRUE
+  }
   forward()
 }
 

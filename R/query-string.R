@@ -1,7 +1,11 @@
 queryStringFilter <- function(req){
-  qs <- req$QUERY_STRING
-  args <- parseQS(qs)
-  req$args <- c(req$args, args)
+  handled <- req$.internal$queryStringHandled
+  if (is.null(handled) || handled != TRUE){
+    qs <- req$QUERY_STRING
+    args <- parseQS(qs)
+    req$args <- c(req$args, args)
+    req$.internal$queryStringHandled <- TRUE
+  }
   forward()
 }
 

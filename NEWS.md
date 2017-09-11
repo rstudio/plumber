@@ -1,4 +1,13 @@
-plumber 0.4.1
+plumber 0.4.3
+--------------------------------------------------------------------------------
+* BUGFIX: properly handle named query string and post body arguments in 
+  mounted subrouters.
+* Enable `ByteCompile` flag
+* Set working directory for DigitalOcean APIs.
+* Respect `setErrorHandler`
+* BUGFIX: export `PlumberStatic`
+
+plumber 0.4.2
 --------------------------------------------------------------------------------
 * Development version for 0.4.2. Will be working to move to even/odd release
   cycles, but I had prematurely bumped to 0.4.0 so that one might get skipped,
