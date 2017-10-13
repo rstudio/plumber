@@ -38,7 +38,7 @@ function(res){
   # as a download named "mydata.Rds" rather than trying to render it inline.
   res$setHeader("Content-Disposition", "attachment; filename=mydata.Rds")
 
-  # Read in the raw contents of the binary filw
+  # Read in the raw contents of the binary file
   bin <- readBin(tmp, "raw", n=file.info(tmp)$size)
 
   # Delete the temp file
