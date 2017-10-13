@@ -33,6 +33,16 @@ parseQS <- function(qs){
   ret <- as.list(vals)
   names(ret) <- keys
 
+  # If duplicates, combine
+  combine_elements <- function(name){
+    unname(unlist(ret[names(ret)==name]))
+  }
+
+  unique_names <- unique(names(ret))
+
+  ret <- lapply(unique_names, combine_elements)
+  names(ret) <- unique_names
+
   ret
 }
 
