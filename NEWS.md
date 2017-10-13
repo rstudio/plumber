@@ -6,6 +6,8 @@ plumber 0.4.3
 * Set working directory for DigitalOcean APIs.
 * Respect `setErrorHandler`
 * BUGFIX: export `PlumberStatic`
+* Support query strings with keys that appear more than once 
+  ([#165](https://github.com/trestletech/plumber/pull/165))
 
 plumber 0.4.2
 --------------------------------------------------------------------------------
