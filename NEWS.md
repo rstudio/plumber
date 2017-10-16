@@ -8,6 +8,10 @@ plumber 0.4.3
 * BUGFIX: export `PlumberStatic`
 * Support query strings with keys that appear more than once 
   ([#165](https://github.com/trestletech/plumber/pull/165))
+* Fix the validation error warning at the bottom of deployed Swagger files 
+  which would have appeared any time your `swagger.json` file was hosted in
+  such a way that a hosted validator service would not have been able to access
+  it. For now we just suppress validation of swagger.json files. (#149)
 
 plumber 0.4.2
 --------------------------------------------------------------------------------

@@ -57,6 +57,10 @@ test_that("extractResponses works", {
   r <- extractResponses(NULL)
   expect_equal(r, defaultResp)
 
+  # Response constructor actually defaults to NA, so that's an important case, too
+  r <- extractResponses(NA)
+  expect_equal(r, defaultResp)
+
   # Responses with no default
   customResps <- list("200" = list())
   r <- extractResponses(customResps)
@@ -67,8 +71,9 @@ test_that("extractResponses works", {
 
 test_that("extractSwaggerParams works", {
   ep <- list(id=list(desc="Description", type="integer", required=FALSE),
+             id2=list(desc="Description2", required=FALSE), # No redundant type specification
              make=list(desc="Make description", type="string", required=FALSE))
-  pp <- data.frame(name="id", type="int")
+  pp <- data.frame(name=c("id", "id2"), type=c("int", "int"))
 
   params <- extractSwaggerParams(ep, pp)
   expect_equal(as.list(params[1,]),
@@ -78,6 +83,12 @@ test_that("extractSwaggerParams works", {
                     required=TRUE, # Made required b/c path arg
                     type="integer"))
   expect_equal(as.list(params[2,]),
+               list(name="id2",
+                    description="Description2",
+                    `in`="path",
+                    required=TRUE, # Made required b/c path arg
+                    type="integer"))
+  expect_equal(as.list(params[3,]),
                list(name="make",
                     description="Make description",
                     `in`="query",
@@ -87,6 +98,7 @@ test_that("extractSwaggerParams works", {
   # If id were not a path param it should not be promoted to required
   params <- extractSwaggerParams(ep, NULL)
   expect_equal(params$required[params$name=="id"], FALSE)
+  expect_equal(params$type[params$name=="id"], "integer")
 
   params <- extractSwaggerParams(NULL, NULL)
   expect_equal(nrow(params), 0)

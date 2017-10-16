@@ -222,7 +222,7 @@ plumber <- R6Class(
         # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
         fun <- function(schemes, host, path){
           if (!missing(schemes)){
-            sf$schemes <- schemes
+            sf$schemes <- I(schemes)
           }
 
           if (!missing(host)){
