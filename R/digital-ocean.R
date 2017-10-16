@@ -112,7 +112,10 @@ install_nginx <- function(droplet){
 install_new_r <- function(droplet){
   analogsea::droplet_ssh(droplet, c("echo 'deb https://cran.rstudio.com/bin/linux/ubuntu xenial/' >> /etc/apt/sources.list",
                   "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9"))
-  analogsea::debian_apt_get_update(droplet)
+  # TODO: use the analogsea version once https://github.com/sckott/analogsea/issues/139 is resolved
+  #analogsea::debian_apt_get_update(droplet)
+  analogsea::droplet_ssh(droplet, "sudo apt-get update -qq", 'sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade')
+
   analogsea::debian_install_r(droplet)
 }
 
