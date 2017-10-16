@@ -52,7 +52,7 @@ prepareSwaggerEndpoints <- function(routerEndpoints){
 
 defaultResp <- list("default"=list(description="Default response."))
 extractResponses <- function(resps){
-  if (is.null(resps)){
+  if (is.null(resps) || is.na(resps)){
     resps <- defaultResp
   } else if (!("default" %in% names(resps))){
     resps <- c(resps, defaultResp)

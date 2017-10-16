@@ -57,6 +57,10 @@ test_that("extractResponses works", {
   r <- extractResponses(NULL)
   expect_equal(r, defaultResp)
 
+  # Response constructor actually defaults to NA, so that's an important case, too
+  r <- extractResponses(NA)
+  expect_equal(r, defaultResp)
+
   # Responses with no default
   customResps <- list("200" = list())
   r <- extractResponses(customResps)
