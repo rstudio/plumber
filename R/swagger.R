@@ -78,9 +78,9 @@ extractSwaggerParams <- function(endpointParams, pathParams){
     }
 
     type <- endpointParams[[p]]$type
-    if (is.na(type)){
+    if (is.null(type) || is.na(type)){
       if (location == "path") {
-        type <- pathParams[pathParams$name == p,"type"]
+        type <- plumberToSwaggerType(pathParams[pathParams$name == p,"type"])
       } else {
         type <- "string" # Default to string
       }
