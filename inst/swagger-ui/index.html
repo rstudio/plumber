@@ -79,8 +79,9 @@ window.onload = function() {
 
   var loc = window.location.href;
   if (loc.match(/\/__swagger__/)){
+    var protocol = window.location.protocol.replace(/:$/, '');
     loc = loc.replace(/__swagger__\/?/, 'swagger.json') + '?' +
-      'schemes=' + window.location.protocol +
+      'schemes=' + protocol +
       '&host=' + window.location.host +
       '&path=' + window.location.pathname.replace(/__swagger__\/?/, '');
   } else {
