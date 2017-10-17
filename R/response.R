@@ -34,26 +34,46 @@ PlumberResponse <- R6Class(
       )
     },
     # TODO: support multiple setCookies per response
-    setCookie = function(name, value, path){
-      # TODO: support expiration
-      # TODO: support HTTP-only
-      # TODO: support secure
-
-      # Keep headers up-to-date
-
-      self$setHeader("Set-Cookie", cookieToStr(name, value, path))
+    setCookie = function(name, value, path, expiration=FALSE, http=FALSE, secure=FALSE){
+      self$setHeader("Set-Cookie", cookieToStr(name, value, path, expiration, http, secure))
     }
   )
 )
 
 #' @importFrom utils URLencode
 #' @noRd
-cookieToStr <- function(name, value, path){
+cookieToStr <- function(name, value, path, expiration=FALSE, http=FALSE, secure=FALSE){
   val <- URLencode(as.character(value))
   str <- paste0(name, "=", val, "; ")
 
   if (!missing(path)){
     str <- paste0(str, "Path=", path, "; ")
+  }
+
+  if (!missing(http) && http){
+    str <- paste0(str, "HttpOnly; ")
+  }
+
+  if (!missing(secure) && secure){
+    str <- paste0(str, "Secure; ")
+  }
+
+  if (!missing(expiration)){
+    if (is.numeric(expiration)){
+      # Number of seconds in the future
+      now <- Sys.time()
+      expy <- now + expiration
+      expyStr <- format(expy, format="%a, %e %b %Y %T", tz="GMT", usetz=TRUE)
+
+      str <- paste0(str, "Expires: ", expyStr, "; ")
+      str <- paste0(str, "Max-Age: ", expiration, "; ")
+    } else if (inherits(expiration, "POSIXt")){
+      seconds <- difftime(expiration, Sys.time(), units="secs")
+      # TODO: DRY
+      expyStr <- format(expiration, format="%a, %e %b %Y %T", tz="GMT", usetz=TRUE)
+      str <- paste0(str, "Expires: ", expyStr, "; ")
+      str <- paste0(str, "Max-Age: ", as.integer(seconds), "; ")
+    } # interpret all other values as session cookies.
   }
 
   # Trim last '; '
