@@ -27,3 +27,21 @@ test_that("Images are properly rendered", {
   expect_gt(length(resp$body), 100) # This changes based on R ver/OS, may not be useful.
   expect_lt(length(resp$body), fullsizeJPEG) # Should be smaller than the full one
 })
+
+test_that("render_image arguments supplement", {
+  pngcalls <- NULL
+  mypng <- function(...){
+    pngcalls <<- list(...)
+  }
+
+  p <- render_image(mypng, "ct", list(a=1, b=2))
+
+  data <- new.env()
+  req <- make_req("GET", "/")
+  res <- list()
+  p$pre(req, res, data)
+  expect_length(pngcalls, 3)
+  expect_equal(pngcalls$filename, data$file)
+  expect_equal(pngcalls$a, 1)
+  expect_equal(pngcalls$b, 2)
+})
