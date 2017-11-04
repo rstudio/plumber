@@ -2,6 +2,10 @@ plumber 0.4.3
 --------------------------------------------------------------------------------
 * BUGFIX: properly handle named query string and post body arguments in 
   mounted subrouters.
+* Added support for static sizing of images. `@png` and `@jpeg` now accept a 
+  parenthetical list of arguments that will be passed into the `png()` or 
+  `jpeg()` call. This enables annotations like 
+  `#' @png (width = 200, height=500)`.
 * Enable `ByteCompile` flag
 * Set working directory for DigitalOcean APIs.
 * Respect `setErrorHandler`
