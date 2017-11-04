@@ -36,6 +36,18 @@ test_that("parseBlock images", {
   expect_equal(b$image, "jpeg")
   expect_equal(b$imageAttr, "")
 
+  # No whitespace is fine
+  lines <- c("#' @jpeg(w=1)")
+  b <- parseBlock(length(lines), lines)
+  expect_equal(b$image, "jpeg")
+  expect_equal(b$imageAttr, "(w=1)")
+
+  # Additional chars after name don't count as image tags
+  lines <- c("#' @jpegs")
+  b <- parseBlock(length(lines), lines)
+  expect_null(b$image)
+  expect_null(b$imageAttr)
+
   # Properly formatted arguments work
   lines <- c("#'@jpeg (width=100)")
   b <- parseBlock(length(lines), lines)

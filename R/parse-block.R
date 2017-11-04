@@ -129,7 +129,7 @@ parseBlock <- function(lineNum, file){
       serializer <- .globals$serializers[[s]]()
     }
 
-    imageMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(jpeg|png)(\\s+(.*)\\s*$)?")
+    imageMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(jpeg|png)([\\s\\(].*)?\\s*$")
     if (!is.na(imageMat[1,1])){
       if (!is.null(image)){
         # Must have already assigned.
@@ -137,7 +137,7 @@ parseBlock <- function(lineNum, file){
       }
       image <- imageMat[1,2]
 
-      imageAttr <- trimws(imageMat[1,4])
+      imageAttr <- trimws(imageMat[1,3])
       if (is.na(imageAttr)){
         imageAttr <- ""
       }
