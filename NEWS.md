@@ -10,6 +10,8 @@ plumber 0.4.3
 * Set working directory for DigitalOcean APIs.
 * Respect `setErrorHandler`
 * BUGFIX: export `PlumberStatic`
+* Case-insensitive matching on `plumber.r` and `entrypoint.r` when 
+  `plumb()`ing a directory.
 * Support query strings with keys that appear more than once 
   ([#165](https://github.com/trestletech/plumber/pull/165))
 * Fix the validation error warning at the bottom of deployed Swagger files 
