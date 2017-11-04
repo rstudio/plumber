@@ -1,35 +1,32 @@
-render_jpeg <- list(
-  pre = function(req, res, data){
-    t <- tempfile()
-    data$file <- t
-    jpeg(t)
-  },
-  post = function(value, req, res, data){
-    dev.off()
+#' @param imageFun The function to call to setup the image device (e.g. `png`)
+#' @param args A list of supplemental arguments to be passed into jpeg()
+#' @noRd
+render_image <- function(imageFun, contentType, args=NULL){
+  list(
+    pre = function(req, res, data){
+      t <- tempfile()
+      data$file <- t
 
-    con <- file(data$file, "rb")
-    img <- readBin(con, "raw", file.info(data$file)$size)
-    close(con)
-    res$body <- img
-    res$setHeader("Content-type", "image/jpeg")
-    res
-  }
-)
+      finalArgs <- c(list(filename=t), args)
+      do.call(imageFun, finalArgs)
+    },
+    post = function(value, req, res, data){
+      dev.off()
 
-render_png <- list(
-  pre = function(req, res, data){
-    t <- tempfile()
-    data$file <- t
-    png(t)
-  },
-  post = function(value, req, res, data){
-    dev.off()
+      con <- file(data$file, "rb")
+      img <- readBin(con, "raw", file.info(data$file)$size)
+      close(con)
+      res$body <- img
+      res$setHeader("Content-type", contentType)
+      res
+    }
+  )
+}
 
-    con <- file(data$file, "rb")
-    img <- readBin(con, "raw", file.info(data$file)$size)
-    close(con)
-    res$body <- img
-    res$setHeader("Content-type", "image/png")
-    res
-  }
-)
+render_jpeg <- function(args){
+  render_image(jpeg, "image/jpeg", args)
+}
+
+render_png <- function(args){
+  render_image(png, "image/png", args)
+}

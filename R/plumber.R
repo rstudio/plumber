@@ -30,21 +30,27 @@ plumb <- function(file, dir="."){
     # Parse dir
     dirMode <- TRUE
     dir <- sub("/$", "", dir)
-    file <- file.path(dir, "plumber.R")
+
+    # Find plumber.R in the directory case-insensitively
+    file <- list.files(dir, "^plumber\\.r$", ignore.case = TRUE, full.names = TRUE)
+    if (length(file) == 0){
+      stop("No plumber.R file found in the specified directory: ", dir)
+    }
 
   } else {
     # File was specified
     dirMode <- FALSE
   }
 
-  if (dirMode && file.exists(file.path(dir, "entrypoint.R"))){
+  entrypoint <- list.files(dir, "^entrypoint\\.r$", ignore.case = TRUE)
+  if (dirMode && length(entrypoint) > 0){
     # Dir was specified and we found an entrypoint.R
 
     old <- setwd(dir)
     on.exit(setwd(old))
 
     # Expect that entrypoint will provide us with the router
-    x <- source("entrypoint.R")
+    x <- source(entrypoint)
 
     # source returns a list with value and visible elements, we want the (visible) value object.
     pr <- x$value

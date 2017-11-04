@@ -1,4 +1,10 @@
 
+# TODO: delete once we require R 3.3.0
+trimws <- function(string){
+  string <- gsub("^\\s+", "", string)
+  gsub("\\s+$", "", string)
+}
+
 stopOnLine <- function(lineNum, line, msg){
   stop("Error on line #", lineNum, ": '", line, "' - ", msg)
 }
@@ -12,6 +18,7 @@ parseBlock <- function(lineNum, file){
   preempt <- NULL
   filter <- NULL
   image <- NULL
+  imageAttr <- NULL
   serializer <- NULL
   assets <- NULL
   params <- NULL
@@ -122,13 +129,21 @@ parseBlock <- function(lineNum, file){
       serializer <- .globals$serializers[[s]]()
     }
 
-    imageMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(jpeg|png)(\\s+(.*)\\s*$)?")
+    imageMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(jpeg|png)([\\s\\(].*)?\\s*$")
     if (!is.na(imageMat[1,1])){
       if (!is.null(image)){
         # Must have already assigned.
         stopOnLine(lineNum, line, "Multiple image annotations on one function.")
       }
       image <- imageMat[1,2]
+
+      imageAttr <- trimws(imageMat[1,3])
+      if (is.na(imageAttr)){
+        imageAttr <- ""
+      }
+      if(!identical(imageAttr, "") && !grepl("^\\(.*\\)$", imageAttr, perl=TRUE)){
+        stopOnLine(lineNum, line, "Supplemental arguments to the image serializer must be surrounded by parentheses, as in `#' @png (width=200)`")
+      }
     }
 
     responseMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@response\\s+(\\w+)\\s+(\\S.+)\\s*$")
@@ -177,6 +192,7 @@ parseBlock <- function(lineNum, file){
     preempt = preempt,
     filter = filter,
     image = image,
+    imageAttr = imageAttr,
     serializer = serializer,
     assets = assets,
     params = params,
@@ -201,10 +217,17 @@ activateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, mou
     ep <- PlumberEndpoint$new(block$verbs, block$path, expr, envir, block$serializer, srcref, block$params, block$comments, block$responses)
 
     if (!is.null(block$image)){
+      # Arguments to pass in to the image serializer
+      imageArgs <- NULL
+      if (!identical(block$imageAttr, "")){
+        call <- paste("list", block$imageAttr)
+        imageArgs <- eval(parse(text=call))
+      }
+
       if (block$image == "png"){
-        ep$registerHooks(render_png)
+        ep$registerHooks(render_png(imageArgs))
       } else if (block$image == "jpeg"){
-        ep$registerHooks(render_jpeg)
+        ep$registerHooks(render_jpeg(imageArgs))
       } else {
         stop("Image format not found: ", block$image)
       }
