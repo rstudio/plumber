@@ -42,7 +42,7 @@ plumb <- function(file, dir="."){
     dirMode <- FALSE
   }
 
-  entrypoint <- list.files(dir, "entrypoint\\.r", ignore.case = TRUE)
+  entrypoint <- list.files(dir, "^entrypoint\\.r$", ignore.case = TRUE)
   if (dirMode && length(entrypoint) > 0){
     # Dir was specified and we found an entrypoint.R
 
