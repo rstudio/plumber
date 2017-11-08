@@ -196,7 +196,6 @@ plumber <- R6Class(
       on.exit({ options('plumber.debug' = getOption('plumber.debug')) })
       options(plumber.debug = debug)
 
-
       # Set and restore the wd to make it appear that the proc is running local to the file's definition.
       if (!is.null(private$filename)){
         cwd <- getwd()
@@ -246,6 +245,12 @@ plumber <- R6Class(
         self$mount("/__swagger__", plumberFileServer)
         message("Running the swagger UI at ", sf$schemes[1], "://", sf$host, "/__swagger__/", sep="")
       }
+
+      onex <- getOption("plumber.onExit", default=function(){})
+      if (!is.function(onex)){
+        stop("plumber.onExit option must be a function.")
+      }
+      on.exit(onex(), add=TRUE)
 
       httpuv::runServer(host, port, self)
     },
