@@ -20,7 +20,7 @@ plumber 0.4.3
   it. For now we just suppress validation of swagger.json files. (#149)
 * Support a `plumber.onExit` option which can define a function that will be
   evaluated when the API is interrupted. e.g. 
-  `options(plumber.onExit=function(){ print("Bye bye!") })`
+  `pr <- plumb("plumber.R"); pr$registerHook("exit", function(){ print("Bye bye!") })`
 
 plumber 0.4.2
 --------------------------------------------------------------------------------

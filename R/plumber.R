@@ -246,11 +246,7 @@ plumber <- R6Class(
         message("Running the swagger UI at ", sf$schemes[1], "://", sf$host, "/__swagger__/", sep="")
       }
 
-      onex <- getOption("plumber.onExit", default=function(){})
-      if (!is.function(onex)){
-        stop("plumber.onExit option must be a function.")
-      }
-      on.exit(onex(), add=TRUE)
+      on.exit(private$runHooks("exit"), add=TRUE)
 
       httpuv::runServer(host, port, self)
     },
@@ -260,7 +256,7 @@ plumber <- R6Class(
       private$mnts[[path]] <- router
     },
     registerHook = function(stage=c("preroute", "postroute",
-                                    "preserialize", "postserialize"), handler){
+                                    "preserialize", "postserialize", "exit"), handler){
       stage <- match.arg(stage)
       super$registerHook(stage, handler)
     },
