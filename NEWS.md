@@ -24,6 +24,8 @@ plumber 0.4.3
 * Support an `exit` hook which can define a function that will be
   evaluated when the API is interrupted. e.g. 
   `pr <- plumb("plumber.R"); pr$registerHook("exit", function(){ print("Bye bye!") })`
+* Fixed bug in which a single function couldn't support multiple paths for a
+  single verb (#203).
 
 plumber 0.4.2
 --------------------------------------------------------------------------------

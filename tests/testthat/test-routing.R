@@ -17,6 +17,8 @@ test_that("Routing to errors and 404s works", {
   expect_equal(r$route(make_req("GET", "/abc"), res), "abc get")
   expect_equal(r$route(make_req("GET", "/dog"), res), "dog get")
   expect_equal(r$route(make_req("POST", "/dog"), res), "dog use")
+  expect_equal(r$route(make_req("GET", "/path1"), res), "dual path")
+  expect_equal(r$route(make_req("GET", "/path2"), res), "dual path")
 
   expect_equal(errors, 0)
   expect_equal(notFounds, 0)

@@ -13,8 +13,7 @@ stopOnLine <- function(lineNum, line, msg){
 #' @param file A character vector representing all the lines in the file
 #' @noRd
 parseBlock <- function(lineNum, file){
-  path <- NULL
-  verbs <- NULL
+  paths <- NULL
   preempt <- NULL
   filter <- NULL
   image <- NULL
@@ -36,8 +35,10 @@ parseBlock <- function(lineNum, file){
         stopOnLine(lineNum, line, "No path specified.")
       }
 
-      verbs <- c(verbs, enumerateVerbs(epMat[1,2]))
-      path <- p
+      if (is.null(paths)){
+        paths <- list()
+      }
+      paths[[length(paths)+1]] <- list(verb = enumerateVerbs(epMat[1,2]), path = p)
     }
 
     filterMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@filter(\\s+(.*)$)?")
@@ -187,8 +188,7 @@ parseBlock <- function(lineNum, file){
   }
 
   list(
-    path = path,
-    verbs = verbs,
+    paths = paths,
     preempt = preempt,
     filter = filter,
     image = image,
@@ -209,31 +209,33 @@ activateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, mou
 
   block <- parseBlock(lineNum, file)
 
-  if (sum(!is.null(block$filter), !is.null(block$path), !is.null(block$assets)) > 1){
+  if (sum(!is.null(block$filter), !is.null(block$paths), !is.null(block$assets)) > 1){
     stopOnLine(lineNum, file[lineNum], "A single function can only be a filter, an API endpoint, or an asset (@filter AND @get, @post, @assets, etc.)")
   }
 
-  if (!is.null(block$path)){
-    ep <- PlumberEndpoint$new(block$verbs, block$path, expr, envir, block$serializer, srcref, block$params, block$comments, block$responses)
+  if (!is.null(block$paths)){
+    lapply(block$paths, function(p){
+      ep <- PlumberEndpoint$new(p$verb, p$path, expr, envir, block$serializer, srcref, block$params, block$comments, block$responses)
 
-    if (!is.null(block$image)){
-      # Arguments to pass in to the image serializer
-      imageArgs <- NULL
-      if (!identical(block$imageAttr, "")){
-        call <- paste("list", block$imageAttr)
-        imageArgs <- eval(parse(text=call))
+      if (!is.null(block$image)){
+        # Arguments to pass in to the image serializer
+        imageArgs <- NULL
+        if (!identical(block$imageAttr, "")){
+          call <- paste("list", block$imageAttr)
+          imageArgs <- eval(parse(text=call))
+        }
+
+        if (block$image == "png"){
+          ep$registerHooks(render_png(imageArgs))
+        } else if (block$image == "jpeg"){
+          ep$registerHooks(render_jpeg(imageArgs))
+        } else {
+          stop("Image format not found: ", block$image)
+        }
       }
 
-      if (block$image == "png"){
-        ep$registerHooks(render_png(imageArgs))
-      } else if (block$image == "jpeg"){
-        ep$registerHooks(render_jpeg(imageArgs))
-      } else {
-        stop("Image format not found: ", block$image)
-      }
-    }
-
-    addEndpoint(ep, block$preempt)
+      addEndpoint(ep, block$preempt)
+    })
   } else if (!is.null(block$filter)){
     filter <- PlumberFilter$new(block$filter, expr, envir, block$serializer, srcref)
     addFilter(filter)
