@@ -7,20 +7,7 @@
 
 <img align="right" src="https://www.rplumber.io/components/images/plumber.png" />
 
-> ## WARNING
-> Plumber 0.4.0 will include breaking changes to the API.
-> 
-> Please see the [migration guide](https://book.rplumber.io/plumber-0-4-0-migration-guide) for instructions on migrating your API to version 0.4.0.
-> 
-> You can see the current list of breaking changes planned for the 0.4.0 release [here](https://github.com/trestletech/plumber/issues?utf8=%E2%9C%93&q=is%3Aissue%20label%3Abreaking%20milestone%3A0.4.0). [Issue #101](https://github.com/trestletech/plumber/issues/101), in particular, is likely to affect you if you run Plumber instances in production, see details and remediation [here](https://github.com/trestletech/plumber/issues/101).
->
-> You can install version 0.3.3 of Plumber (the latest version that did not have breaking changes) using devtools:
-> 
-> ```
-> devtools::install_github("trestletech/plumber", ref="v0.3.3")
-> ```
-
-Plumber allows you to create a REST API by merely decorating your existing R source code with special comments. Take a look at an example.
+Plumber allows you to create a web API by merely decorating your existing R source code with special comments. Take a look at an example.
 
 ```r
 # plumber.R
