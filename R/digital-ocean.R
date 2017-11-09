@@ -167,6 +167,7 @@ install_new_r <- function(droplet){
 #' @param force If `FALSE`, will abort if it believes that the given domain name
 #'   is not yet pointing at the appropriate IP address for this droplet. If
 #'   `TRUE`, will ignore this check and attempt to proceed regardless.
+#' @importFrom jsonlite fromJSON
 #' @export
 do_configure_https <- function(droplet, domain, email, termsOfService=FALSE, force=FALSE){
   checkAnalogSea()
@@ -177,16 +178,30 @@ do_configure_https <- function(droplet, domain, email, termsOfService=FALSE, for
   if (!force){
     nslookup <- tempfile()
 
-    analogsea::droplet_ssh(droplet, paste0("nslookup ", domain, " > /tmp/nslookup"))
-    analogsea::droplet_download(droplet, "/tmp/nslookup", nslookup)
+    nsout <- droplet_capture(droplet, paste0("nslookup ", domain))
 
-    nsout <- readLines(nslookup)
-    file.remove(nslookup)
     ips <- nsout[grepl("^Address: ", nsout)]
     ip <- gsub("^Address: (.*)$", "\\1", ips)
 
-    do_ips <- unlist(lapply(droplet$networks, function(x){ lapply(x, "[[", "ip_address") }))
-    if (length(intersect(ip, do_ips)) == 0){
+    # It turns out that the floating IP is not data that we have about the droplet
+    # Also, if the floating IP was assigned after we created the droplet object that was
+    # passed in, then we might not have that information available anyways.
+    # It turns out that we can use the 'Droplet Metadata' system to query for this info
+    # from the droplet to get a real-time response.
+    metadata <- droplet_capture(droplet, "curl http://169.254.169.254/metadata/v1.json")
+
+    parsed <- jsonlite::fromJSON(metadata)
+    floating <- unlist(lapply(parsed$floating_ip, function(ipv){ ipv$ip_address }))
+    ephemeral <- unlist(parsed$interfaces$public)["ipv4.ip_address"]
+
+    if (ip %in% ephemeral) {
+      warning("You should consider using a Floating IP address on your droplet for DNS. Currently ",
+              "you're using the ephemeral IP address of your droplet for DNS which is dangerous; ",
+              "as soon as you terminate your droplet your DNS records will be pointing to an IP ",
+              "address you no longer control. A floating IP will give you the opportunity to ",
+              "create a new droplet and reassign the floating IP used with DNS later.")
+    } else if (! ip %in% floating) {
+      print(list(ip=ip, floatingIPs = unname(floating), ephemeralIPs = unname(ephemeral)))
       stop("It doesn't appear that the domain name '", domain, "' is pointed to an IP address associated with this droplet. ",
            "This could be due to a DNS misconfiguration or because the changes just haven't propagated through the Internet yet. ",
            "If you believe this is an error, you can override this check by setting force=TRUE.")
