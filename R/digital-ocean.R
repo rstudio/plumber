@@ -58,7 +58,10 @@ do_provision <- function(droplet, unstable=FALSE, example=TRUE, ...){
   }
 
   # Provision
-  analogsea::debian_add_swap(droplet) # FIXME: don't do if already added, not idempotent.
+  lines <- droplet_capture(droplet, 'swapon | grep "/swapfile" | wc -l')
+  if (lines != "1"){
+    analogsea::debian_add_swap(droplet)
+  }
   install_new_r(droplet)
   install_plumber(droplet, unstable)
   install_api(droplet)
@@ -82,6 +85,19 @@ install_plumber <- function(droplet, unstable){
   } else {
     analogsea::install_r_package(droplet, "plumber")
   }
+}
+
+#' Captures the output from running some command via SSH
+#' @noRd
+droplet_capture <- function(droplet, command){
+    tf <- tempfile()
+    randName <- paste(sample(c(letters, LETTERS), size=10, replace=TRUE), collapse="")
+    analogsea::droplet_ssh(droplet, paste0(command, " > /tmp/", randName))
+    analogsea::droplet_download(droplet, paste0("/tmp/", randName), tf)
+    analogsea::droplet_ssh(droplet, paste0("rm /tmp/", randName))
+    lin <- readLines(tf)
+    file.remove(tf)
+    lin
 }
 
 install_api <- function(droplet){
