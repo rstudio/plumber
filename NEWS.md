@@ -21,6 +21,9 @@ plumber 0.4.3
 * Support for floating IPs in DNS check that occurs in `do_configure_https()`
 * Make adding swap file idempotent in `do_provision()` so you can now call that
   on a single droplet multiple times.
+* Support an `exit` hook which can define a function that will be
+  evaluated when the API is interrupted. e.g. 
+  `pr <- plumb("plumber.R"); pr$registerHook("exit", function(){ print("Bye bye!") })`
 
 plumber 0.4.2
 --------------------------------------------------------------------------------
