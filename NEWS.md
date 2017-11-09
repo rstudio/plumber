@@ -18,6 +18,9 @@ plumber 0.4.3
   which would have appeared any time your `swagger.json` file was hosted in
   such a way that a hosted validator service would not have been able to access
   it. For now we just suppress validation of swagger.json files. (#149)
+* Support for floating IPs in DNS check that occurs in `do_configure_https()`
+* Make adding swap file idempotent in `do_provision()` so you can now call that
+  on a single droplet multiple times.
 
 plumber 0.4.2
 --------------------------------------------------------------------------------
