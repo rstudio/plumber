@@ -48,3 +48,9 @@ function(res){
   res$status <- 123
   res
 }
+
+#* @get /path1
+#* @get /path2
+function(){
+  "dual path"
+}

@@ -102,6 +102,8 @@ PlumberEndpoint <- R6Class(
     canServe = function(req){
       req$REQUEST_METHOD %in% self$verbs && !is.na(stringi::stri_match(req$PATH_INFO, regex=private$regex$regex)[1,1])
     },
+    # For historical reasons we have to accept multiple verbs for a single path. Now it's simpler
+    # to just parse each separate verb/path into its own endpoint, so we just do that.
     initialize = function(verbs, path, expr, envir, serializer, lines, params, comments, responses){
       self$verbs <- verbs
       self$path <- path
