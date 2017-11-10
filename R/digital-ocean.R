@@ -13,6 +13,7 @@ checkAnalogSea <- function(){
 #'
 #' Create (if required), install the necessary prerequisites, and
 #' deploy a sample plumber application on a DigitalOcean virtual machine.
+#' You may sign up for a Digital Ocean account [here](https://m.do.co/c/add0b50f54c4).
 #' This command is idempotent, so feel free to run it on a single server multiple times.
 #' @param droplet The DigitalOcean droplet that you want to provision (see [analogsea::droplet()]). If empty, a new DigitalOcean server will be created.
 #' @param unstable If `FALSE`, will install plumber from CRAN. If `TRUE`, will install the unstable version of plumber from GitHub.

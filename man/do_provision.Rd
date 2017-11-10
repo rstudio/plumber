@@ -18,6 +18,7 @@ do_provision(droplet, unstable = FALSE, example = TRUE, ...)
 \description{
 Create (if required), install the necessary prerequisites, and
 deploy a sample plumber application on a DigitalOcean virtual machine.
+You may sign up for a Digital Ocean account \href{https://m.do.co/c/add0b50f54c4}{here}.
 This command is idempotent, so feel free to run it on a single server multiple times.
 }
 \details{
