@@ -52,7 +52,7 @@ do_provision <- function(droplet, unstable=FALSE, example=TRUE, ...){
     analogsea::droplet_wait(droplet)
 
     # I often still get a closed port after droplet_wait returns. Buffer for just a bit
-    Sys.sleep(15)
+    Sys.sleep(25)
 
     # Refresh the droplet; sometimes the original one doesn't yet have a network interface.
     droplet <- analogsea::droplet(id=droplet$id)
