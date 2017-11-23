@@ -1,7 +1,7 @@
 context("Paths")
 
 test_that("paths are properly converted", {
-  varRegex <- "([^\\./]+)"
+  varRegex <- "([^/]+)"
   p <- createPathRegex("/car/")
   expect_equal(p$names, character())
   expect_equal(p$regex, "^/car/$")
@@ -22,15 +22,15 @@ test_that("paths are properly converted", {
 test_that("variables are typed", {
   p <- createPathRegex("/car/<id:int>")
   expect_equal(p$names, "id")
-  expect_equal(p$regex, paste0("^/car/", "(\\d+)", "$"))
+  expect_equal(p$regex, paste0("^/car/", "(-?\\d+)", "$"))
 
   p <- createPathRegex("/car/<id:double>")
   expect_equal(p$names, "id")
-  expect_equal(p$regex, paste0("^/car/", "(\\d*\\.?\\d*)", "$"))
+  expect_equal(p$regex, paste0("^/car/", "(-?\\d*\\.?\\d*)", "$"))
 
   p <- createPathRegex("/car/<id:numeric>")
   expect_equal(p$names, "id")
-  expect_equal(p$regex, paste0("^/car/", "(\\d*\\.?\\d*)", "$"))
+  expect_equal(p$regex, paste0("^/car/", "(-?\\d*\\.?\\d*)", "$"))
 
   p <- createPathRegex("/car/<id:bool>")
   expect_equal(p$names, "id")
@@ -52,9 +52,15 @@ test_that("integration of path parsing works", {
   r <- plumber$new("files/path-params.R")
 
   expect_equal(r$route(make_req("GET", "/car/13"), PlumberResponse$new()), "13")
+  expect_equal(r$route(make_req("GET", "/car/int/13"), PlumberResponse$new()), 13)
+  expect_equal(r$route(make_req("GET", "/car/int/-13"), PlumberResponse$new()), -13)
   expect_equal(r$route(make_req("GET", "/car/15/sell/$15,000"), PlumberResponse$new()), list(id="15", price="$15,000"))
   expect_equal(r$route(make_req("POST", "/car/13"), PlumberResponse$new()), "13")
-  expect_equal(r$route(make_req("GET", "/car/15/buy/$15,000"), PlumberResponse$new()), list(id=15, price="$15,000"))
+  expect_equal(r$route(make_req("GET", "/car/15/buy/$15,000"), PlumberResponse$new()),
+               list(id=15, price="$15,000"))
+  expect_equal(r$route(make_req("GET", "/car/15/buy/$15,000.99"), PlumberResponse$new()),
+               list(id=15, price="$15,000.99"))
   expect_equal(r$route(make_req("GET", "/car/ratio/1.5"), PlumberResponse$new()), 1.5)
+  expect_equal(r$route(make_req("GET", "/car/ratio/-1.5"), PlumberResponse$new()), -1.5)
   expect_equal(r$route(make_req("GET", "/car/sold/true"), PlumberResponse$new()), TRUE)
 })
