@@ -26,6 +26,8 @@ plumber 0.4.3
   `pr <- plumb("plumber.R"); pr$registerHook("exit", function(){ print("Bye bye!") })`
 * Fixed bug in which a single function couldn't support multiple paths for a
   single verb (#203).
+* Support negative numbers in numeric path segments (#212)
+* Support `.` in string path segments
 
 plumber 0.4.2
 --------------------------------------------------------------------------------

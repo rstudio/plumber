@@ -26,11 +26,11 @@ test_that("variables are typed", {
 
   p <- createPathRegex("/car/<id:double>")
   expect_equal(p$names, "id")
-  expect_equal(p$regex, paste0("^/car/", "(-?\\d*\\.?\\d*)", "$"))
+  expect_equal(p$regex, paste0("^/car/", "(-?\\d*\\.?\\d+)", "$"))
 
   p <- createPathRegex("/car/<id:numeric>")
   expect_equal(p$names, "id")
-  expect_equal(p$regex, paste0("^/car/", "(-?\\d*\\.?\\d*)", "$"))
+  expect_equal(p$regex, paste0("^/car/", "(-?\\d*\\.?\\d+)", "$"))
 
   p <- createPathRegex("/car/<id:bool>")
   expect_equal(p$names, "id")
@@ -62,5 +62,13 @@ test_that("integration of path parsing works", {
                list(id=15, price="$15,000.99"))
   expect_equal(r$route(make_req("GET", "/car/ratio/1.5"), PlumberResponse$new()), 1.5)
   expect_equal(r$route(make_req("GET", "/car/ratio/-1.5"), PlumberResponse$new()), -1.5)
+  expect_equal(r$route(make_req("GET", "/car/ratio/-.5"), PlumberResponse$new()), -.5)
+  expect_equal(r$route(make_req("GET", "/car/ratio/.5"), PlumberResponse$new()), .5)
+  expect_equal(r$route(make_req("GET", "/car/ratio/a"), PlumberResponse$new()),
+               list(error = "404 - Resource Not Found"))
+  expect_equal(r$route(make_req("GET", "/car/ratio/"), PlumberResponse$new()),
+               list(error = "404 - Resource Not Found"))
+  expect_equal(r$route(make_req("GET", "/car/ratio/."), PlumberResponse$new()),
+               list(error = "404 - Resource Not Found"))
   expect_equal(r$route(make_req("GET", "/car/sold/true"), PlumberResponse$new()), TRUE)
 })
