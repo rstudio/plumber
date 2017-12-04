@@ -65,14 +65,14 @@ cookieToStr <- function(name, value, path, expiration=FALSE, http=FALSE, secure=
       expy <- now + expiration
       expyStr <- format(expy, format="%a, %e %b %Y %T", tz="GMT", usetz=TRUE)
 
-      str <- paste0(str, "Expires: ", expyStr, "; ")
-      str <- paste0(str, "Max-Age: ", expiration, "; ")
+      str <- paste0(str, "Expires= ", expyStr, "; ")
+      str <- paste0(str, "Max-Age= ", expiration, "; ")
     } else if (inherits(expiration, "POSIXt")){
       seconds <- difftime(expiration, Sys.time(), units="secs")
       # TODO: DRY
       expyStr <- format(expiration, format="%a, %e %b %Y %T", tz="GMT", usetz=TRUE)
-      str <- paste0(str, "Expires: ", expyStr, "; ")
-      str <- paste0(str, "Max-Age: ", as.integer(seconds), "; ")
+      str <- paste0(str, "Expires= ", expyStr, "; ")
+      str <- paste0(str, "Max-Age= ", as.integer(seconds), "; ")
     } # interpret all other values as session cookies.
   }
 
