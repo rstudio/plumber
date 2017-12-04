@@ -45,11 +45,11 @@ test_that("cookies can convert to string", {
   # line above and below.
   # When given as a number of seconds
   expect_equal(cookieToStr("abc", 123, expiration=expiresSec),
-               paste0("abc=123; Expires: ", expyStr, "; Max-Age: ", expiresSec))
+               paste0("abc=123; Expires= ", expyStr, "; Max-Age= ", expiresSec))
   # When given as a POSIXct
   # difftime is exclusive, so the Max-Age may be off by one on positive time diffs.
   expect_equal(cookieToStr("abc", 123, expiration=expires),
-               paste0("abc=123; Expires: ", expyStr, "; Max-Age: ", expiresSec-1))
+               paste0("abc=123; Expires= ", expyStr, "; Max-Age= ", expiresSec-1))
 
   # Works with a negative number of seconds
   expiresSec <- -10
@@ -59,10 +59,10 @@ test_that("cookies can convert to string", {
   # line above and below.
   # When given as a number of seconds
   expect_equal(cookieToStr("abc", 123, expiration=expiresSec),
-               paste0("abc=123; Expires: ", expyStr, "; Max-Age: ", expiresSec))
+               paste0("abc=123; Expires= ", expyStr, "; Max-Age= ", expiresSec))
   # When given as a POSIXct
   expect_equal(cookieToStr("abc", 123, expiration=expires),
-               paste0("abc=123; Expires: ", expyStr, "; Max-Age: ", expiresSec))
+               paste0("abc=123; Expires= ", expyStr, "; Max-Age= ", expiresSec))
 })
 
 
