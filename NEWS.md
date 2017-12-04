@@ -1,4 +1,8 @@
-plumber 0.4.3
+plumber 0.4.5
+--------------------------------------------------------------------------------
+* BUGFIX: properly handle cookie expiration values (#216).
+
+plumber 0.4.4
 --------------------------------------------------------------------------------
 * BUGFIX: properly handle named query string and post body arguments in 
   mounted subrouters.
