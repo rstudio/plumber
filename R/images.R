@@ -1,5 +1,6 @@
 #' @param imageFun The function to call to setup the image device (e.g. `png`)
 #' @param args A list of supplemental arguments to be passed into jpeg()
+#' @importFrom grDevices dev.off jpeg png
 #' @noRd
 render_image <- function(imageFun, contentType, args=NULL){
   list(
