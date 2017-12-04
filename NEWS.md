@@ -4,6 +4,9 @@ plumber 0.4.5
 
 plumber 0.4.4
 --------------------------------------------------------------------------------
+* Support Expiration, HTTPOnly, and Secure flags on cookies (#87). **EDIT**: 
+  see [#216](https://github.com/trestletech/plumber/issues/216) which prevented 
+  expiration from working.
 * BUGFIX: properly handle named query string and post body arguments in 
   mounted subrouters.
 * Added support for static sizing of images. `@png` and `@jpeg` now accept a 
