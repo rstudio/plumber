@@ -3,6 +3,11 @@ function(id){
   id
 }
 
+#* @get /car/int/<id:int>
+function(id){
+  id
+}
+
 #* @get /car/<id>/sell/<price>
 function(id, price){
   list(id=id, price=price)
