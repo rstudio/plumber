@@ -223,7 +223,7 @@ activateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, mou
 
   if (!is.null(block$paths)){
     lapply(block$paths, function(p){
-      ep <- PlumberEndpoint$new(p$verb, p$path, expr, envir, block$serializer, srcref, block$params, block$comments, block$responses)
+      ep <- PlumberEndpoint$new(p$verb, p$path, expr, envir, block$serializer, srcref, block$params, block$comments, block$responses, block$tags)
 
       if (!is.null(block$image)){
         # Arguments to pass in to the image serializer
