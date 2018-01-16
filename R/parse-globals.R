@@ -54,6 +54,12 @@ parseOneGlobal <- function(fields, argument){
          },
          apiProduces={
            fields$produces <- strsplit(def, split="\\s+")[[1]]
+         },
+         apiTag={
+           tagMat <- stringi::stri_match(def, regex="^\\s*(\\w+)\\s+(\\S.+)\\s*$")
+           name <- tagMat[1,2]
+           description <- tagMat[1,3]
+           fields$tags <- rbind(fields$tags,data.frame(name=name,description=description))
          })
   fields
 }
@@ -69,7 +75,7 @@ parseGlobals <- function(lines){
   fullArg <- ""
 
   # Build up the fields that we want to return as globals
-  fields <- list(info=list())
+  fields <- list(info=list(),tags=data.frame())
 
   # Parse the global docs
   for (line in lines){
