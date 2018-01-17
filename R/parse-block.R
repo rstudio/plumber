@@ -27,7 +27,7 @@ parseBlock <- function(lineNum, file){
 
     line <- file[lineNum]
 
-    epMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(get|put|post|use|delete|head|options)(\\s+(.*)$)?")
+    epMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(get|put|post|use|delete|head|options|patch)(\\s+(.*)$)?")
     if (!is.na(epMat[1,2])){
       p <- stri_trim_both(epMat[1,4])
 
