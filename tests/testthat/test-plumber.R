@@ -26,8 +26,8 @@ test_that("The file is sourced in the envir", {
 test_that("Verbs translate correctly", {
   r <- plumber$new("files/verbs.R")
   expect_equal(length(r$endpoints), 1)
-  expect_equal(length(r$endpoints[[1]]), 9)
-  expect_equal(r$endpoints[[1]][[1]]$verbs, c("GET", "PUT", "POST", "DELETE", "HEAD", "OPTIONS"))
+  expect_equal(length(r$endpoints[[1]]), 10)
+  expect_equal(r$endpoints[[1]][[1]]$verbs, c("GET", "PUT", "POST", "DELETE", "HEAD", "OPTIONS", "PATCH"))
   expect_equal(r$endpoints[[1]][[2]]$verbs, "GET")
   expect_equal(r$endpoints[[1]][[3]]$verbs, "PUT")
   expect_equal(r$endpoints[[1]][[4]]$verbs, "POST")
@@ -36,6 +36,7 @@ test_that("Verbs translate correctly", {
   expect_equal(r$endpoints[[1]][[7]]$verbs, "GET")
   expect_equal(r$endpoints[[1]][[8]]$verbs, "HEAD")
   expect_equal(r$endpoints[[1]][[9]]$verbs, "OPTIONS")
+  expect_equal(r$endpoints[[1]][[10]]$verbs, "PATCH")
 })
 
 test_that("Invalid file fails gracefully", {
