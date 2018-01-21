@@ -75,7 +75,7 @@ parseGlobals <- function(lines){
   fullArg <- ""
 
   # Build up the fields that we want to return as globals
-  fields <- list(info=list(),tags=data.frame())
+  fields <- list(info=list())
 
   # Parse the global docs
   for (line in lines){
