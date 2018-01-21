@@ -135,7 +135,7 @@ PlumberEndpoint <- R6Class(
         self$responses <- responses
       }
       if(!missing(tags) && !is.null(tags)){
-        self$tags <- tags
+        self$tags <- I(tags)
       }
     },
     getPathParams = function(path){
