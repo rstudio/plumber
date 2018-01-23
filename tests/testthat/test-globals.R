@@ -51,3 +51,9 @@ test_that("parseGlobals works", {
     tags=data.frame(name=c("tag","tag2"),description=c("description","description2"), stringsAsFactors = FALSE)
   ))
 })
+
+test_that("Globals can't contain duplicate tags", {
+  lines <- c("#* @apiTag test description1",
+             "#* @apiTag test description2")
+  expect_error(parseGlobals(lines), "Duplicate tag definition specified.")
+})

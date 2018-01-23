@@ -59,6 +59,9 @@ parseOneGlobal <- function(fields, argument){
            tagMat <- stringi::stri_match(def, regex="^\\s*(\\w+)\\s+(\\S.+)\\s*$")
            name <- tagMat[1,2]
            description <- tagMat[1,3]
+           if(!is.null(fields$tags) && name %in% fields$tags$name) {
+             stop("Error: '", argument, "' - ","Duplicate tag definition specified.")
+           }
            fields$tags <- rbind(fields$tags,data.frame(name=name, description=description, stringsAsFactors = FALSE))
          })
   fields
