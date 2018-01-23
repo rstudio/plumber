@@ -29,7 +29,8 @@ test_that("parseGlobals works", {
              "#' @apiSchemes schemes",
              "#' @apiConsumes consumes",
              "#' @apiProduces produces",
-             "#' @apiTag tag description")
+             "#' @apiTag tag description",
+             "#' @apiTag tag2 description2")
 
   fields <- parseGlobals(lines)
 
@@ -47,6 +48,6 @@ test_that("parseGlobals works", {
     schemes="schemes",
     consumes="consumes",
     produces="produces",
-    tags=data.frame(name="tag",description="description", stringsAsFactors = FALSE)
+    tags=data.frame(name=c("tag","tag2"),description=c("description","description2"), stringsAsFactors = FALSE)
   ))
 })
