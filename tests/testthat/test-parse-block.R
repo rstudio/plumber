@@ -73,4 +73,10 @@ test_that("Block can't be multiple mutually exclusive things", {
 
 })
 
+test_that("Block can't contain duplicate tags", {
+  lines <- c("#* @tag test",
+            "#* @tag test")
+  expect_error(parseBlock(length(lines), lines), "Duplicate tag specified.")
+})
+
 # TODO: more testing around filter, assets, endpoint, etc.

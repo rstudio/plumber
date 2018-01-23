@@ -3,9 +3,12 @@ inventory <- read.csv("inventory.csv", stringsAsFactors = FALSE)
 #* @apiTitle Auto Inventory Manager
 #* @apiDescription Manage the inventory of an automobile
 #*   store using an API.
+#* @apiTag cars Functionality having to do with the management of
+#*   car inventory.
 
 #* List all cars in the inventory
 #* @get /car/
+#* @tag cars
 listCars <- function(){
   inventory
 }
@@ -14,6 +17,7 @@ listCars <- function(){
 #* @param id The ID of the car to get
 #* @get /car/<id:int>
 #* @response 404 No car with the given ID was found in the inventory.
+#* @tag cars
 getCar <- function(id, res){
   car <- inventory[inventory$id == id,]
   if (nrow(car) == 0){
@@ -44,6 +48,7 @@ validateCar <- function(make, model, year){
 #* @param miles:int The number of miles the car has
 #* @param price:numeric The price of the car in USD
 #* @response 400 Invalid user input provided
+#* @tag cars
 addCar <- function(make, model, edition, year, miles, price, res){
   newId <- max(inventory$id) + 1
 
@@ -76,6 +81,7 @@ addCar <- function(make, model, edition, year, miles, price, res){
 #* @param miles:int The number of miles the car has
 #* @param price:numeric The price of the car in USD
 #* @put /car/<id:int>
+#* @tag cars
 updateCar <- function(id, make, model, edition, year, miles, price, res){
 
   valid <- validateCar(make, model, year)
@@ -105,6 +111,7 @@ updateCar <- function(id, make, model, edition, year, miles, price, res){
 #* Delete a car from the inventory
 #* @param id:int The ID of the car to delete
 #* @delete /car/<id:int>
+#* @tag cars
 deleteCar <- function(id, res){
   if (!(id %in% inventory$id)){
     res$status <- 400

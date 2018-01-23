@@ -40,7 +40,8 @@ prepareSwaggerEndpoints <- function(routerEndpoints){
 
         endptSwag <- list(summary=e$comments,
                           responses=resps,
-                          parameters=params)
+                          parameters=params,
+                          tags=e$tags)
 
         endpoints[[cleanedPath]][[tolower(verb)]] <- endptSwag
       }

@@ -1,6 +1,7 @@
 plumber 0.4.5
 --------------------------------------------------------------------------------
-* BUGFIX: properly handle cookie expiration values (#216).
+* BUGFIX: properly handle cookie expiration values ([#216](https://github.com/trestletech/plumber/issues/216)).
+* Add support for tags in Swagger docs ([#230](https://github.com/trestletech/plumber/pull/230)).
 
 plumber 0.4.4
 --------------------------------------------------------------------------------

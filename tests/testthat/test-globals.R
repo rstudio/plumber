@@ -28,7 +28,9 @@ test_that("parseGlobals works", {
              "#' @apiBasePath basepath",
              "#' @apiSchemes schemes",
              "#' @apiConsumes consumes",
-             "#' @apiProduces produces")
+             "#' @apiProduces produces",
+             "#' @apiTag tag description",
+             "#' @apiTag tag2 description2")
 
   fields <- parseGlobals(lines)
 
@@ -45,6 +47,13 @@ test_that("parseGlobals works", {
     basePath="basepath",
     schemes="schemes",
     consumes="consumes",
-    produces="produces"
+    produces="produces",
+    tags=data.frame(name=c("tag","tag2"),description=c("description","description2"), stringsAsFactors = FALSE)
   ))
+})
+
+test_that("Globals can't contain duplicate tags", {
+  lines <- c("#* @apiTag test description1",
+             "#* @apiTag test description2")
+  expect_error(parseGlobals(lines), "Duplicate tag definition specified.")
 })
