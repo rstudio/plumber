@@ -47,6 +47,6 @@ test_that("parseGlobals works", {
     schemes="schemes",
     consumes="consumes",
     produces="produces",
-    tags=data.frame(name="tag",description="description")
+    tags=data.frame(name="tag",description="description", stringsAsFactors = FALSE)
   ))
 })

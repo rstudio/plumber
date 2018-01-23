@@ -59,7 +59,7 @@ parseOneGlobal <- function(fields, argument){
            tagMat <- stringi::stri_match(def, regex="^\\s*(\\w+)\\s+(\\S.+)\\s*$")
            name <- tagMat[1,2]
            description <- tagMat[1,3]
-           fields$tags <- rbind(fields$tags,data.frame(name=name,description=description))
+           fields$tags <- rbind(fields$tags,data.frame(name=name, description=description, stringsAsFactors = FALSE))
          })
   fields
 }
