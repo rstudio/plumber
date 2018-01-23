@@ -182,7 +182,7 @@ parseBlock <- function(lineNum, file){
 
     tagMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@tag\\s+(\\S.+)\\s*")
     if (!is.na(tagMat[1,1])){
-      t <- gsub("_"," ",stri_trim_both(tagMat[1,2]))
+      t <- stri_trim_both(tagMat[1,2])
       if (is.na(t) || t == ""){
         stopOnLine(lineNum, line, "No tag specified.")
       }
