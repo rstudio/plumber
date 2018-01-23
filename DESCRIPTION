@@ -9,6 +9,7 @@ Authors@R: c(
   person(family="Trestle Technology, LLC", role="aut", email="cran@trestletech.com"),
   person("Jeff", "Allen", role="cre", email="cran@trestletech.com"),
   person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"),
+  person("Sebastiaan", "Vandewoude", role="ctb", email="sebastiaanvandewoude@me.com"),
   person(family="SmartBear Software", role=c("ctb", "cph"), comment="swagger-ui"))
 License: MIT + file LICENSE
 BugReports: https://github.com/trestletech/plumber/issues
