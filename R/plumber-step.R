@@ -135,6 +135,9 @@ PlumberEndpoint <- R6Class(
         self$responses <- responses
       }
       if(!missing(tags) && !is.null(tags)){
+        # make sure we box tags in json using I()
+        # single tags should be converted to json as:
+        # tags: ["tagName"] and not tags: "tagNome"
         self$tags <- I(tags)
       }
     },
