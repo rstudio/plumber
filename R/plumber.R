@@ -499,7 +499,7 @@ plumber <- R6Class(
       warning("WebSockets not supported.")
     },
 
-    setSerializer = function(serlializer){
+    setSerializer = function(serializer){
       private$serializer <- serializer
     }, # Set a default serializer
 
