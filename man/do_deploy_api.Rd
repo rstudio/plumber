@@ -4,7 +4,8 @@
 \alias{do_deploy_api}
 \title{Deploy or Update an API}
 \usage{
-do_deploy_api(droplet, path, localPath, port, forward = FALSE, preflight)
+do_deploy_api(droplet, path, localPath, port, forward = FALSE,
+  swagger = FALSE, preflight)
 }
 \arguments{
 \item{droplet}{The droplet on which to act. It's expected that this droplet
@@ -25,6 +26,9 @@ on your server. If unsure, try a number around \code{8000}.}
 \item{forward}{If \code{TRUE}, will setup requests targeting the root URL on the
 server to point to this application. See the \code{\link[=do_forward]{do_forward()}} function for
 more details.}
+
+\item{swagger}{If \code{TRUE}, will enable the Swagger interface for the remotely
+deployed API. By default, the interface is disabled.}
 
 \item{preflight}{R commands to run after \code{\link[=plumb]{plumb()}}ing the \code{plumber.R} file,
 but before \code{run()}ing the plumber service. This is an opportunity to e.g.
