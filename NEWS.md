@@ -1,6 +1,10 @@
 plumber 0.4.5
 --------------------------------------------------------------------------------
 * BUGFIX: properly handle cookie expiration values (#216).
+* BUGFIX: Hooks that accept a `value` argument (`postroute`, `preserialize`, 
+  and `postserialize`) now modify the incoming value as documented.
+* BUGFIX: The `postserialize` hook is now given the serialized data as its 
+  `value` parameter.
 
 plumber 0.4.4
 --------------------------------------------------------------------------------

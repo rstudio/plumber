@@ -113,7 +113,8 @@ hookable <- R6Class(
           args$value <- value
         }
       }
-      value
+      # Return the value as passed in or as explcitly modified by one or more hooks.
+      args$value
     }
   )
 )
@@ -359,7 +360,12 @@ plumber <- R6Class(
 
       val <- self$route(req, res)
 
-      private$runHooks("postroute", list(data=hookEnv, req=req, res=res, value=val))
+      # Because we're passing in a `value` argument here, `runHooks` will return either the
+      # unmodified `value` argument back, or will allow one or more hooks to modify the value,
+      # in which case the modified value will be returned. Hooks declare that they intend to
+      # modify the value by accepting a parameter named `value`, in which case their returned
+      # value will be used as the updated value.
+      val <- private$runHooks("postroute", list(data=hookEnv, req=req, res=res, value=val))
 
       if ("PlumberResponse" %in% class(val)){
         # They returned the response directly, don't serialize.
@@ -371,9 +377,9 @@ plumber <- R6Class(
           stop("Serializers must be closures: '", ser, "'")
         }
 
-        private$runHooks("preserialize", list(data=hookEnv, req=req, res=res, value=val))
+        val <- private$runHooks("preserialize", list(data=hookEnv, req=req, res=res, value=val))
         out <- ser(val, req, res, private$errorHandler)
-        private$runHooks("postserialize", list(data=hookEnv, req=req, res=res, value=val))
+        out <- private$runHooks("postserialize", list(data=hookEnv, req=req, res=res, value=out))
         out
       }
     },

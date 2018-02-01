@@ -266,7 +266,7 @@ test_that("preroute hook gets the right data", {
   pr$serve(rqst, PlumberResponse$new())
 })
 
-test_that("postroute hook gets the right data", {
+test_that("postroute hook gets the right data and can modify", {
   pr <- plumber$new()
   pr$handle("GET", "/abc", function(){ 123 })
 
@@ -275,11 +275,13 @@ test_that("postroute hook gets the right data", {
     expect_equal(req$PATH_INFO, "/abc")
     expect_true(is.environment(data))
     expect_equal(value, 123)
+    "new val"
   })
-  pr$serve(make_req("GET", "/abc"), PlumberResponse$new())
+  res <- pr$serve(make_req("GET", "/abc"), PlumberResponse$new())
+  expect_equal(as.character(res$body), '["new val"]')
 })
 
-test_that("preserialize hook gets the right data", {
+test_that("preserialize hook gets the right data and can modify", {
   pr <- plumber$new()
   pr$handle("GET", "/abc", function(){ 123 })
 
@@ -288,11 +290,13 @@ test_that("preserialize hook gets the right data", {
     expect_equal(req$PATH_INFO, "/abc")
     expect_true(is.environment(data))
     expect_equal(value, 123)
+    "new val"
   })
-  pr$serve(make_req("GET", "/abc"), PlumberResponse$new())
+  res <- pr$serve(make_req("GET", "/abc"), PlumberResponse$new())
+  expect_equal(as.character(res$body), '["new val"]')
 })
 
-test_that("postserialize hook gets the right data", {
+test_that("postserialize hook gets the right data and can modify", {
   pr <- plumber$new()
   pr$handle("GET", "/abc", function(){ 123 })
 
@@ -300,9 +304,12 @@ test_that("postserialize hook gets the right data", {
     expect_true("PlumberResponse" %in% class(res))
     expect_equal(req$PATH_INFO, "/abc")
     expect_true(is.environment(data))
-    expect_equal(value, 123)
+    expect_equal(as.character(value$body), "[123]")
+    value$body <- "new val"
+    value
   })
-  pr$serve(make_req("GET", "/abc"), PlumberResponse$new())
+  res <- pr$serve(make_req("GET", "/abc"), PlumberResponse$new())
+  expect_equal(as.character(res$body), 'new val')
 })
 
 test_that("invalid hooks err", {

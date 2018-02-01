@@ -121,4 +121,6 @@ test_that("value forwarding works across stacked hooks", {
 
   v <- s$exercise("valForward", list(value=0))
   expect_equal(v, 2)
+  v <- s$exercise("noVal", list(value=0))
+  expect_equal(v, 0)
 })
