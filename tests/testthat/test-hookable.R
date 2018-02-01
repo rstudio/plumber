@@ -103,22 +103,22 @@ test_that("value forwarding works across stacked hooks", {
     )
   )
 
-  val <<- 0
+  increment <- function(value){
+    value + 1
+  }
 
   s <- simpleHook$new()
-  s$registerHook("valForward", function(value){
-    val <<- value + 1
-    val
-  })
+  s$registerHook("valForward", increment)
 
   # Register the same hook twice. Should see the value increment by two each call since the
   # values are getting forwarded from the first hook into the second.
-  s$registerHook("valForward", function(value){
-    val <<- value + 1
-    val
+  s$registerHook("valForward", increment)
+
+  s$registerHook("noVal", function(){
+    # Doesn't take a value parameter, so shouldn't be treated specially for value handling.
+    return(3)
   })
 
-  expect_equal(val, 0)
-  s$exercise("valForward", list(value=0))
-  expect_equal(val, 2)
+  v <- s$exercise("valForward", list(value=0))
+  expect_equal(v, 2)
 })
