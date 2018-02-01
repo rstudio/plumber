@@ -100,12 +100,13 @@ PlumberEndpoint <- R6Class(
       data.frame(name=private$regex$names, type=private$regex$types)
     },
     params = NA,
+    tags = NA,
     canServe = function(req){
       req$REQUEST_METHOD %in% self$verbs && !is.na(stringi::stri_match(req$PATH_INFO, regex=private$regex$regex)[1,1])
     },
     # For historical reasons we have to accept multiple verbs for a single path. Now it's simpler
     # to just parse each separate verb/path into its own endpoint, so we just do that.
-    initialize = function(verbs, path, expr, envir, serializer, lines, params, comments, responses){
+    initialize = function(verbs, path, expr, envir, serializer, lines, params, comments, responses, tags){
       self$verbs <- verbs
       self$path <- path
 
@@ -133,6 +134,12 @@ PlumberEndpoint <- R6Class(
       }
       if (!missing(responses)){
         self$responses <- responses
+      }
+      if(!missing(tags) && !is.null(tags)){
+        # make sure we box tags in json using I()
+        # single tags should be converted to json as:
+        # tags: ["tagName"] and not tags: "tagName"
+        self$tags <- I(tags)
       }
     },
     getPathParams = function(path){

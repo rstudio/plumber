@@ -1,13 +1,17 @@
 plumber 0.4.5
 --------------------------------------------------------------------------------
-* BUGFIX: properly handle cookie expiration values (#216).
 * BUGFIX: Hooks that accept a `value` argument (`postroute`, `preserialize`, 
   and `postserialize`) now modify the incoming value as documented.
 * BUGFIX: The `postserialize` hook is now given the serialized data as its 
   `value` parameter.
+* BUGFIX: properly handle cookie expiration values ([#216](https://github.com/trestletech/plumber/issues/216)).
+* Add support for tags in Swagger docs ([#230](https://github.com/trestletech/plumber/pull/230)).
 
 plumber 0.4.4
 --------------------------------------------------------------------------------
+* Support Expiration, HTTPOnly, and Secure flags on cookies (#87). **EDIT**: 
+  see [#216](https://github.com/trestletech/plumber/issues/216) which prevented 
+  expiration from working.
 * BUGFIX: properly handle named query string and post body arguments in 
   mounted subrouters.
 * Added support for static sizing of images. `@png` and `@jpeg` now accept a 
@@ -34,6 +38,8 @@ plumber 0.4.4
   `pr <- plumb("plumber.R"); pr$registerHook("exit", function(){ print("Bye bye!") })`
 * Fixed bug in which a single function couldn't support multiple paths for a
   single verb (#203).
+* Support negative numbers in numeric path segments (#212)
+* Support `.` in string path segments
 
 plumber 0.4.2
 --------------------------------------------------------------------------------

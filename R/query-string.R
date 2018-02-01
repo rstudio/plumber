@@ -70,9 +70,9 @@ createPathRegex <- function(pathDef){
 }
 
 typeToRegex <- function(type){
-  re <- rep("[^\\\\./]+", length(type))
-  re[type == "int"] <- "\\\\d+"
-  re[type == "double" | type == "numeric"] <- "\\\\d*\\\\.?\\\\d*"
+  re <- rep("[^/]+", length(type))
+  re[type == "int"] <- "-?\\\\d+"
+  re[type == "double" | type == "numeric"] <- "-?\\\\d*\\\\.?\\\\d+"
   re[type == "bool" | type == "logical"] <- "[01tfTF]|true|false|TRUE|FALSE"
 
   re

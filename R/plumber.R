@@ -3,7 +3,7 @@
 NULL
 
 # used to identify annotation flags.
-verbs <- c("GET", "PUT", "POST", "DELETE", "HEAD", "OPTIONS")
+verbs <- c("GET", "PUT", "POST", "DELETE", "HEAD", "OPTIONS", "PATCH")
 enumerateVerbs <- function(v){
   if (identical(v, "use")){
     return(verbs)
@@ -505,7 +505,7 @@ plumber <- R6Class(
       warning("WebSockets not supported.")
     },
 
-    setSerializer = function(serlializer){
+    setSerializer = function(serializer){
       private$serializer <- serializer
     }, # Set a default serializer
 

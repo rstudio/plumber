@@ -23,11 +23,12 @@ parseBlock <- function(lineNum, file){
   params <- NULL
   comments <- ""
   responses <- NULL
+  tags <- NULL
   while (lineNum > 0 && (stri_detect_regex(file[lineNum], pattern="^#['\\*]") || stri_trim_both(file[lineNum]) == "")){
 
     line <- file[lineNum]
 
-    epMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(get|put|post|use|delete|head|options)(\\s+(.*)$)?")
+    epMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(get|put|post|use|delete|head|options|patch)(\\s+(.*)$)?")
     if (!is.na(epMat[1,2])){
       p <- stri_trim_both(epMat[1,4])
 
@@ -179,6 +180,18 @@ parseBlock <- function(lineNum, file){
       params[[name]] <- list(desc=paramMat[1,5], type=type, required=reqd)
     }
 
+    tagMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@tag\\s+(\\S.+)\\s*")
+    if (!is.na(tagMat[1,1])){
+      t <- stri_trim_both(tagMat[1,2])
+      if (is.na(t) || t == ""){
+        stopOnLine(lineNum, line, "No tag specified.")
+      }
+      if (t %in% tags){
+        stopOnLine(lineNum, line, "Duplicate tag specified.")
+      }
+      tags <- c(tags, t)
+    }
+
     commentMat <- stringi::stri_match(line, regex="^#['\\*]\\s*([^@\\s].*$)")
     if (!is.na(commentMat[1,2])){
       comments <- paste(comments, commentMat[1,2])
@@ -197,7 +210,8 @@ parseBlock <- function(lineNum, file){
     assets = assets,
     params = params,
     comments = comments,
-    responses = responses
+    responses = responses,
+    tags = tags
   )
 }
 
@@ -215,7 +229,7 @@ activateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, mou
 
   if (!is.null(block$paths)){
     lapply(block$paths, function(p){
-      ep <- PlumberEndpoint$new(p$verb, p$path, expr, envir, block$serializer, srcref, block$params, block$comments, block$responses)
+      ep <- PlumberEndpoint$new(p$verb, p$path, expr, envir, block$serializer, srcref, block$params, block$comments, block$responses, block$tags)
 
       if (!is.null(block$image)){
         # Arguments to pass in to the image serializer

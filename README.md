@@ -82,8 +82,8 @@ A couple of other approaches to hosting plumber are also made available:
 
 ## Related Projects
 
- - [jug](http://bart6114.github.io/jug/index.html) - an R package similar to Plumber but uses a more programmatic approach to constructing the API.
- - [OpenCPU](https://www.opencpu.org/) - A server designed for hosting R APIs with an eye towards scientific research.
+- [OpenCPU](https://www.opencpu.org/) - A server designed for hosting R APIs with an eye towards scientific research.
+- [jug](http://bart6114.github.io/jug/index.html) - *(development discontinued)* an R package similar to Plumber but uses a more programmatic approach to constructing the API.
 
 ## Provenance
 
