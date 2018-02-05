@@ -1,5 +1,9 @@
 plumber 0.4.5
 --------------------------------------------------------------------------------
+* BUGFIX: Hooks that accept a `value` argument (`postroute`, `preserialize`, 
+  and `postserialize`) now modify the incoming value as documented.
+* BUGFIX: The `postserialize` hook is now given the serialized data as its 
+  `value` parameter.
 * BUGFIX: properly handle cookie expiration values ([#216](https://github.com/trestletech/plumber/issues/216)).
 * Add support for tags in Swagger docs ([#230](https://github.com/trestletech/plumber/pull/230)).
 
