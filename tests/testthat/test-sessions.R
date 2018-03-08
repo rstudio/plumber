@@ -25,11 +25,11 @@ test_that("cookies are set", {
   res <- PlumberResponse$new()
   r$serve(make_req_cookie("GET", "/"), res)
 
-  key <- PKI::PKI.digest(charToRaw("mysecret"), "SHA256")
+  key <- openssl::sha256(charToRaw("mysecret"))
   cook <- res$headers[["Set-Cookie"]]
   expect_match(cook, "^plcook")
   cook <- gsub("^plcook=", "", cook, perl=TRUE)
-  de <- PKI::PKI.decrypt(base64enc::base64decode(cook), key, "aes256")
+  de <- openssl::aes_cbc_decrypt(base64enc::base64decode(cook), key)
 
   expect_equal(rawToChar(de), '{"abc":[123]}')
 })
@@ -48,9 +48,9 @@ test_that("cookies are read", {
   res <- PlumberResponse$new()
 
   # Create the request with an encrypted cookie
-  key <- PKI::PKI.digest(charToRaw("mysecret"), "SHA256")
+  key <- openssl::sha256(charToRaw("mysecret"))
   data <- '{"abc":[123]}'
-  enc <- PKI::PKI.encrypt(charToRaw(data), key, "aes256")
+  enc <- openssl::aes_cbc_encrypt(charToRaw(data), key, iv = NULL)
   r$serve(make_req_cookie("GET", "/", paste0('plcook=', base64enc::base64encode(enc))), res)
 
   expect_equal(res$body, jsonlite::toJSON(123))
@@ -69,9 +69,9 @@ test_that("invalid cookies/JSON are handled", {
 
   res <- PlumberResponse$new()
 
-  key <- PKI::PKI.digest(charToRaw("thewrongkey"), "SHA256")
+  key <- openssl::sha256(charToRaw("thewrongkey"))
   data <- '{"abc":[123]}'
-  enc <- PKI::PKI.encrypt(charToRaw(data), key, "aes256")
+  enc <- openssl::aes_cbc_encrypt(charToRaw(data), key, iv = NULL)
   expect_warning({
     r$serve(make_req_cookie("GET", "/", paste0('plcook=', base64enc::base64encode(enc))), res)
   })

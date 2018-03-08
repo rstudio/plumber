@@ -15,6 +15,6 @@ r_packages:
   - jsonlite
   - httpuv
   - htmlwidgets
-  - PKI
+  - openssl
   - visNetwork
 warnings_are_errors: true

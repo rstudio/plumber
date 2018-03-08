@@ -13,8 +13,7 @@ sessionCookie <- function(key, name="plumber", ...){
   }
 
   if (!is.null(key)){
-    checkPKI()
-    key <- PKI::PKI.digest(charToRaw(key), "SHA256")
+    key <- openssl::sha256(charToRaw(key))
   }
 
   # Return a list that can be added to registerHooks()
@@ -33,7 +32,7 @@ sessionCookie <- function(key, name="plumber", ...){
         if (!is.null(key)){
           tryCatch({
             session <- base64enc::base64decode(session)
-            session <- PKI::PKI.decrypt(session, key, "aes256")
+            session <- openssl::aes_cbc_decrypt(session, key)
             session <- rawToChar(session)
 
             session <- jsonlite::fromJSON(session)
@@ -49,7 +48,7 @@ sessionCookie <- function(key, name="plumber", ...){
       if (!is.null(req$session)){
         sess <- jsonlite::toJSON(req$session)
         if (!is.null(key)){
-          sess <- PKI::PKI.encrypt(charToRaw(sess), key, "aes256")
+          sess <- openssl::aes_cbc_encrypt(charToRaw(sess), key, iv = NULL)
           sess <- base64enc::base64encode(sess)
         }
         res$setCookie(name, sess, ...)
@@ -57,15 +56,4 @@ sessionCookie <- function(key, name="plumber", ...){
       value
     }
   )
-}
-
-#' @importFrom utils packageVersion
-#' @importFrom utils compareVersion
-#' @noRd
-checkPKI <- function(){
-  pkiVer <- tryCatch({as.character(packageVersion("PKI"))},
-                     error=function(e){"0.0.0"});
-  if (compareVersion(pkiVer, "0.1.2") < 0){
-    stop("You need PKI version 0.1.2 or greater installed.")
-  }
 }
