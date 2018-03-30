@@ -38,6 +38,8 @@ Suggests:
     visNetwork,
     analogsea,
     promises
+Remotes:
+    rstudio/promises
 Collate: 
     'content-types.R'
     'cookie-parser.R'
