@@ -146,8 +146,15 @@ plumber <- R6Class(
   public = list(
     initialize = function(file=NULL, filters=defaultPlumberFilters, envir){
 
-      if (!is.null(file) && !file.exists(file)){
-        stop("File does not exist: ", file)
+      if (!is.null(file)){
+        if (!file.exists(file)){
+          stop("File does not exist: ", file)
+        } else {
+          inf <- file.info(file)
+          if (inf$isdir){
+            stop("Expecting a file but found a directory: '", file, "'.")
+          }
+        }
       }
 
       if (missing(envir)){
