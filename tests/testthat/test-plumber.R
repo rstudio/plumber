@@ -48,6 +48,10 @@ test_that("plumb accepts a file", {
   expect_length(r$endpoints[[1]], 5)
 })
 
+test_that("plumb gives a good error when passing in a dir instead of a file", {
+  expect_error(plumb("files/"), "Expecting a file but found a directory: 'files/'")
+})
+
 test_that("plumb accepts a directory with a `plumber.R` file", {
   # works without trailing slash
   r <- plumb(dir = 'files')
