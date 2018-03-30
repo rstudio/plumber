@@ -360,27 +360,42 @@ plumber <- R6Class(
 
       val <- self$route(req, res)
 
-      # Because we're passing in a `value` argument here, `runHooks` will return either the
-      # unmodified `value` argument back, or will allow one or more hooks to modify the value,
-      # in which case the modified value will be returned. Hooks declare that they intend to
-      # modify the value by accepting a parameter named `value`, in which case their returned
-      # value will be used as the updated value.
-      val <- private$runHooks("postroute", list(data=hookEnv, req=req, res=res, value=val))
+      conclude <- function(v){
+        # Because we're passing in a `value` argument here, `runHooks` will return either the
+        # unmodified `value` argument back, or will allow one or more hooks to modify the value,
+        # in which case the modified value will be returned. Hooks declare that they intend to
+        # modify the value by accepting a parameter named `value`, in which case their returned
+        # value will be used as the updated value.
+        v <- private$runHooks("postroute", list(data=hookEnv, req=req, res=res, value=v))
 
-      if ("PlumberResponse" %in% class(val)){
-        # They returned the response directly, don't serialize.
-        res$toResponse()
-      } else {
-        ser <- res$serializer
+        if ("PlumberResponse" %in% class(v)){
+          # They returned the response directly, don't serialize.
+          res$toResponse()
+        } else {
+          ser <- res$serializer
 
-        if (typeof(ser) != "closure") {
-          stop("Serializers must be closures: '", ser, "'")
+          if (typeof(ser) != "closure") {
+            stop("Serializers must be closures: '", ser, "'")
+          }
+
+          v <- private$runHooks("preserialize", list(data=hookEnv, req=req, res=res, value=v))
+          out <- ser(v, req, res, private$errorHandler)
+          out <- private$runHooks("postserialize", list(data=hookEnv, req=req, res=res, value=out))
+          out
         }
+      }
 
-        val <- private$runHooks("preserialize", list(data=hookEnv, req=req, res=res, value=val))
-        out <- ser(val, req, res, private$errorHandler)
-        out <- private$runHooks("postserialize", list(data=hookEnv, req=req, res=res, value=out))
-        out
+      if (hasPromises() && promises::is.promise(val)){
+        # The endpoint returned a promise, we should wait on it
+        then(val, conclude, function(error){
+          # The original error handler would not have run because the endpoint didn't
+          # synchronously produce any errors. We have to run our error handling logic now.
+          # TODO: Dry this up with the error handler in route()
+          v <- private$errorHandler(req, res, error)
+          conclude(v)
+        })
+      } else {
+        conclude(val)
       }
     },
 
@@ -666,3 +681,6 @@ plumber <- R6Class(
   )
 )
 
+hasPromises <- function(){
+  !!requireNamespace("promises", quietly = TRUE)
+}

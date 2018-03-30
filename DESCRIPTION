@@ -36,7 +36,8 @@ Suggests:
     base64enc,
     htmlwidgets,
     visNetwork,
-    analogsea
+    analogsea,
+    promises
 Collate: 
     'content-types.R'
     'cookie-parser.R'
