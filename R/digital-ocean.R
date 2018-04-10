@@ -264,12 +264,15 @@ do_configure_https <- function(droplet, domain, email, termsOfService=FALSE, for
 #' @param forward If `TRUE`, will setup requests targeting the root URL on the
 #'   server to point to this application. See the [do_forward()] function for
 #'   more details.
+#' @param swagger If `TRUE`, will enable the Swagger interface for the remotely
+#'   deployed API. By default, the interface is disabled.
 #' @param preflight R commands to run after [plumb()]ing the `plumber.R` file,
 #'   but before `run()`ing the plumber service. This is an opportunity to e.g.
 #'   add new filters. If you need to specify multiple commands, they should be
 #'   semi-colon-delimited.
 #' @export
-do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE, preflight){
+do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE,
+                          swagger=FALSE, preflight){
   # Trim off any leading slashes
   path <- sub("^/+", "", path)
   # Trim off any trailing slashes if any exist.
@@ -307,6 +310,13 @@ do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE, preflig
     }
   }
   service <- gsub("\\$PREFLIGHT\\$", preflight, service)
+
+  if (missing(swagger)){
+    swagger <- "FALSE"
+  } else {
+    swagger <- "TRUE"
+  }
+  service <- gsub("\\$SWAGGER\\$", swagger, service)
 
   servicefile <- tempfile()
   writeLines(service, servicefile)
