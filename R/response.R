@@ -26,7 +26,7 @@ PlumberResponse <- R6Class(
       if (is.null(body)){
         body <- ""
       }
-
+      Encoding(body) <- "UTF-8"
       list(
         status = self$status,
         headers = h,

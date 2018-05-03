@@ -2,6 +2,7 @@ postBodyFilter <- function(req){
   handled <- req$.internal$postBodyHandled
   if (is.null(handled) || handled != TRUE){
     body <- req$rook.input$read_lines()
+    Encoding(body) <- "UTF-8"
     args <- parseBody(body)
     req$postBody <- body
     req$args <- c(req$args, args)
