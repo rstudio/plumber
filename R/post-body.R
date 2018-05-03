@@ -2,7 +2,6 @@ postBodyFilter <- function(req){
   handled <- req$.internal$postBodyHandled
   if (is.null(handled) || handled != TRUE){
     body <- req$rook.input$read_lines()
-    Encoding(body) <- "UTF-8"
     args <- parseBody(body)
     req$postBody <- body
     req$args <- c(req$args, args)
@@ -14,6 +13,7 @@ postBodyFilter <- function(req){
 #' @importFrom utils URLdecode
 #' @noRd
 parseBody <- function(body){
+  Encoding(body) <- "UTF-8"
   # The body in a curl call can also include querystring formatted data
   # Is there data in the request?
   if (is.null(body) || length(body) == 0 || body == "") {
