@@ -196,7 +196,7 @@ plumber <- R6Class(
 
     },
     run = function(host='127.0.0.1', port=getOption('plumber.port'), swagger=interactive(),
-                   debug=interactive() ){
+                   debug=interactive(), swagger.url=NULL){
       port <- findPort(port)
 
       message("Starting server to listen on port ", port)
@@ -251,7 +251,11 @@ plumber <- R6Class(
 
         plumberFileServer <- PlumberStatic$new(system.file("swagger-ui", package = "plumber"))
         self$mount("/__swagger__", plumberFileServer)
-        message("Running the swagger UI at ", sf$schemes[1], "://", sf$host, "/__swagger__/", sep="")
+        swaggerUrl = paste(sf$schemes[1], "://", sf$host, "/__swagger__/", sep="")
+        message("Running the swagger UI at ", swaggerUrl, sep="")
+        if (!is.null(swagger.url)){
+          swagger.url(swaggerUrl)
+        }
       }
 
       on.exit(private$runHooks("exit"), add=TRUE)
