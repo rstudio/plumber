@@ -6,16 +6,25 @@
 plumber allows you to create a REST API by merely decorating your existing R source code with special comments. Take a look at an example.
 
 {% highlight r %}
-# myfile.R
+# plumber.R
 
-#* @get /mean
-normalMean <- function(samples=10){
-  data <- rnorm(samples)
-  mean(data)
+#* Echo back the input
+#* @param msg The message to echo
+#* @get /echo
+function(msg=""){
+  list(msg = paste0("The message is: '", msg, "'"))
+}
+
+#* Plot a histogram
+#* @png
+#* @get /plot
+function(){
+  rand <- rnorm(100)
+  hist(rand)
 }
 
 #* @post /sum
-addTwo <- function(a, b){
+function(a, b){
   as.numeric(a) + as.numeric(b)
 }
 {% endhighlight %}
@@ -24,17 +33,19 @@ These comments allow plumber to make your R functions available as API endpoints
 
 {% highlight r %}
 > library(plumber)
-> r <- plumb("myfile.R")  # Where 'myfile.R' is the location of the file shown above
+> r <- plumb("plumber.R")  # Where 'plumber.R' is the location of the file shown above
 > r$run(port=8000)
 {% endhighlight %}
 
-You can visit this URL using a browser or a terminal to run your R function and get the results. Here we're using `curl` via a Mac/Linux terminal.
+You can visit this URL using a browser or a terminal to run your R function and get the results. For instance [http://localhost:8000/plot](http://localhost:8000/plot) will show you a histogram, and [curl "http://localhost:8000/mean?msg=hello](curl "http://localhost:8000/mean?msg=hello) will echo back the 'hello' message you provided.
+
+Here we're using `curl` via a Mac/Linux terminal.
 
 {% highlight bash %}
-$ curl "http://localhost:8000/mean"
- [-0.254]
-$ curl "http://localhost:8000/mean?samples=10000"
- [-0.0038]
+$ curl "http://localhost:8000/echo"
+ {"msg":["The message is: ''"]}
+$ curl "http://localhost:8000/mean?msg=hello"
+ {"msg":["The message is: 'hello'"]}
 {% endhighlight %}
 
 As you might have guessed, the request's query string parameters are forwarded to the R function as arguments (as character strings).
@@ -44,7 +55,7 @@ $ curl --data "a=4&b=3" "http://localhost:8000/sum"
  [7]
 {% endhighlight %}
 
-If you're still interested, check out our [live, more thorough example](/docs/endpoints/)
+If you're still interested, check out our [more thorough documentation](/docs/endpoints/).
 
 ## Installation
 
@@ -57,8 +68,7 @@ install.packages("plumber")
 If you want to try out the latest development version, you can install it from GitHub. The easiest way to do that is by using `devtools`.
 
 {% highlight bash %}
-library(devtools)
-install_github("trestletech/plumber")
+devtools::install_github("trestletech/plumber")
 {% endhighlight %}
 
 
