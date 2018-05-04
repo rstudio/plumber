@@ -37,14 +37,14 @@ These comments allow plumber to make your R functions available as API endpoints
 > r$run(port=8000)
 {% endhighlight %}
 
-You can visit this URL using a browser or a terminal to run your R function and get the results. For instance [http://localhost:8000/plot](http://localhost:8000/plot) will show you a histogram, and [http://localhost:8000/mean?msg=hello](http://localhost:8000/mean?msg=hello) will echo back the 'hello' message you provided.
+You can visit this URL using a browser or a terminal to run your R function and get the results. For instance [http://localhost:8000/plot](http://localhost:8000/plot) will show you a histogram, and [http://localhost:8000/echo?msg=hello](http://localhost:8000/echo?msg=hello) will echo back the 'hello' message you provided.
 
 Here we're using `curl` via a Mac/Linux terminal.
 
 {% highlight bash %}
 $ curl "http://localhost:8000/echo"
  {"msg":["The message is: ''"]}
-$ curl "http://localhost:8000/mean?msg=hello"
+$ curl "http://localhost:8000/echo?msg=hello"
  {"msg":["The message is: 'hello'"]}
 {% endhighlight %}
 
