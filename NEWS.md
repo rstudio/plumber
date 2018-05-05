@@ -6,7 +6,7 @@ plumber 0.4.5
   `value` parameter.
 * BUGFIX: properly handle cookie expiration values ([#216](https://github.com/trestletech/plumber/issues/216)).
 * Add support for tags in Swagger docs ([#230](https://github.com/trestletech/plumber/pull/230)).
-* Optional `swagger.url=NULL` parameter for `run()` to supply a callback function
+* Optional `swaggerCallback` parameter for `run()` to supply a callback function
   for reporting the url for swagger page.
 
 plumber 0.4.4
