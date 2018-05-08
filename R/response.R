@@ -26,7 +26,12 @@ PlumberResponse <- R6Class(
       if (is.null(body)){
         body <- ""
       }
-      Encoding(body) <- "UTF-8"
+
+      charset = getCharacterSet(h$HTTP_CONTENT_TYPE)
+      if(is.character(body) ){
+        Encoding(body) <- charset
+      }
+
       list(
         status = self$status,
         headers = h,
