@@ -10,5 +10,5 @@ test_that("Query strings on post are handled correctly", {
 })
 
 test_that("Able to handle UTF-8", {
-  expect_equal(parseBody('{"Json" :{"text":"�lise"}}')$text, "�lise")
+  expect_equal(parseBody('{"text":"Ã©lise"}', 'UTF-8')$text, "Ã©lise")
 })
