@@ -1,0 +1,5 @@
+Title: New Plumber API Project
+Binding: newRStudioProject
+Subtitle: Create a new API using Plumber
+Icon: plumber.png
+OpenFiles: plumber.R
