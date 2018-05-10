@@ -6,6 +6,9 @@ plumber 0.4.5
   `value` parameter.
 * BUGFIX: properly handle cookie expiration values ([#216](https://github.com/trestletech/plumber/issues/216)).
 * Add support for tags in Swagger docs ([#230](https://github.com/trestletech/plumber/pull/230)).
+* Optional `swaggerCallback` parameter for `run()` to supply a callback function
+  for reporting the url for swagger page.
+* Add [RStudio Project Template](https://rstudio.github.io/rstudio-extensions/rstudio_project_templates.html) to package
 
 plumber 0.4.4
 --------------------------------------------------------------------------------
