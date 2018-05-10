@@ -13,11 +13,11 @@ newRStudioProject <- function(path, ...) {
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
 
   # copy 'resources' folder to path
-  resources = system.file("rstudio", "templates", "project", "resources",
+  resources <- system.file("rstudio", "templates", "project", "resources",
                            package = "plumber", mustWork = TRUE)
 
-  files = list.files(resources, recursive = TRUE, include.dirs = FALSE)
-  source = file.path(resources, files)
-  target = file.path(path, files)
+  files <- list.files(resources, recursive = TRUE, include.dirs = FALSE)
+  source <- file.path(resources, files)
+  target <- file.path(path, files)
   file.copy(source, target)
 }
