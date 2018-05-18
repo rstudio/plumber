@@ -5,7 +5,7 @@
 [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/plumber?color=brightgreen)](https://www.r-pkg.org/pkg/plumber)
 [![codecov](https://codecov.io/gh/trestletech/plumber/branch/master/graph/badge.svg)](https://codecov.io/gh/trestletech/plumber)
 
-<img align="right" src="https://www.rplumber.io/components/images/plumber.png" />
+<img align="right" src="https://www.rplumber.io/components/images/plumber-broken.png" />
 
 Plumber allows you to create a web API by merely decorating your existing R source code with special comments. Take a look at an example.
 
