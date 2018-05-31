@@ -10,24 +10,28 @@ test_that("Query strings on post are handled correctly", {
 })
 
 test_that("Able to handle UTF-8", {
-  expect_equal(parseBody('{"text":"Ã©lise"}', 'UTF-8')$text, "Ã©lise")
+  expect_equal(parseBody('{"text":"Ã©lise"}', "UTF-8")$text, "Ã©lise")
 })
 
 test_that("filter passes on charset", {
-  charset_passed = ""
-  req = list(.internal=list(postBodyHandled=FALSE),
-             rook.input=list(read_lines=function(){
-               called = TRUE
-               return("this is a body")}),
-             HTTP_CONTENT_TYPE="text/html; charset=testset",
-             args = c()
+  charset_passed <- ""
+  req <- list(
+    .internal = list(postBodyHandled = FALSE),
+    rook.input = list(
+      read_lines = function() {
+        called <- TRUE
+        return("this is a body")
+      }
+    ),
+    HTTP_CONTENT_TYPE = "text/html; charset=testset",
+    args = c()
   )
   with_mock(
-    parseBody = function(body, charset="UTF-8"){
+    parseBody = function(body, charset = "UTF-8") {
       print(charset)
       body
     },
     expect_output(postBodyFilter(req), "testset"),
-    .env="plumber"
+    .env = "plumber"
   )
 })

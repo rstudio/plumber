@@ -21,16 +21,16 @@ test_that("contentType works in files", {
   expect_equal(val$headers$`Content-Type`, "text/plain")
 })
 
-test_that('Parses charset properly', {
-  charset = getCharacterSet("Content-Type: text/html; charset=latin1")
+test_that("Parses charset properly", {
+  charset <- getCharacterSet("Content-Type: text/html; charset=latin1")
   expect_equal(charset, "latin1")
-  charset = getCharacterSet("Content-Type: text/html; charset=greek8")
+  charset <- getCharacterSet("Content-Type: text/html; charset=greek8")
   expect_equal(charset, "greek8")
 })
 
-test_that('Defaults charset when not there', {
-  charset = getCharacterSet("Content-Type: text/html")
+test_that("Defaults charset when not there", {
+  charset <- getCharacterSet("Content-Type: text/html")
   expect_equal(charset, "UTF-8")
-  charset = getCharacterSet(NULL)
+  charset <- getCharacterSet(NULL)
   expect_equal(charset, "UTF-8")
 })
