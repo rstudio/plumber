@@ -11,9 +11,23 @@ This submission is done by Barret Schloerke <barret@rstudio.com> on behalf of Je
 All NOTEs related to invalid URLs http:localhost:8000 are **false positives**.  The URL makes sense when looking at the example within the README.md file.
 
 * local OS X install, R 3.5.0, --run-dontcheck
-  * 0 errors | 0 warnings | 0 notes
+  * checking CRAN incoming feasibility ... NOTE
+  Found the following (possibly) invalid URLs:
+  URL: http://localhost:8000/echo?msg=hello
+    From: README.md
+    Status: Error
+    Message: libcurl error code 7:
+        Failed to connect to localhost port 8000: Connection refused
+  URL: http://localhost:8000/plot
+    From: README.md
+    Status: Error
+    Message: libcurl error code 7:
+        Failed to connect to localhost port 8000: Connection refused
+  * 0 errors | 0 warnings | 1 notes
+
 * ubuntu 14.04.5 (on travis-ci), R version 3.5.0 (2017-01-27)
   * 0 errors | 0 warnings | 0 notes
+
 * devtools::build_win()
   * x86_64-w64-mingw32, R version 3.5.0 (2018-04-23)
   * x86_64-w64-mingw32, R Under development (unstable) (2018-06-03 r74839)
