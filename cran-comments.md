@@ -54,7 +54,7 @@ All NOTEs related to invalid URLs http:localhost:8000 are **false positives**.  
     0 errors ✔ | 0 warnings ✔ | 1 note ✖
 
 
-  * rhub platform issues:
+  * rhub platform issues not related to code.  These operating systems failed to complete properly and I do not have the ability to fix the error.
     * Windows Server 2008 R2 SP1, R-release, 32/64 bit
       * 'stringi' is not available
     * Windows Server 2008 R2 SP1, R-devel, 32/64 bit
