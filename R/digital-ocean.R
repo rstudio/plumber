@@ -144,7 +144,7 @@ install_new_r <- function(droplet){
 #' IP address associated with your droplet. If you don't already have a domain
 #' name, you can register one [here](http://tres.tl/domain). Point a (sub)domain
 #' to the IP address associated with your plumber droplet before calling this
-#' function. These changes may take a few minutes or hours to propogate around
+#' function. These changes may take a few minutes or hours to propagate around
 #' the Internet, but once complete you can then execute this function with the
 #' given domain to be granted a TLS/SSL certificate for that domain.
 #' @details Obtains a free TLS/SSL certificate from

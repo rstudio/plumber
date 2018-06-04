@@ -49,7 +49,18 @@ test_that("plumb accepts a file", {
 })
 
 test_that("plumb gives a good error when passing in a dir instead of a file", {
-  expect_error(plumb("files/"), "Expecting a file but found a directory: 'files/'")
+
+  if (identical(
+    tolower(Sys.info()[["sysname"]]),
+    "windows"
+  )) {
+    # https://stat.ethz.ch/R-manual/R-devel/library/base/html/files.html
+    # "However, directory names must not include a trailing backslash or slash on Windows"
+    expect_error(plumb("files/"), "File does not exist:")
+  } else {
+    expect_error(plumb("files/"), "Expecting a file but found a directory: 'files/'")
+  }
+
 })
 
 test_that("plumb accepts a directory with a `plumber.R` file", {
