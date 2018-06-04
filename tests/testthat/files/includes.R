@@ -5,7 +5,7 @@ function(req, res){
 
 #* @get /html
 function(req, res){
-  include_html("include/test.html", res)
+  include_html("include/test-html.html", res)
 }
 
 #* @get /rmd
@@ -17,4 +17,3 @@ function(req, res){
 function(req, res){
   include_md("include/test.md", res)
 }
-
