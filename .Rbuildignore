@@ -8,3 +8,4 @@ inst/examples/03-github/github-key.txt
 docs
 scripts
 ^revdep$
+^cran-comments\.md$
