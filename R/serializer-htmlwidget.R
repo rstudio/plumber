@@ -22,7 +22,7 @@ serializer_htmlwidget <- function(){
       htmlwidgets::saveWidget(val, file, selfcontained=TRUE)
 
       # Read the file back in as a single string and return.
-      res$body <- paste(readLines(file), collapse="")
+      res$body <- paste(readLines(file), collapse="\n")
 
       # Delete the temp file
       file.remove(file)
