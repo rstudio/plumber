@@ -50,3 +50,22 @@ getContentType <- function(ext, defaultType='application/octet-stream') {
   }
   return(ct)
 }
+
+getCharacterSet <- function(contentType){
+  default <- "UTF-8"
+  if (is.null(contentType)) {
+    return(default)
+  }
+  charsetStart <- attr(
+    gregexpr(".*charset=(.*)", contentType, perl = T)[[1]],
+    "capture.start"
+  )
+  charsetStart <- as.integer(charsetStart)
+  as.character(
+    ifelse(
+      charsetStart > -1,
+      substr(contentType, charsetStart, nchar(contentType)), 
+      default
+    )
+  )
+}
