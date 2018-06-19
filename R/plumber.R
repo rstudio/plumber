@@ -532,7 +532,30 @@ plumber <- R6Class(
       private$addFilterInternal(filter)
     },
     swaggerFile = function(){ #FIXME: test
-      endpoints <- prepareSwaggerEndpoints(self$endpoints)
+      endpoints <- self$endpoints
+
+      if (length(self$mounts) > 0){
+        for (path in names(self$mounts)){
+
+          mount <- self$mounts[[path]]
+          mount_endpoints <- mount$endpoints
+          path <- sub("[/]$", "", path)
+
+          if (length(mount_endpoints) > 0) {
+            mount_endpoints <- lapply(mount_endpoints, function(i){
+              i <- lapply(i, function(j){
+                subpath <- sub("^[/]", "", j$path)
+                j$path <- paste(path, subpath, sep="/")
+                j
+              })
+              i
+            })
+            
+            endpoints <- c(endpoints, mount_endpoints)
+          }
+        }
+      }
+      endpoints <- prepareSwaggerEndpoints(endpoints)
 
       # Extend the previously parsed settings with the endpoints
       def <- modifyList(private$globalSettings, list(paths=endpoints))
