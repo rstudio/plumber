@@ -676,19 +676,20 @@ plumber <- R6Class(
 
       private$ends[[preempt]] <- c(private$ends[[preempt]], ep)
     },
-    swaggerFileWalkMountsInternal = function(router, parentPath = ""){
+    swaggerFileWalkMountsInternal = function(router, parentPath=""){
 
       parentPath <- sub("[/]$", "", parentPath)
       endpoints <- lapply(router$endpoints, function(endpoint){
 
         endpointEntries <- lapply(endpoint, function(endpointEntry){
+          endpointEntry <- endpointEntry$clone()
           endpointPath <- sub("^[/]", "", endpointEntry$path)
           endpointPath <- paste(parentPath, endpointPath, sep="/")
           endpointEntry$path <- endpointPath
           endpointEntry
         })
         
-        endpoint
+        endpointEntries
       })
 
       mounts <- router$mounts
