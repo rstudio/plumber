@@ -532,7 +532,9 @@ plumber <- R6Class(
       private$addFilterInternal(filter)
     },
     swaggerFile = function(){ #FIXME: test
-      endpoints <- prepareSwaggerEndpoints(self$endpoints)
+
+      endpoints <- private$swaggerFileWalkMountsInternal(self)
+      endpoints <- prepareSwaggerEndpoints(endpoints)
 
       # Extend the previously parsed settings with the endpoints
       def <- modifyList(private$globalSettings, list(paths=endpoints))
@@ -673,6 +675,31 @@ plumber <- R6Class(
       }
 
       private$ends[[preempt]] <- c(private$ends[[preempt]], ep)
+    },
+    swaggerFileWalkMountsInternal = function(router, parentPath=""){
+
+      parentPath <- sub("[/]$", "", parentPath)
+      endpoints <- lapply(router$endpoints, function(endpoint){
+
+        endpointEntries <- lapply(endpoint, function(endpointEntry){
+          endpointEntry <- endpointEntry$clone()
+          endpointPath <- sub("^[/]", "", endpointEntry$path)
+          endpointPath <- paste(parentPath, endpointPath, sep="/")
+          endpointEntry$path <- endpointPath
+          endpointEntry
+        })
+        
+        endpointEntries
+      })
+
+      mounts <- router$mounts
+      mountedEndpoints <- unlist(lapply(names(mounts), function(mountPath){
+        mountedSubrouter <- router$mounts[[mountPath]]
+        mountPath <- sub("^[/]", "", mountPath)
+        mountedEndpoints <- private$swaggerFileWalkMountsInternal(mountedSubrouter, paste(parentPath, mountPath, sep="/"))
+      }))
+
+      c(endpoints, list(mountedEndpoints))
     }
   )
 )

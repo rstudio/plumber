@@ -52,6 +52,31 @@ test_that("params are parsed", {
 #test_that("prepareSwaggerEndpoints works", {
 #})
 
+test_that("swaggerFile works", {
+  pr <- plumber$new()
+  pr$handle("GET", "/nested/path/here", function(){})
+  pr$handle("POST", "/nested/path/here", function(){})
+
+  stat <- PlumberStatic$new(".")
+
+  pr2 <- plumber$new()
+  pr2$handle("POST", "/something", function(){})
+  pr2$handle("GET", "/", function(){})
+
+  pr3 <- plumber$new()
+  pr3$handle("POST", "/else", function(){})
+  pr3$handle("GET", "/", function(){})
+
+  pr$mount("/static", stat)
+  pr2$mount("/sub3", pr3)
+  pr$mount("/sub2", pr2)
+
+  paths <- names(pr$swaggerFile()$paths)
+  expect_length(paths, 5)
+  expect_equal(paths, c("/nested/path/here", "/sub2/something",
+    "/sub2/", "/sub2/sub3/else", "/sub2/sub3/"))
+})
+
 test_that("extractResponses works", {
   # Empty
   r <- extractResponses(NULL)
