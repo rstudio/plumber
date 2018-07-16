@@ -1,5 +1,7 @@
 plumber 0.4.7
 --------------------------------------------------------------------------------
+* Add support for swagger for mounted routers ([#274](https://github.com/trestletech/plumber/issues/274)).
+
 
 plumber 0.4.6
 --------------------------------------------------------------------------------
@@ -11,7 +13,8 @@ plumber 0.4.6
 * Add support for tags in Swagger docs ([#230](https://github.com/trestletech/plumber/pull/230)).
 * Optional `swaggerCallback` parameter for `run()` to supply a callback function
   for reporting the url for swagger page.
-* Add [RStudio Project Template](https://rstudio.github.io/rstudio-extensions/rstudio_project_templates.html) to package
+* Add [RStudio Project Template](https://rstudio.github.io/rstudio-extensions/rstudio_project_templates.html) to package.
+
 
 plumber 0.4.4
 --------------------------------------------------------------------------------
@@ -47,11 +50,13 @@ plumber 0.4.4
 * Support negative numbers in numeric path segments (#212)
 * Support `.` in string path segments
 
+
 plumber 0.4.2
 --------------------------------------------------------------------------------
 * Development version for 0.4.2. Will be working to move to even/odd release
   cycles, but I had prematurely bumped to 0.4.0 so that one might get skipped,
   making the next CRAN release 0.4.2.
+
 
 plumber 0.4.0
 --------------------------------------------------------------------------------
@@ -96,10 +101,12 @@ plumber 0.4.0
 * Added a `debug` parameter to the `run` method which can be set to `TRUE` in
   order to get more insight into your API errors.
 
+
 plumber 0.3.3
 --------------------------------------------------------------------------------
 * `plumb()` now accepts an argument `dir`, referring to a directory containing
   `plumber.R`, which may be provided instead of `file`.
+
 
 plumber 0.3.2
 --------------------------------------------------------------------------------
@@ -114,10 +121,12 @@ plumber 0.3.2
 * Properly handle cookies with no value. (#88)
 * Don't convert `+` character in a query string to a space.
 
+
 plumber 0.3.1
 --------------------------------------------------------------------------------
 * Add a method to consume JSON on post (you can still send a query string in
   the body of a POST request as well).
+
 
 plumber 0.3.0
 --------------------------------------------------------------------------------
@@ -131,6 +140,7 @@ plumber 0.3.0
   will be passed in as an argument to the serializer factory. See example
   `09-content-type`.
 
+
 plumber 0.2.4
 --------------------------------------------------------------------------------
 * Add a filter which parses and sets req$cookies to be a list corresponding to
@@ -139,11 +149,13 @@ plumber 0.2.4
 * Bug Fix: convert non-character arguments in setCookie to character before URL-
   encoding.
 
+
 plumber 0.2.3
 --------------------------------------------------------------------------------
 * Set options(warn=1) during execution of user code so that warnings are
   immediately visible in the console, rather than storing them until the server
   is stopped.
+
 
 plumber 0.2.2
 --------------------------------------------------------------------------------
@@ -157,10 +169,12 @@ plumber 0.2.2
   and the endpoint.
 * Document all public params so CHECK passes
 
+
 plumber 0.2.1
 --------------------------------------------------------------------------------
 * Add more Roxygen documentation for exported functions
 * Remove the warning in the README as the API seems to be stabilizing.
+
 
 plumber 0.2.0
 --------------------------------------------------------------------------------
@@ -169,6 +183,7 @@ plumber 0.2.0
 * BREAKING: Renamed `PlumberRouter` R6 object to just `Plumber`.
 * Support `addEndpoint()` and `addFilter()` on the `Plumber` object.
 * Added support for the `#*` prefix.
+
 
 plumber 0.1.0
 --------------------------------------------------------------------------------
