@@ -52,29 +52,62 @@ test_that("params are parsed", {
 #test_that("prepareSwaggerEndpoints works", {
 #})
 
-test_that("swaggerFile works", {
+test_that("swaggerFile works with mounted routers", {
+  # parameter in path
   pr <- plumber$new()
-  pr$handle("GET", "/nested/path/here", function(){})
-  pr$handle("POST", "/nested/path/here", function(){})
+  pr$handle("GET", "/nested/:path/here", function(){})
+  pr$handle("POST", "/nested/:path/here", function(){})
 
+    # static file handler
   stat <- PlumberStatic$new(".")
 
+  # multiple entries
   pr2 <- plumber$new()
+  pr2$handle("GET", "/something", function(){})
   pr2$handle("POST", "/something", function(){})
   pr2$handle("GET", "/", function(){})
 
+  # test with a filter
   pr3 <- plumber$new()
-  pr3$handle("POST", "/else", function(){})
+  pr3$filter("filter1", function(){})
+  pr3$handle("POST", "/else", function(){}, "filter1")
+  pr3$handle("PUT", "/else", function(){})
   pr3$handle("GET", "/", function(){})
 
+  # nested mount
+  pr4 <- plumber$new()
+  pr4$handle("GET", "/completely", function(){})
+
+  # trailing slash in route
+  pr5 <- plumber$new()
+  pr5$handle("GET", "/trailing_slash/", function(){})
+
+  # ├──/nested
+  # │  ├──/:path
+  # │  │  └──/here (GET, POST)
+  # ├──/static
+  # ├──/sub2
+  # │  ├──/something (GET, POST)
+  # │  ├──/ (GET)
+  # │  ├──/sub3
+  # │  │  ├──/else (POST, PUT)
+  # │  │  └──/ (GET)
+  # ├──/sub4
+  # │  ├──/completely (GET)
+  # │  ├──/
+  # │  │  └──/trailing_slash (GET)
   pr$mount("/static", stat)
   pr2$mount("/sub3", pr3)
   pr$mount("/sub2", pr2)
+  pr$mount("/sub4", pr4)
+  pr4$mount("/", pr5)
 
   paths <- names(pr$swaggerFile()$paths)
-  expect_length(paths, 5)
-  expect_equal(paths, c("/nested/path/here", "/sub2/something",
-    "/sub2/", "/sub2/sub3/else", "/sub2/sub3/"))
+  expect_length(paths, 7)
+  expect_equal(paths, c("/nested/:path/here", "/sub2/something",
+    "/sub2/", "/sub2/sub3/else", "/sub2/sub3/", "/sub4/completely",
+    "/sub4/trailing_slash/"
+  ))
 })
 
 test_that("extractResponses works", {
