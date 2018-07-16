@@ -44,5 +44,5 @@ Your TLS certificate will be automatically renewed and deployed. It also
 opens port 443 in the firewall to allow incoming HTTPS traffic.
 
 Historically, HTTPS certificates required payment in advance. If you
-appreciate this service, consider \href{https://letsencrypt.org/donate/}{donating to the letsencryptproject}.
+appreciate this service, consider \href{https://letsencrypt.org/donate/}{donating to the letsencrypt project}.
 }
