@@ -1,6 +1,6 @@
 plumber 0.4.7
 --------------------------------------------------------------------------------
-* Add support for swagger for mounted routers ([#274](https://github.com/trestletech/plumber/issues/274)).
+* Add support for swagger for mounted routers (@bradleyhd, [#274](https://github.com/trestletech/plumber/issues/274)).
 
 
 plumber 0.4.6
