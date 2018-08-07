@@ -532,7 +532,9 @@ plumber <- R6Class(
       private$addFilterInternal(filter)
     },
     swaggerFile = function(){ #FIXME: test
-      endpoints <- prepareSwaggerEndpoints(self$endpoints)
+
+      endpoints <- private$swaggerFileWalkMountsInternal(self)
+      endpoints <- prepareSwaggerEndpoints(endpoints)
 
       # Extend the previously parsed settings with the endpoints
       def <- modifyList(private$globalSettings, list(paths=endpoints))
@@ -673,7 +675,51 @@ plumber <- R6Class(
       }
 
       private$ends[[preempt]] <- c(private$ends[[preempt]], ep)
+    },
+
+    swaggerFileWalkMountsInternal = function(router, parentPath = "") {
+      remove_trailing_slash <- function(x) {
+        sub("[/]$", "", x)
+      }
+      remove_leading_slash <- function(x) {
+        sub("^[/]", "", x)
+      }
+      join_paths <- function(x, y) {
+        x <- remove_trailing_slash(x)
+        y <- remove_leading_slash(y)
+        paste(x, y, sep = "/")
+      }
+
+      endpoints <- lapply(router$endpoints, function(endpoint) {
+        # clone and make path a full path
+        endpointEntries <- lapply(endpoint, function(endpointEntry) {
+          endpointEntry <- endpointEntry$clone()
+          endpointEntry$path <- join_paths(parentPath, endpointEntry$path)
+          endpointEntry
+        })
+
+        endpointEntries
+      })
+
+      # recursively gather mounted enpoint entries
+      mountedEndpoints <- mapply(
+        names(router$mounts),
+        router$mounts,
+        FUN = function(mountPath, mountedSubrouter) {
+          private$swaggerFileWalkMountsInternal(
+            mountedSubrouter,
+            join_paths(parentPath, mountPath)
+          )
+        }
+      )
+
+      # returning a single list of entries,
+      #   not nested entries using the filter / `__no-preempt__` as names within the list
+      # (the filter name is not required when making swagger docs and do not want to misrepresent the endpoints)
+      unname(append(
+        unlist(endpoints),
+        unlist(mountedEndpoints)
+      ))
     }
   )
 )
-
