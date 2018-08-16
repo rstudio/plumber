@@ -6,6 +6,8 @@ RUN apt-get update -qq && apt-get install -y \
   libssl-dev \
   libcurl4-gnutls-dev
 
+## RUN R -e 'install.packages(c("devtools"))'
+## RUN R -e 'devtools::install_github("trestletech/plumber")'
 RUN install2.r plumber
 
 EXPOSE 8000
