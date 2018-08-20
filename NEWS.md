@@ -1,6 +1,7 @@
 plumber 0.4.7
 --------------------------------------------------------------------------------
 * Add support for swagger for mounted routers (@bradleyhd, [#274](https://github.com/trestletech/plumber/issues/274)).
+* BUGFIX: A multiline POST body is now collapsed to a single line ([#270](https://github.com/trestletech/plumber/issues/270)).
 
 
 plumber 0.4.6

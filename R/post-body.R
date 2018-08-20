@@ -1,7 +1,7 @@
 postBodyFilter <- function(req){
   handled <- req$.internal$postBodyHandled
   if (is.null(handled) || handled != TRUE){
-    body <- req$rook.input$read_lines()
+    body <- paste0(req$rook.input$read_lines(), collapse = "\n")
     charset <- getCharacterSet(req$HTTP_CONTENT_TYPE)
     args <- parseBody(body, charset)
     req$postBody <- body
