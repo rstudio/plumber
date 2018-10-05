@@ -133,8 +133,8 @@ test_that("routes can be constructed correctly", {
   pr$mount("/static", stat)
 
   expect_length(pr$routes, 3)
-  expect_true("plumberstatic" %in% class(pr$routes[["static"]]))
-  expect_true("plumber" %in% class(pr$routes[["mysubpath"]]))
+  expect_is(pr$routes[["static"]], "plumberstatic")
+  expect_is(pr$routes[["mysubpath"]], "plumber")
 
   # 2 endpoints at the same location (different verbs)
   expect_length(pr$routes$nested$path$here, 2)
@@ -154,8 +154,8 @@ test_that("mounts can be read correctly", {
   pr$mount("/static", stat)
 
   expect_length(pr$routes, 3)
-  expect_true("plumberstatic" %in% class(pr$mounts[["/static/"]]))
-  expect_true("plumber" %in% class(pr$mounts[["/mysubpath/"]]))
+  expect_is(pr$mounts[["/static/"]], "plumberstatic")
+  expect_is(pr$mounts[["/mysubpath/"]], "plumber")
 })
 
 test_that("prints correctly", {
@@ -275,7 +275,7 @@ test_that("preroute hook gets the right data", {
   rqst <- make_req("GET", "/")
 
   pr$registerHook("preroute", function(data, req, res){
-    expect_true("PlumberResponse" %in% class(res))
+    expect_is(res, "PlumberResponse")
     expect_equal(rqst, req)
     expect_true(is.environment(data))
   })
@@ -287,7 +287,7 @@ test_that("postroute hook gets the right data and can modify", {
   pr$handle("GET", "/abc", function(){ 123 })
 
   pr$registerHook("postroute", function(data, req, res, value){
-    expect_true("PlumberResponse" %in% class(res))
+    expect_is(res, "PlumberResponse")
     expect_equal(req$PATH_INFO, "/abc")
     expect_true(is.environment(data))
     expect_equal(value, 123)
@@ -302,7 +302,7 @@ test_that("preserialize hook gets the right data and can modify", {
   pr$handle("GET", "/abc", function(){ 123 })
 
   pr$registerHook("preserialize", function(data, req, res, value){
-    expect_true("PlumberResponse" %in% class(res))
+    expect_is(res, "PlumberResponse")
     expect_equal(req$PATH_INFO, "/abc")
     expect_true(is.environment(data))
     expect_equal(value, 123)
@@ -317,7 +317,7 @@ test_that("postserialize hook gets the right data and can modify", {
   pr$handle("GET", "/abc", function(){ 123 })
 
   pr$registerHook("postserialize", function(data, req, res, value){
-    expect_true("PlumberResponse" %in% class(res))
+    expect_is(res, "PlumberResponse")
     expect_equal(req$PATH_INFO, "/abc")
     expect_true(is.environment(data))
     expect_equal(as.character(value$body), "[123]")
