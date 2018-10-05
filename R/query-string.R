@@ -22,13 +22,17 @@ parseQS <- function(qs){
   parts <- strsplit(qs, "&", fixed = TRUE)[[1]]
   kv <- strsplit(parts, "=", fixed = TRUE)
   kv <- kv[sapply(kv, length) == 2] # Ignore incompletes
+  if (length(kv) == 0L) return(list())
 
   keys <- sapply(kv, "[[", 1)
   keys <- unname(sapply(keys, URLdecode))
+  Encoding(keys) <- "UTF-8" # Assume the query is UTF-8 encoded is reasonable
 
   vals <- sapply(kv, "[[", 2)
   vals[is.na(vals)] <- ""
   vals <- unname(sapply(vals, URLdecode))
+  Encoding(vals) <- "UTF-8" # Assume the query is UTF-8 encoded is reasonable
+  # Otherwise, it will fail on Windows, see #296
 
   ret <- as.list(vals)
   names(ret) <- keys
