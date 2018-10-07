@@ -10,9 +10,9 @@
 \alias{serializers}
 \title{Plumber Serializers}
 \usage{
-serializer_json()
+serializer_json(na = "null")
 
-serializer_unboxed_json()
+serializer_unboxed_json(na = "null")
 
 serializer_content_type(type)
 

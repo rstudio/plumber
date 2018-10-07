@@ -6,6 +6,18 @@ test_that("JSON serializes properly", {
   expect_equal(val$status, 200L)
   expect_equal(val$headers$`Content-Type`, "application/json")
   expect_equal(val$body, jsonlite::toJSON(l))
+
+  l <- list(a=1, b=2, c="hi", na=NA)
+  val <- serializer_json()(l, list(), PlumberResponse$new(), stop)
+  expect_equal(val$status, 200L)
+  expect_equal(val$headers$`Content-Type`, "application/json")
+  expect_equal(val$body, jsonlite::toJSON(l, na = 'null'))
+
+  l <- list(a=1, b=2, c="hi", na=NA)
+  val <- serializer_json(na = 'string')(l, list(), PlumberResponse$new(), stop)
+  expect_equal(val$status, 200L)
+  expect_equal(val$headers$`Content-Type`, "application/json")
+  expect_equal(val$body, jsonlite::toJSON(l, na = 'string'))
 })
 
 test_that("Errors call error handler", {
@@ -27,6 +39,19 @@ test_that("Unboxed JSON serializes properly", {
   expect_equal(val$status, 200L)
   expect_equal(val$headers$`Content-Type`, "application/json")
   expect_equal(val$body, jsonlite::toJSON(l, auto_unbox = TRUE))
+
+
+  l <- list(a=1, b=2, c="hi", na=NA)
+  val <- serializer_unboxed_json()(l, list(), PlumberResponse$new(), stop)
+  expect_equal(val$status, 200L)
+  expect_equal(val$headers$`Content-Type`, "application/json")
+  expect_equal(val$body, jsonlite::toJSON(l, auto_unbox = TRUE, na = 'null'))
+
+  l <- list(a=1, b=2, c="hi", na=NA)
+  val <- serializer_unboxed_json(na = 'string')(l, list(), PlumberResponse$new(), stop)
+  expect_equal(val$status, 200L)
+  expect_equal(val$headers$`Content-Type`, "application/json")
+  expect_equal(val$body, jsonlite::toJSON(l,  auto_unbox = TRUE, na = 'string'))
 })
 
 test_that("Unboxed JSON errors call error handler", {
