@@ -22,6 +22,8 @@ serializer_htmlwidget()
 }
 \arguments{
 \item{type}{The value to provide for the \code{Content-Type} HTTP header.}
+\item{na}{How should NA values be encoded?}
+
 }
 \description{
 Serializers are used in Plumber to transform the R object produced by a
