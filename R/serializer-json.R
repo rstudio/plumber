@@ -1,5 +1,6 @@
 #' @include globals.R
 #' @rdname serializers
+#' @param na How should NA values be encoded?
 #' @export
 serializer_json <- function(na = "null"){
   purrr::partial(function(val, req, res, errorHandler, na){
