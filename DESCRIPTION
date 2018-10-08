@@ -24,7 +24,8 @@ Imports:
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
     httpuv (>= 1.2.3),
-    crayon
+    crayon,
+    purrr (>= 0.2.0)
 LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
