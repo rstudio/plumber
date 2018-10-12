@@ -2,6 +2,11 @@
 #' @import stringi
 NULL
 
+# Hard code UTF-8 file encoding
+# Removes encoding headache at minor cost of setting encoding in editor
+# https://github.com/trestletech/plumber/pull/312
+utf8Encoding <- "UTF-8"
+
 # used to identify annotation flags.
 verbs <- c("GET", "PUT", "POST", "DELETE", "HEAD", "OPTIONS", "PATCH")
 enumerateVerbs <- function(v){
@@ -50,7 +55,7 @@ plumb <- function(file, dir="."){
     on.exit(setwd(old))
 
     # Expect that entrypoint will provide us with the router
-    x <- source(entrypoint)
+    x <- source(entrypoint, encoding=utf8Encoding)
 
     # source returns a list with value and visible elements, we want the (visible) value object.
     pr <- x$value
@@ -177,10 +182,13 @@ plumber <- R6Class(
       private$notFoundHandler <- default404Handler
 
       if (!is.null(file)){
-        private$lines <- readLines(file)
-        private$parsed <- parse(file, keep.source=TRUE)
+        con <- file(file, encoding=utf8Encoding)
+        on.exit(close(con), add=TRUE)
 
-        source(file, local=private$envir, echo=FALSE, keep.source=TRUE)
+        private$lines <- readLines(con)
+        srcfile <- srcfilecopy(file, private$lines, isFile=TRUE)
+        private$parsed <- parse(text=private$lines, srcfile=srcfile, keep.source=TRUE)
+        source(con, local=private$envir, echo=FALSE, keep.source=TRUE)
 
         for (i in 1:length(private$parsed)){
           e <- private$parsed[i]
