@@ -36,7 +36,7 @@ Suggests:
     htmlwidgets,
     visNetwork,
     analogsea
-Collate:
+Collate: 
     'content-types.R'
     'cookie-parser.R'
     'parse-globals.R'
@@ -64,4 +64,4 @@ Collate:
     'serializer.R'
     'session-cookie.R'
     'swagger.R'
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0.9000

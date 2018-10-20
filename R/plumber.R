@@ -541,7 +541,7 @@ plumber <- R6Class(
 
       # Lay those over the default globals so we ensure that the required fields
       # (like API version) are satisfied.
-      modifyList(defaultGlobals, def)
+      removeNulls(modifyList(defaultGlobals, def))
     },
 
     ### Legacy/Deprecated

@@ -7,3 +7,7 @@
 .idea
 plumber.Rcheck
 plumber_*.tar.gz
+*.rxproj
+*.sln
+.vs/
+misc/

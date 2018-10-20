@@ -101,3 +101,25 @@ extractSwaggerParams <- function(endpointParams, pathParams){
   }
   params
 }
+
+
+#' Remove nulls from swagger definition:
+#' see https://github.com/swagger-api/swagger-js/issues/268
+#' @noRd
+removeNulls <- function(lst){
+
+  # recursively remove nulls (including NAs which will be translated to
+  # nulls by jsonlite::toJSON)
+  rmNaOrNull <- function(lst){
+    if(is.list(lst)){
+      null <- sapply(lst, function(x) all(is.na(x)) || is.null(x))
+      lst <- lst[!null]
+
+      lapply(lst, rmNaOrNull)
+    } else {
+      lst
+    }
+  }
+
+  rmNaOrNull(lst)
+}
