@@ -2,11 +2,14 @@ plumber 0.4.7
 --------------------------------------------------------------------------------
 * Add support for swagger for mounted routers (@bradleyhd, [#274](https://github.com/trestletech/plumber/issues/274)).
 * BUGFIX: A multiline POST body is now collapsed to a single line ([#270](https://github.com/trestletech/plumber/issues/270)).
+* The source files used in plumber must use the UTF-8 encoding if they contain
+non-ASCII characters (@shrektan, [#312](https://github.com/trestletech/plumber/pull/312)).
 * SECURITY: Wrap `jsonlite::fromJSON` to ensure that `jsonlite` never reads
   input as a remote address (such as a file path or URL) and attempts to parse
   that. The only known way to exploit this behavior in plumber unless an
   API were using encrypted cookies and an attacker knew the encryption key in
-  order to craft arbitrary cookies.
+  order to craft arbitrary cookies. ([#325](https://github.com/trestletech/plumber/pull/325))
+
 
 plumber 0.4.6
 --------------------------------------------------------------------------------
