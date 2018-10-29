@@ -185,9 +185,15 @@ plumber <- R6Class(
         con <- file(file, encoding=utf8Encoding)
         on.exit(close(con), add=TRUE)
 
+        # Read lines directly
         private$lines <- readLines(con)
+        # "...produces an object of the descendant class ‘srcfilecopy’, 
+        #   which saves the source lines in a character vector" (?srcfilecopy)
         srcfile <- srcfilecopy(file, private$lines, isFile=TRUE)
+        # "When ‘keep.source’ is ‘TRUE’, if ‘text’ is used, 
+        #   ‘srcfile’ will be set to a ‘srcfilecopy’ containing the text" (?parse)
         private$parsed <- parse(text=private$lines, srcfile=srcfile, keep.source=TRUE)
+
         source(con, local=private$envir, echo=FALSE, keep.source=TRUE)
 
         for (i in 1:length(private$parsed)){
