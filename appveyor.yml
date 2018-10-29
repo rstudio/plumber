@@ -8,6 +8,7 @@ init:
         Import-Module '..\appveyor-tool.ps1'
 
 install:
+  - ps: Get-WinSystemLocale
   - ps: Bootstrap
 
 cache:
