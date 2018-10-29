@@ -168,7 +168,6 @@ install_new_r <- function(droplet){
 #' @param force If `FALSE`, will abort if it believes that the given domain name
 #'   is not yet pointing at the appropriate IP address for this droplet. If
 #'   `TRUE`, will ignore this check and attempt to proceed regardless.
-#' @importFrom jsonlite fromJSON
 #' @export
 do_configure_https <- function(droplet, domain, email, termsOfService=FALSE, force=FALSE){
   checkAnalogSea()
@@ -191,7 +190,7 @@ do_configure_https <- function(droplet, domain, email, termsOfService=FALSE, for
     # from the droplet to get a real-time response.
     metadata <- droplet_capture(droplet, "curl http://169.254.169.254/metadata/v1.json")
 
-    parsed <- jsonlite::fromJSON(metadata)
+    parsed <- safeFromJSON(metadata)
     floating <- unlist(lapply(parsed$floating_ip, function(ipv){ ipv$ip_address }))
     ephemeral <- unlist(parsed$interfaces$public)["ipv4.ip_address"]
 
