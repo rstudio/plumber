@@ -1,7 +1,7 @@
 postBodyFilter <- function(req){
   handled <- req$.internal$postBodyHandled
   if (is.null(handled) || handled != TRUE){
-    body <- req$rook.input$read_lines()
+    body <- paste0(req$rook.input$read_lines(), collapse = "\n")
     charset <- getCharacterSet(req$HTTP_CONTENT_TYPE)
     args <- parseBody(body, charset)
     req$postBody <- body
@@ -26,8 +26,7 @@ parseBody <- function(body, charset = "UTF-8"){
 
   # Is it JSON data?
   if (stri_startswith_fixed(body, "{")) {
-    # Handle JSON with jsonlite
-    ret <- jsonlite::fromJSON(body)
+    ret <- safeFromJSON(body)
   } else {
     # If not handle it as a query string
       ret <- parseQS(body)
