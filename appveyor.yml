@@ -2,14 +2,6 @@
 
 # Download script file from GitHub
 init:
-  # START / Set windows locale to Chinese (Simplified, PRC)
-  # change locale on appveyor - https://github.com/appveyor/ci/issues/846
-  # place in install, not init - https://github.com/appveyor/ci/issues/2456
-  - ps: Set-WinSystemLocale zh-CN
-  - ps: Start-Sleep -s 5
-  - ps: Restart-Computer
-  - ps: Start-Sleep -s 5
-  # END / Set windows locale to Chinese (Simplified, PRC)
   - ps: |
         $ErrorActionPreference = "Stop"
         Invoke-WebRequest http://raw.github.com/krlmlr/r-appveyor/master/scripts/appveyor-tool.ps1 -OutFile "..\appveyor-tool.ps1"
@@ -22,6 +14,41 @@ cache:
   - C:\RLibrary
 
 # Adapt as necessary starting from here
+# branches to build
+branches:
+  # whitelist
+  only:
+    - master
+    - appveyor
+
+configuration:
+  - English
+  - Chinese
+
+matrix:
+  fast_finish: true     # set this flag to immediately finish build once one of the jobs fails.
+  allow_failures:
+    - configuration: English
+
+for:
+  -
+    matrix:
+      only:
+        - configuration: Chinese
+    init:
+      # START / Set windows locale to Chinese (Simplified, PRC)
+      # change locale on appveyor - https://github.com/appveyor/ci/issues/846
+      # place in install, not init - https://github.com/appveyor/ci/issues/2456
+      - ps: Set-WinSystemLocale zh-CN
+      - ps: Start-Sleep -s 5
+      - ps: Restart-Computer
+      - ps: Start-Sleep -s 5
+      # END / Set windows locale to Chinese (Simplified, PRC)
+      - ps: |
+            $ErrorActionPreference = "Stop"
+            Invoke-WebRequest http://raw.github.com/krlmlr/r-appveyor/master/scripts/appveyor-tool.ps1 -OutFile "..\appveyor-tool.ps1"
+            Import-Module '..\appveyor-tool.ps1'
+
 
 build_script:
   - travis-tool.sh install_deps
