@@ -30,7 +30,7 @@ for:
     matrix:
       only:
         - configuration: Chinese
-    init:
+    install:
       # START / Set windows locale to Chinese (Simplified, PRC)
       # change locale on appveyor - https://github.com/appveyor/ci/issues/846
       # place in install, not init - https://github.com/appveyor/ci/issues/2456
@@ -39,10 +39,8 @@ for:
       - ps: Restart-Computer
       - ps: Start-Sleep -s 5
       # END / Set windows locale to Chinese (Simplified, PRC)
-      - ps: |
-            $ErrorActionPreference = "Stop"
-            Invoke-WebRequest http://raw.github.com/krlmlr/r-appveyor/master/scripts/appveyor-tool.ps1 -OutFile "..\appveyor-tool.ps1"
-            Import-Module '..\appveyor-tool.ps1'
+      - ps: Get-WinSystemLocale
+      - ps: Bootstrap
 
 
 build_script:
