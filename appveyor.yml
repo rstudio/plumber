@@ -17,7 +17,7 @@ cache:
 # Adapt as necessary starting from here
 
 configuration:
-  - English
+  # - English
   - Chinese
 
 matrix:
