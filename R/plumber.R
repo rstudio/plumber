@@ -59,7 +59,7 @@ plumb <- function(file, dir="."){
 
     # source returns a list with value and visible elements, we want the (visible) value object.
     pr <- x$value
-    if (!("plumber" %in% class(pr))){
+    if (!inherits(pr, "plumber")){
       stop("entrypoint.R must return a runnable Plumber router.")
     }
 
@@ -363,11 +363,11 @@ plumber <- R6Class(
               printNode(node[[i]], name, childPref, isLast = i == length(node))
             }
           }
-        } else if ("plumber" %in% class(node)){
+        } else if (inherits(node, "plumber")){
           cat(prefix, "\u251c\u2500\u2500/", name, "\n", sep="") # "+--"
           # It's a router, let it print itself
           print(node, prefix=childPref, topLevel=FALSE)
-        } else if ("PlumberEndpoint" %in% class(node)){
+        } else if (inherits(node, "PlumberEndpoint")){
           printEndpoints(prefix, name, node, isLast)
         } else {
           cat("??")

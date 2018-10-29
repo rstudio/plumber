@@ -36,7 +36,7 @@ sessionCookie <- function(key, name="plumber", ...){
             session <- PKI::PKI.decrypt(session, key, "aes256")
             session <- rawToChar(session)
 
-            session <- jsonlite::fromJSON(session)
+            session <- safeFromJSON(session)
           }, error=function(e){
             warning("Error processing session cookie. Perhaps your secret changed?")
             session <<- NULL

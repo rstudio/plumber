@@ -52,6 +52,7 @@ Collate:
     'digital-ocean.R'
     'find-port.R'
     'includes.R'
+    'json.R'
     'new-rstudio-project.R'
     'paths.R'
     'plumber-static.R'
