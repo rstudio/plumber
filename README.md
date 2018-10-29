@@ -1,6 +1,7 @@
 # plumber
 
 [![Build Status](https://travis-ci.org/trestletech/plumber.svg?branch=master)](https://travis-ci.org/trestletech/plumber)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/trestletech/plumber?branch=master&svg=true)](https://ci.appveyor.com/project/trestletech/plumber)
 [![](https://www.r-pkg.org/badges/version/plumber)](https://www.r-pkg.org/pkg/plumber)
 [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/plumber?color=brightgreen)](https://www.r-pkg.org/pkg/plumber)
 [![codecov](https://codecov.io/gh/trestletech/plumber/branch/master/graph/badge.svg)](https://codecov.io/gh/trestletech/plumber)
@@ -36,7 +37,7 @@ function(a, b){
 }
 ```
 
-These comments allow plumber to make your R functions available as API endpoints. You can use either `#*` as the prefix or `#'`, but we recommend the former since `#'` will collide with Roxygen. 
+These comments allow plumber to make your R functions available as API endpoints. You can use either `#*` as the prefix or `#'`, but we recommend the former since `#'` will collide with Roxygen.
 
 ```r
 > library(plumber)
@@ -53,7 +54,7 @@ $ curl "http://localhost:8000/echo"
  {"msg":["The message is: ''"]}
 $ curl "http://localhost:8000/echo?msg=hello"
  {"msg":["The message is: 'hello'"]}
-```  
+```
 
 As you might have guessed, the request's query string parameters are forwarded to the R function as arguments (as character strings).
 
