@@ -14,12 +14,6 @@ cache:
   - C:\RLibrary
 
 # Adapt as necessary starting from here
-# branches to build
-branches:
-  # whitelist
-  only:
-    - master
-    - appveyor
 
 configuration:
   - English
