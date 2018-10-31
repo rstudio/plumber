@@ -1,7 +1,7 @@
 context("Routing")
 
 test_that("Routing to errors and 404s works", {
-  r <- plumber$new("files/router.R")
+  r <- plumber$new(test_path("files/router.R"))
   errors <- 0
   notFounds <- 0
 
