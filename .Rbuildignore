@@ -9,4 +9,3 @@ docs
 scripts
 ^revdep$
 ^cran-comments\.md$
-^appveyor\.yml$
