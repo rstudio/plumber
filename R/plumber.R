@@ -2,11 +2,6 @@
 #' @import stringi
 NULL
 
-# Hard code UTF-8 file encoding
-# Removes encoding headache at minor cost of setting encoding in editor
-# https://github.com/trestletech/plumber/pull/312
-utf8Encoding <- "UTF-8"
-
 # used to identify annotation flags.
 verbs <- c("GET", "PUT", "POST", "DELETE", "HEAD", "OPTIONS", "PATCH")
 enumerateVerbs <- function(v){
@@ -55,10 +50,10 @@ plumb <- function(file, dir="."){
     on.exit(setwd(old))
 
     # Expect that entrypoint will provide us with the router
-    x <- source(entrypoint, encoding=utf8Encoding)
+    #   Do not 'poison' the global env. Using a local environment
+    #   sourceUTF8 returns the (visible) value object. No need to call source()$value()
+    pr <- sourceUTF8(entrypoint, environment())
 
-    # source returns a list with value and visible elements, we want the (visible) value object.
-    pr <- x$value
     if (!inherits(pr, "plumber")){
       stop("entrypoint.R must return a runnable Plumber router.")
     }
@@ -182,19 +177,9 @@ plumber <- R6Class(
       private$notFoundHandler <- default404Handler
 
       if (!is.null(file)){
-        con <- file(file, encoding=utf8Encoding)
-        on.exit(close(con), add=TRUE)
-
-        # Read lines directly
-        private$lines <- readLines(con)
-        # "...produces an object of the descendant class ‘srcfilecopy’, 
-        #   which saves the source lines in a character vector" (?srcfilecopy)
-        srcfile <- srcfilecopy(file, private$lines, isFile=TRUE)
-        # "When ‘keep.source’ is ‘TRUE’, if ‘text’ is used, 
-        #   ‘srcfile’ will be set to a ‘srcfilecopy’ containing the text" (?parse)
-        private$parsed <- parse(text=private$lines, srcfile=srcfile, keep.source=TRUE)
-
-        source(con, local=private$envir, echo=FALSE, keep.source=TRUE)
+        private$lines <- readUTF8(file)
+        private$parsed <- parseUTF8(file)
+        sourceUTF8(file, private$envir)
 
         for (i in 1:length(private$parsed)){
           e <- private$parsed[i]
