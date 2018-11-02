@@ -65,4 +65,4 @@ Collate:
     'serializer.R'
     'session-cookie.R'
     'swagger.R'
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
