@@ -179,6 +179,8 @@ plumber <- R6Class(
       if (!is.null(file)){
         private$lines <- readUTF8(file)
         private$parsed <- parseUTF8(file)
+        # populate the local envir with parameters defined within the file
+        # https://github.com/trestletech/plumber/issues/329
         sourceUTF8(file, private$envir)
 
         for (i in 1:length(private$parsed)){
