@@ -5,17 +5,5 @@ r_packages:
   - covr
 after_success:
   - Rscript -e 'library(covr);codecov()'
-# r_github_packages:
-#   - jimhester/covr
-# r_packages:
-#   - testthat
-#   - XML
-#   - base64enc
-#   - rmarkdown
-#   - stringi
-#   - jsonlite
-#   - httpuv
-#   - htmlwidgets
-#   - PKI
-#   - visNetwork
+
 warnings_are_errors: true
