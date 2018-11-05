@@ -10,6 +10,9 @@ non-ASCII characters (@shrektan, [#312](https://github.com/trestletech/plumber/p
   that. The only known way to exploit this behavior in plumber unless an
   API were using encrypted cookies and an attacker knew the encryption key in
   order to craft arbitrary cookies. ([#325](https://github.com/trestletech/plumber/pull/325))
+* BUGFIX: Plumber files are now only evaluated once.  Prior plumber behavior sourced endpoint
+  functions twice and non-endpoint code blocks once.
+  ([#328](https://github.com/trestletech/plumber/pull/328/commits/cde0d3d2543a654fd0c5799b670767ccb0e22e35))
 
 
 plumber 0.4.6
