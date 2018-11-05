@@ -227,6 +227,7 @@ activateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, mou
     stopOnLine(lineNum, file[lineNum], "A single function can only be a filter, an API endpoint, or an asset (@filter AND @get, @post, @assets, etc.)")
   }
 
+  # ALL if statements possibilities must eventually call eval(expr, envir)
   if (!is.null(block$paths)){
     lapply(block$paths, function(p){
       ep <- PlumberEndpoint$new(p$verb, p$path, expr, envir, block$serializer, srcref, block$params, block$comments, block$responses, block$tags)
@@ -253,6 +254,7 @@ activateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, mou
   } else if (!is.null(block$filter)){
     filter <- PlumberFilter$new(block$filter, expr, envir, block$serializer, srcref)
     addFilter(filter)
+
   } else if (!is.null(block$assets)){
     path <- block$assets$path
 
@@ -263,5 +265,9 @@ activateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, mou
 
     stat <- PlumberStatic$new(block$assets$dir, expr)
     mount(path, stat)
+
+  } else {
+
+    eval(expr, envir)
   }
 }
