@@ -498,10 +498,6 @@ plumber <- R6Class(
 
     # httpuv interface
     call = function(req){
-      # Due to https://github.com/rstudio/httpuv/issues/49, we need to close
-      # the TCP channels via `Connection: close` header. Otherwise we would
-      # reuse the same environment for each request and potentially recycle
-      # old data here.
       # Set the arguments to an empty list
       req$args <- list()
       req$.internal <- new.env()
