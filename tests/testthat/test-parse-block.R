@@ -67,7 +67,7 @@ test_that("Block can't be multiple mutually exclusive things", {
   addF <- function(){ fail() }
   addA <- function(){ fail() }
   expect_error({
-    activateBlock(srcref, c("#' @get /", "#' @assets /", "function(){}"),
+    evaluateBlock(srcref, c("#' @get /", "#' @assets /", "function(){}"),
                   function(){}, addE, addF, addA)
   }, "A single function can only be")
 

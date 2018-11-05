@@ -185,7 +185,7 @@ plumber <- R6Class(
 
           srcref <- attr(e, "srcref")[[1]][c(1,3)]
 
-          activateBlock(srcref, private$lines, e, private$envir, private$addEndpointInternal,
+          evaluateBlock(srcref, private$lines, e, private$envir, private$addEndpointInternal,
                         private$addFilterInternal, self$mount)
         }
 
