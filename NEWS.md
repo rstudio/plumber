@@ -2,7 +2,7 @@ plumber 0.4.7
 --------------------------------------------------------------------------------
 * Add support for swagger for mounted routers (@bradleyhd, [#274](https://github.com/trestletech/plumber/issues/274)).
 * BUGFIX: A multiline POST body is now collapsed to a single line ([#270](https://github.com/trestletech/plumber/issues/270)).
-* The source files used in plumber must use the UTF-8 encoding if they contain
+* The source files used in plumber **must use** the UTF-8 encoding if they contain
 non-ASCII characters (@shrektan, [#312](https://github.com/trestletech/plumber/pull/312),
   [#328](https://github.com/trestletech/plumber/pull/328)).
 * SECURITY: Wrap `jsonlite::fromJSON` to ensure that `jsonlite` never reads
