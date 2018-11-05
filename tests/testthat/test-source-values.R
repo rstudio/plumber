@@ -15,8 +15,8 @@ test_that(
     res <- PlumberResponse$new()
 
     expected <- "value_a"
-    expect_equal(r$route(make_req("GET", "/a"), res), expected)
-    expect_equal(r$route(make_req("GET", "/b"), res), expected)
+    expect_equal(r$route(make_req("GET", "/count"), res), 1)
+    expect_equal(r$route(make_req("GET", "/static_count"), res), 1)
 
     expect_equal(errors, 0)
     expect_equal(notFounds, 0)
