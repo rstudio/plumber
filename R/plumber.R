@@ -50,10 +50,10 @@ plumb <- function(file, dir="."){
     on.exit(setwd(old))
 
     # Expect that entrypoint will provide us with the router
-    x <- source(entrypoint)
+    #   Do not 'poison' the global env. Using a local environment
+    #   sourceUTF8 returns the (visible) value object. No need to call source()$value()
+    pr <- sourceUTF8(entrypoint, environment())
 
-    # source returns a list with value and visible elements, we want the (visible) value object.
-    pr <- x$value
     if (!inherits(pr, "plumber")){
       stop("entrypoint.R must return a runnable Plumber router.")
     }
@@ -177,17 +177,15 @@ plumber <- R6Class(
       private$notFoundHandler <- default404Handler
 
       if (!is.null(file)){
-        private$lines <- readLines(file)
-        private$parsed <- parse(file, keep.source=TRUE)
-
-        source(file, local=private$envir, echo=FALSE, keep.source=TRUE)
+        private$lines <- readUTF8(file)
+        private$parsed <- parseUTF8(file)
 
         for (i in 1:length(private$parsed)){
           e <- private$parsed[i]
 
           srcref <- attr(e, "srcref")[[1]][c(1,3)]
 
-          activateBlock(srcref, private$lines, e, private$envir, private$addEndpointInternal,
+          evaluateBlock(srcref, private$lines, e, private$envir, private$addEndpointInternal,
                         private$addFilterInternal, self$mount)
         }
 

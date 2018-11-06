@@ -1,7 +1,7 @@
 context("filters")
 
 test_that("Filters work", {
-  r <- plumber$new("files/filters.R")
+  r <- plumber$new(test_path("files/filters.R"))
   expect_equal(length(r$filters), 4+2) #4 for post, query string, cookie, and shared secret filters
 
   expect_equal(r$filters[[5]]$name, "something")
@@ -9,7 +9,7 @@ test_that("Filters work", {
 })
 
 test_that("Filters can update req$args", {
-  r <- plumber$new("files/filters.R")
+  r <- plumber$new(test_path("files/filters.R"))
 
   req <- make_req("GET", "/")
   res <- PlumberResponse$new()
@@ -17,24 +17,24 @@ test_that("Filters can update req$args", {
 })
 
 test_that("Redundant filters fail", {
-  expect_error(plumber$new("files/filter-redundant.R"), regexp="Multiple @filters")
+  expect_error(plumber$new(test_path("files/filter-redundant.R")), regexp="Multiple @filters")
 })
 
 test_that("Empty filters fail", {
-  expect_error(plumber$new("files/filter-empty.R"), regexp="No @filter name specified")
+  expect_error(plumber$new(test_path("files/filter-empty.R")), regexp="No @filter name specified")
 })
 
 test_that("Filter and path fails", {
-  expect_error(plumber$new("files/filterpath.R"), regexp="can only be")
+  expect_error(plumber$new(test_path("files/filterpath.R")), regexp="can only be")
 })
 
 test_that("Filter and assets fails", {
-  expect_error(plumber$new("files/filterasset.R"), regexp="can only be")
+  expect_error(plumber$new(test_path("files/filterasset.R")), regexp="can only be")
 })
 
 test_that("Terminal filters indeed terminate", {
   res <- PlumberResponse$new()
-  r <- plumber$new("files/terminal-filter.R")
+  r <- plumber$new(test_path("files/terminal-filter.R"))
   expect_equal(r$route(make_req("GET", "/"), res), 1)
 })
 

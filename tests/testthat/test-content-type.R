@@ -16,7 +16,7 @@ test_that("contentType works in files", {
 
   res <- PlumberResponse$new()
 
-  r <- plumber$new("files/content-type.R")
+  r <- plumber$new(test_path("files/content-type.R"))
   val <- r$serve(make_req("GET", "/"), res)
   expect_equal(val$headers$`Content-Type`, "text/plain")
 })

@@ -25,9 +25,8 @@ test_that("addGlobalProcessor continues to work", {
 
 test_that("addAssets continues to work", {
   pr <- plumber$new()
-  expect_warning(pr$addAssets("./files/static", "/public"))
+  expect_warning(pr$addAssets(test_path("./files/static"), "/public"))
   res <- PlumberResponse$new()
   val <- pr$route(make_req("GET", "/public/test.txt"), res)
   expect_true(inherits(val, "PlumberResponse"))
 })
-
