@@ -168,6 +168,10 @@ plumber <- R6Class(
       }
 
 
+      # These are initialized here to prevent them being locked by R6
+      private$errorHandler <- defaultErrorHandler()
+      private$notFoundHandler <- default404Handler
+      private$serializer = serializer_json()
 
       # Add in the initial filters
       for (fn in names(filters)){
@@ -175,10 +179,8 @@ plumber <- R6Class(
         private$filts <- c(private$filts, fil)
       }
 
-      # These are initialized here to prevent them being locked by R6
-      private$errorHandler <- defaultErrorHandler()
-      private$notFoundHandler <- default404Handler
-      private$serializer = serializer_json()
+
+
 
       if (!is.null(file)){
         private$lines <- readUTF8(file)
