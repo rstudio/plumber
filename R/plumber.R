@@ -271,7 +271,7 @@ plumber <- R6Class(
       super$registerHook(stage, handler)
     },
 
-    handle = function(methods, path, handler, preempt, serializer, endpoint){
+    handle = function(methods, path, handler, preempt, serializer, endpoint,...){
       epdef <- !missing(methods) || !missing(path) || !missing(handler) || !missing(serializer)
       if (!missing(endpoint) && epdef){
         stop("You must provide either the components for an endpoint (handler and serializer) OR provide the endpoint yourself. You cannot do both.")
@@ -282,7 +282,7 @@ plumber <- R6Class(
           serializer <- private$serializer
         }
 
-        endpoint <- PlumberEndpoint$new(methods, path, handler, private$envir, serializer)
+        endpoint <- PlumberEndpoint$new(methods, path, handler, private$envir, serializer,...)
       }
       private$addEndpointInternal(endpoint, preempt)
     },
