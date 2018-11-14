@@ -167,14 +167,16 @@ plumber <- R6Class(
         filters <- list()
       }
 
+      # Initialize
+      private$serializer <- serializer_json()
+      private$errorHandler <- defaultErrorHandler()
+      private$notFoundHandler <- default404Handler
+      
       # Add in the initial filters
       for (fn in names(filters)){
         fil <- PlumberFilter$new(fn, filters[[fn]], private$envir, private$serializer, NULL)
         private$filts <- c(private$filts, fil)
       }
-
-      private$errorHandler <- defaultErrorHandler()
-      private$notFoundHandler <- default404Handler
 
       if (!is.null(file)){
         private$lines <- readUTF8(file)
@@ -630,7 +632,7 @@ plumber <- R6Class(
       paths
     }
   ), private = list(
-    serializer = serializer_json(), # The default serializer for the router
+    serializer = NULL, # The default serializer for the router
 
     ends = list(), # List of endpoints indexed by their pre-empted filter.
     filts = NULL, # Array of filters
