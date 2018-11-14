@@ -1,7 +1,7 @@
 context("Images")
 
 test_that("Images are properly rendered", {
-  r <- plumber$new("files/image.R")
+  r <- plumber$new(test_path("files/image.R"))
 
   resp <- r$serve(make_req("GET", "/png"), PlumberResponse$new())
   expect_equal(resp$status, 200)

@@ -1,7 +1,7 @@
 context("Plumber")
 
 test_that("Endpoints are properly identified", {
-  r <- plumber$new("files/endpoints.R")
+  r <- plumber$new(test_path("files/endpoints.R"))
   expect_equal(length(r$endpoints), 1)
   expect_equal(length(r$endpoints[[1]]), 5)
   expect_equal(r$endpoints[[1]][[1]]$exec(), 5)
@@ -17,14 +17,14 @@ test_that("Empty file is OK", {
 })
 
 test_that("The file is sourced in the envir", {
-  r <- plumber$new("files/in-env.R")
+  r <- plumber$new(test_path("files/in-env.R"))
   expect_equal(length(r$endpoints), 1)
   expect_equal(length(r$endpoints[[1]]), 2)
   expect_equal(r$endpoints[[1]][[1]]$exec(), 15)
 })
 
 test_that("Verbs translate correctly", {
-  r <- plumber$new("files/verbs.R")
+  r <- plumber$new(test_path("files/verbs.R"))
   expect_equal(length(r$endpoints), 1)
   expect_equal(length(r$endpoints[[1]]), 10)
   expect_equal(r$endpoints[[1]][[1]]$verbs, c("GET", "PUT", "POST", "DELETE", "HEAD", "OPTIONS", "PATCH"))
@@ -44,21 +44,19 @@ test_that("Invalid file fails gracefully", {
 })
 
 test_that("plumb accepts a file", {
-  r <- plumb("files/endpoints.R")
+  r <- plumb(test_path("files/endpoints.R"))
   expect_length(r$endpoints[[1]], 5)
 })
 
 test_that("plumb gives a good error when passing in a dir instead of a file", {
 
-  if (identical(
-    tolower(Sys.info()[["sysname"]]),
-    "windows"
-  )) {
+  if (isWindows()) {
     # https://stat.ethz.ch/R-manual/R-devel/library/base/html/files.html
     # "However, directory names must not include a trailing backslash or slash on Windows"
-    expect_error(plumb("files/"), "File does not exist:")
+    # Appveyor does not work with "files/", but does trigger the proper error with "files\\"
+    expect_error(plumb(test_path("files\\")), "File does not exist:")
   } else {
-    expect_error(plumb("files/"), "Expecting a file but found a directory: 'files/'")
+    expect_error(plumb(test_path("files/")), "Expecting a file but found a directory: 'files/'")
   }
 
 })
@@ -70,25 +68,25 @@ test_that("plumb accepts a directory with a `plumber.R` file", {
   expect_equal(length(r$endpoints[[1]]), 5)
 
   # works with trailing slash
-  r <- plumb(dir = 'files/')
+  r <- plumb(dir = test_path('files/'))
   expect_equal(length(r$endpoints), 1)
   expect_equal(length(r$endpoints[[1]]), 5)
 
   # errors when no plumber.R found
-  expect_error(plumb(dir = 'files/static'), regexp="No plumber.R file found in the specified directory: files/static")
+  expect_error(plumb(dir = test_path("files/static")), regexp="No plumber.R file found in the specified directory: files/static")
   # errors when neither dir is empty and file is not given
   expect_error(plumb(dir=""), regexp="You must specify either a file or directory*")
   # reads from working dir if no args
   expect_error(plumb(), regexp="No plumber.R file found in the specified directory: .")
   # errors when both dir and file are given
-  expect_error(plumb(file="files/endpoints.R", dir="files"), regexp="You must set either the file or the directory parameter, not both")
+  expect_error(plumb(file=test_path("files/endpoints.R"), dir="files"), regexp="You must set either the file or the directory parameter, not both")
 
 })
 
 test_that("plumb() a dir leverages `entrypoint.R`", {
   expect_null(plumber:::.globals$serializers$fake, "This just that your Plumber environment is dirty. Restart your R session.")
 
-  r <- plumb(dir = 'files/entrypoint/')
+  r <- plumb(dir = test_path("files/entrypoint/"))
   expect_equal(length(r$endpoints), 1)
   expect_equal(length(r$endpoints[[1]]), 1)
 
@@ -101,15 +99,15 @@ test_that("plumb() a dir leverages `entrypoint.R`", {
 })
 
 test_that("bad `entrypoint.R`s throw", {
-  expect_error(plumb(dir = 'files/entrypoint-bad/'), "runnable Plumber router")
+  expect_error(plumb(dir = test_path("files/entrypoint-bad/")), "runnable Plumber router")
 })
 
 test_that("Empty endpoints error", {
-  expect_error(plumber$new("files/endpoints-empty.R"), regexp="No path specified")
+  expect_error(plumber$new(test_path("files/endpoints-empty.R")), regexp="No path specified")
 })
 
 test_that("The old roxygen-style comments work", {
-  r <- plumber$new("files/endpoints-old.R")
+  r <- plumber$new(test_path("files/endpoints-old.R"))
   expect_equal(length(r$endpoints), 1)
   expect_equal(length(r$endpoints[[1]]), 5)
   expect_equal(r$endpoints[[1]][[1]]$exec(), 5)
@@ -133,8 +131,8 @@ test_that("routes can be constructed correctly", {
   pr$mount("/static", stat)
 
   expect_length(pr$routes, 3)
-  expect_true("plumberstatic" %in% class(pr$routes[["static"]]))
-  expect_true("plumber" %in% class(pr$routes[["mysubpath"]]))
+  expect_s3_class(pr$routes[["static"]], "plumberstatic")
+  expect_s3_class(pr$routes[["mysubpath"]], "plumber")
 
   # 2 endpoints at the same location (different verbs)
   expect_length(pr$routes$nested$path$here, 2)
@@ -154,8 +152,8 @@ test_that("mounts can be read correctly", {
   pr$mount("/static", stat)
 
   expect_length(pr$routes, 3)
-  expect_true("plumberstatic" %in% class(pr$mounts[["/static/"]]))
-  expect_true("plumber" %in% class(pr$mounts[["/mysubpath/"]]))
+  expect_s3_class(pr$mounts[["/static/"]], "plumberstatic")
+  expect_s3_class(pr$mounts[["/mysubpath/"]], "plumber")
 })
 
 test_that("prints correctly", {
@@ -275,7 +273,7 @@ test_that("preroute hook gets the right data", {
   rqst <- make_req("GET", "/")
 
   pr$registerHook("preroute", function(data, req, res){
-    expect_true("PlumberResponse" %in% class(res))
+    expect_s3_class(res, "PlumberResponse")
     expect_equal(rqst, req)
     expect_true(is.environment(data))
   })
@@ -287,7 +285,7 @@ test_that("postroute hook gets the right data and can modify", {
   pr$handle("GET", "/abc", function(){ 123 })
 
   pr$registerHook("postroute", function(data, req, res, value){
-    expect_true("PlumberResponse" %in% class(res))
+    expect_s3_class(res, "PlumberResponse")
     expect_equal(req$PATH_INFO, "/abc")
     expect_true(is.environment(data))
     expect_equal(value, 123)
@@ -302,7 +300,7 @@ test_that("preserialize hook gets the right data and can modify", {
   pr$handle("GET", "/abc", function(){ 123 })
 
   pr$registerHook("preserialize", function(data, req, res, value){
-    expect_true("PlumberResponse" %in% class(res))
+    expect_s3_class(res, "PlumberResponse")
     expect_equal(req$PATH_INFO, "/abc")
     expect_true(is.environment(data))
     expect_equal(value, 123)
@@ -317,7 +315,7 @@ test_that("postserialize hook gets the right data and can modify", {
   pr$handle("GET", "/abc", function(){ 123 })
 
   pr$registerHook("postserialize", function(data, req, res, value){
-    expect_true("PlumberResponse" %in% class(res))
+    expect_s3_class(res, "PlumberResponse")
     expect_equal(req$PATH_INFO, "/abc")
     expect_true(is.environment(data))
     expect_equal(as.character(value$body), "[123]")

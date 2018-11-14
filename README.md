@@ -36,7 +36,7 @@ function(a, b){
 }
 ```
 
-These comments allow plumber to make your R functions available as API endpoints. You can use either `#*` as the prefix or `#'`, but we recommend the former since `#'` will collide with Roxygen. 
+These comments allow plumber to make your R functions available as API endpoints. You can use either `#*` as the prefix or `#'`, but we recommend the former since `#'` will collide with Roxygen.
 
 ```r
 > library(plumber)
@@ -53,7 +53,7 @@ $ curl "http://localhost:8000/echo"
  {"msg":["The message is: ''"]}
 $ curl "http://localhost:8000/echo?msg=hello"
  {"msg":["The message is: 'hello'"]}
-```  
+```
 
 As you might have guessed, the request's query string parameters are forwarded to the R function as arguments (as character strings).
 

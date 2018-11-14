@@ -50,11 +50,11 @@ plumb <- function(file, dir="."){
     on.exit(setwd(old))
 
     # Expect that entrypoint will provide us with the router
-    x <- source(entrypoint)
+    #   Do not 'poison' the global env. Using a local environment
+    #   sourceUTF8 returns the (visible) value object. No need to call source()$value()
+    pr <- sourceUTF8(entrypoint, environment())
 
-    # source returns a list with value and visible elements, we want the (visible) value object.
-    pr <- x$value
-    if (!("plumber" %in% class(pr))){
+    if (!inherits(pr, "plumber")){
       stop("entrypoint.R must return a runnable Plumber router.")
     }
 
@@ -177,17 +177,15 @@ plumber <- R6Class(
       private$notFoundHandler <- default404Handler
 
       if (!is.null(file)){
-        private$lines <- readLines(file)
-        private$parsed <- parse(file, keep.source=TRUE)
-
-        source(file, local=private$envir, echo=FALSE, keep.source=TRUE)
+        private$lines <- readUTF8(file)
+        private$parsed <- parseUTF8(file)
 
         for (i in 1:length(private$parsed)){
           e <- private$parsed[i]
 
           srcref <- attr(e, "srcref")[[1]][c(1,3)]
 
-          activateBlock(srcref, private$lines, e, private$envir, private$addEndpointInternal,
+          evaluateBlock(srcref, private$lines, e, private$envir, private$addEndpointInternal,
                         private$addFilterInternal, self$mount)
         }
 
@@ -349,11 +347,11 @@ plumber <- R6Class(
               printNode(node[[i]], name, childPref, isLast = i == length(node))
             }
           }
-        } else if ("plumber" %in% class(node)){
+        } else if (inherits(node, "plumber")){
           cat(prefix, "\u251c\u2500\u2500/", name, "\n", sep="") # "+--"
           # It's a router, let it print itself
           print(node, prefix=childPref, topLevel=FALSE)
-        } else if ("PlumberEndpoint" %in% class(node)){
+        } else if (inherits(node, "PlumberEndpoint")){
           printEndpoints(prefix, name, node, isLast)
         } else {
           cat("??")
@@ -498,10 +496,6 @@ plumber <- R6Class(
 
     # httpuv interface
     call = function(req){
-      # Due to https://github.com/rstudio/httpuv/issues/49, we need to close
-      # the TCP channels via `Connection: close` header. Otherwise we would
-      # reuse the same environment for each request and potentially recycle
-      # old data here.
       # Set the arguments to an empty list
       req$args <- list()
       req$.internal <- new.env()

@@ -49,7 +49,7 @@ test_that("path regex's are created properly", {
 })
 
 test_that("integration of path parsing works", {
-  r <- plumber$new("files/path-params.R")
+  r <- plumber$new(test_path("files/path-params.R"))
 
   expect_equal(r$route(make_req("GET", "/car/13"), PlumberResponse$new()), "13")
   expect_equal(r$route(make_req("GET", "/car/int/13"), PlumberResponse$new()), 13)
