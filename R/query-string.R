@@ -27,10 +27,10 @@ parseQS <- function(qs){
   keys <- sapply(kv, "[[", 1)
   keys <- unname(sapply(keys, URLdecode))
   Encoding(keys) <- "UTF-8"
-  # utils::URLdecode() will not mark the encoding
-  # Usually, the original query is UTF-8 encoded.
-  # On Windows, since the default encoding is not UTF-8,
-  # it can cause troubles. See #296 .
+  # The query string (after URL decoding) is usually UTF-8,
+  # but this is not always true. For simplicity, we'll just
+  # enforce that it has to be UTF-8, and not support other encodings.
+  # We also need to ensure that R understands that it's UTF-8.
 
   vals <- sapply(kv, "[[", 2)
   vals[is.na(vals)] <- ""
