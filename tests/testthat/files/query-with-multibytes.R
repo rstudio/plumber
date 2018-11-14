@@ -1,5 +1,5 @@
 #* @get /msg
 #* @post /msg
-function(`参数1`, `参数2`) {
-  paste(`参数1`, `参数2`, sep = "-")
+function(param1, param2) {
+  paste(param1, param2, sep = "-")
 }
