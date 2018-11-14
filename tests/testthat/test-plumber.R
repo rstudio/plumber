@@ -63,12 +63,12 @@ test_that("plumb gives a good error when passing in a dir instead of a file", {
 
 test_that("plumb accepts a directory with a `plumber.R` file", {
   # works without trailing slash
-  r <- plumb(dir = 'files')
+  r <- plumb(dir = test_path('files'))
   expect_equal(length(r$endpoints), 1)
   expect_equal(length(r$endpoints[[1]]), 5)
 
   # works with trailing slash
-  r <- plumb(dir = test_path('files/'))
+  r <- plumb(dir = paste0(test_path('files'), "/"))
   expect_equal(length(r$endpoints), 1)
   expect_equal(length(r$endpoints[[1]]), 5)
 
@@ -79,7 +79,7 @@ test_that("plumb accepts a directory with a `plumber.R` file", {
   # reads from working dir if no args
   expect_error(plumb(), regexp="No plumber.R file found in the specified directory: .")
   # errors when both dir and file are given
-  expect_error(plumb(file=test_path("files/endpoints.R"), dir="files"), regexp="You must set either the file or the directory parameter, not both")
+  expect_error(plumb(file=test_path("files/endpoints.R"), dir=test_path("files")), regexp="You must set either the file or the directory parameter, not both")
 
 })
 
