@@ -17,10 +17,13 @@ PlumberResponse <- R6Class(
       h <- self$headers
       # httpuv doesn't like empty headers lists, and this is a useful field anyway...
       # need to set the LC_TIME to C to ensure the Date is formatted in English
-      old_lc_time <- Sys.getlocale("LC_TIME")
-      Sys.setlocale("LC_TIME", "C")
-      on.exit(Sys.setlocale("LC_TIME", old_lc_time), add = TRUE)
-      h$Date <- format(Sys.time(), "%a, %d %b %Y %X %Z", tz="GMT")
+      english_time <- function() {
+        old_lc_time <- Sys.getlocale("LC_TIME")
+        Sys.setlocale("LC_TIME", "C")
+        on.exit(Sys.setlocale("LC_TIME", old_lc_time), add = TRUE)
+        format(Sys.time(), "%a, %d %b %Y %X %Z", tz="GMT")
+      }
+      h$Date <- english_time()
 
       # Due to https://github.com/rstudio/httpuv/issues/49, we need each
       # request to be on a separate TCP stream
