@@ -1,6 +1,9 @@
 #' Parse the given plumber type and return the typecast value
 #' @noRd
 plumberToSwaggerType <- function(type){
+  if (is.na(type)) {
+    return('string')
+  }
   if (type == "bool" || type == "logical"){
     return("boolean")
   } else if (type == "double" || type == "numeric"){

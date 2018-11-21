@@ -48,7 +48,7 @@ parseQS <- function(qs){
 
 createPathRegex <- function(pathDef){
   # Create a regex from the defined path, substituting variables where appropriate
-  match <- stringi::stri_match_all(pathDef, regex="/<(\\.?[a-zA-Z][\\w_\\.]*)(:(int|double|numeric|bool|logical))?>")[[1]]
+  match <- stringi::stri_match_all(pathDef, regex="/<(\\.?[a-zA-Z][\\w_\\.]*)(:(chr|int|double|numeric|bool|logical))?>")[[1]]
   names <- match[,2]
   type <- match[,4]
   if (length(names) <= 1 && is.na(names)){
