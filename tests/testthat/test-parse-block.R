@@ -79,4 +79,23 @@ test_that("Block can't contain duplicate tags", {
   expect_error(parseBlock(length(lines), lines), "Duplicate tag specified.")
 })
 
+test_that("@json works", {
+
+  lines <- c(
+    "#' @json")
+  b <- parseBlock(length(lines), lines)
+  expect_equal_functions(b$serializer, serializer_json())
+
+
+  lines <- c(
+    "#' @json(na = 'string')")
+  b <- parseBlock(length(lines), lines)
+  expect_equal_functions(b$serializer, serializer_json(na = 'string'))
+
+
+  lines <- c("#' @json(na = 'string'")
+  expect_error(parseBlock(length(lines), lines), "Supplemental arguments to the serializer")
+})
+
+
 # TODO: more testing around filter, assets, endpoint, etc.

@@ -10,9 +10,9 @@
 \alias{serializers}
 \title{Plumber Serializers}
 \usage{
-serializer_json()
+serializer_json(na = "null")
 
-serializer_unboxed_json()
+serializer_unboxed_json(na = "null")
 
 serializer_content_type(type)
 
@@ -22,6 +22,8 @@ serializer_htmlwidget()
 }
 \arguments{
 \item{type}{The value to provide for the \code{Content-Type} HTTP header.}
+\item{na}{How should NA values be encoded?}
+
 }
 \description{
 Serializers are used in Plumber to transform the R object produced by a

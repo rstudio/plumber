@@ -115,7 +115,7 @@ parseBlock <- function(lineNum, file){
       }
     }
 
-    shortSerMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(json|html)")
+    shortSerMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(json|html)([\\s\\(].*)?\\s*$")
     if (!is.na(shortSerMat[1,2])){
       s <- stri_trim_both(shortSerMat[1,2])
       if (!is.null(serializer)){
@@ -126,9 +126,22 @@ parseBlock <- function(lineNum, file){
       if (!is.na(s) && !s %in% names(.globals$serializers)){
         stop("No such @serializer registered: ", s)
       }
+      shortSerAttr <- trimws(shortSerMat[1,3])
+      if (is.na(shortSerAttr)){
+        shortSerAttr <- ""
+      }
+      if(!identical(shortSerAttr, "") && !grepl("^\\(.*\\)$", shortSerAttr, perl=TRUE)){
+        stopOnLine(lineNum, line, "Supplemental arguments to the serializer must be surrounded by parentheses, as in `#' @json(na='null')`")
+      }
 
-      # TODO: support arguments to short serializers once they require them.
-      serializer <- .globals$serializers[[s]]()
+      if (shortSerAttr != ""){
+        # We have an arg to pass in to the serializer
+        argList <- as.list(eval(parse(text=shortSerAttr)))
+
+        serializer <- do.call(.globals$serializers[[s]], argList)
+      } else {
+        serializer <- .globals$serializers[[s]]()
+      }
     }
 
     imageMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(jpeg|png)([\\s\\(].*)?\\s*$")
