@@ -4,7 +4,7 @@ cookieFilter <- function(req){
   forward()
 }
 
-#' @importFrom utils URLdecode
+#' @importFrom httpuv decodeURI
 #' @noRd
 parseCookies <- function(cookie){
   if (is.null(cookie) || nchar(cookie) == 0){
@@ -25,5 +25,5 @@ parseCookies <- function(cookie){
   cookies <- lapply(cookieList, "[[", 2)
   names(cookies) <- sapply(cookieList, "[[", 1)
 
-  return(lapply(cookies, URLdecode))
+  return(lapply(cookies, decodeURI))
 }
