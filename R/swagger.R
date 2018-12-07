@@ -1,17 +1,20 @@
 #' Parse the given plumber type and return the typecast value
 #' @noRd
 plumberToSwaggerType <- function(type){
-  if (type == "bool" || type == "logical"){
-    return("boolean")
-  } else if (type == "double" || type == "numeric"){
-    return("number")
-  } else if (type == "int"){
-    return("integer")
-  } else if (type == "character"){
-    return("string")
-  } else {
+  switch(as.character(type),
+
+    "bool" = ,
+    "logical" = "boolean",
+
+    "double" = ,
+    "numeric" = "number",
+
+    "int" = "integer",
+
+    "character" = "string",
+
     stop("Unrecognized type: ", type)
-  }
+  )
 }
 
 #' Convert the endpoints as they exist on the router to a list which can
