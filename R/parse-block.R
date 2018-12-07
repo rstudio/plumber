@@ -136,7 +136,7 @@ parseBlock <- function(lineNum, file){
 
       if (shortSerAttr != ""){
         # We have an arg to pass in to the serializer
-        argList <- as.list(eval(parse(text=shortSerAttr)))
+        argList <- as.list(eval(parse(text=paste0("list", shortSerAttr))))
 
         serializer <- do.call(.globals$serializers[[s]], argList)
       } else {
