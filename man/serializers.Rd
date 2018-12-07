@@ -16,12 +16,16 @@ serializer_unboxed_json(auto_unbox = TRUE, ...)
 
 serializer_content_type(type)
 
-serializer_html()
+serializer_html(...)
 
 serializer_htmlwidget(...)
 }
 \arguments{
-\item{...}{extra arguments supplied to respective internal serialization function}
+\item{...}{extra arguments supplied to respective internal serialization function.
+\code{serializer_htmlwidget} currently does not interpret any extra arguments.}
+
+\item{auto_unbox}{automatically \code{\link{unbox}} all atomic vectors of length 1. It is usually safer to avoid this and instead use the \code{\link{unbox}} function to unbox individual elements.
+An exception is that objects of class \code{AsIs} (i.e. wrapped in \code{I()}) are not automatically unboxed. This is a way to mark single values as length-1 arrays.}
 
 \item{type}{The value to provide for the \code{Content-Type} HTTP header.}
 }
