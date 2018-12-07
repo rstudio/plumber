@@ -171,7 +171,7 @@ plumber <- R6Class(
       private$serializer <- serializer_json()
       private$errorHandler <- defaultErrorHandler()
       private$notFoundHandler <- default404Handler
-      
+
       # Add in the initial filters
       for (fn in names(filters)){
         fil <- PlumberFilter$new(fn, filters[[fn]], private$envir, private$serializer, NULL)
