@@ -107,15 +107,15 @@ parseGlobals <- function(lines){
   fields
 }
 
-#' The default set of Swagger API globals. Some of these properties are subject
-#' to being overridden by @api* annotations.
+#' The default set of OpenAPI specification (OAS) globals. Some of these properties
+#' are subject to being overridden by @api* annotations.
 #' @noRd
 defaultGlobals <- list(
-  swagger = "2.0",
-  info = list(description="API Description", title="API Title", version="1.0.0"),
-  host=NA,
-  schemes= I("http"),
-  produces=I("application/json")
+  openapi = "3.0.2",
+  info = list(description = "API Description", title = "API Title", version = "1.0.0"),
+  servers = NA,
+  schemes = I("http"),
+  produces = I("application/json")
   #securityDefinitions = list(),
   #definitions = list()
 )
