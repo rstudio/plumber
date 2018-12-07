@@ -79,22 +79,54 @@ test_that("Block can't contain duplicate tags", {
   expect_error(parseBlock(length(lines), lines), "Duplicate tag specified.")
 })
 
-test_that("@json works", {
+test_that("@json parameters work", {
 
-  lines <- c(
-    "#' @json")
-  b <- parseBlock(length(lines), lines)
-  expect_equal_functions(b$serializer, serializer_json())
+  expect_block_fn <- function(lines, fn) {
+    b <- parseBlock(length(lines), lines)
+    expect_equal_functions(b$serializer, fn)
+  }
+  expect_block_error <- function(lines, ...) {
+    expect_error({
+      parseBlock(length(lines), lines)
+    }, ...)
+  }
+
+  expect_block_fn("#' @serializer json", serializer_json())
+  expect_block_fn("#' @json", serializer_json())
+  expect_block_fn("#' @json()", serializer_json())
+  expect_block_fn("#' @serializer unboxedJSON", serializer_unboxed_json())
+
+  expect_block_fn("#' @serializer json list(na = 'string')", serializer_json(na = 'string'))
+  expect_block_fn("#' @json(na = 'string')", serializer_json(na = 'string'))
+
+  expect_block_fn("#* @serializer unboxedJSON list(na = \"string\")", serializer_unboxed_json(na = 'string'))
+  expect_block_fn("#' @json(auto_unbox = TRUE, na = 'string')", serializer_json(auto_unbox = TRUE, na = 'string'))
 
 
-  lines <- c(
-    "#' @json(na = 'string')")
-  b <- parseBlock(length(lines), lines)
-  expect_equal_functions(b$serializer, serializer_json(na = 'string'))
+  expect_block_error("#' @serializer json list(na = 'string'", "unexpected end of input")
+  expect_block_error("#' @json(na = 'string'", "Supplemental arguments to the serializer")
+
+})
 
 
-  lines <- c("#' @json(na = 'string'")
-  expect_error(parseBlock(length(lines), lines), "Supplemental arguments to the serializer")
+test_that("@html parameters produce a warning", {
+
+  expect_block_fn <- function(lines, fn) {
+    b <- parseBlock(length(lines), lines)
+    expect_equal_functions(b$serializer, fn)
+  }
+  expect_block_warning <- function(lines, ...) {
+    expect_warning({
+      parseBlock(length(lines), lines)
+    }, ...)
+  }
+
+  expect_block_fn("#' @serializer html", serializer_html())
+  expect_block_fn("#' @html", serializer_html())
+  expect_block_fn("#' @html()", serializer_html())
+
+  expect_block_warning("#' @serializer html list(key = \"val\")", "does not interpret extra arguments")
+  expect_block_warning("#' @html(key = \"val\")", "does not interpret extra arguments")
 })
 
 
