@@ -92,9 +92,9 @@ Then you'd be able to use `docker run --rm -v `pwd`:/app myCustomDocker` to run 
 
 ## Automatically Run on Restart
 
-If you want your container to start automatically when your machine is booted, you can use the `-d` switch for `docker run`.
+If you want your container to start automatically when your machine is booted, you can use the `--restart` parameter for `docker run`.
 
-`docker run -p 1234:8000 -d myCustomDocker` would run the custom image you created above automatically every time your machine boots and expose the plumber service on port `1234` of your host machine. You'll need to make sure that your firewall allows connections on port `1234` if you want others to be able to access your service.
+`docker run -p 1234:8000 -dit --restart unless-stopped myCustomDocker` would run the custom image you created above automatically every time your machine boots and expose the plumber service on port `1234` of your host machine, unless the container is explicitly stopped. You'll need to make sure that your firewall allows connections on port `1234` if you want others to be able to access your service.
 
 ## Conclusion
 
