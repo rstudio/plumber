@@ -224,17 +224,22 @@ plumber <- R6Class(
         sf <- self$swaggerFile(host = host)
 
         # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
-        if (is.function(swagger)) {
-          swagger_fun <- function(...) {
-            swagger(self, sf, ...)
+        swagger_fun <- function(req, res, ..., scheme = "deprecated", host = "deprecated", path = "deprecated") {
+          if (!missing(scheme) || !missing(host) || !missing(path)) {
+            warning("`scheme`, `host`, or `path` are not supported to produce swagger.json")
           }
-        } else {
-          swagger_fun <- function(..., scheme = "deprecated", host = "deprecated", path = "deprecated") {
-            if (!missing(scheme) || !missing(host) || !missing(path)) {
-              warning("`scheme`, `host`, or `path` are not supported to produce swagger.json")
-            }
-            sf
+          sf$servers <- list(
+            list(
+              url = sub("__swagger__/$", "", req$HTTP_REFERER),
+              description = "OpenAPI"
+            )
+          )
+          if (is.function(swagger)) {
+            ret <- swagger(self, sf, ...)
+          } else {
+            ret <- sf
           }
+          ret
         }
         self$handle("GET", "/swagger.json", swagger_fun, serializer = serializer_unboxed_json())
 
