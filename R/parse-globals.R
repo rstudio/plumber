@@ -113,6 +113,5 @@ parseGlobals <- function(lines){
 defaultGlobals <- list(
   openapi = "3.0.2",
   info = list(description = "API Description", title = "API Title", version = "1.0.0"),
-  paths = list(),
-  schemes = list("http")
+  paths = list()
 )
