@@ -533,18 +533,18 @@ plumber <- R6Class(
     },
     swaggerFile = function(..., serverUrl) { #FIXME: test
 
-      # if (missing(host)) {
-      #   serverUrl <- getOption("plumber.apiServerUrl")
+      # if (missing(serverUrl)) {
+      #   serverUrl <- getOption("plumber.apiServerUrl", NULL)
       #   if (!is.null(serverUrl)) {
       #
       #     scheme <- getOption("plumber.apiScheme", "http")
       #
-      #     if (getOption("plumber"))
-      #     serverUrl <- getOption("plumber.apiServerUrl")
+      #     # if (getOption("plumber"))
+      #     # serverUrl <- getOption("plumber.apiServerUrl")
       #   }
       # }
-      #
-      scheme <- getOption("plumber.apiScheme", "http")[1]
+
+      # scheme <- getOption("plumber.apiScheme", "http")[1]
       # basePath <- getOption("plumber.apiPath")[1]
       # paste0(scheme, "://", host, basePath)
 
@@ -554,13 +554,13 @@ plumber <- R6Class(
       # Extend the previously parsed settings with the endpoints
       def <- modifyList(private$globalSettings, list(paths=endpoints))
 
-      def$servers <- list(
-        list(
-          schemes = scheme,
-          # url = serverUrl,
-          description = "Plumber Server"
-        )
-      )
+      # def$servers <- list(
+      #   list(
+      #     schemes = scheme,
+      #     url = serverUrl,
+      #     description = "Plumber Server"
+      #   )
+      # )
 
       # Lay those over the default globals so we ensure that the required fields
       # (like API version) are satisfied.
