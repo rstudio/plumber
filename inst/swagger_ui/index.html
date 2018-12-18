@@ -1,8 +1,3 @@
-<!-- File obtained from swagger-ui project. Copyright 2018 SmartBear Software. See https://github.com/swagger-api/swagger-ui
-Changes to this file include:
-  1. Resolve default swagger.json URL using window.location, and inject query string params to help resolve to the client's view of things.
-All other assets served unmodified via CDN.
--->
 <!-- HTML for static distribution bundle build -->
 <!DOCTYPE html>
 <html lang="en">
@@ -42,22 +37,9 @@ All other assets served unmodified via CDN.
     <script src="./swagger-ui-standalone-preset.js"> </script>
     <script>
     window.onload = function() {
-
-      var loc = window.location.href;
-        if (loc.match(/\/__swagger__/)){
-          var protocol = window.location.protocol.replace(/:$/, '');
-          loc = loc.replace(/__swagger__\/?/, 'swagger.json') + '?' +
-            'schemes=' + protocol +
-            '&host=' + window.location.host +
-            '&path=' + window.location.pathname.replace(/__swagger__\/?/, '');
-        } else {
-          console.log("Couldn't find __swagger__ in current location.");
-          loc = "http://petstore.swagger.io/v2/swagger.json";
-        }
-
-      // Build a system
+      // Begin Swagger UI call region
       const ui = SwaggerUIBundle({
-        url: loc,
+        url: "/swagger.json",
         dom_id: '#swagger-ui',
         deepLinking: true,
         presets: [
@@ -69,6 +51,7 @@ All other assets served unmodified via CDN.
         ],
         layout: "StandaloneLayout"
       })
+      // End Swagger UI call region
 
       window.ui = ui
     }
