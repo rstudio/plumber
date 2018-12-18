@@ -21,5 +21,10 @@ unlink(tmp_location)
 indexFile <- file.path(to_location, "index.html")
 indexFile %>%
   readLines() %>%
-  sub("https://petstore.swagger.io/v2/swagger.json", "../swagger.json", ., fixed = TRUE) %>%
+  sub(
+    "https://petstore.swagger.io/v2/swagger.json",
+    'window.location.origin + window.location.pathname.replace(/__swagger__\/$/, "") + "swagger.json"',
+    .,
+    fixed = TRUE
+  ) %>%
   writeLines(indexFile)
