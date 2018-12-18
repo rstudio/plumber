@@ -228,9 +228,14 @@ plumber <- R6Class(
           if (!missing(scheme) || !missing(host) || !missing(path)) {
             warning("`scheme`, `host`, or `path` are not supported to produce swagger.json")
           }
+          # allows swagger-ui to provide proper callback location given the referrer location
+          # ex: rstudio cloud
+          referrer_url <- req$HTTP_REFERER
+          referrer_url <- sub("index\\.html$", "", referrer_url)
+          referrer_url <- sub("__swagger__/$", "", referrer_url)
           sf$servers <- list(
             list(
-              url = sub("__swagger__/$", "", req$HTTP_REFERER),
+              url = referrer_url,
               description = "OpenAPI"
             )
           )
@@ -248,9 +253,19 @@ plumber <- R6Class(
         # keeping for legacy purposes
         self$handle("GET", "/swagger.json", swagger_fun, serializer = serializer_unboxed_json())
 
-        plumberFileServer <- PlumberStatic$new(system.file("swagger_ui", package = "plumber"))
-        self$mount("/__swagger__", plumberFileServer)
-        swaggerUrl = paste0(getOption("plumber.apiScheme", "http")[1], "://", host, "/__swagger__/")
+        swagger_index <- function(...) {
+          swagger::swagger_spec(
+            'window.location.origin + window.location.pathname.replace(/\\(__swagger__\\\\/|__swagger__\\\\/index.html\\)$/, "") + "openapi.json"'
+          )
+        }
+        for (path in c("/__swagger__/index.html", "/__swagger__/")) {
+          self$handle(
+            "GET", path, swagger_index,
+            serializer = serializer_html()
+          )
+        }
+        self$mount("/__swagger__", PlumberStatic$new(swagger::swagger_path()))
+        swaggerUrl = paste0(host, ":", port, "/__swagger__/")
         message("Running the swagger UI at ", swaggerUrl, sep = "")
 
         # notify swaggerCallback of plumber swagger location
