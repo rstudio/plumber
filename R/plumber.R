@@ -219,9 +219,9 @@ plumber <- R6Class(
       if (isTRUE(swagger) || is.function(swagger)) {
         host <- getOption(
           "plumber.apiHost",
-          paste(ifelse(identical(host, "0.0.0.0"), "127.0.0.1", host), port, sep = ":")
+          ifelse(identical(host, "0.0.0.0"), "127.0.0.1", host)
         )
-        sf <- self$swaggerFile(host = host)
+        sf <- self$swaggerFile()
 
         # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
         swagger_fun <- function(req, res, ..., scheme = "deprecated", host = "deprecated", path = "deprecated") {
@@ -235,18 +235,25 @@ plumber <- R6Class(
             )
           )
           if (is.function(swagger)) {
+            # allow users to update the swagger file themselves
             ret <- swagger(self, sf, ...)
           } else {
             ret <- sf
           }
           ret
         }
+        # https://swagger.io/specification/#document-structure
+        # "It is RECOMMENDED that the root OpenAPI document be named: openapi.json or openapi.yaml."
+        self$handle("GET", "/openapi.json", swagger_fun, serializer = serializer_unboxed_json())
+        # keeping for legacy purposes
         self$handle("GET", "/swagger.json", swagger_fun, serializer = serializer_unboxed_json())
 
         plumberFileServer <- PlumberStatic$new(system.file("swagger_ui", package = "plumber"))
         self$mount("/__swagger__", plumberFileServer)
         swaggerUrl = paste0(getOption("plumber.apiScheme", "http")[1], "://", host, "/__swagger__/")
         message("Running the swagger UI at ", swaggerUrl, sep = "")
+
+        # notify swaggerCallback of plumber swagger location
         if (!is.null(swaggerCallback) && is.function(swaggerCallback)) {
           swaggerCallback(swaggerUrl)
         }
@@ -254,7 +261,7 @@ plumber <- R6Class(
 
       on.exit(private$runHooks("exit"), add = TRUE)
 
-      httpuv::runServer(strsplit(host, ":")[[1]][1], port, self)
+      httpuv::runServer(host, port, self)
     },
     mount = function(path, router){
       path <- sub("([^/])$", "\\1/", path)
@@ -521,22 +528,7 @@ plumber <- R6Class(
       filter <- PlumberFilter$new(name, expr, private$envir, serializer)
       private$addFilterInternal(filter)
     },
-    swaggerFile = function(..., serverUrl) { #FIXME: test
-
-      # if (missing(serverUrl)) {
-      #   serverUrl <- getOption("plumber.apiServerUrl", NULL)
-      #   if (!is.null(serverUrl)) {
-      #
-      #     scheme <- getOption("plumber.apiScheme", "http")
-      #
-      #     # if (getOption("plumber"))
-      #     # serverUrl <- getOption("plumber.apiServerUrl")
-      #   }
-      # }
-
-      # scheme <- getOption("plumber.apiScheme", "http")[1]
-      # basePath <- getOption("plumber.apiPath")[1]
-      # paste0(scheme, "://", host, basePath)
+    swaggerFile = function(..., asJSON = FALSE) { #FIXME: test
 
       endpoints <- private$swaggerFileWalkMountsInternal(self)
       endpoints <- prepareSwaggerEndpoints(endpoints)
@@ -544,23 +536,13 @@ plumber <- R6Class(
       # Extend the previously parsed settings with the endpoints
       def <- modifyList(private$globalSettings, list(paths=endpoints))
 
-      # def$servers <- list(
-      #   list(
-      #     schemes = scheme,
-      #     url = serverUrl,
-      #     description = "Plumber Server"
-      #   )
-      # )
-
       # Lay those over the default globals so we ensure that the required fields
       # (like API version) are satisfied.
-      modifyList(defaultGlobals, def)
-    },
-    swaggerJSON = function(...) {
-      jsonlite::toJSON(
-        self$swaggerFile(...),
-        auto_unbox = TRUE
-      )
+      ret <- modifyList(defaultGlobals, def)
+      if (isTRUE(asJSON)) {
+        ret <- jsonlite::toJSON(ret, auto_unbox = TRUE)
+      }
+      ret
     },
 
     ### Legacy/Deprecated
