@@ -24,7 +24,8 @@ prepareSwaggerEndpoints <- function(routerEndpointEntries){
   endpoints <- list()
 
   for (e in routerEndpointEntries){
-    # TODO: we are sensitive to trailing slashes. Should we be?
+    # We are sensitive to trailing slashes. Should we be?
+    # Yes - 12/2018
     cleanedPath <- gsub("<([^:>]+)(:[^>]+)?>", "{\\1}", e$path)
     if (is.null(endpoints[[cleanedPath]])){
       endpoints[[cleanedPath]] <- list()
