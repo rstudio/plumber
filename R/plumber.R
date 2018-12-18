@@ -229,29 +229,14 @@ plumber <- R6Class(
             swagger(self, sf, ...)
           }
         } else {
-          swagger_fun <- function(..., scheme, host, path) {
+          swagger_fun <- function(..., scheme = "deprecated", host = "deprecated", path = "deprecated") {
             if (!missing(scheme) || !missing(host) || !missing(path)) {
               warning("`scheme`, `host`, or `path` are not supported to produce swagger.json")
             }
-
             sf
           }
         }
-        fun <- function(schemes, host, path){
-          if (!missing(schemes)){
-            sf$schemes <- I(schemes)
-          }
-
-          if (!missing(host)){
-            sf$host <- host
-          }
-
-          if (!missing(path)){
-            sf$basePath <- path
-          }
-          sf
-        }
-        self$handle("GET", "/swagger.json", fun, serializer = serializer_unboxed_json())
+        self$handle("GET", "/swagger.json", swagger_fun, serializer = serializer_unboxed_json())
 
         plumberFileServer <- PlumberStatic$new(system.file("swagger_ui", package = "plumber"))
         self$mount("/__swagger__", plumberFileServer)
