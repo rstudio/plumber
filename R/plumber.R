@@ -543,7 +543,7 @@ plumber <- R6Class(
       filter <- PlumberFilter$new(name, expr, private$envir, serializer)
       private$addFilterInternal(filter)
     },
-    swaggerFile = function(..., asJSON = FALSE) { #FIXME: test
+    swaggerFile = function(...) { #FIXME: test
 
       endpoints <- private$swaggerFileWalkMountsInternal(self)
       endpoints <- prepareSwaggerEndpoints(endpoints)
@@ -554,9 +554,6 @@ plumber <- R6Class(
       # Lay those over the default globals so we ensure that the required fields
       # (like API version) are satisfied.
       ret <- modifyList(defaultGlobals, def)
-      if (isTRUE(asJSON)) {
-        ret <- jsonlite::toJSON(ret, auto_unbox = TRUE)
-      }
       ret
     },
 
