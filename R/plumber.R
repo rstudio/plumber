@@ -545,11 +545,10 @@ plumber <- R6Class(
     },
     swaggerFile = function(...) { #FIXME: test
 
-      endpoints <- private$swaggerFileWalkMountsInternal(self)
-      endpoints <- prepareSwaggerEndpoints(endpoints)
+      swaggerPaths <- private$swaggerFileWalkMountsInternal(self)
 
       # Extend the previously parsed settings with the endpoints
-      def <- modifyList(private$globalSettings, list(paths=endpoints))
+      def <- modifyList(private$globalSettings, list(paths = swaggerPaths))
 
       # Lay those over the default globals so we ensure that the required fields
       # (like API version) are satisfied.
@@ -703,36 +702,32 @@ plumber <- R6Class(
         paste(x, y, sep = "/")
       }
 
-      endpoints <- lapply(router$endpoints, function(endpoint) {
-        # clone and make path a full path
-        endpointEntries <- lapply(endpoint, function(endpointEntry) {
-          endpointEntry <- endpointEntry$clone()
-          endpointEntry$path <- join_paths(parentPath, endpointEntry$path)
-          endpointEntry
-        })
+      # make sure to use the full path
+      endpointList <- list()
 
-        endpointEntries
-      })
+      for (endpoint in router$endpoints) {
+        for (endpointEntry in endpoint) {
+          swaggerEndpoint <- prepareSwaggerEndpoint(
+            endpointEntry,
+            join_paths(parentPath, endpointEntry$path)
+          )
+          endpointList <- modifyList(endpointList, swaggerEndpoint)
+        }
+      }
 
       # recursively gather mounted enpoint entries
-      mountedEndpoints <- mapply(
-        names(router$mounts),
-        router$mounts,
-        FUN = function(mountPath, mountedSubrouter) {
-          private$swaggerFileWalkMountsInternal(
-            mountedSubrouter,
+      if (length(router$mounts) > 0) {
+        for (mountPath in names(router$mounts)) {
+          mountEndpoints <- private$swaggerFileWalkMountsInternal(
+            router$mounts[[mountPath]],
             join_paths(parentPath, mountPath)
           )
+          endpointList <- modifyList(endpointList, mountEndpoints)
         }
-      )
+      }
 
-      # returning a single list of entries,
-      #   not nested entries using the filter / `__no-preempt__` as names within the list
-      # (the filter name is not required when making swagger docs and do not want to misrepresent the endpoints)
-      unname(append(
-        unlist(endpoints),
-        unlist(mountedEndpoints)
-      ))
+      # returning a single list of swagger entries
+      endpointList
     }
   )
 )

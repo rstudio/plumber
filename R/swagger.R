@@ -20,37 +20,35 @@ plumberToSwaggerType <- function(type){
 #' Convert the endpoints as they exist on the router to a list which can
 #' be converted into a swagger definition for these endpoints
 #' @noRd
-prepareSwaggerEndpoints <- function(routerEndpointEntries){
-  endpoints <- list()
+prepareSwaggerEndpoint <- function(routerEndpointEntry, path = routerEndpointEntry$path) {
+  ret <- list()
 
-  for (e in routerEndpointEntries){
-    # We are sensitive to trailing slashes. Should we be?
-    # Yes - 12/2018
-    cleanedPath <- gsub("<([^:>]+)(:[^>]+)?>", "{\\1}", e$path)
-    if (is.null(endpoints[[cleanedPath]])){
-      endpoints[[cleanedPath]] <- list()
-    }
+  # We are sensitive to trailing slashes. Should we be?
+  # Yes - 12/2018
+  cleanedPath <- gsub("<([^:>]+)(:[^>]+)?>", "{\\1}", path)
+  ret[[cleanedPath]] <- list()
 
-    # Get the params from the path
-    pathParams <- e$getTypedParams()
-    for (verb in e$verbs){
-      params <- extractSwaggerParams(e$params, pathParams)
+  # Get the params from the path
+  pathParams <- routerEndpointEntry$getTypedParams()
+  for (verb in routerEndpointEntry$verbs) {
+    params <- extractSwaggerParams(routerEndpointEntry$params, pathParams)
 
-      # If we haven't already documented a path param, we should add it here.
-      # FIXME: warning("Undocumented path parameters: ", paste0())
+    # If we haven't already documented a path param, we should add it here.
+    # FIXME: warning("Undocumented path parameters: ", paste0())
 
-      resps <- extractResponses(e$responses)
+    resps <- extractResponses(routerEndpointEntry$responses)
 
-      endptSwag <- list(summary=e$comments,
-                        responses=resps,
-                        parameters=params,
-                        tags=e$tags)
+    endptSwag <- list(
+      summary = routerEndpointEntry$comments,
+      responses = resps,
+      parameters = params,
+      tags = routerEndpointEntry$tags
+    )
 
-      endpoints[[cleanedPath]][[tolower(verb)]] <- endptSwag
-    }
+    ret[[cleanedPath]][[tolower(verb)]] <- endptSwag
   }
 
-  endpoints
+  ret
 }
 
 defaultResp <- list(
