@@ -105,8 +105,14 @@ extractSwaggerParams <- function(endpointParams, pathParams){
 }
 
 
+isNa <- function(x) {
+  if (is.list(x)) {
+    return(FALSE)
+  }
+  is.na(x)
+}
 isNaOrNull <- function(x) {
-  is.na(x) || is.null(x)
+  isNa(x) || is.null(x)
 }
 removeNaOrNulls <- function(x) {
   # preemptively stop
