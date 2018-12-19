@@ -242,7 +242,10 @@ plumber <- R6Class(
           if (is.function(swagger)) {
             # allow users to update the swagger file themselves
             ret <- swagger(self, sf, ...)
+            # Since users could have added more NA or NULL values...
+            ret <- removeNaOrNulls(ret)
           } else {
+            # NA/NULL values already removed
             ret <- sf
           }
           ret
@@ -553,6 +556,10 @@ plumber <- R6Class(
       # Lay those over the default globals so we ensure that the required fields
       # (like API version) are satisfied.
       ret <- modifyList(defaultGlobals, def)
+
+      # remove NA or NULL values, which swagger doesn't like
+      ret <- removeNaOrNulls(ret)
+
       ret
     },
 

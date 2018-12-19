@@ -78,7 +78,7 @@ extractSwaggerParams <- function(endpointParams, pathParams){
     }
 
     type <- endpointParams[[p]]$type
-    if (is.null(type) || is.na(type)){
+    if (isNaOrNull(type)){
       if (location == "path") {
         type <- plumberToSwaggerType(pathParams$type[pathParams$name == p])
       } else {
@@ -102,4 +102,30 @@ extractSwaggerParams <- function(endpointParams, pathParams){
 
   }
   params
+}
+
+
+isNaOrNull <- function(x) {
+  is.na(x) || is.null(x)
+}
+removeNaOrNulls <- function(x) {
+  # preemptively stop
+  if (!is.list(x)) {
+    return(x)
+  }
+  if (length(x) == 0) {
+    return(x)
+  }
+
+  # remove any `NA` or `NULL` elements
+  toRemove <- vapply(x, isNaOrNull, logical(1))
+  if (any(toRemove)) {
+    x[toRemove] <- NULL
+  }
+
+  # recurse through list
+  ret <- lapply(x, removeNaOrNulls)
+  class(ret) <- class(x)
+
+  ret
 }
