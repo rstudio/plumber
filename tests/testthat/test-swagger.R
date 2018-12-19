@@ -108,6 +108,8 @@ test_that("swaggerFile works with mounted routers", {
     "/sub2/", "/sub2/sub3/else", "/sub2/sub3/", "/sub4/completely",
     "/sub4/trailing_slash/"
   ))
+
+  pr <<- pr
 })
 
 test_that("extractResponses works", {
@@ -134,19 +136,19 @@ test_that("extractSwaggerParams works", {
   pp <- data.frame(name=c("id", "id2"), type=c("int", "int"))
 
   params <- extractSwaggerParams(ep, pp)
-  expect_equal(as.list(params[1,]),
+  expect_equal(params[[1]],
                list(name="id",
                     description="Description",
                     `in`="path",
                     required=TRUE, # Made required b/c path arg
                     type="integer"))
-  expect_equal(as.list(params[2,]),
+  expect_equal(params[[2]],
                list(name="id2",
                     description="Description2",
                     `in`="path",
                     required=TRUE, # Made required b/c path arg
                     type="integer"))
-  expect_equal(as.list(params[3,]),
+  expect_equal(params[[3]],
                list(name="make",
                     description="Make description",
                     `in`="query",
@@ -155,10 +157,14 @@ test_that("extractSwaggerParams works", {
 
   # If id were not a path param it should not be promoted to required
   params <- extractSwaggerParams(ep, NULL)
-  expect_equal(params$required[params$name=="id"], FALSE)
-  expect_equal(params$type[params$name=="id"], "integer")
+  idParam <- params[[which(vapply(params, `[[`, character(1), "name") == "id")]]
+  expect_equal(idParam$required, FALSE)
+  expect_equal(idParam$type, "integer")
+
+  for (param in params) {
+    expect_equal(length(param), 5)
+  }
 
   params <- extractSwaggerParams(NULL, NULL)
-  expect_equal(nrow(params), 0)
-  expect_equal(ncol(params), 5)
+  expect_equal(length(params), 0)
 })

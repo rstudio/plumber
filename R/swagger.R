@@ -53,7 +53,11 @@ prepareSwaggerEndpoints <- function(routerEndpointEntries){
   endpoints
 }
 
-defaultResp <- list("default"=list(description="Default response."))
+defaultResp <- list(
+  "default" = list(
+    description = "Default response."
+  )
+)
 extractResponses <- function(resps){
   if (is.null(resps) || is.na(resps)){
     resps <- defaultResp
@@ -67,41 +71,37 @@ extractResponses <- function(resps){
 #' paramters.
 #' @noRd
 extractSwaggerParams <- function(endpointParams, pathParams){
-  params <- data.frame(name=character(0),
-                       description=character(0),
-                       `in`=character(0),
-                       required=logical(0),
-                       type=character(0),
-                       check.names = FALSE,
-                       stringsAsFactors = FALSE)
-  for (p in names(endpointParams)){
+
+  params <- list()
+  for (p in names(endpointParams)) {
     location <- "query"
-    if (p %in% pathParams$name){
+    if (p %in% pathParams$name) {
       location <- "path"
     }
 
     type <- endpointParams[[p]]$type
     if (is.null(type) || is.na(type)){
       if (location == "path") {
-        type <- plumberToSwaggerType(pathParams[pathParams$name == p,"type"])
+        type <- plumberToSwaggerType(pathParams$type[pathParams$name == p])
       } else {
         type <- "string" # Default to string
       }
     }
 
-    parDocs <- data.frame(name = p,
-                          description = endpointParams[[p]]$desc,
-                          `in`=location,
-                          required=endpointParams[[p]]$required,
-                          type=type,
-                          check.names = FALSE,
-                          stringsAsFactors = FALSE)
+    paramList <- list(
+      name = p,
+      description = endpointParams[[p]]$desc,
+      `in` = location,
+      required = endpointParams[[p]]$required,
+      type = type
+    )
 
     if (location == "path"){
-      parDocs$required <- TRUE
+      paramList$required <- TRUE
     }
 
-    params <- rbind(params, parDocs)
+    params[[length(params) + 1]] <- paramList
+
   }
   params
 }
