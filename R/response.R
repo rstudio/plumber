@@ -1,3 +1,26 @@
+#' HTTP Date String
+#'
+#' Given a POSIXct object, return a date string in the format required for a
+#' HTTP Date header. For example: "Wed, 21 Oct 2015 07:28:00 GMT"
+#'
+#' @noRd
+http_date_string <- function(time) {
+  weekday_names <- c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
+  weekday_num <- as.integer(strftime(time, format = "%w", tz = "GMT")) + 1L
+  weekday_name <- weekday_names[weekday_num]
+
+  month_names <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+  month_num <- as.integer(strftime(time, format = "%m", tz = "GMT"))
+  month_name <- month_names[month_num]
+
+  strftime(
+    time,
+    paste0(weekday_name, ", %d ", month_name, " %Y %H:%M:%S GMT"),
+    tz = "GMT"
+  )
+}
+
 PlumberResponse <- R6Class(
   "PlumberResponse",
   public = list(
@@ -15,15 +38,7 @@ PlumberResponse <- R6Class(
     },
     toResponse = function(){
       h <- self$headers
-      # httpuv doesn't like empty headers lists, and this is a useful field anyway...
-      # need to set the LC_TIME to C to ensure the Date is formatted in English
-      english_time <- function() {
-        old_lc_time <- Sys.getlocale("LC_TIME")
-        Sys.setlocale("LC_TIME", "C")
-        on.exit(Sys.setlocale("LC_TIME", old_lc_time), add = TRUE)
-        format(Sys.time(), "%a, %d %b %Y %X %Z", tz="GMT")
-      }
-      h$Date <- english_time()
+      h$Date <- http_date_string(Sys.time())
 
       # Due to https://github.com/rstudio/httpuv/issues/49, we need each
       # request to be on a separate TCP stream
