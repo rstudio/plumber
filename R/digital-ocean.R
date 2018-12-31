@@ -105,7 +105,7 @@ droplet_capture <- function(droplet, command){
 install_api <- function(droplet){
   analogsea::droplet_ssh(droplet, "mkdir -p /var/plumber")
   analogsea::droplet_upload(droplet, local=normalizePath(
-      system.file("examples", "10-welcome", package="plumber"), mustWork=FALSE), #TODO: Windows support for **?
+      system.file("examples", "10-welcome", package="plumber"), mustWork=FALSE),
       remote="/var/plumber/",
       verbose = TRUE)
 }
@@ -121,8 +121,15 @@ install_nginx <- function(droplet){
   analogsea::droplet_ssh(droplet, "rm -f /etc/nginx/sites-enabled/default") # Disable the default site
   analogsea::droplet_ssh(droplet, "mkdir -p /var/certbot")
   analogsea::droplet_ssh(droplet, "mkdir -p /etc/nginx/sites-available/plumber-apis/")
+  #analogsea::droplet_upload(droplet, local=system.file("server", "nginx.conf", package="plumber"),
+  #                 remote="/etc/nginx/sites-available/plumber")
+  randname <- paste0(sample(LETTERS, 6, replace=TRUE), collapse="")
+  randdir <- paste0("/tmp/", randname, "/") # Don't use file.path because we want Linux paths here.
   analogsea::droplet_upload(droplet, local=system.file("server", "nginx.conf", package="plumber"),
-                 remote="/etc/nginx/sites-available/plumber")
+                          remote=randdir)
+  analogsea::droplet_ssh(droplet, paste0("mv ", randdir, "nginx.conf",
+                         " /etc/nginx/sites-available/plumber"),
+                         paste0("rmdir ", randdir))
   analogsea::droplet_ssh(droplet, "ln -sf /etc/nginx/sites-available/plumber /etc/nginx/sites-enabled/")
   analogsea::droplet_ssh(droplet, "systemctl reload nginx")
 }
@@ -291,7 +298,7 @@ do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE,
   ### UPLOAD the API ###
   localPath <- sub("/+$", "", localPath)
   analogsea::droplet_ssh(droplet, paste0("mkdir -p /var/plumber/", path))
-  analogsea::droplet_upload(droplet, local=paste0(localPath, "/**"), #TODO: Windows support for **?
+  analogsea::droplet_upload(droplet, local=localPath,
       remote=paste0("/var/plumber/", path, "/"))
 
   ### SYSTEMD ###
