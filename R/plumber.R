@@ -230,6 +230,8 @@ plumber <- R6Class(
           }
           # allows swagger-ui to provide proper callback location given the referrer location
           # ex: rstudio cloud
+          # use the HTTP_REFERER so RSC can find the swagger location to ask
+          ## (can't directly ask for 127.0.0.1)
           referrer_url <- req$HTTP_REFERER
           referrer_url <- sub("index\\.html$", "", referrer_url)
           referrer_url <- sub("__swagger__/$", "", referrer_url)
@@ -561,6 +563,9 @@ plumber <- R6Class(
       ret <- removeNaOrNulls(ret)
 
       ret
+    },
+    openAPIFile = function(...) {
+      self$swaggerFile(...)
     },
 
     ### Legacy/Deprecated

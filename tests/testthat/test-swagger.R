@@ -183,6 +183,11 @@ test_that("api kitchen sink", {
   skip_on_bioc()
   skip_on_os(setdiff(c("windows", "mac", "linux", "solaris"), "mac"))
 
+  ## install brew - https://brew.sh/
+  # /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  ## install yarn
+  # brew install yarn
+  ## install yarn
   # yarn add swagger-ui
   swagger_cli_path <- "../../node_modules/.bin/swagger-cli"
   skip_if_not(file.exists(swagger_cli_path))
