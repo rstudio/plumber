@@ -171,3 +171,64 @@ test_that("extractSwaggerParams works", {
   params <- extractSwaggerParams(NULL, NULL)
   expect_equal(length(params), 0)
 })
+
+
+
+
+test_that("api kitchen sink", {
+
+  skip_on_cran()
+  skip_on_travis()
+  skip_on_appveyor()
+  skip_on_bioc()
+  skip_on_os(setdiff(c("windows", "mac", "linux", "solaris"), "mac"))
+
+  # yarn add swagger-ui
+  swagger_cli_path <- "../../node_modules/.bin/swagger-cli"
+  skip_if_not(file.exists(swagger_cli_path))
+  swagger_cli_path <- normalizePath(swagger_cli_path)
+
+  with_dir <- function(dir, x) {
+    old_wd <- getwd()
+    on.exit({
+      setwd(old_wd)
+    })
+    setwd(folder)
+
+    force(x)
+  }
+
+  validate_spec <- function(pr) {
+    spec <- jsonlite::toJSON(pr$swaggerFile(), auto_unbox = TRUE)
+    tmpfile <- tempfile(fileext = ".json")
+    on.exit({
+      unlink(tmpfile)
+    })
+    cat(spec, file = tmpfile)
+
+    output <- system2(
+      swagger_cli_path,
+      c(
+        "validate",
+        tmpfile
+      ),
+      stdout = TRUE,
+      stderr = TRUE
+    )
+
+    output <- paste0(output, collapse = "\n")
+
+    # using expect_equal vs a regex test to have a better error message
+    expect_equal(sub(tmpfile, "", output, fixed = TRUE), " is valid")
+  }
+
+  folder <- system.file("examples/11-car-inventory/", package = "plumber")
+  with_dir(folder, {
+    pr <- plumb("plumber.R")
+    validate_spec(pr)
+  })
+
+  # TODO test more situations
+
+
+})
