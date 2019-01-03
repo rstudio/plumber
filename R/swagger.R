@@ -91,7 +91,9 @@ extractSwaggerParams <- function(endpointParams, pathParams){
       description = endpointParams[[p]]$desc,
       `in` = location,
       required = endpointParams[[p]]$required,
-      type = type
+      schema = list(
+        type = type
+      )
     )
 
     if (location == "path"){

@@ -141,25 +141,28 @@ test_that("extractSwaggerParams works", {
                     description="Description",
                     `in`="path",
                     required=TRUE, # Made required b/c path arg
-                    type="integer"))
+                    schema = list(
+                      type="integer")))
   expect_equal(params[[2]],
                list(name="id2",
                     description="Description2",
                     `in`="path",
                     required=TRUE, # Made required b/c path arg
-                    type="integer"))
+                    schema = list(
+                      type="integer")))
   expect_equal(params[[3]],
                list(name="make",
                     description="Make description",
                     `in`="query",
                     required=FALSE,
-                    type="string"))
+                    schema = list(
+                      type="string")))
 
   # If id were not a path param it should not be promoted to required
   params <- extractSwaggerParams(ep, NULL)
   idParam <- params[[which(vapply(params, `[[`, character(1), "name") == "id")]]
   expect_equal(idParam$required, FALSE)
-  expect_equal(idParam$type, "integer")
+  expect_equal(idParam$schema$type, "integer")
 
   for (param in params) {
     expect_equal(length(param), 5)
