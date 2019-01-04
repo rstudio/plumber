@@ -548,7 +548,7 @@ plumber <- R6Class(
       filter <- PlumberFilter$new(name, expr, private$envir, serializer)
       private$addFilterInternal(filter)
     },
-    swaggerFile = function(...) { #FIXME: test
+    swaggerFile = function() { #FIXME: test
 
       swaggerPaths <- private$swaggerFileWalkMountsInternal(self)
 
@@ -564,8 +564,8 @@ plumber <- R6Class(
 
       ret
     },
-    openAPIFile = function(...) {
-      self$swaggerFile(...)
+    openAPIFile = function() {
+      self$swaggerFile()
     },
 
     ### Legacy/Deprecated
