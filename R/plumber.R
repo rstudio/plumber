@@ -230,6 +230,8 @@ plumber <- R6Class(
           }
           # allows swagger-ui to provide proper callback location given the referrer location
           # ex: rstudio cloud
+          # use the HTTP_REFERER so RSC can find the swagger location to ask
+          ## (can't directly ask for 127.0.0.1)
           referrer_url <- req$HTTP_REFERER
           referrer_url <- sub("index\\.html$", "", referrer_url)
           referrer_url <- sub("__swagger__/$", "", referrer_url)
@@ -242,7 +244,10 @@ plumber <- R6Class(
           if (is.function(swagger)) {
             # allow users to update the swagger file themselves
             ret <- swagger(self, sf, ...)
+            # Since users could have added more NA or NULL values...
+            ret <- removeNaOrNulls(ret)
           } else {
+            # NA/NULL values already removed
             ret <- sf
           }
           ret
@@ -543,21 +548,24 @@ plumber <- R6Class(
       filter <- PlumberFilter$new(name, expr, private$envir, serializer)
       private$addFilterInternal(filter)
     },
-    swaggerFile = function(..., asJSON = FALSE) { #FIXME: test
+    swaggerFile = function(...) { #FIXME: test
 
-      endpoints <- private$swaggerFileWalkMountsInternal(self)
-      endpoints <- prepareSwaggerEndpoints(endpoints)
+      swaggerPaths <- private$swaggerFileWalkMountsInternal(self)
 
       # Extend the previously parsed settings with the endpoints
-      def <- modifyList(private$globalSettings, list(paths=endpoints))
+      def <- modifyList(private$globalSettings, list(paths = swaggerPaths))
 
       # Lay those over the default globals so we ensure that the required fields
       # (like API version) are satisfied.
       ret <- modifyList(defaultGlobals, def)
-      if (isTRUE(asJSON)) {
-        ret <- jsonlite::toJSON(ret, auto_unbox = TRUE)
-      }
+
+      # remove NA or NULL values, which swagger doesn't like
+      ret <- removeNaOrNulls(ret)
+
       ret
+    },
+    openAPIFile = function(...) {
+      self$swaggerFile(...)
     },
 
     ### Legacy/Deprecated
@@ -706,36 +714,32 @@ plumber <- R6Class(
         paste(x, y, sep = "/")
       }
 
-      endpoints <- lapply(router$endpoints, function(endpoint) {
-        # clone and make path a full path
-        endpointEntries <- lapply(endpoint, function(endpointEntry) {
-          endpointEntry <- endpointEntry$clone()
-          endpointEntry$path <- join_paths(parentPath, endpointEntry$path)
-          endpointEntry
-        })
+      # make sure to use the full path
+      endpointList <- list()
 
-        endpointEntries
-      })
+      for (endpoint in router$endpoints) {
+        for (endpointEntry in endpoint) {
+          swaggerEndpoint <- prepareSwaggerEndpoint(
+            endpointEntry,
+            join_paths(parentPath, endpointEntry$path)
+          )
+          endpointList <- modifyList(endpointList, swaggerEndpoint)
+        }
+      }
 
       # recursively gather mounted enpoint entries
-      mountedEndpoints <- mapply(
-        names(router$mounts),
-        router$mounts,
-        FUN = function(mountPath, mountedSubrouter) {
-          private$swaggerFileWalkMountsInternal(
-            mountedSubrouter,
+      if (length(router$mounts) > 0) {
+        for (mountPath in names(router$mounts)) {
+          mountEndpoints <- private$swaggerFileWalkMountsInternal(
+            router$mounts[[mountPath]],
             join_paths(parentPath, mountPath)
           )
+          endpointList <- modifyList(endpointList, mountEndpoints)
         }
-      )
+      }
 
-      # returning a single list of entries,
-      #   not nested entries using the filter / `__no-preempt__` as names within the list
-      # (the filter name is not required when making swagger docs and do not want to misrepresent the endpoints)
-      unname(append(
-        unlist(endpoints),
-        unlist(mountedEndpoints)
-      ))
+      # returning a single list of swagger entries
+      endpointList
     }
   )
 )

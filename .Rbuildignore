@@ -11,3 +11,6 @@
 ^revdep$
 ^cran-comments\.md$
 ^inst/swagger_ui/.*\.map
+^yarn\.lock$
+^node_modules
+^package\.json$
