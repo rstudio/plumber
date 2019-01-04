@@ -37,9 +37,9 @@ Suggests:
     htmlwidgets,
     visNetwork,
     analogsea,
-    swagger
+    swagger (> 3.20.3)
 Remotes:
-    rstudio/swagger#7
+    rstudio/swagger
 Collate:
     'content-types.R'
     'cookie-parser.R'

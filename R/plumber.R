@@ -241,6 +241,7 @@ plumber <- R6Class(
               description = "OpenAPI"
             )
           )
+
           if (is.function(swagger)) {
             # allow users to update the swagger file themselves
             ret <- swagger(self, sf, ...)
