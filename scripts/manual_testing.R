@@ -13,9 +13,9 @@ test_that("custom swagger file update function works", {
 
   pr$run(
     port = 1234,
-    swagger = function(pr_, sf, ...) {
-      sf$info$title <- Sys.time()
-      sf
+    swagger = function(pr_, spec, ...) {
+      spec$info$title <- Sys.time()
+      spec
     }
   )
 

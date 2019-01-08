@@ -221,7 +221,7 @@ plumber <- R6Class(
           "plumber.apiHost",
           ifelse(identical(host, "0.0.0.0"), "127.0.0.1", host)
         )
-        sf <- self$swaggerFile()
+        spec <- self$swaggerFile()
 
         # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
         swagger_fun <- function(req, res, ..., scheme = "deprecated", host = "deprecated", path = "deprecated") {
@@ -235,7 +235,7 @@ plumber <- R6Class(
           referrer_url <- req$HTTP_REFERER
           referrer_url <- sub("index\\.html$", "", referrer_url)
           referrer_url <- sub("__swagger__/$", "", referrer_url)
-          sf$servers <- list(
+          spec$servers <- list(
             list(
               url = referrer_url,
               description = "OpenAPI"
@@ -244,12 +244,12 @@ plumber <- R6Class(
 
           if (is.function(swagger)) {
             # allow users to update the swagger file themselves
-            ret <- swagger(self, sf, ...)
+            ret <- swagger(self, spec, ...)
             # Since users could have added more NA or NULL values...
             ret <- removeNaOrNulls(ret)
           } else {
             # NA/NULL values already removed
-            ret <- sf
+            ret <- spec
           }
           ret
         }
