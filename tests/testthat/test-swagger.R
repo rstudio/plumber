@@ -227,11 +227,18 @@ test_that("api kitchen sink", {
     expect_equal(sub(tmpfile, "", output, fixed = TRUE), " is valid")
   }
 
-  folder <- system.file("examples/11-car-inventory/", package = "plumber")
-  with_dir(folder, {
-    pr <- plumb("plumber.R")
-    validate_spec(pr)
-  })
+
+  folders <- dir(system.file("examples/", package = "plumber"), full.names = TRUE)
+  for (folder in folders) {
+    with_dir(folder, {
+      if (file.exists("entrypoint.R")) {
+        pr <- sourceUTF8("entrypoint.R")
+      } else {
+        pr <- plumb(dir = ".")
+      }
+      validate_spec(pr)
+    })
+  }
 
   # TODO test more situations
 
