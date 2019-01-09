@@ -272,6 +272,11 @@ plumber <- R6Class(
         }
         self$mount("/__swagger__", PlumberStatic$new(swagger::swagger_path()))
         swaggerUrl = paste0(host, ":", port, "/__swagger__/")
+        if (!grepl("^http://", swaggerUrl)) {
+          # must have http protocol for use within RStudio
+          # does not work if supplying "127.0.0.1:1234/route"
+          swaggerUrl <- paste0("http://", swaggerUrl)
+        }
         message("Running the swagger UI at ", swaggerUrl, sep = "")
 
         # notify swaggerCallback of plumber swagger location
