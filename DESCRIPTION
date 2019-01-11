@@ -36,7 +36,10 @@ Suggests:
     base64enc,
     htmlwidgets,
     visNetwork,
-    analogsea
+    analogsea,
+    swagger (> 3.20.3)
+Remotes:
+    rstudio/swagger
 Collate:
     'content-types.R'
     'cookie-parser.R'

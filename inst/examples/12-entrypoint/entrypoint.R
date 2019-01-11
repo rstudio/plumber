@@ -1,5 +1,5 @@
 
 pr <- plumb("myplumberapi.R")
-pr$addGlobalProcessor(sessionCookie("secret", "cookieName"))
+pr$registerHook("preroute", sessionCookie("secret", "cookieName"))
 
 pr

@@ -390,7 +390,7 @@ test_that("full handle call works", {
   expect_equal(val, "unpreempted") # no JSON box
 })
 
-test_that("Expressions and functions both work on handle", function(){
+test_that("Expressions and functions both work on handle", {
   pr <- plumber$new()
   pr$handle("GET", "/function", function(req){ req[["PATH_INFO"]] })
   pr$handle("GET", "/expression", expression(function(req){ req[["PATH_INFO"]] }))
@@ -401,7 +401,7 @@ test_that("Expressions and functions both work on handle", function(){
   expect_equal(val, "/expression")
 })
 
-test_that("Expressions and functions both work on filter", function(){
+test_that("Expressions and functions both work on filter", {
   pr <- plumber$new()
   pr$filter("ff", function(req){ req$filteredF <- TRUE; forward() })
   pr$filter("fe", expression(function(req){ req$filteredE <- TRUE; forward() }))
@@ -420,7 +420,7 @@ test_that("Expressions and functions both work on filter", function(){
   expect_true(val)
 })
 
-test_that("filters and endpoint expressions evaluated in the appropriate (possibly injected) environment", function(){
+test_that("filters and endpoint expressions evaluated in the appropriate (possibly injected) environment", {
   # Create an environment that contains a variable named `y`.
   env <- new.env(parent=.GlobalEnv)
   env$y <- 10
@@ -437,7 +437,7 @@ test_that("filters and endpoint expressions evaluated in the appropriate (possib
   expect_equal(val, "10 100")
 })
 
-test_that("filters and endpoints executed in the appropriate environment", function(){
+test_that("filters and endpoints executed in the appropriate environment", {
   # We've already seen that, if expressions, they're going to be evaluated in the
   # appropriate environment, but we can also confirm that once they've been evaluated,
   # they're then executed in the appropriate environment.
