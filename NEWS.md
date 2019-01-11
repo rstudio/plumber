@@ -41,6 +41,8 @@ plumber 0.5.0
 
 * A multiline POST body is now collapsed to a single line (@robertdj, [#270](https://github.com/trestletech/plumber/issues/270) [#297](https://github.com/trestletech/plumber/pull/297)).
 
+* Bumped version of httpuv to >= 1.4.5.9000 to address an unexpected segfault (@shapenaji, [#289](https://github.com/trestletech/plumber/issues/289))
+
 
 
 plumber 0.4.6
