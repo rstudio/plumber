@@ -261,7 +261,8 @@ plumber <- R6Class(
 
         swagger_index <- function(...) {
           swagger::swagger_spec(
-            'window.location.origin + window.location.pathname.replace(/\\(__swagger__\\\\/|__swagger__\\\\/index.html\\)$/, "") + "openapi.json"'
+            'window.location.origin + window.location.pathname.replace(/\\(__swagger__\\\\/|__swagger__\\\\/index.html\\)$/, "") + "openapi.json"',
+            version = "3"
           )
         }
         for (path in c("/__swagger__/index.html", "/__swagger__/")) {
