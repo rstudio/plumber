@@ -25,7 +25,8 @@ Imports:
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
     httpuv (>= 1.4.5.9000),
-    crayon
+    crayon,
+    rstudioapi
 LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
@@ -71,4 +72,4 @@ Collate:
     'session-cookie.R'
     'swagger.R'
     'utf8.R'
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
