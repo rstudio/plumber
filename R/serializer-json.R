@@ -1,7 +1,6 @@
 #' @include globals.R
 #' @rdname serializers
 #' @param ... extra arguments supplied to respective internal serialization function.
-#'   \code{serializer_htmlwidget} currently does not interpret any extra arguments.
 #' @export
 serializer_json <- function(...) {
   function(val, req, res, errorHandler) {
