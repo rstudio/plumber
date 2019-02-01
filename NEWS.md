@@ -1,18 +1,48 @@
-plumber 0.4.7
+plumber 0.5.0
 --------------------------------------------------------------------------------
-* Add support for swagger for mounted routers (@bradleyhd, [#274](https://github.com/trestletech/plumber/issues/274)).
-* BUGFIX: A multiline POST body is now collapsed to a single line ([#270](https://github.com/trestletech/plumber/issues/270)).
-* The source files used in plumber **must use** the UTF-8 encoding if they contain
-non-ASCII characters (@shrektan, [#312](https://github.com/trestletech/plumber/pull/312),
-  [#328](https://github.com/trestletech/plumber/pull/328)).
-* SECURITY: Wrap `jsonlite::fromJSON` to ensure that `jsonlite` never reads
+## Full changelog
+
+### Security
+
+* Wrap `jsonlite::fromJSON` to ensure that `jsonlite` never reads
   input as a remote address (such as a file path or URL) and attempts to parse
   that. The only known way to exploit this behavior in plumber unless an
   API were using encrypted cookies and an attacker knew the encryption key in
   order to craft arbitrary cookies. ([#325](https://github.com/trestletech/plumber/pull/325))
-* BUGFIX: Plumber files are now only evaluated once.  Prior plumber behavior sourced endpoint
+
+### Breaking changes
+
+* Plumber's swagger definition is now defined using
+  [OpenAPI 3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md),
+  upgrading from Swagger Specification. ([#365](https://github.com/trestletech/plumber/pull/365))
+
+* The source files used in plumber **must use** the UTF-8 encoding if they contain
+  non-ASCII characters (@shrektan, [#312](https://github.com/trestletech/plumber/pull/312),
+  [#328](https://github.com/trestletech/plumber/pull/328)).
+
+### New features
+
+* Added support to a router's run method to allow the `swagger` parameter to be a function that
+  enhances the existing swagger specification before being returned to `/openapi.json`. ([#365](https://github.com/trestletech/plumber/pull/365))
+
+* Add support for swagger for mounted routers (@bradleyhd, [#274](https://github.com/trestletech/plumber/issues/274)).
+
+
+### Minor new features and improvements
+
+* Changed Swagger UI to use [swagger](https://github.com/rstudio/swagger) R package to display the
+    swagger page. ([#365](https://github.com/trestletech/plumber/pull/365))
+
+* Plumber files are now only evaluated once.  Prior plumber behavior sourced endpoint
   functions twice and non-endpoint code blocks once.
   ([#328](https://github.com/trestletech/plumber/pull/328/commits/cde0d3d2543a654fd0c5799b670767ccb0e22e35))
+
+### Bug fixes
+
+* A multiline POST body is now collapsed to a single line (@robertdj, [#270](https://github.com/trestletech/plumber/issues/270) [#297](https://github.com/trestletech/plumber/pull/297)).
+
+* Bumped version of httpuv to >= 1.4.5.9000 to address an unexpected segfault (@shapenaji, [#289](https://github.com/trestletech/plumber/issues/289))
+
 
 
 plumber 0.4.6

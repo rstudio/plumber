@@ -11,7 +11,9 @@ test_that("Endpoints execute in their environment", {
 })
 
 test_that("Missing lines are ok", {
-  PlumberEndpoint$new('verb', 'path', { 1 }, environment())
+  expect_silent({
+    PlumberEndpoint$new('verb', 'path', { 1 }, environment())
+  })
 })
 
 test_that("Endpoints are exec'able with named arguments.", {

@@ -87,9 +87,9 @@ test_that("Overridden serializers apply on filters and endpoints", {
   expect_equal(body$args$third, 4.3)
 })
 
-test_that("Overridding the attached serializer in code works.", {
-
-})
+# test_that("Overridding the attached serializer in code works.", {
+#
+# })
 
 test_that("Redundant serializers fail", {
   addSerializer("inc", function(val, req, res, errorHandler){

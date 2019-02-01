@@ -24,7 +24,7 @@ Imports:
     R6 (>= 2.0.0),
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
-    httpuv (>= 1.4.0),
+    httpuv (>= 1.4.5.9000),
     crayon
 LazyData: TRUE
 ByteCompile: TRUE
@@ -36,7 +36,11 @@ Suggests:
     base64enc,
     htmlwidgets,
     visNetwork,
-    analogsea
+    analogsea,
+    swagger (> 3.20.3)
+Remotes:
+    rstudio/swagger,
+    rstudio/httpuv
 Collate:
     'content-types.R'
     'cookie-parser.R'
