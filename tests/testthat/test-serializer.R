@@ -3,7 +3,7 @@ context("Serializer")
 test_that("Responses returned directly aren't serialized", {
   res <- PlumberResponse$new("")
 
-  r <- plumber$new("files/router.R")
+  r <- plumber$new(test_path("files/router.R"))
   val <- r$serve(make_req("GET", "/response"), res)
   expect_equal(val$body, "overridden")
   expect_equal(val$status, 123)
@@ -12,7 +12,7 @@ test_that("Responses returned directly aren't serialized", {
 test_that("JSON is the default serializer", {
   res <- PlumberResponse$new()
 
-  r <- plumber$new("files/router.R")
+  r <- plumber$new(test_path("files/router.R"))
   expect_equal(r$serve(make_req("GET", "/"), res)$headers$`Content-Type`, "application/json")
 })
 
@@ -44,7 +44,7 @@ test_that("Overridden serializers apply on filters and endpoints", {
     }
   })
 
-  r <- plumber$new("files/serializer.R")
+  r <- plumber$new(test_path("files/serializer.R"))
   res <- PlumberResponse$new("json")
   expect_equal(r$serve(make_req("GET", "/"), res)$body, "CUSTOM")
   expect_equal(res$serializer, customSer())
@@ -87,23 +87,23 @@ test_that("Overridden serializers apply on filters and endpoints", {
   expect_equal(body$args$third, 4.3)
 })
 
-test_that("Overridding the attached serializer in code works.", {
-
-})
+# test_that("Overridding the attached serializer in code works.", {
+#
+# })
 
 test_that("Redundant serializers fail", {
   addSerializer("inc", function(val, req, res, errorHandler){
     list(status=201L, headers=list(), body="CUSTOM2")
   })
-  expect_error(plumber$new("files/serializer-redundant.R"), regexp="Multiple @serializers")
+  expect_error(plumber$new(test_path("files/serializer-redundant.R")), regexp="Multiple @serializers")
 })
 
 test_that("Empty serializers fail", {
-  expect_error(plumber$new("files/serializer-empty.R"), regexp="No @serializer specified")
+  expect_error(plumber$new(test_path("files/serializer-empty.R")), regexp="No @serializer specified")
 })
 
 test_that("Non-existant serializers fail", {
-  expect_error(plumber$new("files/serializer-nonexistent.R"), regexp="No such @serializer")
+  expect_error(plumber$new(test_path("files/serializer-nonexistent.R")), regexp="No such @serializer")
 })
 
 

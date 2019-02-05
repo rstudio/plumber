@@ -52,6 +52,66 @@ test_that("params are parsed", {
 #test_that("prepareSwaggerEndpoints works", {
 #})
 
+test_that("swaggerFile works with mounted routers", {
+  # parameter in path
+  pr <- plumber$new()
+  pr$handle("GET", "/nested/:path/here", function(){})
+  pr$handle("POST", "/nested/:path/here", function(){})
+
+    # static file handler
+  stat <- PlumberStatic$new(".")
+
+  # multiple entries
+  pr2 <- plumber$new()
+  pr2$handle("GET", "/something", function(){})
+  pr2$handle("POST", "/something", function(){})
+  pr2$handle("GET", "/", function(){})
+
+  # test with a filter
+  pr3 <- plumber$new()
+  pr3$filter("filter1", function(){})
+  pr3$handle("POST", "/else", function(){}, "filter1")
+  pr3$handle("PUT", "/else", function(){})
+  pr3$handle("GET", "/", function(){})
+
+  # nested mount
+  pr4 <- plumber$new()
+  pr4$handle("GET", "/completely", function(){})
+
+  # trailing slash in route
+  pr5 <- plumber$new()
+  pr5$handle("GET", "/trailing_slash/", function(){})
+
+  # ├──/nested
+  # │  ├──/:path
+  # │  │  └──/here (GET, POST)
+  # ├──/static
+  # ├──/sub2
+  # │  ├──/something (GET, POST)
+  # │  ├──/ (GET)
+  # │  ├──/sub3
+  # │  │  ├──/else (POST, PUT)
+  # │  │  └──/ (GET)
+  # ├──/sub4
+  # │  ├──/completely (GET)
+  # │  ├──/
+  # │  │  └──/trailing_slash (GET)
+  pr$mount("/static", stat)
+  pr2$mount("/sub3", pr3)
+  pr$mount("/sub2", pr2)
+  pr$mount("/sub4", pr4)
+  pr4$mount("/", pr5)
+
+  paths <- names(pr$swaggerFile()$paths)
+  expect_length(paths, 7)
+  expect_equal(paths, c("/nested/:path/here", "/sub2/something",
+    "/sub2/", "/sub2/sub3/else", "/sub2/sub3/", "/sub4/completely",
+    "/sub4/trailing_slash/"
+  ))
+
+  pr <<- pr
+})
+
 test_that("extractResponses works", {
   # Empty
   r <- extractResponses(NULL)
@@ -76,31 +136,111 @@ test_that("extractSwaggerParams works", {
   pp <- data.frame(name=c("id", "id2"), type=c("int", "int"))
 
   params <- extractSwaggerParams(ep, pp)
-  expect_equal(as.list(params[1,]),
+  expect_equal(params[[1]],
                list(name="id",
                     description="Description",
                     `in`="path",
                     required=TRUE, # Made required b/c path arg
-                    type="integer"))
-  expect_equal(as.list(params[2,]),
+                    schema = list(
+                      type="integer")))
+  expect_equal(params[[2]],
                list(name="id2",
                     description="Description2",
                     `in`="path",
                     required=TRUE, # Made required b/c path arg
-                    type="integer"))
-  expect_equal(as.list(params[3,]),
+                    schema = list(
+                      type="integer")))
+  expect_equal(params[[3]],
                list(name="make",
                     description="Make description",
                     `in`="query",
                     required=FALSE,
-                    type="string"))
+                    schema = list(
+                      type="string")))
 
   # If id were not a path param it should not be promoted to required
   params <- extractSwaggerParams(ep, NULL)
-  expect_equal(params$required[params$name=="id"], FALSE)
-  expect_equal(params$type[params$name=="id"], "integer")
+  idParam <- params[[which(vapply(params, `[[`, character(1), "name") == "id")]]
+  expect_equal(idParam$required, FALSE)
+  expect_equal(idParam$schema$type, "integer")
+
+  for (param in params) {
+    expect_equal(length(param), 5)
+  }
 
   params <- extractSwaggerParams(NULL, NULL)
-  expect_equal(nrow(params), 0)
-  expect_equal(ncol(params), 5)
+  expect_equal(length(params), 0)
+})
+
+
+
+
+test_that("api kitchen sink", {
+
+  skip_on_cran()
+  skip_on_travis()
+  skip_on_appveyor()
+  skip_on_bioc()
+  skip_on_os(setdiff(c("windows", "mac", "linux", "solaris"), "mac"))
+
+  ## install brew - https://brew.sh/
+  # /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  ## install yarn
+  # brew install yarn
+  ## install yarn
+  # yarn add swagger-ui
+  swagger_cli_path <- "../../node_modules/.bin/swagger-cli"
+  skip_if_not(file.exists(swagger_cli_path))
+  swagger_cli_path <- normalizePath(swagger_cli_path)
+
+  with_dir <- function(dir, x) {
+    old_wd <- getwd()
+    on.exit({
+      setwd(old_wd)
+    })
+    setwd(folder)
+
+    force(x)
+  }
+
+  validate_spec <- function(pr) {
+    spec <- jsonlite::toJSON(pr$swaggerFile(), auto_unbox = TRUE)
+    tmpfile <- tempfile(fileext = ".json")
+    on.exit({
+      unlink(tmpfile)
+    })
+    cat(spec, file = tmpfile)
+
+    output <- system2(
+      swagger_cli_path,
+      c(
+        "validate",
+        tmpfile
+      ),
+      stdout = TRUE,
+      stderr = TRUE
+    )
+
+    output <- paste0(output, collapse = "\n")
+
+    # using expect_equal vs a regex test to have a better error message
+    expect_equal(sub(tmpfile, "", output, fixed = TRUE), " is valid")
+  }
+
+
+  folders <- dir(system.file("examples/", package = "plumber"), full.names = TRUE)
+  for (folder in folders) {
+    with_dir(folder, {
+      if (file.exists("entrypoint.R")) {
+        pr <- sourceUTF8("entrypoint.R")
+      } else {
+        pr <- plumb(dir = ".")
+      }
+      validate_spec(pr)
+    })
+  }
+
+  # TODO test more situations
+
+
 })

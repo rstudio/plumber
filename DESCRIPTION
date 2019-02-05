@@ -2,12 +2,12 @@ Encoding: UTF-8
 Package: plumber
 Type: Package
 Title: An API Generator for R
-Version: 0.4.4
-Date: 2017-12-01
+Version: 0.4.7
 Roxygen: list(markdown = TRUE)
 Authors@R: c(
   person(family="Trestle Technology, LLC", role="aut", email="cran@trestletech.com"),
   person("Jeff", "Allen", role="cre", email="cran@trestletech.com"),
+  person("Barret", "Schloerke", role="ctb", email="barret@rstudio.com"),
   person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"),
   person("Sebastiaan", "Vandewoude", role="ctb", email="sebastiaanvandewoude@gmail.com"),
   person(family="SmartBear Software", role=c("ctb", "cph"), comment="swagger-ui"))
@@ -24,7 +24,7 @@ Imports:
     R6 (>= 2.0.0),
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
-    httpuv (>= 1.2.3),
+    httpuv (>= 1.4.5.9000),
     crayon
 LazyData: TRUE
 ByteCompile: TRUE
@@ -37,10 +37,12 @@ Suggests:
     htmlwidgets,
     visNetwork,
     analogsea,
-    promises
+    swagger (> 3.20.3)
 Remotes:
-    rstudio/promises
-Collate: 
+    rstudio/promises,
+    rstudio/swagger,
+    rstudio/httpuv
+Collate:
     'content-types.R'
     'cookie-parser.R'
     'parse-globals.R'
@@ -56,6 +58,8 @@ Collate:
     'digital-ocean.R'
     'find-port.R'
     'includes.R'
+    'json.R'
+    'new-rstudio-project.R'
     'paths.R'
     'plumber-static.R'
     'plumber-step.R'
@@ -67,4 +71,5 @@ Collate:
     'serializer.R'
     'session-cookie.R'
     'swagger.R'
-RoxygenNote: 6.0.1
+    'utf8.R'
+RoxygenNote: 6.1.0

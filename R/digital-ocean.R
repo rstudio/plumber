@@ -144,7 +144,7 @@ install_new_r <- function(droplet){
 #' IP address associated with your droplet. If you don't already have a domain
 #' name, you can register one [here](http://tres.tl/domain). Point a (sub)domain
 #' to the IP address associated with your plumber droplet before calling this
-#' function. These changes may take a few minutes or hours to propogate around
+#' function. These changes may take a few minutes or hours to propagate around
 #' the Internet, but once complete you can then execute this function with the
 #' given domain to be granted a TLS/SSL certificate for that domain.
 #' @details Obtains a free TLS/SSL certificate from
@@ -168,7 +168,6 @@ install_new_r <- function(droplet){
 #' @param force If `FALSE`, will abort if it believes that the given domain name
 #'   is not yet pointing at the appropriate IP address for this droplet. If
 #'   `TRUE`, will ignore this check and attempt to proceed regardless.
-#' @importFrom jsonlite fromJSON
 #' @export
 do_configure_https <- function(droplet, domain, email, termsOfService=FALSE, force=FALSE){
   checkAnalogSea()
@@ -191,7 +190,7 @@ do_configure_https <- function(droplet, domain, email, termsOfService=FALSE, for
     # from the droplet to get a real-time response.
     metadata <- droplet_capture(droplet, "curl http://169.254.169.254/metadata/v1.json")
 
-    parsed <- jsonlite::fromJSON(metadata)
+    parsed <- safeFromJSON(metadata)
     floating <- unlist(lapply(parsed$floating_ip, function(ipv){ ipv$ip_address }))
     ephemeral <- unlist(parsed$interfaces$public)["ipv4.ip_address"]
 
@@ -264,12 +263,15 @@ do_configure_https <- function(droplet, domain, email, termsOfService=FALSE, for
 #' @param forward If `TRUE`, will setup requests targeting the root URL on the
 #'   server to point to this application. See the [do_forward()] function for
 #'   more details.
+#' @param swagger If `TRUE`, will enable the Swagger interface for the remotely
+#'   deployed API. By default, the interface is disabled.
 #' @param preflight R commands to run after [plumb()]ing the `plumber.R` file,
 #'   but before `run()`ing the plumber service. This is an opportunity to e.g.
 #'   add new filters. If you need to specify multiple commands, they should be
 #'   semi-colon-delimited.
 #' @export
-do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE, preflight){
+do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE,
+                          swagger=FALSE, preflight){
   # Trim off any leading slashes
   path <- sub("^/+", "", path)
   # Trim off any trailing slashes if any exist.
@@ -307,6 +309,13 @@ do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE, preflig
     }
   }
   service <- gsub("\\$PREFLIGHT\\$", preflight, service)
+
+  if (missing(swagger)){
+    swagger <- "FALSE"
+  } else {
+    swagger <- "TRUE"
+  }
+  service <- gsub("\\$SWAGGER\\$", swagger, service)
 
   servicefile <- tempfile()
   writeLines(service, servicefile)

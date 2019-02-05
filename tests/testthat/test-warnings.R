@@ -1,7 +1,7 @@
 context("Warnings")
 
 test_that("Routing to errors and 404s works", {
-  r <- plumber$new("files/warn.R")
+  r <- plumber$new(test_path("files/warn.R"))
 
   res <- plumber:::PlumberResponse$new("json")
 

@@ -2,6 +2,7 @@ FROM rocker/drd
 MAINTAINER Jeff Allen <cran@trestletech.com>
 
 RUN apt-get update -qq && apt-get install -y \
+  curl \
   libxml2-dev \
   git-core \
   libssl-dev/unstable \
@@ -13,14 +14,13 @@ RUN apt-get update -qq && apt-get install -y \
 RUN R -e 'install.packages(c("XML", "devtools", "testthat", "PKI", "httpuv", "rmarkdown"))'
 
 # Install pandoc
-RUN mkdir /pandoc && \
-  cd /pandoc && \
-  wget https://s3.amazonaws.com/rstudio-buildtools/pandoc-debian-x86_64-1.15.2.zip && \
-  unzip pandoc-debian* && \
-  rm pandoc-debian*.zip
+RUN curl -fLo /tmp/pandoc-2.2-1-amd64.deb https://github.com/jgm/pandoc/releases/download/2.2/pandoc-2.2-1-amd64.deb && \
+  dpkg -i /tmp/pandoc-2.2-1-amd64.deb && \
+  apt-get install -f && \
+  rm /tmp/pandoc-2.2-1-amd64.deb
 
-ENV RSTUDIO_PANDOC=/pandoc
-ENV PATH=$PATH:/pandoc
+# ENV RSTUDIO_PANDOC=/pandoc
+# ENV PATH=$PATH:/pandoc
 
 RUN R -e "install.packages(c('htmlwidgets', 'visNetwork', 'analogsea'))"
 
@@ -29,6 +29,6 @@ RUN R -e "install.packages(c('htmlwidgets', 'visNetwork', 'analogsea'))"
 RUN R -e "install.packages('PKI',,'https://www.rforge.net/')"
 
 
-CMD git clone https://github.com/trestletech/plumber.git /plumber && \
+CMD git clone -b "release-v0.4.6" https://github.com/schloerke/plumber.git /plumber && \
   R CMD build /plumber && \
   R CMD check plumber_*.tar.gz --as-cran
