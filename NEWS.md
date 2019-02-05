@@ -43,6 +43,7 @@ plumber 0.5.0
 
 * Bumped version of httpuv to >= 1.4.5.9000 to address an unexpected segfault (@shapenaji, [#289](https://github.com/trestletech/plumber/issues/289))
 
+* Date response header is now supplied by httpuv and not plumber. Fixes non standard date response header issues when using different locales. (@shrektan, [#319](https://github.com/trestletech/plumber/pull/319), [#380](https://github.com/trestletech/plumber/pull/380))
 
 
 plumber 0.4.6
