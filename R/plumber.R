@@ -533,7 +533,6 @@ plumber <- R6Class(
       path <- req$PATH_INFO
 
       errorHandlerStep <- function(error, ...) {
-        str(list(error, ...))
         private$errorHandler(req, res, error)
       }
 
