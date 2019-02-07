@@ -275,7 +275,7 @@ plumber <- R6Class(
           )
         }
         self$mount("/__swagger__", PlumberStatic$new(swagger::swagger_path()))
-        swaggerUrl = paste0(host, ":", port, "/__swagger__/")
+        swaggerUrl <- paste0(host, ":", port, "/__swagger__/")
         if (!grepl("^http://", swaggerUrl)) {
           # must have http protocol for use within RStudio
           # does not work if supplying "127.0.0.1:1234/route"
