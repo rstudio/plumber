@@ -38,3 +38,18 @@ test_that("can set multiple same-named headers", {
   expect_true(another)
 })
 
+test_that("http_date_string() returns the same result as in Locale C", {
+  english_time <- function(x) {
+    old_lc_time <- Sys.getlocale("LC_TIME")
+    Sys.setlocale("LC_TIME", "C")
+    on.exit(Sys.setlocale("LC_TIME", old_lc_time), add = TRUE)
+    format(x, "%a, %d %b %Y %X %Z", tz = "GMT")
+  }
+  x <- as.POSIXct("2018-01-01 01:00:00", tz = "Asia/Shanghai")
+  expect_equal(http_date_string(x), english_time(x))
+  # multiple values
+  x_all_months <- sprintf("2018-%02d-03 12:00:00", 1:12)
+  x_all_weeks <- sprintf("2018-01-%02d 12:00:00", 1:7)
+  x <- as.POSIXct(c(x_all_months, x_all_weeks), tz = "Asia/Shanghai")
+  expect_equal(http_date_string(x), english_time(x))
+})
