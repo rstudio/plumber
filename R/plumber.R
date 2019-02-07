@@ -171,7 +171,7 @@ plumber <- R6Class(
       private$serializer <- serializer_json()
       private$errorHandler <- defaultErrorHandler()
       private$notFoundHandler <- default404Handler
-      
+
       # Add in the initial filters
       for (fn in names(filters)){
         fil <- PlumberFilter$new(fn, filters[[fn]], private$envir, private$serializer, NULL)
@@ -195,8 +195,13 @@ plumber <- R6Class(
       }
 
     },
-    run = function(host='127.0.0.1', port=getOption('plumber.port'), swagger=interactive(),
-                   debug=interactive(), swaggerCallback=getOption('plumber.swagger.url', NULL)){
+    run = function(
+      host = '127.0.0.1',
+      port = getOption('plumber.port'),
+      swagger = interactive(),
+      debug = interactive(),
+      swaggerCallback = getOption('plumber.swagger.url', NULL)
+    ) {
       port <- findPort(port)
 
       message("Starting server to listen on port ", port)
@@ -211,54 +216,76 @@ plumber <- R6Class(
         setwd(dirname(private$filename))
       }
 
-      if (swagger){
-        sf <- self$swaggerFile()
-
-        if (is.na(sf$host)){
-          accessHost <- ifelse(host == "0.0.0.0", "127.0.0.1", host)
-          accessPath <- paste(accessHost, port, sep=":")
-          sf$host <- accessPath
-
-          if (!is.null(getOption("plumber.apiHost"))){
-            sf$host <- getOption("plumber.apiHost")
-          }
-
-          if (!is.null(getOption("plumber.apiScheme"))){
-            sf$schemes <- getOption("plumber.apiScheme")
-          }
-
-          if (!is.null(getOption("plumber.apiPath"))){
-            sf$basePath <- getOption("plumber.apiPath")
-          }
-        }
+      if (isTRUE(swagger) || is.function(swagger)) {
+        host <- getOption(
+          "plumber.apiHost",
+          ifelse(identical(host, "0.0.0.0"), "127.0.0.1", host)
+        )
+        spec <- self$swaggerFile()
 
         # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
-        fun <- function(schemes, host, path){
-          if (!missing(schemes)){
-            sf$schemes <- I(schemes)
+        swagger_fun <- function(req, res, ..., scheme = "deprecated", host = "deprecated", path = "deprecated") {
+          if (!missing(scheme) || !missing(host) || !missing(path)) {
+            warning("`scheme`, `host`, or `path` are not supported to produce swagger.json")
           }
+          # allows swagger-ui to provide proper callback location given the referrer location
+          # ex: rstudio cloud
+          # use the HTTP_REFERER so RSC can find the swagger location to ask
+          ## (can't directly ask for 127.0.0.1)
+          referrer_url <- req$HTTP_REFERER
+          referrer_url <- sub("index\\.html$", "", referrer_url)
+          referrer_url <- sub("__swagger__/$", "", referrer_url)
+          spec$servers <- list(
+            list(
+              url = referrer_url,
+              description = "OpenAPI"
+            )
+          )
 
-          if (!missing(host)){
-            sf$host <- host
+          if (is.function(swagger)) {
+            # allow users to update the swagger file themselves
+            ret <- swagger(self, spec, ...)
+            # Since users could have added more NA or NULL values...
+            ret <- removeNaOrNulls(ret)
+          } else {
+            # NA/NULL values already removed
+            ret <- spec
           }
-
-          if (!missing(path)){
-            sf$basePath <- path
-          }
-          sf
+          ret
         }
-        self$handle("GET", "/swagger.json", fun, serializer=serializer_unboxed_json())
+        # https://swagger.io/specification/#document-structure
+        # "It is RECOMMENDED that the root OpenAPI document be named: openapi.json or openapi.yaml."
+        self$handle("GET", "/openapi.json", swagger_fun, serializer = serializer_unboxed_json())
+        # keeping for legacy purposes
+        self$handle("GET", "/swagger.json", swagger_fun, serializer = serializer_unboxed_json())
 
-        plumberFileServer <- PlumberStatic$new(system.file("swagger-ui", package = "plumber"))
-        self$mount("/__swagger__", plumberFileServer)
-        swaggerUrl = paste(sf$schemes[1], "://", sf$host, "/__swagger__/", sep="")
-        message("Running the swagger UI at ", swaggerUrl, sep="")
-        if (!is.null(swaggerCallback) && is.function(swaggerCallback)){
+        swagger_index <- function(...) {
+          swagger::swagger_spec(
+            'window.location.origin + window.location.pathname.replace(/\\(__swagger__\\\\/|__swagger__\\\\/index.html\\)$/, "") + "openapi.json"'
+          )
+        }
+        for (path in c("/__swagger__/index.html", "/__swagger__/")) {
+          self$handle(
+            "GET", path, swagger_index,
+            serializer = serializer_html()
+          )
+        }
+        self$mount("/__swagger__", PlumberStatic$new(swagger::swagger_path()))
+        swaggerUrl = paste0(host, ":", port, "/__swagger__/")
+        if (!grepl("^http://", swaggerUrl)) {
+          # must have http protocol for use within RStudio
+          # does not work if supplying "127.0.0.1:1234/route"
+          swaggerUrl <- paste0("http://", swaggerUrl)
+        }
+        message("Running the swagger UI at ", swaggerUrl, sep = "")
+
+        # notify swaggerCallback of plumber swagger location
+        if (!is.null(swaggerCallback) && is.function(swaggerCallback)) {
           swaggerCallback(swaggerUrl)
         }
       }
 
-      on.exit(private$runHooks("exit"), add=TRUE)
+      on.exit(private$runHooks("exit"), add = TRUE)
 
       httpuv::runServer(host, port, self)
     },
@@ -527,17 +554,24 @@ plumber <- R6Class(
       filter <- PlumberFilter$new(name, expr, private$envir, serializer)
       private$addFilterInternal(filter)
     },
-    swaggerFile = function(){ #FIXME: test
+    swaggerFile = function() { #FIXME: test
 
-      endpoints <- private$swaggerFileWalkMountsInternal(self)
-      endpoints <- prepareSwaggerEndpoints(endpoints)
+      swaggerPaths <- private$swaggerFileWalkMountsInternal(self)
 
       # Extend the previously parsed settings with the endpoints
-      def <- modifyList(private$globalSettings, list(paths=endpoints))
+      def <- modifyList(private$globalSettings, list(paths = swaggerPaths))
 
       # Lay those over the default globals so we ensure that the required fields
       # (like API version) are satisfied.
-      modifyList(defaultGlobals, def)
+      ret <- modifyList(defaultGlobals, def)
+
+      # remove NA or NULL values, which swagger doesn't like
+      ret <- removeNaOrNulls(ret)
+
+      ret
+    },
+    openAPIFile = function() {
+      self$swaggerFile()
     },
 
     ### Legacy/Deprecated
@@ -686,36 +720,32 @@ plumber <- R6Class(
         paste(x, y, sep = "/")
       }
 
-      endpoints <- lapply(router$endpoints, function(endpoint) {
-        # clone and make path a full path
-        endpointEntries <- lapply(endpoint, function(endpointEntry) {
-          endpointEntry <- endpointEntry$clone()
-          endpointEntry$path <- join_paths(parentPath, endpointEntry$path)
-          endpointEntry
-        })
+      # make sure to use the full path
+      endpointList <- list()
 
-        endpointEntries
-      })
+      for (endpoint in router$endpoints) {
+        for (endpointEntry in endpoint) {
+          swaggerEndpoint <- prepareSwaggerEndpoint(
+            endpointEntry,
+            join_paths(parentPath, endpointEntry$path)
+          )
+          endpointList <- modifyList(endpointList, swaggerEndpoint)
+        }
+      }
 
       # recursively gather mounted enpoint entries
-      mountedEndpoints <- mapply(
-        names(router$mounts),
-        router$mounts,
-        FUN = function(mountPath, mountedSubrouter) {
-          private$swaggerFileWalkMountsInternal(
-            mountedSubrouter,
+      if (length(router$mounts) > 0) {
+        for (mountPath in names(router$mounts)) {
+          mountEndpoints <- private$swaggerFileWalkMountsInternal(
+            router$mounts[[mountPath]],
             join_paths(parentPath, mountPath)
           )
+          endpointList <- modifyList(endpointList, mountEndpoints)
         }
-      )
+      }
 
-      # returning a single list of entries,
-      #   not nested entries using the filter / `__no-preempt__` as names within the list
-      # (the filter name is not required when making swagger docs and do not want to misrepresent the endpoints)
-      unname(append(
-        unlist(endpoints),
-        unlist(mountedEndpoints)
-      ))
+      # returning a single list of swagger entries
+      endpointList
     }
   )
 )

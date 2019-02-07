@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "swagger-cli": "^2.2.0"
+  }
+}

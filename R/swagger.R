@@ -1,55 +1,61 @@
 #' Parse the given plumber type and return the typecast value
 #' @noRd
 plumberToSwaggerType <- function(type){
-  if (type == "bool" || type == "logical"){
-    return("boolean")
-  } else if (type == "double" || type == "numeric"){
-    return("number")
-  } else if (type == "int"){
-    return("integer")
-  } else if (type == "character"){
-    return("string")
-  } else {
+  switch(as.character(type),
+
+    "bool" = ,
+    "logical" = "boolean",
+
+    "double" = ,
+    "numeric" = "number",
+
+    "int" = "integer",
+
+    "character" = "string",
+
     stop("Unrecognized type: ", type)
-  }
+  )
 }
 
 #' Convert the endpoints as they exist on the router to a list which can
 #' be converted into a swagger definition for these endpoints
 #' @noRd
-prepareSwaggerEndpoints <- function(routerEndpointEntries){
-  endpoints <- list()
+prepareSwaggerEndpoint <- function(routerEndpointEntry, path = routerEndpointEntry$path) {
+  ret <- list()
 
-  for (e in routerEndpointEntries){
-    # TODO: we are sensitive to trailing slashes. Should we be?
-    cleanedPath <- gsub("<([^:>]+)(:[^>]+)?>", "{\\1}", e$path)
-    if (is.null(endpoints[[cleanedPath]])){
-      endpoints[[cleanedPath]] <- list()
-    }
+  # We are sensitive to trailing slashes. Should we be?
+  # Yes - 12/2018
+  cleanedPath <- gsub("<([^:>]+)(:[^>]+)?>", "{\\1}", path)
+  ret[[cleanedPath]] <- list()
 
-    # Get the params from the path
-    pathParams <- e$getTypedParams()
-    for (verb in e$verbs){
-      params <- extractSwaggerParams(e$params, pathParams)
+  # Get the params from the path
+  pathParams <- routerEndpointEntry$getTypedParams()
+  for (verb in routerEndpointEntry$verbs) {
+    params <- extractSwaggerParams(routerEndpointEntry$params, pathParams)
 
-      # If we haven't already documented a path param, we should add it here.
-      # FIXME: warning("Undocumented path parameters: ", paste0())
+    # If we haven't already documented a path param, we should add it here.
+    # FIXME: warning("Undocumented path parameters: ", paste0())
 
-      resps <- extractResponses(e$responses)
+    resps <- extractResponses(routerEndpointEntry$responses)
 
-      endptSwag <- list(summary=e$comments,
-                        responses=resps,
-                        parameters=params,
-                        tags=e$tags)
+    endptSwag <- list(
+      summary = routerEndpointEntry$comments,
+      responses = resps,
+      parameters = params,
+      tags = routerEndpointEntry$tags
+    )
 
-      endpoints[[cleanedPath]][[tolower(verb)]] <- endptSwag
-    }
+    ret[[cleanedPath]][[tolower(verb)]] <- endptSwag
   }
 
-  endpoints
+  ret
 }
 
-defaultResp <- list("default"=list(description="Default response."))
+defaultResp <- list(
+  "default" = list(
+    description = "Default response."
+  )
+)
 extractResponses <- function(resps){
   if (is.null(resps) || is.na(resps)){
     resps <- defaultResp
@@ -63,41 +69,71 @@ extractResponses <- function(resps){
 #' paramters.
 #' @noRd
 extractSwaggerParams <- function(endpointParams, pathParams){
-  params <- data.frame(name=character(0),
-                       description=character(0),
-                       `in`=character(0),
-                       required=logical(0),
-                       type=character(0),
-                       check.names = FALSE,
-                       stringsAsFactors = FALSE)
-  for (p in names(endpointParams)){
+
+  params <- list()
+  for (p in names(endpointParams)) {
     location <- "query"
-    if (p %in% pathParams$name){
+    if (p %in% pathParams$name) {
       location <- "path"
     }
 
     type <- endpointParams[[p]]$type
-    if (is.null(type) || is.na(type)){
+    if (isNaOrNull(type)){
       if (location == "path") {
-        type <- plumberToSwaggerType(pathParams[pathParams$name == p,"type"])
+        type <- plumberToSwaggerType(pathParams$type[pathParams$name == p])
       } else {
         type <- "string" # Default to string
       }
     }
 
-    parDocs <- data.frame(name = p,
-                          description = endpointParams[[p]]$desc,
-                          `in`=location,
-                          required=endpointParams[[p]]$required,
-                          type=type,
-                          check.names = FALSE,
-                          stringsAsFactors = FALSE)
+    paramList <- list(
+      name = p,
+      description = endpointParams[[p]]$desc,
+      `in` = location,
+      required = endpointParams[[p]]$required,
+      schema = list(
+        type = type
+      )
+    )
 
     if (location == "path"){
-      parDocs$required <- TRUE
+      paramList$required <- TRUE
     }
 
-    params <- rbind(params, parDocs)
+    params[[length(params) + 1]] <- paramList
+
   }
   params
+}
+
+
+isNa <- function(x) {
+  if (is.list(x)) {
+    return(FALSE)
+  }
+  is.na(x)
+}
+isNaOrNull <- function(x) {
+  isNa(x) || is.null(x)
+}
+removeNaOrNulls <- function(x) {
+  # preemptively stop
+  if (!is.list(x)) {
+    return(x)
+  }
+  if (length(x) == 0) {
+    return(x)
+  }
+
+  # remove any `NA` or `NULL` elements
+  toRemove <- vapply(x, isNaOrNull, logical(1))
+  if (any(toRemove)) {
+    x[toRemove] <- NULL
+  }
+
+  # recurse through list
+  ret <- lapply(x, removeNaOrNulls)
+  class(ret) <- class(x)
+
+  ret
 }

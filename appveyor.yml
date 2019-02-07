@@ -11,7 +11,7 @@ install:
   ps: Bootstrap
 
 cache:
-  - C:\RLibrary
+  - C:\RLibrary -> DESCRIPTION
 
 # Adapt as necessary starting from here
 
@@ -43,3 +43,6 @@ artifacts:
 
   - path: '\*_*.zip'
     name: Bits
+
+environment:
+  USE_RTOOLS: true
