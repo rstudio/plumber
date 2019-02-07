@@ -115,12 +115,12 @@ parseBlock <- function(lineNum, file){
         serializer <- do.call(ser, argList)
       }, error = function(e) {
         stopOnLine(lineNum, line, paste0("Error creating serializer: ", s, "\n", e))
-      }
+      })
 
     }
 
     shortSerMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(json|html)(.*)$")
-    if (!is.na(shortSerMat[1,2])){
+    if (!is.na(shortSerMat[1,2])) {
       s <- stri_trim_both(shortSerMat[1,2])
       if (!is.null(serializer)){
         # Must have already assigned.
@@ -145,8 +145,7 @@ parseBlock <- function(lineNum, file){
         serializer <- do.call(.globals$serializers[[s]], argList)
       }, error = function(e) {
         stopOnLine(lineNum, line, paste0("Error creating serializer: ", s, "\n", e))
-      }
-    )
+      })
 
     }
 
