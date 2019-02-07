@@ -217,6 +217,9 @@ plumber <- R6Class(
       }
 
       if (isTRUE(swagger) || is.function(swagger)) {
+        if (!requireNamespace("swagger")) {
+          stop("swagger must be installed for the Swagger UI to be displayed")
+        }
         host <- getOption(
           "plumber.apiHost",
           ifelse(identical(host, "0.0.0.0"), "127.0.0.1", host)
