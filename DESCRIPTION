@@ -25,7 +25,8 @@ Imports:
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
     httpuv (>= 1.4.5.9000),
-    crayon
+    crayon,
+    promises
 LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
@@ -43,6 +44,7 @@ Remotes:
     rstudio/swagger,
     rstudio/httpuv
 Collate:
+    'async.R'
     'content-types.R'
     'cookie-parser.R'
     'parse-globals.R'
@@ -72,4 +74,4 @@ Collate:
     'session-cookie.R'
     'swagger.R'
     'utf8.R'
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1

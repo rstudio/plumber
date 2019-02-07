@@ -96,25 +96,47 @@ hookable <- R6Class(
     }
   ), private=list(
     hooks = list( ),
-    runHooks = function(stage, args){
-      if (missing(args)){
+
+    # Because we're passing in a `value` argument here, `runHooks` will return either the
+    # unmodified `value` argument back, or will allow one or more hooks to modify the value,
+    # in which case the modified value will be returned. Hooks declare that they intend to
+    # modify the value by accepting a parameter named `value`, in which case their returned
+    # value will be used as the updated value.
+    runHooks = function(stage, args) {
+      if (missing(args)) {
         args <- list()
       }
-      value <- args$value
-      for (h in private$hooks[[stage]]){
-        ar <- getRelevantArgs(args, plumberExpression=h)
 
-        value <- do.call(h, ar) #TODO: envir=private$envir?
+      runSteps(
+        args$value,
+        errorHandlerStep = function(error) {
+          stop(error)
+        },
+        append(
+          lapply(private$hooks[[stage]], function(h) {
+            function(...) {
+              ar <- getRelevantArgs(args, plumberExpression = h)
 
-        if ("value" %in% names(ar)){
-          # Special case, retain the returned value from the hook
-          # and pass it in as the value for the next handler.
-          # Ultimately, return value from this function
-          args$value <- value
-        }
-      }
-      # Return the value as passed in or as explcitly modified by one or more hooks.
-      args$value
+              value <- do.call(h, ar) #TODO: envir=private$envir?
+
+              if ("value" %in% names(ar)) {
+                # Special case, retain the returned value from the hook
+                # and pass it in as the value for the next handler.
+                # Ultimately, return value from this function
+                args$value <<- value
+              }
+
+              NULL
+            }
+          }),
+          list(
+            function(...) {
+              # Return the value as passed in or as explcitly modified by one or more hooks.
+              return(args$value)
+            }
+          )
+        )
+      )
     }
   )
 )
@@ -391,68 +413,117 @@ plumber <- R6Class(
       invisible(self)
     },
 
-    serve = function(req, res){
+    serve = function(req, res) {
       hookEnv <- new.env()
 
-      private$runHooks("preroute", list(data=hookEnv, req=req, res=res))
+      errorHandlerStep <- function(error, ...) {
+        str(list(error, ...))
+        private$errorHandler(req, res, error)
+      }
 
-      val <- self$route(req, res)
+      prerouteStep <- function(...) {
+        private$runHooks("preroute", list(data = hookEnv, req = req, res = res))
+      }
+      routeStep <- function(...) {
+        self$route(req, res)
+      }
+      postrouteStep <- function(value, ...) {
+        private$runHooks("postroute", list(data = hookEnv, req = req, res = res, value = value))
+      }
 
-      conclude <- function(v){
-        # Because we're passing in a `value` argument here, `runHooks` will return either the
-        # unmodified `value` argument back, or will allow one or more hooks to modify the value,
-        # in which case the modified value will be returned. Hooks declare that they intend to
-        # modify the value by accepting a parameter named `value`, in which case their returned
-        # value will be used as the updated value.
-        v <- private$runHooks("postroute", list(data=hookEnv, req=req, res=res, value=v))
-
-        if ("PlumberResponse" %in% class(v)){
-          # They returned the response directly, don't serialize.
-          res$toResponse()
-        } else {
-          ser <- res$serializer
-
-          if (typeof(ser) != "closure") {
-            stop("Serializers must be closures: '", ser, "'")
-          }
-
-          v <- private$runHooks("preserialize", list(data=hookEnv, req=req, res=res, value=v))
-          out <- ser(v, req, res, private$errorHandler)
-          out <- private$runHooks("postserialize", list(data=hookEnv, req=req, res=res, value=out))
-          out
+      serializeSteps <- function(value, ...) {
+        if ("PlumberResponse" %in% class(value)) {
+          return(res$toResponse())
         }
+
+        ser <- res$serializer
+        if (typeof(ser) != "closure") {
+          stop("Serializers must be closures: '", ser, "'")
+        }
+
+        preserializeStep <- function(value, ...) {
+          private$runHooks("preserialize", list(data = hookEnv, req = req, res = res, value = value))
+        }
+        serializeStep <- function(value, ...) {
+          ser(value, req, res, errorHandler)
+        }
+        postserializeStep <- function(value, ...) {
+          private$runHooks("postserialize", list(data = hookEnv, req = req, res = res, value = value))
+        }
+
+        runSteps(
+          value,
+          errorHandlerStep,
+          list(
+            preserializeStep,
+            serializeStep,
+            postserializeStep
+          )
+        )
       }
 
-      if (hasPromises() && promises::is.promise(val)){
-        # The endpoint returned a promise, we should wait on it
-        then(val, conclude, function(error){
-          # The original error handler would not have run because the endpoint didn't
-          # synchronously produce any errors. We have to run our error handling logic now.
-          # TODO: Dry this up with the error handler in route()
-          v <- private$errorHandler(req, res, error)
-          conclude(v)
-        })
-      } else {
-        conclude(val)
-      }
+      runSteps(
+        NULL,
+        errorHandlerStep,
+        list(
+          prerouteStep,
+          routeStep,
+          postrouteStep,
+          serializeSteps
+        )
+      )
+
+      #
+      # conclude <- function(v) {
+      #   v <- private$runHooks("postroute", list(data=hookEnv, req=req, res=res, value=v))
+      #
+      #   if ("PlumberResponse" %in% class(v)){
+      #     # They returned the response directly, don't serialize.
+      #     res$toResponse()
+      #   } else {
+      #     ser <- res$serializer
+      #
+      #     if (typeof(ser) != "closure") {
+      #       stop("Serializers must be closures: '", ser, "'")
+      #     }
+      #
+      #     v <- private$runHooks("preserialize", list(data=hookEnv, req=req, res=res, value=v))
+      #     out <- ser(v, req, res, private$errorHandler)
+      #     out <- private$runHooks("postserialize", list(data=hookEnv, req=req, res=res, value=out))
+      #     out
+      #   }
+      # }
+      #
+      # if (hasPromises() && promises::is.promise(val)){
+      #   # The endpoint returned a promise, we should wait on it
+      #   then(val, conclude, function(error){
+      #     # The original error handler would not have run because the endpoint didn't
+      #     # synchronously produce any errors. We have to run our error handling logic now.
+      #     # TODO: Dry this up with the error handler in route()
+      #     v <- private$errorHandler(req, res, error)
+      #     conclude(v)
+      #   })
+      # } else {
+      #   conclude(val)
+      # }
     },
 
-    route = function(req, res){
-      getHandle <- function(filt){
+    route = function(req, res) {
+      getHandle <- function(filt) {
         handlers <- private$ends[[filt]]
-        if (!is.null(handlers)){
-          for (h in handlers){
-            if (h$canServe(req)){
+        if (!is.null(handlers)) {
+          for (h in handlers) {
+            if (h$canServe(req)) {
               return(h)
             }
           }
         }
-        NULL
+        return(NULL)
       }
 
       # Get args out of the query string, + req/res
       args <- list()
-      if (!is.null(req$args)){
+      if (!is.null(req$args)) {
         args <- req$args
       }
       args$res <- res
@@ -461,90 +532,119 @@ plumber <- R6Class(
       req$args <- args
       path <- req$PATH_INFO
 
-      oldWarn <- options("warn")[[1]]
-      tryCatch({
-        # Set to show warnings immediately as they happen.
-        options(warn=1)
+      errorHandlerStep <- function(error, ...) {
+        str(list(error, ...))
+        private$errorHandler(req, res, error)
+      }
 
-        h <- getHandle("__first__")
-        if (!is.null(h)){
-          if (!is.null(h$serializer)){
+      makeHandleStep <- function(name) {
+        function(...) {
+          h <- getHandle(name)
+          if (is.null(h)) {
+            return(forward())
+          }
+          if (!is.null(h$serializer)) {
             res$serializer <- h$serializer
           }
           req$args <- c(h$getPathParams(path), req$args)
           return(do.call(h$exec, req$args))
         }
+      }
 
-        if (length(private$filts) > 0){
-          # Start running through filters until we find a matching endpoint.
-          for (i in 1:length(private$filts)){
-            fi <- private$filts[[i]]
+      steps <- list(
+        # first step
+        makeHandleStep("__first__")
+      )
 
-            # Check for endpoints preempting in this filter.
-            h <- getHandle(fi$name)
-            if (!is.null(h)){
-              if (!is.null(h$serializer)){
-                res$serializer <- h$serializer
-              }
-              req$args <- c(h$getPathParams(path), req$args)
-              return(do.call(h$exec, req$args))
-            }
+      # Start running through filters until we find a matching endpoint.
+      # returns 2 functions which need to be flattened overall
+      filterSteps <- unlist(recursive = FALSE, lapply(private$filts, function(fi) {
+        # Check for endpoints preempting in this filter.
+        handleStep <- makeHandleStep(fi$name)
 
-            # Execute this filter
-            .globals$forwarded <- FALSE
+        # Execute this filter
+        # Do not stop if the filter returned a non-forward object
+        # If a non-forward object is returned, serialize it according to the filter
+        filterStep <- function(...) {
 
-            fres <- do.call(fi$exec, req$args)
-            if (!.globals$forwarded){
-              # forward() wasn't called, presumably meaning the request was
-              # handled inside of this filter.
-              if (!is.null(fi$serializer)){
-                res$serializer <- fi$serializer
-              }
+          filterExecStep <- function(...) {
+            do.call(fi$exec, req$args)
+          }
+          postFilterStep <- function(fres, ...) {
+            if (is_forward(fres)) {
+              # return like normal
               return(fres)
             }
+            # forward() wasn't called, presumably meaning the request was
+            # handled inside of this filter.
+            if (!is.null(fi$serializer)){
+              res$serializer <- fi$serializer
+            }
+            return(fres)
           }
+
+          runSteps(
+            NULL,
+            errorHandlerStep,
+            list(
+              filterExecStep,
+              postFilterStep
+            )
+          )
         }
 
-        # If we still haven't found a match, check the un-preempt'd endpoints.
-        h <- getHandle("__no-preempt__")
-        if (!is.null(h)){
-          if (!is.null(h$serializer)){
-            res$serializer <- h$serializer
-          }
-          req$args <- c(h$getPathParams(path), req$args)
-          return(do.call(h$exec, req$args))
-        }
+        list(
+          handleStep,
+          filterStep
+        )
+      }))
+      steps <- append(steps, filterSteps)
 
-        # We aren't going to serve this endpoint; see if any mounted routers will
-        for (mountPath in names(private$mnts)){
+      # If we still haven't found a match, check the un-preempt'd endpoints.
+      steps <- append(steps, list(makeHandleStep("__no-preempt__")))
+
+      # We aren't going to serve this endpoint; see if any mounted routers will
+      mountSteps <- lapply(names(private$mnts), function(mountPath) {
+        # (make step function)
+        function(...) {
           # TODO: support globbing?
 
-          if (nchar(path) >= nchar(mountPath) && substr(path, 0, nchar(mountPath)) == mountPath){
+          if (nchar(path) >= nchar(mountPath) && substr(path, 0, nchar(mountPath)) == mountPath) {
             # This is a prefix match or exact match. Let this router handle.
 
             # First trim the prefix off of the PATH_INFO element
             req$PATH_INFO <- substr(req$PATH_INFO, nchar(mountPath), nchar(req$PATH_INFO))
             return(private$mnts[[mountPath]]$route(req, res))
+          } else {
+            return(forward())
           }
         }
+      })
+      steps <- append(steps, mountSteps)
 
-        # No endpoint could handle this request. 404
-        val <- private$notFoundHandler(req=req, res=res)
-        return(val)
-      }, error=function(e){
-        # Error when routing
-        val <- private$errorHandler(req, res, e)
-        return(val)
-      }, finally= options(warn=oldWarn) )
+      # No endpoint could handle this request. 404
+      notFoundStep <- function(...) {
+        private$notFoundHandler(req = req, res = res)
+      }
+      steps <- append(steps, list(notFoundStep))
+
+      tryCatchWarn(
+        error = errorHandlerStep,
+        expr = {
+          runStepsIfForwarding(NULL, errorHandlerStep, steps)
+        }
+      )
     },
 
     # httpuv interface
-    call = function(req){
+    call = function(req) {
       # Set the arguments to an empty list
       req$args <- list()
       req$.internal <- new.env()
 
       res <- PlumberResponse$new(private$serializer)
+
+      # maybe return a promise object
       self$serve(req, res)
     },
     onHeaders = function(req){

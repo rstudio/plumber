@@ -1,3 +1,5 @@
+
+forward_class <- "plumber_forward"
 #' Forward Request to The Next Handler
 #'
 #' This function is used when a filter is done processing a request and wishes
@@ -6,8 +8,11 @@
 #' itself and no other filters or endpoints should be evaluated for this
 #' request.
 #' @export
-forward <- function(){
-  .globals$forwarded <- TRUE
+forward <- function() {
+  structure(forward_class, class = forward_class)
+}
+is_forward <- function(x) {
+  inherits(x, forward_class)
 }
 
 PlumberStep <- R6Class(
@@ -18,7 +23,7 @@ PlumberStep <- R6Class(
     serializer = NULL,
     initialize = function(expr, envir, lines, serializer){
       private$expr <- expr
-      if (is.expression(expr)){
+      if (is.expression(expr)) {
         private$func <- eval(expr, envir)
       } else {
         private$func <- expr
@@ -34,15 +39,33 @@ PlumberStep <- R6Class(
         self$serializer <- serializer
       }
     },
-    exec = function(...){
-      args <- getRelevantArgs(list(...), plumberExpression=private$expr)
+    exec = function(...) {
+      allArgs <- list(...)
+      args <- getRelevantArgs(allArgs, plumberExpression=private$expr)
 
       hookEnv <- new.env()
 
-      private$runHooks("preexec", c(list(data=hookEnv), list(...)))
-      val <- do.call(private$func, args, envir=private$envir)
-      val <- private$runHooks("postexec", c(list(data=hookEnv, value=val), list(...)))
-      val
+      preexecStep <- function(...) {
+        private$runHooks("preexec", c(list(data = hookEnv), allArgs))
+      }
+      execStep <- function(...) {
+        do.call(private$func, args, envir = private$envir)
+      }
+      postexecStep <- function(value, ...) {
+        private$runHooks("postexec", c(list(data = hookEnv, value = value), allArgs))
+      }
+      runSteps(
+        NULL,
+        function(error) {
+          # rethrow error
+          stop(error)
+        },
+        list(
+          preexecStep,
+          execStep,
+          postexecStep
+        )
+      )
     },
     registerHook = function(stage=c("preexec", "postexec"), handler){
       stage <- match.arg(stage)
