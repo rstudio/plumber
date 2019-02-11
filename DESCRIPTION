@@ -71,4 +71,4 @@ Collate:
     'session-cookie.R'
     'swagger.R'
     'utf8.R'
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
