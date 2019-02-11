@@ -217,6 +217,9 @@ plumber <- R6Class(
       }
 
       if (isTRUE(swagger) || is.function(swagger)) {
+        if (!requireNamespace("swagger")) {
+          stop("swagger must be installed for the Swagger UI to be displayed")
+        }
         host <- getOption(
           "plumber.apiHost",
           ifelse(identical(host, "0.0.0.0"), "127.0.0.1", host)
@@ -261,7 +264,8 @@ plumber <- R6Class(
 
         swagger_index <- function(...) {
           swagger::swagger_spec(
-            'window.location.origin + window.location.pathname.replace(/\\(__swagger__\\\\/|__swagger__\\\\/index.html\\)$/, "") + "openapi.json"'
+            'window.location.origin + window.location.pathname.replace(/\\(__swagger__\\\\/|__swagger__\\\\/index.html\\)$/, "") + "openapi.json"',
+            version = "3"
           )
         }
         for (path in c("/__swagger__/index.html", "/__swagger__/")) {
@@ -271,7 +275,7 @@ plumber <- R6Class(
           )
         }
         self$mount("/__swagger__", PlumberStatic$new(swagger::swagger_path()))
-        swaggerUrl = paste0(host, ":", port, "/__swagger__/")
+        swaggerUrl <- paste0(host, ":", port, "/__swagger__/")
         if (!grepl("^http://", swaggerUrl)) {
           # must have http protocol for use within RStudio
           # does not work if supplying "127.0.0.1:1234/route"
