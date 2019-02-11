@@ -109,11 +109,11 @@ test_that("@json parameters work", {
 
 
   expect_block_error("#' @serializer json list(na = 'string'", "unexpected end of input")
-  expect_block_error("#' @json(na = 'string'", "Supplemental arguments to the serializer")
-  expect_block_error("#' @json (na = 'string'", "Supplemental arguments to the serializer")
-  expect_block_error("#' @json ( na = 'string'", "Supplemental arguments to the serializer")
-  expect_block_error("#' @json na = 'string')", "Supplemental arguments to the serializer")
-  expect_block_error("#' @json list(na = 'string')", "Supplemental arguments to the serializer")
+  expect_block_error("#' @json(na = 'string'", "must be surrounded by parentheses")
+  expect_block_error("#' @json (na = 'string'", "must be surrounded by parentheses")
+  expect_block_error("#' @json ( na = 'string'", "must be surrounded by parentheses")
+  expect_block_error("#' @json na = 'string')", "must be surrounded by parentheses")
+  expect_block_error("#' @json list(na = 'string')", "must be surrounded by parentheses")
 
 })
 
