@@ -103,30 +103,51 @@ test_that("@json parameters work", {
   expect_block_fn("#' @json(auto_unbox = TRUE, na = 'string')", serializer_json(auto_unbox = TRUE, na = 'string'))
 
 
+  expect_block_fn("#' @json (    auto_unbox = TRUE, na = 'string'    )", serializer_json(auto_unbox = TRUE, na = 'string'))
+  expect_block_fn("#' @json (auto_unbox          =       TRUE    ,      na      =      'string'   )             ", serializer_json(auto_unbox = TRUE, na = 'string'))
+  expect_block_fn("#' @serializer json list   (      auto_unbox          =       TRUE    ,      na      =      'string'   )             ", serializer_json(auto_unbox = TRUE, na = 'string'))
+
+
   expect_block_error("#' @serializer json list(na = 'string'", "unexpected end of input")
   expect_block_error("#' @json(na = 'string'", "Supplemental arguments to the serializer")
+  expect_block_error("#' @json (na = 'string'", "Supplemental arguments to the serializer")
+  expect_block_error("#' @json ( na = 'string'", "Supplemental arguments to the serializer")
+  expect_block_error("#' @json na = 'string')", "Supplemental arguments to the serializer")
+  expect_block_error("#' @json list(na = 'string')", "Supplemental arguments to the serializer")
 
 })
 
 
-test_that("@html parameters produce a warning", {
+test_that("@html parameters produce an error", {
 
   expect_block_fn <- function(lines, fn) {
     b <- parseBlock(length(lines), lines)
     expect_equal_functions(b$serializer, fn)
   }
-  expect_block_warning <- function(lines, ...) {
-    expect_warning({
+  expect_block_error <- function(lines, ...) {
+    expect_error({
       parseBlock(length(lines), lines)
     }, ...)
   }
 
   expect_block_fn("#' @serializer html", serializer_html())
+
+  expect_block_fn("#' @serializer html list()", serializer_html())
+  expect_block_fn("#' @serializer html list(         )", serializer_html())
+  expect_block_fn("#' @serializer html list     (         )     ", serializer_html())
+
   expect_block_fn("#' @html", serializer_html())
   expect_block_fn("#' @html()", serializer_html())
+  expect_block_fn("#' @html ()", serializer_html())
+  expect_block_fn("#' @html ( )", serializer_html())
+  expect_block_fn("#' @html ( ) ", serializer_html())
+  expect_block_fn("#' @html         (       )       ", serializer_html())
 
-  expect_block_warning("#' @serializer html list(key = \"val\")", "does not interpret extra arguments")
-  expect_block_warning("#' @html(key = \"val\")", "does not interpret extra arguments")
+  expect_block_error("#' @serializer html list(key = \"val\")", "unused argument")
+  expect_block_error("#' @html(key = \"val\")", "unused argument")
+  expect_block_error("#' @html (key = \"val\")", "unused argument")
+
+  expect_block_error("#' @html (key = \"val\")", "unused argument")
 })
 
 
