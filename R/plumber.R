@@ -279,11 +279,12 @@ plumber <- R6Class(
         # notify swaggerCallback of plumber swagger location
         if (!is.null(swaggerCallback) && is.function(swaggerCallback)) {
           # if within the RStudio IDE...
-          if (rstudioapi::isAvailable()) {
+          if (is_running_in_rstudio()) {
             if (grepl("0.0.0.0:", swaggerUrl, fixed = TRUE)) {
               # RStudio IDE does NOT like 0.0.0.0 locations.
               # Must use 127.0.0.1 instead.
               swaggerUrl <- sub("0.0.0.0:", "127.0.0.1:", swaggerUrl, fixed = TRUE)
+              message("Displaying Swagger API at ", swaggerURL, sep = "")
             }
             if (!grepl("^http://", swaggerUrl)) {
               # RStudio IDE does NOT like empty protocols like "127.0.0.1:1234/route"

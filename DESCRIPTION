@@ -25,8 +25,7 @@ Imports:
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
     httpuv (>= 1.4.5.9002),
-    crayon,
-    rstudioapi
+    crayon
 LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
