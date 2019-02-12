@@ -1,6 +1,9 @@
 #' Parse the given plumber type and return the typecast value
 #' @noRd
 plumberToSwaggerType <- function(type){
+  if (is.na(type)) {
+    return("string")
+  }
   switch(as.character(type),
 
     "bool" = ,
@@ -12,7 +15,6 @@ plumberToSwaggerType <- function(type){
     "int" = "integer",
 
     "character" = "string",
-
     stop("Unrecognized type: ", type)
   )
 }
