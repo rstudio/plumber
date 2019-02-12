@@ -21,9 +21,3 @@ newRStudioProject <- function(path, ...) {
   target <- file.path(path, files)
   file.copy(source, target)
 }
-
-
-# boolean 
-is_running_in_rstudio <- function() {
-  identical(.Platform$GUI, "RStudio")
-}
