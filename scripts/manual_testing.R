@@ -34,8 +34,11 @@ test_that("host doesn't change for messages, but does for RStudio IDE", {
   pr$run(
     "0.0.0.0", port = 1234
   )
+  #> Running plumber API at 0.0.0.0:1234
+  #> Running Swagger UI  at 127.0.0.1:1234/__swagger__/
 
-  # verify that a 0.0.0.0 host is printed in all messages
+  # Verify that the output matches the output above.
   # if in RStudio IDE, verify that the window opened, opens to http://127.0.0.1:1234/__swagger__/
-  # verify that the swagger route (from messages) works in a web browser http://0.0.0.0:1234/__swagger__/
+  # verify that the swagger route (from messages) works in a web browser http://127.0.0.1:1234/__swagger__/
+  # Verify that http://0.0.0.0/tail executes
 })
