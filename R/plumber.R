@@ -273,24 +273,26 @@ plumber <- R6Class(
         self$mount("/__swagger__", PlumberStatic$new(swagger::swagger_path()))
 
         swaggerHost <- getOption("plumber.apiHost", host)
-        swaggerUrl = paste0(swaggerHost, ":", port, "/__swagger__/")
-        message("Running Swagger UI at  ", swaggerUrl, sep = "")
-
+        # upgrade swaggerCallback location to be localhost and not catch-all addresses
+        # shiny: https://github.com/rstudio/shiny/blob/95173f6/R/server.R#L781-L786
+        if (identical(swaggerHost, "0.0.0.0")) {
+          # RStudio IDE does NOT like 0.0.0.0 locations.
+          # Must use 127.0.0.1 instead.
+          swaggerHost <- "127.0.0.1"
+        } else if (identical(swaggerHost, "::")) {
+          # upgrade ipv6 catch-all to ipv6 "localhost"
+          swaggerHost <- "::1"
+        }
+        swaggerUrl <- paste0(swaggerHost, ":", port, "/__swagger__/")
+        message("Running Swagger UI  at ", swaggerUrl, sep = "")
         # notify swaggerCallback of plumber swagger location
         if (!is.null(swaggerCallback) && is.function(swaggerCallback)) {
-          # if within the RStudio IDE...
-          if (is_running_in_rstudio()) {
-            if (grepl("0.0.0.0:", swaggerUrl, fixed = TRUE)) {
-              # RStudio IDE does NOT like 0.0.0.0 locations.
-              # Must use 127.0.0.1 instead.
-              swaggerUrl <- sub("0.0.0.0:", "127.0.0.1:", swaggerUrl, fixed = TRUE)
-              message("Displaying Swagger UI at ", swaggerURL, sep = "")
-            }
-            if (!grepl("^http://", swaggerUrl)) {
-              # RStudio IDE does NOT like empty protocols like "127.0.0.1:1234/route"
-              # Works if supplying "http://127.0.0.1:1234/route"
-              swaggerUrl <- paste0("http://", swaggerUrl)
-            }
+          # if no match against http or https protocols
+          if (!grepl("^https?://", swaggerUrl)) {
+            # add http protocol
+            # RStudio IDE does NOT like empty protocols like "127.0.0.1:1234/route"
+            # Works if supplying "http://127.0.0.1:1234/route"
+            swaggerUrl <- paste0("http://", swaggerUrl)
           }
           swaggerCallback(swaggerUrl)
         }
