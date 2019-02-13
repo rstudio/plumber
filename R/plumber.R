@@ -567,10 +567,11 @@ plumber <- R6Class(
         filterStep <- function(...) {
 
           filterExecStep <- function(...) {
+            reset_forward()
             do.call(fi$exec, req$args)
           }
           postFilterStep <- function(fres, ...) {
-            if (is_forward(fres)) {
+            if (!has_forwarded()) {
               # return like normal
               return(fres)
             }
@@ -627,12 +628,14 @@ plumber <- R6Class(
       }
       steps <- append(steps, list(notFoundStep))
 
-      tryCatchWarn(
-        error = errorHandlerStep,
-        expr = {
-          runStepsIfForwarding(NULL, errorHandlerStep, steps)
-        }
-      )
+      withCurrentExecDomain(req, res, {
+        tryCatchWarn(
+          error = errorHandlerStep,
+          expr = {
+            runStepsIfForwarding(NULL, errorHandlerStep, steps)
+          }
+        )
+      })
     },
 
     # httpuv interface
@@ -866,4 +869,18 @@ plumber <- R6Class(
 
 hasPromises <- function(){
   !!requireNamespace("promises", quietly = TRUE)
+}
+
+withCurrentExecDomain <- function(req, res, expr) {
+  # Create a new environment for this particular request/response
+  execEnv <- new.env(parent = emptyenv())
+  execEnv$req <- req
+  execEnv$res <- res
+
+  domain <- createVarPromiseDomain(.globals, "currentExec", execEnv)
+  promises::with_promise_domain(domain, expr)
+}
+
+getCurrentExec <- function() {
+  .globals[["currentExec"]]
 }
