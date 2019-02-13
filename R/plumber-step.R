@@ -97,7 +97,7 @@ PlumberEndpoint <- R6Class(
     comments = NA,
     responses = NA,
     getTypedParams = function(){
-      data.frame(name=private$regex$names, type=private$regex$types)
+      data.frame(name=private$regex$names, type=private$regex$types, stringsAsFactors = FALSE)
     },
     params = NA,
     tags = NA,

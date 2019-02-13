@@ -48,7 +48,11 @@ parseQS <- function(qs){
 
 createPathRegex <- function(pathDef){
   # Create a regex from the defined path, substituting variables where appropriate
-  match <- stringi::stri_match_all(pathDef, regex="/<(\\.?[a-zA-Z][\\w_\\.]*)(:(chr|int|double|numeric|bool|logical))?>")[[1]]
+  match <- stringi::stri_match_all(
+    pathDef,
+    # capture any plumber type (<arg:TYPE>) (typeToRegex(type) will yell if it is unknown)
+    regex = "/<(\\.?[a-zA-Z][\\w_\\.]*)(:([^>]*))?>"
+  )[[1]]
   names <- match[,2]
   type <- match[,4]
   if (length(names) <= 1 && is.na(names)){
@@ -69,34 +73,26 @@ createPathRegex <- function(pathDef){
   list(names = names, types=type, regex = paste0("^", re, "$"), converters=converters)
 }
 
+
 typeToRegex <- function(type){
-  re <- rep("[^/]+", length(type))
-  if (length(re) > 0) {
-    re[type == "int"] <- "-?\\\\d+"
-    re[type == "double" | type == "numeric"] <- "-?\\\\d*\\\\.?\\\\d+"
-    re[type == "bool" | type == "logical"] <- "[01tfTF]|true|false|TRUE|FALSE"
+  if (length(type) == 0) {
+    return(character(0))
   }
-  re
+  # return vector of regex strings
+  unlist(
+    swaggerTypeToRegexMap[plumberToSwaggerType(type)]
+  )
 }
 
-typeToConverters <- function(type){
-  re <- NULL
-  for (t in type){
-    r <- function(x){x}
 
-    if (!is.na(t)){
-      if (t == "int"){
-        r <- as.integer
-      } else if (t == "double" || t == "numeric"){
-        r <- as.numeric
-      } else if (t == "bool" || t == "logical"){
-        r <- as.logical
-      }
-    }
-    re <- c(re, r)
+typeToConverters <- function(type) {
+  if (length(type) == 0) {
+    return(NULL)
   }
-  re
+  # return list of functions
+  swaggerTypeToConvertersMap[plumberToSwaggerType(type)]
 }
+
 
 # Extract the params from a given path
 # @param def is the output from createPathRegex
