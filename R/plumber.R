@@ -205,7 +205,7 @@ plumber <- R6Class(
       port <- findPort(port)
 
 
-      message("Running plumber API at ", urlForMessage(host, port, changeHostLocation = FALSE))
+      message("Running plumber API at ", urlHost(host, port, changeHostLocation = FALSE))
 
       on.exit({ options('plumber.debug' = getOption('plumber.debug')) })
       options(plumber.debug = debug)
@@ -274,7 +274,7 @@ plumber <- R6Class(
         self$mount("/__swagger__", PlumberStatic$new(swagger::swagger_path()))
 
         swaggerUrl <- paste0(
-          urlForMessage(getOption("plumber.apiHost", host), port, changeHostLocation = TRUE),
+          urlHost(getOption("plumber.apiHost", host), port, changeHostLocation = TRUE),
           "/__swagger__/"
         )
         message("Running Swagger UI  at ", swaggerUrl, sep = "")
@@ -756,7 +756,7 @@ plumber <- R6Class(
 
 
 
-urlForMessage <- function(host, port, changeHostLocation = FALSE) {
+urlHost <- function(host, port, changeHostLocation = FALSE) {
   if (isTRUE(changeHostLocation)) {
     # upgrade swaggerCallback location to be localhost and not catch-all addresses
     # shiny: https://github.com/rstudio/shiny/blob/95173f6/R/server.R#L781-L786
@@ -771,11 +771,11 @@ urlForMessage <- function(host, port, changeHostLocation = FALSE) {
   }
 
   # if ipv6 address, surround in brackets
-  if (grepl(":", host, fixed = TRUE)) {
+  if (grepl(":[^/]", host)) {
     host <- paste0("[", host, "]")
   }
-  # if no match against http or https protocols
-  if (!grepl("^https?://", host)) {
+  # if no match against a protocol
+  if (!grepl("://", host)) {
     # add http protocol
     # RStudio IDE does NOT like empty protocols like "127.0.0.1:1234/route"
     # Works if supplying "http://127.0.0.1:1234/route"
