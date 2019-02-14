@@ -108,15 +108,19 @@ parseBlock <- function(lineNum, file){
       if (!is.na(serMat[1, 4]) && serMat[1,4] != ""){
         # We have an arg to pass in to the serializer
         argList <- eval(parse(text=serMat[1,4]))
-
-        serializer <- do.call(ser, argList)
       } else {
-        serializer <- ser()
+        argList <- list()
       }
+      tryCatch({
+        serializer <- do.call(ser, argList)
+      }, error = function(e) {
+        stopOnLine(lineNum, line, paste0("Error creating serializer: ", s, "\n", e))
+      })
+
     }
 
-    shortSerMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(json|html)")
-    if (!is.na(shortSerMat[1,2])){
+    shortSerMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(json|html)(.*)$")
+    if (!is.na(shortSerMat[1,2])) {
       s <- stri_trim_both(shortSerMat[1,2])
       if (!is.null(serializer)){
         # Must have already assigned.
@@ -126,9 +130,23 @@ parseBlock <- function(lineNum, file){
       if (!is.na(s) && !s %in% names(.globals$serializers)){
         stop("No such @serializer registered: ", s)
       }
+      shortSerAttr <- trimws(shortSerMat[1,3])
+      if(!identical(shortSerAttr, "") && !grepl("^\\(.*\\)$", shortSerAttr)){
+        stopOnLine(lineNum, line, paste0("Supplemental arguments to the serializer must be surrounded by parentheses, as in `#' @", s, "(na='null')`"))
+      }
 
-      # TODO: support arguments to short serializers once they require them.
-      serializer <- .globals$serializers[[s]]()
+      if (shortSerAttr != "") {
+        # We have an arg to pass in to the serializer
+        argList <- eval(parse(text=paste0("list", shortSerAttr)))
+      } else {
+        argList <- list()
+      }
+      tryCatch({
+        serializer <- do.call(.globals$serializers[[s]], argList)
+      }, error = function(e) {
+        stopOnLine(lineNum, line, paste0("Error creating serializer: ", s, "\n", e))
+      })
+
     }
 
     imageMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(jpeg|png)([\\s\\(].*)?\\s*$")
