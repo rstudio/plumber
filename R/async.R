@@ -3,8 +3,8 @@ runStepsIfForwarding <- function(initialValue, errorHandlerStep, steps) {
   runStepsUntil(
     initialValue = initialValue,
     errorHandlerStep = errorHandlerStep,
-    conditionFn = function(x) {
-      !is_forward(x)
+    conditionFn = function(value) {
+      !has_forwarded()
     },
     steps = steps
   )
@@ -66,6 +66,7 @@ runStepsUntil <- function(initialValue, errorHandlerStep, conditionFn, steps) {
     res <- nextStep(x)
     if (is.promising(res)) {
       res %...>% (function(value) {
+        # message("WAITED!")
         x <<- value
         if (conditionFn(x)) {
           return(x)
@@ -132,3 +133,57 @@ runStepsUntil <- function(initialValue, errorHandlerStep, conditionFn, steps) {
 # )
 #
 # runStep(steps_two); print("END")
+
+
+currentExecName <- "currentExec"
+getCurrentExec <- function() {
+  .globals[[currentExecName]]
+}
+withCurrentExecDomain <- function(req, res, expr) {
+  # Create a new environment for this particular request/response
+  execEnv <- new.env(parent = emptyenv())
+  execEnv$req <- req
+  execEnv$res <- res
+
+  domain <- createVarPromiseDomain(.globals, currentExecName, execEnv)
+  promises::with_promise_domain(domain, expr)
+}
+
+
+
+# From Shiny.
+# Creates a promise domain that always ensures `env[[name]] == value` when
+# any code is being run in this domain.
+createVarPromiseDomain <- function(env, name, value) {
+  force(env)
+  force(name)
+  force(value)
+
+  promises::new_promise_domain(
+    wrapOnFulfilled = function(onFulfilled) {
+      function(...) {
+        orig <- env[[name]]
+        env[[name]] <- value
+        on.exit(env[[name]] <- orig)
+
+        onFulfilled(...)
+      }
+    },
+    wrapOnRejected = function(onRejected) {
+      function(...) {
+        orig <- env[[name]]
+        env[[name]] <- value
+        on.exit(env[[name]] <- orig)
+
+        onRejected(...)
+      }
+    },
+    wrapSync = function(expr) {
+      orig <- env[[name]]
+      env[[name]] <- value
+      on.exit(env[[name]] <- orig)
+
+      force(expr)
+    }
+  )
+}

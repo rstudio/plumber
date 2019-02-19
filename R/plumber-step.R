@@ -9,10 +9,15 @@ forward_class <- "plumber_forward"
 #' request.
 #' @export
 forward <- function() {
-  structure(forward_class, class = forward_class)
+  exec <- getCurrentExec()
+  exec$forward <- TRUE
 }
-is_forward <- function(x) {
-  inherits(x, forward_class)
+has_forwarded <- function() {
+  getCurrentExec()$forward
+}
+reset_forward <- function() {
+  exec <- getCurrentExec()
+  exec$forward <- FALSE
 }
 
 PlumberStep <- R6Class(
