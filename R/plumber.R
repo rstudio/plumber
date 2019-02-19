@@ -572,7 +572,7 @@ plumber <- R6Class(
             do.call(fi$exec, req$args)
           }
           postFilterStep <- function(fres, ...) {
-            if (!has_forwarded()) {
+            if (has_forwarded()) {
               # return like normal
               return(fres)
             }
