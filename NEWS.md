@@ -12,11 +12,6 @@ plumber 0.5.0
 
 ### Breaking changes
 
-* Filters that want to forward execution onto the next filter or endpoint must
-  return the result of `forward()`. Simply calling the `forward()` function at some
-  point during the filter will not work anymore. This helps enable the handling of
-  promises from within filters, hooks, and endpoints. ([#248](https://github.com/trestletech/plumber/pull/312))
-
 * Plumber's swagger definition is now defined using
   [OpenAPI 3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md),
   upgrading from Swagger Specification. ([#365](https://github.com/trestletech/plumber/pull/365))
@@ -27,7 +22,7 @@ plumber 0.5.0
 
 ### New features
 
-* Added support for promises in endpoints, filters, and hooks. ([#248](https://github.com/trestletech/plumber/pull/312))
+* Added support for promises in endpoints, filters, and hooks. ([#248](https://github.com/trestletech/plumber/pull/248))
 
 * Added support to a router's run method to allow the `swagger` parameter to be a function that
   enhances the existing swagger specification before being returned to `/openapi.json`. ([#365](https://github.com/trestletech/plumber/pull/365))
