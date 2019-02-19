@@ -538,6 +538,7 @@ plumber <- R6Class(
 
       makeHandleStep <- function(name) {
         function(...) {
+          reset_forward()
           h <- getHandle(name)
           if (is.null(h)) {
             return(forward())
@@ -607,6 +608,7 @@ plumber <- R6Class(
       mountSteps <- lapply(names(private$mnts), function(mountPath) {
         # (make step function)
         function(...) {
+          reset_forward()
           # TODO: support globbing?
 
           if (nchar(path) >= nchar(mountPath) && substr(path, 0, nchar(mountPath)) == mountPath) {
