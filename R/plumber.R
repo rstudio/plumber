@@ -866,21 +866,3 @@ plumber <- R6Class(
     }
   )
 )
-
-hasPromises <- function(){
-  !!requireNamespace("promises", quietly = TRUE)
-}
-
-withCurrentExecDomain <- function(req, res, expr) {
-  # Create a new environment for this particular request/response
-  execEnv <- new.env(parent = emptyenv())
-  execEnv$req <- req
-  execEnv$res <- res
-
-  domain <- createVarPromiseDomain(.globals, "currentExec", execEnv)
-  promises::with_promise_domain(domain, expr)
-}
-
-getCurrentExec <- function() {
-  .globals[["currentExec"]]
-}
