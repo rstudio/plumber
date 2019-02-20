@@ -49,44 +49,55 @@ runStepsUntil <- function(initialValue, errorHandlerStep, conditionFn, steps) {
   nextStepPos <- 1L
 
   runStep <- function() {
-    if (nextStepPos > step_count) {
-      return(x)
-    }
 
-    nextStep <- steps[[nextStepPos]]
-    nextStepPos <<- nextStepPos + 1L # TODO pass in as value? multisession issue
-    # if NULL is passed in (or not a function), it is skipped
-    if (is.null(nextStep)) {
-      return(runStep())
-    }
-    if (!is.function(nextStep)) {
-      stop("runStepsUntil only knows how to handle functions or NULL values. Received something of classes: ", paste0(class(nextStep), collapse = ", "))
-    }
+    while(TRUE) {
 
-    res <- nextStep(x)
-    if (is.promising(res)) {
-      res %...>% (function(value) {
-        # message("WAITED!")
-        x <<- value
-        if (conditionFn(x)) {
-          return(x)
-        } else {
-          return(runStep())
-        }
-      }) %...!% errorHandlerStep
-    } else {
-      tryCatch(
-        {
-          x <<- res
-          if (conditionFn(x)) {
-            return(x)
-          } else {
+      if (nextStepPos > step_count) {
+        return(x)
+      }
+
+      nextStep <- steps[[nextStepPos]]
+      nextStepPos <<- nextStepPos + 1L # TODO pass in as value? multisession issue
+
+      # if NULL is passed in (or not a function), it is skipped
+      if (is.null(nextStep)) {
+        next
+      }
+      if (!is.function(nextStep)) {
+        stop("runStepsUntil only knows how to handle functions or NULL values. Received something of classes: ", paste0(class(nextStep), collapse = ", "))
+      }
+
+      result <- nextStep(x)
+      if (is.promising(result)) {
+        result_with_next_step <-
+          result %...>%
+          (function(value) {
+            # message("WAITED!")
+            x <<- value
+            if (conditionFn(x)) {
+              return(x)
+            } else {
+              return(runStep()) # must recurse
+            }
+          }) %...!% errorHandlerStep
+
+        return(result_with_next_step)
+      } else {
+        tryCatch(
+          {
+            x <<- result
+            if (conditionFn(x)) {
+              return(x)
+            }
             return(runStep())
-          }
-        },
-        error = errorHandlerStep
-      )
+            # else
+            # loop through like normal
+          },
+          error = errorHandlerStep
+        )
+      }
     }
+
   }
 
   runStep()
