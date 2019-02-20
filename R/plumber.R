@@ -110,6 +110,7 @@ hookable <- R6Class(
       runSteps(
         args$value,
         errorHandlerStep = function(error) {
+          # bounce the error higher up the call stack
           stop(error)
         },
         append(
@@ -418,7 +419,6 @@ plumber <- R6Class(
       hookEnv <- new.env()
 
       errorHandlerStep <- function(error, ...) {
-        str(list(error, ...))
         private$errorHandler(req, res, error)
       }
 
