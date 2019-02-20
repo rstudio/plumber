@@ -228,8 +228,9 @@ plumber <- R6Class(
 
       message("Starting server to listen on port ", port)
 
-      on.exit({ options('plumber.debug' = getOption('plumber.debug')) })
-      options(plumber.debug = debug)
+      priorDebug <- getOption("plumber.debug")
+      on.exit({ options("plumber.debug" = priorDebug) })
+      options("plumber.debug" = debug)
 
       # Set and restore the wd to make it appear that the proc is running local to the file's definition.
       if (!is.null(private$filename)){
