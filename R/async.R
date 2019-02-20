@@ -89,7 +89,7 @@ runStepsUntil <- function(initialValue, errorHandlerStep, conditionFn, steps) {
             if (conditionFn(x)) {
               return(x)
             }
-            return(runStep())
+            x
             # else
             # loop through like normal
           },
