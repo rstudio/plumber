@@ -107,29 +107,38 @@ hookable <- R6Class(
         args <- list()
       }
 
+      stageHooks <- private$hooks[[stage]]
+      if (length(stageHooks) == 0) {
+        # if there is nothing to execute, return early
+        return(args$value)
+      }
+
       runSteps(
-        args$value,
+        NULL,
         errorHandlerStep = function(error) {
           # bounce the error higher up the call stack
           stop(error)
         },
         append(
-          lapply(private$hooks[[stage]], function(h) {
-            function(...) {
-              ar <- getRelevantArgs(args, plumberExpression = h)
-
-              value <- do.call(h, ar) #TODO: envir=private$envir?
-
-              if ("value" %in% names(ar)) {
-                # Special case, retain the returned value from the hook
-                # and pass it in as the value for the next handler.
-                # Ultimately, return value from this function
-                args$value <<- value
+          unlist(lapply(stageHooks, function(h) {
+            list(
+              function(...) {
+                ar <- getRelevantArgs(args, plumberExpression = h)
+                do.call(h, ar) #TODO: envir=private$envir?
+              },
+              # `do.call` could return a promise. Wait for it's return value
+              # if "value" exists in the original args, overwrite it for futher execution
+              function(value, ...) {
+                if ("value" %in% names(ar)) {
+                  # Special case, retain the returned value from the hook
+                  # and pass it in as the value for the next handler.
+                  # Ultimately, return value from this function
+                  args$value <<- value
+                }
+                NULL
               }
-
-              NULL
-            }
-          }),
+            )
+          })),
           list(
             function(...) {
               # Return the value as passed in or as explcitly modified by one or more hooks.
