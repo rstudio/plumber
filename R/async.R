@@ -45,21 +45,31 @@ runSteps <- function(initialValue, errorHandlerStep, steps) {
 runStepsUntil <- function(initialValue, errorHandlerStep, conditionFn, steps) {
   x <- initialValue
 
-  step_count <- length(steps)
+  stepCount <- length(steps)
   nextStepPos <- 1L
 
+  # Goals of `runStep`:
+  ## - loop through functions that produce results synchronously (avoid recursion where possible)
+  ## - If a result is a promise like object, wait for it's result, then recursively call `runStep`
+  # Current ways to exit `runStep`:
+  ## 1. no more functions to execute
+  ## 2. nextStep returns a promise, which causes recursive (async) calculations to be returned
+  ## 3. w/ synchronous result, `conditionFn` returns TRUE. Return result
+  # Error Handling
+  ## A tryCatch is provided around the initial runStep to capture sync errors
+  ## A %...!% (promise catch) is added to the end of the async recursive call.
+  ##  This captures both async errors and future sync errors.
   runStep <- function() {
 
     while (TRUE) {
-
-      if (nextStepPos > step_count) {
+      if (nextStepPos > stepCount) {
         return(x)
       }
 
       nextStep <- steps[[nextStepPos]]
-      nextStepPos <<- nextStepPos + 1L # TODO pass in as value? multisession issue
+      nextStepPos <<- nextStepPos + 1L
 
-      # if NULL is passed in (or not a function), it is skipped
+      # if NULL is provided, skip it
       if (is.null(nextStep)) {
         next
       }
@@ -69,37 +79,40 @@ runStepsUntil <- function(initialValue, errorHandlerStep, conditionFn, steps) {
 
       result <- nextStep(x)
       if (is.promising(result)) {
-        result_with_next_step <-
+        # async
+        resultOfNextStep <-
           result %...>%
           (function(value) {
             # message("WAITED!")
             x <<- value
             if (conditionFn(x)) {
-              return(x)
+              return(x) # all done, return
             } else {
               return(runStep()) # must recurse
             }
           }) %...!% errorHandlerStep
 
-        return(result_with_next_step)
-      } else {
-        tryCatch(
-          {
-            x <<- result
-            if (conditionFn(x)) {
-              return(x)
-            }
-            # else, loop through like normal
-            x # pure sync exec return value. do NOT remove
-          },
-          error = errorHandlerStep
-        )
+        return(resultOfNextStep)
       }
-    }
 
+      # sync
+      x <<- result
+      if (conditionFn(x)) {
+        return(x) # all done, return
+      }
+      # else, loop through like normal
+      next
+    } # end while (TRUE)
+    # never reached
   }
 
-  runStep()
+  # catch sync error and return it
+  tryCatch(
+    {
+      runStep()
+    },
+    error = errorHandlerStep
+  )
 }
 
 
