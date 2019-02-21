@@ -50,7 +50,7 @@ runStepsUntil <- function(initialValue, errorHandlerStep, conditionFn, steps) {
 
   runStep <- function() {
 
-    while(TRUE) {
+    while (TRUE) {
 
       if (nextStepPos > step_count) {
         return(x)
@@ -89,9 +89,8 @@ runStepsUntil <- function(initialValue, errorHandlerStep, conditionFn, steps) {
             if (conditionFn(x)) {
               return(x)
             }
-            x
-            # else
-            # loop through like normal
+            # else, loop through like normal
+            x # pure sync exec return value. do NOT remove
           },
           error = errorHandlerStep
         )
