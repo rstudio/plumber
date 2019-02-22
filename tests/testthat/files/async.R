@@ -48,3 +48,9 @@ function() {
 function() {
   stop("sync-bad - expected error here")
 }
+
+
+#' @get /number-one
+function() {
+  1
+}
