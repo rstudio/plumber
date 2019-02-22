@@ -115,7 +115,7 @@ hookable <- R6Class(
 
       runSteps(
         NULL,
-        errorHandlerStep = bounceErrorStep,
+        errorHandlerStep = stop,
         append(
           unlist(lapply(stageHooks, function(stageHook) {
             stageHookArgs <- list()
@@ -459,7 +459,7 @@ plumber <- R6Class(
 
         runSteps(
           value,
-          bounceErrorStep,
+          stop,
           list(
             preserializeStep,
             serializeStep,
@@ -594,7 +594,7 @@ plumber <- R6Class(
 
           runSteps(
             NULL,
-            bounceErrorStep,
+            stop,
             list(
               filterExecStep,
               postFilterStep
@@ -877,9 +877,3 @@ plumber <- R6Class(
     }
   )
 )
-
-
-
-bounceErrorStep <- function(error, ...) {
-  stop(error)
-}
