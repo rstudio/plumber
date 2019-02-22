@@ -41,47 +41,66 @@ runStepsUntil <- function(initialValue, errorHandlerStep, conditionFn, steps) {
   stepCount <- length(steps)
   nextStepPos <- 1L
 
+  # Goals of `runStep`:
+  ## - loop through functions that produce results synchronously (avoid recursion where possible)
+  ## - If a result is a promise like object, wait for it's result, then recursively call `runStep`
+  # Current ways to exit `runStep`:
+  ## 1. no more functions to execute
+  ## 2. nextStep returns a promise, which causes recursive (async) calculations to be returned
+  ## 3. w/ synchronous result, `conditionFn` returns TRUE. Return result
+  # Error Handling
+  ## A tryCatch is provided around the initial runStep to capture sync errors
+  ## A %...!% (promise catch) is added to the end of the async recursive call.
+  ##  This captures both async errors and future sync errors.
   runStep <- function() {
-    if (nextStepPos > stepCount) {
-      return(x)
-    }
 
-    nextStep <- steps[[nextStepPos]]
-    nextStepPos <<- nextStepPos + 1L # TODO pass in as value? multisession issue
-    # if NULL is passed in (or not a function), it is skipped
-    if (is.null(nextStep)) {
-      return(runStep())
-    }
-    if (!is.function(nextStep)) {
-      stop("runStepsUntil only knows how to handle functions or NULL values. Received something of classes: ", paste0(class(nextStep), collapse = ", "))
-    }
+    while (TRUE) {
+      
+      if (nextStepPos > stepCount) {
+        return(x)
+      }
 
-    res <- nextStep(x)
-    if (is.promising(res)) {
-      res %...>% (function(value) {
-        # message("WAITED!")
-        x <<- value
-        if (conditionFn(x)) {
-          return(x)
-        } else {
-          return(runStep())
-        }
-      }) %...!% errorHandlerStep
-    } else {
-      tryCatch(
-        {
-          x <<- res
-          if (conditionFn(x)) {
-            return(x)
-          } else {
-            return(runStep())
-          }
-        },
-        error = errorHandlerStep
-      )
-    }
+      nextStep <- steps[[nextStepPos]]
+      nextStepPos <<- nextStepPos + 1L
+
+      # if NULL is provided, skip it
+      if (is.null(nextStep)) {
+        next
+      }
+      if (!is.function(nextStep)) {
+        stop("runStepsUntil only knows how to handle functions or NULL values. Received something of classes: ", paste0(class(nextStep), collapse = ", "))
+      }
+
+      result <- nextStep(x)
+      if (is.promising(result)) {
+        # async
+        resultOfNextStep <-
+          result %...>%
+          (function(value) {
+            # message("WAITED!")
+            x <<- value
+            if (conditionFn(x)) {
+              return(x) # all done, return
+            } else {
+              return(runStep()) # must recurse
+            }
+          }) %...!% errorHandlerStep
+
+        return(resultOfNextStep)
+      }
+
+      # sync
+      x <<- result
+      if (conditionFn(x)) {
+        return(x) # all done, return
+      }
+      # else, loop through like normal
+      next
+    } # end while (TRUE)
+    # never reached
   }
 
+  # catch sync error and return it
   tryCatch(runStep(), error = errorHandlerStep)
 }
 
