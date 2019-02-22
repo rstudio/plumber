@@ -117,16 +117,19 @@ hookable <- R6Class(
         NULL,
         errorHandlerStep = bounceErrorStep,
         append(
-          unlist(lapply(stageHooks, function(h) {
+          unlist(lapply(stageHooks, function(stageHook) {
+            stageHookArgs <- list()
             list(
               function(...) {
-                ar <- getRelevantArgs(args, plumberExpression = h)
-                do.call(h, ar) #TODO: envir=private$envir?
+                stageHookArgs <<- getRelevantArgs(args, plumberExpression = stageHook)
+              },
+              function(...) {
+                do.call(stageHook, stageHookArgs) #TODO: envir=private$envir?
               },
               # `do.call` could return a promise. Wait for it's return value
               # if "value" exists in the original args, overwrite it for futher execution
               function(value, ...) {
-                if ("value" %in% names(ar)) {
+                if ("value" %in% names(stageHookArgs)) {
                   # Special case, retain the returned value from the hook
                   # and pass it in as the value for the next handler.
                   # Ultimately, return value from this function
