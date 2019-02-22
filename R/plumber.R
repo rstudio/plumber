@@ -115,21 +115,21 @@ hookable <- R6Class(
 
       runSteps(
         NULL,
-        errorHandlerStep = function(error) {
-          # bounce the error higher up the call stack
-          stop(error)
-        },
+        errorHandlerStep = bounceErrorStep,
         append(
-          unlist(lapply(stageHooks, function(h) {
+          unlist(lapply(stageHooks, function(stageHook) {
+            stageHookArgs <- list()
             list(
               function(...) {
-                ar <- getRelevantArgs(args, plumberExpression = h)
-                do.call(h, ar) #TODO: envir=private$envir?
+                stageHookArgs <<- getRelevantArgs(args, plumberExpression = stageHook)
+              },
+              function(...) {
+                do.call(stageHook, stageHookArgs) #TODO: envir=private$envir?
               },
               # `do.call` could return a promise. Wait for it's return value
               # if "value" exists in the original args, overwrite it for futher execution
               function(value, ...) {
-                if ("value" %in% names(ar)) {
+                if ("value" %in% names(stageHookArgs)) {
                   # Special case, retain the returned value from the hook
                   # and pass it in as the value for the next handler.
                   # Ultimately, return value from this function
@@ -238,8 +238,9 @@ plumber <- R6Class(
 
       message("Starting server to listen on port ", port)
 
-      on.exit({ options('plumber.debug' = getOption('plumber.debug')) })
-      options(plumber.debug = debug)
+      priorDebug <- getOption("plumber.debug")
+      on.exit({ options("plumber.debug" = priorDebug) })
+      options("plumber.debug" = debug)
 
       # Set and restore the wd to make it appear that the proc is running local to the file's definition.
       if (!is.null(private$filename)){
@@ -426,10 +427,6 @@ plumber <- R6Class(
     serve = function(req, res) {
       hookEnv <- new.env()
 
-      errorHandlerStep <- function(error, ...) {
-        private$errorHandler(req, res, error)
-      }
-
       prerouteStep <- function(...) {
         private$runHooks("preroute", list(data = hookEnv, req = req, res = res))
       }
@@ -462,13 +459,19 @@ plumber <- R6Class(
 
         runSteps(
           value,
-          errorHandlerStep,
+          bounceErrorStep,
           list(
             preserializeStep,
             serializeStep,
             postserializeStep
           )
         )
+      }
+
+      errorHandlerStep <- function(error, ...) {
+        # must set the body and return as this is after the serialize step
+        res$body <- private$errorHandler(req, res, error)
+        return(res$toResponse())
       }
 
       runSteps(
@@ -541,10 +544,6 @@ plumber <- R6Class(
       req$args <- args
       path <- req$PATH_INFO
 
-      errorHandlerStep <- function(error, ...) {
-        private$errorHandler(req, res, error)
-      }
-
       makeHandleStep <- function(name) {
         function(...) {
           reset_forward()
@@ -595,7 +594,7 @@ plumber <- R6Class(
 
           runSteps(
             NULL,
-            errorHandlerStep,
+            bounceErrorStep,
             list(
               filterExecStep,
               postFilterStep
@@ -639,13 +638,14 @@ plumber <- R6Class(
       }
       steps <- append(steps, list(notFoundStep))
 
-      withCurrentExecDomain(req, res, {
-        tryCatchWarn(
-          error = errorHandlerStep,
-          expr = {
-            runStepsIfForwarding(NULL, errorHandlerStep, steps)
-          }
-        )
+      errorHandlerStep <- function(error, ...) {
+        private$errorHandler(req, res, error)
+      }
+
+      withCurrentExecDomain(req, res, { # used to allow `has_forwarded` to work
+        withWarn1({
+          runStepsIfForwarding(NULL, errorHandlerStep, steps)
+        })
       })
     },
 
@@ -877,3 +877,9 @@ plumber <- R6Class(
     }
   )
 )
+
+
+
+bounceErrorStep <- function(error, ...) {
+  stop(error)
+}
