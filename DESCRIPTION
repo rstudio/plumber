@@ -66,6 +66,7 @@ Collate:
     'serializer-content-type.R'
     'serializer-html.R'
     'serializer-htmlwidget.R'
+    'serializer-r-object.R'
     'serializer-xml.R'
     'serializer.R'
     'session-cookie.R'
