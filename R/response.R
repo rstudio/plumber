@@ -40,10 +40,10 @@ PlumberResponse <- R6Class(
   )
 )
 
-#' @importFrom utils URLencode
+#' @importFrom httpuv encodeURI
 #' @noRd
 cookieToStr <- function(name, value, path, expiration=FALSE, http=FALSE, secure=FALSE){
-  val <- URLencode(as.character(value))
+  val <- encodeURI(as.character(value))
   str <- paste0(name, "=", val, "; ")
 
   if (!missing(path)){

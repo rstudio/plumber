@@ -9,7 +9,6 @@ queryStringFilter <- function(req){
   forward()
 }
 
-#' @importFrom utils URLdecode
 #' @noRd
 parseQS <- function(qs){
   if (is.null(qs) || length(qs) == 0 || qs == "") {
@@ -21,14 +20,17 @@ parseQS <- function(qs){
 
   parts <- strsplit(qs, "&", fixed = TRUE)[[1]]
   kv <- strsplit(parts, "=", fixed = TRUE)
-  kv <- kv[sapply(kv, length) == 2] # Ignore incompletes
+  kv <- kv[vapply(kv, length, numeric(1)) == 2] # Ignore incompletes
 
-  keys <- sapply(kv, "[[", 1)
-  keys <- unname(sapply(keys, URLdecode))
+  if (length(kv) == 0) {
+    # return a blank list of args if there is nothing to parse
+    return(list())
+  }
 
-  vals <- sapply(kv, "[[", 2)
-  vals[is.na(vals)] <- ""
-  vals <- unname(sapply(vals, URLdecode))
+  keys <- decodeURI(vapply(kv, "[[", character(1), 1))
+
+  vals <- vapply(kv, "[[", character(1), 2)
+  vals <- decodeURI(vals)
 
   ret <- as.list(vals)
   names(ret) <- keys
