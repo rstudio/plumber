@@ -4,7 +4,7 @@ runStepsIfForwarding <- function(initialValue, errorHandlerStep, steps) {
     initialValue = initialValue,
     errorHandlerStep = errorHandlerStep,
     conditionFn = function(value) {
-      !has_forwarded()
+      !hasForwarded()
     },
     steps = steps
   )
@@ -38,11 +38,11 @@ runSteps <- function(initialValue, errorHandlerStep, steps) {
 runStepsUntil <- function(initialValue, errorHandlerStep, conditionFn, steps) {
   x <- initialValue
 
-  step_count <- length(steps)
+  stepCount <- length(steps)
   nextStepPos <- 1L
 
   runStep <- function() {
-    if (nextStepPos > step_count) {
+    if (nextStepPos > stepCount) {
       return(x)
     }
 
