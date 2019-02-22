@@ -12,10 +12,10 @@ forward <- function() {
   exec <- getCurrentExec()
   exec$forward <- TRUE
 }
-has_forwarded <- function() {
+hasForwarded <- function() {
   getCurrentExec()$forward
 }
-reset_forward <- function() {
+resetForward <- function() {
   exec <- getCurrentExec()
   exec$forward <- FALSE
 }

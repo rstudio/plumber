@@ -546,7 +546,7 @@ plumber <- R6Class(
 
       makeHandleStep <- function(name) {
         function(...) {
-          reset_forward()
+          resetForward()
           h <- getHandle(name)
           if (is.null(h)) {
             return(forward())
@@ -576,11 +576,11 @@ plumber <- R6Class(
         filterStep <- function(...) {
 
           filterExecStep <- function(...) {
-            reset_forward()
+            resetForward()
             do.call(fi$exec, req$args)
           }
           postFilterStep <- function(fres, ...) {
-            if (has_forwarded()) {
+            if (hasForwarded()) {
               # return like normal
               return(fres)
             }
@@ -616,7 +616,7 @@ plumber <- R6Class(
       mountSteps <- lapply(names(private$mnts), function(mountPath) {
         # (make step function)
         function(...) {
-          reset_forward()
+          resetForward()
           # TODO: support globbing?
 
           if (nchar(path) >= nchar(mountPath) && substr(path, 0, nchar(mountPath)) == mountPath) {
@@ -642,7 +642,7 @@ plumber <- R6Class(
         private$errorHandler(req, res, error)
       }
 
-      withCurrentExecDomain(req, res, { # used to allow `has_forwarded` to work
+      withCurrentExecDomain(req, res, { # used to allow `hasForwarded` to work
         withWarn1({
           runStepsIfForwarding(NULL, errorHandlerStep, steps)
         })
