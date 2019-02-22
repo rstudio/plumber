@@ -115,10 +115,7 @@ hookable <- R6Class(
 
       runSteps(
         NULL,
-        errorHandlerStep = function(error) {
-          # bounce the error higher up the call stack
-          stop(error)
-        },
+        errorHandlerStep = bounceErrorStep,
         append(
           unlist(lapply(stageHooks, function(h) {
             list(
@@ -427,10 +424,6 @@ plumber <- R6Class(
     serve = function(req, res) {
       hookEnv <- new.env()
 
-      errorHandlerStep <- function(error, ...) {
-        private$errorHandler(req, res, error)
-      }
-
       prerouteStep <- function(...) {
         private$runHooks("preroute", list(data = hookEnv, req = req, res = res))
       }
@@ -463,13 +456,19 @@ plumber <- R6Class(
 
         runSteps(
           value,
-          errorHandlerStep,
+          bounceErrorStep,
           list(
             preserializeStep,
             serializeStep,
             postserializeStep
           )
         )
+      }
+
+      errorHandlerStep <- function(error, ...) {
+        # must set the body and return as this is after the serialize step
+        res$body <- private$errorHandler(req, res, error)
+        return(res$toResponse())
       }
 
       runSteps(
@@ -542,10 +541,6 @@ plumber <- R6Class(
       req$args <- args
       path <- req$PATH_INFO
 
-      errorHandlerStep <- function(error, ...) {
-        private$errorHandler(req, res, error)
-      }
-
       makeHandleStep <- function(name) {
         function(...) {
           reset_forward()
@@ -596,7 +591,7 @@ plumber <- R6Class(
 
           runSteps(
             NULL,
-            errorHandlerStep,
+            bounceErrorStep,
             list(
               filterExecStep,
               postFilterStep
@@ -640,13 +635,14 @@ plumber <- R6Class(
       }
       steps <- append(steps, list(notFoundStep))
 
-      withCurrentExecDomain(req, res, {
-        tryCatchWarn(
-          error = errorHandlerStep,
-          expr = {
-            runStepsIfForwarding(NULL, errorHandlerStep, steps)
-          }
-        )
+      errorHandlerStep <- function(error, ...) {
+        private$errorHandler(req, res, error)
+      }
+
+      withCurrentExecDomain(req, res, { # used to allow `has_forwarded` to work
+        withWarn1({
+          runStepsIfForwarding(NULL, errorHandlerStep, steps)
+        })
       })
     },
 
@@ -878,3 +874,9 @@ plumber <- R6Class(
     }
   )
 )
+
+
+
+bounceErrorStep <- function(error, ...) {
+  stop(error)
+}

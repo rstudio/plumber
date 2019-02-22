@@ -11,21 +11,14 @@ runStepsIfForwarding <- function(initialValue, errorHandlerStep, steps) {
 }
 
 
-
-tryCatchWarn <- function(error, expr) {
+withWarn1 <- function(expr) {
   oldWarn <- options("warn")[[1]]
-  tryCatch(
-    {
-      # Set to show warnings immediately as they happen.
-      options(warn=1)
+  on.exit({
+    options(warn = oldWarn)
+  })
+  options(warn = 1)
 
-      force(expr)
-    },
-    error = error,
-    finally = {
-      options(warn = oldWarn)
-    }
-  )
+  force(expr)
 }
 
 
@@ -89,7 +82,7 @@ runStepsUntil <- function(initialValue, errorHandlerStep, conditionFn, steps) {
     }
   }
 
-  runStep()
+  tryCatch(runStep(), error = errorHandlerStep)
 }
 
 
