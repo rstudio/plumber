@@ -14,7 +14,7 @@ wait_for_async <- function() {
 
 
 get_result <- function(result) {
-  if (!promises::is.promise(result)) {
+  if (!promises::is.promising(result)) {
     return(result)
   }
 
@@ -36,11 +36,11 @@ get_result <- function(result) {
 }
 
 expect_not_promise <- function(x) {
-  expect_false(promises::is.promise(x))
+  expect_false(promises::is.promising(x))
   invisible(x)
 }
 expect_promise <- function(x) {
-  expect_true(promises::is.promise(x))
+  expect_true(promises::is.promising(x))
   invisible(x)
 }
 
@@ -201,7 +201,6 @@ test_that("async hooks change value being passed through",  {
 context("Promise - errors are handled")
 
 expect_route_error <- function(response, txt) {
-  str(response)
   expect_equal(response$body$error, "500 - Internal server error")
   expect_true(grepl(txt, response$body$message))
 }
