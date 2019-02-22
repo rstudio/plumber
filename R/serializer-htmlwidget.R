@@ -1,4 +1,3 @@
-#' @include globals.R
 #' @rdname serializers
 #' @export
 serializer_htmlwidget <- function(...) {
@@ -35,4 +34,6 @@ serializer_htmlwidget <- function(...) {
   }
 }
 
+
+#' @include globals.R
 .globals$serializers[["htmlwidget"]] <- serializer_htmlwidget
