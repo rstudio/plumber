@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "swagger-cli": "^2.2.0"
+  },
+  "devDependencies": {
+    "loadtest": "^3.0.6"
   }
 }
