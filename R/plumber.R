@@ -236,7 +236,8 @@ plumber <- R6Class(
     ) {
       port <- findPort(port)
 
-      message("Starting server to listen on port ", port)
+
+      message("Running plumber API at ", urlHost(host, port, changeHostLocation = FALSE))
 
       priorDebug <- getOption("plumber.debug")
       on.exit({ options("plumber.debug" = priorDebug) })
@@ -253,10 +254,6 @@ plumber <- R6Class(
         if (!requireNamespace("swagger")) {
           stop("swagger must be installed for the Swagger UI to be displayed")
         }
-        host <- getOption(
-          "plumber.apiHost",
-          ifelse(identical(host, "0.0.0.0"), "127.0.0.1", host)
-        )
         spec <- self$swaggerFile()
 
         # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
@@ -308,14 +305,12 @@ plumber <- R6Class(
           )
         }
         self$mount("/__swagger__", PlumberStatic$new(swagger::swagger_path()))
-        swaggerUrl <- paste0(host, ":", port, "/__swagger__/")
-        if (!grepl("^http://", swaggerUrl)) {
-          # must have http protocol for use within RStudio
-          # does not work if supplying "127.0.0.1:1234/route"
-          swaggerUrl <- paste0("http://", swaggerUrl)
-        }
-        message("Running the swagger UI at ", swaggerUrl, sep = "")
 
+        swaggerUrl <- paste0(
+          urlHost(getOption("plumber.apiHost", host), port, changeHostLocation = TRUE),
+          "/__swagger__/"
+        )
+        message("Running Swagger UI  at ", swaggerUrl, sep = "")
         # notify swaggerCallback of plumber swagger location
         if (!is.null(swaggerCallback) && is.function(swaggerCallback)) {
           swaggerCallback(swaggerUrl)
@@ -881,3 +876,39 @@ plumber <- R6Class(
     }
   )
 )
+
+
+
+
+
+
+
+
+urlHost <- function(host, port, changeHostLocation = FALSE) {
+  if (isTRUE(changeHostLocation)) {
+    # upgrade swaggerCallback location to be localhost and not catch-all addresses
+    # shiny: https://github.com/rstudio/shiny/blob/95173f6/R/server.R#L781-L786
+    if (identical(host, "0.0.0.0")) {
+      # RStudio IDE does NOT like 0.0.0.0 locations.
+      # Must use 127.0.0.1 instead.
+      host <- "127.0.0.1"
+    } else if (identical(host, "::")) {
+      # upgrade ipv6 catch-all to ipv6 "localhost"
+      host <- "::1"
+    }
+  }
+
+  # if ipv6 address, surround in brackets
+  if (grepl(":[^/]", host)) {
+    host <- paste0("[", host, "]")
+  }
+  # if no match against a protocol
+  if (!grepl("://", host)) {
+    # add http protocol
+    # RStudio IDE does NOT like empty protocols like "127.0.0.1:1234/route"
+    # Works if supplying "http://127.0.0.1:1234/route"
+    host <- paste0("http://", host)
+  }
+
+  paste0(host, ":", port)
+}
