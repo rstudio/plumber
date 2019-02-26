@@ -11,7 +11,6 @@ postBodyFilter <- function(req){
   forward()
 }
 
-#' @importFrom utils URLdecode
 #' @noRd
 parseBody <- function(body, charset = "UTF-8"){
   # The body in a curl call can also include querystring formatted data

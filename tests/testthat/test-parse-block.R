@@ -79,4 +79,76 @@ test_that("Block can't contain duplicate tags", {
   expect_error(parseBlock(length(lines), lines), "Duplicate tag specified.")
 })
 
+test_that("@json parameters work", {
+
+  expect_block_fn <- function(lines, fn) {
+    b <- parseBlock(length(lines), lines)
+    expect_equal_functions(b$serializer, fn)
+  }
+  expect_block_error <- function(lines, ...) {
+    expect_error({
+      parseBlock(length(lines), lines)
+    }, ...)
+  }
+
+  expect_block_fn("#' @serializer json", serializer_json())
+  expect_block_fn("#' @json", serializer_json())
+  expect_block_fn("#' @json()", serializer_json())
+  expect_block_fn("#' @serializer unboxedJSON", serializer_unboxed_json())
+
+  expect_block_fn("#' @serializer json list(na = 'string')", serializer_json(na = 'string'))
+  expect_block_fn("#' @json(na = 'string')", serializer_json(na = 'string'))
+
+  expect_block_fn("#* @serializer unboxedJSON list(na = \"string\")", serializer_unboxed_json(na = 'string'))
+  expect_block_fn("#' @json(auto_unbox = TRUE, na = 'string')", serializer_json(auto_unbox = TRUE, na = 'string'))
+
+
+  expect_block_fn("#' @json (    auto_unbox = TRUE, na = 'string'    )", serializer_json(auto_unbox = TRUE, na = 'string'))
+  expect_block_fn("#' @json (auto_unbox          =       TRUE    ,      na      =      'string'   )             ", serializer_json(auto_unbox = TRUE, na = 'string'))
+  expect_block_fn("#' @serializer json list   (      auto_unbox          =       TRUE    ,      na      =      'string'   )             ", serializer_json(auto_unbox = TRUE, na = 'string'))
+
+
+  expect_block_error("#' @serializer json list(na = 'string'", "unexpected end of input")
+  expect_block_error("#' @json(na = 'string'", "must be surrounded by parentheses")
+  expect_block_error("#' @json (na = 'string'", "must be surrounded by parentheses")
+  expect_block_error("#' @json ( na = 'string'", "must be surrounded by parentheses")
+  expect_block_error("#' @json na = 'string')", "must be surrounded by parentheses")
+  expect_block_error("#' @json list(na = 'string')", "must be surrounded by parentheses")
+
+})
+
+
+test_that("@html parameters produce an error", {
+
+  expect_block_fn <- function(lines, fn) {
+    b <- parseBlock(length(lines), lines)
+    expect_equal_functions(b$serializer, fn)
+  }
+  expect_block_error <- function(lines, ...) {
+    expect_error({
+      parseBlock(length(lines), lines)
+    }, ...)
+  }
+
+  expect_block_fn("#' @serializer html", serializer_html())
+
+  expect_block_fn("#' @serializer html list()", serializer_html())
+  expect_block_fn("#' @serializer html list(         )", serializer_html())
+  expect_block_fn("#' @serializer html list     (         )     ", serializer_html())
+
+  expect_block_fn("#' @html", serializer_html())
+  expect_block_fn("#' @html()", serializer_html())
+  expect_block_fn("#' @html ()", serializer_html())
+  expect_block_fn("#' @html ( )", serializer_html())
+  expect_block_fn("#' @html ( ) ", serializer_html())
+  expect_block_fn("#' @html         (       )       ", serializer_html())
+
+  expect_block_error("#' @serializer html list(key = \"val\")", "unused argument")
+  expect_block_error("#' @html(key = \"val\")", "unused argument")
+  expect_block_error("#' @html (key = \"val\")", "unused argument")
+
+  expect_block_error("#' @html (key = \"val\")", "unused argument")
+})
+
+
 # TODO: more testing around filter, assets, endpoint, etc.
