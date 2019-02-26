@@ -37,7 +37,7 @@ test_that("host doesn't change for messages, but does for RStudio IDE", {
   #> Running Swagger UI  at http://127.0.0.1:1234/__swagger__/
 
   pr$run(
-    "http://::", port = 1234
+    "::", port = 1234
   )
   #> Running plumber API at http://[::]:1234
   #> Running Swagger UI  at http://[::1]:1234/__swagger__/
