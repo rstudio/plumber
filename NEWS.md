@@ -22,6 +22,8 @@ plumber 0.5.0
 
 ### New features
 
+* Added support for promises in endpoints, filters, and hooks. ([#248](https://github.com/trestletech/plumber/pull/248))
+
 * Added support to a router's run method to allow the `swagger` parameter to be a function that
   enhances the existing swagger specification before being returned to `/openapi.json`. ([#365](https://github.com/trestletech/plumber/pull/365))
 
