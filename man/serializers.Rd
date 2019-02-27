@@ -4,6 +4,7 @@
 \name{serializer_json}
 \alias{serializer_json}
 \alias{serializer_unboxed_json}
+\alias{box_tags}
 \alias{serializer_content_type}
 \alias{serializer_html}
 \alias{serializer_htmlwidget}
@@ -13,6 +14,8 @@
 serializer_json(...)
 
 serializer_unboxed_json(auto_unbox = TRUE, ...)
+
+box_tags(x)
 
 serializer_content_type(type)
 
@@ -25,6 +28,8 @@ serializer_htmlwidget(...)
 
 \item{auto_unbox}{automatically \code{\link{unbox}} all atomic vectors of length 1. It is usually safer to avoid this and instead use the \code{\link{unbox}} function to unbox individual elements.
 An exception is that objects of class \code{AsIs} (i.e. wrapped in \code{I()}) are not automatically unboxed. This is a way to mark single values as length-1 arrays.}
+
+\item{x}{the object to be encoded}
 
 \item{type}{The value to provide for the \code{Content-Type} HTTP header.}
 }

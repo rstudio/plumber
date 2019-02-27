@@ -3,6 +3,7 @@
 export(PlumberEndpoint)
 export(PlumberStatic)
 export(addSerializer)
+export(box_tags)
 export(do_configure_https)
 export(do_deploy_api)
 export(do_forward)

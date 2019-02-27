@@ -280,6 +280,10 @@ plumber <- R6Class(
             ret <- swagger(self, spec, ...)
             # Since users could have added more NA or NULL values...
             ret <- removeNaOrNulls(ret)
+            if ("paths" %in% names(ret)) {
+              # prevent unboxing of tags in paths
+              ret$paths <- box_tags(ret$paths)
+            }
           } else {
             # NA/NULL values already removed
             ret <- spec

@@ -10,6 +10,8 @@ Authors@R: c(
   person("Barret", "Schloerke", role="aut", email="barret@rstudio.com"),
   person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"),
   person("Sebastiaan", "Vandewoude", role="ctb", email="sebastiaanvandewoude@gmail.com"),
+  person("Eduard", "Szöcs", role = "ctb", email = "eduard.szoecs@basf.com", 
+    comment=c(ORCID = "0000-0001-5376-1194", sponsor = "BASF SE")), 
   person(family="SmartBear Software", role=c("ctb", "cph"), comment="swagger-ui"))
 License: MIT + file LICENSE
 BugReports: https://github.com/trestletech/plumber/issues

@@ -25,5 +25,20 @@ serializer_json <- function(...) {
 serializer_unboxed_json <- function(auto_unbox = TRUE, ...) {
   serializer_json(auto_unbox = auto_unbox, ...)
 }
-
 .globals$serializers[["unboxedJSON"]] <- serializer_unboxed_json
+
+#' @rdname serializers
+#' @export
+box_tags <- function(x) {
+  # base case
+  if (!inherits(x, "list")) {
+    return(x)
+  }
+  # target case
+  if ("tags" %in% names(x) & length(x[["tags"]]) == 1) {
+    x[["tags"]] <- I(x[["tags"]])
+    return(x)
+  }
+  # recursive case
+  lapply(x, box_tags)
+}

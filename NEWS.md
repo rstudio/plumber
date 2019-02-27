@@ -47,6 +47,8 @@ plumber 0.5.0
 
 * Date response header is now supplied by httpuv and not plumber. Fixes non standard date response header issues when using different locales. (@shrektan, [#319](https://github.com/trestletech/plumber/pull/319), [#380](https://github.com/trestletech/plumber/pull/380))
 
+* Single tags where not handled correctly when using a swagger function at runtime [#390](https://github.com/trestletech/plumber/issues/390)
+
 
 plumber 0.4.6
 --------------------------------------------------------------------------------
