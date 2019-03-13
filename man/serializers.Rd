@@ -9,7 +9,6 @@
 \alias{serializer_html}
 \alias{serializer_htmlwidget}
 \alias{serializer_rds}
-\alias{serializer_rds3}
 \alias{serializers}
 \title{Plumber Serializers}
 \usage{
@@ -24,8 +23,6 @@ serializer_html()
 serializer_htmlwidget(...)
 
 serializer_rds(version = "2", ascii = FALSE, ...)
-
-serializer_rds3(version = "3", ascii = FALSE, ...)
 }
 \arguments{
 \item{...}{extra arguments supplied to respective internal serialization function.}

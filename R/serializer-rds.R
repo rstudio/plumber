@@ -22,13 +22,5 @@ serializer_rds <- function(version = "2", ascii = FALSE, ...) {
 }
 
 
-#' @rdname serializers
-#' @inheritParams base::serialize
-#' @export
-serializer_rds3 <- function(version = "3", ascii = FALSE, ...) {
-  serializer_rds(version = version, ascii = ascii, ...)
-}
-
 #' @include globals.R
 .globals$serializers[["rds"]] <- serializer_rds
-.globals$serializers[["rds3"]] <- serializer_rds3
