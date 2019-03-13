@@ -26,7 +26,12 @@ test_that("query strings with duplicates are made into vectors", {
 })
 
 test_that("parseQS() will mark UTF-8 explicitly", {
-  out <- parseQS("%E5%8F%82%E6%95%B01=%E4%B8%AD%E6%96%87")
+  expect_warning(
+    {
+      out <- parseQS("%E5%8F%82%E6%95%B01=%E4%B8%AD%E6%96%87")
+    },
+    "received in non-ASCII encoding"
+  )
   expect_equal(Encoding(names(out)), "UTF-8")
   expect_identical(
     charToRaw(names(out)),
