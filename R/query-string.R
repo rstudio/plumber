@@ -51,46 +51,60 @@ createPathRegex <- function(pathDef){
   match <- stringi::stri_match_all(
     pathDef,
     # capture any plumber type (<arg:TYPE>) (typeToRegex(type) will yell if it is unknown)
+    # <arg> will be given the TYPE `defaultSwaggerType`
     regex = "/<(\\.?[a-zA-Z][\\w_\\.]*)(:([^>]*))?>"
   )[[1]]
   names <- match[,2]
-  type <- match[,4]
+  types <- match[,4]
   if (length(names) <= 1 && is.na(names)){
-    names <- character()
-    type <- NULL
+    return(
+      list(
+        names = character(),
+        types = NULL,
+        regex = paste0("^", pathDef, "$"),
+        converters = NULL
+      )
+    )
+  }
+  if (length(types) > 0) {
+    types[is.na(types)] <- defaultSwaggerType
   }
 
-  typedRe <- typeToRegex(type)
-  re <- pathDef
-  for (r in typedRe){
-    repl <- paste0("/(", r, ")$2")
-    re <- stringi::stri_replace_first_regex(re, pattern="/(<\\.?[a-zA-Z][\\w_\\.:]*>)(/?)",
-                                          replacement=repl)
+  typedRegexs <- typeToRegex(types)
+  pathRegex <- pathDef
+  for (typedRegex in typedRegexs) {
+    regexReplacement <- paste0("/(", typedRegex, ")$2")
+    pathRegex <- stringi::stri_replace_first_regex(
+      pathRegex,
+      pattern = "/(<\\.?[a-zA-Z][\\w_\\.:]*>)(/?)",
+      replacement = regexReplacement
+    )
   }
 
-  converters <- typeToConverters(type)
-
-  list(names = names, types=type, regex = paste0("^", re, "$"), converters=converters)
+  list(
+    names = names,
+    types = types,
+    regex = paste0("^", pathRegex, "$"),
+    converters = typeToConverters(types)
+  )
 }
 
 
 typeToRegex <- function(type){
-  if (length(type) == 0) {
-    return(character(0))
-  }
   # return vector of regex strings
-  unlist(
-    swaggerTypeToRegexMap[plumberToSwaggerType(type)]
+  vapply(
+    swaggerTypeInfo[plumberToSwaggerType(type)],
+    `[[`, character(1), "regex"
   )
 }
 
 
 typeToConverters <- function(type) {
-  if (length(type) == 0) {
-    return(NULL)
-  }
   # return list of functions
-  swaggerTypeToConvertersMap[plumberToSwaggerType(type)]
+  lapply(
+    swaggerTypeInfo[plumberToSwaggerType(type)],
+    `[[`, "converter"
+  )
 }
 
 
