@@ -1,18 +1,18 @@
 
 
 # calculate all swagger type information at once and use created information throughout package
-swaggerTypeInfo <- (function() {
-  swaggerTypes <- c()
-  swaggerTypeToRegexMap <- list()
-  swaggerTypeToConvertersMap <- list()
-  plumberToSwaggerTypeMap <- list()
+swaggerTypeInfo <- list()
+plumberToSwaggerTypeMap <- list()
+defaultSwaggerType <- "string"
 
+local({
   addSwaggerInfo <- function(swaggerType, plumberTypes, regex, converter) {
-    swaggerTypes[length(swaggerTypes) + 1] <<- swaggerType
+    swaggerTypeInfo[[swaggerType]] <<-
+      list(
+        regex = regex,
+        converter = converter
+      )
 
-    swaggerTypeToRegexMap[[swaggerType]] <<- regex
-
-    swaggerTypeToConvertersMap[[swaggerType]] <<- converter
 
     for (plumberType in plumberTypes) {
       plumberToSwaggerTypeMap[[plumberType]] <<- swaggerType
@@ -47,20 +47,7 @@ swaggerTypeInfo <- (function() {
     "[^/]+",
     as.character
   )
-
-  list(
-    swaggerTypes = swaggerTypes,
-    defaultSwaggerType = "string",
-    swaggerTypeToRegexMap = swaggerTypeToRegexMap,
-    swaggerTypeToConvertersMap = swaggerTypeToConvertersMap,
-    plumberToSwaggerTypeMap = plumberToSwaggerTypeMap
-  )
-})()
-
-swaggerTypeToRegexMap <- swaggerTypeInfo$swaggerTypeToRegexMap
-swaggerTypeToConvertersMap <- swaggerTypeInfo$swaggerTypeToConvertersMap
-plumberToSwaggerTypeMap <- swaggerTypeInfo$plumberToSwaggerTypeMap
-defaultSwaggerType <- swaggerTypeInfo$defaultSwaggerType
+})
 
 
 #' Parse the given plumber type and return the typecast value
