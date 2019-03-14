@@ -33,5 +33,5 @@ render_png <- function(args){
 }
 
 render_svg <- function(args){
-  render_image(svg, "image/svg", args)
+  render_image(svg, "image/svg+xml", args)
 }
