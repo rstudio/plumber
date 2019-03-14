@@ -64,7 +64,7 @@ getCharacterSet <- function(contentType){
   as.character(
     ifelse(
       charsetStart > -1,
-      substr(contentType, charsetStart, nchar(contentType)), 
+      substr(contentType, charsetStart, nchar(contentType)),
       default
     )
   )
