@@ -108,10 +108,10 @@ typesToRegexps <- function(types) {
 }
 
 
-typeToConverters <- function(type) {
+typeToConverters <- function(types) {
   # return list of functions
   lapply(
-    swaggerTypeInfo[plumberToSwaggerType(type)],
+    swaggerTypeInfo[plumberToSwaggerType(types)],
     `[[`, "converter"
   )
 }
