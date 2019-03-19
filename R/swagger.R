@@ -63,7 +63,11 @@ plumberToSwaggerType <- function(type) {
 
   swaggerType <- plumberToSwaggerTypeMap[[as.character(type)]]
   if (is.null(swaggerType)) {
-    stop("Unrecognized type: ", type)
+    warning(
+      "Unrecognized type: ", type, ". Using type: ", defaultSwaggerType,
+      call. = FALSE
+    )
+    swaggerType <- defaultSwaggerType
   }
 
   return(swaggerType)
