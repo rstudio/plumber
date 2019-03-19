@@ -460,3 +460,32 @@ test_that("filters and endpoints executed in the appropriate environment", {
   val <- pr$route(make_req("GET", "/"), PlumberResponse$new())
   expect_identical(env, val)
 })
+
+
+test_that("host is updated properly for printing", {
+
+  expect_identical(
+    urlHost("1:1:1", 1234),
+    "http://[1:1:1]:1234"
+  )
+  expect_identical(
+    urlHost("::", 1234, FALSE),
+    "http://[::]:1234"
+  )
+  expect_identical(
+    urlHost("::", 1234, TRUE),
+    "http://[::1]:1234"
+  )
+  expect_identical(
+    urlHost("1.2.3.4", 1234),
+    "http://1.2.3.4:1234"
+  )
+  expect_identical(
+    urlHost("0.0.0.0", 1234, FALSE),
+    "http://0.0.0.0:1234"
+  )
+  expect_identical(
+    urlHost("0.0.0.0", 1234, TRUE),
+    "http://127.0.0.1:1234"
+  )
+})

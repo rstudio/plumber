@@ -7,7 +7,7 @@ Roxygen: list(markdown = TRUE)
 Authors@R: c(
   person(family="Trestle Technology, LLC", role="aut", email="cran@trestletech.com"),
   person("Jeff", "Allen", role="cre", email="cran@trestletech.com"),
-  person("Barret", "Schloerke", role="ctb", email="barret@rstudio.com"),
+  person("Barret", "Schloerke", role="aut", email="barret@rstudio.com"),
   person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"),
   person("Sebastiaan", "Vandewoude", role="ctb", email="sebastiaanvandewoude@gmail.com"),
   person(family="SmartBear Software", role=c("ctb", "cph"), comment="swagger-ui"))
@@ -25,7 +25,8 @@ Imports:
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
     httpuv (>= 1.4.5.9002),
-    crayon
+    crayon,
+    promises
 LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
@@ -39,9 +40,11 @@ Suggests:
     analogsea,
     swagger (> 3.20.3)
 Remotes:
+    rstudio/promises,
     rstudio/swagger,
     rstudio/httpuv
 Collate:
+    'async.R'
     'content-types.R'
     'cookie-parser.R'
     'parse-globals.R'
@@ -66,6 +69,7 @@ Collate:
     'serializer-content-type.R'
     'serializer-html.R'
     'serializer-htmlwidget.R'
+    'serializer-rds.R'
     'serializer-xml.R'
     'serializer.R'
     'session-cookie.R'

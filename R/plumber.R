@@ -96,25 +96,57 @@ hookable <- R6Class(
     }
   ), private=list(
     hooks = list( ),
-    runHooks = function(stage, args){
-      if (missing(args)){
+
+    # Because we're passing in a `value` argument here, `runHooks` will return either the
+    # unmodified `value` argument back, or will allow one or more hooks to modify the value,
+    # in which case the modified value will be returned. Hooks declare that they intend to
+    # modify the value by accepting a parameter named `value`, in which case their returned
+    # value will be used as the updated value.
+    runHooks = function(stage, args) {
+      if (missing(args)) {
         args <- list()
       }
-      value <- args$value
-      for (h in private$hooks[[stage]]){
-        ar <- getRelevantArgs(args, plumberExpression=h)
 
-        value <- do.call(h, ar) #TODO: envir=private$envir?
-
-        if ("value" %in% names(ar)){
-          # Special case, retain the returned value from the hook
-          # and pass it in as the value for the next handler.
-          # Ultimately, return value from this function
-          args$value <- value
-        }
+      stageHooks <- private$hooks[[stage]]
+      if (length(stageHooks) == 0) {
+        # if there is nothing to execute, return early
+        return(args$value)
       }
-      # Return the value as passed in or as explcitly modified by one or more hooks.
-      args$value
+
+      runSteps(
+        NULL,
+        errorHandlerStep = stop,
+        append(
+          unlist(lapply(stageHooks, function(stageHook) {
+            stageHookArgs <- list()
+            list(
+              function(...) {
+                stageHookArgs <<- getRelevantArgs(args, plumberExpression = stageHook)
+              },
+              function(...) {
+                do.call(stageHook, stageHookArgs) #TODO: envir=private$envir?
+              },
+              # `do.call` could return a promise. Wait for it's return value
+              # if "value" exists in the original args, overwrite it for futher execution
+              function(value, ...) {
+                if ("value" %in% names(stageHookArgs)) {
+                  # Special case, retain the returned value from the hook
+                  # and pass it in as the value for the next handler.
+                  # Ultimately, return value from this function
+                  args$value <<- value
+                }
+                NULL
+              }
+            )
+          })),
+          list(
+            function(...) {
+              # Return the value as passed in or as explcitly modified by one or more hooks.
+              return(args$value)
+            }
+          )
+        )
+      )
     }
   )
 )
@@ -204,10 +236,12 @@ plumber <- R6Class(
     ) {
       port <- findPort(port)
 
-      message("Starting server to listen on port ", port)
 
-      on.exit({ options('plumber.debug' = getOption('plumber.debug')) })
-      options(plumber.debug = debug)
+      message("Running plumber API at ", urlHost(host, port, changeHostLocation = FALSE))
+
+      priorDebug <- getOption("plumber.debug")
+      on.exit({ options("plumber.debug" = priorDebug) })
+      options("plumber.debug" = debug)
 
       # Set and restore the wd to make it appear that the proc is running local to the file's definition.
       if (!is.null(private$filename)){
@@ -220,10 +254,6 @@ plumber <- R6Class(
         if (!requireNamespace("swagger")) {
           stop("swagger must be installed for the Swagger UI to be displayed")
         }
-        host <- getOption(
-          "plumber.apiHost",
-          ifelse(identical(host, "0.0.0.0"), "127.0.0.1", host)
-        )
         spec <- self$swaggerFile()
 
         # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
@@ -275,14 +305,12 @@ plumber <- R6Class(
           )
         }
         self$mount("/__swagger__", PlumberStatic$new(swagger::swagger_path()))
-        swaggerUrl <- paste0(host, ":", port, "/__swagger__/")
-        if (!grepl("^http://", swaggerUrl)) {
-          # must have http protocol for use within RStudio
-          # does not work if supplying "127.0.0.1:1234/route"
-          swaggerUrl <- paste0("http://", swaggerUrl)
-        }
-        message("Running the swagger UI at ", swaggerUrl, sep = "")
 
+        swaggerUrl <- paste0(
+          urlHost(getOption("plumber.apiHost", host), port, changeHostLocation = TRUE),
+          "/__swagger__/"
+        )
+        message("Running Swagger UI  at ", swaggerUrl, sep = "")
         # notify swaggerCallback of plumber swagger location
         if (!is.null(swaggerCallback) && is.function(swaggerCallback)) {
           swaggerCallback(swaggerUrl)
@@ -395,53 +423,118 @@ plumber <- R6Class(
       invisible(self)
     },
 
-    serve = function(req, res){
+    serve = function(req, res) {
       hookEnv <- new.env()
 
-      private$runHooks("preroute", list(data=hookEnv, req=req, res=res))
+      prerouteStep <- function(...) {
+        private$runHooks("preroute", list(data = hookEnv, req = req, res = res))
+      }
+      routeStep <- function(...) {
+        self$route(req, res)
+      }
+      postrouteStep <- function(value, ...) {
+        private$runHooks("postroute", list(data = hookEnv, req = req, res = res, value = value))
+      }
 
-      val <- self$route(req, res)
+      serializeSteps <- function(value, ...) {
+        if ("PlumberResponse" %in% class(value)) {
+          return(res$toResponse())
+        }
 
-      # Because we're passing in a `value` argument here, `runHooks` will return either the
-      # unmodified `value` argument back, or will allow one or more hooks to modify the value,
-      # in which case the modified value will be returned. Hooks declare that they intend to
-      # modify the value by accepting a parameter named `value`, in which case their returned
-      # value will be used as the updated value.
-      val <- private$runHooks("postroute", list(data=hookEnv, req=req, res=res, value=val))
-
-      if ("PlumberResponse" %in% class(val)){
-        # They returned the response directly, don't serialize.
-        res$toResponse()
-      } else {
         ser <- res$serializer
-
         if (typeof(ser) != "closure") {
           stop("Serializers must be closures: '", ser, "'")
         }
 
-        val <- private$runHooks("preserialize", list(data=hookEnv, req=req, res=res, value=val))
-        out <- ser(val, req, res, private$errorHandler)
-        out <- private$runHooks("postserialize", list(data=hookEnv, req=req, res=res, value=out))
-        out
+        preserializeStep <- function(value, ...) {
+          private$runHooks("preserialize", list(data = hookEnv, req = req, res = res, value = value))
+        }
+        serializeStep <- function(value, ...) {
+          ser(value, req, res, errorHandler)
+        }
+        postserializeStep <- function(value, ...) {
+          private$runHooks("postserialize", list(data = hookEnv, req = req, res = res, value = value))
+        }
+
+        runSteps(
+          value,
+          stop,
+          list(
+            preserializeStep,
+            serializeStep,
+            postserializeStep
+          )
+        )
       }
+
+      errorHandlerStep <- function(error, ...) {
+        # must set the body and return as this is after the serialize step
+        res$body <- private$errorHandler(req, res, error)
+        return(res$toResponse())
+      }
+
+      runSteps(
+        NULL,
+        errorHandlerStep,
+        list(
+          prerouteStep,
+          routeStep,
+          postrouteStep,
+          serializeSteps
+        )
+      )
+
+      #
+      # conclude <- function(v) {
+      #   v <- private$runHooks("postroute", list(data=hookEnv, req=req, res=res, value=v))
+      #
+      #   if ("PlumberResponse" %in% class(v)){
+      #     # They returned the response directly, don't serialize.
+      #     res$toResponse()
+      #   } else {
+      #     ser <- res$serializer
+      #
+      #     if (typeof(ser) != "closure") {
+      #       stop("Serializers must be closures: '", ser, "'")
+      #     }
+      #
+      #     v <- private$runHooks("preserialize", list(data=hookEnv, req=req, res=res, value=v))
+      #     out <- ser(v, req, res, private$errorHandler)
+      #     out <- private$runHooks("postserialize", list(data=hookEnv, req=req, res=res, value=out))
+      #     out
+      #   }
+      # }
+      #
+      # if (hasPromises() && promises::is.promise(val)){
+      #   # The endpoint returned a promise, we should wait on it
+      #   then(val, conclude, function(error){
+      #     # The original error handler would not have run because the endpoint didn't
+      #     # synchronously produce any errors. We have to run our error handling logic now.
+      #     # TODO: Dry this up with the error handler in route()
+      #     v <- private$errorHandler(req, res, error)
+      #     conclude(v)
+      #   })
+      # } else {
+      #   conclude(val)
+      # }
     },
 
-    route = function(req, res){
-      getHandle <- function(filt){
+    route = function(req, res) {
+      getHandle <- function(filt) {
         handlers <- private$ends[[filt]]
-        if (!is.null(handlers)){
-          for (h in handlers){
-            if (h$canServe(req)){
+        if (!is.null(handlers)) {
+          for (h in handlers) {
+            if (h$canServe(req)) {
               return(h)
             }
           }
         }
-        NULL
+        return(NULL)
       }
 
       # Get args out of the query string, + req/res
       args <- list()
-      if (!is.null(req$args)){
+      if (!is.null(req$args)) {
         args <- req$args
       }
       args$res <- res
@@ -450,90 +543,120 @@ plumber <- R6Class(
       req$args <- args
       path <- req$PATH_INFO
 
-      oldWarn <- options("warn")[[1]]
-      tryCatch({
-        # Set to show warnings immediately as they happen.
-        options(warn=1)
-
-        h <- getHandle("__first__")
-        if (!is.null(h)){
-          if (!is.null(h$serializer)){
+      makeHandleStep <- function(name) {
+        function(...) {
+          resetForward()
+          h <- getHandle(name)
+          if (is.null(h)) {
+            return(forward())
+          }
+          if (!is.null(h$serializer)) {
             res$serializer <- h$serializer
           }
           req$args <- c(h$getPathParams(path), req$args)
           return(do.call(h$exec, req$args))
         }
+      }
 
-        if (length(private$filts) > 0){
-          # Start running through filters until we find a matching endpoint.
-          for (i in 1:length(private$filts)){
-            fi <- private$filts[[i]]
+      steps <- list(
+        # first step
+        makeHandleStep("__first__")
+      )
 
-            # Check for endpoints preempting in this filter.
-            h <- getHandle(fi$name)
-            if (!is.null(h)){
-              if (!is.null(h$serializer)){
-                res$serializer <- h$serializer
-              }
-              req$args <- c(h$getPathParams(path), req$args)
-              return(do.call(h$exec, req$args))
-            }
+      # Start running through filters until we find a matching endpoint.
+      # returns 2 functions which need to be flattened overall
+      filterSteps <- unlist(recursive = FALSE, lapply(private$filts, function(fi) {
+        # Check for endpoints preempting in this filter.
+        handleStep <- makeHandleStep(fi$name)
 
-            # Execute this filter
-            .globals$forwarded <- FALSE
+        # Execute this filter
+        # Do not stop if the filter returned a non-forward object
+        # If a non-forward object is returned, serialize it according to the filter
+        filterStep <- function(...) {
 
-            fres <- do.call(fi$exec, req$args)
-            if (!.globals$forwarded){
-              # forward() wasn't called, presumably meaning the request was
-              # handled inside of this filter.
-              if (!is.null(fi$serializer)){
-                res$serializer <- fi$serializer
-              }
+          filterExecStep <- function(...) {
+            resetForward()
+            do.call(fi$exec, req$args)
+          }
+          postFilterStep <- function(fres, ...) {
+            if (hasForwarded()) {
+              # return like normal
               return(fres)
             }
+            # forward() wasn't called, presumably meaning the request was
+            # handled inside of this filter.
+            if (!is.null(fi$serializer)){
+              res$serializer <- fi$serializer
+            }
+            return(fres)
           }
+
+          runSteps(
+            NULL,
+            stop,
+            list(
+              filterExecStep,
+              postFilterStep
+            )
+          )
         }
 
-        # If we still haven't found a match, check the un-preempt'd endpoints.
-        h <- getHandle("__no-preempt__")
-        if (!is.null(h)){
-          if (!is.null(h$serializer)){
-            res$serializer <- h$serializer
-          }
-          req$args <- c(h$getPathParams(path), req$args)
-          return(do.call(h$exec, req$args))
-        }
+        list(
+          handleStep,
+          filterStep
+        )
+      }))
+      steps <- append(steps, filterSteps)
 
-        # We aren't going to serve this endpoint; see if any mounted routers will
-        for (mountPath in names(private$mnts)){
+      # If we still haven't found a match, check the un-preempt'd endpoints.
+      steps <- append(steps, list(makeHandleStep("__no-preempt__")))
+
+      # We aren't going to serve this endpoint; see if any mounted routers will
+      mountSteps <- lapply(names(private$mnts), function(mountPath) {
+        # (make step function)
+        function(...) {
+          resetForward()
           # TODO: support globbing?
 
-          if (nchar(path) >= nchar(mountPath) && substr(path, 0, nchar(mountPath)) == mountPath){
+          if (nchar(path) >= nchar(mountPath) && substr(path, 0, nchar(mountPath)) == mountPath) {
             # This is a prefix match or exact match. Let this router handle.
 
             # First trim the prefix off of the PATH_INFO element
             req$PATH_INFO <- substr(req$PATH_INFO, nchar(mountPath), nchar(req$PATH_INFO))
             return(private$mnts[[mountPath]]$route(req, res))
+          } else {
+            return(forward())
           }
         }
+      })
+      steps <- append(steps, mountSteps)
 
-        # No endpoint could handle this request. 404
-        val <- private$notFoundHandler(req=req, res=res)
-        return(val)
-      }, error=function(e){
-        # Error when routing
-        val <- private$errorHandler(req, res, e)
-        return(val)
-      }, finally= options(warn=oldWarn) )
+      # No endpoint could handle this request. 404
+      notFoundStep <- function(...) {
+        private$notFoundHandler(req = req, res = res)
+      }
+      steps <- append(steps, list(notFoundStep))
+
+      errorHandlerStep <- function(error, ...) {
+        private$errorHandler(req, res, error)
+      }
+
+      withCurrentExecDomain(req, res, { # used to allow `hasForwarded` to work
+        withWarn1({
+          runStepsIfForwarding(NULL, errorHandlerStep, steps)
+        })
+      })
     },
 
     # httpuv interface
-    call = function(req){
+    call = function(req) {
       # Set the arguments to an empty list
       req$args <- list()
       req$.internal <- new.env()
 
       res <- PlumberResponse$new(private$serializer)
+
+      # maybe return a promise object
       self$serve(req, res)
     },
     onHeaders = function(req){
@@ -753,3 +876,39 @@ plumber <- R6Class(
     }
   )
 )
+
+
+
+
+
+
+
+
+urlHost <- function(host, port, changeHostLocation = FALSE) {
+  if (isTRUE(changeHostLocation)) {
+    # upgrade swaggerCallback location to be localhost and not catch-all addresses
+    # shiny: https://github.com/rstudio/shiny/blob/95173f6/R/server.R#L781-L786
+    if (identical(host, "0.0.0.0")) {
+      # RStudio IDE does NOT like 0.0.0.0 locations.
+      # Must use 127.0.0.1 instead.
+      host <- "127.0.0.1"
+    } else if (identical(host, "::")) {
+      # upgrade ipv6 catch-all to ipv6 "localhost"
+      host <- "::1"
+    }
+  }
+
+  # if ipv6 address, surround in brackets
+  if (grepl(":[^/]", host)) {
+    host <- paste0("[", host, "]")
+  }
+  # if no match against a protocol
+  if (!grepl("://", host)) {
+    # add http protocol
+    # RStudio IDE does NOT like empty protocols like "127.0.0.1:1234/route"
+    # Works if supplying "http://127.0.0.1:1234/route"
+    host <- paste0("http://", host)
+  }
+
+  paste0(host, ":", port)
+}

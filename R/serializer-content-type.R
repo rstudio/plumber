@@ -1,7 +1,7 @@
 #' @rdname serializers
 #' @param type The value to provide for the `Content-Type` HTTP header.
 #' @export
-serializer_content_type <- function(type){
+serializer_content_type <- function(type) {
   if (missing(type)){
     stop("You must provide the custom content type to the serializer_content_type")
   }
@@ -17,4 +17,5 @@ serializer_content_type <- function(type){
   }
 }
 
+#' @include globals.R
 .globals$serializers[["contentType"]] <- serializer_content_type

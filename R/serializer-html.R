@@ -1,7 +1,7 @@
 #' @rdname serializers
 #' @export
-serializer_html <- function(){
-  function(val, req, res, errorHandler){
+serializer_html <- function() {
+  function(val, req, res, errorHandler) {
     tryCatch({
       res$setHeader("Content-Type", "text/html; charset=utf-8")
       res$body <- val
@@ -13,4 +13,5 @@ serializer_html <- function(){
   }
 }
 
+#' @include globals.R
 .globals$serializers[["html"]] <- serializer_html

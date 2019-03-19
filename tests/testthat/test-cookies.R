@@ -64,5 +64,3 @@ test_that("cookies can convert to string", {
   expect_equal(cookieToStr("abc", 123, expiration=expires),
                paste0("abc=123; Expires= ", expyStr, "; Max-Age= ", expiresSec))
 })
-
-
