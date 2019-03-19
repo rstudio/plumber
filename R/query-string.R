@@ -60,7 +60,7 @@ createPathRegex <- function(pathDef){
   # Create a regex from the defined path, substituting variables where appropriate
   match <- stringi::stri_match_all(
     pathDef,
-    # capture any plumber type (<arg:TYPE>) (typeToRegex(type) will yell if it is unknown)
+    # capture any plumber type (<arg:TYPE>) (typesToRegexps(type) will yell if it is unknown)
     # <arg> will be given the TYPE `defaultSwaggerType`
     regex = "/<(\\.?[a-zA-Z][\\w_\\.]*)(:([^>]*))?>"
   )[[1]]
@@ -80,14 +80,13 @@ createPathRegex <- function(pathDef){
     types[is.na(types)] <- defaultSwaggerType
   }
 
-  typedRegexs <- typeToRegex(types)
   pathRegex <- pathDef
-  for (typedRegex in typedRegexs) {
-    regexReplacement <- paste0("/(", typedRegex, ")$2")
+  regexps <- typesToRegexps(types)
+  for (regex in regexps) {
     pathRegex <- stringi::stri_replace_first_regex(
       pathRegex,
       pattern = "/(<\\.?[a-zA-Z][\\w_\\.:]*>)(/?)",
-      replacement = regexReplacement
+      replacement = paste0("/(", regex, ")$2")
     )
   }
 
@@ -100,10 +99,10 @@ createPathRegex <- function(pathDef){
 }
 
 
-typeToRegex <- function(type){
+typesToRegexps <- function(types) {
   # return vector of regex strings
   vapply(
-    swaggerTypeInfo[plumberToSwaggerType(type)],
+    swaggerTypeInfo[plumberToSwaggerType(types)],
     `[[`, character(1), "regex"
   )
 }
