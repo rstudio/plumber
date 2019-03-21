@@ -32,6 +32,8 @@ plumber 0.5.0
 
 ### Minor new features and improvements
 
+* Added new shorthand types for url parameters. (@byzheng, [#388](https://github.com/trestletech/plumber/pull/388))
+
 * Changed Swagger UI to use [swagger](https://github.com/rstudio/swagger) R package to display the
     swagger page. ([#365](https://github.com/trestletech/plumber/pull/365))
 
