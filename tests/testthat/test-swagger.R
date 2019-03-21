@@ -11,7 +11,9 @@ test_that("plumberToSwaggerType works", {
 
   expect_equal(plumberToSwaggerType("character"), "string")
 
-  expect_warning(plumberToSwaggerType("flargdarg"), "Unrecognized type:")
+  expect_warning({
+    expect_equal(plumberToSwaggerType("flargdarg"), "string")
+  }, "Unrecognized type:")
 })
 
 test_that("response attributes are parsed", {
