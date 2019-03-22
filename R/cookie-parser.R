@@ -6,7 +6,7 @@ cookieFilter <- function(req){
 
 #' @importFrom httpuv decodeURI
 #' @noRd
-parseCookies <- function(cookie){
+parseCookies <- function(cookie) {
   if (is.null(cookie) || nchar(cookie) == 0) {
     return(list())
   }
@@ -16,8 +16,8 @@ parseCookies <- function(cookie){
   cookieList <- strsplit(cookie, "=", fixed=TRUE)
 
   # Handle any non-existent cookie values.
-  for (i in 1:length(cookieList)){
-    if(length(cookieList[[i]])==1){
+  for (i in seq_along(cookieList)) {
+    if(length(cookieList[[i]]) == 1) {
       cookieList[[i]][[2]] <- ""
     }
   }

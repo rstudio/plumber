@@ -1,7 +1,7 @@
 #* @get /counter
-function(req, res){
+function(req, res) {
   count <- 0
-  if (!is.null(req$cookies$visitcounter)){
+  if (!is.null(req$cookies$visitcounter)) {
     count <- as.numeric(req$cookies$visitcounter)
   }
   # Most people won't need to concern themselves with the path argument.
