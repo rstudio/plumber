@@ -1,11 +1,41 @@
 #' Store session data in encrypted cookies.
+#'
+#' \code{plumber} is using the crypto R package \code{sodium}, which binds to
+#' \code{libsodium}, "a modern, easy-to-use software library for encryption".
+#' Using \code{sodium}, \code{req$session} information is be preserved between
+#' requests in encrypted cookies.
+#'
+#' Currently, if no \code{key} value is provided, encrypted browser cookies can be valid
+#' until the \code{plumber} server is restarted.  Once restarted,  the new
+#' \code{plumber} server will create a new encryption key and all prior cookies
+#' will silently fail to parse, losing all \code{req$session} information.
+#'
+#' If a consistent \code{key} is provided each time a \code{plumber} server is
+#' launched, users will maintain \code{req$session} information between server resets.
+#'
+#' @section Storing secure key:
+#' While it is very quick to get started with user session cookies using
+#' \code{plumber}, please use exercise precaution when storing secure key information.
+#'
+#' Please: \itemize{
+#' \item Do NOT store keys in storage code.
+#' \item Do NOT store keys which can be accessed by everyone.
+#' \item Do NOT store keys which can be queried by everyone.
+#' }
+#'
+#' Instead, please: \itemize{
+#' \item Use a key management system or password application.
+#' \item (or) Store it on a disk that only you have access to.
+#' Such as modifying the file permissions to "user read only" (\code{chmod 400 myfile.txt}) to your file from being modified and prevent others from reading your file.
+#' }
+#'
 #' @param key The secret key to use. This must be consistent across all sessions
 #'   where you want to save/restore encrypted cookies. It should be a long and
-#'   complex character string to bolster security.
+#'   complex character string to bolster security. Raw vectors with a length of
+#'   32 or more may also be used.
 #' @param name The name of the cookie in the user's browser.
 #' @param ... Arguments passed on to the \code{response$setCookie} call to,
 #'   for instance, set the cookie's expiration.
-#' @include plumber.R
 #' @export
 sessionCookie <- function(
   key = randomCookieKey(),
@@ -35,6 +65,7 @@ sessionCookie <- function(
       tryCatch({
         req$session <- decodeCookie(session, key)
       }, error = function(e) {
+        # silently fail
         NULL # kept to not re-throw warning
       })
 
@@ -45,10 +76,10 @@ sessionCookie <- function(
       if (!is.null(session)) {
         res$setCookie(name, encodeCookie(session, key), ...)
       } else {
-        # TODO-barret unset cookie if it exists in
+        # session is null
         if (!is.null(req$cookies[[name]])) {
           # no session to save, but had session to parse
-          # remove cookie
+          # remove cookie session cookie
           res$removeCookie(name, "", ...)
         }
       }
@@ -58,6 +89,12 @@ sessionCookie <- function(
   )
 }
 
+#' Random cookie key generator
+#'
+#'
+#' @return A 64 digit hexadecimal number to be used as a key for cookie encryption.
+#' @export
+#' @seealso \code{\link{sessionCookie}}
 randomCookieKey <- function() {
   sodium::bin2hex(
     sodium::random(32)
@@ -165,9 +202,18 @@ decodeCookie <- function(encodedValue, key) {
 
   # split parts, then decrypt -> as char -> fromJSON
   valueParts <- split_val_and_nonce(encodedValue)
-  x <-
+  xChar <-
     sodium::data_decrypt(valueParts$value, key, valueParts$nonce) %>%
-    rawToChar() %>%
+    rawToChar()
+
+  tryCatch({
+    x <- safeFromJSON(xChar)
+  }, error = function(e) {
+    # print warning
+    warning("Cookie information could not be converted from JSON.  Please make sure session objects being stored can be converted to and from JSON cleanly.")
+    # re throw error
+    stop(e)
+  })
 
     safeFromJSON() # TODO-barret report this error
   return(x)
