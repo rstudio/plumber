@@ -6,7 +6,7 @@ warnings_are_errors: true
 r:
   - oldrel
   - release
-  - devel
+  # - devel
 
 # install sodium
 addons:

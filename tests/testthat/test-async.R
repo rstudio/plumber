@@ -6,6 +6,7 @@ library(promises) # reexports
 
 # Block until all pending later tasks have executed
 wait_for_async <- function() {
+  skip_if_not_installed("later")
   while (!later::loop_empty()) {
     later::run_now()
     Sys.sleep(0.00001)
