@@ -7,19 +7,23 @@
 #'   for instance, set the cookie's expiration.
 #' @include plumber.R
 #' @export
-sessionCookie <- function(key, name="plumber", ...){
-  if (missing(key)){
-    stop("You must define an encryption key or set it to NULL to disable encryption")
-  }
+sessionCookie <- function(
+  key = randomCookieKey(),
+  name = "plumber",
+  ...
+) {
 
-  if (!is.null(key)){
-    checkPKI()
-    key <- PKI::PKI.digest(charToRaw(key), "SHA256")
+  if (missing(key)) {
+    warning("If 'key' is missing, all cookies will become invalid when server stops")
   }
+  key <- asCookieKey(key)
+
+  # force the args to evaluate
+  list(...)
 
   # Return a list that can be added to registerHooks()
   list(
-    preroute = function(req, res, data){
+    preroute = function(req, res, data) {
 
       cookies <- req$cookies
       if (is.null(cookies)){
@@ -28,44 +32,159 @@ sessionCookie <- function(key, name="plumber", ...){
         cookies <- parseCookies(req$HTTP_COOKIE)
       }
       session <- cookies[[name]]
+      tryCatch({
+        req$session <- decodeCookie(session, key)
+      }, error = function(e) {
+        NULL # kept to not re-throw warning
+      })
 
-      if (!is.null(session) && !identical(session, "")){
-        if (!is.null(key)){
-          tryCatch({
-            session <- base64enc::base64decode(session)
-            session <- PKI::PKI.decrypt(session, key, "aes256")
-            session <- rawToChar(session)
-
-            session <- safeFromJSON(session)
-          }, error=function(e){
-            warning("Error processing session cookie. Perhaps your secret changed?")
-            session <<- NULL
-          })
-        }
-      }
-      req$session <- session
     },
-    postroute = function(value, req, res, data){
-      if (!is.null(req$session)){
-        sess <- jsonlite::toJSON(req$session)
-        if (!is.null(key)){
-          sess <- PKI::PKI.encrypt(charToRaw(sess), key, "aes256")
-          sess <- base64enc::base64encode(sess)
+    postroute = function(value, req, res, data) {
+      session <- req$session
+      # save session in a cookie
+      if (!is.null(session)) {
+        res$setCookie(name, encodeCookie(session, key), ...)
+      } else {
+        # TODO-barret unset cookie if it exists in
+        if (!is.null(req$cookies[[name]])) {
+          # no session to save, but had session to parse
+          # remove cookie
+          res$removeCookie(name, "", ...)
         }
-        res$setCookie(name, sess, ...)
       }
+
       value
     }
   )
 }
 
-#' @importFrom utils packageVersion
-#' @importFrom utils compareVersion
-#' @noRd
-checkPKI <- function(){
-  pkiVer <- tryCatch({as.character(packageVersion("PKI"))},
-                     error=function(e){"0.0.0"});
-  if (compareVersion(pkiVer, "0.1.2") < 0){
-    stop("You need PKI version 0.1.2 or greater installed.")
+randomCookieKey <- function() {
+  sodium::bin2hex(
+    sodium::random(32)
+  )
+}
+
+
+asCookieKey <- function(key) {
+  if (is.null(key)) {
+    warning(
+      "\n",
+      "\n\t!! Cookie secret 'key' is `NULL`. Cookies will not be encrypted.   !!",
+      "\n\t!! Support for unencrypted cookies deprecated and will be removed. !!",
+      "\n\t!! Please see `?sessionCookie` for details.                        !!",
+      "\n"
+    )
+    return(NULL)
   }
+
+  if (is.raw(key)) {
+    # turn binary key into hex string.
+    # run through all checks as a character string.
+    # this should pass given it's a "valid" raw string
+    key <- sodium::bin2hex(key)
+  }
+
+  if (!is.character(key)) {
+    stop(
+      "Cookie secret 'key' must be a 64 digit hexadecimal string",
+      " or a length 32 raw vector.",
+      "\nPlease see `?sessionCookie` for details."
+    )
+  }
+
+  if (
+    nchar(key) != 64 ||
+    grepl("[^0-9a-fA-F]", key)
+  ) {
+    # turn key into 64 digit hex str by hashing it
+    if (nchar(key) < 64) {
+
+      warning(
+        "\n",
+        "\n\t!! Low entropy cookie secret 'key' detected!      !!",
+        "\n\t!! We recommend you upgrade to a more secure key. !!",
+        "\n\t!! Please see `?sessionCookie` for details.       !!",
+        "\n"
+      )
+    }
+    key <-
+      serialize(key, NULL) %>%
+      sodium::sha256() %>%
+      sodium::bin2hex()
+  }
+
+  sodium::hex2bin(key)
+}
+
+
+encodeCookie <- function(x, key) {
+  if (is.null(x)) {
+    return("")
+  }
+  xRaw <-
+    x %>%
+    jsonlite::toJSON() %>%
+    charToRaw()
+
+  if (is.null(key)) {
+    encodedCookie <- base64enc::base64encode(xRaw)
+    return(encodedCookie)
+  }
+
+  # key provided
+
+  # random nonce for each request
+  nonce <- sodium::random(24)
+  # toJSON -> as raw -> encrypt
+  encryptedX <- sodium::data_encrypt(xRaw, key, nonce)
+
+  encodedCookie <- combine_val_and_nonce(encryptedX, nonce)
+  return(encodedCookie)
+}
+
+
+# any bad result returns NULL
+# any invalid input returns NULL
+decodeCookie <- function(encodedValue, key) {
+  if (is.null(encodedValue) || identical(encodedValue, "")) {
+    # nothing to decode
+    return(NULL)
+  }
+
+  # if no key provided
+  if (is.null(key)) {
+    value <-
+      encodedValue %>%
+      base64enc::base64decode() %>%
+      rawToChar() %>%
+      safeFromJSON()
+    return(value)
+  }
+
+  # key provided
+
+  # split parts, then decrypt -> as char -> fromJSON
+  valueParts <- split_val_and_nonce(encodedValue)
+  x <-
+    sodium::data_decrypt(valueParts$value, key, valueParts$nonce) %>%
+    rawToChar() %>%
+
+    safeFromJSON() # TODO-barret report this error
+  return(x)
+}
+
+
+# combine/split with "_" as it is not in the base64 vocab
+combine_val_and_nonce <- function(val, nonce) {
+  paste0(base64enc::base64encode(val), "_", base64enc::base64encode(nonce))
+}
+split_val_and_nonce <- function(x) {
+  vals <- strsplit(x, "_")[[1]]
+  if (length(vals) != 2) {
+    stop("Could not separate secure cookie parts")
+  }
+  list(
+    value = base64enc::base64decode(vals[[1]]),
+    nonce = base64enc::base64decode(vals[[2]])
+  )
 }
