@@ -1,5 +1,11 @@
 context("Sessions")
 
+skip_if_no_cookie_support <- function() {
+  skip_if_not_installed("sodium")
+  skip_if_not_installed("base64enc")
+}
+
+
 make_req_cookie <- function(verb, path, cookie){
   req <- new.env()
   req$REQUEST_METHOD <- toupper(verb)
@@ -12,68 +18,121 @@ make_req_cookie <- function(verb, path, cookie){
 }
 
 test_that("cookies are set", {
-  r <- plumber$new()
+  skip_if_no_cookie_support()
 
-  expr <- expression(function(req, res){ req$session <- list(abc=123); TRUE })
+  r <- plumber$new()
+  expr <- expression(function(req, res){ req$session <- list(abc = 1234); TRUE })
 
   r$handle("GET", "/", expr)
 
-  sc <- sessionCookie("mysecret", name="plcook")
+  key <- rep("mysecret", 10) %>% paste0(collapse = "") %>% asCookieKey()
+  sc <- sessionCookie(
+    key,
+    name = "plcook"
+  )
 
   r$registerHooks(sc)
 
   res <- PlumberResponse$new()
   r$serve(make_req_cookie("GET", "/"), res)
 
-  key <- PKI::PKI.digest(charToRaw("mysecret"), "SHA256")
   cook <- res$headers[["Set-Cookie"]]
   expect_match(cook, "^plcook")
-  cook <- gsub("^plcook=", "", cook, perl=TRUE)
-  de <- PKI::PKI.decrypt(base64enc::base64decode(cook), key, "aes256")
+  cook <- gsub("^plcook=", "", cook, perl = TRUE)
+  expect_equal(decodeCookie(cook, key), list(abc = 1234))
+})
 
-  expect_equal(rawToChar(de), '{"abc":[123]}')
+test_that("cookies are unset", {
+  skip_if_no_cookie_support()
+
+  r <- plumber$new()
+  exprRemoveSession <- expression(function(req, res){ req$session <- NULL; TRUE })
+
+  r$handle("GET", "/", exprRemoveSession)
+
+  key <- rep("mysecret", 10) %>% paste0(collapse = "") %>% asCookieKey()
+  sc <- sessionCookie(
+    key,
+    name = "plcook"
+  )
+
+  r$registerHooks(sc)
+
+  res <- PlumberResponse$new()
+  r$serve(
+    make_req_cookie(
+      "GET", "/",
+      # start with a session cookie
+      paste0("plcook=", encodeCookie(list(abc = 1234), key))
+    ),
+    res
+  )
+
+  cook <- res$headers[["Set-Cookie"]]
+  expect_match(cook, "^plcook=;")
+  expect_true(grepl("Thu, 01 Jan 1970", cook, fixed = TRUE))
 })
 
 test_that("cookies are read", {
+  skip_if_no_cookie_support()
+
   r <- plumber$new()
 
   expr <- expression(function(req, res){ req$session$abc })
 
   r$handle("GET", "/", expr)
 
-  sc <- sessionCookie("mysecret", name="plcook")
-
+  key <- rep("mysecret", 10) %>% paste0(collapse = "") %>% asCookieKey()
+  sc <- sessionCookie(
+    key,
+    name = "plcook"
+  )
   r$registerHooks(sc)
 
-  res <- PlumberResponse$new()
 
   # Create the request with an encrypted cookie
-  key <- PKI::PKI.digest(charToRaw("mysecret"), "SHA256")
-  data <- '{"abc":[123]}'
-  enc <- PKI::PKI.encrypt(charToRaw(data), key, "aes256")
-  r$serve(make_req_cookie("GET", "/", paste0('plcook=', base64enc::base64encode(enc))), res)
+  res <- PlumberResponse$new()
+  r$serve(
+    make_req_cookie(
+      "GET", "/",
+      # start with a session cookie
+      paste0("plcook=", encodeCookie(list(abc = 1234), key))
+    ),
+    res
+  )
 
-  expect_equal(res$body, jsonlite::toJSON(123))
+  expect_equal(res$body, jsonlite::toJSON(1234))
 })
 
 test_that("invalid cookies/JSON are handled", {
+  skip_if_no_cookie_support()
+
   r <- plumber$new()
 
-  expr <- expression(function(req, res){ ifelse(is.null(req$session), "NULL", req$session) })
+  expr <- expression(function(req, res){ ifelse(is.null(req$session), "no session", req$session) })
 
   r$handle("GET", "/", expr)
 
-  sc <- sessionCookie("mysecret", name="plcook")
-
+  key <- rep("mysecret", 10) %>% paste0(collapse = "") %>% asCookieKey()
+  sc <- sessionCookie(
+    key,
+    name = "plcook"
+  )
   r$registerHooks(sc)
 
   res <- PlumberResponse$new()
 
-  key <- PKI::PKI.digest(charToRaw("thewrongkey"), "SHA256")
-  data <- '{"abc":[123]}'
-  enc <- PKI::PKI.encrypt(charToRaw(data), key, "aes256")
-  expect_warning({
-    r$serve(make_req_cookie("GET", "/", paste0('plcook=', base64enc::base64encode(enc))), res)
+  badKey <- randomCookieKey() %>% asCookieKey()
+  x <- list(abc = 1234)
+  encodedX <- encodeCookie(x, badKey)
+  expect_silent({
+    r$serve(
+      make_req_cookie(
+        "GET", "/",
+        paste0('plcook=', encodedX)
+      ),
+      res
+    )
   })
-  expect_equal(res$body, jsonlite::toJSON("NULL"))
+  expect_equal(res$body, jsonlite::toJSON("no session"))
 })
