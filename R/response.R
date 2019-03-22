@@ -33,11 +33,11 @@ PlumberResponse <- R6Class(
         body = body
       )
     },
-    # TODO: support multiple setCookies per response
-    setCookie = function(name, value, path, expiration=FALSE, http=FALSE, secure=FALSE){
+    # TODO if name and value are a vector of same length, call set cookie many times
+    setCookie = function(name, value, path, expiration = FALSE, http = FALSE, secure = FALSE) {
       self$setHeader("Set-Cookie", cookieToStr(name, value, path, expiration, http, secure))
     },
-    removeCookie = function(name, path, http=FALSE, secure=FALSE, ...) {
+    removeCookie = function(name, path, http = FALSE, secure = FALSE, ...) {
       self$setHeader("Set-Cookie", removeCookieStr(name, path, http, secure))
     }
   )
