@@ -16,8 +16,14 @@ addons:
     packages:
       - libsodium-dev
 
-# testing coverage
-r_packages:
-  - covr
-after_success:
-  - Rscript -e 'library(covr);codecov()'
+
+jobs:
+  include:
+    - stage: "post processing"
+      name: "covr"
+      r: release
+      r_packages:
+        - covr
+      # testing coverage
+      after_success:
+        - Rscript -e 'library(covr);codecov()'
