@@ -4,13 +4,13 @@
 \alias{sessionCookie}
 \title{Store session data in encrypted cookies.}
 \usage{
-sessionCookie(key = randomCookieKey(), name = "plumber", ...)
+sessionCookie(key, name = "plumber", ...)
 }
 \arguments{
-\item{key}{The secret key to use. This must be consistent across all sessions
-where you want to save/restore encrypted cookies. It should be a long and
-complex character string to bolster security. Raw vectors with a length of
-32 or more may also be used.}
+\item{key}{The secret key to use. This must be consistent across all R sessions
+where you want to save/restore encrypted cookies. It should be produced using
+\code{\link{randomCookieKey}}. Please see the "Storing secure keys" section for more details
+complex character string to bolster security. # TODO-barret}
 
 \item{name}{The name of the cookie in the user's browser.}
 
@@ -18,35 +18,72 @@ complex character string to bolster security. Raw vectors with a length of
 for instance, set the cookie's expiration.}
 }
 \description{
-\code{plumber} is using the crypto R package \code{sodium}, which binds to
-\code{libsodium}, "a modern, easy-to-use software library for encryption".
-Using \code{sodium}, \code{req$session} information is be preserved between
-requests in encrypted cookies.
+\code{plumber} uses the crypto R package \code{sodium}, to encrypt/decrypt
+\code{req$session} information for each server request.
 }
 \details{
-Currently, if no \code{key} value is provided, encrypted browser cookies can be valid
-until the \code{plumber} server is restarted.  Once restarted,  the new
-\code{plumber} server will create a new encryption key and all prior cookies
-will silently fail to parse, losing all \code{req$session} information.
-
-If a consistent \code{key} is provided each time a \code{plumber} server is
-launched, users will maintain \code{req$session} information between server resets.
+The cookie's secret encryption \code{key} value must be consistent to maintain
+\code{req$session} information between server restarts.
 }
-\section{Storing secure key}{
+\section{Storing secure keys}{
 
 While it is very quick to get started with user session cookies using
-\code{plumber}, please use exercise precaution when storing secure key information.
+\code{plumber}, please exercise precaution when storing secure key information.
+If a malicious person were to gain access to the secret \code{key}, they woud
+be able to eavesdrop on all \code{req$session} information and/or tamper with
+\code{req$session} information being processed.
 
 Please: \itemize{
-\item Do NOT store keys in storage code.
-\item Do NOT store keys which can be accessed by everyone.
-\item Do NOT store keys which can be queried by everyone.
+\item Do NOT store keys in source control.
+\item Do NOT store keys on disk with permissions that allow it to be accessed by everyone.
+\item Do NOT store keys in databases which can be queried by everyone.
 }
 
 Instead, please: \itemize{
-\item Use a key management system or password application.
+\item Use a key management system, such as
+\href{https://github.com/r-lib/keyring}{keyring} (preferred)
 \item (or) Store it on a disk that only you have access to.
-Such as modifying the file permissions to "user read only" (\code{chmod 400 myfile.txt}) to your file from being modified and prevent others from reading your file.
-}
+Such as modifying the file permissions to "user read only"
+(\code{chmod 400 myfile.txt}) to your file from being modified and prevent
+others from reading your file.
+} Examples of both of these solutions are done in the Examples section.
 }
 
+\examples{
+\dontrun{## Set secret key using `keyring` (preferred method)
+keyring::key_set_with_value("plumber_api", plumber::randomCookieKey())
+
+
+# Load a router
+pr <- plumb(system.file(file.path("examples", "01-append", "plumber.R"), package = "plumber"))
+
+# Add cookie support and retrieve secret key using `keyring`
+pr$registerHooks(
+  sessionCookie(
+    keyring::key_get("plumber_api")
+  )
+)
+pr$run()
+
+
+#### -------------------------------- ###
+
+
+## Save key to a local file
+pswd_file <- "normal_file.txt"
+cat(plumber::randomCookieKey(), file = pswd_file)
+# Make file read-only
+Sys.chmod(pswd_file, mode = "0400")
+
+
+# Load a router
+pr <- plumb(system.file(file.path("examples", "01-append", "plumber.R"), package = "plumber"))
+
+# Add cookie support and retrieve secret key from file
+pr$registerHooks(
+  sessionCookie(
+    readLines(pswd_file, warn = FALSE)
+  )
+)
+pr$run()}
+}
