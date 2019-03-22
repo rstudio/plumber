@@ -36,9 +36,27 @@ PlumberResponse <- R6Class(
     # TODO: support multiple setCookies per response
     setCookie = function(name, value, path, expiration=FALSE, http=FALSE, secure=FALSE){
       self$setHeader("Set-Cookie", cookieToStr(name, value, path, expiration, http, secure))
+    },
+    removeCookie = function(name, path, http=FALSE, secure=FALSE, ...) {
+      self$setHeader("Set-Cookie", removeCookieStr(name, path, http, secure))
     }
   )
 )
+
+removeCookieStr <- function(name, path, http = FALSE, secure = FALSE) {
+  str <- paste0(name, "=; ")
+  if (!missing(path)){
+    str <- paste0(str, "Path=", path, "; ")
+  }
+  if (!missing(http) && http){
+    str <- paste0(str, "HttpOnly; ")
+  }
+  if (!missing(secure) && secure){
+    str <- paste0(str, "Secure; ")
+  }
+  str <- paste0(str, "Expires=Thu, 01 Jan 1970 00:00:00 GMT")
+  str
+}
 
 #' @importFrom httpuv encodeURI
 #' @noRd
