@@ -13,7 +13,7 @@ parseCookies <- function(cookie) {
   cookie <- strsplit(cookie, ";", fixed=TRUE)[[1]]
   cookie <- sub("\\s*([\\S*])\\s*", "\\1", cookie, perl=TRUE)
 
-  cookieList <- strsplit(cookie, "=", fixed=TRUE)
+  cookieList <- stri_split_fixed(str = cookie, pattern = "=", n = 2)
 
   # Handle any non-existent cookie values.
   for (i in seq_along(cookieList)) {
