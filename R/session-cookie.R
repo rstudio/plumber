@@ -214,8 +214,6 @@ decodeCookie <- function(encodedValue, key) {
     # re throw error
     stop(e)
   })
-
-    safeFromJSON() # TODO-barret report this error
   return(x)
 }
 
