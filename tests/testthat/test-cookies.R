@@ -1,31 +1,44 @@
 context("Cookies")
 
-test_that("cookies are parsed", {
-  co <- parseCookies("spaced=cookie%20here; another=2")
+skip_if_no_cookie_support <- function() {
+  skip_if_not_installed("sodium")
+  skip_if_not_installed("base64enc")
+}
 
-  expect_equal(co$spaced, "cookie here")
-  expect_equal(co$another, "2")
+test_that("cookies are parsed", {
+
+  cookies <- parseCookies("spaced=cookie%20here; another=2")
+  expect_equal(names(cookies), c("spaced", "another"))
+  expect_equal(cookies$spaced, "cookie here")
+  expect_equal(cookies$another, "2")
+
+  cookies <- parseCookies("a=zxcv=asdf; b=qwer=ttyui")
+  expect_equal(names(cookies), c("a", "b"))
+  expect_equal(cookies$a, "zxcv=asdf")
+  expect_equal(cookies$b, "qwer=ttyui")
+
 })
 
 test_that("missing cookies are an empty list", {
-  co <- parseCookies("")
+  cookies <- parseCookies("")
 
-  expect_equal(co, list())
+  expect_equal(cookies, list())
 })
 
-test_that("the cookies list is set", {
+cookieReq <- function(cookieStr) {
   req <- new.env()
-  req$HTTP_COOKIE <- "abc=123"
+  req$HTTP_COOKIE <- cookieStr
   cookieFilter(req)
+  req
+}
 
+test_that("the cookies list is set", {
+  req <- cookieReq("abc=123")
   expect_equal(req$cookies$abc, "123")
 })
 
 test_that("missing cookie values are empty string", {
-  req <- new.env()
-  req$HTTP_COOKIE <- "abc="
-  cookieFilter(req)
-
+  req <- cookieReq("abc=")
   expect_equal(req$cookies$abc, "")
 })
 
@@ -63,4 +76,187 @@ test_that("cookies can convert to string", {
   # When given as a POSIXct
   expect_equal(cookieToStr("abc", 123, expiration=expires),
                paste0("abc=123; Expires= ", expyStr, "; Max-Age= ", expiresSec))
+})
+
+test_that("remove cookie string works", {
+  expect_equal(
+    removeCookieStr("asdf"),
+    "asdf=; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
+  )
+  expect_equal(
+    removeCookieStr("asdf", path = "/"),
+    "asdf=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
+  )
+  expect_equal(
+    removeCookieStr("asdf", http = TRUE),
+    "asdf=; HttpOnly; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
+  )
+  expect_equal(
+    removeCookieStr("asdf", secure = TRUE),
+    "asdf=; Secure; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
+  )
+  expect_equal(
+    removeCookieStr("asdf", path = "/", http = TRUE, secure = TRUE),
+    "asdf=; Path=/; HttpOnly; Secure; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
+  )
+})
+
+
+test_that("asCookieKey conforms entropy", {
+  skip_if_no_cookie_support()
+
+  cookieFromStr <- function(val, count) {
+    rep(val, count) %>%
+      paste0(collapse = "") %>%
+      asCookieKey()
+  }
+
+  expect_cookie_key <- function(key) {
+    expect_type(key, "raw")
+    expect_length(key, 32)
+  }
+
+  expect_warning({
+    expect_null(asCookieKey(NULL))
+  }, "Cookies will not be encrypted")
+
+  # not char or raw
+  expect_error({
+    asCookieKey(42)
+  })
+
+  # low entropy
+  expect_warning({
+    expect_cookie_key(asCookieKey(sodium::random(31)))
+  }, "Low entropy")
+  expect_warning({
+    expect_cookie_key(cookieFromStr("a", 63))
+  }, "Low entropy")
+
+  # converted to 64 digits
+  expect_cookie_key(cookieFromStr("a", 65))
+  expect_cookie_key(asCookieKey(sodium::random(100)))
+
+  # convert non hexadecimal to hexadecimal
+  expect_cookie_key(cookieFromStr("/", 64))
+
+  # Used as 64 digit hex bin
+  ## lower case a
+  char <- rep("a", 64) %>% paste0(collapse = "")
+  key <- asCookieKey(char)
+  expect_cookie_key(key)
+  expect_equal(key, sodium::hex2bin(char))
+
+  ## upper case a
+  char <- rep("A", 64) %>% paste0(collapse = "")
+  key <- asCookieKey(char)
+  expect_cookie_key(key)
+  expect_equal(key, sodium::hex2bin(char))
+
+  ## raw vector input
+  randomRaw <- sodium::random(32)
+  key <- asCookieKey(randomRaw)
+  expect_cookie_key(key)
+  expect_equal(key, randomRaw)
+})
+
+
+test_that("cookie encryption works", {
+  skip_if_no_cookie_support()
+
+  # check that you can't encode a NULL value
+  expect_equal(encodeCookie(NULL, NULL), "")
+  expect_equal(encodeCookie(NULL, asCookieKey(randomCookieKey())), "")
+
+  xVals <- list(
+    list(),
+    "",
+    list(a = 4, b = 3),
+    rep("1234567890", 100) %>% paste0(collapse = "")
+  )
+  keys <- list(
+    NULL, # no key
+    asCookieKey(randomCookieKey()), # random key
+    asCookieKey(randomCookieKey()) # different random key
+  )
+
+  for (key in keys) {
+    for (x in xVals) {
+      encrypted <- encodeCookie(x, key)
+      encryptedStr <- cookieToStr("cookieVal", encrypted)
+
+      encryptedParsed <- parseCookies(encryptedStr)
+      maybeX <- decodeCookie(encryptedParsed$cookieVal, key)
+      expect_equal(x, maybeX)
+    }
+  }
+
+})
+
+test_that("cookie encyption fails smoothly", {
+  skip_if_no_cookie_support()
+
+  x <- list(x = 4, y = 5)
+
+  # garbage in
+  garbage <- x %>%
+    serialize(NULL) %>%
+    sodium::hash() %>% # make "garbage"
+    base64enc::base64encode()
+
+  # garbage in, no key
+  expect_error({
+    decodeCookie(garbage, NULL)
+  }, "not a valid JSON string")
+  # garbage in, key
+  expect_error({
+    decodeCookie(garbage, asCookieKey(randomCookieKey()))
+  }, "Could not separate")
+
+  infoList <- list(
+    # different cookies
+    list(
+      a = asCookieKey(randomCookieKey()),
+      b = asCookieKey(randomCookieKey()),
+      error = "Failed to decrypt"
+    ),
+    # not encrypted, try to decrypt
+    list(
+      a = NULL,
+      b = asCookieKey(randomCookieKey()),
+      error = "Could not separate"
+    ),
+    # encrypted, no decryption
+    list(
+      a = asCookieKey(randomCookieKey()),
+      b = NULL,
+      error = "(not a valid JSON string|embedded nul in string)"
+    )
+  )
+
+  for (info in infoList) {
+    keyA <- info$a
+    keyB <- info$b
+    err <- info$error
+
+    expect_error({
+      encrypted <- encodeCookie(x, keyA)
+      encryptedStr <- cookieToStr("cookieVal", encrypted)
+
+      encryptedParsed <- parseCookies(encryptedStr)
+      maybeX <- decodeCookie(encryptedParsed$cookieVal, keyB)
+    }, err)
+  }
+
+})
+
+
+test_that("large cookie size makes warning", {
+  skip_if_no_cookie_support()
+
+  largeObj <- rbind(iris, iris)
+  encrypted <- encodeCookie(largeObj, NULL)
+  expect_warning({
+    cookieToStr("cookieVal", encrypted)
+  }, "Cookie being saved is too large")
 })
