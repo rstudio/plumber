@@ -99,11 +99,14 @@ cookieToStr <- function(name, value, path, expiration=FALSE, http=FALSE, secure=
 
   # double check size limit isn't reached
   cookieByteSize <- length(charToRaw(ret))
+  # http://browsercookielimits.squawky.net/#limits
+  #  typical browsers support 4096.  A couple safari based browsers max out at 4093.
   if (cookieByteSize > 4093) {
     warning(
       "Cookie being saved is too large",
       " (> 4093 bytes; found ", cookieByteSize, " bytes).",
-      " Browsers may not support such large. ")
+      " Browsers may not support such a large value.\n",
+      "Consider using a database and only storing minimal information.")
   }
 
   ret
