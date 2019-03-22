@@ -5,7 +5,7 @@ RUN apt-get update -qq && apt-get install -y \
   curl \
   libxml2-dev \
   git-core \
-  libsodium \
+  libsodium-dev \
   libssl-dev/unstable \
   libssh2-1 \
   texlive-latex-base \
