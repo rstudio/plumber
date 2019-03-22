@@ -4,7 +4,7 @@
 \alias{sessionCookie}
 \title{Store session data in encrypted cookies.}
 \usage{
-sessionCookie(key, name = "plumber", ...)
+sessionCookie(key = randomCookieKey(), name = "plumber", ...)
 }
 \arguments{
 \item{key}{The secret key to use. This must be consistent across all sessions
