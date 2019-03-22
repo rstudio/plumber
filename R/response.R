@@ -77,5 +77,16 @@ cookieToStr <- function(name, value, path, expiration=FALSE, http=FALSE, secure=
   }
 
   # Trim last '; '
-  substr(str, 0, nchar(str)-2)
+  ret <- substr(str, 0, nchar(str)-2)
+
+  # double check size limit isn't reached
+  cookieByteSize <- length(charToRaw(ret))
+  if (cookieByteSize > 4093) {
+    warning(
+      "Cookie being saved is too large",
+      " (> 4093 bytes; found ", cookieByteSize, " bytes).",
+      " Browsers may not support such large. ")
+  }
+
+  ret
 }
