@@ -17,7 +17,7 @@ do_deploy_api(drop, "github", "./inst/examples/03-github/", 8003)
 
 # Sessions
 do_deploy_api(drop, "sessions", "./inst/examples/06-sessions/", 8006,
-              preflight="pr$addGlobalProcessor(plumber::sessionCookie('secret', 'cookieName', path='/'));")
+              preflight="pr$registerHooks(plumber::sessionCookie('secret', 'cookieName', path='/'));")
 
 # Mailgun
 install_package_secure(drop, "htmltools")

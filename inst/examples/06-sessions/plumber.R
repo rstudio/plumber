@@ -12,7 +12,7 @@ function(req, res) {
 
 #* Example using req$session. Requires adding "sessionCookie()" support to your router in order
 #* to work:
-#* `pr <- plumb("file.R"); pr$addGlobalProcessor(sessionCookie("secret", "cookieName")); pr$run()`
+#* `pr <- plumb("file.R"); pr$registerHooks(sessionCookie("secret", "cookieName")); pr$run()`
 #* @get /sessionCounter
 function(req){
   count <- 0
