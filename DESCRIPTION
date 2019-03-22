@@ -26,14 +26,14 @@ Imports:
     jsonlite (>= 0.9.16),
     httpuv (>= 1.4.5.9002),
     crayon,
-    promises
+    promises,
+    sodium
 LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
     testthat (>= 0.11.0),
     XML,
     rmarkdown,
-    PKI,
     base64enc,
     htmlwidgets,
     visNetwork,

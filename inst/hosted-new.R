@@ -16,7 +16,6 @@ install_package_secure(drop, "digest")
 do_deploy_api(drop, "github", "./inst/examples/03-github/", 8003)
 
 # Sessions
-droplet_ssh(drop, 'R -e "install.packages(\\"PKI\\",,\\"https://www.rforge.net\\")"')
 do_deploy_api(drop, "sessions", "./inst/examples/06-sessions/", 8006,
               preflight="pr$addGlobalProcessor(plumber::sessionCookie('secret', 'cookieName', path='/'));")
 
