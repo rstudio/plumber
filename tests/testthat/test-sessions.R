@@ -38,7 +38,8 @@ test_that("cookies are set", {
 
   cook <- res$headers[["Set-Cookie"]]
   expect_match(cook, "^plcook")
-  cook <- gsub("^plcook=", "", cook, perl = TRUE)
+  cook <- sub("^plcook=", "", cook, perl = TRUE)
+  cook <- sub(";.*", "", cook)
   expect_equal(decodeCookie(cook, asCookieKey(key)), list(abc = 1234))
 })
 
