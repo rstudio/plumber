@@ -31,17 +31,32 @@
 #' @param key The secret key to use. This must be consistent across all R sessions
 #'   where you want to save/restore encrypted cookies. It should be produced using
 #'   \code{\link{randomCookieKey}}. Please see the "Storing secure keys" section for more details
-#'   complex character string to bolster security. # TODO-barret
+#'   complex character string to bolster security.
 #' @param name The name of the cookie in the user's browser.
-#' @param ... Arguments passed on to the \code{response$setCookie} call to,
-#'   for instance, set the cookie's expiration.
+#' @param expiration A number representing the number of seconds into the future
+#'   before the cookie expires or a \code{POSIXt} date object of when the cookie expires.
+#'   Defaults to the end of the user's browser session.
+#' @param http Boolean that adds the \code{HttpOnly} cookie flag that tells the browser
+#'   to save the cookie and to NOT send it to client-side scripts. This mitigates \href{https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting}{cross-site scripting}.
+#'   Defaults to \code{TRUE}.
+#' @param secure Boolean that adds the \code{Secure} cookie flag.  This should be set
+#'   when the route is eventually delivered over \href{https://en.wikipedia.org/wiki/HTTPS}{HTTPS}.
 #' @export
+#' @seealso \itemize{
+#' \item \code{\href{https://github.com/jeroen/sodium}{sodium}}: R bindings to 'libsodium'
+#' \item \code{\href{https://download.libsodium.org/doc/}{libsodium}}: A Modern and Easy-to-Use Crypto Library
+#' \item \code{\href{https://github.com/r-lib/keyring}{keyring}}: Access the system credential store from R
+#' \item \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#Directives}{Set-Cookie flags}: Descriptions of different flags for \code{Set-Cookie}
+#' \item \href{https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting}{Cross-site scripting}: A security exploit which allows an attacker to inject into a website malicious client-side code
+#' }
 #' @examples
-#' \dontrun{## Set secret key using `keyring` (preferred method)
+#' \dontrun{
+#'
+#' ## Set secret key using `keyring` (preferred method)
 #' keyring::key_set_with_value("plumber_api", plumber::randomCookieKey())
 #'
 #'
-#' # Load a router
+#' # Load a plumber API
 #' pr <- plumb(system.file(file.path("examples", "01-append", "plumber.R"), package = "plumber"))
 #'
 #' # Add cookie support and retrieve secret key using `keyring`
@@ -63,7 +78,7 @@
 #' Sys.chmod(pswd_file, mode = "0400")
 #'
 #'
-#' # Load a router
+#' # Load a plumber API
 #' pr <- plumb(system.file(file.path("examples", "01-append", "plumber.R"), package = "plumber"))
 #'
 #' # Add cookie support and retrieve secret key from file
@@ -72,12 +87,16 @@
 #'     readLines(pswd_file, warn = FALSE)
 #'   )
 #' )
-#' pr$run()}
+#' pr$run()
+#'
+#' }
 
 sessionCookie <- function(
   key,
   name = "plumber",
-  ...
+  expiration = FALSE,
+  http = TRUE,
+  secure = FALSE
 ) {
 
   if (missing(key)) {
@@ -86,7 +105,7 @@ sessionCookie <- function(
   key <- asCookieKey(key)
 
   # force the args to evaluate
-  list(...)
+  list(expiration, http, secure)
 
   # Return a list that can be added to registerHooks()
   list(
@@ -111,13 +130,13 @@ sessionCookie <- function(
       session <- req$session
       # save session in a cookie
       if (!is.null(session)) {
-        res$setCookie(name, encodeCookie(session, key), ...)
+        res$setCookie(name, encodeCookie(session, key), expiration = expiration, http = http, secure = secure)
       } else {
         # session is null
         if (!is.null(req$cookies[[name]])) {
           # no session to save, but had session to parse
           # remove cookie session cookie
-          res$removeCookie(name, "", ...)
+          res$removeCookie(name, "", expiration = expiration, http = http, secure = secure)
         }
       }
 

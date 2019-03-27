@@ -9,6 +9,10 @@ plumber 0.5.0
   Please see `?sessionCookie` for more information.
   ([#404](https://github.com/trestletech/plumber/pull/404))
 
+* Session cookies set the `HttpOnly` flag by default to mitigate cross-site scripting (XSS).
+  Please see `?sessionCookie` for more information.
+  ([#404](https://github.com/trestletech/plumber/pull/404))
+
 * Wrap `jsonlite::fromJSON` to ensure that `jsonlite` never reads
   input as a remote address (such as a file path or URL) and attempts to parse
   that. The only known way to exploit this behavior in plumber unless an
