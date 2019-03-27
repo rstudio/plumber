@@ -50,7 +50,7 @@ Please: \itemize{
 
 Instead, please: \itemize{
 \item Use a key management system, such as
-\href{https://github.com/r-lib/keyring}{keyring} (preferred)
+\href{https://github.com/r-lib/keyring}{'keyring'} (preferred)
 \item (or) Store it on a disk that only you have access to.
 Such as modifying the file permissions to "user read only"
 (\code{chmod 400 myfile.txt}) to your file from being modified and prevent
@@ -102,9 +102,9 @@ pr$run()
 }
 \seealso{
 \itemize{
-\item \code{\href{https://github.com/jeroen/sodium}{sodium}}: R bindings to 'libsodium'
-\item \code{\href{https://download.libsodium.org/doc/}{libsodium}}: A Modern and Easy-to-Use Crypto Library
-\item \code{\href{https://github.com/r-lib/keyring}{keyring}}: Access the system credential store from R
+\item \href{https://github.com/jeroen/sodium}{'sodium'}: R bindings to 'libsodium'
+\item \href{https://download.libsodium.org/doc/}{'libsodium'}: A Modern and Easy-to-Use Crypto Library
+\item \href{https://github.com/r-lib/keyring}{'keyring'}: Access the system credential store from R
 \item \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#Directives}{Set-Cookie flags}: Descriptions of different flags for \code{Set-Cookie}
 \item \href{https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting}{Cross-site scripting}: A security exploit which allows an attacker to inject into a website malicious client-side code
 }
