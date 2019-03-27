@@ -105,59 +105,62 @@ test_that("remove cookie string works", {
 test_that("asCookieKey conforms entropy", {
   skip_if_no_cookie_support()
 
-  cookieFromStr <- function(val, count) {
+
+  secretFromStr <- function(val, count) {
     rep(val, count) %>%
-      paste0(collapse = "") %>%
-      asCookieKey()
+      paste0(collapse = "")
   }
 
   expect_cookie_key <- function(key) {
     expect_type(key, "raw")
     expect_length(key, 32)
   }
+  expect_invalid_cookie <- function(secret) {
+    expect_error({
+      asCookieKey(secret)
+    }, "Illegal cookie")
+  }
+  expect_legacy_cookie <- function(secret) {
+    expect_warning({
+      cookie <- asCookieKey(secret)
+    }, "Legacy cookie secret")
+    ret <- expect_cookie_key(cookie)
+    invisible(ret)
+  }
 
   expect_warning({
     expect_null(asCookieKey(NULL))
   }, "Cookies will not be encrypted")
 
-  # not char or raw
-  expect_error({
-    asCookieKey(42)
-  })
+  # not char
+  expect_invalid_cookie(42)
+  expect_invalid_cookie(sodium::random(31))
+  expect_invalid_cookie(sodium::random(100))
 
-  # low entropy
-  expect_warning({
-    expect_cookie_key(asCookieKey(sodium::random(31)))
-  }, "Low entropy")
-  expect_warning({
-    expect_cookie_key(cookieFromStr("a", 63))
-  }, "Low entropy")
-
-  # converted to 64 digits
-  expect_cookie_key(cookieFromStr("a", 65))
-  expect_cookie_key(asCookieKey(sodium::random(100)))
-
+  # legacy cookie
   # convert non hexadecimal to hexadecimal
-  expect_cookie_key(cookieFromStr("/", 64))
+  expect_legacy_cookie(secretFromStr("a", 63))
+  expect_legacy_cookie(secretFromStr("a", 65))
+  expect_legacy_cookie(secretFromStr("/", 64))
 
   # Used as 64 digit hex bin
   ## lower case a
-  char <- rep("a", 64) %>% paste0(collapse = "")
+  char <- secretFromStr("a", 64)
   key <- asCookieKey(char)
   expect_cookie_key(key)
   expect_equal(key, sodium::hex2bin(char))
 
   ## upper case a
-  char <- rep("A", 64) %>% paste0(collapse = "")
+  char <- secretFromStr("A", 64)
   key <- asCookieKey(char)
   expect_cookie_key(key)
   expect_equal(key, sodium::hex2bin(char))
 
-  ## raw vector input
-  randomRaw <- sodium::random(32)
+  ## hex char input
+  randomRaw <- sodium::random(32) %>% sodium::bin2hex()
   key <- asCookieKey(randomRaw)
   expect_cookie_key(key)
-  expect_equal(key, randomRaw)
+  expect_equal(sodium::bin2hex(key), randomRaw)
 })
 
 

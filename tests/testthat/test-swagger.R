@@ -239,7 +239,7 @@ test_that("api kitchen sink", {
           # don't show the warning
           expect_warning({
             pr <- sourceUTF8("entrypoint.R")
-          }, "Low entropy cookie")
+          }, "Legacy cookie secret")
         } else {
           pr <- sourceUTF8("entrypoint.R")
         }

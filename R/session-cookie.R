@@ -178,6 +178,7 @@ asCookieKey <- function(key) {
 
     # turn key into 64 digit hex str by hashing it
     key <-
+      key %>%
       charToRaw() %>%
       sodium::sha256() %>%
       sodium::bin2hex()

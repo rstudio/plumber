@@ -6,11 +6,11 @@ skip_if_no_cookie_support <- function() {
 }
 
 
-make_req_cookie <- function(verb, path, cookie){
+make_req_cookie <- function(verb, path, cookie) {
   req <- new.env()
   req$REQUEST_METHOD <- toupper(verb)
   req$PATH_INFO <- path
-  req$rook.input <- list(read_lines = function(){ "" })
+  req$rook.input <- list(read_lines = function() { "" })
   if (!missing(cookie)){
     req$HTTP_COOKIE <- cookie
   }
@@ -25,7 +25,7 @@ test_that("cookies are set", {
 
   r$handle("GET", "/", expr)
 
-  key <- rep("mysecret", 10) %>% paste0(collapse = "") %>% asCookieKey()
+  key <- randomCookieKey()
   sc <- sessionCookie(
     key,
     name = "plcook"
@@ -39,7 +39,7 @@ test_that("cookies are set", {
   cook <- res$headers[["Set-Cookie"]]
   expect_match(cook, "^plcook")
   cook <- gsub("^plcook=", "", cook, perl = TRUE)
-  expect_equal(decodeCookie(cook, key), list(abc = 1234))
+  expect_equal(decodeCookie(cook, asCookieKey(key)), list(abc = 1234))
 })
 
 test_that("cookies are unset", {
@@ -50,7 +50,7 @@ test_that("cookies are unset", {
 
   r$handle("GET", "/", exprRemoveSession)
 
-  key <- rep("mysecret", 10) %>% paste0(collapse = "") %>% asCookieKey()
+  key <- randomCookieKey()
   sc <- sessionCookie(
     key,
     name = "plcook"
@@ -63,7 +63,7 @@ test_that("cookies are unset", {
     make_req_cookie(
       "GET", "/",
       # start with a session cookie
-      paste0("plcook=", encodeCookie(list(abc = 1234), key))
+      paste0("plcook=", encodeCookie(list(abc = 1234), asCookieKey(key)))
     ),
     res
   )
@@ -82,7 +82,7 @@ test_that("cookies are read", {
 
   r$handle("GET", "/", expr)
 
-  key <- rep("mysecret", 10) %>% paste0(collapse = "") %>% asCookieKey()
+  key <- randomCookieKey()
   sc <- sessionCookie(
     key,
     name = "plcook"
@@ -96,7 +96,7 @@ test_that("cookies are read", {
     make_req_cookie(
       "GET", "/",
       # start with a session cookie
-      paste0("plcook=", encodeCookie(list(abc = 1234), key))
+      paste0("plcook=", encodeCookie(list(abc = 1234), asCookieKey(key)))
     ),
     res
   )
@@ -113,7 +113,7 @@ test_that("invalid cookies/JSON are handled", {
 
   r$handle("GET", "/", expr)
 
-  key <- rep("mysecret", 10) %>% paste0(collapse = "") %>% asCookieKey()
+  key <- randomCookieKey()
   sc <- sessionCookie(
     key,
     name = "plcook"
@@ -122,9 +122,9 @@ test_that("invalid cookies/JSON are handled", {
 
   res <- PlumberResponse$new()
 
-  badKey <- randomCookieKey() %>% asCookieKey()
+  badKey <- randomCookieKey()
   x <- list(abc = 1234)
-  encodedX <- encodeCookie(x, badKey)
+  encodedX <- encodeCookie(x, asCookieKey(badKey))
   expect_silent({
     r$serve(
       make_req_cookie(
