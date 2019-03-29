@@ -51,10 +51,9 @@ Please: \itemize{
 Instead, please: \itemize{
 \item Use a key management system, such as
 \href{https://github.com/r-lib/keyring}{'keyring'} (preferred)
-\item (or) Store it on a disk that only you have access to.
-Such as modifying the file permissions to "user read only"
-(\code{chmod 400 myfile.txt}) to your file from being modified and prevent
-others from reading your file.
+\item Store the secret in a file on disk with appropriately secure permissions,
+such as "user read only" (\code{Sys.chmod("myfile.txt", mode = "0600")}),
+to prevent others from reading it.
 } Examples of both of these solutions are done in the Examples section.
 }
 
@@ -84,7 +83,7 @@ pr$run()
 pswd_file <- "normal_file.txt"
 cat(plumber::randomCookieKey(), file = pswd_file)
 # Make file read-only
-Sys.chmod(pswd_file, mode = "0400")
+Sys.chmod(pswd_file, mode = "0600")
 
 
 # Load a plumber API
