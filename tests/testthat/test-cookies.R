@@ -12,9 +12,10 @@ test_that("cookies are parsed", {
   expect_equal(cookies$spaced, "cookie here")
   expect_equal(cookies$another, "2")
 
-  cookies <- parseCookies("a=zxcv=asdf; b=qwer=ttyui")
-  expect_equal(names(cookies), c("a", "b"))
+  cookies <- parseCookies("a=zxcv=asdf; missingVal=; b=qwer=ttyui")
+  expect_equal(names(cookies), c("a", "missingVal", "b"))
   expect_equal(cookies$a, "zxcv=asdf")
+  expect_equal(cookies$missingVal, "")
   expect_equal(cookies$b, "qwer=ttyui")
 
 })

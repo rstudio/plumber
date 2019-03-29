@@ -2,6 +2,8 @@ context("htmlwidgets serializer")
 
 # Render a simple HTML widget using the visNetwork package
 renderWidget <- function(){
+  skip_if_not_installed("visNetwork")
+  
   nodes <- data.frame(id = 1:6, title = paste("node", 1:6),
                       shape = c("dot", "square"),
                       size = 10:15, color = c("blue", "red"))

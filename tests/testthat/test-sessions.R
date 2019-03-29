@@ -17,6 +17,13 @@ make_req_cookie <- function(verb, path, cookie) {
   req
 }
 
+test_that("sessionCookie throws missing key", {
+  expect_error(
+    sessionCookie(),
+    "You must define an encryption key"
+  )
+})
+
 test_that("cookies are set", {
   skip_if_no_cookie_support()
 
