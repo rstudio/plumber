@@ -190,7 +190,7 @@ asCookieKey <- function(key) {
       "\n",
       "\n\t!! Legacy cookie secret 'key' detected!                                         !!",
       "\n\t!! Support for legacy cookie secret 'key' is deprecated and will be removed.    !!",
-      "\n\t!! Please see follow the instructions in `?sessionCookie` for a new secret key. !!",
+      "\n\t!! Please follow the instructions in `?sessionCookie` for creating a new secret key. !!",
       "\n"
     )
 
