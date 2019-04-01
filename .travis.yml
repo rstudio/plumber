@@ -1,9 +1,29 @@
 language: r
 cache: packages
-
-r_packages:
-  - covr
-after_success:
-  - Rscript -e 'library(covr);codecov()'
-
 warnings_are_errors: true
+
+# test on all flavors of R
+r:
+  - oldrel
+  - release
+  # - devel
+
+# install sodium
+addons:
+  apt:
+    sources:
+      - sourceline: 'ppa:chris-lea/libsodium'
+    packages:
+      - libsodium-dev
+
+
+jobs:
+  include:
+    - stage: "post processing"
+      name: "covr"
+      r: release
+      r_packages:
+        - covr
+      # testing coverage
+      after_success:
+        - Rscript -e 'library(covr);codecov()'

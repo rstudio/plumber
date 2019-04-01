@@ -659,7 +659,7 @@ plumber <- R6Class(
       # maybe return a promise object
       self$serve(req, res)
     },
-    onHeaders = function(req){
+    onHeaders = function(req) {
       NULL
     },
     onWSOpen = function(ws){

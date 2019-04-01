@@ -33,12 +33,30 @@ PlumberResponse <- R6Class(
         body = body
       )
     },
-    # TODO: support multiple setCookies per response
-    setCookie = function(name, value, path, expiration=FALSE, http=FALSE, secure=FALSE){
+    # TODO if name and value are a vector of same length, call set cookie many times
+    setCookie = function(name, value, path, expiration = FALSE, http = FALSE, secure = FALSE) {
       self$setHeader("Set-Cookie", cookieToStr(name, value, path, expiration, http, secure))
+    },
+    removeCookie = function(name, path, http = FALSE, secure = FALSE, ...) {
+      self$setHeader("Set-Cookie", removeCookieStr(name, path, http, secure))
     }
   )
 )
+
+removeCookieStr <- function(name, path, http = FALSE, secure = FALSE) {
+  str <- paste0(name, "=; ")
+  if (!missing(path)){
+    str <- paste0(str, "Path=", path, "; ")
+  }
+  if (!missing(http) && http){
+    str <- paste0(str, "HttpOnly; ")
+  }
+  if (!missing(secure) && secure){
+    str <- paste0(str, "Secure; ")
+  }
+  str <- paste0(str, "Expires=Thu, 01 Jan 1970 00:00:00 GMT")
+  str
+}
 
 #' @importFrom httpuv encodeURI
 #' @noRd
@@ -77,5 +95,19 @@ cookieToStr <- function(name, value, path, expiration=FALSE, http=FALSE, secure=
   }
 
   # Trim last '; '
-  substr(str, 0, nchar(str)-2)
+  ret <- substr(str, 0, nchar(str)-2)
+
+  # double check size limit isn't reached
+  cookieByteSize <- length(charToRaw(ret))
+  # http://browsercookielimits.squawky.net/#limits
+  #  typical browsers support 4096.  A couple safari based browsers max out at 4093.
+  if (cookieByteSize > 4093) {
+    warning(
+      "Cookie being saved is too large",
+      " (> 4093 bytes; found ", cookieByteSize, " bytes).",
+      " Browsers may not support such a large value.\n",
+      "Consider using a database and only storing minimal information.")
+  }
+
+  ret
 }
