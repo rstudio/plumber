@@ -27,7 +27,8 @@ Imports:
     httpuv (>= 1.4.5.9002),
     crayon,
     promises,
-    sodium
+    sodium,
+    swagger (> 3.20.3)
 LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
@@ -38,7 +39,6 @@ Suggests:
     htmlwidgets,
     visNetwork,
     analogsea,
-    swagger (> 3.20.3),
     later
 Remotes:
     rstudio/promises,
