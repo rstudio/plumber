@@ -46,7 +46,7 @@ PlumberStep <- R6Class(
     },
     exec = function(...) {
       allArgs <- list(...)
-      args <- getRelevantArgs(allArgs, plumberExpression=private$expr)
+      args <- getRelevantArgs(allArgs, plumberExpression=private$func)
 
       hookEnv <- new.env()
 
