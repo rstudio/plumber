@@ -2,10 +2,23 @@ language: r
 cache: packages
 warnings_are_errors: true
 
+job_pointers:
+  if_release: &if_release
+    if: |
+      repo = trestletech/plumber AND
+      branch IN (master, rc-v0.5.0)
+  if_plumber: &if_plumber
+    if: |
+      repo = trestletech/plumber
+  if_always: &if_always
+    if: |
+      true
+
 # Test on multiple dists with every flavor of R
-matrix:
+jobs:
   include:
     - &trusty
+      <<: *if_release
       name: Linux - trusty - oldrel
       os: linux
       dist: trusty
@@ -17,7 +30,7 @@ matrix:
             - sourceline: 'ppa:chris-lea/libsodium'
           packages:
             - libsodium-dev
-    - <<: *trusty
+    - <<: [*trusty, *if_always]
       name: Linux - trusty - release
       r: release
     - <<: *trusty
@@ -25,6 +38,7 @@ matrix:
       r: devel
 
     - &xenial
+      <<: *if_always
       name: Linux - xenial - oldrel
       os: linux
       dist: xenial
@@ -46,11 +60,12 @@ matrix:
       r: devel
 
     - &osx
+      <<: *if_release
       name: macOS - oldrel
       os: osx
       brew_packages: libsodium
       r: oldrel
-    - <<: *osx
+    - <<: [*osx, *if_always]
       name: macOS - release
       r: release
     - <<: *osx
