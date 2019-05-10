@@ -8,12 +8,22 @@ r:
   - release
   - devel
 
-matrix:
-  include:
-    - dist: trusty
-    - dist: xenial
-    - os: osx
-      brew_packages: libsodium
+# Test on multiple dists
+os:
+  - linux
+  - osx
+dist:
+  - trusty
+  - xenial
+brew_packages: libsodium
+# matrix:
+#   include:
+#     - os: linux
+#       dist: trusty
+#     - os: linux
+#       dist: xenial
+#     - os: osx
+#       brew_packages: libsodium
 
 # PPA is only needed for (legacy) Trusty. Can be removed when Trusty is EOL.
 addons:
