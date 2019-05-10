@@ -12,7 +12,7 @@ jobs:
       r: oldrel
       if: |
         repo = trestletech/plumber AND
-        branch IN (master, rc-v0.5.0)
+        branch IN (master, travis, rc-v0.5.0)
       addons:
         apt:
           sources:
@@ -57,7 +57,7 @@ jobs:
       r: oldrel
       if: |
         repo = trestletech/plumber AND
-        branch IN (master, rc-v0.5.0)
+        branch IN (master, travis, rc-v0.5.0)
     - <<: *osx
       name: macOS - release
       r: release
