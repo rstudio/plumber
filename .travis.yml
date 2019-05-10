@@ -2,45 +2,48 @@ language: r
 cache: packages
 warnings_are_errors: true
 
-# test on all flavors of R
-r:
-  - oldrel
-  - release
-  - devel
-
-# Test on multiple dists
-os:
-  - linux
-  - osx
-dist:
-  - trusty
-  - xenial
-brew_packages: libsodium
-# matrix:
-#   include:
-#     - os: linux
-#       dist: trusty
-#     - os: linux
-#       dist: xenial
-#     - os: osx
-#       brew_packages: libsodium
-
-# PPA is only needed for (legacy) Trusty. Can be removed when Trusty is EOL.
-addons:
-  apt:
-    sources:
-      - sourceline: 'ppa:chris-lea/libsodium'
-    packages:
-      - libsodium-dev
-
-jobs:
+# Test on multiple dists with every flavor of R
+matrix:
   include:
-    - stage: "post processing"
-      name: "covr"
+    - &trusty
+      os: linux
+      dist: trusty
+      r: oldrel
+      addons:
+        apt:
+          sources:
+            # PPA is only needed for (legacy) Trusty. Can be removed when Trusty is EOL.
+            - sourceline: 'ppa:chris-lea/libsodium'
+          packages:
+            - libsodium-dev
+    - <<: *trusty
       r: release
+    - <<: *trusty
+      r: devel
+
+    - &xenial
+      os: linux
       dist: xenial
+      r: oldrel
+      addons:
+        apt:
+          packages:
+            - libsodium-dev
+    - <<: *xenial
+      r: release
       r_packages:
         - covr
-      # testing coverage
       after_success:
+        # testing coverage
         - Rscript -e 'library(covr);codecov()'
+    - <<: *xenial
+      r: devel
+
+    - &osx
+      os: osx
+      brew_packages: libsodium
+      r: oldrel
+    - <<: *osx
+      r: release
+    - <<: *osx
+      r: devel
