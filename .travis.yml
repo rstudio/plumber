@@ -8,7 +8,14 @@ r:
   - release
   - devel
 
-# install sodium
+matrix:
+  include:
+    - dist: trusty
+    - dist: xenial
+    - os: osx
+      brew_packages: libsodium
+
+# PPA is only needed for (legacy) Trusty. Can be removed when Trusty is EOL.
 addons:
   apt:
     sources:
@@ -21,6 +28,7 @@ jobs:
     - stage: "post processing"
       name: "covr"
       r: release
+      dist: xenial
       r_packages:
         - covr
       # testing coverage
