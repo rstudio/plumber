@@ -6,6 +6,7 @@ warnings_are_errors: true
 matrix:
   include:
     - &trusty
+      name: Linux - trusty - oldrel
       os: linux
       dist: trusty
       r: oldrel
@@ -17,11 +18,14 @@ matrix:
           packages:
             - libsodium-dev
     - <<: *trusty
+      name: Linux - trusty - release
       r: release
     - <<: *trusty
+      name: Linux - trusty - devel
       r: devel
 
     - &xenial
+      name: Linux - xenial - oldrel
       os: linux
       dist: xenial
       r: oldrel
@@ -30,6 +34,7 @@ matrix:
           packages:
             - libsodium-dev
     - <<: *xenial
+      name: Linux - xenial - release; covr
       r: release
       r_packages:
         - covr
@@ -37,13 +42,17 @@ matrix:
         # testing coverage
         - Rscript -e 'library(covr);codecov()'
     - <<: *xenial
+      name: Linux - xenial - devel
       r: devel
 
     - &osx
+      name: macOS - oldrel
       os: osx
       brew_packages: libsodium
       r: oldrel
     - <<: *osx
+      name: macOS - release
       r: release
     - <<: *osx
+      name: macOS - devel
       r: devel
