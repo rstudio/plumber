@@ -8,6 +8,14 @@ r:
   - release
   - devel
 
+# install sodium
+addons:
+  apt:
+    sources:
+      - sourceline: 'ppa:chris-lea/libsodium'
+    packages:
+      - libsodium-dev
+
 jobs:
   include:
     - stage: "post processing"

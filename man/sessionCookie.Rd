@@ -4,18 +4,107 @@
 \alias{sessionCookie}
 \title{Store session data in encrypted cookies.}
 \usage{
-sessionCookie(key, name = "plumber", ...)
+sessionCookie(key, name = "plumber", expiration = FALSE, http = TRUE,
+  secure = FALSE)
 }
 \arguments{
-\item{key}{The secret key to use. This must be consistent across all sessions
-where you want to save/restore encrypted cookies. It should be a long and
+\item{key}{The secret key to use. This must be consistent across all R sessions
+where you want to save/restore encrypted cookies. It should be produced using
+\code{\link{randomCookieKey}}. Please see the "Storing secure keys" section for more details
 complex character string to bolster security.}
 
 \item{name}{The name of the cookie in the user's browser.}
 
-\item{...}{Arguments passed on to the \code{response$setCookie} call to,
-for instance, set the cookie's expiration.}
+\item{expiration}{A number representing the number of seconds into the future
+before the cookie expires or a \code{POSIXt} date object of when the cookie expires.
+Defaults to the end of the user's browser session.}
+
+\item{http}{Boolean that adds the \code{HttpOnly} cookie flag that tells the browser
+to save the cookie and to NOT send it to client-side scripts. This mitigates \href{https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting}{cross-site scripting}.
+Defaults to \code{TRUE}.}
+
+\item{secure}{Boolean that adds the \code{Secure} cookie flag.  This should be set
+when the route is eventually delivered over \href{https://en.wikipedia.org/wiki/HTTPS}{HTTPS}.}
 }
 \description{
-Store session data in encrypted cookies.
+\code{plumber} uses the crypto R package \code{sodium}, to encrypt/decrypt
+\code{req$session} information for each server request.
+}
+\details{
+The cookie's secret encryption \code{key} value must be consistent to maintain
+\code{req$session} information between server restarts.
+}
+\section{Storing secure keys}{
+
+While it is very quick to get started with user session cookies using
+\code{plumber}, please exercise precaution when storing secure key information.
+If a malicious person were to gain access to the secret \code{key}, they woud
+be able to eavesdrop on all \code{req$session} information and/or tamper with
+\code{req$session} information being processed.
+
+Please: \itemize{
+\item Do NOT store keys in source control.
+\item Do NOT store keys on disk with permissions that allow it to be accessed by everyone.
+\item Do NOT store keys in databases which can be queried by everyone.
+}
+
+Instead, please: \itemize{
+\item Use a key management system, such as
+\href{https://github.com/r-lib/keyring}{'keyring'} (preferred)
+\item Store the secret in a file on disk with appropriately secure permissions,
+such as "user read only" (\code{Sys.chmod("myfile.txt", mode = "0600")}),
+to prevent others from reading it.
+} Examples of both of these solutions are done in the Examples section.
+}
+
+\examples{
+\dontrun{
+
+## Set secret key using `keyring` (preferred method)
+keyring::key_set_with_value("plumber_api", plumber::randomCookieKey())
+
+
+# Load a plumber API
+pr <- plumb(system.file(file.path("examples", "01-append", "plumber.R"), package = "plumber"))
+
+# Add cookie support and retrieve secret key using `keyring`
+pr$registerHooks(
+  sessionCookie(
+    keyring::key_get("plumber_api")
+  )
+)
+pr$run()
+
+
+#### -------------------------------- ###
+
+
+## Save key to a local file
+pswd_file <- "normal_file.txt"
+cat(plumber::randomCookieKey(), file = pswd_file)
+# Make file read-only
+Sys.chmod(pswd_file, mode = "0600")
+
+
+# Load a plumber API
+pr <- plumb(system.file(file.path("examples", "01-append", "plumber.R"), package = "plumber"))
+
+# Add cookie support and retrieve secret key from file
+pr$registerHooks(
+  sessionCookie(
+    readLines(pswd_file, warn = FALSE)
+  )
+)
+pr$run()
+
+}
+}
+\seealso{
+\itemize{
+\item \href{https://github.com/jeroen/sodium}{'sodium'}: R bindings to 'libsodium'
+\item \href{https://download.libsodium.org/doc/}{'libsodium'}: A Modern and Easy-to-Use Crypto Library
+\item \href{https://github.com/r-lib/keyring}{'keyring'}: Access the system credential store from R
+\item \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#Directives}{Set-Cookie flags}: Descriptions of different flags for \code{Set-Cookie}
+\item \href{https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting}{Cross-site scripting}: A security exploit which allows an attacker to inject into a website malicious client-side code
+}
 }

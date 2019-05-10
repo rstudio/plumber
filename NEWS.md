@@ -4,6 +4,15 @@ plumber 0.5.0
 
 ### Security
 
+* Secret session cookies are now encrypted using `sodium`.
+  All prior `req$session` information will be lost.
+  Please see `?sessionCookie` for more information.
+  ([#404](https://github.com/trestletech/plumber/pull/404))
+
+* Session cookies set the `HttpOnly` flag by default to mitigate cross-site scripting (XSS).
+  Please see `?sessionCookie` for more information.
+  ([#404](https://github.com/trestletech/plumber/pull/404))
+
 * Wrap `jsonlite::fromJSON` to ensure that `jsonlite` never reads
   input as a remote address (such as a file path or URL) and attempts to parse
   that. The only known way to exploit this behavior in plumber unless an
@@ -31,6 +40,8 @@ plumber 0.5.0
 
 
 ### Minor new features and improvements
+
+* If cookie information is too large (> 4093 bytes), a warning will be displayed. ([#404](https://github.com/trestletech/plumber/pull/404))
 
 * Added new shorthand types for url parameters. (@byzheng, [#388](https://github.com/trestletech/plumber/pull/388))
 
