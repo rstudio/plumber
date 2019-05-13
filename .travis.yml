@@ -3,6 +3,7 @@ cache: packages
 warnings_are_errors: true
 
 # Test on multiple dists with every flavor of R
+# limit to 5 instances for regular usage.  (5 can be done in parallel)
 jobs:
   include:
     - &trusty
@@ -29,6 +30,7 @@ jobs:
       name: Linux - trusty - devel
       r: devel
 
+    # always test xenial
     - &xenial
       name: Linux - xenial - oldrel
       os: linux
@@ -44,7 +46,6 @@ jobs:
       r_packages:
         - covr
       after_success:
-        # testing coverage
         - Rscript -e 'library(covr);codecov()'
     - <<: *xenial
       name: Linux - xenial - devel
