@@ -43,7 +43,8 @@ Suggests:
 Remotes:
     rstudio/promises,
     rstudio/swagger,
-    rstudio/httpuv
+    rstudio/httpuv,
+    sckott/analogsea
 Collate:
     'async.R'
     'content-types.R'
