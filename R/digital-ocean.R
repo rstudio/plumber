@@ -105,7 +105,7 @@ droplet_capture <- function(droplet, command){
 install_api <- function(droplet){
   analogsea::droplet_ssh(droplet, "mkdir -p /var/plumber")
   analogsea::droplet_upload(droplet, local=normalizePath(
-      system.file("examples", "10-welcome", package="plumber"), mustWork=FALSE), #TODO: Windows support for **?
+      paste0(system.file("examples", "10-welcome", package="plumber"), "/**"), mustWork=FALSE), #TODO: Windows support for **?
       remote="/var/plumber/",
       verbose = TRUE)
 }
