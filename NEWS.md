@@ -54,6 +54,8 @@ plumber 0.5.0
 
 ### Bug fixes
 
+* Fixed bug where functions defined earlier in the file could not be found when `plumb()`ing a file.  ([#416](https://github.com/trestletech/plumber/pull/416))
+
 * A multiline POST body is now collapsed to a single line (@robertdj, [#270](https://github.com/trestletech/plumber/issues/270) [#297](https://github.com/trestletech/plumber/pull/297)).
 
 * Bumped version of httpuv to >= 1.4.5.9000 to address an unexpected segfault (@shapenaji, [#289](https://github.com/trestletech/plumber/issues/289))
