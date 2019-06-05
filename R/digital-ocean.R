@@ -77,6 +77,9 @@ do_provision <- function(droplet, unstable=FALSE, example=TRUE, ...){
 }
 
 install_plumber <- function(droplet, unstable){
+  # Satisfy sodium's requirements
+  analogsea::debian_apt_get_install(droplet, "libsodium-dev")
+
   if (unstable){
     analogsea::debian_apt_get_install(droplet, "libcurl4-openssl-dev")
     analogsea::debian_apt_get_install(droplet, "libgit2-dev")
