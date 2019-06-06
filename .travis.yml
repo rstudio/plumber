@@ -22,6 +22,7 @@ jobs:
             - sourceline: 'ppa:chris-lea/libsodium'
           packages:
             - libsodium-dev
+            - libssh-dev
     - <<: *trusty
       name: Linux - trusty - release
       r: release
@@ -41,6 +42,7 @@ jobs:
         apt:
           packages:
             - libsodium-dev
+            - libssh-dev
     - <<: *xenial
       name: Linux - xenial - release; covr
       r: release
