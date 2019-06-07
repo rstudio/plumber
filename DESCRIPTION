@@ -38,7 +38,7 @@ Suggests:
     base64enc,
     htmlwidgets,
     visNetwork,
-    analogsea,
+    analogsea (>= 0.7.0),
     later
 Remotes:
     rstudio/promises,
