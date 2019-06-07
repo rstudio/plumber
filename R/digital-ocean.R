@@ -95,13 +95,15 @@ install_plumber <- function(droplet, unstable){
 #' @noRd
 droplet_capture <- function(droplet, command){
     tf <- tempdir()
+    on.exit({
+      unlink(tf, recursive = TRUE)
+    })
     randName <- paste(sample(c(letters, LETTERS), size=10, replace=TRUE), collapse="")
     tff <- file.path(tf, randName)
     analogsea::droplet_ssh(droplet, paste0(command, " > /tmp/", randName))
     analogsea::droplet_download(droplet, paste0("/tmp/", randName), tf)
     analogsea::droplet_ssh(droplet, paste0("rm /tmp/", randName))
     lin <- readLines(tff)
-    file.remove(tff)
     lin
 }
 
