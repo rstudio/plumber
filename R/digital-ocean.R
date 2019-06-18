@@ -77,6 +77,9 @@ do_provision <- function(droplet, unstable=FALSE, example=TRUE, ...){
 }
 
 install_plumber <- function(droplet, unstable){
+  # Satisfy sodium's requirements
+  analogsea::debian_apt_get_install(droplet, "libsodium-dev")
+
   if (unstable){
     analogsea::debian_apt_get_install(droplet, "libcurl4-openssl-dev")
     analogsea::debian_apt_get_install(droplet, "libgit2-dev")
@@ -91,22 +94,32 @@ install_plumber <- function(droplet, unstable){
 #' Captures the output from running some command via SSH
 #' @noRd
 droplet_capture <- function(droplet, command){
-    tf <- tempfile()
+    tf <- tempdir()
     randName <- paste(sample(c(letters, LETTERS), size=10, replace=TRUE), collapse="")
+    tff <- file.path(tf, randName)
+    on.exit({
+      if (file.exists(tff)) {
+        file.remove(tff)
+      }
+    })
     analogsea::droplet_ssh(droplet, paste0(command, " > /tmp/", randName))
     analogsea::droplet_download(droplet, paste0("/tmp/", randName), tf)
     analogsea::droplet_ssh(droplet, paste0("rm /tmp/", randName))
-    lin <- readLines(tf)
-    file.remove(tf)
+    lin <- readLines(tff)
     lin
 }
 
 install_api <- function(droplet){
   analogsea::droplet_ssh(droplet, "mkdir -p /var/plumber")
-  analogsea::droplet_upload(droplet, local=normalizePath(
-      paste0(system.file("examples", "10-welcome", package="plumber"), "/**"), mustWork=FALSE), #TODO: Windows support for **?
-      remote="/var/plumber/",
-      verbose = TRUE)
+  example_plumber_file <- system.file("examples", "10-welcome", "plumber.R", package="plumber")
+  if (nchar(example_plumber_file) < 1) {
+    stop("Could not find example 10-welcome plumber file", call. = FALSE)
+  }
+  analogsea::droplet_upload(
+    droplet,
+    local = example_plumber_file,
+    remote = "/var/plumber/",
+    verbose = TRUE)
 }
 
 install_firewall <- function(droplet){
@@ -127,11 +140,12 @@ install_nginx <- function(droplet){
 }
 
 install_new_r <- function(droplet){
-  analogsea::droplet_ssh(droplet, c("echo 'deb https://cran.rstudio.com/bin/linux/ubuntu xenial/' >> /etc/apt/sources.list",
-                  "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9"))
+  analogsea::droplet_ssh(droplet, "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9")
+  analogsea::droplet_ssh(droplet, "echo 'deb https://cran.rstudio.com/bin/linux/ubuntu xenial/' >> /etc/apt/sources.list.d/cran.list")
   # TODO: use the analogsea version once https://github.com/sckott/analogsea/issues/139 is resolved
   #analogsea::debian_apt_get_update(droplet)
-  analogsea::droplet_ssh(droplet, "sudo apt-get update -qq", 'sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade')
+  analogsea::droplet_ssh(droplet, "sudo apt-get update -qq")
+  analogsea::droplet_ssh(droplet, 'sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade')
 
   analogsea::debian_install_r(droplet)
 }
@@ -288,10 +302,11 @@ do_deploy_api <- function(droplet, path, localPath, port, forward=FALSE,
   }
 
   ### UPLOAD the API ###
-  localPath <- sub("/+$", "", localPath)
-  analogsea::droplet_ssh(droplet, paste0("mkdir -p /var/plumber/", path))
-  analogsea::droplet_upload(droplet, local=paste0(localPath, "/**"), #TODO: Windows support for **?
-      remote=paste0("/var/plumber/", path, "/"))
+  remoteTmp <- paste0("/tmp/", paste0(sample(LETTERS, 10, replace=TRUE), collapse=""))
+  dirName <- basename(localPath)
+  analogsea::droplet_ssh(droplet, paste0("mkdir -p ", remoteTmp))
+  analogsea::droplet_upload(droplet, local=localPath, remote=remoteTmp)
+  analogsea::droplet_ssh(droplet, paste("mv", paste0(remoteTmp, "/", dirName, "/"), paste0("/var/plumber/", path)))
 
   ### SYSTEMD ###
   serviceName <- paste0("plumber-", path)

@@ -54,6 +54,8 @@ plumber 0.5.0
 
 ### Bug fixes
 
+* Fix bugs that prevented `do_provision` from deploying to DigitalOcean and updated to the latest `analogsea`.  ([#448](https://github.com/trestletech/plumber/pull/448/files))
+
 * Fixed bug where functions defined earlier in the file could not be found when `plumb()`ing a file.  ([#416](https://github.com/trestletech/plumber/pull/416))
 
 * A multiline POST body is now collapsed to a single line (@robertdj, [#270](https://github.com/trestletech/plumber/issues/270) [#297](https://github.com/trestletech/plumber/pull/297)).
