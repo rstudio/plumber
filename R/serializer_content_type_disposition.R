@@ -9,7 +9,7 @@ serializer_content_type_disposition <- function(type,disposition) {
   if (missing(disposition)){
     stop("You must provide the custom content disposition to the serializer_content_type_disposition")
   }
-  
+
   function(val, req, res, errorHandler){
     tryCatch({
       res$setHeader("Content-Type", type)
@@ -24,4 +24,4 @@ serializer_content_type_disposition <- function(type,disposition) {
 }
 
 #' @include globals.R
-.globals$serializers[["contentType"]] <- serializer_content_type_disposition
+.globals$serializers[["contentTypeDisposition"]] <- serializer_content_type_disposition
