@@ -74,6 +74,7 @@ Collate:
     'serializer-rds.R'
     'serializer-xml.R'
     'serializer.R'
+    'serializer_content_type_disposition.R'
     'session-cookie.R'
     'swagger.R'
     'utf8.R'
