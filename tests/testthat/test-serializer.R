@@ -114,6 +114,22 @@ test_that("nullSerializer serializes properly", {
   expect_equal(val$body, v)
 })
 
+
+
+test_that("content type disposition", {
+  tmp <- tempfile(fileext = ".csv")
+  erg<-data.frame(a=1:10,b=11:20)
+  write.csv(x=erg,file=tmp)
+  val1<-serializer_content_type_disposition(type="text/plain",
+                                            disposition='attachment; filename="Test.csv"')(
+                                              readBin(tmp, "raw", n=file.info(tmp)$size),list(),PlumberResponse$new(), stop)
+  expect_equal(val1$status, 200L)
+  expect_equal(val1$header$`Content-Type`,"text/plain")
+  expect_equal(val1$header$`Content-Disposition`, "attachment; filename=\"Test.csv\"")
+  expect_equal(val1$body,readBin(tmp, "raw", n=file.info(tmp)$size))
+})
+
+
 test_that("nullSerializer errors call error handler", {
   errors <- 0
   errHandler <- function(req, res, err){
