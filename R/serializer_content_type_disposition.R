@@ -1,6 +1,6 @@
 #' @rdname serializers
-#' @param type The value to provide for the `Content-Type` HTTP header.
 #' @param disposition The value to provide for the `Content-Disposition` HTTP header.
+#' @inheritParams serializer_content_type
 #' @export
 serializer_content_type_disposition <- function(type,disposition) {
   if (missing(type)){
@@ -13,7 +13,7 @@ serializer_content_type_disposition <- function(type,disposition) {
   function(val, req, res, errorHandler){
     tryCatch({
       res$setHeader("Content-Type", type)
-	  res$setHeader("Content-Disposition", disposition)
+	    res$setHeader("Content-Disposition", disposition)
       res$body <- val
 
       return(res$toResponse())
