@@ -132,9 +132,6 @@ test_that("content type disposition error", {
   expect_error(serializer_content_type()(
       readBin(tmp, "raw", n=file.info(tmp)$size),list(),PlumberResponse$new(),stop))
 
-  # print(str(val1))
-  # expect_error()
-
 
 })
 
@@ -159,9 +156,6 @@ test_that("content type disposition error", {
   expect_error(serializer_content_type_disposition(
     type="text/plain")(
       readBin(tmp, "raw", n=file.info(tmp)$size),list(),PlumberResponse$new(),stop))
-
-  # print(str(val1))
-  # expect_error()
 
 
 })
