@@ -116,13 +116,35 @@ test_that("nullSerializer serializes properly", {
 
 
 test_that("Serializer disposition check",{
-  expect_error(serializer_content_type()(),label = "You must provide the custom content type to the serializer_content_type_disposition")
-  expect_error(serializer_content_type()(type="text/html; charset=utf-8",disposition="test"))
-  expect_error(serializer_content_type()("text/html","test"))
-  expect_error(serializer_content_type()("text/html","attachment","test.csv"))
-  expect_error(serializer_content_type()("","attachment"))
-  expect_error(serializer_content_type()("","attachment",'"'))
-  expect_error(serializer_content_type()("","attachment","kjk\""))
+  v <- "<html><h1>Hi!</h1></html>"
+  val <- try(serializer_content_type(disposition = "attachment")(v, list(), PlumberResponse$new(), stop),silent = T)
+  expect_equal(attr(val,"condition")$message,"You must provide the custom content type to the serializer_content_type_disposition")
+
+  val <- serializer_content_type(type="text/html; charset=utf-8",disposition = "attachment")(v, list(), PlumberResponse$new(), stop)
+  expect_equal(val$headers$`Content-Type`,"text/html; charset=utf-8")
+  expect_equal(val$headers$`Content-Disposition`,"attachment")
+  expect_equal(val$body, v)
+  expect_equal(val$status, 200L)
+
+
+  val <- serializer_content_type(type="text/html; charset=utf-8",disposition = "inline")(v, list(), PlumberResponse$new(), stop)
+  expect_equal(val$headers$`Content-Type`,"text/html; charset=utf-8")
+  expect_equal(val$headers$`Content-Disposition`,"inline")
+  expect_equal(val$body, v)
+  expect_equal(val$status, 200L)
+
+
+  expect_error(serializer_content_type(type="text/html; charset=utf-8",disposition = "error")(v, list(), PlumberResponse$new(), stop))
+
+  expect_error(serializer_content_type(type="text/html; charset=utf-8",disposition = "attachment",filename="test\".csv")(v, list(), PlumberResponse$new(), stop))
+
+
+  val<-serializer_content_type(type="text/html; charset=utf-8",disposition = "attachment",filename="test.html")(v, list(), PlumberResponse$new(), stop)
+  expect_equal(val$headers$`Content-Type`,"text/html; charset=utf-8")
+  expect_equal(val$headers$`Content-Disposition`,"attachment; filename=\"test.html\"")
+  expect_equal(val$body, v)
+  expect_equal(val$status, 200L)
+
 })
 
 test_that("nullSerializer errors call error handler", {
