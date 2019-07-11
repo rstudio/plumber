@@ -115,7 +115,10 @@ test_that("nullSerializer serializes properly", {
 })
 
 
-
+test_that("Serializer disposition check",{
+  expect_error(serializer_content_type()("","test"))
+  expect_error(serializer_content_type()("","attachment",'"'))
+})
 
 test_that("nullSerializer errors call error handler", {
   errors <- 0
