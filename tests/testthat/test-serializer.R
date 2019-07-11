@@ -116,8 +116,13 @@ test_that("nullSerializer serializes properly", {
 
 
 test_that("Serializer disposition check",{
-  expect_error(serializer_content_type()("","test"))
+  expect_error(serializer_content_type()(),label = "You must provide the custom content type to the serializer_content_type_disposition")
+  expect_error(serializer_content_type()(type="text/html; charset=utf-8",disposition="test"))
+  expect_error(serializer_content_type()("text/html","test"))
+  expect_error(serializer_content_type()("text/html","attachment","test.csv"))
+  expect_error(serializer_content_type()("","attachment"))
   expect_error(serializer_content_type()("","attachment",'"'))
+  expect_error(serializer_content_type()("","attachment","kjk\""))
 })
 
 test_that("nullSerializer errors call error handler", {
