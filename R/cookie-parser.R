@@ -4,7 +4,6 @@ cookieFilter <- function(req){
   forward()
 }
 
-#' @importFrom httpuv decodeURIComponent
 #' @noRd
 parseCookies <- function(cookie) {
   if (is.null(cookie) || nchar(cookie) == 0) {

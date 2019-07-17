@@ -9,7 +9,6 @@ queryStringFilter <- function(req){
   forward()
 }
 
-#' @importFrom httpuv decodeURIComponent
 #' @noRd
 parseQS <- function(qs){
   if (is.null(qs) || length(qs) == 0 || qs == "") {
