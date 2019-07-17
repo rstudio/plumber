@@ -9,6 +9,7 @@ queryStringFilter <- function(req){
   forward()
 }
 
+#' @importFrom httpuv decodeURIComponent
 #' @noRd
 parseQS <- function(qs){
   if (is.null(qs) || length(qs) == 0 || qs == "") {
@@ -27,7 +28,7 @@ parseQS <- function(qs){
     return(list())
   }
 
-  keys <- decodeURI(vapply(kv, "[[", character(1), 1)) # returns utf8 strings
+  keys <- httpuv::decodeURIComponent(vapply(kv, "[[", character(1), 1)) # returns utf8 strings
   if (any(Encoding(keys) != "unknown")) {
     # https://github.com/trestletech/plumber/pull/314#discussion_r239992879
     non_ascii <- setdiff(unique(Encoding(keys)), "unknown")
@@ -38,7 +39,7 @@ parseQS <- function(qs){
   }
 
   vals <- vapply(kv, "[[", character(1), 2)
-  vals <- decodeURI(vals) # returns utf8 strings
+  vals <- httpuv::decodeURIComponent(vals) # returns utf8 strings
 
   ret <- as.list(vals)
   names(ret) <- keys

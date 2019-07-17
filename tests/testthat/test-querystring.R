@@ -9,6 +9,7 @@ test_that("query strings are properly parsed", {
 test_that("special characters in query strings are handled properly", {
   expect_equal(parseQS("?a=1+.#"), list(a="1+.#"))
   expect_equal(parseQS("?a=a%20b"), list(a="a b"))
+  expect_equal(parseQS('?a=%2C%2B%2F%3F%25%26'), list(a=",+/?%&"))
 })
 
 test_that("null an empty strings return empty list", {
