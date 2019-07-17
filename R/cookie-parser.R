@@ -4,7 +4,6 @@ cookieFilter <- function(req){
   forward()
 }
 
-#' @importFrom httpuv decodeURI
 #' @noRd
 parseCookies <- function(cookie) {
   if (is.null(cookie) || nchar(cookie) == 0) {
@@ -23,7 +22,7 @@ parseCookies <- function(cookie) {
   }
 
   cookies <- vapply(cookieList, "[[", character(1), 2)
-  decodedCookies <- as.list(decodeURI(cookies))
+  decodedCookies <- as.list(httpuv::decodeURIComponent(cookies))
   cookieNames <- vapply(cookieList, "[[", character(1), 1)
   names(decodedCookies) <- cookieNames
   decodedCookies
