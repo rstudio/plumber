@@ -7,9 +7,9 @@ skip_if_no_cookie_support <- function() {
 
 test_that("cookies are parsed", {
 
-  cookies <- parseCookies("spaced=cookie%20here; another=2")
+  cookies <- parseCookies("spaced=cookie%2C%20here; another=2")
   expect_equal(names(cookies), c("spaced", "another"))
-  expect_equal(cookies$spaced, "cookie here")
+  expect_equal(cookies$spaced, "cookie, here")
   expect_equal(cookies$another, "2")
 
   cookies <- parseCookies("a=zxcv=asdf; missingVal=; b=qwer=ttyui")
@@ -48,6 +48,7 @@ test_that("cookies can convert to string", {
 
   expect_equal(cookieToStr("abc", 123), "abc=123")
   expect_equal(cookieToStr("complex", "string with spaces"), "complex=string%20with%20spaces")
+  expect_equal(cookieToStr("complex2", "forbidden:,%/"), "complex2=forbidden%3A%2C%25%2F")
   expect_equal(cookieToStr("abc", 123, path="/somepath"), "abc=123; Path=/somepath")
   expect_equal(cookieToStr("abc", 123, http=TRUE, secure=TRUE), "abc=123; HttpOnly; Secure")
 
