@@ -46,3 +46,4 @@ artifacts:
 
 environment:
   USE_RTOOLS: true
+  R_REMOTES_STANDALONE: true
