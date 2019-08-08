@@ -33,9 +33,6 @@ plumb <- function(file, dir="."){
 
     # Find plumber.R in the directory case-insensitively
     file <- list.files(dir, "^plumber\\.r$", ignore.case = TRUE, full.names = TRUE)
-    if (length(file) == 0){
-      stop("No plumber.R file found in the specified directory: ", dir)
-    }
 
   } else {
     # File was specified
@@ -59,9 +56,10 @@ plumb <- function(file, dir="."){
     }
 
     pr
+  } else if (length(file) == 0){
+    stop("No plumber.R file found in the specified directory: ", dir)
   } else if (file.exists(file)) {
     # Plumber file found
-
     plumber$new(file)
   } else {
     # Couldn't find the Plumber file nor an entrypoint
