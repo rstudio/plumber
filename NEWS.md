@@ -1,3 +1,9 @@
+plumber (version)
+--------------------------------------------------------------------------------
+### Bug fixes
+
+* Fix `plumb()` function when `plumb()`ing a directory so that `plumber.R` is not a requirement if a valid `entrypoint.R` file is found. (@blairj09, [#392](https://github.com/trestletech/plumber/issues/392)).
+
 plumber 0.5.0
 --------------------------------------------------------------------------------
 ## Full changelog
