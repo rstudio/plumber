@@ -102,6 +102,12 @@ test_that("bad `entrypoint.R`s throw", {
   expect_error(plumb(dir = test_path("files/entrypoint-bad/")), "runnable Plumber router")
 })
 
+test_that("plumb() a dir works with `entrypoint.R` and without `plumber.R`", {
+  r <- plumb(dir = test_path("files/no-plumber/"))
+  expect_equal(length(r$endpoints), 1)
+  expect_equal(length(r$endpoints[[1]]), 1)
+})
+
 test_that("Empty endpoints error", {
   expect_error(plumber$new(test_path("files/endpoints-empty.R")), regexp="No path specified")
 })
