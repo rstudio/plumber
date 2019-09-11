@@ -450,7 +450,7 @@ plumber <- R6Class(
           private$runHooks("preserialize", list(data = hookEnv, req = req, res = res, value = value))
         }
         serializeStep <- function(value, ...) {
-          ser(value, req, res, errorHandler)
+          ser(value, req, res, private$errorHandler)
         }
         postserializeStep <- function(value, ...) {
           private$runHooks("postserialize", list(data = hookEnv, req = req, res = res, value = value))
