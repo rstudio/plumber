@@ -54,6 +54,8 @@ plumber 0.5.0
 
 ### Bug fixes
 
+* Fix bug preventing error handling when a serializer fails (@antoine-sachet, [#490](https://github.com/rstudio/plumber/pull/490))
+
 * Fix URL-decoding of query parameters and URL-encoding/decoding of cookies. Both now use `httpuv::decodeURIComponent` instead of `httpuv::decodeURI`. (@antoine-sachet, [#462](https://github.com/trestletech/plumber/pull/462))
 
 * Fix bugs that prevented `do_provision` from deploying to DigitalOcean and updated to the latest `analogsea`.  ([#448](https://github.com/trestletech/plumber/pull/448/files))
