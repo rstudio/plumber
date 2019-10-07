@@ -32,3 +32,50 @@ function() {
     paste0("/future; ", Sys.time(), "; pid:", Sys.getpid())
   })
 }
+
+
+# -----------------------------------
+
+
+# Originally by @antoine-sachet from https://github.com/rstudio/plumber/issues/389
+#' @get /divide
+#' @json(auto_unbox = TRUE)
+#' @param a number
+#' @param b number
+function(a = NA, b = NA) {
+  future({
+    a <- as.numeric(a)
+    b <- as.numeric(b)
+    if (is.na(a)) stop("a is missing")
+    if (is.na(b)) stop("b is missing")
+    if (b == 0) stop("Cannot divide by 0")
+
+    a / b
+  })
+}
+
+#' @get /divide-catch
+#' @json(auto_unbox = TRUE)
+#' @param a number
+#' @param b number
+function(a = NA, b = NA) {
+  future({
+    a <- as.numeric(a)
+    b <- as.numeric(b)
+    if (is.na(a)) stop("a is missing")
+    if (is.na(b)) stop("b is missing")
+    if (b == 0) stop("Cannot divide by 0")
+
+    a / b
+  }) %>%
+    # Handle `future` errors
+    promises::catch(function(error) {
+      # handle error here!
+      if (error$message == "b is missing") {
+        return(Inf)
+      }
+
+      # rethrow original error
+      stop(error)
+    })
+}
