@@ -1,6 +1,6 @@
 # Instructions:
 # 1. `plumb` API - plumb(system.file("examples/14-future/plumber.R", package = "plumber"))$run(port = 1234)
-# 2. Execute the code below - source(system.file("examples/14-future/test-future.R", package = "plumber"))
+# 2. In separate R session, source the test file - source(system.file("examples/14-future/test-future.R", package = "plumber"))
 
 local(withAutoprint({ # print when sourced
 
