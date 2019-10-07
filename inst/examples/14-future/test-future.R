@@ -1,29 +1,36 @@
 # Instructions:
 # 1. `plumb` API - plumb(system.file("examples/14-future/plumber.R", package = "plumber"))$run(port = 1234)
-# 2. Execute the code below
+# 2. Execute the code below - source(system.file("examples/14-future/test-future.R", package = "plumber"))
 
+local(withAutoprint({ # print when sourced
 
+read_url <- function(...) {
+  try(readLines(..., warn = FALSE))
+}
 
 # example
-readLines("http://127.0.0.1:1234/divide?a=6&b=3", warn = FALSE) # 2
-readLines("http://127.0.0.1:1234/divide-catch?a=6&b=3", warn = FALSE) # 2
+read_url("http://127.0.0.1:1234/divide?a=6&b=3") # 2
+read_url("http://127.0.0.1:1234/divide-catch?a=6&b=3") # 2
 
 # missing 'b' param
-readLines("http://127.0.0.1:1234/divide?a=6", warn = FALSE) # fails
-readLines("http://127.0.0.1:1234/divide-catch?a=6", warn = FALSE) # handles error; returns Inf
+read_url("http://127.0.0.1:1234/divide?a=6") # fails
+read_url("http://127.0.0.1:1234/divide-catch?a=6") # handles error; returns Inf
 
 # missing 'a' param
-readLines("http://127.0.0.1:1234/divide?b=3", warn = FALSE) # fails
-readLines("http://127.0.0.1:1234/divide-catch?b=3", warn = FALSE) # fails
+read_url("http://127.0.0.1:1234/divide?b=3") # fails
+read_url("http://127.0.0.1:1234/divide-catch?b=3") # fails
 
+}))
 
 # --------------------------
 # --------------------------
 
+local(withAutoprint({ # print when sourced
 
 counter <- 1
 log_file <- "_timings.log"
 cat_file <- function(..., append = TRUE) {
+  Sys.sleep(0.5) # for clean logging purposes only
   cat(..., "\n", file = log_file, append = append)
 }
 curl_route <- function(route) {
@@ -59,6 +66,7 @@ Sys.sleep(21) # wait for everything to finish
 cat(readLines(log_file), sep = "\n")
 
 
+}))
 # --------------------------
 
 ## Sample output using future::plan(future::multiprocess(workers = 2)) # only two cores
