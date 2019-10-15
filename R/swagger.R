@@ -1,20 +1,76 @@
+
+
+# calculate all swagger type information at once and use created information throughout package
+swaggerTypeInfo <- list()
+plumberToSwaggerTypeMap <- list()
+defaultSwaggerType <- "string"
+
+local({
+  addSwaggerInfo <- function(swaggerType, plumberTypes, regex, converter) {
+    swaggerTypeInfo[[swaggerType]] <<-
+      list(
+        regex = regex,
+        converter = converter
+      )
+
+
+    for (plumberType in plumberTypes) {
+      plumberToSwaggerTypeMap[[plumberType]] <<- swaggerType
+    }
+    # make sure it could be called again
+    plumberToSwaggerTypeMap[[swaggerType]] <<- swaggerType
+
+    invisible(TRUE)
+  }
+
+  addSwaggerInfo(
+    "boolean",
+    c("bool", "boolean", "logical"),
+    "[01tfTF]|true|false|TRUE|FALSE",
+    as.logical
+  )
+  addSwaggerInfo(
+    "number",
+    c("dbl", "double", "float", "number", "numeric"),
+    "-?\\\\d*\\\\.?\\\\d+",
+    as.numeric
+  )
+  addSwaggerInfo(
+    "integer",
+    c("int", "integer"),
+    "-?\\\\d+",
+    as.integer
+  )
+  addSwaggerInfo(
+    "string",
+    c("chr", "str", "character", "string"),
+    "[^/]+",
+    as.character
+  )
+})
+
+
 #' Parse the given plumber type and return the typecast value
 #' @noRd
-plumberToSwaggerType <- function(type){
-  switch(as.character(type),
+plumberToSwaggerType <- function(type) {
+  if (length(type) > 1) {
+    return(vapply(type, plumberToSwaggerType, character(1)))
+  }
+  # default type is "string" type
+  if (is.na(type)) {
+    return(defaultSwaggerType)
+  }
 
-    "bool" = ,
-    "logical" = "boolean",
+  swaggerType <- plumberToSwaggerTypeMap[[as.character(type)]]
+  if (is.null(swaggerType)) {
+    warning(
+      "Unrecognized type: ", type, ". Using type: ", defaultSwaggerType,
+      call. = FALSE
+    )
+    swaggerType <- defaultSwaggerType
+  }
 
-    "double" = ,
-    "numeric" = "number",
-
-    "int" = "integer",
-
-    "character" = "string",
-
-    stop("Unrecognized type: ", type)
-  )
+  return(swaggerType)
 }
 
 #' Convert the endpoints as they exist on the router to a list which can
@@ -82,7 +138,7 @@ extractSwaggerParams <- function(endpointParams, pathParams){
       if (location == "path") {
         type <- plumberToSwaggerType(pathParams$type[pathParams$name == p])
       } else {
-        type <- "string" # Default to string
+        type <- defaultSwaggerType
       }
     }
 

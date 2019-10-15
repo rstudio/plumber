@@ -1,7 +1,7 @@
 #* @get /counter
-function(req, res){
+function(req, res) {
   count <- 0
-  if (!is.null(req$cookies$visitcounter)){
+  if (!is.null(req$cookies$visitcounter)) {
     count <- as.numeric(req$cookies$visitcounter)
   }
   # Most people won't need to concern themselves with the path argument.
@@ -12,7 +12,7 @@ function(req, res){
 
 #* Example using req$session. Requires adding "sessionCookie()" support to your router in order
 #* to work:
-#* `pr <- plumb("file.R"); pr$addGlobalProcessor(sessionCookie("secret", "cookieName")); pr$run()`
+#* `pr <- plumb("file.R"); pr$registerHooks(sessionCookie("secret", "cookieName")); pr$run()`
 #* @get /sessionCounter
 function(req){
   count <- 0

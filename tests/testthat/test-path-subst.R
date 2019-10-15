@@ -39,6 +39,12 @@ test_that("variables are typed", {
   p <- createPathRegex("/car/<id:logical>")
   expect_equal(p$names, "id")
   expect_equal(p$regex, paste0("^/car/", "([01tfTF]|true|false|TRUE|FALSE)", "$"))
+  p <- createPathRegex("/car/<id:chr>")
+  expect_equal(p$names, "id")
+  expect_equal(p$regex, paste0("^/car/", "([^/]+)", "$"))
+
+
+
 })
 
 test_that("path regex's are created properly", {

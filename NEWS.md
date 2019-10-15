@@ -4,6 +4,15 @@ plumber 0.5.0
 
 ### Security
 
+* Secret session cookies are now encrypted using `sodium`.
+  All prior `req$session` information will be lost.
+  Please see `?sessionCookie` for more information.
+  ([#404](https://github.com/trestletech/plumber/pull/404))
+
+* Session cookies set the `HttpOnly` flag by default to mitigate cross-site scripting (XSS).
+  Please see `?sessionCookie` for more information.
+  ([#404](https://github.com/trestletech/plumber/pull/404))
+
 * Wrap `jsonlite::fromJSON` to ensure that `jsonlite` never reads
   input as a remote address (such as a file path or URL) and attempts to parse
   that. The only known way to exploit this behavior in plumber unless an
@@ -32,6 +41,10 @@ plumber 0.5.0
 
 ### Minor new features and improvements
 
+* If cookie information is too large (> 4093 bytes), a warning will be displayed. ([#404](https://github.com/trestletech/plumber/pull/404))
+
+* Added new shorthand types for url parameters. (@byzheng, [#388](https://github.com/trestletech/plumber/pull/388))
+
 * Changed Swagger UI to use [swagger](https://github.com/rstudio/swagger) R package to display the
     swagger page. ([#365](https://github.com/trestletech/plumber/pull/365))
 
@@ -40,6 +53,14 @@ plumber 0.5.0
   ([#328](https://github.com/trestletech/plumber/pull/328/commits/cde0d3d2543a654fd0c5799b670767ccb0e22e35))
 
 ### Bug fixes
+
+* Fix bug preventing error handling when a serializer fails (@antoine-sachet, [#490](https://github.com/rstudio/plumber/pull/490))
+
+* Fix URL-decoding of query parameters and URL-encoding/decoding of cookies. Both now use `httpuv::decodeURIComponent` instead of `httpuv::decodeURI`. (@antoine-sachet, [#462](https://github.com/trestletech/plumber/pull/462))
+
+* Fix bugs that prevented `do_provision` from deploying to DigitalOcean and updated to the latest `analogsea`.  ([#448](https://github.com/trestletech/plumber/pull/448/files))
+
+* Fixed bug where functions defined earlier in the file could not be found when `plumb()`ing a file.  ([#416](https://github.com/trestletech/plumber/pull/416))
 
 * A multiline POST body is now collapsed to a single line (@robertdj, [#270](https://github.com/trestletech/plumber/issues/270) [#297](https://github.com/trestletech/plumber/pull/297)).
 

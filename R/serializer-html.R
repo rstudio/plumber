@@ -13,4 +13,5 @@ serializer_html <- function() {
   }
 }
 
+#' @include globals.R
 .globals$serializers[["html"]] <- serializer_html

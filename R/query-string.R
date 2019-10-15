@@ -27,10 +27,18 @@ parseQS <- function(qs){
     return(list())
   }
 
-  keys <- decodeURI(vapply(kv, "[[", character(1), 1))
+  keys <- httpuv::decodeURIComponent(vapply(kv, "[[", character(1), 1)) # returns utf8 strings
+  if (any(Encoding(keys) != "unknown")) {
+    # https://github.com/trestletech/plumber/pull/314#discussion_r239992879
+    non_ascii <- setdiff(unique(Encoding(keys)), "unknown")
+    warning(
+      "Query string parameter received in non-ASCII encoding. Received: ",
+      paste0(non_ascii, collapse = ", ")
+    )
+  }
 
   vals <- vapply(kv, "[[", character(1), 2)
-  vals <- decodeURI(vals)
+  vals <- httpuv::decodeURIComponent(vals) # returns utf8 strings
 
   ret <- as.list(vals)
   names(ret) <- keys
@@ -50,54 +58,64 @@ parseQS <- function(qs){
 
 createPathRegex <- function(pathDef){
   # Create a regex from the defined path, substituting variables where appropriate
-  match <- stringi::stri_match_all(pathDef, regex="/<(\\.?[a-zA-Z][\\w_\\.]*)(:(int|double|numeric|bool|logical))?>")[[1]]
+  match <- stringi::stri_match_all(
+    pathDef,
+    # capture any plumber type (<arg:TYPE>) (typesToRegexps(type) will yell if it is unknown)
+    # <arg> will be given the TYPE `defaultSwaggerType`
+    regex = "/<(\\.?[a-zA-Z][\\w_\\.]*)(:([^>]*))?>"
+  )[[1]]
   names <- match[,2]
-  type <- match[,4]
+  types <- match[,4]
   if (length(names) <= 1 && is.na(names)){
-    names <- character()
-    type <- NULL
+    return(
+      list(
+        names = character(),
+        types = NULL,
+        regex = paste0("^", pathDef, "$"),
+        converters = NULL
+      )
+    )
+  }
+  if (length(types) > 0) {
+    types[is.na(types)] <- defaultSwaggerType
   }
 
-  typedRe <- typeToRegex(type)
-  re <- pathDef
-  for (r in typedRe){
-    repl <- paste0("/(", r, ")$2")
-    re <- stringi::stri_replace_first_regex(re, pattern="/(<\\.?[a-zA-Z][\\w_\\.:]*>)(/?)",
-                                          replacement=repl)
+  pathRegex <- pathDef
+  regexps <- typesToRegexps(types)
+  for (regex in regexps) {
+    pathRegex <- stringi::stri_replace_first_regex(
+      pathRegex,
+      pattern = "/(<\\.?[a-zA-Z][\\w_\\.:]*>)(/?)",
+      replacement = paste0("/(", regex, ")$2")
+    )
   }
 
-  converters <- typeToConverters(type)
-
-  list(names = names, types=type, regex = paste0("^", re, "$"), converters=converters)
+  list(
+    names = names,
+    types = types,
+    regex = paste0("^", pathRegex, "$"),
+    converters = typeToConverters(types)
+  )
 }
 
-typeToRegex <- function(type){
-  re <- rep("[^/]+", length(type))
-  re[type == "int"] <- "-?\\\\d+"
-  re[type == "double" | type == "numeric"] <- "-?\\\\d*\\\\.?\\\\d+"
-  re[type == "bool" | type == "logical"] <- "[01tfTF]|true|false|TRUE|FALSE"
 
-  re
+typesToRegexps <- function(types) {
+  # return vector of regex strings
+  vapply(
+    swaggerTypeInfo[plumberToSwaggerType(types)],
+    `[[`, character(1), "regex"
+  )
 }
 
-typeToConverters <- function(type){
-  re <- NULL
-  for (t in type){
-    r <- function(x){x}
 
-    if (!is.na(t)){
-      if (t == "int"){
-        r <- as.integer
-      } else if (t == "double" || t == "numeric"){
-        r <- as.numeric
-      } else if (t == "bool" || t == "logical"){
-        r <- as.logical
-      }
-    }
-    re <- c(re, r)
-  }
-  re
+typeToConverters <- function(types) {
+  # return list of functions
+  lapply(
+    swaggerTypeInfo[plumberToSwaggerType(types)],
+    `[[`, "converter"
+  )
 }
+
 
 # Extract the params from a given path
 # @param def is the output from createPathRegex

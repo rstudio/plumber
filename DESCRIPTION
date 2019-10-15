@@ -2,10 +2,10 @@ Encoding: UTF-8
 Package: plumber
 Type: Package
 Title: An API Generator for R
-Version: 0.4.7
+Version: 0.4.7.9000
 Roxygen: list(markdown = TRUE)
 Authors@R: c(
-  person(family="Trestle Technology, LLC", role="aut", email="cran@trestletech.com"),
+  person(family = "RStudio", role = c("cph", "fnd")),
   person("Jeff", "Allen", role="cre", email="cran@trestletech.com"),
   person("Barret", "Schloerke", role="aut", email="barret@rstudio.com"),
   person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"),
@@ -26,23 +26,25 @@ Imports:
     jsonlite (>= 0.9.16),
     httpuv (>= 1.4.5.9002),
     crayon,
-    promises
+    promises,
+    sodium,
+    swagger (> 3.20.3)
 LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
     testthat (>= 0.11.0),
     XML,
     rmarkdown,
-    PKI,
     base64enc,
     htmlwidgets,
     visNetwork,
-    analogsea,
-    swagger (> 3.20.3)
+    analogsea (>= 0.7.0),
+    later
 Remotes:
     rstudio/promises,
     rstudio/swagger,
-    rstudio/httpuv
+    rstudio/httpuv,
+    sckott/analogsea
 Collate:
     'async.R'
     'content-types.R'
@@ -69,6 +71,7 @@ Collate:
     'serializer-content-type.R'
     'serializer-html.R'
     'serializer-htmlwidget.R'
+    'serializer-rds.R'
     'serializer-xml.R'
     'serializer.R'
     'session-cookie.R'

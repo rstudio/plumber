@@ -11,7 +11,9 @@ test_that("plumberToSwaggerType works", {
 
   expect_equal(plumberToSwaggerType("character"), "string")
 
-  expect_error(plumberToSwaggerType("flargdarg"), "Unrecognized type:")
+  expect_warning({
+    expect_equal(plumberToSwaggerType("flargdarg"), "string")
+  }, "Unrecognized type:")
 })
 
 test_that("response attributes are parsed", {
@@ -232,7 +234,15 @@ test_that("api kitchen sink", {
   for (folder in folders) {
     with_dir(folder, {
       if (file.exists("entrypoint.R")) {
-        pr <- sourceUTF8("entrypoint.R")
+        if (basename(folder) == "12-entrypoint") {
+          # this file has a bad secret on purpose,
+          # don't show the warning
+          expect_warning({
+            pr <- sourceUTF8("entrypoint.R")
+          }, "Legacy cookie secret")
+        } else {
+          pr <- sourceUTF8("entrypoint.R")
+        }
       } else {
         pr <- plumb(dir = ".")
       }
