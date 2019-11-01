@@ -322,7 +322,13 @@ plumber <- R6Class(
       httpuv::runServer(host, port, self)
     },
     mount = function(path, router){
-      path <- sub("([^/])$", "\\1/", path)
+      # Ensure that the path has both a leading and trailing slash.
+      if (!startsWith(path, "/")) {
+        path <- paste0("/", path)
+      }
+      if (!endsWith(path, "/")) {
+        path <- paste0(path, "/")
+      }
 
       private$mnts[[path]] <- router
     },
