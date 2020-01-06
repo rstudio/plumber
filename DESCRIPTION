@@ -1,4 +1,3 @@
-Encoding: UTF-8
 Package: plumber
 Type: Package
 Title: An API Generator for R
@@ -45,6 +44,7 @@ Remotes:
     rstudio/swagger,
     rstudio/httpuv,
     sckott/analogsea
+Encoding: UTF-8
 Collate:
     'async.R'
     'content-types.R'
