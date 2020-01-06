@@ -1,3 +1,5 @@
+* Multipart input is not parsed for query strings (#504, @krlmlr).
+
 plumber 0.5.0
 --------------------------------------------------------------------------------
 ## Full changelog
