@@ -15,7 +15,7 @@ postBodyFilter <- function(req){
 parseBody <- function(body, charset = "UTF-8"){
   # The body in a curl call can also include querystring formatted data
   # Is there data in the request?
-  if (is.null(body) || length(body) == 0 || body == "") {
+  if (is.null(body) || length(body) == 0 || body == "" || charset == "bytes") {
     return(list())
   }
 
@@ -28,7 +28,7 @@ parseBody <- function(body, charset = "UTF-8"){
     ret <- safeFromJSON(body)
   } else {
     # If not handle it as a query string
-      ret <- parseQS(body)
+    ret <- parseQS(body)
   }
   ret
 }

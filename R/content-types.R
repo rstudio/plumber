@@ -56,6 +56,9 @@ getCharacterSet <- function(contentType){
   if (is.null(contentType)) {
     return(default)
   }
+  if(grepl("^multipart/", contentType)) {
+    return("bytes")
+  }
   charsetStart <- attr(
     gregexpr(".*charset=(.*)", contentType, perl = T)[[1]],
     "capture.start"
