@@ -11,12 +11,14 @@ test_that("parseBlock works", {
     "#' @get /",
     "#' @post /",
     "#' @filter test",
-    "#' @serializer json")
+    "#' @serializer json",
+    "#' @errorhandler\nfunction(){x}")
   b <- parseBlock(length(lines), lines)
   expect_length(b$path, 2)
   expect_equal(b$path[[1]], list(verb="POST", path="/"))
   expect_equal(b$path[[2]], list(verb="GET", path="/"))
   expect_equal(b$filter, "test")
+  expect_equal(b$errorhandler, "function(){x}")
   expect_equal_functions(b$serializer, serializer_json())
 })
 

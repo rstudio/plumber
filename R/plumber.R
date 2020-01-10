@@ -220,7 +220,7 @@ plumber <- R6Class(
           srcref <- attr(e, "srcref")[[1]][c(1,3)]
 
           evaluateBlock(srcref, private$lines, e, private$envir, private$addEndpointInternal,
-                        private$addFilterInternal, self$mount)
+                        private$addFilterInternal, private$setErrorHandlerInternal, self$mount)
         }
 
         private$globalSettings <- parseGlobals(private$lines)
@@ -811,6 +811,10 @@ plumber <- R6Class(
     globalSettings = list(info=list()), # Global settings for this API. Primarily used for Swagger docs.
 
     errorHandler = NULL,
+    setErrorHandlerInternal = function(errorhandler){
+      private$errorHandler <- errorhandler
+      invisible(self)
+    },
     notFoundHandler = NULL,
 
     addFilterInternal = function(filter){
