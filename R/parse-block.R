@@ -63,10 +63,6 @@ parseBlock <- function(lineNum, file){
     if (!is.na(errorMat[1,1])){
       e <- stri_trim_both(errorMat[1,3])
 
-      # if (is.na(f) || f == ""){
-      #   stopOnLine(lineNum, line, "No @errorMat name specified.")
-      # }
-
       if (!is.null(errorhandler)){
         # Must have already assigned.
         stopOnLine(lineNum, line, "Multiple @errorhandlers specified for one function.")
@@ -107,7 +103,6 @@ parseBlock <- function(lineNum, file){
 
     serMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@serializer(\\s+([^\\s]+)\\s*(.*)\\s*$)?")
     if (!is.na(serMat[1,1])){
-
       s <- stri_trim_both(serMat[1,3])
       if (is.na(s) || s == ""){
         stopOnLine(lineNum, line, "No @serializer specified")
@@ -122,6 +117,7 @@ parseBlock <- function(lineNum, file){
       }
 
       ser <- .globals$serializers[[s]]
+
       if (!is.na(serMat[1, 4]) && serMat[1,4] != ""){
         # We have an arg to pass in to the serializer
         argList <- eval(parse(text=serMat[1,4]))
