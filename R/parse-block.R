@@ -65,7 +65,7 @@ parseBlock <- function(lineNum, file){
 
       if (!is.null(errorhandler)){
         # Must have already assigned.
-        stopOnLine(lineNum, line, "Multiple @errorhandlers specified for one function.")
+        stopOnLine(lineNum, line, "Multiple @errorhandlers specified.")
       }
 
       errorhandler <- e
@@ -287,7 +287,7 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, set
     filter <- PlumberFilter$new(block$filter, expr, envir, block$serializer, srcref)
     addFilter(filter)
 
-  }else if (!is.null(block$errorhandler)){
+  } else if (!is.null(block$errorhandler)){
     setErrorHandler(eval(expr))
 
   } else if (!is.null(block$assets)){
