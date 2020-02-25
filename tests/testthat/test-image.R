@@ -26,6 +26,10 @@ test_that("Images are properly rendered", {
   expect_equal(resp$headers$`Content-type`, "image/jpeg")
   expect_gt(length(resp$body), 100) # This changes based on R ver/OS, may not be useful.
   expect_lt(length(resp$body), fullsizeJPEG) # Should be smaller than the full one
+
+  resp <- r$serve(make_req("GET", "/svg"), PlumberResponse$new())
+  expect_equal(resp$status, 200)
+  expect_equal(resp$headers$`Content-type`, "image/svg+xml")
 })
 
 test_that("render_image arguments supplement", {
