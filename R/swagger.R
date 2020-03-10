@@ -170,7 +170,7 @@ isNa <- function(x) {
   is.na(x)
 }
 isNaOrNull <- function(x) {
-  isNa(x) || is.null(x)
+  any(isNa(x)) || is.null(x)
 }
 removeNaOrNulls <- function(x) {
   # preemptively stop
