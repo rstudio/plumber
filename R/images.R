@@ -12,14 +12,23 @@ render_image <- function(imageFun, contentType, args=NULL){
       do.call(imageFun, finalArgs)
     },
     post = function(value, req, res, data){
-      dev.off()
 
-      con <- file(data$file, "rb")
-      img <- readBin(con, "raw", file.info(data$file)$size)
-      close(con)
-      res$body <- img
-      res$setHeader("Content-type", contentType)
-      res
+      res$serializer <- function(val, req, res, errorHandler) {
+        tryCatch({
+          dev.off()
+
+          con <- file(data$file, "rb")
+          img <- readBin(con, "raw", file.info(data$file)$size)
+          close(con)
+          res$body <- img
+          res$setHeader("Content-type", contentType)
+          return(res$toResponse())
+        }, error = function(e){
+             errorHandler(req, res, e)
+        })
+      }
+      value
+
     }
   )
 }
