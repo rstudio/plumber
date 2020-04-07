@@ -6,7 +6,7 @@ serializer_json <- function(...) {
     tryCatch({
       json <- jsonlite::toJSON(val, ...)
 
-      res$setHeader("Content-Type", "application/txt")
+      res$setHeader("Content-Type", "application/json")
       res$body <- json
 
       return(res$toResponse())
