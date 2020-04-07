@@ -5,7 +5,7 @@ serializer_csv <- function(...) {
   function(val, req, res, errorHandler) {
     tryCatch({
       res$setHeader("Content-Type", "text/plain")
-      res$body <- readr::format_csv(val)
+      res$body <- readr::format_csv(val, ...)
       return(res$toResponse())
     }, error = function(e){
       errorHandler(req, res, e)

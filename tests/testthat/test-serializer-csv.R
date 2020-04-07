@@ -12,6 +12,12 @@ test_that("CSV serializes properly", {
   expect_equal(val$status, 200L)
   expect_equal(val$headers$`Content-Type`, "text/plain")
   expect_equal(val$body, readr::format_csv(d, na = "NA"))
+
+  d <- data.frame(a=1, b=2, c="hi", na=NA)
+  val <- serializer_csv(na = 'test-na')(d, data.frame(), PlumberResponse$new(), stop)
+  expect_equal(val$status, 200L)
+  expect_equal(val$headers$`Content-Type`, "text/plain")
+  expect_equal(val$body, readr::format_csv(d, na = 'test-na'))
 })
 
 test_that("Errors call error handler", {
