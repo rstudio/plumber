@@ -4,8 +4,13 @@
 \alias{do_configure_https}
 \title{Add HTTPS to a plumber Droplet}
 \usage{
-do_configure_https(droplet, domain, email, termsOfService = FALSE,
-  force = FALSE)
+do_configure_https(
+  droplet,
+  domain,
+  email,
+  termsOfService = FALSE,
+  force = FALSE
+)
 }
 \arguments{
 \item{droplet}{The droplet on which to act. See \code{\link[analogsea:droplet]{analogsea::droplet()}}.}

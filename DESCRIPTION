@@ -28,8 +28,7 @@ Imports:
     crayon,
     promises,
     sodium,
-    swagger (> 3.20.3),
-    readr
+    swagger (> 3.20.3)
 LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
@@ -40,7 +39,8 @@ Suggests:
     htmlwidgets,
     visNetwork,
     analogsea (>= 0.7.0),
-    later
+    later,
+    readr
 Remotes:
     rstudio/promises,
     rstudio/swagger,
@@ -55,7 +55,6 @@ Collate:
     'parse-block.R'
     'globals.R'
     'serializer-json.R'
-    'serializer-csv.R'
     'shared-secret-filter.R'
     'post-body.R'
     'query-string.R'
@@ -71,6 +70,7 @@ Collate:
     'plumber-step.R'
     'response.R'
     'serializer-content-type.R'
+    'serializer-csv.R'
     'serializer-html.R'
     'serializer-htmlwidget.R'
     'serializer-rds.R'
@@ -79,4 +79,4 @@ Collate:
     'session-cookie.R'
     'swagger.R'
     'utf8.R'
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0

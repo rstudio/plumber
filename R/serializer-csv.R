@@ -2,6 +2,10 @@
 #' @param ... extra arguments supplied to respective internal serialization function.
 #' @export
 serializer_csv <- function(...) {
+  if (!requireNamespace("readr", quietly = TRUE)) {
+    stop("`readr` must be installed for `serializer_csv` to work")
+  }
+
   function(val, req, res, errorHandler) {
     tryCatch({
       res$setHeader("Content-Type", "text/plain")
