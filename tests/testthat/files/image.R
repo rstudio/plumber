@@ -10,6 +10,7 @@ function() {
   plot(1:10)
 }
 
+
 #' @png (width = 150, height=150)
 #' @get /littlepng
 function(){

@@ -149,7 +149,7 @@ parseBlock <- function(lineNum, file){
 
     }
 
-    imageMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(jpeg|png|svg)([\\s\\(].*)?\\s*$")
+    imageMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(jpeg|png)([\\s\\(].*)?\\s*$")
     if (!is.na(imageMat[1,1])){
       if (!is.null(image)){
         # Must have already assigned.
@@ -262,8 +262,6 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, mou
           ep$registerHooks(render_png(imageArgs))
         } else if (block$image == "jpeg"){
           ep$registerHooks(render_jpeg(imageArgs))
-        } else if (block$image == "svg"){
-          ep$registerHooks(render_svg(imageArgs))
         } else {
           stop("Image format not found: ", block$image)
         }
