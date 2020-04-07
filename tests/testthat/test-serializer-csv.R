@@ -1,8 +1,8 @@
 context("CSV serializer")
 
-skip_if_not_installed("readr")
-
 test_that("CSV serializes properly", {
+  skip_if_not_installed("readr")
+
   d <- data.frame(a=1, b=2, c="hi")
   val <- serializer_csv()(d, data.frame(), PlumberResponse$new(), stop)
   expect_equal(val$status, 200L)
@@ -23,6 +23,8 @@ test_that("CSV serializes properly", {
 })
 
 test_that("Errors call error handler", {
+  skip_if_not_installed("readr")
+
   errors <- 0
   errHandler <- function(req, res, err){
     errors <<- errors + 1
