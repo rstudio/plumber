@@ -1,6 +1,6 @@
-#' @param imageFun The function to call to setup the image device (`png`, `jpeg` or `svg`)
-#' @param args A list of supplemental arguments to be passed into png(), jpeg() or svg()
-#' @importFrom grDevices dev.off jpeg png svg
+#' @param imageFun The function to call to setup the image device (e.g. `png`)
+#' @param args A list of supplemental arguments to be passed into jpeg()
+#' @importFrom grDevices dev.off jpeg png
 #' @noRd
 render_image <- function(imageFun, contentType, args=NULL){
   list(
@@ -30,8 +30,4 @@ render_jpeg <- function(args){
 
 render_png <- function(args){
   render_image(png, "image/png", args)
-}
-
-render_svg <- function(args){
-  render_image(svg, "image/svg+xml", args)
 }
