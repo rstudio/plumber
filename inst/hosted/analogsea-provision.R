@@ -34,7 +34,7 @@ install_new_r <- function(droplet){
 
 prepare_plumber<- function(droplet){
   droplet %>%
-    droplet_ssh("git clone https://github.com/trestletech/plumber.git") %>%
+    droplet_ssh("git clone https://github.com/rstudio/plumber.git") %>%
     droplet_ssh("cd plumber/inst/hosted/ && docker-compose up -d --build")
 }
 

@@ -29,7 +29,7 @@ parseQS <- function(qs){
 
   keys <- httpuv::decodeURIComponent(vapply(kv, "[[", character(1), 1)) # returns utf8 strings
   if (any(Encoding(keys) != "unknown")) {
-    # https://github.com/trestletech/plumber/pull/314#discussion_r239992879
+    # https://github.com/rstudio/plumber/pull/314#discussion_r239992879
     non_ascii <- setdiff(unique(Encoding(keys)), "unknown")
     warning(
       "Query string parameter received in non-ASCII encoding. Received: ",
