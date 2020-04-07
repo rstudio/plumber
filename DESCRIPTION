@@ -28,7 +28,8 @@ Imports:
     crayon,
     promises,
     sodium,
-    swagger (> 3.20.3)
+    swagger (> 3.20.3),
+    readr
 LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
@@ -54,6 +55,7 @@ Collate:
     'parse-block.R'
     'globals.R'
     'serializer-json.R'
+    'serializer-csv.R'
     'shared-secret-filter.R'
     'post-body.R'
     'query-string.R'
