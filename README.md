@@ -91,7 +91,7 @@ GitHub. The easiest way to do that is by using `devtools`.
 
 ```r
 library(devtools)
-install_github("trestletech/plumber")
+install_github("rstudio/plumber")
 library(plumber)
 ```
 
