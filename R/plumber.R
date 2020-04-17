@@ -265,12 +265,15 @@ plumber <- R6Class(
           # ex: rstudio cloud
           # use the HTTP_REFERER so RSC can find the swagger location to ask
           ## (can't directly ask for 127.0.0.1)
-          referrer_url <- req$HTTP_REFERER
-          referrer_url <- sub("index\\.html$", "", referrer_url)
-          referrer_url <- sub("__swagger__/$", "", referrer_url)
+          if (is.null(req$HTTP_REFERER)) {
+            openapi_server_url <- getOption("plumber.openapi.server.url")
+          } else {
+            openapi_server_url <- sub("index\\.html$|__swagger__/$", "", req$HTTP_REFERER)
+            options("plumber.openapi.server.url" = openapi_server_url)
+          }
           spec$servers <- list(
             list(
-              url = referrer_url,
+              url = openapi_server_url,
               description = "OpenAPI"
             )
           )
