@@ -237,7 +237,7 @@ plumber <- R6Class(
       port <- findPort(port)
 
 
-      message("Running plumber API at ", urlHost(host, port, changeHostLocation = FALSE))
+      message("Running plumber API at ", urlHost(host = host, port = port, changeHostLocation = FALSE))
 
       priorDebug <- getOption("plumber.debug")
       on.exit({ options("plumber.debug" = priorDebug) })
@@ -256,6 +256,17 @@ plumber <- R6Class(
         }
         spec <- self$swaggerFile()
 
+        swaggerUrl <- paste0(getOption(
+            "plumber.apiURL",
+            urlHost(
+              scheme = getOption("plumber.apiScheme", "http"),
+              host   = getOption("plumber.apiHost", host),
+              port   = getOption("plumber.apiPort", port),
+              path   = getOption("plumber.apiPath", ""),
+              changeHostLocation = TRUE
+            )
+        ), "/__swagger__/")
+
         # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
         swagger_fun <- function(req, res, ..., scheme = "deprecated", host = "deprecated", path = "deprecated") {
           if (!missing(scheme) || !missing(host) || !missing(path)) {
@@ -265,15 +276,24 @@ plumber <- R6Class(
           # ex: rstudio cloud
           # use the HTTP_REFERER so RSC can find the swagger location to ask
           ## (can't directly ask for 127.0.0.1)
-          if (is.null(req$HTTP_REFERER)) {
-            openapi_server_url <- getOption("plumber.openapi.server.url")
-          } else {
-            openapi_server_url <- sub("index\\.html$|__swagger__/$", "", req$HTTP_REFERER)
-            options("plumber.openapi.server.url" = openapi_server_url)
+          api_server_url <- swaggerUrl
+          if (isFALSE(getOption("plumber.apiURL", FALSE)) &&
+              isFALSE(getOption("plumber.apiHost", FALSE))) {
+            if (is.null(req$HTTP_REFERER)) {
+              # Prevent leaking host and port if option is not set
+              api_server_url <- character(1)
+            }
+            else {
+              # Use HTTP_REFERER as fallback
+              api_server_url <- req$HTTP_REFERER
+            }
           }
+          api_server_url <- sub("index\\.html$", "", api_server_url)
+          api_server_url <- sub("/__swagger__/$", "", api_server_url)
+
           spec$servers <- list(
             list(
-              url = openapi_server_url,
+              url = api_server_url,
               description = "OpenAPI"
             )
           )
@@ -309,11 +329,7 @@ plumber <- R6Class(
         }
         self$mount("/__swagger__", PlumberStatic$new(swagger::swagger_path()))
 
-        swaggerUrl <- paste0(
-          urlHost(getOption("plumber.apiHost", host), port, changeHostLocation = TRUE),
-          "/__swagger__/"
-        )
-        message("Running Swagger UI  at ", swaggerUrl, sep = "")
+        message("Running Swagger UI at ", swaggerUrl, sep = "")
         # notify swaggerCallback of plumber swagger location
         if (!is.null(swaggerCallback) && is.function(swaggerCallback)) {
           swaggerCallback(swaggerUrl)
@@ -893,7 +909,7 @@ plumber <- R6Class(
 
 
 
-urlHost <- function(host, port, changeHostLocation = FALSE) {
+urlHost <- function(scheme = "http", host, port, path = "", changeHostLocation = FALSE) {
   if (isTRUE(changeHostLocation)) {
     # upgrade swaggerCallback location to be localhost and not catch-all addresses
     # shiny: https://github.com/rstudio/shiny/blob/95173f6/R/server.R#L781-L786
@@ -911,13 +927,7 @@ urlHost <- function(host, port, changeHostLocation = FALSE) {
   if (grepl(":[^/]", host)) {
     host <- paste0("[", host, "]")
   }
-  # if no match against a protocol
-  if (!grepl("://", host)) {
-    # add http protocol
-    # RStudio IDE does NOT like empty protocols like "127.0.0.1:1234/route"
-    # Works if supplying "http://127.0.0.1:1234/route"
-    host <- paste0("http://", host)
-  }
 
-  paste0(host, ":", port)
+  paste0(scheme, "://", host, ":", port, path)
+
 }
