@@ -41,6 +41,9 @@ plumber 0.5.0
 
 ### Minor new features and improvements
 
+* R repository modified to `xenial-cran35` and `trusty-cran35` in `install_new_r` scripts (@meztez,
+[#526](https://github.com/rstudio/plumber/issues/526))
+
 * If cookie information is too large (> 4093 bytes), a warning will be displayed. ([#404](https://github.com/rstudio/plumber/pull/404))
 
 * Added new shorthand types for url parameters. (@byzheng, [#388](https://github.com/rstudio/plumber/pull/388))

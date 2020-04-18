@@ -141,7 +141,7 @@ install_nginx <- function(droplet){
 
 install_new_r <- function(droplet){
   analogsea::droplet_ssh(droplet, "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9")
-  analogsea::droplet_ssh(droplet, "echo 'deb https://cran.rstudio.com/bin/linux/ubuntu xenial/' >> /etc/apt/sources.list.d/cran.list")
+  analogsea::droplet_ssh(droplet, "echo 'deb https://cran.rstudio.com/bin/linux/ubuntu xenial-cran35/' >> /etc/apt/sources.list.d/cran.list")
   # TODO: use the analogsea version once https://github.com/sckott/analogsea/issues/139 is resolved
   #analogsea::debian_apt_get_update(droplet)
   analogsea::droplet_ssh(droplet, "sudo apt-get update -qq")
