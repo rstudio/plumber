@@ -497,22 +497,6 @@ test_that("host is updated properly for printing", {
     "http://127.0.0.1:1234"
   )
   expect_identical(
-    urlHost(host = "0.0.0.0", port = 1234, changeHostLocation = TRUE),
-    "http://127.0.0.1:1234"
-  )
-  expect_identical(
-    urlHost(host = "0.0.0.0", port = 1234, changeHostLocation = TRUE),
-    "http://127.0.0.1:1234"
-  )
-  expect_identical(
-    urlHost(host = "0.0.0.0", port = 1234, changeHostLocation = TRUE),
-    "http://127.0.0.1:1234"
-  )
-  expect_identical(
-    urlHost(scheme = "http", host = "0.0.0.0", port = 1234, changeHostLocation = TRUE),
-    "http://127.0.0.1:1234"
-  )
-  expect_identical(
     urlHost(scheme = "http", host = "0.0.0.0", port = 1234, path = "/v1", changeHostLocation = TRUE),
     "http://127.0.0.1:1234/v1"
   )
