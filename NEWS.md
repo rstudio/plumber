@@ -56,7 +56,7 @@ plumber 0.5.0
 
 * Modified images handling to serialize during serialization step instead of
   postexec step. Fix issue with images pre/postserialize hooks (@meztez,
-[#517](https://github.com/rstudio/plumber/issues/517)).
+[#518](https://github.com/rstudio/plumber/pull/518)).
 
 * Fix possible bugs due to mounted routers without leading slashes (@atheriel, [#476](https://github.com/trestletech/plumber/issues/476) [#501](https://github.com/trestletech/plumber/pull/501)).
 
