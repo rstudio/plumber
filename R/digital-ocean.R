@@ -84,6 +84,7 @@ install_plumber <- function(droplet, unstable){
     analogsea::debian_apt_get_install(droplet, "libcurl4-openssl-dev")
     analogsea::debian_apt_get_install(droplet, "libgit2-dev")
     analogsea::debian_apt_get_install(droplet, "libssl-dev")
+    analogsea::debian_apt_get_install(droplet, "libsodium-dev")
     analogsea::install_r_package(droplet, "devtools", repo="https://cran.rstudio.com")
     analogsea::droplet_ssh(droplet, "Rscript -e \"devtools::install_github('rstudio/plumber')\"")
   } else {
