@@ -8,6 +8,10 @@ PlumberStatic <- R6Class(
   "plumberstatic",
   inherit = plumber,
   public = list(
+    #' @description Create a new `plumberstatic` router
+    #' @param direc a path to an asset directory.
+    #' @param options options to be evaluated in the plumberstatic router environment
+    #' @return A new `plumberstatic` router
     initialize = function(direc, options){
       super$initialize(filters=NULL)
 
@@ -75,6 +79,12 @@ PlumberStatic <- R6Class(
       filter <- PlumberFilter$new(paste("static-asset", direc, sep="|"), expr, private$envir)
       private$addFilterInternal(filter)
     },
+    #' @description Print reprensation of plumberstatic router.
+    #' @param prefix a character string. Prefix to append to representation.
+    #' @param topLevel a logical value. When method executed on top level
+    #' router, set to `TRUE`.
+    #' @param ... additional arguments for recursive calls
+    #' @return A terminal friendly represention of a plumberstatic router.
     print = function(prefix="", topLevel=TRUE, ...){
       cat(prefix)
       if (!topLevel){
