@@ -212,7 +212,7 @@ test_that("cookie encyption fails smoothly", {
   # garbage in, no key
   expect_error({
     decodeCookie(garbage, NULL)
-  }, "not a valid JSON string")
+  }, "(not a valid JSON string|embedded nul in string)")
   # garbage in, key
   expect_error({
     decodeCookie(garbage, asCookieKey(randomCookieKey()))
