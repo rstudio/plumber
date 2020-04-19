@@ -12,7 +12,7 @@ jobs:
       dist: trusty
       r: oldrel
       if: |
-        repo = trestletech/plumber AND
+        repo = rstudio/plumber AND
         type = push AND
         branch IN (master, travis, rc-v0.5.0)
       addons:
@@ -60,7 +60,7 @@ jobs:
       brew_packages: libsodium
       r: oldrel
       if: |
-        repo = trestletech/plumber AND
+        repo = rstudio/plumber AND
         type = push AND
         branch IN (master, travis, rc-v0.5.0)
     - <<: *osx

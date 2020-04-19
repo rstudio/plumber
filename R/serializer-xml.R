@@ -5,7 +5,7 @@ xmlSerializer <- function(){
     #       call. = FALSE)
     #}
 
-    stop("XML serialization not yet implemented. Please see the discussion at https://github.com/trestletech/plumber/issues/65")
+    stop("XML serialization not yet implemented. Please see the discussion at https://github.com/rstudio/plumber/issues/65")
   }
 }
 
