@@ -32,13 +32,17 @@ parseBlock <- function(lineNum, file){
     if (!is.na(epMat[1,2])){
       p <- stri_trim_both(epMat[1,4])
 
+      objectTypes <- paste0(names(which(plumberToSwaggerTypeMap == "object")), collapse = "|")
       if (is.na(p) || p == ""){
         stopOnLine(lineNum, line, "No path specified.")
+      } else if (stri_detect_regex(p, paste0("<([^:>]+)(:(", objectTypes, "|\\[(", objectTypes, ")\\]){1}>"))) {
+        stopOnLine(lineNum, line, paste("Path parameter types", objectTypes, "not supported."))
       }
 
       if (is.null(paths)){
         paths <- list()
       }
+
       paths[[length(paths)+1]] <- list(verb = enumerateVerbs(epMat[1,2]), path = p)
     }
 
@@ -182,20 +186,22 @@ parseBlock <- function(lineNum, file){
 
       name <- paramMat[1,3]
       type <- NA
+      sern <- FALSE
 
-      nameType <- stringi::stri_match(name, regex="^([^\\s]+):(\\w+)(\\*?)$")
+      nameType <- stringi::stri_match(name, regex="^([^\\s]+):(\\w+|\\[\\w+\\])(\\*?)$")
       if (!is.na(nameType[1,1])){
         name <- nameType[1,2]
-        type <- plumberToSwaggerType(nameType[1,3])
+        type <- plumberToSwaggerType(stringi::stri_replace_all(nameType[1,3], "", regex = "\\[|\\]"))
+        sern <- stringi::stri_detect_regex(nameType[1,3], "^\\[")
         #stopOnLine(lineNum, line, "No parameter type specified")
       }
 
-
-      reqd <- FALSE
-      if (!is.na(nameType[1,4])){
-        reqd <- nameType[1,4] == "*"
+      reqd <- "false"
+      if (!is.na(nameType[1,4])) {
+        reqd <- nameType[1,4] == "true"
       }
-      params[[name]] <- list(desc=paramMat[1,5], type=type, required=reqd)
+
+      params[[name]] <- list(desc=paramMat[1,5], type=type, required=reqd, serialization=sern)
     }
 
     tagMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@tag\\s+(\\S.+)\\s*")

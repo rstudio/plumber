@@ -26,26 +26,36 @@ local({
   addSwaggerInfo(
     "boolean",
     c("bool", "boolean", "logical"),
-    "[01tfTF]|true|false|TRUE|FALSE",
-    as.logical
+    "(?:(?:[01tfTF]|true|false|TRUE|FALSE),?)+",
+    function(x) {as.logical(stringi::stri_split_fixed(x, ",")[[1]])}
   )
   addSwaggerInfo(
     "number",
     c("dbl", "double", "float", "number", "numeric"),
-    "-?\\\\d*\\\\.?\\\\d+",
-    as.numeric
+    "(?:-?\\\\d*\\\\.?\\\\d+,?)+",
+    function(x) {as.numeric(stringi::stri_split_fixed(x, ",")[[1]])}
   )
   addSwaggerInfo(
     "integer",
     c("int", "integer"),
-    "-?\\\\d+",
-    as.integer
+    "(?:-?\\\\d+,?)+",
+    function(x) {as.integer(stringi::stri_split_fixed(x, ",")[[1]])}
   )
   addSwaggerInfo(
     "string",
     c("chr", "str", "character", "string"),
-    "[^/]+",
-    as.character
+    "(?:[^/,]+,?)",
+    function(x) {as.character(stringi::stri_split_fixed(x, ",")[[1]])}
+  )
+  addSwaggerInfo(
+    "object",
+    c("list", "data.frame", "df"),
+    "(?:[^/,]+,?)",
+    # Should not be used, object in path are not reliable for larger size like a serialized iris datasets
+    # Errors on Windows with a chopped up req$PATH_INFO only containing the last few thousands character
+    # Could not reproduce on Ubuntu. Might be related to rewriting buffer in httpuv from the split url
+    # did not investigate further.
+    function(x) {safeFromJSON(URLdecode(x))}
   )
 })
 
@@ -97,7 +107,8 @@ prepareSwaggerEndpoint <- function(routerEndpointEntry, path = routerEndpointEnt
     endptSwag <- list(
       summary = routerEndpointEntry$comments,
       responses = resps,
-      parameters = params,
+      parameters = params$parameters,
+      requestBody = params$requestBody,
       tags = routerEndpointEntry$tags
     )
 
@@ -126,15 +137,24 @@ extractResponses <- function(resps){
 #' @noRd
 extractSwaggerParams <- function(endpointParams, pathParams){
 
-  params <- list()
+  params <- list(
+    parameters = list(),
+    requestBody = list()
+  )
   for (p in names(endpointParams)) {
     location <- "query"
+    required <- endpointParams[[p]]$required
+    style <- "form"
+    explode <- "true"
     if (p %in% pathParams$name) {
       location <- "path"
+      required <- "true"
+      style <- "simple"
+      explode <- "false"
     }
 
     type <- endpointParams[[p]]$type
-    if (isNaOrNull(type)){
+    if (isNaOrNull(type)) {
       if (location == "path") {
         type <- plumberToSwaggerType(pathParams$type[pathParams$name == p])
       } else {
@@ -142,21 +162,45 @@ extractSwaggerParams <- function(endpointParams, pathParams){
       }
     }
 
-    paramList <- list(
-      name = p,
-      description = endpointParams[[p]]$desc,
-      `in` = location,
-      required = endpointParams[[p]]$required,
-      schema = list(
-        type = type
+    if (type == "object") {
+      if (length(params$requestBody) == 0L) {
+        params$requestBody <- list(
+          content = list(
+            `application/json` = list(
+              schema = list(
+                type = object,
+                example = list()
+              )
+            )
+          )
+        )
+      }
+      params$requestBody$content$`application/json`$schema$example[[p]] <- {
+        if (endpointParams[[p]]$serialization) {"[{}]"} else {"{}"}
+      }
+    } else {
+      paramList <- list(
+        name = p,
+        description = endpointParams[[p]]$desc,
+        `in` = location,
+        required = required,
+        schema = list(
+          type = type
+        )
       )
-    )
-
-    if (location == "path"){
-      paramList$required <- TRUE
+      if (endpointParams[[p]]$serialization) {
+        paramList$schema <- list(
+          type = "array",
+          items = list(
+            type = type
+          ),
+          minItems = 1
+        )
+        paramList$style <- style
+        paramList$explode <- explode
+      }
+      params$parameters[[length(params$parameters) + 1]] <- paramList
     }
-
-    params[[length(params) + 1]] <- paramList
 
   }
   params

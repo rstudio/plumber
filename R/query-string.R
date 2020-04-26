@@ -62,17 +62,19 @@ createPathRegex <- function(pathDef){
     pathDef,
     # capture any plumber type (<arg:TYPE>) (typesToRegexps(type) will yell if it is unknown)
     # <arg> will be given the TYPE `defaultSwaggerType`
-    regex = "/<(\\.?[a-zA-Z][\\w_\\.]*)(:([^>]*))?>"
+    regex = "/<(\\.?[a-zA-Z][\\w_\\.]*)(:([^>]*|\\[[^>]*\\]))?>"
   )[[1]]
   names <- match[,2]
-  types <- match[,4]
-  if (length(names) <= 1 && is.na(names)){
+  types <- stringi::stri_replace_all(match[,4], "", regex = "\\[|\\]")
+  serializations <- stringi::stri_detect_regex(match[,4], "^\\[")
+  if (length(names) <= 1 && is.na(names)) {
     return(
       list(
         names = character(),
         types = NULL,
         regex = paste0("^", pathDef, "$"),
-        converters = NULL
+        converters = NULL,
+        serializations = NULL
       )
     )
   }
@@ -85,7 +87,7 @@ createPathRegex <- function(pathDef){
   for (regex in regexps) {
     pathRegex <- stringi::stri_replace_first_regex(
       pathRegex,
-      pattern = "/(<\\.?[a-zA-Z][\\w_\\.:]*>)(/?)",
+      pattern = "/(<\\.?[a-zA-Z][\\w_\\.:\\[\\]]*>)(/?)",
       replacement = paste0("/(", regex, ")$2")
     )
   }
@@ -94,7 +96,8 @@ createPathRegex <- function(pathDef){
     names = names,
     types = types,
     regex = paste0("^", pathRegex, "$"),
-    converters = typeToConverters(types)
+    converters = typeToConverters(types),
+    serializations = serializations
   )
 }
 
