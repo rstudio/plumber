@@ -218,7 +218,7 @@ extractSwaggerParams <- function(endpointParams, pathParams){
           items = list(
             type = type
           ),
-          minItems = 1
+          minItems = as.integer(required)
         )
         paramList$style <- style
         paramList$explode <- explode

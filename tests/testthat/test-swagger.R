@@ -176,7 +176,7 @@ test_that("extractSwaggerParams works", {
                       type="array",
                       items= list(
                         type="numeric"),
-                      minItems=1),
+                      minItems=0),
                     style="form",
                     explode=TRUE))
   expect_equal(params$parameters[[5]],
