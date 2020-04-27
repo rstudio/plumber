@@ -24,26 +24,58 @@ test_that("variables are typed", {
   expect_equal(p$names, "id")
   expect_equal(p$regex, paste0("^/car/", "(-?\\d+)", "$"))
 
+  p <- createPathRegex("/car/<id:[int]>")
+  expect_equal(p$names, "id")
+  expect_equal(p$regex, paste0("^/car/", "((?:-?\\d+,?)+)", "$"))
+
   p <- createPathRegex("/car/<id:double>")
   expect_equal(p$names, "id")
   expect_equal(p$regex, paste0("^/car/", "(-?\\d*\\.?\\d+)", "$"))
+  p <- createPathRegex("/car/<id:[double]>")
+  expect_equal(p$names, "id")
+  expect_equal(p$regex, paste0("^/car/", "((?:-?\\d*\\.?\\d+,?)+)", "$"))
 
   p <- createPathRegex("/car/<id:numeric>")
   expect_equal(p$names, "id")
   expect_equal(p$regex, paste0("^/car/", "(-?\\d*\\.?\\d+)", "$"))
+  p <- createPathRegex("/car/<id:[numeric]>")
+  expect_equal(p$names, "id")
+  expect_equal(p$regex, paste0("^/car/", "((?:-?\\d*\\.?\\d+,?)+)", "$"))
 
   p <- createPathRegex("/car/<id:bool>")
   expect_equal(p$names, "id")
   expect_equal(p$regex, paste0("^/car/", "([01tfTF]|true|false|TRUE|FALSE)", "$"))
+  p <- createPathRegex("/car/<id:[bool]>")
+  expect_equal(p$names, "id")
+  expect_equal(p$regex, paste0("^/car/", "((?:(?:[01tfTF]|true|false|TRUE|FALSE),?)+)", "$"))
 
   p <- createPathRegex("/car/<id:logical>")
   expect_equal(p$names, "id")
   expect_equal(p$regex, paste0("^/car/", "([01tfTF]|true|false|TRUE|FALSE)", "$"))
+  p <- createPathRegex("/car/<id:[logical]>")
+  expect_equal(p$names, "id")
+  expect_equal(p$regex, paste0("^/car/", "((?:(?:[01tfTF]|true|false|TRUE|FALSE),?)+)", "$"))
+
   p <- createPathRegex("/car/<id:chr>")
   expect_equal(p$names, "id")
   expect_equal(p$regex, paste0("^/car/", "([^/]+)", "$"))
+  p <- createPathRegex("/car/<id:[chr]>")
+  expect_equal(p$names, "id")
+  expect_equal(p$regex, paste0("^/car/", "((?:[^/,]+,?))", "$"))
+  expect_equal(p$serializations, TRUE)
+  expect_equal(p$converters$string("BOB,LUKE,GUY"), c("BOB", "LUKE", "GUY"))
 
-
+  #Check that warnings happen on typo or unsupported type
+  expect_warning(createPathRegex("/car/<id:motor>"),
+                 "Unrecognized type")
+  expect_warning(createPathRegex("/car/<id:[motor>"),
+                 "Unrecognized type")
+  expect_warning(createPathRegex("/car/<id:[df*>"),
+                 "Unrecognized type")
+  expect_warning(createPathRegex("/car/<id:df]*>"),
+                 "Unrecognized type")
+  expect_warning(createPathRegex("/car/<id:df]>"),
+                 "Unrecognized type")
 
 })
 

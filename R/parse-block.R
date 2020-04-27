@@ -24,6 +24,7 @@ parseBlock <- function(lineNum, file){
   comments <- ""
   responses <- NULL
   tags <- NULL
+  objectTypes <- paste0(names(which(plumberToSwaggerTypeMap == "object")), collapse = "|")
   while (lineNum > 0 && (stri_detect_regex(file[lineNum], pattern="^#['\\*]") || stri_trim_both(file[lineNum]) == "")){
 
     line <- file[lineNum]
@@ -32,10 +33,9 @@ parseBlock <- function(lineNum, file){
     if (!is.na(epMat[1,2])){
       p <- stri_trim_both(epMat[1,4])
 
-      objectTypes <- paste0(names(which(plumberToSwaggerTypeMap == "object")), collapse = "|")
       if (is.na(p) || p == ""){
         stopOnLine(lineNum, line, "No path specified.")
-      } else if (stri_detect_regex(p, paste0("<([^:>]+)(:(", objectTypes, "|\\[(", objectTypes, ")\\]){1}>"))) {
+      } else if (stri_detect_regex(p, paste0("<([^:>]+)(:(", objectTypes, "|\\[(", objectTypes, ")\\])){1}\\*?>"))) {
         stopOnLine(lineNum, line, paste("Path parameter types", objectTypes, "not supported."))
       }
 
@@ -196,9 +196,9 @@ parseBlock <- function(lineNum, file){
         #stopOnLine(lineNum, line, "No parameter type specified")
       }
 
-      reqd <- "false"
+      reqd <- FALSE
       if (!is.na(nameType[1,4])) {
-        reqd <- nameType[1,4] == "true"
+        reqd <- nameType[1,4] == "*"
       }
 
       params[[name]] <- list(desc=paramMat[1,5], type=type, required=reqd, serialization=sern)

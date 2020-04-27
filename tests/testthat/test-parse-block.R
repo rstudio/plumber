@@ -150,5 +150,19 @@ test_that("@html parameters produce an error", {
   expect_block_error("#' @html (key = \"val\")", "unused argument")
 })
 
+test_that("Stop object typed param in path", {
+
+  expect_block_error <- function(lines, ...) {
+    expect_error({
+      parseBlock(length(lines), lines)
+    }, ...)
+  }
+
+  #no object typed param in path
+  expect_block_error("#' @get /car/<id:df>", "Path parameter types")
+  expect_block_error("#' @get /car/<id:[df]>", "Path parameter types")
+  expect_block_error("#' @get /car/<id:[df]*>", "Path parameter types")
+
+})
 
 # TODO: more testing around filter, assets, endpoint, etc.

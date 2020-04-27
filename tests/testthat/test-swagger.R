@@ -11,6 +11,10 @@ test_that("plumberToSwaggerType works", {
 
   expect_equal(plumberToSwaggerType("character"), "string")
 
+  expect_equal(plumberToSwaggerType("df"), "object")
+  expect_equal(plumberToSwaggerType("list"), "object")
+  expect_equal(plumberToSwaggerType("data.frame"), "object")
+
   expect_warning({
     expect_equal(plumberToSwaggerType("flargdarg"), "string")
   }, "Unrecognized type:")
@@ -39,12 +43,14 @@ test_that("params are parsed", {
     "#' @get /",
     "#' @param test Test docs",
     "#' @param required:character* Required param",
-    "#' @param another:int Another docs")
+    "#' @param another:int Another docs",
+    "#' @param multi:[int]* Required array param")
   b <- parseBlock(length(lines), lines)
-  expect_length(b$params, 3)
-  expect_equal(b$params$another, list(desc="Another docs", type="integer", required=FALSE))
-  expect_equal(b$params$test, list(desc="Test docs", type=NA, required=FALSE))
-  expect_equal(b$params$required, list(desc="Required param", type="string", required=TRUE))
+  expect_length(b$params, 4)
+  expect_equal(b$params$another, list(desc="Another docs", type="integer", required=FALSE, serialization = FALSE))
+  expect_equal(b$params$test, list(desc="Test docs", type=NA, required=FALSE, serialization = FALSE))
+  expect_equal(b$params$required, list(desc="Required param", type="string", required=TRUE, serialization = FALSE))
+  expect_equal(b$params$multi, list(desc="Required array param", type="integer", required=TRUE, serialization = TRUE))
 
   b <- parseBlock(1, "")
   expect_null(b$params)
@@ -134,48 +140,97 @@ test_that("extractResponses works", {
 test_that("extractSwaggerParams works", {
   ep <- list(id=list(desc="Description", type="integer", required=FALSE),
              id2=list(desc="Description2", required=FALSE), # No redundant type specification
-             make=list(desc="Make description", type="string", required=FALSE))
-  pp <- data.frame(name=c("id", "id2"), type=c("int", "int"))
+             make=list(desc="Make description", type="string", required=FALSE),
+             prices=list(desc="Historic sell prices", type="numeric", required = FALSE, serialization = TRUE),
+             claims=list(desc="Insurance claims", type="object", required = FALSE))
+  pp <- data.frame(name=c("id", "id2", "owners"), type=c("int", "int", "chr"), serialization = c(FALSE, FALSE, TRUE), stringsAsFactors = FALSE)
 
   params <- extractSwaggerParams(ep, pp)
-  expect_equal(params[[1]],
+  expect_equal(params$parameters[[1]],
                list(name="id",
                     description="Description",
                     `in`="path",
                     required=TRUE, # Made required b/c path arg
                     schema = list(
                       type="integer")))
-  expect_equal(params[[2]],
+  expect_equal(params$parameters[[2]],
                list(name="id2",
                     description="Description2",
                     `in`="path",
                     required=TRUE, # Made required b/c path arg
                     schema = list(
                       type="integer")))
-  expect_equal(params[[3]],
+  expect_equal(params$parameters[[3]],
                list(name="make",
                     description="Make description",
                     `in`="query",
                     required=FALSE,
                     schema = list(
                       type="string")))
+  expect_equal(params$parameters[[4]],
+               list(name="prices",
+                    description="Historic sell prices",
+                    `in`="query",
+                    required=FALSE,
+                    schema = list(
+                      type="array",
+                      items= list(
+                        type="numeric"),
+                      minItems=1),
+                    style="form",
+                    explode=TRUE))
+  expect_equal(params$parameters[[5]],
+               list(name="owners",
+                    description=NULL,
+                    `in`="path",
+                    required=TRUE,
+                    schema = list(
+                      type="array",
+                      items= list(
+                        type="string"),
+                      minItems=1),
+                    style="simple",
+                    explode=FALSE))
+  expect_equal(params$requestBody,
+               list(content = list(
+                 `application/json` = list(
+                   schema = list(
+                     type = "object",
+                     example = list(
+                       "claims" = "{}"))))))
 
   # If id were not a path param it should not be promoted to required
   params <- extractSwaggerParams(ep, NULL)
-  idParam <- params[[which(vapply(params, `[[`, character(1), "name") == "id")]]
+  idParam <- params$parameters[[which(vapply(params$parameters, `[[`, character(1), "name") == "id")]]
   expect_equal(idParam$required, FALSE)
   expect_equal(idParam$schema$type, "integer")
 
-  for (param in params) {
-    expect_equal(length(param), 5)
+  for (param in params$parameters) {
+    if (param$schema$type != "array") {
+      expect_equal(length(param), 5)
+    } else {
+      expect_equal(length(param), 7)
+    }
   }
 
+  # Check if we can pass a single path parameter without a @param line match
+  params <- extractSwaggerParams(NULL, pp[3,])
+  expect_equal(params$parameters[[1]],
+               list(name="owners",
+                    description=NULL,
+                    `in`="path",
+                    required=TRUE,
+                    schema = list(
+                      type="array",
+                      items= list(
+                        type="string"),
+                      minItems=1),
+                    style="simple",
+                    explode=FALSE))
+
   params <- extractSwaggerParams(NULL, NULL)
-  expect_equal(length(params), 0)
+  expect_equal(sum(sapply(params, length)), 0)
 })
-
-
-
 
 test_that("api kitchen sink", {
 

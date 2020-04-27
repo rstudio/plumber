@@ -4,13 +4,18 @@
 swaggerTypeInfo <- list()
 plumberToSwaggerTypeMap <- list()
 defaultSwaggerType <- "string"
+defaultSwaggerSerialization <- FALSE
 
 local({
-  addSwaggerInfo <- function(swaggerType, plumberTypes, regex, converter) {
+  addSwaggerInfo <- function(swaggerType, plumberTypes,
+                             regex, regexSerialization,
+                             converter, converterSerialization) {
     swaggerTypeInfo[[swaggerType]] <<-
       list(
         regex = regex,
-        converter = converter
+        regexSerialization = regexSerialization,
+        converter = converter,
+        converterSerialization = converterSerialization
       )
 
 
@@ -26,36 +31,46 @@ local({
   addSwaggerInfo(
     "boolean",
     c("bool", "boolean", "logical"),
+    "[01tfTF]|true|false|TRUE|FALSE",
     "(?:(?:[01tfTF]|true|false|TRUE|FALSE),?)+",
+    as.logical,
     function(x) {as.logical(stringi::stri_split_fixed(x, ",")[[1]])}
   )
   addSwaggerInfo(
     "number",
     c("dbl", "double", "float", "number", "numeric"),
+    "-?\\\\d*\\\\.?\\\\d+",
     "(?:-?\\\\d*\\\\.?\\\\d+,?)+",
+    as.numeric,
     function(x) {as.numeric(stringi::stri_split_fixed(x, ",")[[1]])}
   )
   addSwaggerInfo(
     "integer",
     c("int", "integer"),
+    "-?\\\\d+",
     "(?:-?\\\\d+,?)+",
+    as.integer,
     function(x) {as.integer(stringi::stri_split_fixed(x, ",")[[1]])}
   )
   addSwaggerInfo(
     "string",
     c("chr", "str", "character", "string"),
+    "[^/]+",
     "(?:[^/,]+,?)",
+    as.character,
     function(x) {as.character(stringi::stri_split_fixed(x, ",")[[1]])}
   )
   addSwaggerInfo(
     "object",
     c("list", "data.frame", "df"),
+    "[^/]+",
     "(?:[^/,]+,?)",
     # Should not be used, object in path are not reliable for larger size like a serialized iris datasets
     # Errors on Windows with a chopped up req$PATH_INFO only containing the last few thousands character
     # Could not reproduce on Ubuntu. Might be related to rewriting buffer in httpuv from the split url
     # did not investigate further.
-    function(x) {safeFromJSON(URLdecode(x))}
+    function(x) {safeFromJSON(URLdecode(x))},
+    function(x) {safeFromJSON(URLdecode(stringi::stri_split_fixed(x, ",")[[1]]))}
   )
 })
 
@@ -141,16 +156,16 @@ extractSwaggerParams <- function(endpointParams, pathParams){
     parameters = list(),
     requestBody = list()
   )
-  for (p in names(endpointParams)) {
+  for (p in unique(c(names(endpointParams),pathParams$name))) {
     location <- "query"
     required <- endpointParams[[p]]$required
     style <- "form"
-    explode <- "true"
+    explode <- TRUE
     if (p %in% pathParams$name) {
       location <- "path"
-      required <- "true"
+      required <- TRUE
       style <- "simple"
-      explode <- "false"
+      explode <- FALSE
     }
 
     type <- endpointParams[[p]]$type
@@ -162,13 +177,22 @@ extractSwaggerParams <- function(endpointParams, pathParams){
       }
     }
 
+    serialization <- endpointParams[[p]]$serialization
+    if (isNaOrNull(serialization)) {
+      if (location == "path") {
+        serialization <- pathParams$serialization[pathParams$name == p]
+      } else {
+        serialization <- defaultSwaggerSerialization
+      }
+    }
+
     if (type == "object") {
       if (length(params$requestBody) == 0L) {
         params$requestBody <- list(
           content = list(
             `application/json` = list(
               schema = list(
-                type = object,
+                type = type,
                 example = list()
               )
             )
@@ -176,7 +200,7 @@ extractSwaggerParams <- function(endpointParams, pathParams){
         )
       }
       params$requestBody$content$`application/json`$schema$example[[p]] <- {
-        if (endpointParams[[p]]$serialization) {"[{}]"} else {"{}"}
+        if (serialization) {"[{}]"} else {"{}"}
       }
     } else {
       paramList <- list(
@@ -188,7 +212,7 @@ extractSwaggerParams <- function(endpointParams, pathParams){
           type = type
         )
       )
-      if (endpointParams[[p]]$serialization) {
+      if (serialization) {
         paramList$schema <- list(
           type = "array",
           items = list(
