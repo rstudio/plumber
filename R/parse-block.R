@@ -24,19 +24,16 @@ parseBlock <- function(lineNum, file){
   comments <- ""
   responses <- NULL
   tags <- NULL
-  objectTypes <- paste0(names(which(plumberToSwaggerTypeMap == "object")), collapse = "|")
   while (lineNum > 0 && (stri_detect_regex(file[lineNum], pattern="^#['\\*]") || stri_trim_both(file[lineNum]) == "")){
 
     line <- file[lineNum]
 
-    epMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(get|put|post|use|delete|head|options|patch)(\\s+(.*)$)?")
+    epMat <- stri_match(line, regex="^#['\\*]\\s*@(get|put|post|use|delete|head|options|patch)(\\s+(.*)$)?")
     if (!is.na(epMat[1,2])){
       p <- stri_trim_both(epMat[1,4])
 
       if (is.na(p) || p == ""){
         stopOnLine(lineNum, line, "No path specified.")
-      } else if (stri_detect_regex(p, paste0("<([^:>]+)(:(", objectTypes, "|\\[(", objectTypes, ")\\])){1}\\*?>"))) {
-        stopOnLine(lineNum, line, paste("Path parameter types", objectTypes, "not supported."))
       }
 
       if (is.null(paths)){
@@ -46,7 +43,7 @@ parseBlock <- function(lineNum, file){
       paths[[length(paths)+1]] <- list(verb = enumerateVerbs(epMat[1,2]), path = p)
     }
 
-    filterMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@filter(\\s+(.*)$)?")
+    filterMat <- stri_match(line, regex="^#['\\*]\\s*@filter(\\s+(.*)$)?")
     if (!is.na(filterMat[1,1])){
       f <- stri_trim_both(filterMat[1,3])
 
@@ -62,7 +59,7 @@ parseBlock <- function(lineNum, file){
       filter <- f
     }
 
-    preemptMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@preempt(\\s+(.*)\\s*$)?")
+    preemptMat <- stri_match(line, regex="^#['\\*]\\s*@preempt(\\s+(.*)\\s*$)?")
     if (!is.na(preemptMat[1,1])){
       p <- stri_trim_both(preemptMat[1,3])
       if (is.na(p) || p == ""){
@@ -75,7 +72,7 @@ parseBlock <- function(lineNum, file){
       preempt <- p
     }
 
-    assetsMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@assets(\\s+(\\S*)(\\s+(\\S+))?\\s*)?$")
+    assetsMat <- stri_match(line, regex="^#['\\*]\\s*@assets(\\s+(\\S*)(\\s+(\\S+))?\\s*)?$")
     if (!is.na(assetsMat[1,1])){
       dir <- stri_trim_both(assetsMat[1,3])
       if (is.na(dir) || dir == ""){
@@ -92,7 +89,7 @@ parseBlock <- function(lineNum, file){
       assets <- list(dir=dir, path=prefixPath)
     }
 
-    serMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@serializer(\\s+([^\\s]+)\\s*(.*)\\s*$)?")
+    serMat <- stri_match(line, regex="^#['\\*]\\s*@serializer(\\s+([^\\s]+)\\s*(.*)\\s*$)?")
     if (!is.na(serMat[1,1])){
       s <- stri_trim_both(serMat[1,3])
       if (is.na(s) || s == ""){
@@ -123,7 +120,7 @@ parseBlock <- function(lineNum, file){
 
     }
 
-    shortSerMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(json|html)(.*)$")
+    shortSerMat <- stri_match(line, regex="^#['\\*]\\s*@(json|html)(.*)$")
     if (!is.na(shortSerMat[1,2])) {
       s <- stri_trim_both(shortSerMat[1,2])
       if (!is.null(serializer)){
@@ -153,7 +150,7 @@ parseBlock <- function(lineNum, file){
 
     }
 
-    imageMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@(jpeg|png)([\\s\\(].*)?\\s*$")
+    imageMat <- stri_match(line, regex="^#['\\*]\\s*@(jpeg|png)([\\s\\(].*)?\\s*$")
     if (!is.na(imageMat[1,1])){
       if (!is.null(image)){
         # Must have already assigned.
@@ -170,41 +167,30 @@ parseBlock <- function(lineNum, file){
       }
     }
 
-    responseMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@response\\s+(\\w+)\\s+(\\S.+)\\s*$")
+    responseMat <- stri_match(line, regex="^#['\\*]\\s*@response\\s+(\\w+)\\s+(\\S.+)\\s*$")
     if (!is.na(responseMat[1,1])){
       resp <- list()
       resp[[responseMat[1,2]]] <- list(description=responseMat[1,3])
       responses <- c(responses, resp)
     }
 
-    paramMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@param(\\s+([^\\s]+)(\\s+(.*))?\\s*$)?")
+    paramMat <- stri_match(line, regex="^#['\\*]\\s*@param(\\s+([^\\s:]+):?([^\\s*]+)?(\\*)?(?:\\s+(.*))?\\s*$)?")
     if (!is.na(paramMat[1,2])){
-      p <- stri_trim_both(paramMat[1,3])
-      if (is.na(p) || p == ""){
+      name <- paramMat[1,3]
+      if (is.na(name)){
         stopOnLine(lineNum, line, "No parameter specified.")
       }
+      type <- stri_replace_all(paramMat[1,4], "$1", regex = "^\\[([^\\]]*)\\]$")
+      type <- plumberToSwaggerType(type)
+      serialization <- stri_detect_regex(paramMat[1,4], "^\\[[^\\]]*\\]$")
+      serialization <- serialization & supportsSerialization(type)
+      serialization[is.na(serialization)] <- defaultSwaggerSerialization
+      required <- identical(paramMat[1,5], "*")
 
-      name <- paramMat[1,3]
-      type <- NA
-      sern <- FALSE
-
-      nameType <- stringi::stri_match(name, regex="^([^\\s]+):(\\w+|\\[\\w+\\])(\\*?)$")
-      if (!is.na(nameType[1,1])){
-        name <- nameType[1,2]
-        type <- plumberToSwaggerType(stringi::stri_replace_all(nameType[1,3], "", regex = "\\[|\\]"))
-        sern <- stringi::stri_detect_regex(nameType[1,3], "^\\[")
-        #stopOnLine(lineNum, line, "No parameter type specified")
-      }
-
-      reqd <- FALSE
-      if (!is.na(nameType[1,4])) {
-        reqd <- nameType[1,4] == "*"
-      }
-
-      params[[name]] <- list(desc=paramMat[1,5], type=type, required=reqd, serialization=sern)
+      params[[name]] <- list(desc=paramMat[1,6], type=type, required=required, serialization=serialization)
     }
 
-    tagMat <- stringi::stri_match(line, regex="^#['\\*]\\s*@tag\\s+(\\S.+)\\s*")
+    tagMat <- stri_match(line, regex="^#['\\*]\\s*@tag\\s+(\\S.+)\\s*")
     if (!is.na(tagMat[1,1])){
       t <- stri_trim_both(tagMat[1,2])
       if (is.na(t) || t == ""){
@@ -216,7 +202,7 @@ parseBlock <- function(lineNum, file){
       tags <- c(tags, t)
     }
 
-    commentMat <- stringi::stri_match(line, regex="^#['\\*]\\s*([^@\\s].*$)")
+    commentMat <- stri_match(line, regex="^#['\\*]\\s*([^@\\s].*$)")
     if (!is.na(commentMat[1,2])){
       comments <- paste(comments, commentMat[1,2])
     }

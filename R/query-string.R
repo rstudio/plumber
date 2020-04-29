@@ -56,17 +56,18 @@ parseQS <- function(qs){
   ret
 }
 
-createPathRegex <- function(pathDef){
+createPathRegex <- function(pathDef, funcParams = NULL){
   # Create a regex from the defined path, substituting variables where appropriate
-  match <- stringi::stri_match_all(
+  match <- stri_match_all(
     pathDef,
-    # capture any plumber type (<arg:TYPE>) (typesToRegexps(type) will yell if it is unknown)
+    # capture any plumber type (<arg:TYPE>).
+    # plumberToSwaggerType(types) will yell if it is unknown
+    # and can not be guessed from endpoint function args)
     # <arg> will be given the TYPE `defaultSwaggerType`
-    regex = "/<(\\.?[a-zA-Z][\\w_\\.]*)(:([^>]*|\\[[^>]*\\](?:\\*)?))?>"
+    regex = "/<(\\.?[a-zA-Z][\\w_\\.]*)(?::([^>]*))?>"
   )[[1]]
   names <- match[,2]
-  types <- stringi::stri_replace_all(match[,4], "$1$2", regex = "^\\[([^\\]]*)\\]\\*?$|^([^\\*])\\*?$")
-  serializations <- stringi::stri_detect_regex(match[,4], "^\\[[^\\]]*\\]\\*?$")
+  # No path params
   if (length(names) <= 1 && is.na(names)) {
     return(
       list(
@@ -78,21 +79,31 @@ createPathRegex <- function(pathDef){
       )
     )
   }
-  if (length(types) > 0) {
-    types[is.na(types)] <- defaultSwaggerType
-  }
 
-  if (length(serializations) > 0) {
-    serializations[is.na(serializations)] <- defaultSwaggerSerialization
+  types <- stri_replace_all(match[,3], "$1", regex = "^\\[([^\\]]*)\\]$")
+  if (length(funcParams) > 0) {
+    # Override with detection of function args if type not found in map
+    idx <- !(types %in% names(plumberToSwaggerTypeMap))
+    types[idx] <- sapply(funcParams, `[[`, "type")[names[idx]]
   }
+  types <- plumberToSwaggerType(types, inPath = TRUE)
+
+  serializations <- stri_detect_regex(match[,3], "^\\[[^\\]]*\\]$")
+  if (length(funcParams) > 0) {
+    # Override with detection of function args when false or na
+    idx <- (is.na(serializations) | !serializations)
+    serializations[idx] <- sapply(funcParams, `[[`, "serialization")[names[idx]]
+  }
+  serializations <- serializations & supportsSerialization(types)
+  serializations[is.na(serializations)] <- defaultSwaggerSerialization
 
   pathRegex <- pathDef
   regexps <- typesToRegexps(types, serializations)
   for (regex in regexps) {
-    pathRegex <- stringi::stri_replace_first_regex(
+    pathRegex <- stri_replace_first_regex(
       pathRegex,
-      pattern = "/(<\\.?[a-zA-Z][\\w_\\.:\\[\\]\\*]*>)(/?)",
-      replacement = paste0("/(", regex, ")$2")
+      pattern = "/(?:<\\.?[a-zA-Z][\\w_\\.:\\[\\]]*>)(/?)",
+      replacement = paste0("/(", regex, ")$1")
     )
   }
 
@@ -106,22 +117,24 @@ createPathRegex <- function(pathDef){
 }
 
 
-typesToRegexps <- function(types, serializations) {
+typesToRegexps <- function(swaggerTypes, serializations = FALSE) {
   # return vector of regex strings
   mapply(
     function(x, y) {x[[y]]},
-    swaggerTypeInfo[plumberToSwaggerType(types)],
-    ifelse(serializations, "regexSerialization", "regex")
+    swaggerTypeInfo[swaggerTypes],
+    ifelse(serializations, "regexSerialization", "regex"),
+    USE.NAMES = FALSE
   )
 }
 
 
-typeToConverters <- function(types, serializations) {
+typeToConverters <- function(swaggerTypes, serializations = FALSE) {
   # return list of functions
   mapply(
     function(x, y) {x[[y]]},
-    swaggerTypeInfo[plumberToSwaggerType(types)],
-    ifelse(serializations, "converterSerialization", "converter")
+    swaggerTypeInfo[swaggerTypes],
+    ifelse(serializations, "converterSerialization", "converter"),
+    USE.NAMES = FALSE
   )
 }
 
@@ -129,7 +142,7 @@ typeToConverters <- function(types, serializations) {
 # Extract the params from a given path
 # @param def is the output from createPathRegex
 extractPathParams <- function(def, path){
-  vals <- as.list(stringi::stri_match(path, regex = def$regex)[,-1])
+  vals <- as.list(stri_match(path, regex = def$regex)[,-1])
   names(vals) <- def$names
 
   if (!is.null(def$converters)){

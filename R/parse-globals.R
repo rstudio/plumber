@@ -56,7 +56,7 @@ parseOneGlobal <- function(fields, argument){
            fields$produces <- strsplit(def, split="\\s+")[[1]]
          },
          apiTag={
-           tagMat <- stringi::stri_match(def, regex="^\\s*(\\w+)\\s+(\\S.+)\\s*$")
+           tagMat <- stri_match(def, regex="^\\s*(\\w+)\\s+(\\S.+)\\s*$")
            name <- tagMat[1,2]
            description <- tagMat[1,3]
            if(!is.null(fields$tags) && name %in% fields$tags$name) {

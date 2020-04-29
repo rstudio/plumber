@@ -133,15 +133,13 @@ PlumberEndpoint <- R6Class(
     params = NA,
     tags = NA,
     canServe = function(req){
-      req$REQUEST_METHOD %in% self$verbs && !is.na(stringi::stri_match(req$PATH_INFO, regex=private$regex$regex)[1,1])
+      req$REQUEST_METHOD %in% self$verbs && !is.na(stri_match(req$PATH_INFO, regex=private$regex$regex)[1,1])
     },
     # For historical reasons we have to accept multiple verbs for a single path. Now it's simpler
     # to just parse each separate verb/path into its own endpoint, so we just do that.
     initialize = function(verbs, path, expr, envir, serializer, lines, params, comments, responses, tags){
       self$verbs <- verbs
       self$path <- path
-
-      private$regex <- createPathRegex(path)
 
       private$expr <- expr
       if (is.expression(expr)){
@@ -150,6 +148,8 @@ PlumberEndpoint <- R6Class(
         private$func <- expr
       }
       private$envir <- envir
+
+      private$regex <- createPathRegex(path, self$getFuncParams())
 
       if (!missing(serializer) && !is.null(serializer)){
         self$serializer <- serializer
@@ -175,6 +175,9 @@ PlumberEndpoint <- R6Class(
     },
     getPathParams = function(path){
       extractPathParams(private$regex, path)
+    },
+    getFuncParams = function() {
+      getArgsMetadata(private$func)
     }
   ),
   private = list(

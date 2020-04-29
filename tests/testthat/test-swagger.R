@@ -16,7 +16,7 @@ test_that("plumberToSwaggerType works", {
   expect_equal(plumberToSwaggerType("data.frame"), "object")
 
   expect_warning({
-    expect_equal(plumberToSwaggerType("flargdarg"), "string")
+    expect_equal(plumberToSwaggerType("flargdarg"),  defaultSwaggerType)
   }, "Unrecognized type:")
 })
 
@@ -48,7 +48,7 @@ test_that("params are parsed", {
   b <- parseBlock(length(lines), lines)
   expect_length(b$params, 4)
   expect_equal(b$params$another, list(desc="Another docs", type="integer", required=FALSE, serialization = FALSE))
-  expect_equal(b$params$test, list(desc="Test docs", type=NA, required=FALSE, serialization = FALSE))
+  expect_equal(b$params$test, list(desc="Test docs", type=defaultSwaggerType, required=FALSE, serialization = FALSE))
   expect_equal(b$params$required, list(desc="Required param", type="string", required=TRUE, serialization = FALSE))
   expect_equal(b$params$multi, list(desc="Required array param", type="integer", required=TRUE, serialization = TRUE))
 
@@ -152,21 +152,27 @@ test_that("extractSwaggerParams works", {
                     `in`="path",
                     required=TRUE, # Made required b/c path arg
                     schema = list(
-                      type="integer")))
+                      type="integer",
+                      format="int64",
+                      default=NULL)))
   expect_equal(params$parameters[[2]],
                list(name="id2",
                     description="Description2",
                     `in`="path",
                     required=TRUE, # Made required b/c path arg
                     schema = list(
-                      type="integer")))
+                      type="integer",
+                      format="int64",
+                      default=NULL)))
   expect_equal(params$parameters[[3]],
                list(name="make",
                     description="Make description",
                     `in`="query",
                     required=FALSE,
                     schema = list(
-                      type="string")))
+                      type="string",
+                      format=NULL,
+                      default=NULL)))
   expect_equal(params$parameters[[4]],
                list(name="prices",
                     description="Historic sell prices",
@@ -175,8 +181,9 @@ test_that("extractSwaggerParams works", {
                     schema = list(
                       type="array",
                       items= list(
-                        type="numeric"),
-                      minItems=0),
+                        type="number",
+                        format="double"),
+                      default = NULL),
                     style="form",
                     explode=TRUE))
   expect_equal(params$parameters[[5]],
@@ -187,8 +194,9 @@ test_that("extractSwaggerParams works", {
                     schema = list(
                       type="array",
                       items= list(
-                        type="string"),
-                      minItems=1),
+                        type="string",
+                        format=NULL),
+                      default = NULL),
                     style="simple",
                     explode=FALSE))
   expect_equal(params$requestBody,
@@ -196,8 +204,12 @@ test_that("extractSwaggerParams works", {
                  `application/json` = list(
                    schema = list(
                      type = "object",
-                     example = list(
-                       "claims" = "{}"))))))
+                     properties = list(
+                       claims = list(
+                         type = "object",
+                         format = NULL,
+                         example = NULL,
+                         description = "Insurance claims")))))))
 
   # If id were not a path param it should not be promoted to required
   params <- extractSwaggerParams(ep, NULL)
@@ -223,8 +235,9 @@ test_that("extractSwaggerParams works", {
                     schema = list(
                       type="array",
                       items= list(
-                        type="string"),
-                      minItems=1),
+                        type="string",
+                        format=NULL),
+                      default=NULL),
                     style="simple",
                     explode=FALSE))
 
@@ -307,5 +320,36 @@ test_that("api kitchen sink", {
 
   # TODO test more situations
 
+
+})
+
+test_that("multiple variations in function extract correct metadata", {
+  dummy <- function(var0 = 420.69,
+                    var1,
+                    var2 = c(1L, 2L),
+                    var3 = rnorm,
+                    var4 = NULL,
+                    var5 = FALSE,
+                    var6 = list(name = c("luke", "bob"), lastname = c("skywalker", "ross")),
+                    var7 = .GlobalEnv,
+                    var8 = list(a = 2, b = mean, c = .GlobalEnv)) {}
+  funcParams <- getArgsMetadata(dummy)
+  expect_identical(sapply(funcParams, `[[`, "required"),
+                   c(var0 = FALSE, var1 = TRUE, var2 = FALSE, var3 = FALSE, var4 = FALSE,
+                     var5 = FALSE, var6 = FALSE, var7 = FALSE, var8 = FALSE))
+  expect_identical(lapply(funcParams, `[[`, "default"),
+                   list(var0 = 420.69, var1 = NA, var2 = 1L:2L, var3 = NA, var4 = NA, var5 = FALSE,
+                        var6 = list(name = c("luke", "bob"), lastname = c("skywalker", "ross")), var7 = NA, var8 = NA))
+  expect_identical(lapply(funcParams, `[[`, "example"),
+                   list(var0 = 420.69, var1 = NA, var2 = 1L:2L, var3 = NA, var4 = NA, var5 = FALSE,
+                        var6 = list(name = c("luke", "bob"), lastname = c("skywalker", "ross")), var7 = NA, var8 = NA))
+  expect_identical(lapply(funcParams, `[[`, "serialization"),
+                   list(var0 = defaultSwaggerSerialization, var1 = defaultSwaggerSerialization, var2 = TRUE,
+                        var3 = defaultSwaggerSerialization, var4 = defaultSwaggerSerialization,
+                        var5 = defaultSwaggerSerialization, var6 = defaultSwaggerSerialization,
+                        var7 = defaultSwaggerSerialization, var8 = defaultSwaggerSerialization))
+  expect_identical(lapply(funcParams, `[[`, "type"),
+                   list(var0 = "number", var1 = defaultSwaggerType, var2 = "integer", var3 = defaultSwaggerType, var4 = defaultSwaggerType,
+                        var5 = "boolean", var6 = "object", var7 = defaultSwaggerType, var8 = defaultSwaggerType))
 
 })

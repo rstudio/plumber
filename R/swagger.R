@@ -4,20 +4,29 @@
 swaggerTypeInfo <- list()
 plumberToSwaggerTypeMap <- list()
 defaultSwaggerType <- "string"
+attr(defaultSwaggerType, "default") <- TRUE
 defaultSwaggerSerialization <- FALSE
+attr(defaultSwaggerSerialization, "default") <- TRUE
 
 local({
   addSwaggerInfo <- function(swaggerType, plumberTypes,
-                             regex, regexSerialization,
-                             converter, converterSerialization) {
+                             regex = NULL, converter = NULL,
+                             regexSerialization = NULL,
+                             converterSerialization = NULL,
+                             format = NULL,
+                             location = NULL,
+                             realType = NULL) {
     swaggerTypeInfo[[swaggerType]] <<-
       list(
         regex = regex,
         regexSerialization = regexSerialization,
         converter = converter,
-        converterSerialization = converterSerialization
+        converterSerialization = converterSerialization,
+        format = format,
+        location = location,
+        serializationSupport = !is.null(regexSerialization) & !is.null(converterSerialization),
+        realType = realType
       )
-
 
     for (plumberType in plumberTypes) {
       plumberToSwaggerTypeMap[[plumberType]] <<- swaggerType
@@ -32,54 +41,60 @@ local({
     "boolean",
     c("bool", "boolean", "logical"),
     "[01tfTF]|true|false|TRUE|FALSE",
-    "(?:(?:[01tfTF]|true|false|TRUE|FALSE),?)+",
     as.logical,
-    function(x) {as.logical(stringi::stri_split_fixed(x, ",")[[1]])}
+    "(?:(?:[01tfTF]|true|false|TRUE|FALSE),?)+",
+    function(x) {as.logical(stri_split_fixed(x, ",")[[1]])},
+    location = c("query", "path")
   )
   addSwaggerInfo(
     "number",
     c("dbl", "double", "float", "number", "numeric"),
     "-?\\\\d*\\\\.?\\\\d+",
-    "(?:-?\\\\d*\\\\.?\\\\d+,?)+",
     as.numeric,
-    function(x) {as.numeric(stringi::stri_split_fixed(x, ",")[[1]])}
+    "(?:-?\\\\d*\\\\.?\\\\d+,?)+",
+    function(x) {as.numeric(stri_split_fixed(x, ",")[[1]])},
+    format = "double",
+    location = c("query", "path")
   )
   addSwaggerInfo(
     "integer",
     c("int", "integer"),
     "-?\\\\d+",
-    "(?:-?\\\\d+,?)+",
     as.integer,
-    function(x) {as.integer(stringi::stri_split_fixed(x, ",")[[1]])}
+    "(?:-?\\\\d+,?)+",
+    function(x) {as.integer(stri_split_fixed(x, ",")[[1]])},
+    format = "int64",
+    location = c("query", "path")
   )
   addSwaggerInfo(
     "string",
     c("chr", "str", "character", "string"),
     "[^/]+",
-    "(?:[^/,]+,?)",
     as.character,
-    function(x) {as.character(stringi::stri_split_fixed(x, ",")[[1]])}
+    "(?:[^/,]+,?)",
+    function(x) {as.character(stri_split_fixed(x, ",")[[1]])},
+    location = c("query", "path")
   )
   addSwaggerInfo(
     "object",
     c("list", "data.frame", "df"),
-    "[^/]+",
-    "(?:[^/,]+,?)",
-    # Should not be used, object in path are not reliable for larger size like a serialized iris datasets
-    # Errors on Windows with a chopped up req$PATH_INFO only containing the last few thousands character
-    # Could not reproduce on Ubuntu. Might be related to rewriting buffer in httpuv from the split url
-    # did not investigate further.
-    function(x) {safeFromJSON(URLdecode(x))},
-    function(x) {safeFromJSON(URLdecode(stringi::stri_split_fixed(x, ",")[[1]]))}
+    location = "requestBody"
+  )
+  addSwaggerInfo(
+    "file",
+    c("file", "binary"),
+    location = "requestBody",
+    format = "binary",
+    realType = "string"
   )
 })
 
 
 #' Parse the given plumber type and return the typecast value
 #' @noRd
-plumberToSwaggerType <- function(type) {
+plumberToSwaggerType <- function(type, inPath = FALSE) {
   if (length(type) > 1) {
-    return(vapply(type, plumberToSwaggerType, character(1)))
+    return(vapply(type, plumberToSwaggerType, character(1), inPath, USE.NAMES = FALSE))
   }
   # default type is "string" type
   if (is.na(type)) {
@@ -94,8 +109,32 @@ plumberToSwaggerType <- function(type) {
     )
     swaggerType <- defaultSwaggerType
   }
+  if (inPath && !"path" %in% swaggerTypeInfo[[swaggerType]]$location) {
+    warning(
+      "Unsupported path parameter type: ", type, ". Using type: ", defaultSwaggerType,
+      call. = FALSE
+    )
+    swaggerType <- defaultSwaggerType
+  }
 
   return(swaggerType)
+}
+
+#' Check if swagger type support serialization
+#' @noRd
+supportsSerialization <- function(swaggerTypes) {
+  vapply(
+    swaggerTypeInfo[swaggerTypes],
+    `[[`,
+    logical(1),
+    "serializationSupport",
+    USE.NAMES = FALSE)
+}
+
+#' Filter swagger type
+#' @noRd
+filterSwaggerTypes <- function(matches, property) {
+  names(Filter(function(x) {any(matches %in% x[[property]])}, swaggerTypeInfo))
 }
 
 #' Convert the endpoints as they exist on the router to a list which can
@@ -111,8 +150,10 @@ prepareSwaggerEndpoint <- function(routerEndpointEntry, path = routerEndpointEnt
 
   # Get the params from the path
   pathParams <- routerEndpointEntry$getTypedParams()
+  # Get the params from endpoint func
+  funcParams <- routerEndpointEntry$getFuncParams()
   for (verb in routerEndpointEntry$verbs) {
-    params <- extractSwaggerParams(routerEndpointEntry$params, pathParams)
+    params <- extractSwaggerParams(routerEndpointEntry$params, pathParams, funcParams)
 
     # If we haven't already documented a path param, we should add it here.
     # FIXME: warning("Undocumented path parameters: ", paste0())
@@ -150,58 +191,77 @@ extractResponses <- function(resps){
 #' Extract the swagger-friendly parameter definitions from the endpoint
 #' paramters.
 #' @noRd
-extractSwaggerParams <- function(endpointParams, pathParams){
+extractSwaggerParams <- function(endpointParams, pathParams, funcParams = NULL){
 
   params <- list(
     parameters = list(),
     requestBody = list()
   )
-  for (p in unique(c(names(endpointParams),pathParams$name))) {
-    location <- "query"
-    required <- endpointParams[[p]]$required
-    style <- "form"
-    explode <- TRUE
+  inBody <- filterSwaggerTypes("requestBody", "location")
+  inRaw <- filterSwaggerTypes("binary", "format")
+  for (p in unique(c(names(endpointParams), pathParams$name, names(funcParams)))) {
+
+    # Dealing with priorities endpointParams > pathParams > funcParams
+    # For each p, find out which source to trust for :
+    #   `type`, `serialization`, `required`
+    # - `description` comes from endpointParams
+    # - `serialization` defines both `style` and `explode`
+    # - `default` and `example` comes from funcParams
+    # - `location` change to "path" when p is in pathParams and
+    #   unused when `type` is "object" or "file"
+    # - When type is `object`, create a requestBody with content
+    #   default to "application/json"
+    # - When type is `file`, change requestBody content to
+    #   multipart/form-data
+
     if (p %in% pathParams$name) {
       location <- "path"
       required <- TRUE
       style <- "simple"
       explode <- FALSE
+      type <- priorizeProperty(defaultSwaggerType,
+                               pathParams[pathParams$name == p,]$type,
+                               endpointParams[[p]]$type,
+                               funcParams[[p]]$type)
+      type <- plumberToSwaggerType(type, inPath = TRUE)
+      serialization <- priorizeProperty(defaultSwaggerSerialization,
+                                        pathParams[pathParams$name == p,]$serialization,
+                                        endpointParams[[p]]$serialization,
+                                        funcParams[[p]]$serialization)
+    } else {
+      location <- "query"
+      style <- "form"
+      explode <- TRUE
+      type <- priorizeProperty(defaultSwaggerType,
+                               endpointParams[[p]]$type,
+                               funcParams[[p]]$type)
+      type <- plumberToSwaggerType(type)
+      serialization <- priorizeProperty(defaultSwaggerSerialization,
+                                        endpointParams[[p]]$serialization,
+                                        funcParams[[p]]$serialization)
+      required <- priorizeProperty(funcParams[[p]]$required,
+                                   endpointParams[[p]]$required)
     }
 
-    type <- endpointParams[[p]]$type
-    if (isNaOrNull(type)) {
-      if (location == "path") {
-        type <- plumberToSwaggerType(pathParams$type[pathParams$name == p])
-      } else {
-        type <- defaultSwaggerType
-      }
-    }
-
-    serialization <- endpointParams[[p]]$serialization
-    if (isNaOrNull(serialization)) {
-      if (location == "path") {
-        serialization <- pathParams$serialization[pathParams$name == p]
-      } else {
-        serialization <- defaultSwaggerSerialization
-      }
-    }
-
-    if (type == "object") {
+    # Building openapi definition
+    if (type %in% inBody) {
       if (length(params$requestBody) == 0L) {
-        params$requestBody <- list(
-          content = list(
-            `application/json` = list(
-              schema = list(
-                type = type,
-                example = list()
-              )
-            )
-          )
-        )
+        params$requestBody$content$`application/json`[["schema"]] <-
+          list(type = "object", properties = list())
       }
-      params$requestBody$content$`application/json`$schema$example[[p]] <- {
-        if (serialization) {"[{}]"} else {"{}"}
+      property <- list(
+        type = type,
+        format = swaggerTypeInfo[[type]]$format,
+        example = funcParams[[p]]$example,
+        description = endpointParams[[p]]$desc
+      )
+      if (type %in% inRaw) {
+        names(params$requestBody$content) <- "multipart/form-data"
+        property$type <- swaggerTypeInfo[[type]]$realType
       }
+      params$requestBody[[1]][[1]][[1]]$properties[[p]] <- property
+      if (required) { params$requestBody[[1]][[1]][[1]]$required <-
+        c(p, params$requestBody[[1]][[1]][[1]]$required)}
     } else {
       paramList <- list(
         name = p,
@@ -209,16 +269,19 @@ extractSwaggerParams <- function(endpointParams, pathParams){
         `in` = location,
         required = required,
         schema = list(
-          type = type
+          type = type,
+          format = swaggerTypeInfo[[type]]$format,
+          default = funcParams[[p]]$default
         )
       )
       if (serialization) {
         paramList$schema <- list(
           type = "array",
           items = list(
-            type = type
+            type = type,
+            format = swaggerTypeInfo[[type]]$format
           ),
-          minItems = as.integer(required)
+          default = funcParams[[p]]$default
         )
         paramList$style <- style
         paramList$explode <- explode
@@ -248,6 +311,14 @@ removeNaOrNulls <- function(x) {
   if (length(x) == 0) {
     return(x)
   }
+  # Prevent example from being wiped out
+  if (!isNaOrNull(x$example)) {
+    saveExample <- TRUE
+    savedExample <- x$example
+    x$example <- NULL
+  } else {
+    saveExample <- FALSE
+  }
 
   # remove any `NA` or `NULL` elements
   toRemove <- vapply(x, isNaOrNull, logical(1))
@@ -259,5 +330,56 @@ removeNaOrNulls <- function(x) {
   ret <- lapply(x, removeNaOrNulls)
   class(ret) <- class(x)
 
+  # Put example back in
+  if (saveExample) {
+    ret$example <- savedExample
+  }
+
   ret
+}
+#' For openapi definition
+priorizeProperty <- function(...) {
+  l <- list(...)
+  isnullordefault <- sapply(l, function(x) {isNaOrNull(x) || isTRUE(attributes(x)$default)})
+  l[[which.min(isnullordefault)]]
+}
+
+#' Check if x is JSON serializable
+#' @noRd
+isJSONserializable <- function(x) {
+  testJSONserializable <- TRUE
+  tryCatch(jsonlite::toJSON(x),
+           error = function(cond) {
+             # Do we need to test for specific errors?
+             testJSONserializable <<- FALSE}
+  )
+  testJSONserializable
+}
+
+#' Extract metadata on args of plumberExpression
+#' @noRd
+getArgsMetadata <- function(plumberExpression){
+  #return same format as getTypedParams or params?
+  args <- formals(eval(plumberExpression))
+  lapply(args[!names(args) %in% "..."], function(arg) {
+    required <- identical(arg, formals(function(x){})$x)
+    if (is.call(arg) || is.name(arg)) {
+      arg <- tryCatch(
+        eval(arg),
+        error = function(cond) {NA})
+    }
+    if (!is.logical(arg) && !is.numeric(arg) && !is.character(arg)
+        && !(is.list(arg) && isJSONserializable(arg))) {
+      arg <- NA
+    }
+    type <- if (isNaOrNull(arg)) {NA} else {typeof(arg)}
+    type <- plumberToSwaggerType(type)
+    list(
+      default = arg,
+      example = arg,
+      required = required,
+      serialization = {if (length(arg) > 1L & supportsSerialization(type)) TRUE else defaultSwaggerSerialization},
+      type = type
+    )
+  })
 }
