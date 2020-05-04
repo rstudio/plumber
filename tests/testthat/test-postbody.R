@@ -1,17 +1,16 @@
 context("POST body")
 
 test_that("JSON is consumed on POST", {
-  expect_equal(parseBody(charToRaw('{"a":"1"}')), list(a = "1"))
+  expect_equal(parseBody('{"a":"1"}'), list(a = "1"))
 })
 
 test_that("Query strings on post are handled correctly", {
-  expect_equivalent(parseBody(charToRaw("a=")), list()) # It's technically a named list()
-  expect_equal(parseBody(charToRaw("a=1&b=&c&d=1")), list(a="1", d="1"))
+  expect_equivalent(parseBody("a="), list()) # It's technically a named list()
+  expect_equal(parseBody("a=1&b=&c&d=1"), list(a="1", d="1"))
 })
 
 test_that("Able to handle UTF-8", {
-  browser()
-  expect_equal(parseBody(charToRaw('{"text":"Ã©lise"}'), content_type = "application/json; charset=utf8")$text, "Ã©lise")
+  expect_equal(parseBody('{"text":"Ã©lise"}', content_type = "application/json; charset=UTF-8")$text, "Ã©lise")
 })
 
 #charset moved to part parsing
@@ -22,7 +21,7 @@ test_that("filter passes on content-type", {
     rook.input = list(
       read = function() {
         called <- TRUE
-        return(charToRaw("this is a body"))
+        return("this is a body")
       }
     ),
     HTTP_CONTENT_TYPE = "text/html; charset=testset",

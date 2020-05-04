@@ -16,13 +16,37 @@ NULL
 #' @param name The name of the parser (character string)
 #' @param parser The parser to be added.
 #' @param regex A pattern to match against the content-type of each part of
-#' the request body. Pattern is stored in attribute `regex` of an added parser.
+#' the request body.
+#'
+#' @details Pattern is stored in attribute `regex` of an added parser.
 #' For instance, the \code{parser_json} pattern is `application/json`.
 #' If `regex` is not provided and no attribute `regex` is set on `parser`,
 #' parser attribute `regex` will be set to `application/{name}`.
 #' Detection is done assuming content-type starts with pattern and is
 #' case insensitive.
 #'
+#' Parser function structure is something like
+#' ```r
+#' parser <- function(...) {
+#'   function(value, ...) {
+#'     # do something with raw value
+#'   }
+#' }
+#' ```
+#'
+#' It should return a named list when not used with content-type multipart
+#' if you want values to map to plumber endpoint function args.
+#'
+#' @example
+#' parser_json <- function(...) {
+#'   function(value, content_type = "application/json", ...) {
+#'     charset <- getCharacterSet(content_type)
+#'     value <- rawToChar(value)
+#'     Encoding(value) <- charset
+#'     safeFromJSON(value)
+#'   }
+#' }
+#' @md
 #' @export
 addParser <- function(name, parser, regex = attr(parser, "regex")) {
   if (is.null(.globals$parsers)) {
@@ -46,11 +70,11 @@ addParser <- function(name, parser, regex = attr(parser, "regex")) {
 #' @param ... Raw values and headers are passed there.
 #' @export
 parser_json <- function(...) {
-  function(value, content_type = "application/json") {
+  function(value, content_type = "application/json", ...) {
     charset <- getCharacterSet(content_type)
     value <- rawToChar(value)
     Encoding(value) <- charset
-    I(safeFromJSON(value))
+    safeFromJSON(value)
   }
 }
 attr(parser_json, "regex") <- "application/json"
@@ -63,11 +87,11 @@ attr(parser_json, "regex") <- "application/json"
 #' @param ... Raw values and headers are passed there.
 #' @export
 parser_query <- function(...) {
-  function(value, content_type = "application/x-www-form-urlencoded") {
+  function(value, content_type = "application/x-www-form-urlencoded", ...) {
     charset <- getCharacterSet(content_type)
     value <- rawToChar(value)
     Encoding(value) <- charset
-    I(parseQS(value))
+    parseQS(value)
   }
 }
 attr(parser_query, "regex") <- "application/x-www-form-urlencoded"
@@ -80,7 +104,7 @@ attr(parser_query, "regex") <- "application/x-www-form-urlencoded"
 #' @param ... Raw values and headers are passed there.
 #' @export
 parser_text <- function(...) {
-  function(value, content_type = "text/html") {
+  function(value, content_type = "text/html", ...) {
     charset <- getCharacterSet(content_type)
     value <- rawToChar(value)
     Encoding(value) <- charset
@@ -97,8 +121,8 @@ attr(parser_text, "regex") <- "text/"
 #' @param ... Raw values and headers are passed there.
 #' @export
 parser_rds <- function(...) {
-  function(value) {
-    I(unserialize(value))
+  function(value, ...) {
+    unserialize(value)
   }
 }
 attr(parser_rds, "regex") <- "application/rds"
@@ -111,8 +135,8 @@ attr(parser_rds, "regex") <- "application/rds"
 #' @param ... Raw values and headers are passed there.
 #' @export
 parser_protobuff <- function(...) {
-  function(value) {
-    I(protolite::unserialize_pb(value))
+  function(value, ...) {
+    protolite::unserialize_pb(value)
   }
 }
 attr(parser_protobuff, "regex") <- "application/r?protobuf"
@@ -125,7 +149,7 @@ attr(parser_protobuff, "regex") <- "application/r?protobuf"
 #' @param ... Raw values and headers are passed there.
 #' @export
 parser_octet <- function(...) {
-  function(value, filename) {
+  function(value, filename, ...) {
     if (!missing(filename)) {
       if (interactive()) {
         writeBin(value, basename(filename))

@@ -20,13 +20,15 @@ parseBody <- function(body, content_type = "unknown") {
   if (is.null(body) || length(body) == 0 || body == "") {
     return(list())
   }
-  if (stri_detect_fixed("multipart/form-data", content_type)) {
+  if (!is.raw(body)) body <- charToRaw(body)
+  if (is.null(content_type) || length(content_type) == 0 ||
+      content_type == "" || !stri_detect_fixed(content_type, "multipart/form-data")) {
+    toparse <- list(list(value = body, content_type = content_type))
+  } else {
     if (!stri_detect_fixed(content_type, "boundary=", case_insensitive = TRUE))
       stop("No boundary found in multipart content-type header: ", content_type)
     boundary <- stri_match_first(content_type, regex = "boundary=([^; ]{2,})", case_insensitive = TRUE)[,2]
     toparse <- webutils::parse_multipart(body, boundary)
-  } else {
-    toparse <- list(list(value = body, content_type = content_type))
   }
   do.call(c, lapply(toparse, parseRaw))
 }
@@ -34,7 +36,9 @@ parseBody <- function(body, content_type = "unknown") {
 parseRaw <- function(toparse) {
   parser <- parserPicker(toparse$content_type)
   if (length(parser) == 0L) {
-    if (toparse$value[1] %in% charToRaw("[{")) {
+    if (!is.null(toparse$filename)) {
+      parser <- .globals$parsers[["octet"]]
+    } else if (toparse$value[1] %in% charToRaw("[{")) {
       parser <- .globals$parsers[["json"]]
     } else {
       parser <- .globals$parsers[["query"]]
