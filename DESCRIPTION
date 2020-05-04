@@ -24,6 +24,7 @@ Imports:
     R6 (>= 2.0.0),
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
+    webutils (>= 1.1),
     httpuv (>= 1.4.5.9002),
     crayon,
     promises,
@@ -67,6 +68,7 @@ Collate:
     'paths.R'
     'plumber-static.R'
     'plumber-step.R'
+    'post-parsers.R'
     'response.R'
     'serializer-content-type.R'
     'serializer-html.R'

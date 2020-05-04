@@ -1,6 +1,6 @@
 queryStringFilter <- function(req){
   handled <- req$.internal$queryStringHandled
-  if (is.null(handled) || handled != TRUE){
+  if (is.null(handled) || handled != TRUE) {
     qs <- req$QUERY_STRING
     args <- parseQS(qs)
     req$args <- c(req$args, args)
@@ -11,49 +11,42 @@ queryStringFilter <- function(req){
 
 #' @noRd
 parseQS <- function(qs){
-  if (is.null(qs) || length(qs) == 0 || qs == "") {
+
+  if (is.null(qs) || length(qs) == 0L || qs == "") {
     return(list())
   }
-  if (stri_startswith_fixed(qs, "?")) {
-    qs <- substr(qs, 2, nchar(qs))
-  }
 
-  parts <- strsplit(qs, "&", fixed = TRUE)[[1]]
-  kv <- strsplit(parts, "=", fixed = TRUE)
-  kv <- kv[vapply(kv, length, numeric(1)) == 2] # Ignore incompletes
+  qs <- stri_replace_first_regex(qs, "^[?]", "")
+  #qs <- stri_replace_all_fixed(qs, "+", " ")
+
+  args <- stri_split_fixed(qs, "&", omit_empty = TRUE)[[1L]]
+  kv <- lapply(args, function(x) {
+    # returns utf8 strings
+    httpuv::decodeURIComponent(stri_split_fixed(x, "=", omit_empty = TRUE)[[1]])
+  })
+  kv <- kv[lengths(kv) == 2] # Ignore incompletes
 
   if (length(kv) == 0) {
     # return a blank list of args if there is nothing to parse
     return(list())
   }
 
-  keys <- httpuv::decodeURIComponent(vapply(kv, "[[", character(1), 1)) # returns utf8 strings
-  if (any(Encoding(keys) != "unknown")) {
+  k <- vapply(kv, "[", character(1), 1)
+  kenc <- unique(Encoding(k))
+  if (any(kenc != "unknown")) {
     # https://github.com/rstudio/plumber/pull/314#discussion_r239992879
-    non_ascii <- setdiff(unique(Encoding(keys)), "unknown")
+    non_ascii <- setdiff(kenc, "unknown")
     warning(
       "Query string parameter received in non-ASCII encoding. Received: ",
       paste0(non_ascii, collapse = ", ")
     )
   }
 
-  vals <- vapply(kv, "[[", character(1), 2)
-  vals <- httpuv::decodeURIComponent(vals) # returns utf8 strings
-
-  ret <- as.list(vals)
-  names(ret) <- keys
-
+  v <- lapply(kv, "[", 2)
   # If duplicates, combine
-  combine_elements <- function(name){
-    unname(unlist(ret[names(ret)==name]))
-  }
+  v <- sapply(unique(k), function(x) do.call(c, v[x == k]), simplify = FALSE)
 
-  unique_names <- unique(names(ret))
-
-  ret <- lapply(unique_names, combine_elements)
-  names(ret) <- unique_names
-
-  ret
+  return(v)
 }
 
 createPathRegex <- function(pathDef, funcParams = NULL){

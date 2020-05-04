@@ -218,7 +218,7 @@ parseBlock <- function(lineNum, file){
     imageAttr = imageAttr,
     serializer = serializer,
     assets = assets,
-    params = params,
+    params = rev(params),
     comments = comments,
     responses = responses,
     tags = tags
