@@ -121,25 +121,14 @@ attr(parser_text, "regex") <- "text/"
 #' @param ... Raw values and headers are passed there.
 #' @export
 parser_rds <- function(...) {
-  function(value, ...) {
-    unserialize(value)
+  function(value, filename, ...) {
+    tmp <- tempfile("plumb", fileext = paste0("_", basename(filename)))
+    writeBin(value, tmp)
+    on.exit(file.remove(tmp))
+    list(readRDS(tmp))
   }
 }
 attr(parser_rds, "regex") <- "application/rds"
-
-
-
-
-#' PROTOBUFF
-#' @rdname parsers
-#' @param ... Raw values and headers are passed there.
-#' @export
-parser_protobuff <- function(...) {
-  function(value, ...) {
-    protolite::unserialize_pb(value)
-  }
-}
-attr(parser_protobuff, "regex") <- "application/r?protobuf"
 
 
 
@@ -177,5 +166,4 @@ attr(parser_octet, "regex") <- "application/octet"
 .globals$parsers[["query"]] <- parser_query
 .globals$parsers[["text"]] <- parser_text
 .globals$parsers[["rds"]] <- parser_rds
-.globals$parsers[["protobuff"]] <- parser_protobuff
 .globals$parsers[["octet"]] <- parser_octet

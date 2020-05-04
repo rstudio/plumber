@@ -34,11 +34,13 @@ parseBody <- function(body, content_type = "unknown") {
 }
 
 parseRaw <- function(toparse) {
+  if (!is.null(toparse$filename)) {
+    ext <- tools::file_ext(toparse$filename)
+    toparse$content_type <- getContentType(ext)
+  }
   parser <- parserPicker(toparse$content_type)
   if (length(parser) == 0L) {
-    if (!is.null(toparse$filename)) {
-      parser <- .globals$parsers[["octet"]]
-    } else if (toparse$value[1] %in% charToRaw("[{")) {
+    if (toparse$value[1] %in% charToRaw("[{")) {
       parser <- .globals$parsers[["json"]]
     } else {
       parser <- .globals$parsers[["query"]]
