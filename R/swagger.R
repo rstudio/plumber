@@ -348,7 +348,7 @@ priorizeProperty <- function(...) {
 #' @noRd
 isJSONserializable <- function(x) {
   testJSONserializable <- TRUE
-  tryCatch(jsonlite::toJSON(x),
+  tryCatch(toJSON(x),
            error = function(cond) {
              # Do we need to test for specific errors?
              testJSONserializable <<- FALSE}

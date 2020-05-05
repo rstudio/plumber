@@ -15,15 +15,13 @@ NULL
 #'
 #' @param name The name of the parser (character string)
 #' @param parser The parser to be added.
-#' @param regex A pattern to match against the content-type of each part of
+#' @param pattern A pattern to match against the content-type of each part of
 #' the request body.
 #'
-#' @details Pattern is stored in attribute `regex` of an added parser.
-#' For instance, the \code{parser_json} pattern is `application/json`.
-#' If `regex` is not provided and no attribute `regex` is set on `parser`,
-#' parser attribute `regex` will be set to `application/{name}`.
+#' @details For instance, the \code{parser_json} pattern is `application/json`.
+#' If `pattern` is not provided, will be set to `application/{name}`.
 #' Detection is done assuming content-type starts with pattern and is
-#' case insensitive.
+#' case sensitive.
 #'
 #' Parser function structure is something like
 #' ```r
@@ -34,8 +32,8 @@ NULL
 #' }
 #' ```
 #'
-#' It should return a named list when not used with content-type multipart
-#' if you want values to map to plumber endpoint function args.
+#' It should return a named list if you want values to map to
+#' plumber endpoint function args.
 #'
 #' @example
 #' parser_json <- function(...) {
@@ -48,19 +46,18 @@ NULL
 #' }
 #' @md
 #' @export
-addParser <- function(name, parser, regex = attr(parser, "regex")) {
+addParser <- function(name, parser, pattern = NULL) {
   if (is.null(.globals$parsers)) {
-    .globals$serializers <- list()
+    .globals$parsers <- list()
   }
-  if (!is.null(.globals$parser[[name]])) {
+  if (!is.null(.globals$parsers$f[[name]])) {
     stop("Already have a parser by the name of ", name)
   }
-  if (is.null(regex)) {
-    attr(parser, "regex") <- paste0("application/", name)
-  } else {
-    attr(parser, "regex") <- regex
+  if (is.null(pattern)) {
+    pattern <- paste0("application/", name)
   }
-  .globals$parser[[name]] <- parser
+  .globals$parsers$f[[name]] <- parser
+  .globals$parsers$p[[name]] <- pattern
 }
 
 
@@ -70,55 +67,49 @@ addParser <- function(name, parser, regex = attr(parser, "regex")) {
 #' @param ... Raw values and headers are passed there.
 #' @export
 parser_json <- function(...) {
-  function(value, content_type = "application/json", ...) {
+  function(value, content_type = NULL, ...) {
     charset <- getCharacterSet(content_type)
     value <- rawToChar(value)
     Encoding(value) <- charset
     safeFromJSON(value)
   }
 }
-attr(parser_json, "regex") <- "application/json"
 
 
 
 
 #' QUERY STRING
 #' @rdname parsers
-#' @param ... Raw values and headers are passed there.
 #' @export
 parser_query <- function(...) {
-  function(value, content_type = "application/x-www-form-urlencoded", ...) {
+  function(value, content_type = NULL, ...) {
     charset <- getCharacterSet(content_type)
     value <- rawToChar(value)
     Encoding(value) <- charset
     parseQS(value)
   }
 }
-attr(parser_query, "regex") <- "application/x-www-form-urlencoded"
 
 
 
 
 #' TEXT
 #' @rdname parsers
-#' @param ... Raw values and headers are passed there.
 #' @export
 parser_text <- function(...) {
-  function(value, content_type = "text/html", ...) {
+  function(value, content_type = NULL, ...) {
     charset <- getCharacterSet(content_type)
     value <- rawToChar(value)
     Encoding(value) <- charset
     value
   }
 }
-attr(parser_text, "regex") <- "text/"
 
 
 
 
 #" RDS
 #' @rdname parsers
-#' @param ... Raw values and headers are passed there.
 #' @export
 parser_rds <- function(...) {
   function(value, filename, ...) {
@@ -128,7 +119,30 @@ parser_rds <- function(...) {
     list(readRDS(tmp))
   }
 }
-attr(parser_rds, "regex") <- "application/rds"
+
+
+
+
+#" MULTI
+#' @rdname parsers
+#' @export
+#' @importFrom webutils parse_multipart
+parser_multi <- function(...) {
+  function(value, content_type, ...) {
+    if (!stri_detect_fixed(content_type, "boundary=", case_insensitive = TRUE))
+      stop("No boundary found in multipart content-type header: ", content_type)
+    boundary <- stri_match_first_regex(content_type, "boundary=([^; ]{2,})", case_insensitive = TRUE)[,2]
+    toparse <- parse_multipart(value, boundary)
+    # content-type detection
+    for (i in seq_len(length(toparse))) {
+      if (!is.null(toparse[[i]]$filename)) {
+        ext <- tools::file_ext(toparse[[i]]$filename)
+        toparse[[i]]$content_type <- getContentType(ext)
+      }
+    }
+    lapply(toparse, parseRaw)
+  }
+}
 
 
 
@@ -156,14 +170,14 @@ parser_octet <- function(...) {
     }
   }
 }
-attr(parser_octet, "regex") <- "application/octet"
 
 
 
 
 #' @include globals.R
-.globals$parsers[["json"]] <- parser_json
-.globals$parsers[["query"]] <- parser_query
-.globals$parsers[["text"]] <- parser_text
-.globals$parsers[["rds"]] <- parser_rds
-.globals$parsers[["octet"]] <- parser_octet
+addParser("json", parser_json, "application/json")
+addParser("query", parser_query, "application/x-www-form-urlencoded")
+addParser("text", parser_text, "text/")
+addParser("rds", parser_rds, "application/rds")
+addParser("multi", parser_multi, "multipart/form-data")
+addParser("octet", parser_octet, "application/octet")

@@ -11,53 +11,37 @@ postBodyFilter <- function(req){
   forward()
 }
 
-# use something similar to opencpu parse_post
-#' @noRd
-#' @importFrom webutils parse_multipart
-parseBody <- function(body, content_type = "unknown") {
-  # The body in a curl call can also include querystring formatted data
-  # Is there data in the request?
-  if (is.null(body) || length(body) == 0 || body == "") {
-    return(list())
-  }
-  if (!is.raw(body)) body <- charToRaw(body)
-  if (is.null(content_type) || length(content_type) == 0 ||
-      content_type == "" || !stri_detect_fixed(content_type, "multipart/form-data")) {
-    toparse <- list(list(value = body, content_type = content_type))
-  } else {
-    if (!stri_detect_fixed(content_type, "boundary=", case_insensitive = TRUE))
-      stop("No boundary found in multipart content-type header: ", content_type)
-    boundary <- stri_match_first(content_type, regex = "boundary=([^; ]{2,})", case_insensitive = TRUE)[,2]
-    toparse <- webutils::parse_multipart(body, boundary)
-  }
-  do.call(c, lapply(toparse, parseRaw))
+parseBody <- function(body, content_type = NULL) {
+  if (!is.raw(body)) {body <- charToRaw(body)}
+  if (length(body) == 0L) return(list())
+  toparse <- list(value = body, content_type = content_type)
+  parseRaw(toparse)
 }
 
 parseRaw <- function(toparse) {
-  if (!is.null(toparse$filename)) {
-    ext <- tools::file_ext(toparse$filename)
-    toparse$content_type <- getContentType(ext)
-  }
-  parser <- parserPicker(toparse$content_type)
-  if (length(parser) == 0L) {
-    if (toparse$value[1] %in% charToRaw("[{")) {
-      parser <- .globals$parsers[["json"]]
-    } else {
-      parser <- .globals$parsers[["query"]]
-    }
-  } else {
-    parser <- parser[[1L]]
-  }
+  parser <- parserPicker(toparse$content_type, toparse$value[1], toparse$filename)
   do.call(parser(), toparse)
 }
 
-parserPicker <- function(content_type) {
-  regexes <- vapply(.globals$parsers, attr, character(1), "regex")
-  parser <- .globals$parsers[stri_detect_regex(content_type, paste0("^", regexes), case_insensitive = TRUE)]
-  if (length(parser) > 1L) {
-    parser <- parser[1L]
-    # Should we warn?
-    # warning("Multiple body parsers matches for content-type : ", toparse$content_type, ". Parser ", names(parser)[1L], " used.")
+parserPicker <- function(content_type, first_byte, filename = NULL) {
+  #fast default to json when first byte is 7b ({)
+  if (first_byte == as.raw(123L))
+    return(.globals$parsers$f[["json"]])
+  if (is.null(content_type)) {
+    return(.globals$parsers$f[["query"]])
   }
-  parser
+  # then try to find a match
+  patterns <- .globals$parsers$p
+  parser <- .globals$parsers$f[stri_startswith_fixed(content_type, patterns)]
+  # Should we warn when multiple parsers match?
+  # warning("Multiple body parsers matches for content-type : ", toparse$content_type, ". Parser ", names(parser)[1L], " used.")
+  if (length(parser) == 0L) {
+    if (is.null(filename)) {
+      return(.globals$parsers$f[["query"]])
+    } else {
+      return(.globals$parsers$f[["octet"]])
+    }
+  } else {
+    return(parser[[1L]])
+  }
 }
