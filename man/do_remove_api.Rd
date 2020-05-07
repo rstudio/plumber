@@ -14,7 +14,7 @@ obtain a reference to a running droplet.}
 \item{path}{The path/name of the plumber service}
 
 \item{delete}{If \code{TRUE}, will also delete the associated directory
-(\code{/var/plumber/whatever}) from the server.}
+(\verb{/var/plumber/whatever}) from the server.}
 }
 \description{
 Removes all services and routing rules associated with a particular service.
