@@ -22,7 +22,7 @@ parseCookies <- function(cookie) {
   }
 
   cookies <- vapply(cookieList, "[[", character(1), 2)
-  decodedCookies <- as.list(httpuv::decodeURIComponent(cookies))
+  decodedCookies <- as.list(decodeURIComponent(cookies))
   cookieNames <- vapply(cookieList, "[[", character(1), 1)
   names(decodedCookies) <- cookieNames
   decodedCookies

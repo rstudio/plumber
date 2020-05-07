@@ -1,8 +1,9 @@
 context("Static")
+EOL <- if (.Platform$OS.type == "windows") {"\r\n"} else {"\n"}
 
 pr <- PlumberStatic$new(test_path("files/static"))
 
-test_that("the response is reurned", {
+test_that("the response is returned", {
   res <- PlumberResponse$new()
   val <- pr$route(make_req("GET", "/test.txt"), res)
   expect_true(inherits(val, "PlumberResponse"))
@@ -12,21 +13,21 @@ test_that("static txt file is served", {
   res <- PlumberResponse$new()
   pr$route(make_req("GET", "/test.txt"), res)
   expect_equal(res$headers$`Content-type`, "text/plain")
-  expect_equal(rawToChar(res$body), "I am a text file.\n")
+  expect_equal(rawToChar(res$body), paste0("I am a text file.", EOL))
 })
 
 test_that("static html file is served", {
   res <- PlumberResponse$new()
   pr$route(make_req("GET", "/index.html"), res)
   expect_equal(res$headers$`Content-type`, "text/html; charset=UTF-8")
-  expect_equal(rawToChar(res$body), "<html>I am HTML</html>\n")
+  expect_equal(rawToChar(res$body), paste0("<html>I am HTML</html>", EOL))
 })
 
 test_that("root requests are routed to index.html", {
   res <- PlumberResponse$new()
   pr$route(make_req("GET", "/"), res)
   expect_equal(res$headers$`Content-type`, "text/html; charset=UTF-8")
-  expect_equal(rawToChar(res$body), "<html>I am HTML</html>\n")
+  expect_equal(rawToChar(res$body), paste0("<html>I am HTML</html>", EOL))
 })
 
 test_that("static binary file is served", {
@@ -59,14 +60,14 @@ test_that("files are parsed properly", {
   res <- PlumberResponse$new()
   req <- make_req("GET", "/static/test.txt")
   p$route(req=req, res=res)
-  expect_equal(length(res$body), 18)
+  expect_equal(length(res$body), 17 + nchar(EOL))
   expect_equal(res$status, 200)
   expect_equal(res$headers$`Content-type`, "text/plain")
 
   res <- PlumberResponse$new()
   req <- make_req("GET", "/public/test.txt")
   p$route(req=req, res=res)
-  expect_equal(length(res$body), 18)
+  expect_equal(length(res$body), 17 + nchar(EOL))
   expect_equal(res$status, 200)
   expect_equal(res$headers$`Content-type`, "text/plain")
 })
@@ -83,5 +84,5 @@ test_that("expressions work as options", {
   res <- PlumberResponse$new()
   pr$route(make_req("GET", "/public/test.txt"), res)
   expect_equal(res$headers$`Content-type`, "text/plain")
-  expect_equal(rawToChar(res$body), "I am a text file.\n")
+  expect_equal(rawToChar(res$body), paste0("I am a text file.", EOL))
 })

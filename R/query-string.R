@@ -10,6 +10,7 @@ queryStringFilter <- function(req){
 }
 
 #' @noRd
+#' @importFrom httpuv decodeURIComponent
 parseQS <- function(qs){
 
   if (is.null(qs) || length(qs) == 0L || qs == "") {
@@ -22,7 +23,7 @@ parseQS <- function(qs){
   args <- stri_split_fixed(qs, "&", omit_empty = TRUE)[[1L]]
   kv <- lapply(args, function(x) {
     # returns utf8 strings
-    httpuv::decodeURIComponent(stri_split_fixed(x, "=", omit_empty = TRUE)[[1]])
+    decodeURIComponent(stri_split_fixed(x, "=", omit_empty = TRUE)[[1]])
   })
   kv <- kv[lengths(kv) == 2] # Ignore incompletes
 

@@ -59,8 +59,9 @@ removeCookieStr <- function(name, path, http = FALSE, secure = FALSE) {
 }
 
 #' @noRd
+#' @importFrom httpuv encodeURIComponent
 cookieToStr <- function(name, value, path, expiration=FALSE, http=FALSE, secure=FALSE){
-  val <- httpuv::encodeURIComponent(as.character(value))
+  val <- encodeURIComponent(as.character(value))
   str <- paste0(name, "=", val, "; ")
 
   if (!missing(path)){
