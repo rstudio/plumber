@@ -35,7 +35,7 @@ NULL
 #' It should return a named list if you want values to map to
 #' plumber endpoint function args.
 #'
-#' @example
+#' @examples
 #' parser_json <- function(...) {
 #'   function(value, content_type = "application/json", ...) {
 #'     charset <- getCharacterSet(content_type)

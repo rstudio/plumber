@@ -218,6 +218,7 @@ PlumberEndpoint <- R6Class(
     getPathParams = function(path){
       extractPathParams(private$regex, path)
     },
+    #' @description retrieve endpoint expression parameters
     getFuncParams = function() {
       getArgsMetadata(private$func)
     }

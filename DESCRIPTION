@@ -65,6 +65,7 @@ Collate:
     'includes.R'
     'json.R'
     'new-rstudio-project.R'
+    'openapi.R'
     'paths.R'
     'plumber-static.R'
     'plumber-step.R'
