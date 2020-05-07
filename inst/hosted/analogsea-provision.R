@@ -26,7 +26,7 @@ install_docker <- function(droplet){
 
 install_new_r <- function(droplet){
   droplet %>%
-    droplet_ssh(c("echo 'deb https://cran.rstudio.com/bin/linux/ubuntu trusty/' >> /etc/apt/sources.list",
+    droplet_ssh(c("echo 'deb https://cran.rstudio.com/bin/linux/ubuntu trusty-cran35/' >> /etc/apt/sources.list",
                   "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9")) %>%
     debian_apt_get_update() %>%
     debian_install_r()
