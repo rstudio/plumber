@@ -13,24 +13,24 @@ postBodyFilter <- function(req){
 
 parseBody <- function(body, content_type = NULL) {
   if (!is.raw(body)) {body <- charToRaw(body)}
-  if (length(body) == 0L) return(list())
   toparse <- list(value = body, content_type = content_type)
   parseRaw(toparse)
 }
 
 parseRaw <- function(toparse) {
+  if (length(toparse$value) == 0L) return(list())
   parser <- parserPicker(toparse$content_type, toparse$value[1], toparse$filename)
   do.call(parser(), toparse)
 }
 
 parserPicker <- function(content_type, first_byte, filename = NULL) {
-  #fast default to json when first byte is 7b ({)
+  #fast default to json when first byte is 7b (ascii {)
   if (first_byte == as.raw(123L))
     return(.globals$parsers$f[["json"]])
   if (is.null(content_type)) {
     return(.globals$parsers$f[["query"]])
   }
-  # then try to find a match
+  # else try to find a match
   patterns <- .globals$parsers$p
   parser <- .globals$parsers$f[stri_startswith_fixed(content_type, patterns)]
   # Should we warn when multiple parsers match?
