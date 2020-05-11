@@ -55,9 +55,9 @@ createPathRegex <- function(pathDef, funcParams = NULL){
   match <- stri_match_all(
     pathDef,
     # capture any plumber type (<arg:TYPE>).
-    # plumberToSwaggerType(types) will yell if it is unknown
+    # plumberToDataType(types) will yell if it is unknown
     # and can not be guessed from endpoint function args)
-    # <arg> will be given the TYPE `defaultSwaggerType`
+    # <arg> will be given the TYPE `defaultDataType`
     regex = "/<(\\.?[a-zA-Z][\\w_\\.]*)(?::([^>]*))?>"
   )[[1]]
   names <- match[,2]
@@ -77,10 +77,10 @@ createPathRegex <- function(pathDef, funcParams = NULL){
   types <- stri_replace_all(match[,3], "$1", regex = "^\\[([^\\]]*)\\]$")
   if (length(funcParams) > 0) {
     # Override with detection of function args if type not found in map
-    idx <- !(types %in% names(plumberToSwaggerTypeMap))
+    idx <- !(types %in% names(dataTypesMap))
     types[idx] <- sapply(funcParams, `[[`, "type")[names[idx]]
   }
-  types <- plumberToSwaggerType(types, inPath = TRUE)
+  types <- plumberToDataType(types, inPath = TRUE)
 
   serializations <- stri_detect_regex(match[,3], "^\\[[^\\]]*\\]$")
   if (length(funcParams) > 0) {
@@ -88,8 +88,8 @@ createPathRegex <- function(pathDef, funcParams = NULL){
     idx <- (is.na(serializations) | !serializations)
     serializations[idx] <- sapply(funcParams, `[[`, "serialization")[names[idx]]
   }
-  serializations <- serializations & supportsSerialization(types)
-  serializations[is.na(serializations)] <- defaultSwaggerSerialization
+  serializations <- serializations & types %in% filterDataTypes(TRUE, "serializationSupport")
+  serializations[is.na(serializations)] <- defaultSerialization
 
   pathRegex <- pathDef
   regexps <- typesToRegexps(types, serializations)
@@ -105,28 +105,28 @@ createPathRegex <- function(pathDef, funcParams = NULL){
     names = names,
     types = types,
     regex = paste0("^", pathRegex, "$"),
-    converters = typeToConverters(types, serializations),
+    converters = typesToConverters(types, serializations),
     serializations = serializations
   )
 }
 
 
-typesToRegexps <- function(swaggerTypes, serializations = FALSE) {
+typesToRegexps <- function(dataTypes, serializations = FALSE) {
   # return vector of regex strings
   mapply(
     function(x, y) {x[[y]]},
-    swaggerTypeInfo[swaggerTypes],
+    dataTypesInfo[dataTypes],
     ifelse(serializations, "regexSerialization", "regex"),
     USE.NAMES = FALSE
   )
 }
 
 
-typeToConverters <- function(swaggerTypes, serializations = FALSE) {
+typesToConverters <- function(dataTypes, serializations = FALSE) {
   # return list of functions
   mapply(
     function(x, y) {x[[y]]},
-    swaggerTypeInfo[swaggerTypes],
+    dataTypesInfo[dataTypes],
     ifelse(serializations, "converterSerialization", "converter"),
     USE.NAMES = FALSE
   )

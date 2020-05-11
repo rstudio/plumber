@@ -40,7 +40,8 @@ Suggests:
     htmlwidgets,
     visNetwork,
     analogsea (>= 0.7.0),
-    later
+    later,
+    yaml
 Remotes:
     rstudio/promises,
     rstudio/swagger,
@@ -50,9 +51,9 @@ Collate:
     'async.R'
     'content-types.R'
     'cookie-parser.R'
-    'parse-globals.R'
+    'plumb-globals.R'
     'images.R'
-    'parse-block.R'
+    'plumb-block.R'
     'globals.R'
     'serializer-json.R'
     'shared-secret-filter.R'
@@ -65,7 +66,8 @@ Collate:
     'includes.R'
     'json.R'
     'new-rstudio-project.R'
-    'openapi.R'
+    'openapi-spec.R'
+    'openapi-types.R'
     'paths.R'
     'plumber-static.R'
     'plumber-step.R'
@@ -78,6 +80,5 @@ Collate:
     'serializer-xml.R'
     'serializer.R'
     'session-cookie.R'
-    'swagger.R'
     'utf8.R'
 RoxygenNote: 7.1.0

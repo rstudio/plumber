@@ -5,7 +5,7 @@
 #'   If this line represents what was once multiple lines, intermediate comment
 #'   prefixes should have been removed.
 #' @noRd
-parseOneGlobal <- function(fields, argument){
+plumbOneGlobal <- function(fields, argument){
   if (nchar(argument) == 0){
     return(fields)
   }
@@ -70,9 +70,9 @@ parseOneGlobal <- function(fields, argument){
 argRegex <- "^#['\\*]\\s*(@(api\\w+)\\s+)?(.*)$"
 
 #' Parse out the global API settings of a given set of lines and return a
-#' swagger-compliant list describing the global API.
+#' OpenAPI-compliant list describing the global API.
 #' @noRd
-parseGlobals <- function(lines){
+plumbGlobals <- function(lines){
   # Build up the entire argument here; needed since a single directive
   # might wrap multiple lines
   fullArg <- ""
@@ -90,19 +90,19 @@ parseGlobals <- function(lines){
         fullArg <- paste(fullArg, parsedLine[4])
       } else {
         # New argument, parse the buffer and start a new one
-        fields <- parseOneGlobal(fields, fullArg)
+        fields <- plumbOneGlobal(fields, fullArg)
         fullArg <- line
       }
     } else {
       # This isn't a line we can underestand. Parse what we have in the
       # buffer and then reset
-      fields <- parseOneGlobal(fields, fullArg)
+      fields <- plumbOneGlobal(fields, fullArg)
       fullArg <- ""
     }
   }
 
   # Clear out the buffer
-  fields <- parseOneGlobal(fields, fullArg)
+  fields <- plumbOneGlobal(fields, fullArg)
 
   fields
 }
