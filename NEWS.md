@@ -31,6 +31,8 @@ plumber 0.5.0
 
 ### New features
 
+* Added Swagger support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez) 
+
 * Added support for promises in endpoints, filters, and hooks. ([#248](https://github.com/rstudio/plumber/pull/248))
 
 * Added support to a router's run method to allow the `swagger` parameter to be a function that
@@ -40,6 +42,11 @@ plumber 0.5.0
 
 
 ### Minor new features and improvements
+
+* Update documentation on R6 objects (@meztez)
+
+* R repository modified to `xenial-cran35` and `trusty-cran35` in `install_new_r` scripts (@meztez,
+[#529](https://github.com/rstudio/plumber/pull/529))
 
 * If cookie information is too large (> 4093 bytes), a warning will be displayed. ([#404](https://github.com/rstudio/plumber/pull/404))
 
@@ -57,6 +64,9 @@ plumber 0.5.0
 * Modified images handling to serialize during serialization step instead of
   postexec step. Fix issue with images pre/postserialize hooks (@meztez,
 [#518](https://github.com/rstudio/plumber/pull/518)).
+
+* Fix bug in setting openapi.json url when HTTP_REFERER is null (@meztez,
+[#528](https://github.com/rstudio/plumber/pull/528))
 
 * Fix possible bugs due to mounted routers without leading slashes (@atheriel, [#476](https://github.com/rstudio/plumber/issues/476) [#501](https://github.com/rstudio/plumber/pull/501)).
 

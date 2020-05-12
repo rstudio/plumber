@@ -24,6 +24,7 @@ Imports:
     R6 (>= 2.0.0),
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
+    webutils (>= 1.1),
     httpuv (>= 1.4.5.9002),
     crayon,
     promises,
@@ -39,7 +40,8 @@ Suggests:
     htmlwidgets,
     visNetwork,
     analogsea (>= 0.7.0),
-    later
+    later,
+    yaml
 Remotes:
     rstudio/promises,
     rstudio/swagger,
@@ -49,9 +51,9 @@ Collate:
     'async.R'
     'content-types.R'
     'cookie-parser.R'
-    'parse-globals.R'
+    'plumb-globals.R'
     'images.R'
-    'parse-block.R'
+    'plumb-block.R'
     'globals.R'
     'serializer-json.R'
     'shared-secret-filter.R'
@@ -64,9 +66,12 @@ Collate:
     'includes.R'
     'json.R'
     'new-rstudio-project.R'
+    'openapi-spec.R'
+    'openapi-types.R'
     'paths.R'
     'plumber-static.R'
     'plumber-step.R'
+    'post-parsers.R'
     'response.R'
     'serializer-content-type.R'
     'serializer-html.R'
@@ -75,6 +80,5 @@ Collate:
     'serializer-xml.R'
     'serializer.R'
     'session-cookie.R'
-    'swagger.R'
     'utf8.R'
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0

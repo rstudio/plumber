@@ -203,6 +203,8 @@ test_that("prints correctly", {
     "│  │ # Plumber static router serving from directory: \\."
   )
 
+  skip_if_not(all(Encoding(printed) %in% Encoding(regexps)))
+
   for (i in 1:length(regexps)){
     expect_match(printed[i], regexps[i], info=paste0("on line ", i))
   }
@@ -473,27 +475,31 @@ test_that("filters and endpoints executed in the appropriate environment", {
 test_that("host is updated properly for printing", {
 
   expect_identical(
-    urlHost("1:1:1", 1234),
+    urlHost(host = "1:1:1", port = 1234),
     "http://[1:1:1]:1234"
   )
   expect_identical(
-    urlHost("::", 1234, FALSE),
+    urlHost(host = "::", port = 1234, changeHostLocation = FALSE),
     "http://[::]:1234"
   )
   expect_identical(
-    urlHost("::", 1234, TRUE),
+    urlHost(host = "::", port = 1234, changeHostLocation = TRUE),
     "http://[::1]:1234"
   )
   expect_identical(
-    urlHost("1.2.3.4", 1234),
+    urlHost(host = "1.2.3.4", port = 1234),
     "http://1.2.3.4:1234"
   )
   expect_identical(
-    urlHost("0.0.0.0", 1234, FALSE),
+    urlHost(host = "0.0.0.0", port = 1234, changeHostLocation = FALSE),
     "http://0.0.0.0:1234"
   )
   expect_identical(
-    urlHost("0.0.0.0", 1234, TRUE),
+    urlHost(host = "0.0.0.0", port = 1234, changeHostLocation = TRUE),
     "http://127.0.0.1:1234"
+  )
+  expect_identical(
+    urlHost(scheme = "http", host = "0.0.0.0", port = 1234, path = "/v1", changeHostLocation = TRUE),
+    "http://127.0.0.1:1234/v1"
   )
 })

@@ -1,18 +1,22 @@
 context("swagger")
 
-test_that("plumberToSwaggerType works", {
-  expect_equal(plumberToSwaggerType("bool"), "boolean")
-  expect_equal(plumberToSwaggerType("logical"), "boolean")
+test_that("plumberToDataType works", {
+  expect_equal(plumberToDataType("bool"), "boolean")
+  expect_equal(plumberToDataType("logical"), "boolean")
 
-  expect_equal(plumberToSwaggerType("double"), "number")
-  expect_equal(plumberToSwaggerType("numeric"), "number")
+  expect_equal(plumberToDataType("double"), "number")
+  expect_equal(plumberToDataType("numeric"), "number")
 
-  expect_equal(plumberToSwaggerType("int"), "integer")
+  expect_equal(plumberToDataType("int"), "integer")
 
-  expect_equal(plumberToSwaggerType("character"), "string")
+  expect_equal(plumberToDataType("character"), "string")
+
+  expect_equal(plumberToDataType("df"), "object")
+  expect_equal(plumberToDataType("list"), "object")
+  expect_equal(plumberToDataType("data.frame"), "object")
 
   expect_warning({
-    expect_equal(plumberToSwaggerType("flargdarg"), "string")
+    expect_equal(plumberToDataType("flargdarg"),  defaultDataType)
   }, "Unrecognized type:")
 })
 
@@ -23,14 +27,14 @@ test_that("response attributes are parsed", {
     "#' @response 202 Here's second",
     "#' @response 203 Here's third",
     "#' @response default And default")
-  b <- parseBlock(length(lines), lines)
+  b <- plumbBlock(length(lines), lines)
   expect_length(b$responses, 4)
   expect_equal(b$responses$`201`, list(description="This is response 201"))
   expect_equal(b$responses$`202`, list(description="Here's second"))
   expect_equal(b$responses$`203`, list(description="Here's third"))
   expect_equal(b$responses$default, list(description="And default"))
 
-  b <- parseBlock(1, "")
+  b <- plumbBlock(1, "")
   expect_null(b$responses)
 })
 
@@ -39,22 +43,24 @@ test_that("params are parsed", {
     "#' @get /",
     "#' @param test Test docs",
     "#' @param required:character* Required param",
-    "#' @param another:int Another docs")
-  b <- parseBlock(length(lines), lines)
-  expect_length(b$params, 3)
-  expect_equal(b$params$another, list(desc="Another docs", type="integer", required=FALSE))
-  expect_equal(b$params$test, list(desc="Test docs", type=NA, required=FALSE))
-  expect_equal(b$params$required, list(desc="Required param", type="string", required=TRUE))
+    "#' @param another:int Another docs",
+    "#' @param multi:[int]* Required array param")
+  b <- plumbBlock(length(lines), lines)
+  expect_length(b$params, 4)
+  expect_equal(b$params$another, list(desc="Another docs", type="integer", required=FALSE, serialization = FALSE))
+  expect_equal(b$params$test, list(desc="Test docs", type=defaultDataType, required=FALSE, serialization = FALSE))
+  expect_equal(b$params$required, list(desc="Required param", type="string", required=TRUE, serialization = FALSE))
+  expect_equal(b$params$multi, list(desc="Required array param", type="integer", required=TRUE, serialization = TRUE))
 
-  b <- parseBlock(1, "")
+  b <- plumbBlock(1, "")
   expect_null(b$params)
 })
 
 # TODO
-#test_that("prepareSwaggerEndpoints works", {
+#test_that("endpointSpecification works", {
 #})
 
-test_that("swaggerFile works with mounted routers", {
+test_that("OpenAPI specifications works with mounted routers", {
   # parameter in path
   pr <- plumber$new()
   pr$handle("GET", "/nested/:path/here", function(){})
@@ -104,7 +110,7 @@ test_that("swaggerFile works with mounted routers", {
   pr$mount("/sub4", pr4)
   pr4$mount("/", pr5)
 
-  paths <- names(pr$swaggerFile()$paths)
+  paths <- names(pr$openAPIFile()$paths)
   expect_length(paths, 7)
   expect_equal(paths, c("/nested/:path/here", "/sub2/something",
     "/sub2/", "/sub2/sub3/else", "/sub2/sub3/", "/sub4/completely",
@@ -114,68 +120,130 @@ test_that("swaggerFile works with mounted routers", {
   pr <<- pr
 })
 
-test_that("extractResponses works", {
+test_that("responsesSpecification works", {
   # Empty
-  r <- extractResponses(NULL)
-  expect_equal(r, defaultResp)
+  r <- responsesSpecification(NULL)
+  expect_equal(r, defaultResponse)
 
   # Response constructor actually defaults to NA, so that's an important case, too
-  r <- extractResponses(NA)
-  expect_equal(r, defaultResp)
+  r <- responsesSpecification(NA)
+  expect_equal(r, defaultResponse)
 
   # Responses with no default
   customResps <- list("200" = list())
-  r <- extractResponses(customResps)
+  r <- responsesSpecification(customResps)
   expect_length(r, 2)
-  expect_equal(r$default, defaultResp$default)
+  expect_equal(r$default, defaultResponse$default)
   expect_equal(r$`200`, customResps$`200`)
 })
 
-test_that("extractSwaggerParams works", {
+test_that("parametersSpecification works", {
   ep <- list(id=list(desc="Description", type="integer", required=FALSE),
              id2=list(desc="Description2", required=FALSE), # No redundant type specification
-             make=list(desc="Make description", type="string", required=FALSE))
-  pp <- data.frame(name=c("id", "id2"), type=c("int", "int"))
+             make=list(desc="Make description", type="string", required=FALSE),
+             prices=list(desc="Historic sell prices", type="numeric", required = FALSE, serialization = TRUE),
+             claims=list(desc="Insurance claims", type="object", required = FALSE))
+  pp <- data.frame(name=c("id", "id2", "owners"), type=c("int", "int", "chr"), serialization = c(FALSE, FALSE, TRUE), stringsAsFactors = FALSE)
 
-  params <- extractSwaggerParams(ep, pp)
-  expect_equal(params[[1]],
+  params <- parametersSpecification(ep, pp)
+  expect_equal(params$parameters[[1]],
                list(name="id",
                     description="Description",
                     `in`="path",
                     required=TRUE, # Made required b/c path arg
                     schema = list(
-                      type="integer")))
-  expect_equal(params[[2]],
+                      type="integer",
+                      format="int64",
+                      default=NULL)))
+  expect_equal(params$parameters[[2]],
                list(name="id2",
                     description="Description2",
                     `in`="path",
                     required=TRUE, # Made required b/c path arg
                     schema = list(
-                      type="integer")))
-  expect_equal(params[[3]],
+                      type="integer",
+                      format="int64",
+                      default=NULL)))
+  expect_equal(params$parameters[[3]],
                list(name="make",
                     description="Make description",
                     `in`="query",
                     required=FALSE,
                     schema = list(
-                      type="string")))
+                      type="string",
+                      format=NULL,
+                      default=NULL)))
+  expect_equal(params$parameters[[4]],
+               list(name="prices",
+                    description="Historic sell prices",
+                    `in`="query",
+                    required=FALSE,
+                    schema = list(
+                      type="array",
+                      items= list(
+                        type="number",
+                        format="double"),
+                      default = NULL),
+                    style="form",
+                    explode=TRUE))
+  expect_equal(params$parameters[[5]],
+               list(name="owners",
+                    description=NULL,
+                    `in`="path",
+                    required=TRUE,
+                    schema = list(
+                      type="array",
+                      items= list(
+                        type="string",
+                        format=NULL),
+                      default = NULL),
+                    style="simple",
+                    explode=FALSE))
+  expect_equal(params$requestBody,
+               list(content = list(
+                 `application/json` = list(
+                   schema = list(
+                     type = "object",
+                     properties = list(
+                       claims = list(
+                         type = "object",
+                         format = NULL,
+                         example = NULL,
+                         description = "Insurance claims")))))))
 
   # If id were not a path param it should not be promoted to required
-  params <- extractSwaggerParams(ep, NULL)
-  idParam <- params[[which(vapply(params, `[[`, character(1), "name") == "id")]]
+  params <- parametersSpecification(ep, NULL)
+  idParam <- params$parameters[[which(vapply(params$parameters, `[[`, character(1), "name") == "id")]]
   expect_equal(idParam$required, FALSE)
   expect_equal(idParam$schema$type, "integer")
 
-  for (param in params) {
-    expect_equal(length(param), 5)
+  for (param in params$parameters) {
+    if (param$schema$type != "array") {
+      expect_equal(length(param), 5)
+    } else {
+      expect_equal(length(param), 7)
+    }
   }
 
-  params <- extractSwaggerParams(NULL, NULL)
-  expect_equal(length(params), 0)
+  # Check if we can pass a single path parameter without a @param line match
+  params <- parametersSpecification(NULL, pp[3,])
+  expect_equal(params$parameters[[1]],
+               list(name="owners",
+                    description=NULL,
+                    `in`="path",
+                    required=TRUE,
+                    schema = list(
+                      type="array",
+                      items= list(
+                        type="string",
+                        format=NULL),
+                      default=NULL),
+                    style="simple",
+                    explode=FALSE))
+
+  params <- parametersSpecification(NULL, NULL)
+  expect_equal(sum(sapply(params, length)), 0)
 })
-
-
-
 
 test_that("api kitchen sink", {
 
@@ -206,7 +274,7 @@ test_that("api kitchen sink", {
   }
 
   validate_spec <- function(pr) {
-    spec <- jsonlite::toJSON(pr$swaggerFile(), auto_unbox = TRUE)
+    spec <- jsonlite::toJSON(pr$openAPIFile(), auto_unbox = TRUE)
     tmpfile <- tempfile(fileext = ".json")
     on.exit({
       unlink(tmpfile)
@@ -252,5 +320,36 @@ test_that("api kitchen sink", {
 
   # TODO test more situations
 
+
+})
+
+test_that("multiple variations in function extract correct metadata", {
+  dummy <- function(var0 = 420.69,
+                    var1,
+                    var2 = c(1L, 2L),
+                    var3 = rnorm,
+                    var4 = NULL,
+                    var5 = FALSE,
+                    var6 = list(name = c("luke", "bob"), lastname = c("skywalker", "ross")),
+                    var7 = .GlobalEnv,
+                    var8 = list(a = 2, b = mean, c = .GlobalEnv)) {}
+  funcParams <- getArgsMetadata(dummy)
+  expect_identical(sapply(funcParams, `[[`, "required"),
+                   c(var0 = FALSE, var1 = TRUE, var2 = FALSE, var3 = FALSE, var4 = FALSE,
+                     var5 = FALSE, var6 = FALSE, var7 = FALSE, var8 = FALSE))
+  expect_identical(lapply(funcParams, `[[`, "default"),
+                   list(var0 = 420.69, var1 = NA, var2 = 1L:2L, var3 = NA, var4 = NA, var5 = FALSE,
+                        var6 = list(name = c("luke", "bob"), lastname = c("skywalker", "ross")), var7 = NA, var8 = NA))
+  expect_identical(lapply(funcParams, `[[`, "example"),
+                   list(var0 = 420.69, var1 = NA, var2 = 1L:2L, var3 = NA, var4 = NA, var5 = FALSE,
+                        var6 = list(name = c("luke", "bob"), lastname = c("skywalker", "ross")), var7 = NA, var8 = NA))
+  expect_identical(lapply(funcParams, `[[`, "serialization"),
+                   list(var0 = defaultSerialization, var1 = defaultSerialization, var2 = TRUE,
+                        var3 = defaultSerialization, var4 = defaultSerialization,
+                        var5 = defaultSerialization, var6 = defaultSerialization,
+                        var7 = defaultSerialization, var8 = defaultSerialization))
+  expect_identical(lapply(funcParams, `[[`, "type"),
+                   list(var0 = "number", var1 = defaultDataType, var2 = "integer", var3 = defaultDataType, var4 = defaultDataType,
+                        var5 = "boolean", var6 = "object", var7 = defaultDataType, var8 = defaultDataType))
 
 })

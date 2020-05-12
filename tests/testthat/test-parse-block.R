@@ -6,13 +6,13 @@ test_that("trimws works", {
   expect_equal(trimws("hi "), "hi")
 })
 
-test_that("parseBlock works", {
+test_that("plumbBlock works", {
   lines <- c(
     "#' @get /",
     "#' @post /",
     "#' @filter test",
     "#' @serializer json")
-  b <- parseBlock(length(lines), lines)
+  b <- plumbBlock(length(lines), lines)
   expect_length(b$path, 2)
   expect_equal(b$path[[1]], list(verb="POST", path="/"))
   expect_equal(b$path[[2]], list(verb="GET", path="/"))
@@ -20,44 +20,44 @@ test_that("parseBlock works", {
   expect_equal_functions(b$serializer, serializer_json())
 })
 
-test_that("parseBlock images", {
+test_that("plumbBlock images", {
   lines <- c("#'@png")
-  b <- parseBlock(length(lines), lines)
+  b <- plumbBlock(length(lines), lines)
   expect_equal(b$image, "png")
   expect_equal(b$imageAttr, "")
 
   lines <- c("#'@jpeg")
-  b <- parseBlock(length(lines), lines)
+  b <- plumbBlock(length(lines), lines)
   expect_equal(b$image, "jpeg")
   expect_equal(b$imageAttr, "")
 
   # Whitespace is fine
   lines <- c("#' @jpeg    \t ")
-  b <- parseBlock(length(lines), lines)
+  b <- plumbBlock(length(lines), lines)
   expect_equal(b$image, "jpeg")
   expect_equal(b$imageAttr, "")
 
   # No whitespace is fine
   lines <- c("#' @jpeg(w=1)")
-  b <- parseBlock(length(lines), lines)
+  b <- plumbBlock(length(lines), lines)
   expect_equal(b$image, "jpeg")
   expect_equal(b$imageAttr, "(w=1)")
 
   # Additional chars after name don't count as image tags
   lines <- c("#' @jpegs")
-  b <- parseBlock(length(lines), lines)
+  b <- plumbBlock(length(lines), lines)
   expect_null(b$image)
   expect_null(b$imageAttr)
 
   # Properly formatted arguments work
   lines <- c("#'@jpeg (width=100)")
-  b <- parseBlock(length(lines), lines)
+  b <- plumbBlock(length(lines), lines)
   expect_equal(b$image, "jpeg")
   expect_equal(b$imageAttr, "(width=100)")
 
   # Ill-formatted arguments return a meaningful error
   lines <- c("#'@jpeg width=100")
-  expect_error(parseBlock(length(lines), lines), "Supplemental arguments to the image serializer")
+  expect_error(plumbBlock(length(lines), lines), "Supplemental arguments to the image serializer")
 })
 
 test_that("Block can't be multiple mutually exclusive things", {
@@ -76,18 +76,18 @@ test_that("Block can't be multiple mutually exclusive things", {
 test_that("Block can't contain duplicate tags", {
   lines <- c("#* @tag test",
             "#* @tag test")
-  expect_error(parseBlock(length(lines), lines), "Duplicate tag specified.")
+  expect_error(plumbBlock(length(lines), lines), "Duplicate tag specified.")
 })
 
 test_that("@json parameters work", {
 
   expect_block_fn <- function(lines, fn) {
-    b <- parseBlock(length(lines), lines)
+    b <- plumbBlock(length(lines), lines)
     expect_equal_functions(b$serializer, fn)
   }
   expect_block_error <- function(lines, ...) {
     expect_error({
-      parseBlock(length(lines), lines)
+      plumbBlock(length(lines), lines)
     }, ...)
   }
 
@@ -121,12 +121,12 @@ test_that("@json parameters work", {
 test_that("@html parameters produce an error", {
 
   expect_block_fn <- function(lines, fn) {
-    b <- parseBlock(length(lines), lines)
+    b <- plumbBlock(length(lines), lines)
     expect_equal_functions(b$serializer, fn)
   }
   expect_block_error <- function(lines, ...) {
     expect_error({
-      parseBlock(length(lines), lines)
+      plumbBlock(length(lines), lines)
     }, ...)
   }
 
@@ -149,6 +149,5 @@ test_that("@html parameters produce an error", {
 
   expect_block_error("#' @html (key = \"val\")", "unused argument")
 })
-
 
 # TODO: more testing around filter, assets, endpoint, etc.

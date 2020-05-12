@@ -25,6 +25,6 @@ RUN curl -fLo /tmp/pandoc-2.2-1-amd64.deb https://github.com/jgm/pandoc/releases
 
 RUN R -e "install.packages(c('htmlwidgets', 'visNetwork', 'analogsea'))"
 
-CMD git clone -b "release-v0.5.0" https://github.com/trestletech/plumber.git /plumber && \
+CMD git clone -b "release-v0.5.0" https://github.com/rstudio/plumber.git /plumber && \
   R CMD build /plumber && \
   R CMD check plumber_*.tar.gz --as-cran

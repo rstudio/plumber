@@ -146,7 +146,7 @@ sessionCookie <- function(
 
 #' Random cookie key generator
 #'
-#' Uses a cryptographically secure pseudorandom number generator from \code{sodium::\link[sodium]{random}} to generate a 64 digit hexadecimal string.  \href{https://github.com/jeroen/sodium}{'sodium'} wraps around \href{https://download.libsodium.org/doc/}{'libsodium'}.
+#' Uses a cryptographically secure pseudorandom number generator from \code{sodium::\link[sodium]{helpers}} to generate a 64 digit hexadecimal string.  \href{https://github.com/jeroen/sodium}{'sodium'} wraps around \href{https://download.libsodium.org/doc/}{'libsodium'}.
 #'
 #' Please see \code{\link{sessionCookie}} for more information on how to save the generated key.
 #'
@@ -212,7 +212,7 @@ encodeCookie <- function(x, key) {
   }
   xRaw <-
     x %>%
-    jsonlite::toJSON() %>%
+    toJSON() %>%
     charToRaw()
 
   if (is.null(key)) {

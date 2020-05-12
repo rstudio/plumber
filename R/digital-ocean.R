@@ -84,8 +84,9 @@ install_plumber <- function(droplet, unstable){
     analogsea::debian_apt_get_install(droplet, "libcurl4-openssl-dev")
     analogsea::debian_apt_get_install(droplet, "libgit2-dev")
     analogsea::debian_apt_get_install(droplet, "libssl-dev")
-    analogsea::install_r_package(droplet, "devtools", repo="https://cran.rstudio.com")
-    analogsea::droplet_ssh(droplet, "Rscript -e \"devtools::install_github('rstudio/plumber')\"")
+    analogsea::debian_apt_get_install(droplet, "libsodium-dev")
+    analogsea::install_r_package(droplet, "remotes", repo="https://cran.rstudio.com")
+    analogsea::droplet_ssh(droplet, "Rscript -e \"remotes::install_github('rstudio/plumber')\"")
   } else {
     analogsea::install_r_package(droplet, "plumber")
   }
@@ -141,7 +142,7 @@ install_nginx <- function(droplet){
 
 install_new_r <- function(droplet){
   analogsea::droplet_ssh(droplet, "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9")
-  analogsea::droplet_ssh(droplet, "echo 'deb https://cran.rstudio.com/bin/linux/ubuntu xenial/' >> /etc/apt/sources.list.d/cran.list")
+  analogsea::droplet_ssh(droplet, "echo 'deb https://cran.rstudio.com/bin/linux/ubuntu xenial-cran35/' >> /etc/apt/sources.list.d/cran.list")
   # TODO: use the analogsea version once https://github.com/sckott/analogsea/issues/139 is resolved
   #analogsea::debian_apt_get_update(droplet)
   analogsea::droplet_ssh(droplet, "sudo apt-get update -qq")

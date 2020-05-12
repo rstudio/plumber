@@ -1,24 +1,25 @@
 context("POST body")
 
 test_that("JSON is consumed on POST", {
-  expect_equal(parseBody('{"a":"1"}'), list(a = "1"))
+  expect_equal(parseBody('{"a":"1"}', content_type = NULL), list(a = "1"))
 })
 
 test_that("Query strings on post are handled correctly", {
   expect_equivalent(parseBody("a="), list()) # It's technically a named list()
-  expect_equal(parseBody("a=1&b=&c&d=1"), list(a="1", d="1"))
+  expect_equal(parseBody("a=1&b=&c&d=1", content_type = NULL), list(a="1", d="1"))
 })
 
 test_that("Able to handle UTF-8", {
-  expect_equal(parseBody('{"text":"Ã©lise"}', "UTF-8")$text, "Ã©lise")
+  expect_equal(parseBody('{"text":"Ã©lise"}', content_type = "application/json; charset=UTF-8")$text, "Ã©lise")
 })
 
-test_that("filter passes on charset", {
-  charset_passed <- ""
+#charset moved to part parsing
+test_that("filter passes on content-type", {
+  content_type_passed <- ""
   req <- list(
     .internal = list(postBodyHandled = FALSE),
     rook.input = list(
-      read_lines = function() {
+      read = function() {
         called <- TRUE
         return("this is a body")
       }
@@ -27,11 +28,11 @@ test_that("filter passes on charset", {
     args = c()
   )
   with_mock(
-    parseBody = function(body, charset = "UTF-8") {
-      print(charset)
+    parseBody = function(body, content_type = "unknown") {
+      print(content_type)
       body
     },
-    expect_output(postBodyFilter(req), "testset"),
+    expect_output(postBodyFilter(req), "text/html; charset=testset"),
     .env = "plumber"
   )
 })
