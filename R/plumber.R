@@ -698,7 +698,7 @@ plumber <- R6Class(
         handlers <- private$ends[[filt]]
         if (!is.null(handlers)) {
           for (h in handlers) {
-            if (h$canServe(req)) {
+            if (h$canServe(req, res)) {
               return(h)
             }
           }
@@ -850,8 +850,8 @@ plumber <- R6Class(
 
       if (reqSize > maxSize) {
         return(list(status = 413L,
-                    headers = list('Content-Type' = 'text/plain'),
-                    body = 'Maximum upload size exceeded'))
+                    headers = list('Content-Type' = 'application/json'),
+                    body = toJSON(list(error = "413 - Payload Too Large"))))
       }
       else {
         return(NULL)
