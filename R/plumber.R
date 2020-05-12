@@ -215,6 +215,7 @@ plumber <- R6Class(
       private$serializer <- serializer_json()
       private$errorHandler <- defaultErrorHandler()
       private$notFoundHandler <- default404Handler
+      private$maxSize <- getOption('plumber.maxRequestSize', 0) #0 Unlimited
 
       # Add in the initial filters
       for (fn in names(filters)){
@@ -837,7 +838,24 @@ plumber <- R6Class(
     #' @param req request object
     #' @details required for httpuv interface
     onHeaders = function(req) {
-      NULL
+      maxSize <- private$maxSize
+      if (maxSize <= 0)
+        return(NULL)
+
+      reqSize <- 0
+      if (length(req$CONTENT_LENGTH) > 0)
+        reqSize <- as.numeric(req$CONTENT_LENGTH)
+      else if (length(req$HTTP_TRANSFER_ENCODING) > 0)
+        reqSize <- Inf
+
+      if (reqSize > maxSize) {
+        return(list(status = 413L,
+                    headers = list('Content-Type' = 'text/plain'),
+                    body = 'Maximum upload size exceeded'))
+      }
+      else {
+        return(NULL)
+      }
     },
     #' @description httpuv interface onWSOpen function
     #' @param ws WebSocket object
@@ -1036,6 +1054,7 @@ plumber <- R6Class(
 
     errorHandler = NULL,
     notFoundHandler = NULL,
+    maxSize = NULL, # Max request size in bytes
 
     addFilterInternal = function(filter){
       # Create a new filter and add it to the router
