@@ -72,8 +72,8 @@ plumb <- function(file, dir="."){
 }
 
 
-#' @include query-string.R
-#' @include post-body.R
+#' @include parse-query.R
+#' @include parse-body.R
 #' @include cookie-parser.R
 #' @include shared-secret-filter.R
 defaultPlumberFilters <- list(

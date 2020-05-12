@@ -47,7 +47,7 @@ Remotes:
     rstudio/swagger,
     rstudio/httpuv,
     sckott/analogsea
-Collate:
+Collate: 
     'async.R'
     'content-types.R'
     'cookie-parser.R'
@@ -57,8 +57,8 @@ Collate:
     'globals.R'
     'serializer-json.R'
     'shared-secret-filter.R'
-    'post-body.R'
-    'query-string.R'
+    'parse-body.R'
+    'parse-query.R'
     'plumber.R'
     'default-handlers.R'
     'digital-ocean.R'
@@ -68,11 +68,12 @@ Collate:
     'new-rstudio-project.R'
     'openapi-spec.R'
     'openapi-types.R'
+    'parsers-body.R'
     'paths.R'
+    'plumber-options.R'
+    'plumber-response.R'
     'plumber-static.R'
     'plumber-step.R'
-    'post-parsers.R'
-    'response.R'
     'serializer-content-type.R'
     'serializer-html.R'
     'serializer-htmlwidget.R'
