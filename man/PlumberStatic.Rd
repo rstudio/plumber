@@ -37,6 +37,7 @@ Creates a router that is backed by a directory of files on disk.
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="onHeaders">}\href{../../plumber/html/plumber.html#method-onHeaders}{\code{plumber::plumber$onHeaders()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="onWSOpen">}\href{../../plumber/html/plumber.html#method-onWSOpen}{\code{plumber::plumber$onWSOpen()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="openAPIFile">}\href{../../plumber/html/plumber.html#method-openAPIFile}{\code{plumber::plumber$openAPIFile()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="openAPISpec">}\href{../../plumber/html/plumber.html#method-openAPISpec}{\code{plumber::plumber$openAPISpec()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="registerHook">}\href{../../plumber/html/plumber.html#method-registerHook}{\code{plumber::plumber$registerHook()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="route">}\href{../../plumber/html/plumber.html#method-route}{\code{plumber::plumber$route()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="run">}\href{../../plumber/html/plumber.html#method-run}{\code{plumber::plumber$run()}}\out{</span>}

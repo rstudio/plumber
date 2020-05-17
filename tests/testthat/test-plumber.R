@@ -203,7 +203,8 @@ test_that("prints correctly", {
     "│  │ # Plumber static router serving from directory: \\."
   )
 
-  skip_if_not(all(Encoding(printed) %in% Encoding(regexps)))
+  skip_if_not(all(Encoding(printed) %in% Encoding(regexps)),
+              message = "UTF-8 Encoding support")
 
   for (i in 1:length(regexps)){
     expect_match(printed[i], regexps[i], info=paste0("on line ", i))

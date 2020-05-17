@@ -159,6 +159,7 @@ PlumberEndpoint <- R6Class(
     tags = NA,
     #' @description ability to serve request
     #' @param req a request object
+    #' @param res a response object
     #' @return a logical. `TRUE` when endpoint can serve request.
     canServe = function(req, res){
       if (!is.na(stri_match(req$PATH_INFO, regex=private$regex$regex)[1,1])) {

@@ -43,6 +43,7 @@ each separate verb/path into its own endpoint, so we just do that.}
 \item \href{#method-canServe}{\code{PlumberEndpoint$canServe()}}
 \item \href{#method-new}{\code{PlumberEndpoint$new()}}
 \item \href{#method-getPathParams}{\code{PlumberEndpoint$getPathParams()}}
+\item \href{#method-getFuncParams}{\code{PlumberEndpoint$getFuncParams()}}
 \item \href{#method-clone}{\code{PlumberEndpoint$clone()}}
 }
 }
@@ -71,13 +72,15 @@ retrieve endpoint typed parameters
 \subsection{Method \code{canServe()}}{
 ability to serve request
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$canServe(req)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$canServe(req, res)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{req}}{a request object}
+
+\item{\code{res}}{a response object}
 }
 \if{html}{\out{</div>}}
 }
@@ -150,6 +153,16 @@ retrieve endpoint path parameters
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getFuncParams"></a>}}
+\if{latex}{\out{\hypertarget{method-getFuncParams}{}}}
+\subsection{Method \code{getFuncParams()}}{
+retrieve endpoint expression parameters
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$getFuncParams()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
