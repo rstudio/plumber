@@ -47,7 +47,6 @@ Remotes:
     rstudio/promises,
     rstudio/swagger,
     rstudio/httpuv,
-    sckott/analogsea,
     meztez/redoc
 Collate: 
     'async.R'
