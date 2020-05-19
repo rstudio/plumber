@@ -84,7 +84,6 @@ Collate:
     'serializer-yaml.R'
     'serializer.R'
     'session-cookie.R'
-    'ui-redoc.R'
-    'ui-swagger.R'
+    'ui.R'
     'utf8.R'
 RoxygenNote: 7.1.0

@@ -78,42 +78,6 @@ stubParameters <- function(spec) {
 
 }
 
-#' Mount OpenAPI spec to a plumber router
-#' @noRd
-mountOpenAPI <- function(pr, api_server_url) {
-
-  spec <- pr$openAPISpec()
-
-  # Create a function that's hardcoded to return the OpenAPI specification -- regardless of env.
-  openapi_fun <- function(req) {
-    # use the HTTP_REFERER so RSC can find the swagger location to ask
-    ## (can't directly ask for 127.0.0.1)
-    if (isFALSE(getOption("plumber.apiURL", FALSE)) &&
-        isFALSE(getOption("plumber.apiHost", FALSE))) {
-      if (is.null(req$HTTP_REFERER)) {
-        # Prevent leaking host and port if option is not set
-        api_server_url <- character(1)
-      }
-      else {
-        # Use HTTP_REFERER as fallback
-        api_server_url <- req$HTTP_REFERER
-      }
-    }
-
-    modifyList(list(servers = list(list(url = api_server_url, description = "OpenAPI"))), spec)
-
-  }
-  # http://spec.openapis.org/oas/v3.0.3#document-structure
-  # "It is RECOMMENDED that the root OpenAPI document be named: openapi.json or openapi.yaml."
-  pr$handle("GET", "/openapi.json", openapi_fun, serializer = serializer_unboxed_json())
-  if (requireNamespace("yaml", quietly = TRUE)) {
-    pr$handle("GET", "/openapi.yaml", openapi_fun, serializer = serializer_yaml())
-  }
-
-  return(invisible())
-
-}
-
 #' Convert the endpoints as they exist on the router to a list which can
 #' be converted into a openapi specification for these endpoints
 #' @noRd

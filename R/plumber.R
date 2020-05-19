@@ -283,28 +283,7 @@ plumber <- R6Class(
         setwd(dirname(private$filename))
       }
 
-      # Mount OpenAPI and UI
-      if (!isFALSE(ui)) {
-        api_url <- getOption(
-          "plumber.apiURL",
-          urlHost(
-            scheme = getOption("plumber.apiScheme", "http"),
-            host   = getOption("plumber.apiHost", host),
-            port   = getOption("plumber.apiPort", port),
-            path   = getOption("plumber.apiPath", ""),
-            changeHostLocation = TRUE
-          )
-        )
-        mountOpenAPI(self, api_url)
-        if (isTRUE(ui)) ui <- getOption("plumber.ui", "Swagger")
-        for (interface in ui) {
-          ui_url <- .globals$interfaces[[interface]](self, api_url,...)
-          message("Running ", interface, " UI at ", ui_url, sep = "")
-        }
-        if (is.function(callback)) {
-          callback(ui_url)
-        }
-      }
+      if (!isFALSE(ui)) mountUI(self, host, port, ui, callback, ...)
 
       on.exit(private$runHooks("exit"), add = TRUE)
 

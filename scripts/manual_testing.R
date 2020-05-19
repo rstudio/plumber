@@ -18,6 +18,16 @@ test_that("custom openapi file update function works", {
 })
 
 
+test_that("custom swagger and redoc works", {
+  pr <- plumber$new()
+  pr$handle("GET", "/:path/here", function(){})
+  pr$run(ui = c("swagger", "redoc", "myLittleUI"))
+
+  # validate that http://127.0.0.1:1234/__swagger__/ and
+  # http://127.0.0.1:1234/__redoc__/ works
+  # Message contains Ignored unknown ...
+})
+
 
 
 test_that("host doesn't change for messages, but does for RStudio IDE", {
