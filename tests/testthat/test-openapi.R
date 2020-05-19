@@ -1,4 +1,4 @@
-context("swagger")
+context("OpenAPI")
 
 test_that("plumberToDataType works", {
   expect_equal(plumberToDataType("bool"), "boolean")
@@ -66,7 +66,7 @@ test_that("OpenAPI specifications works with mounted routers", {
   pr$handle("GET", "/nested/:path/here", function(){})
   pr$handle("POST", "/nested/:path/here", function(){})
 
-    # static file handler
+  # static file handler
   stat <- PlumberStatic$new(".")
 
   # multiple entries
@@ -110,11 +110,11 @@ test_that("OpenAPI specifications works with mounted routers", {
   pr$mount("/sub4", pr4)
   pr4$mount("/", pr5)
 
-  paths <- names(pr$openAPIFile()$paths)
+  paths <- names(pr$openAPISpec()$paths)
   expect_length(paths, 7)
   expect_equal(paths, c("/nested/:path/here", "/sub2/something",
-    "/sub2/", "/sub2/sub3/else", "/sub2/sub3/", "/sub4/completely",
-    "/sub4/trailing_slash/"
+                        "/sub2/", "/sub2/sub3/else", "/sub2/sub3/", "/sub4/completely",
+                        "/sub4/trailing_slash/"
   ))
 
   pr <<- pr
@@ -274,7 +274,7 @@ test_that("api kitchen sink", {
   }
 
   validate_spec <- function(pr) {
-    spec <- jsonlite::toJSON(pr$openAPIFile(), auto_unbox = TRUE)
+    spec <- jsonlite::toJSON(pr$openAPISpec(), auto_unbox = TRUE)
     tmpfile <- tempfile(fileext = ".json")
     on.exit({
       unlink(tmpfile)
@@ -353,3 +353,16 @@ test_that("multiple variations in function extract correct metadata", {
                         var5 = "boolean", var6 = "object", var7 = defaultDataType, var8 = defaultDataType))
 
 })
+
+test_that("custom spec works", {
+  pr <- plumber$new()
+  pr$handle("POST", "/func1", function(){})
+  pr$handle("GET", "/func2", function(){})
+  pr$handle("GET", "/func3", function(){})
+  pr$customSpec <- list(info = list(description = "My Custom Spec", title = "This is only a test"))
+  spec <- pr$openAPISpec()
+  expect_equal(spec$info$description, "My Custom Spec")
+  expect_equal(spec$info$title, "This is only a test")
+  expect_equal(class(spec$openapi), "character")
+})
+

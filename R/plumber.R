@@ -179,6 +179,7 @@ hookable <- R6Class(
 #' @include plumb-globals.R
 #' @export
 #' @importFrom httpuv runServer
+#' @importFrom utils modifyList
 #' @import crayon
 plumber <- R6Class(
   "plumber",
@@ -240,54 +241,35 @@ plumber <- R6Class(
       }
 
     },
-    #' @description Start an a server using `plumber` object.
+    #' @description Start a server using `plumber` object.
     #' @param host a string that is a valid IPv4 or IPv6 address that is owned by
     #' this server, which the application will listen on. "0.0.0.0" represents
     #' all IPv4 addresses and "::/0" represents all IPv6 addresses.
     #' @param port a number or integer that indicates the server port that should
     #' be listened on. Note that on most Unix-like systems including Linux and
     #' Mac OS X, port numbers smaller than 1025 require root privileges.
-    #' @param swagger a function that enhances the existing swagger specification.
+    #' @param ui a logical or a character vector. The default UI when `TRUE` is `Swagger`.
+    #' Other valid values are `FALSE` and `Redoc`.
     #' @param debug `TRUE` provides more insight into your API errors.
-    #' @param swaggerCallback a callback function for taking action on the url for swagger page.
+    #' @param callback a callback function for taking action on UI url.
+    #' @param ... Other params to be passed down to ui functions, such as
+    #' `redoc_options` \code{redoc::\link[redoc]{redoc_spec}}.
     #' @details
     #' `port` does not need to be explicitly assigned.
-    #' It will be attributed automatically in the following priority order :
-    #' option `plumber.port`, `port` value in global environment, a random port
-    #' between 3000 and 10000 that is not blacklisted. When in unable to find
-    #' an available port, method will fail.\cr
     #' \cr
-    #' `swagger` should be either a logial or set to a function . When `TRUE` or a
-    #' function, multiple handles will be added to `plumber` object. OpenAPI json
-    #' file will be served on paths `/openapi.json` and `/swagger.json`. Swagger UI
-    #' will be served on paths `/__swagger__/index.html` and `/__swagger__/`. When
-    #' using a function, it will receive the plumber router as the first parameter
-    #' and currrent OpenAPI specifications as the second. This function should return a
-    #' list containing an OpenAPI-compliant specification.
-    #' See \url{https://www.openapis.org/}\cr
-    #' \cr
-    #' `swaggerCallback` When set, it will be called with a character string corresponding
-    #' to the swagger UI url. It allows RStudio to open swagger UI when plumber router
-    #' run method is executed using default `plumber.swagger.url` option.
-    #' @examples
-    #' \dontrun{
-    #' pr <- plumber$new
-    #' swagger <- function(pr_, spec) {
-    #'   spec$servers[[1]]$description <- "MyCustomAPISpec"
-    #'   spec
-    #' }
-    #' pr$run(swagger = swagger)
-    #' }
+    #' When `ui` is used, multiple handles will be added to `plumber` router.
+    #' OpenAPI json file will be served on paths `/openapi.json` and `/openapi.yaml`.
+    #' Swagger UI will be served on paths `/__swagger__/index.html` and `/__swagger__/`.
+    #' Redoc UI will be served on paths `/__redoc__/index.html` and `/__redoc__/`.
     run = function(
       host = '127.0.0.1',
       port = getOption('plumber.port'),
-      swagger = interactive(),
+      ui = interactive(),
       debug = interactive(),
-      swaggerCallback = getOption('plumber.swagger.url', NULL)
+      callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL)),
+      ...
     ) {
       port <- findPort(port)
-
-
       message("Running plumber API at ", urlHost(host = host, port = port, changeHostLocation = FALSE))
 
       priorDebug <- getOption("plumber.debug")
@@ -301,89 +283,26 @@ plumber <- R6Class(
         setwd(dirname(private$filename))
       }
 
-      if (isTRUE(swagger) || is.function(swagger)) {
-        if (!requireNamespace("swagger")) {
-          stop("swagger must be installed for the Swagger UI to be displayed")
-        }
-        spec <- self$openAPIFile()
-
-        swaggerUrl <- paste0(getOption(
-            "plumber.apiURL",
-            urlHost(
-              scheme = getOption("plumber.apiScheme", "http"),
-              host   = getOption("plumber.apiHost", host),
-              port   = getOption("plumber.apiPort", port),
-              path   = getOption("plumber.apiPath", ""),
-              changeHostLocation = TRUE
-            )
-        ), "/__swagger__/")
-
-        # Create a function that's hardcoded to return the OpenAPI specification -- regardless of env.
-        openapi_fun <- function(req, res, ..., scheme = "deprecated", host = "deprecated", path = "deprecated") {
-          if (!missing(scheme) || !missing(host) || !missing(path)) {
-            warning("`scheme`, `host`, or `path` are not supported to produce swagger.json")
-          }
-          # allows swagger-ui to provide proper callback location given the referrer location
-          # ex: rstudio cloud
-          # use the HTTP_REFERER so RSC can find the swagger location to ask
-          ## (can't directly ask for 127.0.0.1)
-          api_server_url <- swaggerUrl
-          if (isFALSE(getOption("plumber.apiURL", FALSE)) &&
-              isFALSE(getOption("plumber.apiHost", FALSE))) {
-            if (is.null(req$HTTP_REFERER)) {
-              # Prevent leaking host and port if option is not set
-              api_server_url <- character(1)
-            }
-            else {
-              # Use HTTP_REFERER as fallback
-              api_server_url <- req$HTTP_REFERER
-            }
-          }
-          api_server_url <- sub("index\\.html$", "", api_server_url)
-          api_server_url <- sub("/__swagger__/$", "", api_server_url)
-
-          spec$servers <- list(
-            list(
-              url = api_server_url,
-              description = "OpenAPI"
-            )
+      # Mount OpenAPI and UI
+      if (!isFALSE(ui)) {
+        api_url <- getOption(
+          "plumber.apiURL",
+          urlHost(
+            scheme = getOption("plumber.apiScheme", "http"),
+            host   = getOption("plumber.apiHost", host),
+            port   = getOption("plumber.apiPort", port),
+            path   = getOption("plumber.apiPath", ""),
+            changeHostLocation = TRUE
           )
-
-          if (is.function(swagger)) {
-            # allow users to update the OpenAPI specification themselves
-            ret <- swagger(self, spec, ...)
-            # Since users could have added more NA or NULL values...
-            ret <- removeNaOrNulls(ret)
-          } else {
-            # NA/NULL values already removed
-            ret <- spec
-          }
-          ret
+        )
+        mountOpenAPI(self, api_url)
+        if (isTRUE(ui)) ui <- getOption("plumber.ui", "Swagger")
+        for (interface in ui) {
+          ui_url <- .globals$interfaces[[interface]](self, api_url,...)
+          message("Running ", interface, " UI at ", ui_url, sep = "")
         }
-        # http://spec.openapis.org/oas/v3.0.3#document-structure
-        # "It is RECOMMENDED that the root OpenAPI document be named: openapi.json or openapi.yaml."
-        self$handle("GET", "/openapi.json", openapi_fun, serializer = serializer_unboxed_json())
-        # keeping for legacy purposes
-        self$handle("GET", "/swagger.json", openapi_fun, serializer = serializer_unboxed_json())
-
-        swagger_index <- function(...) {
-          swagger::swagger_spec(
-            'window.location.origin + window.location.pathname.replace(/\\(__swagger__\\\\/|__swagger__\\\\/index.html\\)$/, "") + "openapi.json"',
-            version = "3"
-          )
-        }
-        for (path in c("/__swagger__/index.html", "/__swagger__/")) {
-          self$handle(
-            "GET", path, swagger_index,
-            serializer = serializer_html()
-          )
-        }
-        self$mount("/__swagger__", PlumberStatic$new(swagger::swagger_path()))
-
-        message("Running Swagger UI at ", swaggerUrl, sep = "")
-        # notify swaggerCallback of plumber swagger location
-        if (!is.null(swaggerCallback) && is.function(swaggerCallback)) {
-          swaggerCallback(swaggerUrl)
+        if (is.function(callback)) {
+          callback(ui_url)
         }
       }
 
@@ -900,81 +819,18 @@ plumber <- R6Class(
     },
     #' @description Retrieve OpenAPI specification
     openAPISpec = function() {
-
       routerSpec <- private$routerSpecificationInternal(self)
-
-      # Extend the previously parsed settings with the endpoints
       def <- modifyList(private$globalSettings, list(paths = routerSpec))
-
-      # Lay those over the default globals so we ensure that the required fields
-      # (like API version) are satisfied.
       ret <- modifyList(defaultGlobals, def)
-
-      # remove NA or NULL values, which swagger doesn't like
+      if (is.list(self$customSpec)) {
+        ret <- modifyList(ret, self$customSpec)
+      }
       ret <- removeNaOrNulls(ret)
-
       ret
     },
-    #' @description Retrieve OpenAPI file (this should return a file instead of a list)
-    openAPIFile = function() {
-      self$openAPISpec()
-    },
-    #' @description Retrieve OpenAPI file (this should return a file instead of a list)
-    swaggerFile = function() {
-      self$openAPISpec()
-    },
-
-    ### Legacy/Deprecated -- Remove?
-    #' @details addEndpoint has been deprecated in v0.4.0 and will be removed in a coming release. Please use `handle()` instead.
-    #' @param verbs verbs
-    #' @param path path
-    #' @param expr expr
-    #' @param serializer serializer
-    #' @param processors processors
-    #' @param preempt preempt
-    #' @param params params
-    #' @param comments comments
-    addEndpoint = function(verbs, path, expr, serializer, processors, preempt=NULL, params=NULL, comments){
-      warning("addEndpoint has been deprecated in v0.4.0 and will be removed in a coming release. Please use `handle()` instead.")
-      if (!missing(processors) || !missing(params) || !missing(comments)){
-        stop("The processors, params, and comments parameters are no longer supported.")
-      }
-
-      self$handle(verbs, path, expr, preempt, serializer)
-    },
-    #' @details addAssets has been deprecated in v0.4.0 and will be removed in a coming release. Please use `mount` and `PlumberStatic$new()` instead.
-    #' @param dir dir
-    #' @param path path
-    #' @param options options
-    addAssets = function(dir, path="/public", options=list()){
-      warning("addAssets has been deprecated in v0.4.0 and will be removed in a coming release. Please use `mount` and `PlumberStatic$new()` instead.")
-      if (substr(path, 1,1) != "/"){
-        path <- paste0("/", path)
-      }
-
-      stat <- PlumberStatic$new(dir, options)
-      self$mount(path, stat)
-    },
-    #' @details addFilter has been deprecated in v0.4.0 and will be removed in a coming release. Please use `filter` instead.
-    #' @param name name
-    #' @param expr expr
-    #' @param serializer serializer
-    #' @param processors processors
-    addFilter = function(name, expr, serializer, processors){
-      warning("addFilter has been deprecated in v0.4.0 and will be removed in a coming release. Please use `filter` instead.")
-      if (!missing(processors)){
-        stop("The processors parameter is no longer supported.")
-      }
-
-      filter <- PlumberFilter$new(name, expr, private$envir, serializer)
-      private$addFilterInternal(filter)
-    },
-    #' @details addGlobalProcessor has been deprecated in v0.4.0 and will be removed in a coming release. Please use `registerHook`(s) instead.
-    #' @param proc proc
-    addGlobalProcessor = function(proc){
-      warning("addGlobalProcessor has been deprecated in v0.4.0 and will be removed in a coming release. Please use `registerHook`(s) instead.")
-      self$registerHooks(proc)
-    }
+    #' @field customSpec A list of custom spec to overlay over openAPI spec
+    #' generated from a plumber router.
+    customSpec = NULL
   ), active = list(
     #' @field endpoints plumber router endpoints read-only
     endpoints = function(){

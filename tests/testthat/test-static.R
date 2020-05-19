@@ -1,5 +1,12 @@
 context("Static")
-EOL <- if (.Platform$OS.type == "windows") {"\r\n"} else {"\n"}
+EOL <- {
+  f <-tempfile()
+  writeLines(c("",""), f)
+  readBin(f, "raw", n=2)
+  eol <- rawToChar(readBin(f, "raw", n=2))
+  unlink(f)
+  eol
+}
 
 pr <- PlumberStatic$new(test_path("files/static"))
 

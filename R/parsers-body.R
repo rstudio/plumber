@@ -78,6 +78,25 @@ parser_json <- function(...) {
 
 
 
+#' YAML
+#' @rdname parsers
+#' @param ... Raw values and headers are passed there.
+#' @export
+parser_yaml <- function(...) {
+  if (!requireNamespace("yaml", quietly = TRUE)) {
+    stop("yaml must be installed for the yaml parser to work")
+  }
+  function(value, content_type = NULL, ...) {
+    charset <- getCharacterSet(content_type)
+    value <- rawToChar(value)
+    Encoding(value) <- charset
+    safeFromJSON(value)
+  }
+}
+
+
+
+
 #' QUERY STRING
 #' @rdname parsers
 #' @export
@@ -176,6 +195,7 @@ parser_octet <- function(...) {
 
 #' @include globals.R
 addParser("json", parser_json, "application/json")
+addParser("yaml", parser_yaml, "application/x-yaml")
 addParser("query", parser_query, "application/x-www-form-urlencoded")
 addParser("text", parser_text, "text/")
 addParser("rds", parser_rds, "application/rds")

@@ -41,12 +41,14 @@ Suggests:
     visNetwork,
     analogsea (>= 0.7.0),
     later,
-    yaml
+    yaml,
+    redoc
 Remotes:
     rstudio/promises,
     rstudio/swagger,
     rstudio/httpuv,
-    sckott/analogsea
+    sckott/analogsea,
+    meztez/redoc
 Collate: 
     'async.R'
     'content-types.R'
@@ -79,7 +81,10 @@ Collate:
     'serializer-htmlwidget.R'
     'serializer-rds.R'
     'serializer-xml.R'
+    'serializer-yaml.R'
     'serializer.R'
     'session-cookie.R'
+    'ui-redoc.R'
+    'ui-swagger.R'
     'utf8.R'
 RoxygenNote: 7.1.0

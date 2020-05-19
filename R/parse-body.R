@@ -4,7 +4,6 @@ postBodyFilter <- function(req){
     body <- req$rook.input$read()
     type <- req$HTTP_CONTENT_TYPE
     args <- parseBody(body, type)
-    req$postBody <- body #this is a raw body contrary to what plumber did before
     req$args <- c(req$args, args)
     req$.internal$postBodyHandled <- TRUE
   }
