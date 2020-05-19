@@ -1,5 +1,4 @@
 #' @rdname serializers
-#' @param ... extra arguments supplied to respective internal serialization function.
 #' @export
 serializer_yaml <- function(...) {
   if (!requireNamespace("yaml", quietly = TRUE)) {

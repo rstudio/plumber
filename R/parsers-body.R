@@ -80,7 +80,6 @@ parser_json <- function(...) {
 
 #' YAML
 #' @rdname parsers
-#' @param ... Raw values and headers are passed there.
 #' @export
 parser_yaml <- function(...) {
   if (!requireNamespace("yaml", quietly = TRUE)) {
