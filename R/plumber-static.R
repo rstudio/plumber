@@ -84,7 +84,7 @@ PlumberStatic <- R6Class(
     #' @param topLevel a logical value. When method executed on top level
     #' router, set to `TRUE`.
     #' @param ... additional arguments for recursive calls
-    #' @return A terminal friendly represention of a plumberstatic router.
+    #' @return A terminal friendly represention of a `PlumberStatic()` router.
     print = function(prefix="", topLevel=TRUE, ...){
       cat(prefix)
       if (!topLevel){
