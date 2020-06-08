@@ -30,7 +30,7 @@
 #' OpenAPI specification.})
 #' \item{plumber.apiPath (defaults to an empty string)}{Path used to build UI url and server url for
 #' OpenAPI specification.})
-#' \item{plumber.apiURL (defaults to the combination of the above options)}{UI url and server url for
+#' \item{plumber.apiURL (defaults to the combination of the above options)}{UI url and server urls for
 #' OpenAPI specification respecting pattern `scheme://host:port/path`.})
 #' \item{plumber.debug (defaults to `FALSE`)}{Provides more insight into your API errors. Alternatively,
 #' use parameter `debug` of plumber router `run` method})

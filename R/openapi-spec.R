@@ -33,7 +33,7 @@ toOpenAPI <- function(plumber, output = NULL) {
   spec$servers$url <- open_api_url
   spec$servers$description <- "OpenAPI"
 
-  spec <- toJSON(spec, auto_unbox = TRUE)
+  spec <- jsonlite::toJSON(spec, auto_unbox = TRUE)
   if (!is.null(output)) {
     return(writeLines(spec, output))
   }
@@ -46,28 +46,48 @@ toOpenAPI <- function(plumber, output = NULL) {
 #' @param format Input file format. Either "json" or "yml". If not
 #' provided, will be guessed from file extension.
 #' @export
-fromOpenAPI <- function(openapi, con = NULL, format = c("json", "yml")) {
+fromOpenAPI <- function(openapi, format = c("json", "yaml")) {
   format <- match.arg(format)
-  if (tools::file_ext(openapi) == "yml" || format == "yml") {
+  spec <- new.env()
+  if (tools::file_ext(openapi) == "yaml" || format == "yaml") {
     if (!requireNamespace("yaml", quietly = TRUE)) {
       stop("The yaml package is not available but is required in order to parse yaml specifications.\ninstall.packages(\"yaml\")",
            call. = FALSE)
     }
-    if (stri_detect_fixed(openapi, "\n")) {
-      spec <- yaml::yaml.load(openapi)
+    if (stringi::stri_detect_fixed(openapi, "\n")) {
+      s <- yaml::yaml.load(openapi)
     } else {
-      spec <- yaml::read_yaml(openapi)
+      s <- yaml::read_yaml(openapi)
     }
-  } else if (jsonlite::validate(readLines(openapi, warn = FALSE))) {
-    spec <- fromJSON(openapi)
   } else {
-    stop("Invalid", format, "file.")
+    s <- jsonlite::fromJSON(openapi)
   }
-  stubSpec(spec)
+  mapply(assign, names(s), s, MoreArgs = list(envir = spec))
+  return(spec)
+  #stubSpec(spec)
 }
 
+#' @
 stubSpec <- function(spec) {
+  l <- function(lines, value, field) {
+    if (is.null(value)) return(lines)
+    line <- paste0("#* @api", field, " ", value)
+    c(lines, lines)}
+  options("plumber.apiURL" = spec$servers[[1]]$url)
+  lines <- character()
+  lines <- l(lines, spec$info$title, "Title")
+  lines <- l(lines, spec$info$description, "Description")
+  lines <- l(lines, spec$info$termsOfService, "TOS")
+  lines <- l(lines, spec$info$contact$name, "ContactName")
+  lines <- l(lines, spec$info$contact$email, "ContactEmail")
+  lines <- l(lines, spec$info$contact$url, "ContactUrl")
+  lines <- l(lines, spec$info$license$name, "LicenseName")
+  lines <- l(lines, spec$info$license$url, "LicenseUrl")
+  lines <- l(lines, spec$info$version, "Version")
 
+  a <- c("title","description", "termsOfService", "contact", "license", "version", "bob")
+  b <- c("Title","Description","TOS","Contact","License", "Version", "Bobby")
+  line <- paste0("#* @api", b, " ", spec$info[a])
 }
 
 stubEndpoint <- function(spec) {
@@ -243,7 +263,7 @@ priorizeProperty <- function(...) {
 #' @noRd
 isJSONserializable <- function(x) {
   testJSONserializable <- TRUE
-  tryCatch(toJSON(x),
+  tryCatch(jsonlite::toJSON(x),
            error = function(cond) {
              # Do we need to test for specific errors?
              testJSONserializable <<- FALSE}

@@ -749,7 +749,7 @@ plumber <- R6Class(
       if (reqSize > maxSize) {
         return(list(status = 413L,
                     headers = list('Content-Type' = 'application/json'),
-                    body = toJSON(list(error = "413 - Payload Too Large"))))
+                    body = jsonlite::toJSON(list(error = "413 - Payload Too Large"))))
       }
       else {
         return(NULL)
