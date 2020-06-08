@@ -150,9 +150,17 @@ test_that("mounts can be read correctly", {
 
   stat <- PlumberStatic$new(".")
   pr$mount("/static", stat)
+  pr$mount("missing-slashes", stat)
+  pr$mount("/both-slashes/", stat)
+  pr$mount("trailing-slash/", stat)
+  pr$mount("/extra-slash//", stat)
 
-  expect_length(pr$routes, 3)
+  expect_length(pr$routes, 7)
   expect_s3_class(pr$mounts[["/static/"]], "plumberstatic")
+  expect_s3_class(pr$mounts[["/missing-slashes/"]], "plumberstatic")
+  expect_s3_class(pr$mounts[["/both-slashes/"]], "plumberstatic")
+  expect_s3_class(pr$mounts[["/trailing-slash/"]], "plumberstatic")
+  expect_s3_class(pr$mounts[["/extra-slash//"]], "plumberstatic")
   expect_s3_class(pr$mounts[["/mysubpath/"]], "plumber")
 })
 

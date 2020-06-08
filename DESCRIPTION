@@ -5,16 +5,16 @@ Title: An API Generator for R
 Version: 0.4.7.9000
 Roxygen: list(markdown = TRUE)
 Authors@R: c(
-  person(family="Trestle Technology, LLC", role="aut", email="cran@trestletech.com"),
+  person(family = "RStudio", role = c("cph", "fnd")),
   person("Jeff", "Allen", role="cre", email="cran@trestletech.com"),
   person("Barret", "Schloerke", role="aut", email="barret@rstudio.com"),
   person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"),
   person("Sebastiaan", "Vandewoude", role="ctb", email="sebastiaanvandewoude@gmail.com"),
   person(family="SmartBear Software", role=c("ctb", "cph"), comment="swagger-ui"))
 License: MIT + file LICENSE
-BugReports: https://github.com/trestletech/plumber/issues
+BugReports: https://github.com/rstudio/plumber/issues
 URL: https://www.rplumber.io (site)
-    https://github.com/trestletech/plumber (dev)
+    https://github.com/rstudio/plumber (dev)
 Description: Gives the ability to automatically generate and serve an HTTP API
     from R functions using the annotations in the R documentation around your
     functions.
@@ -38,12 +38,13 @@ Suggests:
     base64enc,
     htmlwidgets,
     visNetwork,
-    analogsea,
+    analogsea (>= 0.7.0),
     later
 Remotes:
     rstudio/promises,
     rstudio/swagger,
-    rstudio/httpuv
+    rstudio/httpuv,
+    sckott/analogsea
 Collate:
     'async.R'
     'content-types.R'

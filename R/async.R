@@ -55,7 +55,7 @@ runStepsUntil <- function(initialValue, errorHandlerStep, conditionFn, steps) {
   runStep <- function() {
 
     while (TRUE) {
-      
+
       if (nextStepPos > stepCount) {
         return(x)
       }

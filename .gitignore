@@ -8,4 +8,4 @@
 plumber.Rcheck
 plumber_*.tar.gz
 yarn.lock
-node_modules/*
+node_modules

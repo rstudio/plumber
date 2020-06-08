@@ -124,3 +124,24 @@ test_that("nullSerializer errors call error handler", {
   nullSerializer()(parse(stop("I crash")), list(), PlumberResponse$new("json"), err = errHandler)
   expect_equal(errors, 1)
 })
+
+test_that("Error handler is passed to serializer", {
+  res <- PlumberResponse$new()
+
+  addSerializer("failingSer", function() {
+    function(val, req, res, errorHandler){
+      errorHandler(req, res, simpleError("A serializer error"))
+    }
+  })
+
+  r <- plumber$new(test_path("files/serializer-error.R"))
+
+  r$setErrorHandler(function(req, res, err) {
+    msg <- paste("Handled:", conditionMessage(err))
+    stop(msg)
+  })
+
+  expect_error(r$serve(make_req("GET", "/fail"), res),
+               regexp = "Handled: A serializer error")
+
+})
