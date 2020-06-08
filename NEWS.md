@@ -29,6 +29,9 @@ plumber 0.5.0
   non-ASCII characters (@shrektan, [#312](https://github.com/rstudio/plumber/pull/312),
   [#328](https://github.com/rstudio/plumber/pull/328)).
 
+* Docker file R repository modified to `xenial-cran35` and `trusty-cran35` in `install_new_r` scripts (@meztez,
+[#529](https://github.com/rstudio/plumber/pull/529))
+
 ### New features
 
 * Added support for promises in endpoints, filters, and hooks. ([#248](https://github.com/rstudio/plumber/pull/248))
@@ -40,9 +43,6 @@ plumber 0.5.0
 
 
 ### Minor new features and improvements
-
-* R repository modified to `xenial-cran35` and `trusty-cran35` in `install_new_r` scripts (@meztez,
-[#529](https://github.com/rstudio/plumber/pull/529))
 
 * If cookie information is too large (> 4093 bytes), a warning will be displayed. ([#404](https://github.com/rstudio/plumber/pull/404))
 
