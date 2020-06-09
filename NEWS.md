@@ -52,6 +52,8 @@ plumber 0.5.0
   functions twice and non-endpoint code blocks once.
   ([#328](https://github.com/rstudio/plumber/pull/328/commits/cde0d3d2543a654fd0c5799b670767ccb0e22e35))
 
+* Improve speed of `getHandle()` (@atheriel, #484)
+
 ### Bug fixes
 
 * Fix possible bugs due to mounted routers without leading slashes (@atheriel, [#476](https://github.com/rstudio/plumber/issues/476) [#501](https://github.com/rstudio/plumber/pull/501)).
