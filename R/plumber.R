@@ -527,9 +527,12 @@ plumber <- R6Class(
 
     route = function(req, res) {
       getHandle <- function(filt) {
-        for (h in private$ends[[filt]]) {
-          if (h$canServe(req)) {
-            return(h)
+        handlers <- private$ends[[filt]]
+        if (!is.null(handlers)) {
+          for (h in handlers) {
+            if (h$canServe(req)) {
+              return(h)
+            }
           }
         }
         return(NULL)
