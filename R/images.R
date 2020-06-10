@@ -4,14 +4,14 @@
 #' @noRd
 render_image <- function(imageFun, args=NULL){
   list(
-    pre = function(req, res, data){
+    preroute = function(req, res, data){
       t <- tempfile()
       data$file <- t
 
       finalArgs <- c(list(filename=t), args)
       do.call(imageFun, finalArgs)
     },
-    post = function(value, req, res, data){
+    postroute = function(value, req, res, data){
       dev.off()
 
       con <- file(data$file, "rb")
