@@ -22,8 +22,11 @@ jobs:
         config:
           - {os: macOS-latest,   r: 'devel'}
           - {os: macOS-latest,   r: 'release'}
+          - {os: macOS-latest,   r: 'old'}
 
+          - {os: windows-latest,   r: 'devel'}
           - {os: windows-latest, r: 'release'}
+          - {os: windows-latest, r: 'oldrelease'}
 
           # check a lot of ubuntu combinations as that's where plumber is hosted
           - {os: ubuntu-18.04,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
@@ -64,8 +67,8 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+          key: ${{ matrix.config.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ matrix.config.os }}-${{ hashFiles('.github/R-version') }}-1-
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
@@ -104,5 +107,5 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@master
         with:
-          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
+          name: ${{ matrix.config.os }}-r${{ matrix.config.r }}-results
           path: check
