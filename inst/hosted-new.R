@@ -12,7 +12,7 @@ do_deploy_api(drop, "filters", "./inst/examples/02-filters/", 8002)
 
 # GitHub
 install_package_secure(drop, "digest")
-# devtools is the other dependency, but by unstable=TRUE on do_provision we already have that
+# remotes is the other dependency, but by unstable=TRUE on do_provision we already have that
 do_deploy_api(drop, "github", "./inst/examples/03-github/", 8003)
 
 # Sessions
