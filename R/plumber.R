@@ -254,8 +254,8 @@ plumber <- R6Class(
     #' It will be attributed automatically in the following priority order :
     #' option `plumber.port`, `port` value in global environment, a random port
     #' between 3000 and 10000 that is not blacklisted. When in unable to find
-    #' an available port, method will fail.\cr
-    #' \cr
+    #' an available port, method will fail.
+    #'
     #' `swagger` should be either a logial or set to a function . When `TRUE` or a
     #' function, multiple handles will be added to `plumber` object. OpenAPI json
     #' file will be served on paths `/openapi.json` and `/swagger.json`. Swagger UI
@@ -263,8 +263,8 @@ plumber <- R6Class(
     #' using a function, it will receive the plumber router as the first parameter
     #' and currrent swagger specifications as the second. This function should return a
     #' list containing swagger specifications.
-    #' See \url{https://swagger.io/docs/specification/}\cr
-    #' \cr
+    #' See \url{https://swagger.io/docs/specification/}
+    #'
     #' `swaggerCallback` When set, it will be called with a character string corresponding
     #' to the swagger UI url. It allows RStudio to open swagger UI when plumber router
     #' run method is executed using default `plumber.swagger.url` option.
