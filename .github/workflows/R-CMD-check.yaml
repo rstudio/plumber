@@ -26,7 +26,7 @@ jobs:
 
           - {os: windows-latest,   r: 'devel'}
           - {os: windows-latest, r: 'release'}
-          - {os: windows-latest, r: 'oldrel'}
+          # - {os: windows-latest, r: 'oldrel'} # do not test due to binaries not being created
 
           # check a lot of ubuntu combinations as that's where plumber is hosted
           - {os: ubuntu-18.04,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
