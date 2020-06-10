@@ -85,5 +85,5 @@ test_that("expressions work as options", {
   res <- PlumberResponse$new()
   pr$route(make_req("GET", "/public/test.txt"), res)
   expect_equal(res$headers$`Content-type`, "text/plain")
-  expect_equal(rawToChar(res$body), "I am a text file.\n")
+  expect_equal(trimws(rawToChar(res$body)), "I am a text file.")
 })

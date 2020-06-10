@@ -165,7 +165,8 @@ test_that("mounts can be read correctly", {
 })
 
 test_that("prints correctly", {
-  skip_on_cran()
+  testthat::skip_on_cran()
+  testthat::skip_on_os("windows") # has issues comparing text values
 
   pr <- plumber$new()
   pr$handle("GET", "/nested/path/here", function(){})
