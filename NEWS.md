@@ -62,8 +62,7 @@ plumber 0.5.0
 ### Bug fixes
 
 * Modified images handling to serialize during serialization step instead of
-  postexec step. Fix issue with images pre/postserialize hooks (@meztez,
-[#518](https://github.com/rstudio/plumber/pull/518)).
+  postexec step. Fix issue with images pre/postserialize hooks (@meztez, #518).
 
 * Fix bug in setting openapi.json url when HTTP_REFERER is null (@meztez,
 [#528](https://github.com/rstudio/plumber/pull/528))

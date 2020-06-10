@@ -252,8 +252,10 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, mou
 
         if (block$image == "png"){
           ep$registerHooks(render_png(imageArgs))
+          ep$serializer <- serializer_content_type("image/png")
         } else if (block$image == "jpeg"){
           ep$registerHooks(render_jpeg(imageArgs))
+          ep$serializer <- serializer_content_type("image/jpeg")
         } else {
           stop("Image format not found: ", block$image)
         }
