@@ -5,6 +5,8 @@ on:
   pull_request:
     branches:
       - master
+  schedule:
+    - cron:  '0 0 1,11,21 * *' # every 10 days (GHA cache invalidates after 7)
 
 name: R-CMD-check
 
