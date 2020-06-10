@@ -46,4 +46,4 @@ pr$handle("POST", "/upload", handler, serializer = serializer_json())
 
 pr$run(swagger = swagger)
 
-#In case you have have problems, it is wise to insert a browser() in your swagger function
+#In case you have have problems, insert a `browser()` in your swagger function
