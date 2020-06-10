@@ -1,9 +1,11 @@
 # plumber
 
-[![Build Status](https://travis-ci.org/rstudio/plumber.svg?branch=master)](https://travis-ci.org/rstudio/plumber)
+<!-- badges: start -->
+[![R build status](https://github.com/rstudio/plumber/workflows/R-CMD-check/badge.svg)](https://github.com/rstudio/plumber/actions)
 [![](https://www.r-pkg.org/badges/version/plumber)](https://www.r-pkg.org/pkg/plumber)
 [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/plumber?color=brightgreen)](https://www.r-pkg.org/pkg/plumber)
 [![codecov](https://codecov.io/gh/trestletech/plumber/branch/master/graph/badge.svg)](https://codecov.io/gh/trestletech/plumber)
+<!-- badges: end -->
 
 <img align="right" src="https://www.rplumber.io/components/images/plumber-broken.png" />
 
