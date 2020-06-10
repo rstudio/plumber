@@ -183,28 +183,28 @@ test_that("prints correctly", {
 
   regexps <- c(
     "Plumber router with 2 endpoints, 4 filters, and 2 sub-routers",
-    "Call run\\(\\) on this object",
-    "├──\\[queryString\\]",
-    "├──\\[postBody\\]",
-    "├──\\[cookieParser\\]",
-    "├──\\[sharedSecret\\]",
+    "Call run() on this object",
+    "├──[queryString]",
+    "├──[postBody]",
+    "├──[cookieParser]",
+    "├──[sharedSecret]",
     "├──/nested",
     "│  ├──/path",
-    "│  │  └──/here \\(GET, POST\\)",
+    "│  │  └──/here (GET, POST)",
     "├──/mysubpath",
     "│  │ # Plumber router with 2 endpoints, 4 filters, and 0 sub-routers.",
-    "│  ├──\\[queryString\\]",
-    "│  ├──\\[postBody\\]",
-    "│  ├──\\[cookieParser\\]",
-    "│  ├──\\[sharedSecret\\]",
-    "│  ├──/something \\(POST\\)",
-    "│  └──/ \\(GET\\)",
+    "│  ├──[queryString]",
+    "│  ├──[postBody]",
+    "│  ├──[cookieParser]",
+    "│  ├──[sharedSecret]",
+    "│  ├──/something (POST)",
+    "│  └──/ (GET)",
     "├──/static",
-    "│  │ # Plumber static router serving from directory: \\."
+    "│  │ # Plumber static router serving from directory: ."
   )
 
   for (i in 1:length(regexps)){
-    expect_match(printed[i], regexps[i], info=paste0("on line ", i))
+    expect_match(printed[i], regexps[i], info=paste0("on line ", i), fixed = TRUE)
   }
 
 })

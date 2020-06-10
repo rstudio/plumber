@@ -33,13 +33,12 @@ jobs:
           - {os: ubuntu-18.04,   r: 'oldrel',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
           - {os: ubuntu-18.04,   r: '3.5',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
           - {os: ubuntu-18.04,   r: '3.4',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
-          - {os: ubuntu-18.04,   r: '3.3',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
 
+          # would use RSPM for ubuntu 16, but sodium has issues finding libsodium
           - {os: ubuntu-16.04,   r: 'release'}
           - {os: ubuntu-16.04,   r: 'oldrel'}
           - {os: ubuntu-16.04,   r: '3.5'}
           - {os: ubuntu-16.04,   r: '3.4'}
-          - {os: ubuntu-16.04,   r: '3.3'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -69,6 +68,12 @@ jobs:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ matrix.config.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
           restore-keys: ${{ matrix.config.os }}-${{ hashFiles('.github/R-version') }}-1-
+
+      - name: macOS oldrel Rcpp
+        if: matrix.config.os == 'macOS-latest' && matrix.config.r == 'oldrel'
+        shell: Rscript {0}
+        run: |
+          remotes::install_cran("Rcpp", type = "source")
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
