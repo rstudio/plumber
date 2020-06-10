@@ -2,9 +2,18 @@
 # can't really test these.
 # nocov start
 
-checkAnalogSea <- function(){
+checkAnalogSea <- function() {
   if (!requireNamespace("analogsea", quietly = TRUE)) {
     stop("The analogsea package is not available but is required in order to use the provisioning functions. Please install analogsea.",
+         call. = FALSE)
+  }
+
+
+  suggests <- read.dcf(system.file("DESCRIPTION", package = "plumber"))[1, "Suggests"]
+  pkgs <- strsplit(suggests, ",")[[1]]
+  analogsea_version <- gsub("[^.0-9]", "", pkgs[grepl("^analogsea ", pkgs)])
+  if (utils::packageVersion("analogsea") < package_version(analogsea_version)) {
+    stop("The analogsea package is not high enough. Please update `analogsea`.",
          call. = FALSE)
   }
 }
