@@ -17,6 +17,7 @@ render_image <- function(imageFun, args=NULL){
       con <- file(data$file, "rb")
       img <- readBin(con, "raw", file.info(data$file)$size)
       close(con)
+      unlink(data$file)
       img
     }
   )
