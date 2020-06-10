@@ -67,7 +67,7 @@ PlumberStatic <- R6Class(
         responseContent <- readBin(abs.path, 'raw', n=file.info(abs.path)$size)
 
         res$status <- 200
-        res$setHeader("Content-type", contentType)
+        res$setHeader("Content-Type", contentType)
         res$body <- responseContent
         res
       }

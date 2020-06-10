@@ -17,7 +17,7 @@ requireRmd <- function(fun_name){
 #' @param file The path to the file to return
 #' @param res The response object into which we'll write
 #' @param content_type If provided, the given value will be sent as the
-#'  \code{Content-type} header in the response.
+#'  \code{Content-Type} header in the response.
 #' @export
 include_file <- function(file, res, content_type){
   # TODO stream this directly to the request w/o loading in memory
@@ -27,7 +27,7 @@ include_file <- function(file, res, content_type){
   res$body <- c(res$body, lines)
 
   if (!missing(content_type)){
-    res$setHeader("Content-type", content_type)
+    res$setHeader("Content-Type", content_type)
   }
 
   res
