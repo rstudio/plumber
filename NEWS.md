@@ -43,7 +43,7 @@ plumber 0.5.0
 
 ### Minor new features and improvements
 
-* Update documentation on R6 objects (@meztez)
+* Update documentation on R6 objects (@meztez, #530)
 
 * R repository modified to `xenial-cran35` and `trusty-cran35` in `install_new_r` scripts (@meztez,
 [#529](https://github.com/rstudio/plumber/pull/529))

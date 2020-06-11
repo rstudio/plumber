@@ -31,7 +31,7 @@ PlumberStep <- R6Class(
     lines = NA,
     #' @field serializer step serializer function
     serializer = NULL,
-    #' @description Create a new `PlumberStep` object
+    #' @description Create a new [PlumberStep()] object
     #' @param expr step expr
     #' @param envir step environment
     #' @param lines step block

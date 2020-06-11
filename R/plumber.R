@@ -256,11 +256,10 @@ plumber <- R6Class(
     #' `redoc_options` \code{redoc::\link[redoc]{redoc_spec}}.
     #' @details
     #' `port` does not need to be explicitly assigned.
-    #' \cr
+    #'
     #' When `ui` is used, multiple handles will be added to `plumber` router.
     #' OpenAPI json file will be served on paths `/openapi.json` and `/openapi.yaml`.
-    #' Swagger UI will be served on paths `/__swagger__/index.html` and `/__swagger__/`.
-    #' Redoc UI will be served on paths `/__redoc__/index.html` and `/__redoc__/`.
+    #' UIs will be served on paths `/__{ui}__/index.html` and `/__{ui}__/`.
     run = function(
       host = '127.0.0.1',
       port = getOption('plumber.port'),
@@ -331,16 +330,16 @@ plumber <- R6Class(
     #' In all of the above you have access to a disposable environment in the `data`
     #' parameter that is created as a temporary data store for each request. Hooks
     #' can store temporary data in these hooks that can be reused by other hooks
-    #' processing this same request.\cr
-    #' \cr
+    #' processing this same request.
+    #'
     #' One feature when defining hooks in Plumber routers is the ability to modify
     #' the returned value. The convention for such hooks is: any function that accepts
     #' a parameter named `value` is expected to return the new value. This could
     #' be an unmodified version of the value that was passed in, or it could be a
     #' mutated value. But in either case, if your hook accepts a parameter
     #' named `value`, whatever your hook returns will be used as the new value
-    #' for the response.\cr
-    #' \cr
+    #' for the response.
+    #'
     #' You can add hooks using the `registerHook` method, or you can add multiple
     #' hooks at once using the `registerHooks` method which takes a name list in
     #' which the names are the names of the hooks, and the values are the
