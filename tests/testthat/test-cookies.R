@@ -48,7 +48,7 @@ test_that("cookies can convert to string", {
 
   # timing issues with cookieToStr(expiration = expires).
   # Win R4.0 equals `expiresSec`; Win Rdevel equals `expiresSec-1`
-  testthat::skip_on_platform("windows")
+  testthat::skip_on_os("windows")
 
   expect_equal(cookieToStr("abc", 123), "abc=123")
   expect_equal(cookieToStr("complex", "string with spaces"), "complex=string%20with%20spaces")
