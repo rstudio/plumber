@@ -43,7 +43,7 @@ plumb <- function(file = NULL, dir = ".") {
 
       # set working directory to dir before sourcing
       old <- setwd(dir)
-      on.exit(setwd(old))
+      on.exit(setwd(old), add = TRUE)
 
       # Expect that entrypoint will provide us with the router
       #   Do not 'poison' the global env. Using a local environment
