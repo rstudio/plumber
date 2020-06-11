@@ -29,8 +29,7 @@ plumber 0.5.0
   non-ASCII characters (@shrektan, [#312](https://github.com/rstudio/plumber/pull/312),
   [#328](https://github.com/rstudio/plumber/pull/328)).
 
-* Docker file R repository modified to `xenial-cran35` and `trusty-cran35` in `install_new_r` scripts (@meztez,
-[#529](https://github.com/rstudio/plumber/pull/529))
+* R repository modified to `focal-cran40` using Ubuntu 20.04 LTS for digital ocean provisioning (@meztez, #529)
 
 ### New features
 
