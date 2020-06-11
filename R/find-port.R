@@ -27,7 +27,7 @@ findPort <- function(port){
     }
 
     for (i in 1:10){
-      tryCatch(srv <- httpuv::startServer("127.0.0.1", port, list()), error=function(e){
+      tryCatch(srv <- httpuv::startServer("127.0.0.1", port, list(), quiet = TRUE), error=function(e){
         port <<- 0
       })
       if (port != 0){
