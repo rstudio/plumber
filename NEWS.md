@@ -29,6 +29,8 @@ plumber 0.5.0
   non-ASCII characters (@shrektan, [#312](https://github.com/rstudio/plumber/pull/312),
   [#328](https://github.com/rstudio/plumber/pull/328)).
 
+* R repository modified to `focal-cran40` using Ubuntu 20.04 LTS for digital ocean provisioning (@meztez, #529)
+
 ### New features
 
 * Added support for promises in endpoints, filters, and hooks. ([#248](https://github.com/rstudio/plumber/pull/248))
@@ -41,6 +43,8 @@ plumber 0.5.0
 
 ### Minor new features and improvements
 
+* Update documentation on R6 objects (@meztez, #530)
+
 * If cookie information is too large (> 4093 bytes), a warning will be displayed. ([#404](https://github.com/rstudio/plumber/pull/404))
 
 * Added new shorthand types for url parameters. (@byzheng, [#388](https://github.com/rstudio/plumber/pull/388))
@@ -52,7 +56,11 @@ plumber 0.5.0
   functions twice and non-endpoint code blocks once.
   ([#328](https://github.com/rstudio/plumber/pull/328/commits/cde0d3d2543a654fd0c5799b670767ccb0e22e35))
 
+* Improve speed of `canServe()` method of the `PlumberEndpoint` class (@atheriel, #484)
+
 ### Bug fixes
+
+* Modified images serialization to use content-type serializer. Fixes issue with images pre/postserialize hooks (@meztez, #518).
 
 * Fix possible bugs due to mounted routers without leading slashes (@atheriel, [#476](https://github.com/rstudio/plumber/issues/476) [#501](https://github.com/rstudio/plumber/pull/501)).
 

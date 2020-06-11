@@ -4,8 +4,15 @@
 \alias{do_deploy_api}
 \title{Deploy or Update an API}
 \usage{
-do_deploy_api(droplet, path, localPath, port, forward = FALSE,
-  swagger = FALSE, preflight)
+do_deploy_api(
+  droplet,
+  path,
+  localPath,
+  port,
+  forward = FALSE,
+  swagger = FALSE,
+  preflight
+)
 }
 \arguments{
 \item{droplet}{The droplet on which to act. It's expected that this droplet

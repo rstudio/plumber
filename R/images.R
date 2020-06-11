@@ -2,32 +2,30 @@
 #' @param args A list of supplemental arguments to be passed into jpeg()
 #' @importFrom grDevices dev.off jpeg png
 #' @noRd
-render_image <- function(imageFun, contentType, args=NULL){
+render_image <- function(imageFun, args=NULL){
   list(
-    pre = function(req, res, data){
+    preexec = function(req, res, data){
       t <- tempfile()
       data$file <- t
 
       finalArgs <- c(list(filename=t), args)
       do.call(imageFun, finalArgs)
     },
-    post = function(value, req, res, data){
+    postexec = function(value, req, res, data){
       dev.off()
-
+      on.exit({unlink(data$file)}, add = TRUE)
       con <- file(data$file, "rb")
+      on.exit({close(con)}, add = TRUE)
       img <- readBin(con, "raw", file.info(data$file)$size)
-      close(con)
-      res$body <- img
-      res$setHeader("Content-type", contentType)
-      res
+      img
     }
   )
 }
 
 render_jpeg <- function(args){
-  render_image(jpeg, "image/jpeg", args)
+  render_image(grDevices::jpeg, args)
 }
 
 render_png <- function(args){
-  render_image(png, "image/png", args)
+  render_image(grDevices::png, args)
 }

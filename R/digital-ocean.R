@@ -28,7 +28,7 @@ checkAnalogSea <- function() {
 #' @param unstable If `FALSE`, will install plumber from CRAN. If `TRUE`, will install the unstable version of plumber from GitHub.
 #' @param example If `TRUE`, will deploy an example API named `hello` to the server on port 8000.
 #' @param ... Arguments passed into the [analogsea::droplet_create()] function.
-#' @details Provisions a Ubuntu 16.04-x64 droplet with the following customizations:
+#' @details Provisions a Ubuntu 20.04-x64 droplet with the following customizations:
 #'  - A recent version of R installed
 #'  - plumber installed globally in the system library
 #'  - An example plumber API deployed at `/var/plumber`
@@ -53,7 +53,7 @@ do_provision <- function(droplet, unstable=FALSE, example=TRUE, ...){
 
     createArgs <- list(...)
     createArgs$tags <- c(createArgs$tags, "plumber")
-    createArgs$image <- "ubuntu-16-04-x64"
+    createArgs$image <- "ubuntu-20-04-x64"
 
     droplet <- do.call(analogsea::droplet_create, createArgs)
 
@@ -151,7 +151,7 @@ install_nginx <- function(droplet){
 
 install_new_r <- function(droplet){
   analogsea::droplet_ssh(droplet, "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9")
-  analogsea::droplet_ssh(droplet, "echo 'deb https://cran.rstudio.com/bin/linux/ubuntu xenial/' >> /etc/apt/sources.list.d/cran.list")
+  analogsea::droplet_ssh(droplet, "echo 'deb https://cran.rstudio.com/bin/linux/ubuntu focal-cran40/' >> /etc/apt/sources.list.d/cran.list")
   # TODO: use the analogsea version once https://github.com/sckott/analogsea/issues/139 is resolved
   #analogsea::debian_apt_get_update(droplet)
   analogsea::droplet_ssh(droplet, "sudo apt-get update -qq")
