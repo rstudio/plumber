@@ -13,20 +13,19 @@ render_image <- function(imageFun, args=NULL){
     },
     postexec = function(value, req, res, data){
       dev.off()
-
+      on.exit(unlink(data$file))
       con <- file(data$file, "rb")
       img <- readBin(con, "raw", file.info(data$file)$size)
       close(con)
-      unlink(data$file)
       img
     }
   )
 }
 
 render_jpeg <- function(args){
-  render_image(jpeg, args)
+  render_image(grDevices::jpeg, args)
 }
 
 render_png <- function(args){
-  render_image(png, args)
+  render_image(grDevices::png, args)
 }
