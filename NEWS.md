@@ -29,6 +29,8 @@ plumber 0.5.0
   non-ASCII characters (@shrektan, [#312](https://github.com/rstudio/plumber/pull/312),
   [#328](https://github.com/rstudio/plumber/pull/328)).
 
+* R repository modified to `focal-cran40` using Ubuntu 20.04 LTS for digital ocean provisioning (@meztez, #529)
+
 ### New features
 
 * Added support for promises in endpoints, filters, and hooks. ([#248](https://github.com/rstudio/plumber/pull/248))
