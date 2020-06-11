@@ -13,10 +13,10 @@ render_image <- function(imageFun, args=NULL){
     },
     postexec = function(value, req, res, data){
       dev.off()
-      on.exit(unlink(data$file))
+      on.exit({unlink(data$file)}, add = TRUE)
       con <- file(data$file, "rb")
+      on.exit({close(con)}, add = TRUE)
       img <- readBin(con, "raw", file.info(data$file)$size)
-      close(con)
       img
     }
   )
