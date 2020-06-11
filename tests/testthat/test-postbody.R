@@ -21,8 +21,10 @@ test_that("filter passes on content-type", {
     rook.input = list(
       read = function() {
         called <- TRUE
-        return("this is a body")
-      }
+        return(charToRaw("this is a body"))
+      },
+      rewind = function() {},
+      read_lines = function() {return("this is a body")}
     ),
     HTTP_CONTENT_TYPE = "text/html; charset=testset",
     args = c()

@@ -182,12 +182,12 @@ parseBlock <- function(lineNum, file){
       }
       type <- stri_replace_all(paramMat[1,4], "$1", regex = "^\\[([^\\]]*)\\]$")
       type <- plumberToSwaggerType(type)
-      serialization <- stri_detect_regex(paramMat[1,4], "^\\[[^\\]]*\\]$")
-      serialization <- serialization & supportsSerialization(type)
-      serialization[is.na(serialization)] <- defaultSwaggerSerialization
+      isArray <- stri_detect_regex(paramMat[1,4], "^\\[[^\\]]*\\]$")
+      isArray <- isArray & supportsArray(type)
+      isArray[is.na(isArray)] <- defaultSwaggerIsArray
       required <- identical(paramMat[1,5], "*")
 
-      params[[name]] <- list(desc=paramMat[1,6], type=type, required=required, serialization=serialization)
+      params[[name]] <- list(desc=paramMat[1,6], type=type, required=required, isArray=isArray)
     }
 
     tagMat <- stri_match(line, regex="^#['\\*]\\s*@tag\\s+(\\S.+)\\s*")

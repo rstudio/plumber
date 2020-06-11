@@ -62,7 +62,7 @@ test_that("variables are typed", {
   p <- createPathRegex("/car/<id:[chr]>")
   expect_equal(p$names, "id")
   expect_equal(p$regex, paste0("^/car/", "((?:[^/,]+,?))", "$"))
-  expect_equal(p$serializations, TRUE)
+  expect_equal(p$areArrays, TRUE)
   expect_equal(p$converters[[1]]("BOB,LUKE,GUY"), c("BOB", "LUKE", "GUY"))
 
   #Check that warnings happen on typo or unsupported type
@@ -117,14 +117,14 @@ test_that("multiple variations in path works nicely with function args detection
   pathDef <- "/<var0:str>/<var1:chr*>/<var2:[int]>/<var3>/<var4:*>/<var5:[*>/<var6:[]*>/<var7:[]>/<var8*>"
   regex <- suppressWarnings(createPathRegex(pathDef))
   expect_equal(regex$types, c("string", "string", "integer", "string", "string", "string", "string", "string"))
-  expect_equal(regex$serializations, c(FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, TRUE))
+  expect_equal(regex$areArrays, c(FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, TRUE))
 
   # Check when no args in endpoint function
   dummy <- function() {}
   funcParams <- getArgsMetadata(dummy)
   regex <- suppressWarnings(createPathRegex(pathDef, funcParams))
   expect_equal(regex$types, c("string", "string", "integer", "string", "string", "string", "string", "string"))
-  expect_equal(regex$serializations, c(FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, TRUE))
+  expect_equal(regex$areArrays, c(FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, TRUE))
 
   # Mix and match
   dummy <- function(var0 = 420.69,
@@ -139,14 +139,14 @@ test_that("multiple variations in path works nicely with function args detection
   funcParams <- getArgsMetadata(dummy)
   regex <- suppressWarnings(createPathRegex(pathDef, funcParams))
   expect_equal(regex$types, c("string", "string", "integer", "string", "string", "boolean", "string", "string"))
-  expect_equal(regex$serializations, c(FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, TRUE))
+  expect_equal(regex$areArrays, c(FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, TRUE))
 
   # Throw sand at it
   pathDef <- "/<>/<:chr*>/<:chr>/<henry:[IV]>"
   regex <- suppressWarnings(createPathRegex(pathDef, funcParams))
   expect_equivalent(regex$types, "string")
   expect_equal(regex$names, "henry")
-  # Since type IV is converted to string, serialization can occur
-  expect_equal(regex$serializations, TRUE)
+  # Since type IV is converted to string, areArrays can be TRUE
+  expect_equal(regex$areArrays, TRUE)
 
 })

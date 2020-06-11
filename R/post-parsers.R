@@ -50,14 +50,14 @@ addParser <- function(name, parser, pattern = NULL) {
   if (is.null(.globals$parsers)) {
     .globals$parsers <- list()
   }
-  if (!is.null(.globals$parsers$f[[name]])) {
+  if (!is.null(.globals$parsers$func[[name]])) {
     stop("Already have a parser by the name of ", name)
   }
   if (is.null(pattern)) {
     pattern <- paste0("application/", name)
   }
-  .globals$parsers$f[[name]] <- parser
-  .globals$parsers$p[[name]] <- pattern
+  .globals$parsers$func[[name]] <- parser
+  .globals$parsers$pattern[[name]] <- pattern
 }
 
 
@@ -153,7 +153,7 @@ parser_multi <- function(...) {
 #' @export
 parser_octet <- function(...) {
   function(value, filename, ...) {
-    if (!missing(filename)) {
+    if (!missing(filename) && getOption("plumber.saveFileToDisk", FALSE)) {
       if (interactive()) {
         writeBin(value, basename(filename))
         ret <- basename(filename)

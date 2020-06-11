@@ -47,10 +47,10 @@ test_that("params are parsed", {
     "#' @param multi:[int]* Required array param")
   b <- parseBlock(length(lines), lines)
   expect_length(b$params, 4)
-  expect_equal(b$params$another, list(desc="Another docs", type="integer", required=FALSE, serialization = FALSE))
-  expect_equal(b$params$test, list(desc="Test docs", type=defaultSwaggerType, required=FALSE, serialization = FALSE))
-  expect_equal(b$params$required, list(desc="Required param", type="string", required=TRUE, serialization = FALSE))
-  expect_equal(b$params$multi, list(desc="Required array param", type="integer", required=TRUE, serialization = TRUE))
+  expect_equal(b$params$another, list(desc="Another docs", type="integer", required=FALSE, isArray = FALSE))
+  expect_equal(b$params$test, list(desc="Test docs", type=defaultSwaggerType, required=FALSE, isArray = FALSE))
+  expect_equal(b$params$required, list(desc="Required param", type="string", required=TRUE, isArray = FALSE))
+  expect_equal(b$params$multi, list(desc="Required array param", type="integer", required=TRUE, isArray = TRUE))
 
   b <- parseBlock(1, "")
   expect_null(b$params)
@@ -141,9 +141,9 @@ test_that("extractSwaggerParams works", {
   ep <- list(id=list(desc="Description", type="integer", required=FALSE),
              id2=list(desc="Description2", required=FALSE), # No redundant type specification
              make=list(desc="Make description", type="string", required=FALSE),
-             prices=list(desc="Historic sell prices", type="numeric", required = FALSE, serialization = TRUE),
+             prices=list(desc="Historic sell prices", type="numeric", required = FALSE, isArray = TRUE),
              claims=list(desc="Insurance claims", type="object", required = FALSE))
-  pp <- data.frame(name=c("id", "id2", "owners"), type=c("int", "int", "chr"), serialization = c(FALSE, FALSE, TRUE), stringsAsFactors = FALSE)
+  pp <- data.frame(name=c("id", "id2", "owners"), type=c("int", "int", "chr"), isArray = c(FALSE, FALSE, TRUE), stringsAsFactors = FALSE)
 
   params <- extractSwaggerParams(ep, pp)
   expect_equal(params$parameters[[1]],
@@ -343,11 +343,11 @@ test_that("multiple variations in function extract correct metadata", {
   expect_identical(lapply(funcParams, `[[`, "example"),
                    list(var0 = 420.69, var1 = NA, var2 = 1L:2L, var3 = NA, var4 = NA, var5 = FALSE,
                         var6 = list(name = c("luke", "bob"), lastname = c("skywalker", "ross")), var7 = NA, var8 = NA))
-  expect_identical(lapply(funcParams, `[[`, "serialization"),
-                   list(var0 = defaultSwaggerSerialization, var1 = defaultSwaggerSerialization, var2 = TRUE,
-                        var3 = defaultSwaggerSerialization, var4 = defaultSwaggerSerialization,
-                        var5 = defaultSwaggerSerialization, var6 = defaultSwaggerSerialization,
-                        var7 = defaultSwaggerSerialization, var8 = defaultSwaggerSerialization))
+  expect_identical(lapply(funcParams, `[[`, "isArray"),
+                   list(var0 = defaultSwaggerIsArray, var1 = defaultSwaggerIsArray, var2 = TRUE,
+                        var3 = defaultSwaggerIsArray, var4 = defaultSwaggerIsArray,
+                        var5 = defaultSwaggerIsArray, var6 = defaultSwaggerIsArray,
+                        var7 = defaultSwaggerIsArray, var8 = defaultSwaggerIsArray))
   expect_identical(lapply(funcParams, `[[`, "type"),
                    list(var0 = "number", var1 = defaultSwaggerType, var2 = "integer", var3 = defaultSwaggerType, var4 = defaultSwaggerType,
                         var5 = "boolean", var6 = "object", var7 = defaultSwaggerType, var8 = defaultSwaggerType))

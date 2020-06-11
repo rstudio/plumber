@@ -4,6 +4,8 @@ make_req <- function(verb, path, qs="", body=""){
   req$REQUEST_METHOD <- toupper(verb)
   req$PATH_INFO <- path
   req$QUERY_STRING <- qs
-  req$rook.input <- list(read_lines = function(){ body })
+  req$rook.input <- list(read_lines = function(){ body },
+                         read = function(){ charToRaw(body) },
+                         rewind = function(){ length(charToRaw(body)) })
   req
 }

@@ -1,10 +1,17 @@
 postBodyFilter <- function(req){
   handled <- req$.internal$postBodyHandled
   if (is.null(handled) || handled != TRUE) {
+    # This will return raw bytes
     body <- req$rook.input$read()
     type <- req$HTTP_CONTENT_TYPE
     args <- parseBody(body, type)
-    req$postBody <- body #this is a raw body contrary to what plumber did before
+    if (getOption("plumber.rawPostBody", FALSE)) {
+      req$rawPostBody <- body
+    }
+    if (getOption("plumber.postBody", TRUE)) {
+      req$rook.input$rewind()
+      req$postBody <- paste0(req$rook.input$read_lines(), collapse = "\n")
+    }
     req$args <- c(req$args, args)
     req$.internal$postBodyHandled <- TRUE
   }
@@ -26,20 +33,20 @@ parseRaw <- function(toparse) {
 parserPicker <- function(content_type, first_byte, filename = NULL) {
   #fast default to json when first byte is 7b (ascii {)
   if (first_byte == as.raw(123L))
-    return(.globals$parsers$f[["json"]])
+    return(.globals$parsers$func[["json"]])
   if (is.null(content_type)) {
-    return(.globals$parsers$f[["query"]])
+    return(.globals$parsers$func[["query"]])
   }
   # else try to find a match
-  patterns <- .globals$parsers$p
-  parser <- .globals$parsers$f[stri_startswith_fixed(content_type, patterns)]
+  patterns <- .globals$parsers$pattern
+  parser <- .globals$parsers$func[stri_startswith_fixed(content_type, patterns)]
   # Should we warn when multiple parsers match?
   # warning("Multiple body parsers matches for content-type : ", toparse$content_type, ". Parser ", names(parser)[1L], " used.")
   if (length(parser) == 0L) {
     if (is.null(filename)) {
-      return(.globals$parsers$f[["query"]])
+      return(.globals$parsers$func[["query"]])
     } else {
-      return(.globals$parsers$f[["octet"]])
+      return(.globals$parsers$func[["octet"]])
     }
   } else {
     return(parser[[1L]])

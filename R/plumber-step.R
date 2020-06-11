@@ -127,7 +127,7 @@ PlumberEndpoint <- R6Class(
     getTypedParams = function(){
       data.frame(name = private$regex$names,
                  type = private$regex$types,
-                 serialization = private$regex$serializations,
+                 isArray = private$regex$areArrays,
                  stringsAsFactors = FALSE)
     },
     params = NA,

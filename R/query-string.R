@@ -68,7 +68,7 @@ createPathRegex <- function(pathDef, funcParams = NULL){
         types = NULL,
         regex = paste0("^", pathDef, "$"),
         converters = NULL,
-        serializations = NULL
+        areArrays = NULL
       )
     )
   }
@@ -81,17 +81,17 @@ createPathRegex <- function(pathDef, funcParams = NULL){
   }
   types <- plumberToSwaggerType(types, inPath = TRUE)
 
-  serializations <- stri_detect_regex(match[,3], "^\\[[^\\]]*\\]$")
+  areArrays <- stri_detect_regex(match[,3], "^\\[[^\\]]*\\]$")
   if (length(funcParams) > 0) {
     # Override with detection of function args when false or na
-    idx <- (is.na(serializations) | !serializations)
-    serializations[idx] <- sapply(funcParams, `[[`, "serialization")[names[idx]]
+    idx <- (is.na(areArrays) | !areArrays)
+    areArrays[idx] <- sapply(funcParams, `[[`, "isArray")[names[idx]]
   }
-  serializations <- serializations & supportsSerialization(types)
-  serializations[is.na(serializations)] <- defaultSwaggerSerialization
+  areArrays <- areArrays & supportsArray(types)
+  areArrays[is.na(areArrays)] <- defaultSwaggerIsArray
 
   pathRegex <- pathDef
-  regexps <- typesToRegexps(types, serializations)
+  regexps <- typesToRegexps(types, areArrays)
   for (regex in regexps) {
     pathRegex <- stri_replace_first_regex(
       pathRegex,
@@ -104,29 +104,29 @@ createPathRegex <- function(pathDef, funcParams = NULL){
     names = names,
     types = types,
     regex = paste0("^", pathRegex, "$"),
-    converters = typeToConverters(types, serializations),
-    serializations = serializations
+    converters = typeToConverters(types, areArrays),
+    areArrays = areArrays
   )
 }
 
 
-typesToRegexps <- function(swaggerTypes, serializations = FALSE) {
+typesToRegexps <- function(swaggerTypes, areArrays = FALSE) {
   # return vector of regex strings
   mapply(
     function(x, y) {x[[y]]},
     swaggerTypeInfo[swaggerTypes],
-    ifelse(serializations, "regexSerialization", "regex"),
+    ifelse(areArrays, "regexArray", "regex"),
     USE.NAMES = FALSE
   )
 }
 
 
-typeToConverters <- function(swaggerTypes, serializations = FALSE) {
+typeToConverters <- function(swaggerTypes, areArrays = FALSE) {
   # return list of functions
   mapply(
     function(x, y) {x[[y]]},
     swaggerTypeInfo[swaggerTypes],
-    ifelse(serializations, "converterSerialization", "converter"),
+    ifelse(areArrays, "converterArray", "converter"),
     USE.NAMES = FALSE
   )
 }

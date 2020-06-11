@@ -5,26 +5,26 @@ swaggerTypeInfo <- list()
 plumberToSwaggerTypeMap <- list()
 defaultSwaggerType <- "string"
 attr(defaultSwaggerType, "default") <- TRUE
-defaultSwaggerSerialization <- FALSE
-attr(defaultSwaggerSerialization, "default") <- TRUE
+defaultSwaggerIsArray <- FALSE
+attr(defaultSwaggerIsArray, "default") <- TRUE
 
 local({
   addSwaggerInfo <- function(swaggerType, plumberTypes,
                              regex = NULL, converter = NULL,
-                             regexSerialization = NULL,
-                             converterSerialization = NULL,
+                             regexArray = NULL,
+                             converterArray = NULL,
                              format = NULL,
                              location = NULL,
                              realType = NULL) {
     swaggerTypeInfo[[swaggerType]] <<-
       list(
         regex = regex,
-        regexSerialization = regexSerialization,
+        regexArray = regexArray,
         converter = converter,
-        converterSerialization = converterSerialization,
+        converterArray = converterArray,
         format = format,
         location = location,
-        serializationSupport = !is.null(regexSerialization) & !is.null(converterSerialization),
+        arraySupport = !is.null(regexArray) & !is.null(converterArray),
         realType = realType
       )
 
@@ -120,14 +120,14 @@ plumberToSwaggerType <- function(type, inPath = FALSE) {
   return(swaggerType)
 }
 
-#' Check if swagger type support serialization
+#' Check if swagger type supports array
 #' @noRd
-supportsSerialization <- function(swaggerTypes) {
+supportsArray <- function(swaggerTypes) {
   vapply(
     swaggerTypeInfo[swaggerTypes],
     `[[`,
     logical(1),
-    "serializationSupport",
+    "arraySupport",
     USE.NAMES = FALSE)
 }
 
@@ -203,9 +203,9 @@ extractSwaggerParams <- function(endpointParams, pathParams, funcParams = NULL){
 
     # Dealing with priorities endpointParams > pathParams > funcParams
     # For each p, find out which source to trust for :
-    #   `type`, `serialization`, `required`
+    #   `type`, `isArray`, `required`
     # - `description` comes from endpointParams
-    # - `serialization` defines both `style` and `explode`
+    # - `isArray` defines both `style` and `explode`
     # - `default` and `example` comes from funcParams
     # - `location` change to "path" when p is in pathParams and
     #   unused when `type` is "object" or "file"
@@ -224,10 +224,10 @@ extractSwaggerParams <- function(endpointParams, pathParams, funcParams = NULL){
                                endpointParams[[p]]$type,
                                funcParams[[p]]$type)
       type <- plumberToSwaggerType(type, inPath = TRUE)
-      serialization <- priorizeProperty(defaultSwaggerSerialization,
-                                        pathParams[pathParams$name == p,]$serialization,
-                                        endpointParams[[p]]$serialization,
-                                        funcParams[[p]]$serialization)
+      isArray <- priorizeProperty(defaultSwaggerIsArray,
+                                  pathParams[pathParams$name == p,]$isArray,
+                                  endpointParams[[p]]$isArray,
+                                  funcParams[[p]]$isArray)
     } else {
       location <- "query"
       style <- "form"
@@ -236,9 +236,9 @@ extractSwaggerParams <- function(endpointParams, pathParams, funcParams = NULL){
                                endpointParams[[p]]$type,
                                funcParams[[p]]$type)
       type <- plumberToSwaggerType(type)
-      serialization <- priorizeProperty(defaultSwaggerSerialization,
-                                        endpointParams[[p]]$serialization,
-                                        funcParams[[p]]$serialization)
+      isArray <- priorizeProperty(defaultSwaggerIsArray,
+                                  endpointParams[[p]]$isArray,
+                                  funcParams[[p]]$isArray)
       required <- priorizeProperty(funcParams[[p]]$required,
                                    endpointParams[[p]]$required)
     }
@@ -274,7 +274,7 @@ extractSwaggerParams <- function(endpointParams, pathParams, funcParams = NULL){
           default = funcParams[[p]]$default
         )
       )
-      if (serialization) {
+      if (isArray) {
         paramList$schema <- list(
           type = "array",
           items = list(
@@ -378,7 +378,7 @@ getArgsMetadata <- function(plumberExpression){
       default = arg,
       example = arg,
       required = required,
-      serialization = {if (length(arg) > 1L & supportsSerialization(type)) TRUE else defaultSwaggerSerialization},
+      isArray = {if (length(arg) > 1L & supportsArray(type)) TRUE else defaultSwaggerIsArray},
       type = type
     )
   })
