@@ -58,6 +58,8 @@ plumber 0.5.0
 
 ### Bug fixes
 
+* Modified images serialization to use content-type serializer. Fixes issue with images pre/postserialize hooks (@meztez, #518).
+
 * Fix possible bugs due to mounted routers without leading slashes (@atheriel, [#476](https://github.com/rstudio/plumber/issues/476) [#501](https://github.com/rstudio/plumber/pull/501)).
 
 * Fix bug preventing error handling when a serializer fails (@antoine-sachet, [#490](https://github.com/rstudio/plumber/pull/490))
