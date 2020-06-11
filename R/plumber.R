@@ -31,8 +31,7 @@ plumb <- function(file = NULL, dir = ".") {
       stop("You must specify either a file or directory parameter")
     }
 
-    # Parse dir
-    dir <- sub("/$", "", dir)
+    dir <- normalize_dir_path(dir)
 
     # if the entrypoint file exists...
     entrypoint <- list.files(dir, "^entrypoint\\.r$", ignore.case = TRUE)
