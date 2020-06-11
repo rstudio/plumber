@@ -5,14 +5,12 @@ postBodyFilter <- function(req){
     body <- req$rook.input$read()
     type <- req$HTTP_CONTENT_TYPE
     args <- parseBody(body, type)
-    if (getOption("plumber.rawPostBody", FALSE)) {
-      req$rawPostBody <- body
-    }
+    req$args <- c(req$args, args)
+    req$rawPostBody <- body
     if (getOption("plumber.postBody", TRUE)) {
       req$rook.input$rewind()
       req$postBody <- paste0(req$rook.input$read_lines(), collapse = "\n")
     }
-    req$args <- c(req$args, args)
     req$.internal$postBodyHandled <- TRUE
   }
   forward()

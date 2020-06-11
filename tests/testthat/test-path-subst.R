@@ -26,21 +26,21 @@ test_that("variables are typed", {
 
   p <- createPathRegex("/car/<id:[int]>")
   expect_equal(p$names, "id")
-  expect_equal(p$regex, paste0("^/car/", "((?:-?\\d+,?)+)", "$"))
+  expect_equal(p$regex, paste0("^/car/", "((?:(?:-?\\d+),?)+)", "$"))
 
   p <- createPathRegex("/car/<id:double>")
   expect_equal(p$names, "id")
   expect_equal(p$regex, paste0("^/car/", "(-?\\d*\\.?\\d+)", "$"))
   p <- createPathRegex("/car/<id:[double]>")
   expect_equal(p$names, "id")
-  expect_equal(p$regex, paste0("^/car/", "((?:-?\\d*\\.?\\d+,?)+)", "$"))
+  expect_equal(p$regex, paste0("^/car/", "((?:(?:-?\\d*\\.?\\d+),?)+)", "$"))
 
   p <- createPathRegex("/car/<id:numeric>")
   expect_equal(p$names, "id")
   expect_equal(p$regex, paste0("^/car/", "(-?\\d*\\.?\\d+)", "$"))
   p <- createPathRegex("/car/<id:[numeric]>")
   expect_equal(p$names, "id")
-  expect_equal(p$regex, paste0("^/car/", "((?:-?\\d*\\.?\\d+,?)+)", "$"))
+  expect_equal(p$regex, paste0("^/car/", "((?:(?:-?\\d*\\.?\\d+),?)+)", "$"))
 
   p <- createPathRegex("/car/<id:bool>")
   expect_equal(p$names, "id")
@@ -61,7 +61,7 @@ test_that("variables are typed", {
   expect_equal(p$regex, paste0("^/car/", "([^/]+)", "$"))
   p <- createPathRegex("/car/<id:[chr]>")
   expect_equal(p$names, "id")
-  expect_equal(p$regex, paste0("^/car/", "((?:[^/,]+,?))", "$"))
+  expect_equal(p$regex, paste0("^/car/", "((?:(?:[^/]+),?)+)", "$"))
   expect_equal(p$areArrays, TRUE)
   expect_equal(p$converters[[1]]("BOB,LUKE,GUY"), c("BOB", "LUKE", "GUY"))
 

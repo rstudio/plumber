@@ -11,22 +11,27 @@ attr(defaultSwaggerIsArray, "default") <- TRUE
 local({
   addSwaggerInfo <- function(swaggerType, plumberTypes,
                              regex = NULL, converter = NULL,
-                             regexArray = NULL,
-                             converterArray = NULL,
                              format = NULL,
                              location = NULL,
-                             realType = NULL) {
+                             realType = NULL,
+                             arraySupport = FALSE) {
     swaggerTypeInfo[[swaggerType]] <<-
       list(
         regex = regex,
-        regexArray = regexArray,
         converter = converter,
-        converterArray = converterArray,
         format = format,
         location = location,
-        arraySupport = !is.null(regexArray) & !is.null(converterArray),
+        arraySupport = arraySupport,
         realType = realType
       )
+
+    if (arraySupport == TRUE) {
+      swaggerTypeInfo[[swaggerType]] <<- modifyList(
+        swaggerTypeInfo[[swaggerType]],
+        list(regexArray = paste0("(?:(?:", regex, "),?)+"),
+             converterArray = function(x) {converter(stri_split_fixed(x, ",")[[1]])})
+      )
+    }
 
     for (plumberType in plumberTypes) {
       plumberToSwaggerTypeMap[[plumberType]] <<- swaggerType
@@ -42,38 +47,34 @@ local({
     c("bool", "boolean", "logical"),
     "[01tfTF]|true|false|TRUE|FALSE",
     as.logical,
-    "(?:(?:[01tfTF]|true|false|TRUE|FALSE),?)+",
-    function(x) {as.logical(stri_split_fixed(x, ",")[[1]])},
-    location = c("query", "path")
+    location = c("query", "path"),
+    arraySupport = TRUE
   )
   addSwaggerInfo(
     "number",
     c("dbl", "double", "float", "number", "numeric"),
     "-?\\\\d*\\\\.?\\\\d+",
     as.numeric,
-    "(?:-?\\\\d*\\\\.?\\\\d+,?)+",
-    function(x) {as.numeric(stri_split_fixed(x, ",")[[1]])},
     format = "double",
-    location = c("query", "path")
+    location = c("query", "path"),
+    arraySupport = TRUE
   )
   addSwaggerInfo(
     "integer",
     c("int", "integer"),
     "-?\\\\d+",
     as.integer,
-    "(?:-?\\\\d+,?)+",
-    function(x) {as.integer(stri_split_fixed(x, ",")[[1]])},
     format = "int64",
-    location = c("query", "path")
+    location = c("query", "path"),
+    arraySupport = TRUE
   )
   addSwaggerInfo(
     "string",
     c("chr", "str", "character", "string"),
     "[^/]+",
     as.character,
-    "(?:[^/,]+,?)",
-    function(x) {as.character(stri_split_fixed(x, ",")[[1]])},
-    location = c("query", "path")
+    location = c("query", "path"),
+    arraySupport = TRUE
   )
   addSwaggerInfo(
     "object",
@@ -361,7 +362,7 @@ isJSONserializable <- function(x) {
 getArgsMetadata <- function(plumberExpression){
   #return same format as getTypedParams or params?
   args <- formals(eval(plumberExpression))
-  lapply(args[!names(args) %in% "..."], function(arg) {
+  lapply(args[!names(args) %in% c("...", "res", "req")], function(arg) {
     required <- identical(arg, formals(function(x){})$x)
     if (is.call(arg) || is.name(arg)) {
       arg <- tryCatch(
