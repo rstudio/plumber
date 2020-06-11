@@ -20,7 +20,7 @@ plumb <- function(file = NULL, dir = ".") {
     # assume it is a file in that dir and continue like normal
     file <- file.path(
       # removing trailing slash in dir
-      sub("/$", "", dir),
+      normalize_dir_path(dir),
       file
     )
   }
