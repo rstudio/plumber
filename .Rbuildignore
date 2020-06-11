@@ -16,3 +16,4 @@
 ^package\.json$
 ^\.github
 ^\.httr-oauth$
+^\.github$
