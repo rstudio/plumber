@@ -15,8 +15,9 @@ install <- function(droplet){
 
 install_docker <- function(droplet){
   droplet %>%
+    # Deprecated (Shutting down dockerproject.org APT and YUM repos 2020-03-31)
     droplet_ssh(c("sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D",
-                  "echo 'deb https://apt.dockerproject.org/repo ubuntu-trusty main' > /etc/apt/sources.list.d/docker.list")) %>%
+                  "echo 'deb https://apt.dockerproject.org/repo ubuntu-focal main' > /etc/apt/sources.list.d/docker.list")) %>%
     debian_apt_get_update() %>%
     droplet_ssh("sudo apt-get install linux-image-extra-$(uname -r)") %>%
     debian_apt_get_install("docker-engine") %>%
@@ -26,7 +27,7 @@ install_docker <- function(droplet){
 
 install_new_r <- function(droplet){
   droplet %>%
-    droplet_ssh(c("echo 'deb https://cran.rstudio.com/bin/linux/ubuntu trusty/' >> /etc/apt/sources.list",
+    droplet_ssh(c("echo 'deb https://cran.rstudio.com/bin/linux/ubuntu focal-cran40/' >> /etc/apt/sources.list",
                   "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9")) %>%
     debian_apt_get_update() %>%
     debian_install_r()
