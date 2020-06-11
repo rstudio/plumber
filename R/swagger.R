@@ -294,16 +294,23 @@ extractSwaggerParams <- function(endpointParams, pathParams, funcParams = NULL){
   params
 }
 
-
+#' Check na
+#' @noRd
 isNa <- function(x) {
   if (is.list(x)) {
     return(FALSE)
   }
   is.na(x)
 }
+
+#' Check na or null
+#' @noRd
 isNaOrNull <- function(x) {
   any(isNa(x)) || is.null(x)
 }
+
+#' Remove na or null
+#' @noRd
 removeNaOrNulls <- function(x) {
   # preemptively stop
   if (!is.list(x)) {
@@ -338,7 +345,9 @@ removeNaOrNulls <- function(x) {
 
   ret
 }
+
 #' For openapi definition
+#' @noRd
 priorizeProperty <- function(...) {
   l <- list(...)
   isnullordefault <- sapply(l, function(x) {isNaOrNull(x) || isTRUE(attributes(x)$default)})

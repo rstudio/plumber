@@ -39,7 +39,7 @@ of a request by a plumber router.
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new \code{PlumberStep} object
+Create a new \code{\link[=PlumberStep]{PlumberStep()}} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PlumberStep$new(expr, envir, lines, serializer)}\if{html}{\out{</div>}}
 }

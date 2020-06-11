@@ -29,8 +29,8 @@ details on the methods available on this object.
 It will be attributed automatically in the following priority order :
 option \code{plumber.port}, \code{port} value in global environment, a random port
 between 3000 and 10000 that is not blacklisted. When in unable to find
-an available port, method will fail.\cr
-\cr
+an available port, method will fail.
+
 \code{swagger} should be either a logial or set to a function . When \code{TRUE} or a
 function, multiple handles will be added to \code{plumber} object. OpenAPI json
 file will be served on paths \verb{/openapi.json} and \verb{/swagger.json}. Swagger UI
@@ -38,8 +38,8 @@ will be served on paths \verb{/__swagger__/index.html} and \verb{/__swagger__/}.
 using a function, it will receive the plumber router as the first parameter
 and currrent swagger specifications as the second. This function should return a
 list containing swagger specifications.
-See \url{https://swagger.io/docs/specification/}\cr
-\cr
+See \url{https://swagger.io/docs/specification/}
+
 \code{swaggerCallback} When set, it will be called with a character string corresponding
 to the swagger UI url. It allows RStudio to open swagger UI when plumber router
 run method is executed using default \code{plumber.swagger.url} option.
@@ -60,16 +60,16 @@ Plumber routers currently support four hooks:
 In all of the above you have access to a disposable environment in the \code{data}
 parameter that is created as a temporary data store for each request. Hooks
 can store temporary data in these hooks that can be reused by other hooks
-processing this same request.\cr
-\cr
+processing this same request.
+
 One feature when defining hooks in Plumber routers is the ability to modify
 the returned value. The convention for such hooks is: any function that accepts
 a parameter named \code{value} is expected to return the new value. This could
 be an unmodified version of the value that was passed in, or it could be a
 mutated value. But in either case, if your hook accepts a parameter
 named \code{value}, whatever your hook returns will be used as the new value
-for the response.\cr
-\cr
+for the response.
+
 You can add hooks using the \code{registerHook} method, or you can add multiple
 hooks at once using the \code{registerHooks} method which takes a name list in
 which the names are the names of the hooks, and the values are the

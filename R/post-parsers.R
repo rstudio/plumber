@@ -23,10 +23,12 @@ NULL
 #' Detection is done assuming content-type starts with pattern and is
 #' case sensitive.
 #'
-#' Parser function structure is something like
+#' Parser function structure is something like below. Available parameters
+#' to build parser are `value`, `content_type` and `filename` (only available
+#' in `multipart-form` body).
 #' ```r
 #' parser <- function(...) {
-#'   function(value, ...) {
+#'   function(value, content_type = "ct", filename, ...) {
 #'     # do something with raw value
 #'   }
 #' }
@@ -35,7 +37,7 @@ NULL
 #' It should return a named list if you want values to map to
 #' plumber endpoint function args.
 #'
-#' @example
+#' @examples
 #' parser_json <- function(...) {
 #'   function(value, content_type = "application/json", ...) {
 #'     charset <- getCharacterSet(content_type)
