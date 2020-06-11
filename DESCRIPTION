@@ -25,9 +25,9 @@ Imports:
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
     webutils (>= 1.1),
-    httpuv (>= 1.4.5.9002),
+    httpuv (>= 1.5.0),
     crayon,
-    promises,
+    promises (>= 1.1.0),
     sodium,
     swagger (> 3.20.3)
 LazyData: TRUE
@@ -42,10 +42,7 @@ Suggests:
     analogsea (>= 0.7.0),
     later
 Remotes:
-    rstudio/promises,
-    rstudio/swagger,
-    rstudio/httpuv,
-    sckott/analogsea
+    rstudio/swagger
 Collate:
     'async.R'
     'content-types.R'
