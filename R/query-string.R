@@ -73,13 +73,13 @@ createPathRegex <- function(pathDef, funcParams = NULL){
     )
   }
 
-  types <- stri_replace_all(match[,3], "$1", regex = "^\\[([^\\]]*)\\]$")
+  plumberTypes <- stri_replace_all(match[,3], "$1", regex = "^\\[([^\\]]*)\\]$")
   if (length(funcParams) > 0) {
     # Override with detection of function args if type not found in map
     idx <- !(types %in% names(plumberToSwaggerTypeMap))
-    types[idx] <- sapply(funcParams, `[[`, "type")[names[idx]]
+    plumberTypes[idx] <- sapply(funcParams, `[[`, "type")[names[idx]]
   }
-  types <- plumberToSwaggerType(types, inPath = TRUE)
+  swaggerTypes <- plumberToSwaggerType(plumberTypes, inPath = TRUE)
 
   areArrays <- stri_detect_regex(match[,3], "^\\[[^\\]]*\\]$")
   if (length(funcParams) > 0) {
@@ -87,11 +87,11 @@ createPathRegex <- function(pathDef, funcParams = NULL){
     idx <- (is.na(areArrays) | !areArrays)
     areArrays[idx] <- sapply(funcParams, `[[`, "isArray")[names[idx]]
   }
-  areArrays <- areArrays & supportsArray(types)
+  areArrays <- areArrays & supportsArray(swaggerTypes)
   areArrays[is.na(areArrays)] <- defaultSwaggerIsArray
 
   pathRegex <- pathDef
-  regexps <- typesToRegexps(types, areArrays)
+  regexps <- typesToRegexps(swaggerTypes, areArrays)
   for (regex in regexps) {
     pathRegex <- stri_replace_first_regex(
       pathRegex,
@@ -102,7 +102,7 @@ createPathRegex <- function(pathDef, funcParams = NULL){
 
   list(
     names = names,
-    types = types,
+    types = swaggerTypes,
     regex = paste0("^", pathRegex, "$"),
     converters = typeToConverters(types, areArrays),
     areArrays = areArrays
