@@ -116,8 +116,8 @@ parser_text <- function(...) {
 parser_rds <- function(...) {
   function(value, filename, ...) {
     tmp <- tempfile("plumb", fileext = paste0("_", basename(filename)))
-    writeBin(value, tmp)
     on.exit(file.remove(tmp))
+    writeBin(value, tmp)
     list(readRDS(tmp))
   }
 }
@@ -155,16 +155,10 @@ parser_multi <- function(...) {
 parser_octet <- function(...) {
   function(value, filename = NULL, ...) {
     if (!is.null(filename) && isTRUE(getOption("plumber.saveFileToDisk", FALSE))) {
-      if (interactive()) {
-        writeBin(value, basename(filename))
-        ret <- basename(filename)
-        attr(ret, "filename") <- filename
-      } else {
-        tmp <- tempfile("plumb", fileext = paste0("_", basename(filename)))
-        writeBin(value, tmp)
-        ret <- tmp
-        attr(ret, "filename") <- filename
-      }
+      tmp <- tempfile("plumb", fileext = paste0("_", basename(filename)))
+      writeBin(value, tmp)
+      ret <- tmp
+      attr(ret, "filename") <- filename
       return(ret)
     } else {
       return(value)

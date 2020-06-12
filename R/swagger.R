@@ -380,6 +380,7 @@ isJSONserializable <- function(x) {
 
 #' Extract metadata on args of plumberExpression
 #' @noRd
+#' @importFrom rlang is_missing
 getArgsMetadata <- function(plumberExpression){
   #return same format as getTypedParams or params?
   if (!is.function(plumberExpression)) plumberExpression <- eval(plumberExpression)
