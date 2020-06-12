@@ -382,17 +382,23 @@ isJSONserializable <- function(x) {
 #' @noRd
 getArgsMetadata <- function(plumberExpression){
   #return same format as getTypedParams or params?
-  args <- formals(eval(plumberExpression))
-  required_arg <- formals(function(x){})$x
+  if (!is.function(plumberExpression)) plumberExpression <- eval(plumberExpression)
+  args <- formals(plumberExpression)
   lapply(args[!names(args) %in% c("...", "res", "req")], function(arg) {
-    required <- identical(arg, required_arg)
+    required <- rlang::is_missing(arg)
     if (is.call(arg) || is.name(arg)) {
       arg <- tryCatch(
         eval(arg),
         error = function(cond) {NA})
     }
+    # Check that it is possible to transform arg value into
+    # an example for the openAPI spec. Valid transform are
+    # either a logical, a numeric, a character or a list that
+    # is json serializable. Otherwise set to NA. Otherwise
+    # it
     if (!is.logical(arg) && !is.numeric(arg) && !is.character(arg)
         && !(is.list(arg) && isJSONserializable(arg))) {
+      message("Argument of class ", class(arg), " cannot be used to set default value in OpenAPI specifications.")
       arg <- NA
     }
     type <- if (isNaOrNull(arg)) {NA} else {typeof(arg)}
