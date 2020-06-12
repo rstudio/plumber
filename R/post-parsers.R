@@ -153,8 +153,8 @@ parser_multi <- function(...) {
 #' @param ... Raw values and headers are passed there.
 #' @export
 parser_octet <- function(...) {
-  function(value, filename, ...) {
-    if (!missing(filename) && getOption("plumber.saveFileToDisk", FALSE)) {
+  function(value, filename = NULL, ...) {
+    if (!is.null(filename) && isTRUE(getOption("plumber.saveFileToDisk", FALSE))) {
       if (interactive()) {
         writeBin(value, basename(filename))
         ret <- basename(filename)
