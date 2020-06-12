@@ -7,7 +7,7 @@
 \usage{
 toOpenAPI(plumber, output = NULL)
 
-fromOpenAPI(openapi, con = NULL, format = c("json", "yml"))
+fromOpenAPI(openapi, format = c("json", "yaml"))
 }
 \arguments{
 \item{plumber}{A plumber router or a plumbable file or directory}
@@ -15,8 +15,6 @@ fromOpenAPI(openapi, con = NULL, format = c("json", "yml"))
 \item{output}{An optional filename where to write specifications.}
 
 \item{openapi}{an OpenAPI specifications string, URL or file}
-
-\item{con}{A connection object or a character string.}
 
 \item{format}{Input file format. Either "json" or "yml". If not
 provided, will be guessed from file extension.}

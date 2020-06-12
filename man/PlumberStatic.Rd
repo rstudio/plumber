@@ -75,7 +75,7 @@ A new \code{plumberstatic} router
 \if{html}{\out{<a id="method-print"></a>}}
 \if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
-Print reprensation of plumberstatic router.
+Print representation of \code{PlumberStatic()} router.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PlumberStatic$print(prefix = "", topLevel = TRUE, ...)}\if{html}{\out{</div>}}
 }
@@ -93,7 +93,7 @@ router, set to \code{TRUE}.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A terminal friendly represention of a plumberstatic router.
+A terminal friendly represention of a \code{PlumberStatic()} router.
 }
 }
 \if{html}{\out{<hr>}}

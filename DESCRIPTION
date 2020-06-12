@@ -8,6 +8,7 @@ Authors@R: c(
   person(family = "RStudio", role = c("cph", "fnd")),
   person("Jeff", "Allen", role="cre", email="cran@trestletech.com"),
   person("Barret", "Schloerke", role="aut", email="barret@rstudio.com"),
+  person("Bruno", "Tremblay", role="ctb", email="bruno.tremblay@lacapitale.com"),
   person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"),
   person("Sebastiaan", "Vandewoude", role="ctb", email="sebastiaanvandewoude@gmail.com"),
   person(family="SmartBear Software", role=c("ctb", "cph"), comment="swagger-ui"))
@@ -25,9 +26,9 @@ Imports:
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
     webutils (>= 1.1),
-    httpuv (>= 1.4.5.9002),
+    httpuv (>= 1.5.0),
     crayon,
-    promises,
+    promises (>= 1.1.0),
     sodium,
     swagger (> 3.20.3)
 LazyData: TRUE
@@ -44,12 +45,9 @@ Suggests:
     yaml,
     redoc
 Remotes:
-    rstudio/promises,
-    rstudio/swagger,
-    rstudio/httpuv,
-    sckott/analogsea,
     meztez/redoc
-Collate: 
+    rstudio/swagger
+Collate:
     'async.R'
     'content-types.R'
     'cookie-parser.R'

@@ -600,6 +600,10 @@ plumber <- R6Class(
             }
           }
         }
+        if (!is.null(req$methodAllowed) && !req$methodAllowed) {
+          res$status = 405L
+          res$setHeader("Allow", paste(self$verbs, collapse = ", "))
+        }
         return(NULL)
       }
 
@@ -808,7 +812,68 @@ plumber <- R6Class(
     },
     #' @field customSpec A list of custom spec to overlay over openAPI spec
     #' generated from a plumber router.
-    customSpec = NULL
+    customSpec = NULL,
+
+    ### Legacy/Deprecated
+    #' @description Retrieve OpenAPI specification (deprecated and will be removed in a coming release)
+    openAPIFile = function() {
+      self$openAPISpec()
+    },
+    #' @description Retrieve OpenAPI specification (deprecated and will be removed in a coming release)
+    swaggerFile = function() {
+      self$openAPISpec()
+    },
+    #' @details addEndpoint has been deprecated in v0.4.0 and will be removed in a coming release. Please use `handle()` instead.
+    #' @param verbs verbs
+    #' @param path path
+    #' @param expr expr
+    #' @param serializer serializer
+    #' @param processors processors
+    #' @param preempt preempt
+    #' @param params params
+    #' @param comments comments
+    addEndpoint = function(verbs, path, expr, serializer, processors, preempt=NULL, params=NULL, comments){
+      warning("addEndpoint has been deprecated in v0.4.0 and will be removed in a coming release. Please use `handle()` instead.")
+      if (!missing(processors) || !missing(params) || !missing(comments)){
+        stop("The processors, params, and comments parameters are no longer supported.")
+      }
+
+      self$handle(verbs, path, expr, preempt, serializer)
+    },
+    #' @details addAssets has been deprecated in v0.4.0 and will be removed in a coming release. Please use `mount` and `PlumberStatic$new()` instead.
+    #' @param dir dir
+    #' @param path path
+    #' @param options options
+    addAssets = function(dir, path="/public", options=list()){
+      warning("addAssets has been deprecated in v0.4.0 and will be removed in a coming release. Please use `mount` and `PlumberStatic$new()` instead.")
+      if (substr(path, 1,1) != "/"){
+        path <- paste0("/", path)
+      }
+
+      stat <- PlumberStatic$new(dir, options)
+      self$mount(path, stat)
+    },
+    #' @details addFilter has been deprecated in v0.4.0 and will be removed in a coming release. Please use `filter` instead.
+    #' @param name name
+    #' @param expr expr
+    #' @param serializer serializer
+    #' @param processors processors
+    addFilter = function(name, expr, serializer, processors){
+      warning("addFilter has been deprecated in v0.4.0 and will be removed in a coming release. Please use `filter` instead.")
+      if (!missing(processors)){
+        stop("The processors parameter is no longer supported.")
+      }
+
+      filter <- PlumberFilter$new(name, expr, private$envir, serializer)
+      private$addFilterInternal(filter)
+    },
+    #' @details addGlobalProcessor has been deprecated in v0.4.0 and will be removed in a coming release. Please use `registerHook`(s) instead.
+    #' @param proc proc
+    addGlobalProcessor = function(proc){
+      warning("addGlobalProcessor has been deprecated in v0.4.0 and will be removed in a coming release. Please use `registerHook`(s) instead.")
+      self$registerHooks(proc)
+    }
+
   ), active = list(
     #' @field endpoints plumber router endpoints read-only
     endpoints = function(){

@@ -131,6 +131,8 @@ getRelevantArgs <- function(args, plumberExpression){
 #' Plumber Endpoint
 #'
 #' Defines a terminal handler in a PLumber router.
+#'
+#' @importFrom stringi stri_match_first_regex
 #' @export
 PlumberEndpoint <- R6Class(
   "PlumberEndpoint",
@@ -150,7 +152,7 @@ PlumberEndpoint <- R6Class(
     getTypedParams = function(){
       data.frame(name = private$regex$names,
                  type = private$regex$types,
-                 serialization = private$regex$serializations,
+                 isArray = private$regex$areArrays,
                  stringsAsFactors = FALSE)
     },
     #' @field params endpoint parameters
@@ -164,10 +166,10 @@ PlumberEndpoint <- R6Class(
     canServe = function(req, res){
       if (!is.na(stri_match_first_regex(req$PATH_INFO, private$regex$regex)[1,1])) {
         if (req$REQUEST_METHOD %in% self$verbs) {
+          req$methodAllowed <- TRUE
           return(TRUE)
         } else {
-          res$status = 405L
-          res$setHeader("Allow", paste(self$verbs, collapse = ", "))
+          req$methodAllowed <- FALSE
         }
       }
       return(FALSE)

@@ -36,6 +36,11 @@
 #' use parameter `debug` of plumber router `run` method})
 #' \item{plumber.maxRequestSize (defaults to `0`)}{Maximum length in bytes of request body. Body larger
 #' than maximum are rejected with http error 413. `0` means unlimited size.})
+#' \item{plumber.postBody (defaults to `TRUE`)}{Copy post body content to `req$postBody`.
+#' If you do not need it, set to `FALSE` for improved API performance.})
+#' \item{plumber.saveFileToDisk (defaults to `FALSE`)}{By default octetstream parser will return
+#' raw bytes. If you want it to save file sent to an API to disk and return a file path instead, set
+#' to `TRUE`. Note that the API has to handle deletion of the file, it is not done automatically.})
 #' \item{plumber.port (defaults to `NULL`)}{Port Plumber will attempt to use to start http server.
 #' If the port is already in use, server will not be able to start.})
 #' \item{plumber.sharedSecret (defaults to `NULL`)}{Shared secret used to filter incoming request.

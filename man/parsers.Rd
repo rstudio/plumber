@@ -3,6 +3,7 @@
 \name{parsers}
 \alias{parsers}
 \alias{parser_json}
+\alias{parser_yaml}
 \alias{parser_query}
 \alias{parser_text}
 \alias{parser_rds}
@@ -11,6 +12,8 @@
 \title{Plumber Parsers}
 \usage{
 parser_json(...)
+
+parser_yaml(...)
 
 parser_query(...)
 

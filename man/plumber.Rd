@@ -26,23 +26,10 @@ See \url{http://www.rplumber.io/docs/programmatic/} for additional
 details on the methods available on this object.
 
 \code{port} does not need to be explicitly assigned.
-It will be attributed automatically in the following priority order :
-option \code{plumber.port}, \code{port} value in global environment, a random port
-between 3000 and 10000 that is not blacklisted. When in unable to find
-an available port, method will fail.\cr
-\cr
-\code{swagger} should be either a logial or set to a function . When \code{TRUE} or a
-function, multiple handles will be added to \code{plumber} object. OpenAPI json
-file will be served on paths \verb{/openapi.json} and \verb{/swagger.json}. Swagger UI
-will be served on paths \verb{/__swagger__/index.html} and \verb{/__swagger__/}. When
-using a function, it will receive the plumber router as the first parameter
-and currrent OpenAPI specifications as the second. This function should return a
-list containing an OpenAPI-compliant specification.
-See \url{https://www.openapis.org/}\cr
-\cr
-\code{swaggerCallback} When set, it will be called with a character string corresponding
-to the swagger UI url. It allows RStudio to open swagger UI when plumber router
-run method is executed using default \code{plumber.swagger.url} option.
+
+When \code{ui} is used, multiple handles will be added to \code{plumber} router.
+OpenAPI json file will be served on paths \verb{/openapi.json} and \verb{/openapi.yaml}.
+UIs will be served on paths \verb{/__\{ui\}__/index.html} and \verb{/__\{ui\}__/}.
 
 Plumber routers can be “nested” by mounting one into another
 using the \code{mount()} method. This allows you to compartmentalize your API
@@ -60,16 +47,16 @@ Plumber routers currently support four hooks:
 In all of the above you have access to a disposable environment in the \code{data}
 parameter that is created as a temporary data store for each request. Hooks
 can store temporary data in these hooks that can be reused by other hooks
-processing this same request.\cr
-\cr
+processing this same request.
+
 One feature when defining hooks in Plumber routers is the ability to modify
 the returned value. The convention for such hooks is: any function that accepts
 a parameter named \code{value} is expected to return the new value. This could
 be an unmodified version of the value that was passed in, or it could be a
 mutated value. But in either case, if your hook accepts a parameter
 named \code{value}, whatever your hook returns will be used as the new value
-for the response.\cr
-\cr
+for the response.
+
 You can add hooks using the \code{registerHook} method, or you can add multiple
 hooks at once using the \code{registerHooks} method which takes a name list in
 which the names are the names of the hooks, and the values are the
@@ -105,19 +92,6 @@ addFilter has been deprecated in v0.4.0 and will be removed in a coming release.
 addGlobalProcessor has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{registerHook}(s) instead.
 }
 \examples{
-
-## ------------------------------------------------
-## Method `plumber$run`
-## ------------------------------------------------
-
-\dontrun{
-pr <- plumber$new
-swagger <- function(pr_, spec) {
-  spec$servers[[1]]$description <- "MyCustomAPISpec"
-  spec
-}
-pr$run(swagger = swagger)
-}
 
 ## ------------------------------------------------
 ## Method `plumber$mount`
@@ -191,6 +165,14 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 }
 \section{Super class}{
 \code{\link[plumber:hookable]{plumber::hookable}} -> \code{plumber}
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{customSpec}}{A list of custom spec to overlay over openAPI spec
+generated from a plumber router.}
+}
+\if{html}{\out{</div>}}
 }
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
@@ -270,14 +252,15 @@ A new \code{plumber} router
 \if{html}{\out{<a id="method-run"></a>}}
 \if{latex}{\out{\hypertarget{method-run}{}}}
 \subsection{Method \code{run()}}{
-Start an a server using \code{plumber} object.
+Start a server using \code{plumber} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$run(
   host = "127.0.0.1",
   port = getOption("plumber.port"),
-  swagger = interactive(),
+  ui = interactive(),
   debug = interactive(),
-  swaggerCallback = getOption("plumber.swagger.url", NULL)
+  callback = getOption("plumber.ui.callback", getOption("plumber.swagger.url", NULL)),
+  ...
 )}\if{html}{\out{</div>}}
 }
 
@@ -292,29 +275,18 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.}
 
-\item{\code{swagger}}{a function that enhances the existing swagger specification.}
+\item{\code{ui}}{a logical or a character vector. The default UI when \code{TRUE} is \code{Swagger}.
+Other valid values are \code{FALSE} and \code{Redoc}.}
 
 \item{\code{debug}}{\code{TRUE} provides more insight into your API errors.}
 
-\item{\code{swaggerCallback}}{a callback function for taking action on the url for swagger page.}
+\item{\code{callback}}{a callback function for taking action on UI url.}
+
+\item{\code{...}}{Other params to be passed down to ui functions, such as
+\code{redoc_options} \code{redoc::\link[redoc]{redoc_spec}}.}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{\dontrun{
-pr <- plumber$new
-swagger <- function(pr_, spec) {
-  spec$servers[[1]]$description <- "MyCustomAPISpec"
-  spec
-}
-pr$run(swagger = swagger)
-}
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mount"></a>}}
@@ -663,7 +635,7 @@ Retrieve OpenAPI specification
 \if{html}{\out{<a id="method-openAPIFile"></a>}}
 \if{latex}{\out{\hypertarget{method-openAPIFile}{}}}
 \subsection{Method \code{openAPIFile()}}{
-Retrieve OpenAPI file (this should return a file instead of a list)
+Retrieve OpenAPI specification (deprecated and will be removed in a coming release)
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$openAPIFile()}\if{html}{\out{</div>}}
 }
@@ -673,7 +645,7 @@ Retrieve OpenAPI file (this should return a file instead of a list)
 \if{html}{\out{<a id="method-swaggerFile"></a>}}
 \if{latex}{\out{\hypertarget{method-swaggerFile}{}}}
 \subsection{Method \code{swaggerFile()}}{
-Retrieve OpenAPI file (this should return a file instead of a list)
+Retrieve OpenAPI specification (deprecated and will be removed in a coming release)
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$swaggerFile()}\if{html}{\out{</div>}}
 }

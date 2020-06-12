@@ -42,7 +42,6 @@ toOpenAPI <- function(plumber, output = NULL) {
 
 #' @rdname openapi
 #' @param openapi an OpenAPI specifications string, URL or file
-#' @param con A connection object or a character string.
 #' @param format Input file format. Either "json" or "yml". If not
 #' provided, will be guessed from file extension.
 #' @export
@@ -161,9 +160,9 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
 
     # Dealing with priorities endpointParams > pathParams > funcParams
     # For each p, find out which source to trust for :
-    #   `type`, `serialization`, `required`
+    #   `type`, `isArray`, `required`
     # - `description` comes from endpointParams
-    # - `serialization` defines both `style` and `explode`
+    # - `isArray` defines both `style` and `explode`
     # - `default` and `example` comes from funcParams
     # - `location` change to "path" when p is in pathParams and
     #   unused when `type` is "object" or "file"
@@ -182,10 +181,10 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
                                endpointParams[[p]]$type,
                                funcParams[[p]]$type)
       type <- plumberToDataType(type, inPath = TRUE)
-      serialization <- priorizeProperty(defaultSerialization,
-                                        pathParams[pathParams$name == p,]$serialization,
-                                        endpointParams[[p]]$serialization,
-                                        funcParams[[p]]$serialization)
+      isArray <- priorizeProperty(defaultIsArray,
+                                  pathParams[pathParams$name == p,]$isArray,
+                                  endpointParams[[p]]$isArray,
+                                  funcParams[[p]]$isArray)
     } else {
       location <- "query"
       style <- "form"
@@ -194,9 +193,9 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
                                endpointParams[[p]]$type,
                                funcParams[[p]]$type)
       type <- plumberToDataType(type)
-      serialization <- priorizeProperty(defaultSerialization,
-                                        endpointParams[[p]]$serialization,
-                                        funcParams[[p]]$serialization)
+      isArray <- priorizeProperty(defaultIsArray,
+                                  endpointParams[[p]]$isArray,
+                                  funcParams[[p]]$isArray)
       required <- priorizeProperty(funcParams[[p]]$required,
                                    endpointParams[[p]]$required)
     }
@@ -232,7 +231,7 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
           default = funcParams[[p]]$default
         )
       )
-      if (serialization) {
+      if (isArray) {
         paramList$schema <- list(
           type = "array",
           items = list(
@@ -276,7 +275,7 @@ isJSONserializable <- function(x) {
 getArgsMetadata <- function(plumberExpression){
   #return same format as getTypedParams or params?
   args <- formals(eval(plumberExpression))
-  lapply(args[!names(args) %in% c("...", "req", "res", "data")], function(arg) {
+  lapply(args[!names(args) %in% c("...", "req", "res")], function(arg) {
     required <- identical(arg, formals(function(x){})$x)
     if (is.call(arg) || is.name(arg)) {
       arg <- tryCatch(
@@ -289,17 +288,19 @@ getArgsMetadata <- function(plumberExpression){
     }
     type <- if (isNaOrNull(arg)) {NA} else {typeof(arg)}
     type <- plumberToDataType(type)
-    serialization <- {if (length(arg) > 1L && type %in% filterDataTypes(TRUE, "serializationSupport")) TRUE else defaultSerialization}
+    isArray <- {if (length(arg) > 1L && type %in% filterDataTypes(TRUE, "arraySupport")) TRUE else defaultIsArray}
     list(
       default = arg,
       example = arg,
       required = required,
-      serialization = serialization,
+      isArray = isArray,
       type = type
     )
   })
 }
 
+#' Check na
+#' @noRd
 isNa <- function(x) {
   if (is.list(x)) {
     return(FALSE)
@@ -307,10 +308,14 @@ isNa <- function(x) {
   is.na(x)
 }
 
+#' Check na or null
+#' @noRd
 isNaOrNull <- function(x) {
   any(isNa(x)) || is.null(x)
 }
 
+#' Remove na or null
+#' @noRd
 removeNaOrNulls <- function(x) {
   # preemptively stop
   if (!is.list(x)) {

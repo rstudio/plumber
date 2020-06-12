@@ -16,4 +16,4 @@
 ^package\.json$
 ^\.github
 ^\.httr-oauth$
-todo.R
+^\.github$

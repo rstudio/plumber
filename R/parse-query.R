@@ -69,7 +69,7 @@ createPathRegex <- function(pathDef, funcParams = NULL){
         types = NULL,
         regex = paste0("^", pathDef, "$"),
         converters = NULL,
-        serializations = NULL
+        areArrays = NULL
       )
     )
   }
@@ -82,17 +82,18 @@ createPathRegex <- function(pathDef, funcParams = NULL){
   }
   types <- plumberToDataType(types, inPath = TRUE)
 
-  serializations <- stri_detect_regex(match[,3], "^\\[[^\\]]*\\]$")
+  areArrays <- stri_detect_regex(match[,3], "^\\[[^\\]]*\\]$")
   if (length(funcParams) > 0) {
     # Override with detection of function args when false or na
-    idx <- (is.na(serializations) | !serializations)
-    serializations[idx] <- sapply(funcParams, `[[`, "serialization")[names[idx]]
+    idx <- (is.na(areArrays) | !areArrays)
+    areArrays[idx] <- sapply(funcParams, `[[`, "isArray")[names[idx]]
   }
-  serializations <- serializations & types %in% filterDataTypes(TRUE, "serializationSupport")
-  serializations[is.na(serializations)] <- defaultSerialization
+
+  areArrays <- areArrays & types %in% filterDataTypes(TRUE, "arraySupport")
+  areArrays[is.na(areArrays)] <- defaultIsArray
 
   pathRegex <- pathDef
-  regexps <- typesToRegexps(types, serializations)
+  regexps <- typesToRegexps(types, areArrays)
   for (regex in regexps) {
     pathRegex <- stri_replace_first_regex(
       pathRegex,
@@ -105,33 +106,30 @@ createPathRegex <- function(pathDef, funcParams = NULL){
     names = names,
     types = types,
     regex = paste0("^", pathRegex, "$"),
-    converters = typesToConverters(types, serializations),
-    serializations = serializations
+    converters = typesToConverters(types, areArrays),
+    areArrays = areArrays
   )
 }
 
-
-typesToRegexps <- function(dataTypes, serializations = FALSE) {
+typesToRegexps <- function(dataTypes, areArrays = FALSE) {
   # return vector of regex strings
   mapply(
     function(x, y) {x[[y]]},
     dataTypesInfo[dataTypes],
-    ifelse(serializations, "regexSerialization", "regex"),
+    ifelse(areArrays, "regexArray", "regex"),
     USE.NAMES = FALSE
   )
 }
 
-
-typesToConverters <- function(dataTypes, serializations = FALSE) {
+typesToConverters <- function(dataTypes, areArrays = FALSE) {
   # return list of functions
   mapply(
     function(x, y) {x[[y]]},
     dataTypesInfo[dataTypes],
-    ifelse(serializations, "converterSerialization", "converter"),
+    ifelse(areArrays, "converterArray", "converter"),
     USE.NAMES = FALSE
   )
 }
-
 
 # Extract the params from a given path
 # @param def is the output from createPathRegex

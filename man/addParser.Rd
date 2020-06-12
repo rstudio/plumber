@@ -26,8 +26,10 @@ If \code{pattern} is not provided, will be set to \code{application/{name}}.
 Detection is done assuming content-type starts with pattern and is
 case sensitive.
 
-Parser function structure is something like\if{html}{\out{<div class="r">}}\preformatted{parser <- function(...) \{
-  function(value, ...) \{
+Parser function structure is something like below. Available parameters
+to build parser are \code{value}, \code{content_type} and \code{filename} (only available
+in \code{multipart-form} body).\if{html}{\out{<div class="r">}}\preformatted{parser <- function(...) \{
+  function(value, content_type = "ct", filename, ...) \{
     # do something with raw value
   \}
 \}

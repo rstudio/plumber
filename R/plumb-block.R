@@ -182,12 +182,12 @@ plumbBlock <- function(lineNum, file){
       }
       type <- stri_replace_all(paramMat[1,4], "$1", regex = "^\\[([^\\]]*)\\]$")
       type <- plumberToDataType(type)
-      serialization <- stri_detect_regex(paramMat[1,4], "^\\[[^\\]]*\\]$")
-      serialization <- serialization && type %in% filterDataTypes(TRUE, "serializationSupport")
-      serialization[is.na(serialization)] <- defaultSerialization
+      isArray <- stri_detect_regex(paramMat[1,4], "^\\[[^\\]]*\\]$")
+      isArray <- isArray && type %in% filterDataTypes(TRUE, "arraySupport")
+      isArray[is.na(isArray)] <- defaultIsArray
       required <- identical(paramMat[1,5], "*")
 
-      params[[name]] <- list(desc=paramMat[1,6], type=type, required=required, serialization=serialization)
+      params[[name]] <- list(desc=paramMat[1,6], type=type, required=required, isArray=isArray)
     }
 
     tagMat <- stri_match(line, regex="^#['\\*]\\s*@tag\\s+(\\S.+)\\s*")

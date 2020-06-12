@@ -165,7 +165,8 @@ test_that("mounts can be read correctly", {
 })
 
 test_that("prints correctly", {
-  skip_on_cran()
+  testthat::skip_on_cran()
+  testthat::skip_on_os("windows") # has issues comparing text values
 
   pr <- plumber$new()
   pr$handle("GET", "/nested/path/here", function(){})
@@ -183,31 +184,31 @@ test_that("prints correctly", {
 
   regexps <- c(
     "Plumber router with 2 endpoints, 4 filters, and 2 sub-routers",
-    "Call run\\(\\) on this object",
-    "├──\\[queryString\\]",
-    "├──\\[postBody\\]",
-    "├──\\[cookieParser\\]",
-    "├──\\[sharedSecret\\]",
+    "Call run() on this object",
+    "├──[queryString]",
+    "├──[postBody]",
+    "├──[cookieParser]",
+    "├──[sharedSecret]",
     "├──/nested",
     "│  ├──/path",
-    "│  │  └──/here \\(GET, POST\\)",
+    "│  │  └──/here (GET, POST)",
     "├──/mysubpath",
     "│  │ # Plumber router with 2 endpoints, 4 filters, and 0 sub-routers.",
-    "│  ├──\\[queryString\\]",
-    "│  ├──\\[postBody\\]",
-    "│  ├──\\[cookieParser\\]",
-    "│  ├──\\[sharedSecret\\]",
-    "│  ├──/something \\(POST\\)",
-    "│  └──/ \\(GET\\)",
+    "│  ├──[queryString]",
+    "│  ├──[postBody]",
+    "│  ├──[cookieParser]",
+    "│  ├──[sharedSecret]",
+    "│  ├──/something (POST)",
+    "│  └──/ (GET)",
     "├──/static",
-    "│  │ # Plumber static router serving from directory: \\."
+    "│  │ # Plumber static router serving from directory: ."
   )
 
   skip_if_not(all(Encoding(printed) %in% Encoding(regexps)),
               message = "UTF-8 Encoding support")
 
   for (i in 1:length(regexps)){
-    expect_match(printed[i], regexps[i], info=paste0("on line ", i))
+    expect_match(printed[i], regexps[i], info=paste0("on line ", i), fixed = TRUE)
   }
 
 })

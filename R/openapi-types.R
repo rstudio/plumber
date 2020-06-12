@@ -2,25 +2,32 @@
 dataTypesInfo <- list()
 dataTypesMap <- list()
 defaultDataType <- structure("string", default = TRUE)
-defaultSerialization <- structure(FALSE, default = TRUE)
+defaultIsArray <- structure(FALSE, default = TRUE)
 
 local({
   addDataTypeInfo <- function(dataType, plumberTypes,
                               regex = NULL, converter = NULL,
-                              regexSerialization = NULL,
-                              converterSerialization = NULL,
                               format = NULL,
                               location = NULL,
-                              realType = NULL) {
+                              realType = NULL,
+                              arraySupport = FALSE) {
     dataTypesInfo[[dataType]] <<-
       list(
-        regex = regex, regexSerialization = regexSerialization,
-        converter = converter, converterSerialization = converterSerialization,
+        regex = regex,
+        converter = converter,
         format = format,
         location = location,
-        serializationSupport = !is.null(regexSerialization) & !is.null(converterSerialization),
+        arraySupport = arraySupport,
         realType = realType
       )
+
+    if (arraySupport == TRUE) {
+      dataTypesInfo[[dataType]] <<- modifyList(
+        dataTypesInfo[[dataType]],
+        list(regexArray = paste0("(?:(?:", regex, "),?)+"),
+             converterArray = function(x) {converter(stri_split_fixed(x, ",")[[1]])})
+      )
+    }
 
     for (plumberType in plumberTypes) {
       dataTypesMap[[plumberType]] <<- dataType
@@ -36,38 +43,34 @@ local({
     c("bool", "boolean", "logical"),
     "[01tfTF]|true|false|TRUE|FALSE",
     as.logical,
-    "(?:(?:[01tfTF]|true|false|TRUE|FALSE),?)+",
-    function(x) {as.logical(stri_split_fixed(x, ",")[[1]])},
-    location = c("query", "path")
+    location = c("query", "path"),
+    arraySupport = TRUE
   )
   addDataTypeInfo(
     "number",
     c("dbl", "double", "float", "number", "numeric"),
     "-?\\\\d*\\\\.?\\\\d+",
     as.numeric,
-    "(?:-?\\\\d*\\\\.?\\\\d+,?)+",
-    function(x) {as.numeric(stri_split_fixed(x, ",")[[1]])},
     format = "double",
-    location = c("query", "path")
+    location = c("query", "path"),
+    arraySupport = TRUE
   )
   addDataTypeInfo(
     "integer",
     c("int", "integer"),
     "-?\\\\d+",
     as.integer,
-    "(?:-?\\\\d+,?)+",
-    function(x) {as.integer(stri_split_fixed(x, ",")[[1]])},
     format = "int64",
-    location = c("query", "path")
+    location = c("query", "path"),
+    arraySupport = TRUE
   )
   addDataTypeInfo(
     "string",
     c("chr", "str", "character", "string"),
     "[^/]+",
     as.character,
-    "(?:[^/,]+,?)",
-    function(x) {as.character(stri_split_fixed(x, ",")[[1]])},
-    location = c("query", "path")
+    location = c("query", "path"),
+    arraySupport = TRUE
   )
   addDataTypeInfo(
     "object",
