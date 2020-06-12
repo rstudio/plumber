@@ -23,7 +23,7 @@ parseQS <- function(qs){
     # returns utf8 strings
     httpuv::decodeURIComponent(stri_split_fixed(x, "=", omit_empty = TRUE)[[1]])
   })
-  kv <- kv[lengths(kv) == 2] # Ignore incompletes
+  kv <- kv[vapply(kv, length, numeric(1)) == 2] # Ignore incompletes
 
   if (length(kv) == 0) {
     # return a blank list of args if there is nothing to parse
