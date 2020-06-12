@@ -10,6 +10,11 @@ function() {
   plot(1:10)
 }
 
+#* @svg
+#* @get /svg
+function() {
+  plot(1:10)
+}
 
 #' @png (width = 150, height=150)
 #' @get /littlepng
