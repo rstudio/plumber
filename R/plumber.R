@@ -11,10 +11,21 @@ enumerateVerbs <- function(v){
   toupper(v)
 }
 
-#' @rdname plumber
-#' @param file path to file to plumb
-#' @param dir dir path where to look for file to plumb
+#' Plumber Router
+#'
+#' Routers are the core request handler in plumber. A router is responsible for
+#' taking an incoming request, submitting it through the appropriate filters and
+#' eventually to a corresponding endpoint, if one is found.
+#'
+#' See \url{http://www.rplumber.io/docs/programmatic/} for additional
+#' details on the methods available on this object.
+#' @param file The file to parse as the plumber router definition.
+#' @param dir The directory containing the `plumber.R` file to parse as the
+#'   plumber router definition. Alternatively, if an `entrypoint.R` file is
+#'   found, it will take precedence and be responsible for returning a runnable
+#'   router.
 #' @export
+#' @rdname plumber
 plumb <- function(file, dir="."){
 
   dirMode <- NULL
@@ -159,20 +170,6 @@ hookable <- R6Class(
   )
 )
 
-
-#' Plumber Router
-#'
-#' Routers are the core request handler in plumber. A router is responsible for
-#' taking an incoming request, submitting it through the appropriate filters and
-#' eventually to a corresponding endpoint, if one is found.
-#'
-#' See \url{http://www.rplumber.io/docs/programmatic/} for additional
-#' details on the methods available on this object.
-#' @param file The file to parse as the plumber router definition
-#' @param dir The directory containing the `plumber.R` file to parse as the
-#'   plumber router definition. Alternatively, if an `entrypoint.R` file is
-#'   found, it will take precedence and be responsible for returning a runnable
-#'   Plumber router.
 #' @include globals.R
 #' @include serializer-json.R
 #' @include plumb-block.R
@@ -186,6 +183,7 @@ plumber <- R6Class(
   inherit = hookable,
   public = list(
     #' @description Create a new `plumber` router
+    #' @param file The file to parse as the plumber router definition.
     #' @param filters a list of plumber filters
     #' @param envir an environment to be used as the enclosure for the routers execution
     #' @return A new `plumber` router
