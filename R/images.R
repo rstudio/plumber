@@ -11,7 +11,7 @@ render_image <- function(imageFun, args=NULL){
       do.call(imageFun, finalArgs)
     },
     postexec = function(value, req, res, data){
-      dev.off()
+      grDevices::dev.off()
       on.exit({unlink(data$file)}, add = TRUE)
       con <- file(data$file, "rb")
       on.exit({close(con)}, add = TRUE)

@@ -29,7 +29,7 @@ test_that("Images are properly rendered", {
 
   resp <- r$serve(make_req("GET", "/svg"), PlumberResponse$new())
   expect_equal(resp$status, 200)
-  expect_equal(resp$headers$`Content-type`, "image/svg+xml") # without +xml doesn't work in firefox
+  expect_equal(resp$headers$`Content-Type`, "image/svg+xml") # without +xml doesn't work in firefox
 })
 
 test_that("render_image arguments supplement", {
@@ -43,7 +43,7 @@ test_that("render_image arguments supplement", {
   data <- new.env()
   req <- make_req("GET", "/")
   res <- list()
-  p$pre(req, res, data)
+  p$preexec(req, res, data)
   expect_length(pngcalls, 3)
   expect_equal(pngcalls$filename, data$file)
   expect_equal(pngcalls$a, 1)

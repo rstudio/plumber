@@ -266,7 +266,7 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, mou
           ep$serializer <- serializer_content_type("image/jpeg")
         } else if (block$image == "svg"){
           ep$registerHooks(render_svg(imageArgs))
-          ep$serializer <- serializer_content_type("image/svg")
+          ep$serializer <- serializer_content_type("image/svg+xml")
         } else {
           stop("Image format not found: ", block$image)
         }
