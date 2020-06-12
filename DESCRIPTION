@@ -45,7 +45,7 @@ Suggests:
     yaml,
     redoc
 Remotes:
-    meztez/redoc
+    meztez/redoc,
     rstudio/swagger
 Collate:
     'async.R'
