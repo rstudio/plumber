@@ -136,13 +136,12 @@ parser_multi <- function(...) {
     boundary <- stri_match_first_regex(content_type, "boundary=([^; ]{2,})", case_insensitive = TRUE)[,2]
     toparse <- parse_multipart(value, boundary)
     # content-type detection
-    for (i in seq_len(length(toparse))) {
-      if (!is.null(toparse[[i]]$filename)) {
-        ext <- tools::file_ext(toparse[[i]]$filename)
-        toparse[[i]]$content_type <- getContentType(ext)
+    lapply(toparse, function(x) {
+      if (!is.null(x$filename)) {
+        x$content_type <- getContentType(tools::file_ext(x$filename))
       }
-    }
-    lapply(toparse, parseRaw)
+      parseRaw(x)
+    })
   }
 }
 
