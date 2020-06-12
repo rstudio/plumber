@@ -353,3 +353,10 @@ test_that("multiple variations in function extract correct metadata", {
                         var5 = "boolean", var6 = "object", var7 = defaultSwaggerType, var8 = defaultSwaggerType))
 
 })
+
+test_that("priorize works as expected", {
+  expect_identical("abc", priorizeProperty(structure("zzz", default = TRUE), NULL, "abc"))
+  expect_identical(NULL, priorizeProperty(NULL, NULL, NULL))
+  expect_identical(structure("zzz", default = TRUE), priorizeProperty(structure("zzz", default = TRUE), NULL, NA))
+  expect_identical(NULL, priorizeProperty())
+})

@@ -32,10 +32,10 @@ local({
              # Q: Do we need to safe guard against special characters, such as `,`?
              # https://github.com/rstudio/plumber/pull/532#discussion_r439584727
              # A: https://swagger.io/docs/specification/serialization/
-             # > Additionally, the allowReserved keyword specifies whether the reserved 
-             # > characters :/?#[]@!$&'()*+,;= in parameter values are allowed to be sent as they are, 
-             # > or should be percent-encoded. By default, allowReserved is false, and reserved characters 
-             # > are percent-encoded. For example, / is encoded as %2F (or %2f), so that the parameter 
+             # > Additionally, the allowReserved keyword specifies whether the reserved
+             # > characters :/?#[]@!$&'()*+,;= in parameter values are allowed to be sent as they are,
+             # > or should be percent-encoded. By default, allowReserved is false, and reserved characters
+             # > are percent-encoded. For example, / is encoded as %2F (or %2f), so that the parameter
              # > value quotes/h2g2.txt will be sent as quotes%2Fh2g2.txt
              converterArray = function(x) {converter(stri_split_fixed(x, ",")[[1]])})
       )
@@ -358,8 +358,12 @@ removeNaOrNulls <- function(x) {
 #' @noRd
 priorizeProperty <- function(...) {
   l <- list(...)
-  isnullordefault <- vapply(l, function(x) {isNaOrNull(x) || isTRUE(attributes(x)$default)}, logical(1))
-  l[[which.min(isnullordefault)]]
+  if (length(l) > 0L) {
+    isnullordefault <- vapply(l, function(x) {isNaOrNull(x) || isTRUE(attributes(x)$default)}, logical(1))
+    # return the position of the first FALSE value or position 1 if all values are TRUE
+    return(l[[which.min(isnullordefault)]])
+  }
+  return()
 }
 
 #' Check if x is JSON serializable
