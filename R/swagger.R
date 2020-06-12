@@ -358,7 +358,7 @@ removeNaOrNulls <- function(x) {
 #' @noRd
 priorizeProperty <- function(...) {
   l <- list(...)
-  isnullordefault <- sapply(l, function(x) {isNaOrNull(x) || isTRUE(attributes(x)$default)})
+  isnullordefault <- vapply(l, function(x) {isNaOrNull(x) || isTRUE(attributes(x)$default)}, logical(1))
   l[[which.min(isnullordefault)]]
 }
 
