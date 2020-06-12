@@ -7,7 +7,7 @@ postBodyFilter <- function(req){
     args <- parseBody(body, type)
     req$args <- c(req$args, args)
     req$postBodyRaw <- body
-    if (getOption("plumber.postBody", TRUE)) {
+    if (isTRUE(getOption("plumber.postBody", TRUE))) {
       req$rook.input$rewind()
       req$postBody <- paste0(req$rook.input$read_lines(), collapse = "\n")
     }
@@ -30,8 +30,9 @@ parseRaw <- function(toparse) {
 
 parserPicker <- function(content_type, first_byte, filename = NULL) {
   #fast default to json when first byte is 7b (ascii {)
-  if (first_byte == as.raw(123L))
+  if (first_byte == as.raw(123L)) {
     return(.globals$parsers$func[["json"]])
+  }
   if (is.null(content_type)) {
     return(.globals$parsers$func[["query"]])
   }
