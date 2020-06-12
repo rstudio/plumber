@@ -30,7 +30,7 @@ parseQS <- function(qs){
     return(list())
   }
 
-  k <- vapply(kv, "[", character(1), 1)
+  k <- vapply(kv, `[`, character(1), 1)
   kenc <- unique(Encoding(k))
   if (any(kenc != "unknown")) {
     # https://github.com/rstudio/plumber/pull/314#discussion_r239992879
