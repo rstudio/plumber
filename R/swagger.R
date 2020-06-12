@@ -388,7 +388,7 @@ getArgsMetadata <- function(plumberExpression){
     required <- identical(arg, formals(function(x){})$x)
     if (is.call(arg) || is.name(arg)) {
       arg <- tryCatch(
-        eval(arg),
+        eval(arg, envir = environment(plumberExpression)),
         error = function(cond) {NA})
     }
     # Check that it is possible to transform arg value into
