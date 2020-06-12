@@ -19,7 +19,8 @@ handler <- function(num) { sum(as.integer(num)) }
 
 pr$handle("GET", "/sum", handler, serializer = serializer_json())
 
-pr$run(swagger = swagger)
+# pr$run(swagger = swagger) # TODO-barret make function for this
+
 
 # Dealing with a file parameter
 pr <- plumber$new()
@@ -44,6 +45,8 @@ handler <- function(req) {
 
 pr$handle("POST", "/upload", handler, serializer = serializer_json())
 
-pr$run(swagger = swagger)
+# pr$run(swagger = swagger) # TODO-barret make function for this
 
 #In case you have have problems, insert a `browser()` in your swagger function
+
+pr

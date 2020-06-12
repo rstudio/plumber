@@ -27,3 +27,9 @@ function(){
 function(){
   plot(1:10)
 }
+
+#* @svg(width=150, height=150)
+#* @get /littlesvg
+function() {
+  plot(1:10)
+}
