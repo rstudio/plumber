@@ -104,7 +104,7 @@ createPathRegex <- function(pathDef, funcParams = NULL){
     names = names,
     types = swaggerTypes,
     regex = paste0("^", pathRegex, "$"),
-    converters = typeToConverters(types, areArrays),
+    converters = typesToConverters(swaggerTypes, areArrays),
     areArrays = areArrays
   )
 }
@@ -121,7 +121,7 @@ typesToRegexps <- function(swaggerTypes, areArrays = FALSE) {
 }
 
 
-typeToConverters <- function(swaggerTypes, areArrays = FALSE) {
+typesToConverters <- function(swaggerTypes, areArrays = FALSE) {
   # return list of functions
   mapply(
     function(x, y) {x[[y]]},
