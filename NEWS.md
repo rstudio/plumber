@@ -58,6 +58,8 @@ plumber 0.5.0
 
 * Improve speed of `canServe()` method of the `PlumberEndpoint` class (@atheriel, #484)
 
+* Add support for returning svg images using `#' @svg` (and with arguments `#' @svg (width = 200, height=500)`. (@pachamaltese, #398)
+
 ### Bug fixes
 
 * Modified images serialization to use content-type serializer. Fixes issue with images pre/postserialize hooks (@meztez, #518).
