@@ -183,7 +183,7 @@ parseBlock <- function(lineNum, file){
       type <- stri_replace_all(paramMat[1,4], "$1", regex = "^\\[([^\\]]*)\\]$")
       type <- plumberToSwaggerType(type)
       isArray <- stri_detect_regex(paramMat[1,4], "^\\[[^\\]]*\\]$")
-      isArray <- isArray & supportsArray(type)
+      isArray <- isArray && supportsArray(type)
       isArray[is.na(isArray)] <- defaultSwaggerIsArray
       required <- identical(paramMat[1,5], "*")
 
