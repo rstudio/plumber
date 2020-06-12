@@ -17,7 +17,6 @@ parseQS <- function(qs){
   }
 
   qs <- stri_replace_first_regex(qs, "^[?]", "")
-  #qs <- stri_replace_all_fixed(qs, "+", " ")
 
   args <- stri_split_fixed(qs, "&", omit_empty = TRUE)[[1L]]
   kv <- lapply(args, function(x) {
