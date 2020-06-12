@@ -379,8 +379,9 @@ isJSONserializable <- function(x) {
 getArgsMetadata <- function(plumberExpression){
   #return same format as getTypedParams or params?
   args <- formals(eval(plumberExpression))
+  required_arg <- formals(function(x){})$x
   lapply(args[!names(args) %in% c("...", "res", "req")], function(arg) {
-    required <- identical(arg, formals(function(x){})$x)
+    required <- identical(arg, required_arg)
     if (is.call(arg) || is.name(arg)) {
       arg <- tryCatch(
         eval(arg),
