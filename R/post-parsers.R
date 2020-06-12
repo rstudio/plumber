@@ -161,6 +161,7 @@ parser_octet <- function(...) {
       attr(ret, "filename") <- filename
       return(ret)
     } else {
+      attr(value, "filename") <- filename
       return(value)
     }
   }
