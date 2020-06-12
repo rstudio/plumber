@@ -76,7 +76,7 @@ createPathRegex <- function(pathDef, funcParams = NULL){
   plumberTypes <- stri_replace_all(match[,3], "$1", regex = "^\\[([^\\]]*)\\]$")
   if (length(funcParams) > 0) {
     # Override with detection of function args if type not found in map
-    idx <- !(types %in% names(plumberToSwaggerTypeMap))
+    idx <- !(plumberTypes %in% names(plumberToSwaggerTypeMap))
     plumberTypes[idx] <- sapply(funcParams, `[[`, "type")[names[idx]]
   }
   swaggerTypes <- plumberToSwaggerType(plumberTypes, inPath = TRUE)
