@@ -28,8 +28,9 @@ function(){
   plot(1:10)
 }
 
-#* @svg(width=150, height=150)
+#* @svg(width=4, height=4)
 #* @get /littlesvg
 function() {
+  warning("Should not test. Image size does not decrease with dimension decrease")
   plot(1:10)
 }

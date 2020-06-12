@@ -1,45 +1,39 @@
 context("Images")
 
-test_that("Images are properly rendered", {
-  r <- plumber$new(test_path("files/image.R"))
+test_image <- local({
+    r <- plumber$new(test_path("files/image.R"))
 
-  resp <- r$serve(make_req("GET", "/png"), PlumberResponse$new())
-  expect_equal(resp$status, 200)
-  expect_equal(resp$headers$`Content-Type`, "image/png")
-  fullsizePNG <- length(resp$body)
-  expect_gt(fullsizePNG, 1000) # This changes based on R ver/OS, may not be useful.
+  function(name, content_type, capability_type = name, test_little = TRUE) {
+    if (!capabilities(capability_type)) {
+      testthat::skip("Graphics type not supported: ", name)
+    }
 
-  resp <- r$serve(make_req("GET", "/littlepng"), PlumberResponse$new())
-  expect_equal(resp$status, 200)
-  expect_equal(resp$headers$`Content-Type`, "image/png")
-  expect_gt(length(resp$body), 100) # This changes based on R ver/OS, may not be useful.
-  expect_lt(length(resp$body), fullsizePNG) # Should be smaller than the full one
+    resp <- r$serve(make_req("GET", paste0("/", name)), PlumberResponse$new())
+    expect_equal(resp$status, 200)
+    expect_equal(resp$headers$`Content-Type`, content_type)
+    fullsize <- length(resp$body)
+    expect_gt(fullsize, 1000) # This changes based on R ver/OS, may not be useful.
 
-  resp <- r$serve(make_req("GET", "/jpeg"), PlumberResponse$new())
-  expect_equal(resp$status, 200)
-  expect_equal(resp$headers$`Content-Type`, "image/jpeg")
-  fullsizeJPEG <- length(resp$body)
-  expect_gt(fullsizeJPEG, 1000) # This changes based on R ver/OS, may not be useful.
+    if (!isTRUE(test_little)) {
+      # do not test the smaller image route
+      return()
+    }
+    resp <- r$serve(make_req("GET", paste0("/little", name)), PlumberResponse$new())
+    expect_equal(resp$status, 200)
+    expect_equal(resp$headers$`Content-Type`, content_type)
+    expect_gt(length(resp$body), 100) # This changes based on R ver/OS, may not be useful.
+    expect_lt(length(resp$body), fullsize) # Should be smaller than the full one
+  }
+})
 
-  resp <- r$serve(make_req("GET", "/littlejpeg"), PlumberResponse$new())
-  expect_equal(resp$status, 200)
-  expect_equal(resp$headers$`Content-Type`, "image/jpeg")
-  expect_gt(length(resp$body), 100) # This changes based on R ver/OS, may not be useful.
-  expect_lt(length(resp$body), fullsizeJPEG) # Should be smaller than the full one
-
-  resp <- r$serve(make_req("GET", "/svg"), PlumberResponse$new())
-  expect_equal(resp$status, 200)
-  expect_equal(resp$headers$`Content-Type`, "image/svg+xml")
-  fullsizeSVG <- length(resp$body)
-  expect_gt(fullsizeSVG, 1000) # This changes based on R ver/OS, may not be useful.
-
-  resp <- r$serve(make_req("GET", "/littlejpeg"), PlumberResponse$new())
-  expect_equal(resp$status, 200)
-  expect_equal(resp$headers$`Content-Type`, "image/jpeg")
-  expect_gt(length(resp$body), 100) # This changes based on R ver/OS, may not be useful.
-  expect_lt(length(resp$body), fullsizeSVG) # Should be smaller than the full one
-
-
+test_that("png are properly rendered", {
+  test_image("png", "image/png")
+})
+test_that("jpeg are properly rendered", {
+  test_image("jpeg", "image/jpeg")
+})
+test_that("svg are properly rendered", {
+  test_image("svg", "image/svg+xml", capability_type = "cairo", test_little = FALSE)
 })
 
 test_that("render_image arguments supplement", {
