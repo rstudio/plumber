@@ -380,13 +380,12 @@ isJSONserializable <- function(x) {
 
 #' Extract metadata on args of plumberExpression
 #' @noRd
-#' @importFrom rlang is_missing
 getArgsMetadata <- function(plumberExpression){
   #return same format as getTypedParams or params?
   if (!is.function(plumberExpression)) plumberExpression <- eval(plumberExpression)
   args <- formals(plumberExpression)
   lapply(args[!names(args) %in% c("...", "res", "req")], function(arg) {
-    required <- rlang::is_missing(arg)
+    required <- identical(arg, formals(function(x){})$x)
     if (is.call(arg) || is.name(arg)) {
       arg <- tryCatch(
         eval(arg),
