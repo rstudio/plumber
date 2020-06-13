@@ -41,10 +41,11 @@ parseQS <- function(qs){
     )
   }
 
-  v <- lapply(kv, "[", 2)
+  v <- lapply(kv, `[`, 2)
   # If duplicates, combine
-  v <- lapply(unique(k), function(x) do.call(c, v[k %in% x])) 
-  names(v) <- k
+  unique_k <- unique(k)
+  v <- lapply(unique_k, function(x) do.call(c, v[k %in% x]))
+  names(v) <- unique_k
 
   return(v)
 }
