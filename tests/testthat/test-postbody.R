@@ -48,17 +48,17 @@ test_that("Test multipart parser", {
 
   bin_file <- test_path("files/multipart-form.bin")
   body <- readBin(bin_file, what = "raw", n = file.info(bin_file)$size)
-  parsed_body <- parseBody(body, "multipart/form-data; boundary=----WebKitFormBoundaryaCUcW05OMh32LDVS")
+  parsed_body <- parseBody(body, "multipart/form-data; boundary=----WebKitFormBoundaryMYdShB9nBc32BUhQ")
 
   expect_equal(names(parsed_body), c("json", "img1", "img2", "rds"))
-  expect_equal(parsed_body[["rds"]], iris)
+  expect_equal(parsed_body[["rds"]], women)
   expect_equal(attr(parsed_body[["img1"]], "filename"), "avatar2-small.png")
   expect_equal(parsed_body[["json"]], list(a=2,b=4,c=list(w=3,t=5)))
 
   # Test save file option
   opt_value = getOption("plumber.saveFileToDisk")
   options(plumber.saveFileToDisk = TRUE)
-  parsed_body <- parseBody(body, "multipart/form-data; boundary=----WebKitFormBoundaryaCUcW05OMh32LDVS")
+  parsed_body <- parseBody(body, "multipart/form-data; boundary=----WebKitFormBoundaryMYdShB9nBc32BUhQ")
   expect_true(file.exists(parsed_body[["img1"]]) && file.exists(parsed_body[["img2"]]))
   unlink(c(parsed_body[["img1"]], parsed_body[["img2"]]))
   options(plumber.saveFileToDisk = opt_value)
