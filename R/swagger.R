@@ -3,10 +3,8 @@
 # calculate all swagger type information at once and use created information throughout package
 swaggerTypeInfo <- list()
 plumberToSwaggerTypeMap <- list()
-defaultSwaggerType <- "string"
-attr(defaultSwaggerType, "default") <- TRUE
-defaultSwaggerIsArray <- FALSE
-attr(defaultSwaggerIsArray, "default") <- TRUE
+defaultSwaggerType <- structure("string", default = TRUE)
+defaultSwaggerIsArray <- structure(FALSE, default = TRUE)
 
 local({
   addSwaggerInfo <- function(swaggerType, plumberTypes,
