@@ -22,7 +22,7 @@ You may sign up for a Digital Ocean account \href{https://m.do.co/c/add0b50f54c4
 This command is idempotent, so feel free to run it on a single server multiple times.
 }
 \details{
-Provisions a Ubuntu 16.04-x64 droplet with the following customizations:
+Provisions a Ubuntu 20.04-x64 droplet with the following customizations:
 \itemize{
 \item A recent version of R installed
 \item plumber installed globally in the system library
