@@ -160,5 +160,4 @@ test_that("@html parameters produce an error", {
   expect_block_error("#' @html (key = \"val\")", "unused argument")
 })
 
-
 # TODO: more testing around filter, assets, endpoint, etc.

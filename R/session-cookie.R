@@ -212,7 +212,7 @@ encodeCookie <- function(x, key) {
   }
   xRaw <-
     x %>%
-    jsonlite::toJSON() %>%
+    toJSON() %>%
     charToRaw()
 
   if (is.null(key)) {

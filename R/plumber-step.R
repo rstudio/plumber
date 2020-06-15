@@ -150,7 +150,10 @@ PlumberEndpoint <- R6Class(
     responses = NA,
     #' @description retrieve endpoint typed parameters
     getTypedParams = function(){
-      data.frame(name=private$regex$names, type=private$regex$types, stringsAsFactors = FALSE)
+      data.frame(name = private$regex$names,
+                 type = private$regex$types,
+                 isArray = private$regex$areArrays,
+                 stringsAsFactors = FALSE)
     },
     #' @field params endpoint parameters
     params = NA,
@@ -180,8 +183,6 @@ PlumberEndpoint <- R6Class(
       self$verbs <- verbs
       self$path <- path
 
-      private$regex <- createPathRegex(path)
-
       private$expr <- expr
       if (is.expression(expr)){
         private$func <- eval(expr, envir)
@@ -189,6 +190,8 @@ PlumberEndpoint <- R6Class(
         private$func <- expr
       }
       private$envir <- envir
+
+      private$regex <- createPathRegex(path, self$getFuncParams())
 
       if (!missing(serializer) && !is.null(serializer)){
         self$serializer <- serializer
@@ -216,6 +219,10 @@ PlumberEndpoint <- R6Class(
     #' @param path endpoint path
     getPathParams = function(path){
       extractPathParams(private$regex, path)
+    },
+    #' @description retrieve endpoint expression parameters
+    getFuncParams = function() {
+      getArgsMetadata(private$func)
     }
   ),
   private = list(

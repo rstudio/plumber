@@ -10,7 +10,9 @@ make_req_cookie <- function(verb, path, cookie) {
   req <- new.env()
   req$REQUEST_METHOD <- toupper(verb)
   req$PATH_INFO <- path
-  req$rook.input <- list(read_lines = function() { "" })
+  req$rook.input <- list(read_lines = function() { "" },
+                         rewind = function() {},
+                         read = function() { charToRaw("") })
   if (!missing(cookie)){
     req$HTTP_COOKIE <- cookie
   }
