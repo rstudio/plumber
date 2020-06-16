@@ -156,16 +156,8 @@ parser_multi <- function(...) {
 #' @export
 parser_octet <- function(...) {
   function(value, filename = NULL, ...) {
-    if (!is.null(filename) && isTRUE(getOption("plumber.saveFileToDisk", FALSE))) {
-      tmp <- tempfile("plumb", fileext = paste0("_", basename(filename)))
-      writeBin(value, tmp)
-      ret <- tmp
-      attr(ret, "filename") <- filename
-      return(ret)
-    } else {
-      attr(value, "filename") <- filename
-      return(value)
-    }
+    attr(value, "filename") <- filename
+    return(value)
   }
 }
 
