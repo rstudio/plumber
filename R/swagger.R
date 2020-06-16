@@ -24,7 +24,7 @@ addSwaggerInfo_onLoad <- function() {
       )
 
     if (arraySupport == TRUE) {
-      swaggerTypeInfo[[swaggerType]] <<- modifyList(
+      swaggerTypeInfo[[swaggerType]] <<- utils::modifyList(
         swaggerTypeInfo[[swaggerType]],
         list(regexArray = paste0("(?:(?:", regex, "),?)+"),
              # Q: Do we need to safe guard against special characters, such as `,`?
@@ -367,13 +367,16 @@ priorizeProperty <- function(...) {
 #' Check if x is JSON serializable
 #' @noRd
 isJSONserializable <- function(x) {
-  testJSONserializable <- TRUE
-  tryCatch(toJSON(x),
-           error = function(cond) {
-             # Do we need to test for specific errors?
-             testJSONserializable <<- FALSE}
+  tryCatch(
+    {
+      toJSON(x)
+      TRUE
+    },
+    error = function(cond) {
+      # Do we need to test for specific errors?
+      FALSE
+    }
   )
-  testJSONserializable
 }
 
 #' Extract metadata on args of plumberExpression
