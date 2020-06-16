@@ -6,7 +6,7 @@ plumberToSwaggerTypeMap <- list()
 defaultSwaggerType <- structure("string", default = TRUE)
 defaultSwaggerIsArray <- structure(FALSE, default = TRUE)
 
-local({
+addSwaggerInfo_onLoad <- function() {
   addSwaggerInfo <- function(swaggerType, plumberTypes,
                              regex = NULL, converter = NULL,
                              format = NULL,
@@ -94,7 +94,7 @@ local({
     format = "binary",
     realType = "string"
   )
-})
+}
 
 
 #' Parse the given plumber type and return the typecast value
@@ -361,7 +361,7 @@ priorizeProperty <- function(...) {
     # return the position of the first FALSE value or position 1 if all values are TRUE
     return(l[[which.min(isnullordefault)]])
   }
-  return()
+  NULL # do not return any value
 }
 
 #' Check if x is JSON serializable

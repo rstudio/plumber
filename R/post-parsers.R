@@ -1,3 +1,5 @@
+
+
 #' Plumber Parsers
 #'
 #' Parsers are used in Plumber to transform the raw body content received
@@ -170,10 +172,11 @@ parser_octet <- function(...) {
 
 
 
-#' @include globals.R
-addParser("json", parser_json, "application/json")
-addParser("query", parser_query, "application/x-www-form-urlencoded")
-addParser("text", parser_text, "text/")
-addParser("rds", parser_rds, "application/rds")
-addParser("multi", parser_multi, "multipart/form-data")
-addParser("octet", parser_octet, "application/octet")
+addParsers_onLoad <- function() {
+  addParser("json", parser_json, "application/json")
+  addParser("query", parser_query, "application/x-www-form-urlencoded")
+  addParser("text", parser_text, "text/")
+  addParser("rds", parser_rds, "application/rds")
+  addParser("multi", parser_multi, "multipart/form-data")
+  addParser("octet", parser_octet, "application/octet")
+}
