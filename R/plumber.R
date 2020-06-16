@@ -829,7 +829,7 @@ plumber <- R6Class(
       else if (length(req$HTTP_TRANSFER_ENCODING) > 0)
         reqSize <- Inf
 
-      if (reqSize > maxSize) {
+      if (isTRUE(reqSize > maxSize)) {
         return(list(status = 413L,
                     headers = list('Content-Type' = 'text/plain'),
                     body = 'Maximum upload size exceeded'))
