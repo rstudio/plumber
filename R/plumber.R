@@ -885,11 +885,11 @@ plumber <- R6Class(
       swaggerPaths <- private$swaggerFileWalkMountsInternal(self)
 
       # Extend the previously parsed settings with the endpoints
-      def <- modifyList(private$globalSettings, list(paths = swaggerPaths))
+      def <- utils::modifyList(private$globalSettings, list(paths = swaggerPaths))
 
       # Lay those over the default globals so we ensure that the required fields
       # (like API version) are satisfied.
-      ret <- modifyList(defaultGlobals, def)
+      ret <- utils::modifyList(defaultGlobals, def)
 
       # remove NA or NULL values, which swagger doesn't like
       ret <- removeNaOrNulls(ret)
@@ -1082,7 +1082,7 @@ plumber <- R6Class(
             endpointEntry,
             join_paths(parentPath, endpointEntry$path)
           )
-          endpointList <- modifyList(endpointList, swaggerEndpoint)
+          endpointList <- utils::modifyList(endpointList, swaggerEndpoint)
         }
       }
 
@@ -1093,7 +1093,7 @@ plumber <- R6Class(
             router$mounts[[mountPath]],
             join_paths(parentPath, mountPath)
           )
-          endpointList <- modifyList(endpointList, mountEndpoints)
+          endpointList <- utils::modifyList(endpointList, mountEndpoints)
         }
       }
 
