@@ -16,6 +16,10 @@ parseQS <- function(qs){
     return(list())
   }
 
+  # Looked into using webutils::parse_query()
+  # Currently not pursuing `parse_query` as it does not handle Encoding issues handled below
+  # (Combining keys are also not handled by `parse_query`)
+
   qs <- stri_replace_first_regex(qs, "^[?]", "")
 
   args <- stri_split_fixed(qs, "&", omit_empty = TRUE)[[1L]]
@@ -30,8 +34,8 @@ parseQS <- function(qs){
     return(list())
   }
 
-  k <- vapply(kv, `[`, character(1), 1)
-  kenc <- unique(Encoding(k))
+  keys <- vapply(kv, `[`, character(1), 1)
+  kenc <- unique(Encoding(keys))
   if (any(kenc != "unknown")) {
     # https://github.com/rstudio/plumber/pull/314#discussion_r239992879
     non_ascii <- setdiff(kenc, "unknown")
@@ -41,13 +45,38 @@ parseQS <- function(qs){
     )
   }
 
-  v <- lapply(kv, `[`, 2)
-  # If duplicates, combine
-  unique_k <- unique(k)
-  v <- lapply(unique_k, function(x) do.call(c, v[k %in% x]))
-  names(v) <- unique_k
+  vals <- lapply(kv, `[`, 2)
 
-  return(v)
+  # If duplicates, combine
+  unique_keys <- unique(keys)
+
+  # equivalent code output, `split` is much faster with larger objects
+  # Testing on personal machine had a breakpoint around 150 letters as query parameters
+  ## n <- 150
+  ## k <- sample(letters, n, replace = TRUE)
+  ## v <- as.list(sample(1L, n, replace = TRUE))
+  ## microbenchmark::microbenchmark(
+  ##   split = {
+  ##     lapply(split(v, k), function(x) unname(unlist(x)))
+  ##   },
+  ##   not_split = {
+  ##     lapply(unique(k), function(x) {
+  ##       unname(unlist(v[k == x]))
+  ##     })
+  ##   }
+  ## )
+  vals <-
+    if (length(unique_keys) > 150) {
+      lapply(split(vals, keys), function(items) unname(unlist(items)))
+    } else {
+      # n < 150
+      lapply(unique_keys, function(key) {
+        unname(unlist(vals[keys == key]))
+      })
+    }
+  names(vals) <- unique_keys
+
+  return(vals)
 }
 
 createPathRegex <- function(pathDef, funcParams = NULL){
