@@ -824,6 +824,7 @@ plumber <- R6Class(
         return(NULL)
 
       reqSize <- 0
+      # https://github.com/rstudio/shiny/blob/a022a2b4/R/middleware.R#L298-L301
       if (length(req$CONTENT_LENGTH) > 0)
         reqSize <- as.numeric(req$CONTENT_LENGTH)
       else if (length(req$HTTP_TRANSFER_ENCODING) > 0)
