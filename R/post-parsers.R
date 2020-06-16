@@ -118,7 +118,7 @@ parser_text <- function(...) {
 parser_rds <- function(...) {
   function(value, filename, ...) {
     tmp <- tempfile("plumb", fileext = paste0("_", basename(filename)))
-    on.exit(file.remove(tmp))
+    on.exit(file.remove(tmp), add = TRUE)
     writeBin(value, tmp)
     readRDS(tmp)
   }
