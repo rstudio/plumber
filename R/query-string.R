@@ -1,6 +1,6 @@
 queryStringFilter <- function(req){
   handled <- req$.internal$queryStringHandled
-  if (is.null(handled) || handled != TRUE){
+  if (is.null(handled) || handled != TRUE) {
     qs <- req$QUERY_STRING
     args <- parseQS(qs)
     req$args <- c(req$args, args)
@@ -11,15 +11,22 @@ queryStringFilter <- function(req){
 
 #' @noRd
 parseQS <- function(qs){
-  if (is.null(qs) || length(qs) == 0 || qs == "") {
+
+  if (is.null(qs) || length(qs) == 0L || qs == "") {
     return(list())
   }
-  if (stri_startswith_fixed(qs, "?")) {
-    qs <- substr(qs, 2, nchar(qs))
-  }
 
-  parts <- strsplit(qs, "&", fixed = TRUE)[[1]]
-  kv <- strsplit(parts, "=", fixed = TRUE)
+  # Looked into using webutils::parse_query()
+  # Currently not pursuing `parse_query` as it does not handle Encoding issues handled below
+  # (Combining keys are also not handled by `parse_query`)
+
+  qs <- stri_replace_first_regex(qs, "^[?]", "")
+
+  args <- stri_split_fixed(qs, "&", omit_empty = TRUE)[[1L]]
+  kv <- lapply(args, function(x) {
+    # returns utf8 strings
+    httpuv::decodeURIComponent(stri_split_fixed(x, "=", omit_empty = TRUE)[[1]])
+  })
   kv <- kv[vapply(kv, length, numeric(1)) == 2] # Ignore incompletes
 
   if (length(kv) == 0) {
@@ -27,92 +34,130 @@ parseQS <- function(qs){
     return(list())
   }
 
-  keys <- httpuv::decodeURIComponent(vapply(kv, "[[", character(1), 1)) # returns utf8 strings
-  if (any(Encoding(keys) != "unknown")) {
+  keys <- vapply(kv, `[`, character(1), 1)
+  kenc <- unique(Encoding(keys))
+  if (any(kenc != "unknown")) {
     # https://github.com/rstudio/plumber/pull/314#discussion_r239992879
-    non_ascii <- setdiff(unique(Encoding(keys)), "unknown")
+    non_ascii <- setdiff(kenc, "unknown")
     warning(
       "Query string parameter received in non-ASCII encoding. Received: ",
       paste0(non_ascii, collapse = ", ")
     )
   }
 
-  vals <- vapply(kv, "[[", character(1), 2)
-  vals <- httpuv::decodeURIComponent(vals) # returns utf8 strings
-
-  ret <- as.list(vals)
-  names(ret) <- keys
+  vals <- lapply(kv, `[`, 2)
 
   # If duplicates, combine
-  combine_elements <- function(name){
-    unname(unlist(ret[names(ret)==name]))
-  }
+  unique_keys <- unique(keys)
 
-  unique_names <- unique(names(ret))
+  # equivalent code output, `split` is much faster with larger objects
+  # Testing on personal machine had a breakpoint around 150 letters as query parameters
+  ## n <- 150
+  ## k <- sample(letters, n, replace = TRUE)
+  ## v <- as.list(sample(1L, n, replace = TRUE))
+  ## microbenchmark::microbenchmark(
+  ##   split = {
+  ##     lapply(split(v, k), function(x) unname(unlist(x)))
+  ##   },
+  ##   not_split = {
+  ##     lapply(unique(k), function(x) {
+  ##       unname(unlist(v[k == x]))
+  ##     })
+  ##   }
+  ## )
+  vals <-
+    if (length(unique_keys) > 150) {
+      lapply(split(vals, keys), function(items) unname(unlist(items)))
+    } else {
+      # n < 150
+      lapply(unique_keys, function(key) {
+        unname(unlist(vals[keys == key]))
+      })
+    }
+  names(vals) <- unique_keys
 
-  ret <- lapply(unique_names, combine_elements)
-  names(ret) <- unique_names
-
-  ret
+  return(vals)
 }
 
-createPathRegex <- function(pathDef){
+createPathRegex <- function(pathDef, funcParams = NULL){
   # Create a regex from the defined path, substituting variables where appropriate
-  match <- stringi::stri_match_all(
+  match <- stri_match_all(
     pathDef,
-    # capture any plumber type (<arg:TYPE>) (typesToRegexps(type) will yell if it is unknown)
+    # capture any plumber type (<arg:TYPE>).
+    # plumberToSwaggerType(types) will yell if it is unknown
+    # and can not be guessed from endpoint function args)
     # <arg> will be given the TYPE `defaultSwaggerType`
-    regex = "/<(\\.?[a-zA-Z][\\w_\\.]*)(:([^>]*))?>"
+    regex = "/<(\\.?[a-zA-Z][\\w_\\.]*)(?::([^>]*))?>"
   )[[1]]
   names <- match[,2]
-  types <- match[,4]
-  if (length(names) <= 1 && is.na(names)){
+  # No path params
+  if (length(names) <= 1 && is.na(names)) {
     return(
       list(
         names = character(),
         types = NULL,
         regex = paste0("^", pathDef, "$"),
-        converters = NULL
+        converters = NULL,
+        areArrays = NULL
       )
     )
   }
-  if (length(types) > 0) {
-    types[is.na(types)] <- defaultSwaggerType
+
+  plumberTypes <- stri_replace_all(match[,3], "$1", regex = "^\\[([^\\]]*)\\]$")
+  if (length(funcParams) > 0) {
+    # Override with detection of function args if type not found in map
+    idx <- !(plumberTypes %in% names(plumberToSwaggerTypeMap))
+    plumberTypes[idx] <- sapply(funcParams, `[[`, "type")[names[idx]]
   }
+  swaggerTypes <- plumberToSwaggerType(plumberTypes, inPath = TRUE)
+
+  areArrays <- stri_detect_regex(match[,3], "^\\[[^\\]]*\\]$")
+  if (length(funcParams) > 0) {
+    # Override with detection of function args when false or na
+    idx <- (is.na(areArrays) | !areArrays)
+    areArrays[idx] <- sapply(funcParams, `[[`, "isArray")[names[idx]]
+  }
+  areArrays <- areArrays & supportsArray(swaggerTypes)
+  areArrays[is.na(areArrays)] <- defaultSwaggerIsArray
 
   pathRegex <- pathDef
-  regexps <- typesToRegexps(types)
+  regexps <- typesToRegexps(swaggerTypes, areArrays)
   for (regex in regexps) {
-    pathRegex <- stringi::stri_replace_first_regex(
+    pathRegex <- stri_replace_first_regex(
       pathRegex,
-      pattern = "/(<\\.?[a-zA-Z][\\w_\\.:]*>)(/?)",
-      replacement = paste0("/(", regex, ")$2")
+      pattern = "/(?:<\\.?[a-zA-Z][\\w_\\.:\\[\\]]*>)(/?)",
+      replacement = paste0("/(", regex, ")$1")
     )
   }
 
   list(
     names = names,
-    types = types,
+    types = swaggerTypes,
     regex = paste0("^", pathRegex, "$"),
-    converters = typeToConverters(types)
+    converters = typesToConverters(swaggerTypes, areArrays),
+    areArrays = areArrays
   )
 }
 
 
-typesToRegexps <- function(types) {
+typesToRegexps <- function(swaggerTypes, areArrays = FALSE) {
   # return vector of regex strings
-  vapply(
-    swaggerTypeInfo[plumberToSwaggerType(types)],
-    `[[`, character(1), "regex"
+  mapply(
+    function(x, y) {x[[y]]},
+    swaggerTypeInfo[swaggerTypes],
+    ifelse(areArrays, "regexArray", "regex"),
+    USE.NAMES = FALSE
   )
 }
 
 
-typeToConverters <- function(types) {
+typesToConverters <- function(swaggerTypes, areArrays = FALSE) {
   # return list of functions
-  lapply(
-    swaggerTypeInfo[plumberToSwaggerType(types)],
-    `[[`, "converter"
+  mapply(
+    function(x, y) {x[[y]]},
+    swaggerTypeInfo[swaggerTypes],
+    ifelse(areArrays, "converterArray", "converter"),
+    USE.NAMES = FALSE
   )
 }
 
@@ -120,7 +165,7 @@ typeToConverters <- function(types) {
 # Extract the params from a given path
 # @param def is the output from createPathRegex
 extractPathParams <- function(def, path){
-  vals <- as.list(stringi::stri_match(path, regex = def$regex)[,-1])
+  vals <- as.list(stri_match(path, regex = def$regex)[,-1])
   names(vals) <- def$names
 
   if (!is.null(def$converters)){

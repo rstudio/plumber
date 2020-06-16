@@ -44,3 +44,24 @@ test_that("parseQS() will mark UTF-8 explicitly", {
   )
   expect_equal(Encoding(out[[1L]]), "UTF-8")
 })
+
+
+test_that("different lengths of query string return same shape", {
+  for (n in c(5, 50, 500, 1000)) {
+    keys <- sample(letters, n, replace = TRUE)
+    vals <- as.list(sample(letters, n, replace = TRUE))
+
+    expect_equal(
+      parseQS(
+        paste0("?", paste0(keys, "=", vals, collapse = "&"))
+      ),
+      setNames(
+        lapply(unique(keys), function(key) {
+          unname(unlist(vals[keys == key]))
+        }),
+        unique(keys)
+      )
+    )
+
+  }
+})

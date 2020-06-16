@@ -42,6 +42,8 @@ plumber 0.5.0
 
 ### New features
 
+* Added Swagger support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez, #532) 
+
 * Added support for promises in endpoints, filters, and hooks. (#248)
 
 * Added support to a router's run method to allow the `swagger` parameter to be a function that

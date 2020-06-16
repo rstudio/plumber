@@ -225,6 +225,7 @@ plumber <- R6Class(
       private$serializer <- serializer_json()
       private$errorHandler <- defaultErrorHandler()
       private$notFoundHandler <- default404Handler
+      private$maxSize <- getOption('plumber.maxRequestSize', 0) #0 Unlimited
 
       # Add in the initial filters
       for (fn in names(filters)){
@@ -828,7 +829,25 @@ plumber <- R6Class(
     #' @param req request object
     #' @details required for httpuv interface
     onHeaders = function(req) {
-      NULL
+      maxSize <- private$maxSize
+      if (isTRUE(maxSize <= 0))
+        return(NULL)
+
+      reqSize <- 0
+      # https://github.com/rstudio/shiny/blob/a022a2b4/R/middleware.R#L298-L301
+      if (length(req$CONTENT_LENGTH) > 0)
+        reqSize <- as.numeric(req$CONTENT_LENGTH)
+      else if (length(req$HTTP_TRANSFER_ENCODING) > 0)
+        reqSize <- Inf
+
+      if (isTRUE(reqSize > maxSize)) {
+        return(list(status = 413L,
+                    headers = list('Content-Type' = 'text/plain'),
+                    body = 'Maximum upload size exceeded'))
+      }
+      else {
+        return(NULL)
+      }
     },
     #' @description httpuv interface onWSOpen function
     #' @param ws WebSocket object
@@ -877,11 +896,11 @@ plumber <- R6Class(
       swaggerPaths <- private$swaggerFileWalkMountsInternal(self)
 
       # Extend the previously parsed settings with the endpoints
-      def <- modifyList(private$globalSettings, list(paths = swaggerPaths))
+      def <- utils::modifyList(private$globalSettings, list(paths = swaggerPaths))
 
       # Lay those over the default globals so we ensure that the required fields
       # (like API version) are satisfied.
-      ret <- modifyList(defaultGlobals, def)
+      ret <- utils::modifyList(defaultGlobals, def)
 
       # remove NA or NULL values, which swagger doesn't like
       ret <- removeNaOrNulls(ret)
@@ -1023,6 +1042,7 @@ plumber <- R6Class(
 
     errorHandler = NULL,
     notFoundHandler = NULL,
+    maxSize = NULL, # Max request size in bytes
 
     addFilterInternal = function(filter){
       # Create a new filter and add it to the router
@@ -1073,7 +1093,7 @@ plumber <- R6Class(
             endpointEntry,
             join_paths(parentPath, endpointEntry$path)
           )
-          endpointList <- modifyList(endpointList, swaggerEndpoint)
+          endpointList <- utils::modifyList(endpointList, swaggerEndpoint)
         }
       }
 
@@ -1084,7 +1104,7 @@ plumber <- R6Class(
             router$mounts[[mountPath]],
             join_paths(parentPath, mountPath)
           )
-          endpointList <- modifyList(endpointList, mountEndpoints)
+          endpointList <- utils::modifyList(endpointList, mountEndpoints)
         }
       }
 
