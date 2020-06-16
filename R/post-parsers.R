@@ -45,7 +45,7 @@ NULL
 #'     charset <- getCharacterSet(content_type)
 #'     value <- rawToChar(value)
 #'     Encoding(value) <- charset
-#'     safeFromJSON(value)
+#'     jsonlite::fromJSON(value)
 #'   }
 #' }
 #' @md
