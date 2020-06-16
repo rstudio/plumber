@@ -4,6 +4,11 @@ test_that("JSON is consumed on POST", {
   expect_equal(parseBody('{"a":"1"}', content_type = NULL), list(a = "1"))
 })
 
+test_that("ending in `==` does not produce a unexpected key", {
+  # See https://github.com/rstudio/plumber/issues/463
+  expect_equal(parseBody("randomcharshere==", content_type = NULL), list())
+})
+
 test_that("Query strings on post are handled correctly", {
   expect_equivalent(parseBody("a="), list()) # It's technically a named list()
   expect_equal(parseBody("a=1&b=&c&d=1", content_type = NULL), list(a="1", d="1"))
