@@ -820,7 +820,7 @@ plumber <- R6Class(
     #' @details required for httpuv interface
     onHeaders = function(req) {
       maxSize <- private$maxSize
-      if (maxSize <= 0)
+      if (isTRUE(maxSize <= 0))
         return(NULL)
 
       reqSize <- 0
