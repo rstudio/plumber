@@ -8,7 +8,7 @@ serializer_csv <- function(...) {
 
   function(val, req, res, errorHandler) {
     tryCatch({
-      res$setHeader("Content-Type", "text/plain; charset=utf-8")
+      res$setHeader("Content-Type", "text/plain; charset=UTF-8")
       res$body <- readr::format_csv(val, ...)
       return(res$toResponse())
     }, error = function(e){
