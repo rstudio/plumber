@@ -4,6 +4,11 @@
 \alias{PlumberStatic}
 \title{Static file router}
 \description{
+Static file router
+
+Static file router
+}
+\details{
 Creates a router that is backed by a directory of files on disk.
 }
 \section{Super classes}{
@@ -47,19 +52,48 @@ Creates a router that is backed by a directory of files on disk.
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
+Create a new \code{plumberstatic} router
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PlumberStatic$new(direc, options)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{direc}}{a path to an asset directory.}
+
+\item{\code{options}}{options to be evaluated in the plumberstatic router environment}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new \code{plumberstatic} router
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
 \if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
+Print representation of \code{PlumberStatic()} router.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PlumberStatic$print(prefix = "", topLevel = TRUE, ...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{prefix}}{a character string. Prefix to append to representation.}
+
+\item{\code{topLevel}}{a logical value. When method executed on top level
+router, set to \code{TRUE}.}
+
+\item{\code{...}}{additional arguments for recursive calls}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A terminal friendly represention of a \code{PlumberStatic()} router.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

@@ -1,9 +1,12 @@
 # plumber
 
-[![Build Status](https://travis-ci.org/trestletech/plumber.svg?branch=master)](https://travis-ci.org/trestletech/plumber)
+<!-- badges: start -->
+[![R build status](https://github.com/rstudio/plumber/workflows/R-CMD-check/badge.svg)](https://github.com/rstudio/plumber/actions)
 [![](https://www.r-pkg.org/badges/version/plumber)](https://www.r-pkg.org/pkg/plumber)
 [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/plumber?color=brightgreen)](https://www.r-pkg.org/pkg/plumber)
 [![codecov](https://codecov.io/gh/trestletech/plumber/branch/master/graph/badge.svg)](https://codecov.io/gh/trestletech/plumber)
+[![RStudio community](https://img.shields.io/badge/community-plumber-blue?style=social&logo=rstudio&logoColor=75AADB)](https://community.rstudio.com/tags/plumber)
+<!-- badges: end -->
 
 <img align="right" src="https://www.rplumber.io/components/images/plumber-broken.png" />
 
@@ -91,7 +94,7 @@ GitHub. The easiest way to do that is by using `devtools`.
 
 ```r
 library(devtools)
-install_github("trestletech/plumber")
+install_github("rstudio/plumber")
 library(plumber)
 ```
 
@@ -112,7 +115,7 @@ A couple of other approaches to hosting plumber are also made available:
 
  - PM2 - https://www.rplumber.io/docs/hosting/
  - Docker - https://www.rplumber.io/docs/docker/
- 
+
 ## Related Projects
 
 - [OpenCPU](https://www.opencpu.org/) - A server designed for hosting R APIs

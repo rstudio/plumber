@@ -15,7 +15,7 @@ function(req, username=""){
   # expect it to be available as a parameter to the
   # filter (plumber magic).
 
-  # This is a work-around for https://github.com/trestletech/plumber/issues/12
+  # This is a work-around for https://github.com/rstudio/plumber/issues/12
   # and shouldn't be necessary long-term
   req$user <- NULL
 

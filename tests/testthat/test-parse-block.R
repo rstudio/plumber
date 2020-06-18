@@ -17,6 +17,11 @@ test_that("parseBlock works", {
   expect_equal(b$path[[1]], list(verb="POST", path="/"))
   expect_equal(b$path[[2]], list(verb="GET", path="/"))
   expect_equal(b$filter, "test")
+
+  # due to covr changing some code, the return answer is very strange
+  # the tests below should be skipped on covr
+  testthat::skip_on_covr()
+
   expect_equal_functions(b$serializer, serializer_json())
 })
 
@@ -81,6 +86,9 @@ test_that("Block can't contain duplicate tags", {
 
 test_that("@json parameters work", {
 
+  # due to covr changing some code, the return answer is very strange
+  testthat::skip_on_covr()
+
   expect_block_fn <- function(lines, fn) {
     b <- parseBlock(length(lines), lines)
     expect_equal_functions(b$serializer, fn)
@@ -119,6 +127,8 @@ test_that("@json parameters work", {
 
 
 test_that("@html parameters produce an error", {
+  # due to covr changing some code, the return answer is very strange
+  testthat::skip_on_covr()
 
   expect_block_fn <- function(lines, fn) {
     b <- parseBlock(length(lines), lines)
@@ -149,6 +159,5 @@ test_that("@html parameters produce an error", {
 
   expect_block_error("#' @html (key = \"val\")", "unused argument")
 })
-
 
 # TODO: more testing around filter, assets, endpoint, etc.

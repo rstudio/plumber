@@ -52,32 +52,32 @@ test_that("cookies can convert to string", {
   expect_equal(cookieToStr("abc", 123, path="/somepath"), "abc=123; Path=/somepath")
   expect_equal(cookieToStr("abc", 123, http=TRUE, secure=TRUE), "abc=123; HttpOnly; Secure")
 
+  now <- force(Sys.time())
+  cookieToStr_ <- function(expiration, ...) {
+    cookieToStr("abc", 123, expiration = expiration, ..., now = now)
+  }
+  cookie_match <- function(expirationStr, expiresSec) {
+    # difftime is exclusive, so the Max-Age may be off by one on positive time diffs.
+    #   Using a regex from 0 to 9 incase a slow machine is encountered
+    # match from 0 to 9 seconds
+    paste0("abc=123; Expires= ", expirationStr, "; Max-Age= ", expiresSec)
+  }
+  expect_cookie <- function(expiresSec) {
+    expires <- now + expiresSec
+    expyStr <- format(expires, format="%a, %e %b %Y %T", tz="GMT", usetz=TRUE)
+
+    # When given as a number of seconds
+    expect_equal(cookieToStr_(expiresSec), cookie_match(expyStr, expiresSec), label = "Raw seconds expiration cookie")
+
+    # When given as a POSIXct
+    expect_equal(cookieToStr_(expires), cookie_match(expyStr, expiresSec), label = "POSIXct expiration cookie")
+  }
+
   # Test date in the future
-  expiresSec <- 10
-  expires <- Sys.time() + expiresSec
-  expyStr <- format(expires, format="%a, %e %b %Y %T", tz="GMT", usetz=TRUE)
-  # TODO: this test is vulnerable to Sys.time() crossing over a second boundary in between the
-  # line above and below.
-  # When given as a number of seconds
-  expect_equal(cookieToStr("abc", 123, expiration=expiresSec),
-               paste0("abc=123; Expires= ", expyStr, "; Max-Age= ", expiresSec))
-  # When given as a POSIXct
-  # difftime is exclusive, so the Max-Age may be off by one on positive time diffs.
-  expect_equal(cookieToStr("abc", 123, expiration=expires),
-               paste0("abc=123; Expires= ", expyStr, "; Max-Age= ", expiresSec-1))
+  expect_cookie(9)
 
   # Works with a negative number of seconds
-  expiresSec <- -10
-  expires <- Sys.time() + expiresSec
-  expyStr <- format(expires, format="%a, %e %b %Y %T", tz="GMT", usetz=TRUE)
-  # TODO: this test is vulnerable to Sys.time() crossing over a second boundary in between the
-  # line above and below.
-  # When given as a number of seconds
-  expect_equal(cookieToStr("abc", 123, expiration=expiresSec),
-               paste0("abc=123; Expires= ", expyStr, "; Max-Age= ", expiresSec))
-  # When given as a POSIXct
-  expect_equal(cookieToStr("abc", 123, expiration=expires),
-               paste0("abc=123; Expires= ", expyStr, "; Max-Age= ", expiresSec))
+  expect_cookie(-8)
 })
 
 test_that("remove cookie string works", {
@@ -212,7 +212,7 @@ test_that("cookie encyption fails smoothly", {
   # garbage in, no key
   expect_error({
     decodeCookie(garbage, NULL)
-  }, "not a valid JSON string")
+  }, "(not a valid JSON string|embedded nul in string)")
   # garbage in, key
   expect_error({
     decodeCookie(garbage, asCookieKey(randomCookieKey()))

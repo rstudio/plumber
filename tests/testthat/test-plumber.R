@@ -73,13 +73,16 @@ test_that("plumb accepts a directory with a `plumber.R` file", {
   expect_equal(length(r$endpoints[[1]]), 5)
 
   # errors when no plumber.R found
-  expect_error(plumb(dir = test_path("files/static")), regexp="No plumber.R file found in the specified directory: files/static")
+  expect_error(plumb(dir = test_path("files/static")), regexp="No plumber.R file found in the specified directory: ")
+
   # errors when neither dir is empty and file is not given
   expect_error(plumb(dir=""), regexp="You must specify either a file or directory*")
+
   # reads from working dir if no args
   expect_error(plumb(), regexp="No plumber.R file found in the specified directory: .")
+
   # errors when both dir and file are given
-  expect_error(plumb(file=test_path("files/endpoints.R"), dir=test_path("files")), regexp="You must set either the file or the directory parameter, not both")
+  expect_silent(plumb(file = "endpoints.R", dir = test_path("files")))
 
 })
 
@@ -100,6 +103,12 @@ test_that("plumb() a dir leverages `entrypoint.R`", {
 
 test_that("bad `entrypoint.R`s throw", {
   expect_error(plumb(dir = test_path("files/entrypoint-bad/")), "runnable Plumber router")
+})
+
+test_that("plumb() a dir works with `entrypoint.R` and without `plumber.R`", {
+  r <- plumb(dir = test_path("files/no-plumber/"))
+  expect_equal(length(r$endpoints), 1)
+  expect_equal(length(r$endpoints[[1]]), 1)
 })
 
 test_that("Empty endpoints error", {
@@ -150,14 +159,23 @@ test_that("mounts can be read correctly", {
 
   stat <- PlumberStatic$new(".")
   pr$mount("/static", stat)
+  pr$mount("missing-slashes", stat)
+  pr$mount("/both-slashes/", stat)
+  pr$mount("trailing-slash/", stat)
+  pr$mount("/extra-slash//", stat)
 
-  expect_length(pr$routes, 3)
+  expect_length(pr$routes, 7)
   expect_s3_class(pr$mounts[["/static/"]], "plumberstatic")
+  expect_s3_class(pr$mounts[["/missing-slashes/"]], "plumberstatic")
+  expect_s3_class(pr$mounts[["/both-slashes/"]], "plumberstatic")
+  expect_s3_class(pr$mounts[["/trailing-slash/"]], "plumberstatic")
+  expect_s3_class(pr$mounts[["/extra-slash//"]], "plumberstatic")
   expect_s3_class(pr$mounts[["/mysubpath/"]], "plumber")
 })
 
 test_that("prints correctly", {
-  skip_on_cran()
+  testthat::skip_on_cran()
+  testthat::skip_on_os("windows") # has issues comparing text values
 
   pr <- plumber$new()
   pr$handle("GET", "/nested/path/here", function(){})
@@ -175,28 +193,28 @@ test_that("prints correctly", {
 
   regexps <- c(
     "Plumber router with 2 endpoints, 4 filters, and 2 sub-routers",
-    "Call run\\(\\) on this object",
-    "├──\\[queryString\\]",
-    "├──\\[postBody\\]",
-    "├──\\[cookieParser\\]",
-    "├──\\[sharedSecret\\]",
+    "Call run() on this object",
+    "├──[queryString]",
+    "├──[postBody]",
+    "├──[cookieParser]",
+    "├──[sharedSecret]",
     "├──/nested",
     "│  ├──/path",
-    "│  │  └──/here \\(GET, POST\\)",
+    "│  │  └──/here (GET, POST)",
     "├──/mysubpath",
     "│  │ # Plumber router with 2 endpoints, 4 filters, and 0 sub-routers.",
-    "│  ├──\\[queryString\\]",
-    "│  ├──\\[postBody\\]",
-    "│  ├──\\[cookieParser\\]",
-    "│  ├──\\[sharedSecret\\]",
-    "│  ├──/something \\(POST\\)",
-    "│  └──/ \\(GET\\)",
+    "│  ├──[queryString]",
+    "│  ├──[postBody]",
+    "│  ├──[cookieParser]",
+    "│  ├──[sharedSecret]",
+    "│  ├──/something (POST)",
+    "│  └──/ (GET)",
     "├──/static",
-    "│  │ # Plumber static router serving from directory: \\."
+    "│  │ # Plumber static router serving from directory: ."
   )
 
   for (i in 1:length(regexps)){
-    expect_match(printed[i], regexps[i], info=paste0("on line ", i))
+    expect_match(printed[i], regexps[i], info=paste0("on line ", i), fixed = TRUE)
   }
 
 })

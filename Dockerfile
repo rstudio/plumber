@@ -4,10 +4,11 @@ MAINTAINER Jeff Allen <docker@trestletech.com>
 RUN apt-get update -qq && apt-get install -y \
   git-core \
   libssl-dev \
-  libcurl4-gnutls-dev
+  libcurl4-gnutls-dev \
+  libsodium-dev
 
-## RUN R -e 'install.packages(c("devtools"))'
-## RUN R -e 'devtools::install_github("trestletech/plumber")'
+## RUN R -e 'install.packages(c("remotes"))'
+## RUN R -e 'remotes::install_github("rstudio/plumber")'
 RUN install2.r plumber
 
 EXPOSE 8000
