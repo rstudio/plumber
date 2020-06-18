@@ -41,7 +41,8 @@ knownContentTypes <- list(
   docx='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   dotx='application/vnd.openxmlformats-officedocument.wordprocessingml.template',
   xlam='application/vnd.ms-excel.addin.macroEnabled.12',
-  xlsb='application/vnd.ms-excel.sheet.binary.macroEnabled.12')
+  xlsb='application/vnd.ms-excel.sheet.binary.macroEnabled.12',
+  rds='application/rds')
 
 getContentType <- function(ext, defaultType='application/octet-stream') {
   ct <- knownContentTypes[[tolower(ext)]]
@@ -51,21 +52,12 @@ getContentType <- function(ext, defaultType='application/octet-stream') {
   return(ct)
 }
 
-getCharacterSet <- function(contentType){
-  default <- "UTF-8"
-  if (is.null(contentType)) {
-    return(default)
-  }
-  charsetStart <- attr(
-    gregexpr(".*charset=(.*)", contentType, perl = T)[[1]],
-    "capture.start"
-  )
-  charsetStart <- as.integer(charsetStart)
-  as.character(
-    ifelse(
-      charsetStart > -1,
-      substr(contentType, charsetStart, nchar(contentType)),
-      default
-    )
-  )
+#4x perf improvement when contentType is set
+#' Request character set
+#' @param contentType Request Content-Type header
+#' @return Default to `UTF-8`. Otherwise return `charset` defined in request header.
+#' @export
+getCharacterSet <- function(contentType = NULL){
+  if (is.null(contentType)) return("UTF-8")
+  stri_match_first_regex(paste(contentType,"; charset=UTF-8"), "charset=([^;\\s]*)")[,2]
 }

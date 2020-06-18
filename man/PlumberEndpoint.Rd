@@ -43,6 +43,7 @@ each separate verb/path into its own endpoint, so we just do that.}
 \item \href{#method-canServe}{\code{PlumberEndpoint$canServe()}}
 \item \href{#method-new}{\code{PlumberEndpoint$new()}}
 \item \href{#method-getPathParams}{\code{PlumberEndpoint$getPathParams()}}
+\item \href{#method-getFuncParams}{\code{PlumberEndpoint$getFuncParams()}}
 \item \href{#method-clone}{\code{PlumberEndpoint$clone()}}
 }
 }
@@ -150,6 +151,16 @@ retrieve endpoint path parameters
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getFuncParams"></a>}}
+\if{latex}{\out{\hypertarget{method-getFuncParams}{}}}
+\subsection{Method \code{getFuncParams()}}{
+retrieve endpoint expression parameters
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$getFuncParams()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

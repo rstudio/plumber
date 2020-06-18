@@ -73,13 +73,16 @@ test_that("plumb accepts a directory with a `plumber.R` file", {
   expect_equal(length(r$endpoints[[1]]), 5)
 
   # errors when no plumber.R found
-  expect_error(plumb(dir = test_path("files/static")), regexp="No plumber.R file found in the specified directory: files/static")
+  expect_error(plumb(dir = test_path("files/static")), regexp="No plumber.R file found in the specified directory: ")
+
   # errors when neither dir is empty and file is not given
   expect_error(plumb(dir=""), regexp="You must specify either a file or directory*")
+
   # reads from working dir if no args
   expect_error(plumb(), regexp="No plumber.R file found in the specified directory: .")
+
   # errors when both dir and file are given
-  expect_error(plumb(file=test_path("files/endpoints.R"), dir=test_path("files")), regexp="You must set either the file or the directory parameter, not both")
+  expect_silent(plumb(file = "endpoints.R", dir = test_path("files")))
 
 })
 
@@ -100,6 +103,12 @@ test_that("plumb() a dir leverages `entrypoint.R`", {
 
 test_that("bad `entrypoint.R`s throw", {
   expect_error(plumb(dir = test_path("files/entrypoint-bad/")), "runnable Plumber router")
+})
+
+test_that("plumb() a dir works with `entrypoint.R` and without `plumber.R`", {
+  r <- plumb(dir = test_path("files/no-plumber/"))
+  expect_equal(length(r$endpoints), 1)
+  expect_equal(length(r$endpoints[[1]]), 1)
 })
 
 test_that("Empty endpoints error", {
