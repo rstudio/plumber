@@ -1,6 +1,5 @@
-#' @param imageFun The function to call to setup the image device (e.g. `png`)
-#' @param args A list of supplemental arguments to be passed into jpeg()
-#' @importFrom grDevices dev.off jpeg png
+#' @param imageFun The function to call to setup the image device (Ex: `grDevices::png()`)
+#' @param args A list of supplemental arguments to be passed into `imageFun()`
 #' @noRd
 render_image <- function(imageFun, args=NULL){
   list(
@@ -12,7 +11,7 @@ render_image <- function(imageFun, args=NULL){
       do.call(imageFun, finalArgs)
     },
     postexec = function(value, req, res, data){
-      dev.off()
+      grDevices::dev.off()
       on.exit({unlink(data$file)}, add = TRUE)
       con <- file(data$file, "rb")
       on.exit({close(con)}, add = TRUE)
@@ -28,4 +27,8 @@ render_jpeg <- function(args){
 
 render_png <- function(args){
   render_image(grDevices::png, args)
+}
+
+render_svg <- function(args){
+  render_image(grDevices::svg, args)
 }
