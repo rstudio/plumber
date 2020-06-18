@@ -12,7 +12,7 @@ test_that("CSV serializes properly", {
   d <- data.frame(a=1, b=2, c="hi", na=NA)
   val <- serializer_csv()(d, data.frame(), PlumberResponse$new(), stop)
   expect_equal(val$status, 200L)
-  expect_equal(val$headers$`Content-Type`, "text/plain; charset=utf-8")
+  expect_equal(val$headers$`Content-Type`, "text/plain; charset=UTF-8")
   expect_equal(val$body, readr::format_csv(d, na = "NA"))
 
   d <- data.frame(a=1, b=2, c="hi", na=NA)
