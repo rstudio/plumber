@@ -42,6 +42,8 @@ plumber 0.5.0
 
 ### New features
 
+* Support HTTP 405 Code. (@meztez)
+
 * Added Swagger support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez, #532) 
 
 * Added support for promises in endpoints, filters, and hooks. (#248)
