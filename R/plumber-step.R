@@ -167,7 +167,7 @@ PlumberEndpoint <- R6Class(
         if (req$REQUEST_METHOD %in% self$verbs) {
           return(TRUE)
         } else {
-          req$methodAllowed <- FALSE
+          req$methodNotAllowed <- TRUE
           req$verbsAllowed <- c(req$verbsAllowed, self$verbs)
         }
       }
