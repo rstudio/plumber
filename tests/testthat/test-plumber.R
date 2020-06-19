@@ -352,7 +352,7 @@ test_that("invalid hooks err", {
 test_that("handle invokes correctly", {
   pr <- plumber$new()
   pr$handle("GET", "/trailslash", function(){ "getter" })
-  pr$handle("POST", "/trailslash/", function(){ "poster" })
+  pr$handle("POST", "/trailslashp/", function(){ "poster" })
 
   expect_equal(pr$route(make_req("GET", "/trailslash"), PlumberResponse$new()), "getter")
   res <- PlumberResponse$new()
@@ -360,15 +360,15 @@ test_that("handle invokes correctly", {
   expect_equal(res$status, 404)
   res <- PlumberResponse$new()
   pr$route(make_req("POST", "/trailslash"), res) # Wrong verb
-  expect_equal(res$status, 404)
+  expect_equal(res$status, 405)
 
-  expect_equal(pr$route(make_req("POST", "/trailslash/"), PlumberResponse$new()), "poster")
+  expect_equal(pr$route(make_req("POST", "/trailslashp/"), PlumberResponse$new()), "poster")
   res <- PlumberResponse$new()
-  pr$route(make_req("POST", "/trailslash"), res) # w/o trailing slash
+  pr$route(make_req("POST", "/trailslashp"), res) # w/o trailing slash
   expect_equal(res$status, 404)
   res <- PlumberResponse$new()
-  pr$route(make_req("GET", "/trailslash/"), res) # Wrong verb
-  expect_equal(res$status, 404)
+  pr$route(make_req("GET", "/trailslashp/"), res) # Wrong verb
+  expect_equal(res$status, 405)
 })
 
 test_that("handle with an endpoint works", {

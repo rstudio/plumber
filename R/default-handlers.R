@@ -1,5 +1,8 @@
 #' @include plumber.R
 default404Handler <- function(req, res){
+  if (res$status == 405L) {
+    return(list(error = "405 - Method Not Allowed"))
+  }
   res$status <- 404
   list(error="404 - Resource Not Found")
 }
