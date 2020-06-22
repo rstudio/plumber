@@ -8,6 +8,7 @@ Authors@R: c(
   person(family = "RStudio", role = c("cph", "fnd")),
   person("Jeff", "Allen", role="cre", email="cran@trestletech.com"),
   person("Barret", "Schloerke", role="aut", email="barret@rstudio.com"),
+  person("Bruno", "Tremblay", role="ctb", email="bruno.tremblay@lacapitale.com"),
   person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"),
   person("Sebastiaan", "Vandewoude", role="ctb", email="sebastiaanvandewoude@gmail.com"),
   person(family="SmartBear Software", role=c("ctb", "cph"), comment="swagger-ui"))
