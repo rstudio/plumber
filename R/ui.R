@@ -18,16 +18,17 @@ mountUI <- function(pr, host, port, ui, callback, ...) {
   mountOpenAPI(pr, api_url)
 
   # Mount UIs
-  if (isTRUE(ui)) ui <- getOption("plumber.ui", "Swagger")
-  for (interface in ui) {
-    ui_mount <- .globals$interfaces[[interface]]
-    if (!is.null(ui_mount)) {
-      ui_url <- ui_mount(pr, api_url,...)
-      message("Running ", interface, " UI at ", ui_url, sep = "")
-    } else {
-      message("Ignored unknown user interface ", interface,". Supports ",
-              paste0('"', names(.globals$interfaces), '"', collapse = ", "))
-    }
+  if (isTRUE(ui)) {
+    ui <- getOption("plumber.ui", "Swagger")
+  }
+  interface <- ui[1]
+  ui_mount <- .globals$interfaces[[interface]]
+  if (!is.null(ui_mount)) {
+    ui_url <- ui_mount(pr, api_url,...)
+    message("Running ", interface, " UI at ", ui_url, sep = "")
+  } else {
+    message("Ignored unknown user interface ", interface,". Supports ",
+            paste0('"', names(.globals$interfaces), '"', collapse = ", "))
   }
 
   # Use callback when defined
@@ -49,8 +50,8 @@ mountOpenAPI <- function(pr, api_server_url) {
   openapi_fun <- function(req) {
     # use the HTTP_REFERER so RSC can find the swagger location to ask
     ## (can't directly ask for 127.0.0.1)
-    if (isFALSE(getOption("plumber.apiURL", FALSE)) &&
-        isFALSE(getOption("plumber.apiHost", FALSE))) {
+    if (is.null(getOption("plumber.apiURL")) &&
+        is.null(getOption("plumber.apiHost"))) {
       if (is.null(req$HTTP_REFERER)) {
         # Prevent leaking host and port if option is not set
         api_server_url <- character(1)

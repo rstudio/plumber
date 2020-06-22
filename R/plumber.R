@@ -265,7 +265,7 @@ plumber <- R6Class(
     #'
     #' When `ui` is used, multiple handles will be added to `plumber` router.
     #' OpenAPI json file will be served on paths `/openapi.json`.
-    #' UIs will be served on paths `/__{ui}__/index.html` and `/__{ui}__/`.
+    #' UI will be served on path `/__{ui}__/index.html` and `/__{ui}__/`.
     run = function(
       host = '127.0.0.1',
       port = getOption('plumber.port'),
@@ -288,7 +288,7 @@ plumber <- R6Class(
         setwd(dirname(private$filename))
       }
 
-      if (!isFALSE(ui)) mountUI(self, host, port, ui, callback, ...)
+      if (isTRUE(ui) || is.character(ui)) mountUI(self, host, port, ui, callback, ...)
 
       on.exit(private$runHooks("exit"), add = TRUE)
 
