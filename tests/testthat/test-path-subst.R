@@ -115,46 +115,6 @@ test_that("multiple variations in path works nicely with function args detection
 
   # Check when detection is not provided
   pathDef <- "/<var0:str>/<var1:chr*>/<var2:[int]>/<var3>/<var4:*>/<var5:[*>/<var6:[]*>/<var7:[]>/<var8*>"
-  regex <- suppressWarnings(createPathRegex(pathDef))
-  expect_equal(regex$types, c("string", "string", "integer", "string", "string", "string", "string", "string"))
-  expect_equal(regex$areArrays, c(FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, TRUE))
-
-  # Check when no args in endpoint function
-  dummy <- function() {}
-  funcParams <- getArgsMetadata(dummy)
-  regex <- suppressWarnings(createPathRegex(pathDef, funcParams))
-  expect_equal(regex$types, c("string", "string", "integer", "string", "string", "string", "string", "string"))
-  expect_equal(regex$areArrays, c(FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, TRUE))
-
-  # Mix and match
-  dummy <- function(var0 = 420.69,
-                    var1,
-                    var2 = c(1L, 2L),
-                    var3 = rnorm,
-                    var4 = NULL,
-                    var5 = c(TRUE, FALSE),
-                    var6 = list(name = c("luke", "bob"), lastname = c("skywalker", "ross")),
-                    var7 = .GlobalEnv,
-                    var8 = list(a = 2, b = mean, c = .GlobalEnv)) {}
-  funcParams <- getArgsMetadata(dummy)
-  regex <- suppressWarnings(createPathRegex(pathDef, funcParams))
-  expect_equal(regex$types, c("string", "string", "integer", "string", "string", "boolean", "string", "string"))
-  expect_equal(regex$areArrays, c(FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, TRUE))
-
-  # Throw sand at it
-  pathDef <- "/<>/<:chr*>/<:chr>/<henry:[IV]>"
-  regex <- suppressWarnings(createPathRegex(pathDef, funcParams))
-  expect_equivalent(regex$types, "string")
-  expect_equal(regex$names, "henry")
-  # Since type IV is converted to string, areArrays can be TRUE
-  expect_equal(regex$areArrays, TRUE)
-
-})
-
-test_that("multiple variations in path works nicely with function args detection", {
-
-  # Check when detection is not provided
-  pathDef <- "/<var0:str>/<var1:chr*>/<var2:[int]>/<var3>/<var4:*>/<var5:[*>/<var6:[]*>/<var7:[]>/<var8*>"
   expect_warning(regex <- createPathRegex(pathDef), "Unrecognized type")
   expect_equal(regex$types, c("string", "string", "integer", "string", "string", "string", "string", "string"))
   expect_equal(regex$areArrays, c(FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, TRUE))
@@ -183,7 +143,7 @@ test_that("multiple variations in path works nicely with function args detection
 
   # Throw sand at it
   pathDef <- "/<>/<:chr*>/<:chr>/<henry:[IV]>"
-  regex <- suppressWarnings(createPathRegex(pathDef, funcParams))
+  expect_warning(regex <- createPathRegex(pathDef, funcParams), "Unrecognized type")
   expect_equivalent(regex$types, "string")
   expect_equal(regex$names, "henry")
   # Since type IV is converted to string, areArrays can be TRUE
