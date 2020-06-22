@@ -164,6 +164,24 @@ parser_octet <- function(...) {
 
 
 
+#' YAML
+#' @rdname parsers
+#' @export
+parser_yaml <- function(...) {
+  if (!requireNamespace("yaml", quietly = TRUE)) {
+    stop("yaml must be installed for the yaml parser to work")
+  }
+  function(value, content_type = NULL, ...) {
+    charset <- getCharacterSet(content_type)
+    value <- rawToChar(value)
+    Encoding(value) <- charset
+    yaml::yaml.load(value)
+  }
+}
+
+
+
+
 addParsers_onLoad <- function() {
   addParser("json", parser_json, "application/json")
   addParser("query", parser_query, "application/x-www-form-urlencoded")
@@ -171,4 +189,5 @@ addParsers_onLoad <- function() {
   addParser("rds", parser_rds, "application/rds")
   addParser("multi", parser_multi, "multipart/form-data")
   addParser("octet", parser_octet, "application/octet")
+  addParser("yaml", parser_yaml, "application/x-yaml")
 }

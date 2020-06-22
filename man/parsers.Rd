@@ -8,6 +8,7 @@
 \alias{parser_rds}
 \alias{parser_multi}
 \alias{parser_octet}
+\alias{parser_yaml}
 \title{Plumber Parsers}
 \usage{
 parser_json(...)
@@ -21,6 +22,8 @@ parser_rds(...)
 parser_multi(...)
 
 parser_octet(...)
+
+parser_yaml(...)
 }
 \arguments{
 \item{...}{Raw values and headers are passed there.}
