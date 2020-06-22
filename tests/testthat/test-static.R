@@ -4,7 +4,7 @@ context("Static")
 
 pr <- PlumberStatic$new(test_path("files/static"))
 
-test_that("the response is reurned", {
+test_that("the response is returned", {
   res <- PlumberResponse$new()
   val <- pr$route(make_req("GET", "/test.txt"), res)
   expect_true(inherits(val, "PlumberResponse"))
