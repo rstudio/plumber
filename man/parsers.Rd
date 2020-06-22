@@ -11,22 +11,19 @@
 \alias{parser_yaml}
 \title{Plumber Parsers}
 \usage{
-parser_json(...)
+parser_json()
 
-parser_query(...)
+parser_query()
 
-parser_text(...)
+parser_text()
 
-parser_rds(...)
+parser_rds()
 
-parser_multi(...)
+parser_multi()
 
-parser_octet(...)
+parser_octet()
 
-parser_yaml(...)
-}
-\arguments{
-\item{...}{Raw values and headers are passed there.}
+parser_yaml()
 }
 \description{
 Parsers are used in Plumber to transform the raw body content received

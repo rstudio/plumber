@@ -29,7 +29,7 @@ NULL
 #' to build parser are `value`, `content_type` and `filename` (only available
 #' in `multipart-form` body).
 #' ```r
-#' parser <- function(...) {
+#' parser <- function() {
 #'   function(value, content_type = "ct", filename, ...) {
 #'     # do something with raw value
 #'   }
@@ -40,7 +40,7 @@ NULL
 #' plumber endpoint function args.
 #'
 #' @examples
-#' parser_json <- function(...) {
+#' parser_json <- function() {
 #'   function(value, content_type = "application/json", ...) {
 #'     charset <- getCharacterSet(content_type)
 #'     value <- rawToChar(value)
@@ -68,9 +68,8 @@ addParser <- function(name, parser, pattern = NULL) {
 
 #' JSON
 #' @rdname parsers
-#' @param ... Raw values and headers are passed there.
 #' @export
-parser_json <- function(...) {
+parser_json <- function() {
   function(value, content_type = NULL, ...) {
     charset <- getCharacterSet(content_type)
     value <- rawToChar(value)
@@ -85,7 +84,7 @@ parser_json <- function(...) {
 #' QUERY STRING
 #' @rdname parsers
 #' @export
-parser_query <- function(...) {
+parser_query <- function() {
   function(value, content_type = NULL, ...) {
     charset <- getCharacterSet(content_type)
     value <- rawToChar(value)
@@ -100,7 +99,7 @@ parser_query <- function(...) {
 #' TEXT
 #' @rdname parsers
 #' @export
-parser_text <- function(...) {
+parser_text <- function() {
   function(value, content_type = NULL, ...) {
     charset <- getCharacterSet(content_type)
     value <- rawToChar(value)
@@ -115,7 +114,7 @@ parser_text <- function(...) {
 #" RDS
 #' @rdname parsers
 #' @export
-parser_rds <- function(...) {
+parser_rds <- function() {
   function(value, filename, ...) {
     tmp <- tempfile("plumb", fileext = paste0("_", basename(filename)))
     on.exit(file.remove(tmp), add = TRUE)
@@ -131,7 +130,7 @@ parser_rds <- function(...) {
 #' @rdname parsers
 #' @export
 #' @importFrom webutils parse_multipart
-parser_multi <- function(...) {
+parser_multi <- function() {
   function(value, content_type, ...) {
     if (!stri_detect_fixed(content_type, "boundary=", case_insensitive = TRUE))
       stop("No boundary found in multipart content-type header: ", content_type)
@@ -152,9 +151,8 @@ parser_multi <- function(...) {
 
 #' OCTET
 #' @rdname parsers
-#' @param ... Raw values and headers are passed there.
 #' @export
-parser_octet <- function(...) {
+parser_octet <- function() {
   function(value, filename = NULL, ...) {
     attr(value, "filename") <- filename
     return(value)
@@ -167,7 +165,7 @@ parser_octet <- function(...) {
 #' YAML
 #' @rdname parsers
 #' @export
-parser_yaml <- function(...) {
+parser_yaml <- function() {
   if (!requireNamespace("yaml", quietly = TRUE)) {
     stop("yaml must be installed for the yaml parser to work")
   }
