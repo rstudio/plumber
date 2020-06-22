@@ -50,6 +50,8 @@ test_that("Test text parser", {
 })
 
 test_that("Test yaml parser", {
+  skip_if_not_installed("yaml")
+
   r_object <- list(a=1,b=list(c=2,d=list(e=3,f=4:6)))
   expect_equal(parseBody(charToRaw(yaml::as.yaml(r_object)), "application/x-yaml"), r_object)
 })
