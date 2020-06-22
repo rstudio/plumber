@@ -23,6 +23,8 @@ test_that("YAML serializes properly", {
 })
 
 test_that("Errors call error handler", {
+  skip_if_not_installed("yaml")
+
   errors <- 0
   errHandler <- function(req, res, err){
     errors <<- errors + 1
