@@ -70,7 +70,6 @@ Collate:
     'openapi-types.R'
     'parsers-body.R'
     'paths.R'
-    'plumber-magrittr-api.R'
     'plumber-options.R'
     'plumber-response.R'
     'plumber-static.R'
