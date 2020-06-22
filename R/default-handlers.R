@@ -1,6 +1,8 @@
 #' @include plumber.R
 default404Handler <- function(req, res){
-  if (res$status == 405L) {
+  if (isTRUE(req$methodNotAllowed)) {
+    res$status = 405L
+    res$setHeader("Allow", paste(req$verbsAllowed, collapse = ", "))
     return(list(error = "405 - Method Not Allowed"))
   }
   res$status <- 404

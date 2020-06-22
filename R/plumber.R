@@ -694,10 +694,6 @@ plumber <- R6Class(
             }
           }
         }
-        if (isTRUE(req$methodNotAllowed)) {
-          res$status = 405L
-          res$setHeader("Allow", paste(req$verbsAllowed, collapse = ", "))
-        }
         return(NULL)
       }
 

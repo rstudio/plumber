@@ -164,11 +164,12 @@ PlumberEndpoint <- R6Class(
     #' @return a logical. `TRUE` when endpoint can serve request.
     canServe = function(req){
       if (!is.na(stri_match_first_regex(req$PATH_INFO, private$regex$regex)[1,1])) {
+        req$verbsAllowed <- c(req$verbsAllowed, self$verbs)
         if (req$REQUEST_METHOD %in% self$verbs) {
+          req$methodNotAllowed <- NULL
           return(TRUE)
         } else {
           req$methodNotAllowed <- TRUE
-          req$verbsAllowed <- c(req$verbsAllowed, self$verbs)
         }
       }
       return(FALSE)
