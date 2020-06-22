@@ -42,7 +42,6 @@ Suggests:
     visNetwork,
     analogsea (>= 0.7.0),
     later,
-    yaml,
     redoc
 Remotes:
     meztez/redoc,
@@ -78,7 +77,6 @@ Collate:
     'serializer-htmlwidget.R'
     'serializer-rds.R'
     'serializer-xml.R'
-    'serializer-yaml.R'
     'serializer.R'
     'session-cookie.R'
     'ui.R'

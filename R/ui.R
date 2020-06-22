@@ -14,7 +14,7 @@ mountUI <- function(pr, host, port, ui, callback, ...) {
     )
   )
 
-  # Mount openAPI spec paths openapi.json and openapi.yaml
+  # Mount openAPI spec paths openapi.json
   mountOpenAPI(pr, api_url)
 
   # Mount UIs
@@ -65,11 +65,8 @@ mountOpenAPI <- function(pr, api_server_url) {
 
   }
   # http://spec.openapis.org/oas/v3.0.3#document-structure
-  # "It is RECOMMENDED that the root OpenAPI document be named: openapi.json or openapi.yaml."
+  # "It is RECOMMENDED that the root OpenAPI document be named: openapi.json"
   pr$handle("GET", "/openapi.json", openapi_fun, serializer = serializer_unboxed_json())
-  if (requireNamespace("yaml", quietly = TRUE)) {
-    pr$handle("GET", "/openapi.yaml", openapi_fun, serializer = serializer_yaml())
-  }
 
   return(invisible())
 

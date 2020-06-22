@@ -224,7 +224,7 @@ Other valid values are \code{FALSE} and \code{Redoc}.}
 \code{port} does not need to be explicitly assigned.
 
 When \code{ui} is used, multiple handles will be added to \code{plumber} router.
-OpenAPI json file will be served on paths \verb{/openapi.json} and \verb{/openapi.yaml}.
+OpenAPI json file will be served on paths \verb{/openapi.json}.
 UIs will be served on paths \verb{/__\{ui\}__/index.html} and \verb{/__\{ui\}__/}.
 }
 

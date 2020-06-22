@@ -264,7 +264,7 @@ plumber <- R6Class(
     #' `port` does not need to be explicitly assigned.
     #'
     #' When `ui` is used, multiple handles will be added to `plumber` router.
-    #' OpenAPI json file will be served on paths `/openapi.json` and `/openapi.yaml`.
+    #' OpenAPI json file will be served on paths `/openapi.json`.
     #' UIs will be served on paths `/__{ui}__/index.html` and `/__{ui}__/`.
     run = function(
       host = '127.0.0.1',

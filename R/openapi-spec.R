@@ -48,19 +48,19 @@ toOpenAPI <- function(plumber, output = NULL) {
 fromOpenAPI <- function(openapi, format = c("json", "yaml")) {
   format <- match.arg(format)
   spec <- new.env()
-  if (tools::file_ext(openapi) == "yaml" || format == "yaml") {
-    if (!requireNamespace("yaml", quietly = TRUE)) {
-      stop("The yaml package is not available but is required in order to parse yaml specifications.\ninstall.packages(\"yaml\")",
-           call. = FALSE)
-    }
-    if (stringi::stri_detect_fixed(openapi, "\n")) {
-      s <- yaml::yaml.load(openapi)
-    } else {
-      s <- yaml::read_yaml(openapi)
-    }
-  } else {
+  # if (tools::file_ext(openapi) == "yaml" || format == "yaml") {
+  #   if (!requireNamespace("yaml", quietly = TRUE)) {
+  #     stop("The yaml package is not available but is required in order to parse yaml specifications.\ninstall.packages(\"yaml\")",
+  #          call. = FALSE)
+  #   }
+  #   if (stringi::stri_detect_fixed(openapi, "\n")) {
+  #     s <- yaml::yaml.load(openapi)
+  #   } else {
+  #     s <- yaml::read_yaml(openapi)
+  #   }
+  # } else {
     s <- jsonlite::fromJSON(openapi)
-  }
+  # }
   mapply(assign, names(s), s, MoreArgs = list(envir = spec))
   return(spec)
   #stubSpec(spec)
