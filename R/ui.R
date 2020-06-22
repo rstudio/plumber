@@ -58,6 +58,8 @@ mountOpenAPI <- function(pr, api_server_url) {
       else {
         # Use HTTP_REFERER as fallback
         api_server_url <- req$HTTP_REFERER
+        api_server_url <- sub("index\\.html$", "", api_server_url)
+        api_server_url <- sub("__[swagerdoc]+__/$", "", api_server_url)
       }
     }
 
