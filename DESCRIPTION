@@ -63,6 +63,7 @@ Collate:
     'json.R'
     'new-rstudio-project.R'
     'paths.R'
+    'plumber-options.R'
     'plumber-static.R'
     'plumber-step.R'
     'post-parsers.R'
