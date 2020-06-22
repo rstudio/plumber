@@ -42,7 +42,7 @@ plumber 0.5.0
 
 ### New features
 
-* Document plumber options. Add `setPlumberOptions` and `getPlumberOptions`. (@meztez)
+* Document plumber options. Add `setPlumberOptions` and `getPlumberOptions`. (@meztez, #555)
 
 * Added Swagger support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez, #532) 
 
