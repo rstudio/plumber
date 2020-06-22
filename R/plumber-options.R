@@ -15,8 +15,8 @@
 #'
 #' @section Options:
 #' There are a number of global options that affect Plumber's behavior. These can
-#' be set globally with \code{\link{options}} or with \code{\link{setPlumberOptions}}. Current values
-#' can be retrieved with \code{\link{getOption}} or \code{\link{getPlumberOptions}}.
+#' be set globally with \code{\link{options}} or with \code{\link{optionsPlumber}}. Current values
+#' can be retrieved with \code{\link{getOption}} or \code{\link{optionsPlumber}} without arguments.
 #'
 #' \describe{
 #' \item{plumber.apiHost (defaults to `host` defined by `run` method, or an empty string
@@ -49,8 +49,11 @@
 #' @param port see \code{\link{plumber-options}}
 #' @param sharedSecret see \code{\link{plumber-options}}
 #' @param swagger.url see \code{\link{plumber-options}}
+#' @details
+#' Sets plumber options. Call without arguments to get current
+#' values.
 #' @export
-setPlumberOptions <- function(
+optionsPlumber <- function(
   apiHost              = getOption("plumber.apiHost"),
   debug                = getOption("plumber.debug"),
   maxRequestSize       = getOption("plumber.maxRequestSize"),
@@ -59,6 +62,20 @@ setPlumberOptions <- function(
   sharedSecret         = getOption("plumber.sharedSecret"),
   swagger.url          = getOption("plumber.swagger.url")
 ) {
+  if (all(
+    missing(apiHost),
+    missing(debug),
+    missing(maxRequestSize),
+    missing(postBody),
+    missing(port),
+    missing(sharedSecret),
+    missing(swagger.url)
+    )) {
+    options_names <- grep("^plumber", names(options()), value = TRUE)
+    set_options <- lapply(options_names, getOption)
+    names(set_options) <- options_names
+    return(set_options)
+  }
   options(
     plumber.apiHost = apiHost,
     plumber.debug = debug,
@@ -68,13 +85,4 @@ setPlumberOptions <- function(
     plumber.sharedSecret = sharedSecret,
     plumber.swagger.url = swagger.url
   )
-}
-
-#' @export
-#' @rdname setPlumberOptions
-getPlumberOptions <- function() {
-  options_names <- grep("^plumber", names(options()), value = TRUE)
-  ret <- lapply(options_names, getOption)
-  names(ret) <- options_names
-  ret
 }

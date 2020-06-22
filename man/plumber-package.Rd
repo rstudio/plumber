@@ -14,8 +14,8 @@ Gives the ability to automatically generate and serve an HTTP API
 \section{Options}{
 
 There are a number of global options that affect Plumber's behavior. These can
-be set globally with \code{\link{options}} or with \code{\link{setPlumberOptions}}. Current values
-can be retrieved with \code{\link{getOption}} or \code{\link{getPlumberOptions}}.
+be set globally with \code{\link{options}} or with \code{\link{optionsPlumber}}. Current values
+can be retrieved with \code{\link{getOption}} or \code{\link{optionsPlumber}} without arguments.
 
 \describe{
 \item{plumber.apiHost (defaults to \code{host} defined by \code{run} method, or an empty string
