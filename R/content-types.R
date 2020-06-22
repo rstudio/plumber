@@ -52,7 +52,10 @@ getContentType <- function(ext, defaultType='application/octet-stream') {
   return(ct)
 }
 
-#4x perf improvement when contentType is set
+#' Request character set
+#' @param contentType Request Content-Type header
+#' @return Default to `UTF-8`. Otherwise return `charset` defined in request header.
+#' @export
 getCharacterSet <- function(contentType = NULL){
   if (is.null(contentType)) return("UTF-8")
   stri_match_first_regex(paste(contentType,"; charset=UTF-8"), "charset=([^;\\s]*)")[,2]

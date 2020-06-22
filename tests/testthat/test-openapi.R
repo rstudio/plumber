@@ -366,3 +366,9 @@ test_that("custom spec works", {
   expect_equal(class(spec$openapi), "character")
 })
 
+test_that("priorize works as expected", {
+  expect_identical("abc", priorizeProperty(structure("zzz", default = TRUE), NULL, "abc"))
+  expect_identical(NULL, priorizeProperty(NULL, NULL, NULL))
+  expect_identical(structure("zzz", default = TRUE), priorizeProperty(structure("zzz", default = TRUE), NULL, NA))
+  expect_identical(NULL, priorizeProperty())
+})

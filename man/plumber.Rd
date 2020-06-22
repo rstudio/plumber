@@ -5,7 +5,7 @@
 \alias{plumber}
 \title{Plumber Router}
 \usage{
-plumb(file, dir = ".")
+plumb(file = NULL, dir = ".")
 }
 \arguments{
 \item{file}{The file to parse as the plumber router definition.}

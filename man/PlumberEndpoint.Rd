@@ -72,15 +72,13 @@ retrieve endpoint typed parameters
 \subsection{Method \code{canServe()}}{
 ability to serve request
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$canServe(req, res)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$canServe(req)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{req}}{a request object}
-
-\item{\code{res}}{a response object}
 }
 \if{html}{\out{</div>}}
 }

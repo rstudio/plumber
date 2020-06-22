@@ -4,6 +4,11 @@ test_that("JSON is consumed on POST", {
   expect_equal(parseBody('{"a":"1"}', content_type = NULL), list(a = "1"))
 })
 
+test_that("ending in `==` does not produce a unexpected key", {
+  # See https://github.com/rstudio/plumber/issues/463
+  expect_equal(parseBody("randomcharshere==", content_type = NULL), list())
+})
+
 test_that("Query strings on post are handled correctly", {
   expect_equivalent(parseBody("a="), list()) # It's technically a named list()
   expect_equal(parseBody("a=1&b=&c&d=1", content_type = NULL), list(a="1", d="1"))
@@ -37,4 +42,21 @@ test_that("filter passes on content-type", {
     expect_output(postBodyFilter(req), "text/html; charset=testset"),
     .env = "plumber"
   )
+})
+
+# parsers
+test_that("Test text parser", {
+  expect_equal(parseBody("Ceci est un texte.", "text/html"), "Ceci est un texte.")
+})
+
+test_that("Test multipart parser", {
+
+  bin_file <- test_path("files/multipart-form.bin")
+  body <- readBin(bin_file, what = "raw", n = file.info(bin_file)$size)
+  parsed_body <- parseBody(body, "multipart/form-data; boundary=----WebKitFormBoundaryMYdShB9nBc32BUhQ")
+
+  expect_equal(names(parsed_body), c("json", "img1", "img2", "rds"))
+  expect_equal(parsed_body[["rds"]], women)
+  expect_equal(attr(parsed_body[["img1"]], "filename"), "avatar2-small.png")
+  expect_equal(parsed_body[["json"]], list(a=2,b=4,c=list(w=3,t=5)))
 })

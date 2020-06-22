@@ -10,30 +10,32 @@ queryStringFilter <- function(req){
 }
 
 #' @noRd
-#' @importFrom httpuv decodeURIComponent
 parseQS <- function(qs){
 
   if (is.null(qs) || length(qs) == 0L || qs == "") {
     return(list())
   }
 
+  # Looked into using webutils::parse_query()
+  # Currently not pursuing `parse_query` as it does not handle Encoding issues handled below
+  # (Combining keys are also not handled by `parse_query`)
+
   qs <- stri_replace_first_regex(qs, "^[?]", "")
-  #qs <- stri_replace_all_fixed(qs, "+", " ")
 
   args <- stri_split_fixed(qs, "&", omit_empty = TRUE)[[1L]]
   kv <- lapply(args, function(x) {
     # returns utf8 strings
-    decodeURIComponent(stri_split_fixed(x, "=", omit_empty = TRUE)[[1]])
+    httpuv::decodeURIComponent(stri_split_fixed(x, "=", omit_empty = TRUE)[[1]])
   })
-  kv <- kv[lengths(kv) == 2] # Ignore incompletes
+  kv <- kv[vapply(kv, length, numeric(1)) == 2] # Ignore incompletes
 
   if (length(kv) == 0) {
     # return a blank list of args if there is nothing to parse
     return(list())
   }
 
-  k <- vapply(kv, "[", character(1), 1)
-  kenc <- unique(Encoding(k))
+  keys <- vapply(kv, `[`, character(1), 1)
+  kenc <- unique(Encoding(keys))
   if (any(kenc != "unknown")) {
     # https://github.com/rstudio/plumber/pull/314#discussion_r239992879
     non_ascii <- setdiff(kenc, "unknown")
@@ -43,11 +45,38 @@ parseQS <- function(qs){
     )
   }
 
-  v <- lapply(kv, "[", 2)
-  # If duplicates, combine
-  v <- sapply(unique(k), function(x) do.call(c, v[x == k]), simplify = FALSE)
+  vals <- lapply(kv, `[`, 2)
 
-  return(v)
+  # If duplicates, combine
+  unique_keys <- unique(keys)
+
+  # equivalent code output, `split` is much faster with larger objects
+  # Testing on personal machine had a breakpoint around 150 letters as query parameters
+  ## n <- 150
+  ## k <- sample(letters, n, replace = TRUE)
+  ## v <- as.list(sample(1L, n, replace = TRUE))
+  ## microbenchmark::microbenchmark(
+  ##   split = {
+  ##     lapply(split(v, k), function(x) unname(unlist(x)))
+  ##   },
+  ##   not_split = {
+  ##     lapply(unique(k), function(x) {
+  ##       unname(unlist(v[k == x]))
+  ##     })
+  ##   }
+  ## )
+  vals <-
+    if (length(unique_keys) > 150) {
+      lapply(split(vals, keys), function(items) unname(unlist(items)))
+    } else {
+      # n < 150
+      lapply(unique_keys, function(key) {
+        unname(unlist(vals[keys == key]))
+      })
+    }
+  names(vals) <- unique_keys
+
+  return(vals)
 }
 
 createPathRegex <- function(pathDef, funcParams = NULL){
@@ -74,13 +103,13 @@ createPathRegex <- function(pathDef, funcParams = NULL){
     )
   }
 
-  types <- stri_replace_all(match[,3], "$1", regex = "^\\[([^\\]]*)\\]$")
+  plumberTypes <- stri_replace_all(match[,3], "$1", regex = "^\\[([^\\]]*)\\]$")
   if (length(funcParams) > 0) {
     # Override with detection of function args if type not found in map
-    idx <- !(types %in% names(dataTypesMap))
-    types[idx] <- sapply(funcParams, `[[`, "type")[names[idx]]
+    idx <- !(plumberTypes %in% names(dataTypesMap))
+    plumberTypes[idx] <- sapply(funcParams, `[[`, "type")[names[idx]]
   }
-  types <- plumberToDataType(types, inPath = TRUE)
+  dataTypes <- plumberToDataType(plumberTypes, inPath = TRUE)
 
   areArrays <- stri_detect_regex(match[,3], "^\\[[^\\]]*\\]$")
   if (length(funcParams) > 0) {
@@ -88,12 +117,11 @@ createPathRegex <- function(pathDef, funcParams = NULL){
     idx <- (is.na(areArrays) | !areArrays)
     areArrays[idx] <- sapply(funcParams, `[[`, "isArray")[names[idx]]
   }
-
-  areArrays <- areArrays & types %in% filterDataTypes(TRUE, "arraySupport")
+  areArrays <- areArrays & dataTypes %in% filterDataTypes(TRUE, "arraySupport")
   areArrays[is.na(areArrays)] <- defaultIsArray
 
   pathRegex <- pathDef
-  regexps <- typesToRegexps(types, areArrays)
+  regexps <- typesToRegexps(dataTypes, areArrays)
   for (regex in regexps) {
     pathRegex <- stri_replace_first_regex(
       pathRegex,
@@ -104,9 +132,9 @@ createPathRegex <- function(pathDef, funcParams = NULL){
 
   list(
     names = names,
-    types = types,
+    types = dataTypes,
     regex = paste0("^", pathRegex, "$"),
-    converters = typesToConverters(types, areArrays),
+    converters = typesToConverters(dataTypes, areArrays),
     areArrays = areArrays
   )
 }

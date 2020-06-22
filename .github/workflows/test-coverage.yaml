@@ -20,6 +20,14 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@master
 
+      # Install Cairo system dependencies
+      # used for svg testing
+      - name: Mac systemdeps
+        if: runner.os == 'macOS'
+        run: |
+          brew cask install xquartz
+          brew install cairo
+
       - name: Query dependencies
         run: |
           install.packages('remotes')

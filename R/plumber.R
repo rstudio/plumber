@@ -4,8 +4,8 @@ NULL
 
 # used to identify annotation flags.
 verbs <- c("GET", "PUT", "POST", "DELETE", "HEAD", "OPTIONS", "PATCH")
-enumerateVerbs <- function(v){
-  if (identical(v, "use")){
+enumerateVerbs <- function(v) {
+  if (identical(v, "use")) {
     return(verbs)
   }
   toupper(v)
@@ -26,60 +26,70 @@ enumerateVerbs <- function(v){
 #'   router.
 #' @export
 #' @rdname plumber
-plumb <- function(file, dir="."){
+plumb <- function(file = NULL, dir = ".") {
 
-  dirMode <- NULL
+  if (!is.null(file) && !identical(dir, ".")) {
+    # both were explicitly set.
+    # assume it is a file in that dir and continue like normal
+    file <- file.path(
+      # removing trailing slash in dir
+      normalize_dir_path(dir),
+      file
+    )
+  }
 
-  if (!missing(file) && !missing(dir)){
-    # Both were explicitly set. Error
-    stop("You must set either the file or the directory parameter, not both")
-
-  } else if (missing(file)){
-    if (identical(dir, "")){
+  if (is.null(file)) {
+    if (identical(dir, "")) {
       # dir and file are both empty. Error
       stop("You must specify either a file or directory parameter")
     }
 
-    # Parse dir
-    dirMode <- TRUE
-    dir <- sub("/$", "", dir)
+    dir <- normalize_dir_path(dir)
 
-    # Find plumber.R in the directory case-insensitively
+    # if the entrypoint file exists...
+    entrypoint <- list.files(dir, "^entrypoint\\.r$", ignore.case = TRUE)
+    if (length(entrypoint) >= 1) {
+      if (length(entrypoint) > 1) {
+        entrypoint <- entrypoint[1]
+        warning("Found multiple files named 'entrypoint.R'. Using: '", entrypoint, "'")
+      }
+
+      # set working directory to dir before sourcing
+      old <- setwd(dir)
+      on.exit(setwd(old), add = TRUE)
+
+      # Expect that entrypoint will provide us with the router
+      #   Do not 'poison' the global env. Using a local environment
+      #   sourceUTF8 returns the (visible) value object. No need to call source()$value()
+      pr <- sourceUTF8(entrypoint, environment())
+
+      if (!inherits(pr, "plumber")){
+        stop("'", entrypoint, "' must return a runnable Plumber router.")
+      }
+
+      # return plumber object
+      return(pr)
+    }
+
+    # Find plumber.R in the directory case-insensitive
     file <- list.files(dir, "^plumber\\.r$", ignore.case = TRUE, full.names = TRUE)
-    if (length(file) == 0){
+    if (length(file) == 0) {
       stop("No plumber.R file found in the specified directory: ", dir)
     }
-
-  } else {
-    # File was specified
-    dirMode <- FALSE
+    if (length(file) > 1) {
+      file <- file[1]
+      warning("Found multiple files named 'plumber.R' in directory: '", dir, "'.\nUsing: '", file, "'")
+    }
+    # continue as if a file has been provided...
   }
 
-  entrypoint <- list.files(dir, "^entrypoint\\.r$", ignore.case = TRUE)
-  if (dirMode && length(entrypoint) > 0){
-    # Dir was specified and we found an entrypoint.R
-
-    old <- setwd(dir)
-    on.exit(setwd(old))
-
-    # Expect that entrypoint will provide us with the router
-    #   Do not 'poison' the global env. Using a local environment
-    #   sourceUTF8 returns the (visible) value object. No need to call source()$value()
-    pr <- sourceUTF8(entrypoint, environment())
-
-    if (!inherits(pr, "plumber")){
-      stop("entrypoint.R must return a runnable Plumber router.")
-    }
-
-    pr
-  } else if (file.exists(file)) {
-    # Plumber file found
-
-    plumber$new(file)
-  } else {
+  if (!file.exists(file)) {
     # Couldn't find the Plumber file nor an entrypoint
     stop("File does not exist: ", file)
   }
+
+  # Plumber file found
+  plumber$new(file)
 }
 
 
@@ -175,8 +185,6 @@ hookable <- R6Class(
 #' @include plumb-block.R
 #' @include plumb-globals.R
 #' @export
-#' @importFrom httpuv runServer
-#' @importFrom utils modifyList
 #' @import crayon
 plumber <- R6Class(
   "plumber",
@@ -593,14 +601,10 @@ plumber <- R6Class(
         handlers <- private$ends[[filt]]
         if (!is.null(handlers)) {
           for (h in handlers) {
-            if (h$canServe(req, res)) {
+            if (h$canServe(req)) {
               return(h)
             }
           }
-        }
-        if (!is.null(req$methodAllowed) && !req$methodAllowed) {
-          res$status = 405L
-          res$setHeader("Allow", paste(self$verbs, collapse = ", "))
         }
         return(NULL)
       }
@@ -738,19 +742,20 @@ plumber <- R6Class(
     #' @details required for httpuv interface
     onHeaders = function(req) {
       maxSize <- private$maxSize
-      if (maxSize <= 0)
+      if (isTRUE(maxSize <= 0))
         return(NULL)
 
       reqSize <- 0
+      # https://github.com/rstudio/shiny/blob/a022a2b4/R/middleware.R#L298-L301
       if (length(req$CONTENT_LENGTH) > 0)
         reqSize <- as.numeric(req$CONTENT_LENGTH)
       else if (length(req$HTTP_TRANSFER_ENCODING) > 0)
         reqSize <- Inf
 
-      if (reqSize > maxSize) {
+      if (isTRUE(reqSize > maxSize)) {
         return(list(status = 413L,
-                    headers = list('Content-Type' = 'application/json'),
-                    body = jsonlite::toJSON(list(error = "413 - Payload Too Large"))))
+                    headers = list('Content-Type' = 'text/plain'),
+                    body = 'Maximum upload size exceeded'))
       }
       else {
         return(NULL)
@@ -800,10 +805,10 @@ plumber <- R6Class(
     #' @description Retrieve OpenAPI specification
     openAPISpec = function() {
       routerSpec <- private$routerSpecificationInternal(self)
-      def <- modifyList(private$globalSettings, list(paths = routerSpec))
-      ret <- modifyList(defaultGlobals, def)
+      def <- utils::modifyList(private$globalSettings, list(paths = routerSpec))
+      ret <- utils::modifyList(defaultGlobals, def)
       if (is.list(self$customSpec)) {
-        ret <- modifyList(ret, self$customSpec)
+        ret <- utils::modifyList(ret, self$customSpec)
       }
       ret <- removeNaOrNulls(ret)
       ret
@@ -1002,7 +1007,7 @@ plumber <- R6Class(
             endpointEntry,
             join_paths(parentPath, endpointEntry$path)
           )
-          endpointList <- modifyList(endpointList, endpointSpec)
+          endpointList <- utils::modifyList(endpointList, endpointSpec)
         }
       }
 
@@ -1013,7 +1018,7 @@ plumber <- R6Class(
             router$mounts[[mountPath]],
             join_paths(parentPath, mountPath)
           )
-          endpointList <- modifyList(endpointList, mountEndpoints)
+          endpointList <- utils::modifyList(endpointList, mountEndpoints)
         }
       }
 

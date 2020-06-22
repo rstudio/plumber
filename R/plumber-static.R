@@ -59,7 +59,7 @@ PlumberStatic <- R6Class(
           path <- '/index.html'
         }
 
-        abs.path <- resolve(direc, path)
+        abs.path <- resolve_path(direc, path)
         if (is.null(abs.path)){
           # TODO: Should this be inherited from a parent router?
           val <- private$notFoundHandler(req=req, res=res)

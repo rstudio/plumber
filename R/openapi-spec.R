@@ -115,6 +115,9 @@ endpointSpecification <- function(routerEndpointEntry, path = routerEndpointEntr
   for (verb in routerEndpointEntry$verbs) {
     params <- parametersSpecification(routerEndpointEntry$params, pathParams, funcParams)
 
+    # If we haven't already documented a path param, we should add it here.
+    # FIXME: warning("Undocumented path parameters: ", paste0())
+
     resps <- responsesSpecification(routerEndpointEntry$responses)
 
     endptSpec <- list(
@@ -254,36 +257,49 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
 #' @noRd
 priorizeProperty <- function(...) {
   l <- list(...)
-  isnullordefault <- sapply(l, function(x) {isNaOrNull(x) || isTRUE(attributes(x)$default)})
-  l[[which.min(isnullordefault)]]
+  if (length(l) > 0L) {
+    isnullordefault <- vapply(l, function(x) {isNaOrNull(x) || isTRUE(attributes(x)$default)}, logical(1))
+    # return the position of the first FALSE value or position 1 if all values are TRUE
+    return(l[[which.min(isnullordefault)]])
+  }
+  NULL # do not return any value
 }
 
-#' Check if x is JSON serializable (examples)
+#' Check if x is JSON serializable
 #' @noRd
 isJSONserializable <- function(x) {
-  testJSONserializable <- TRUE
-  tryCatch(jsonlite::toJSON(x),
-           error = function(cond) {
-             # Do we need to test for specific errors?
-             testJSONserializable <<- FALSE}
+  tryCatch(
+    {
+      toJSON(x)
+      TRUE
+    },
+    error = function(cond) {
+      # Do we need to test for specific errors?
+      FALSE
+    }
   )
-  testJSONserializable
 }
 
 #' Extract metadata on args of plumberExpression
 #' @noRd
 getArgsMetadata <- function(plumberExpression){
   #return same format as getTypedParams or params?
-  args <- formals(eval(plumberExpression))
+  if (!is.function(plumberExpression)) plumberExpression <- eval(plumberExpression)
+  args <- formals(plumberExpression)
   lapply(args[!names(args) %in% c("...", "req", "res")], function(arg) {
     required <- identical(arg, formals(function(x){})$x)
     if (is.call(arg) || is.name(arg)) {
       arg <- tryCatch(
-        eval(arg),
+        eval(arg, envir = environment(plumberExpression)),
         error = function(cond) {NA})
     }
+    # Check that it is possible to transform arg value into
+    # an example for the openAPI spec. Valid transform are
+    # either a logical, a numeric, a character or a list that
+    # is json serializable. Otherwise set to NA.
     if (!is.logical(arg) && !is.numeric(arg) && !is.character(arg)
         && !(is.list(arg) && isJSONserializable(arg))) {
+      message("Argument of class ", class(arg), " cannot be used to set default value in OpenAPI specifications.")
       arg <- NA
     }
     type <- if (isNaOrNull(arg)) {NA} else {typeof(arg)}

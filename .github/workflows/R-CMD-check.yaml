@@ -69,8 +69,16 @@ jobs:
           key: ${{ matrix.config.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
           restore-keys: ${{ matrix.config.os }}-${{ hashFiles('.github/R-version') }}-1-
 
+      # Install Cairo system dependencies
+      # used for svg testing
+      - name: Mac systemdeps
+        if: runner.os == 'macOS'
+        run: |
+          brew cask install xquartz
+          brew install cairo
+
       - name: macOS oldrel Rcpp
-        if: matrix.config.os == 'macOS-latest' && matrix.config.r == 'oldrel'
+        if: runner.os == 'macOS' && matrix.config.r == 'oldrel'
         shell: Rscript {0}
         run: |
           remotes::install_cran("Rcpp", type = "source")

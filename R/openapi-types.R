@@ -4,7 +4,7 @@ dataTypesMap <- list()
 defaultDataType <- structure("string", default = TRUE)
 defaultIsArray <- structure(FALSE, default = TRUE)
 
-local({
+addDataTypeInfo_onLoad <- function() {
   addDataTypeInfo <- function(dataType, plumberTypes,
                               regex = NULL, converter = NULL,
                               format = NULL,
@@ -22,9 +22,17 @@ local({
       )
 
     if (arraySupport == TRUE) {
-      dataTypesInfo[[dataType]] <<- modifyList(
+      dataTypesInfo[[dataType]] <<- utils::modifyList(
         dataTypesInfo[[dataType]],
         list(regexArray = paste0("(?:(?:", regex, "),?)+"),
+             # Q: Do we need to safe guard against special characters, such as `,`?
+             # https://github.com/rstudio/plumber/pull/532#discussion_r439584727
+             # A: https://swagger.io/docs/specification/serialization/
+             # > Additionally, the allowReserved keyword specifies whether the reserved
+             # > characters :/?#[]@!$&'()*+,;= in parameter values are allowed to be sent as they are,
+             # > or should be percent-encoded. By default, allowReserved is false, and reserved characters
+             # > are percent-encoded. For example, / is encoded as %2F (or %2f), so that the parameter
+             # > value quotes/h2g2.txt will be sent as quotes%2Fh2g2.txt
              converterArray = function(x) {converter(stri_split_fixed(x, ",")[[1]])})
       )
     }
@@ -84,7 +92,8 @@ local({
     format = "binary",
     realType = "string"
   )
-})
+}
+
 
 #' Parse the given plumber type and return the typecast value
 #' @noRd

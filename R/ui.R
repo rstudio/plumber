@@ -61,7 +61,7 @@ mountOpenAPI <- function(pr, api_server_url) {
       }
     }
 
-    modifyList(list(servers = list(list(url = api_server_url, description = "OpenAPI"))), spec)
+    utils::modifyList(list(servers = list(list(url = api_server_url, description = "OpenAPI"))), spec)
 
   }
   # http://spec.openapis.org/oas/v3.0.3#document-structure

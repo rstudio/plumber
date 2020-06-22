@@ -43,7 +43,7 @@ NULL
 #'     charset <- getCharacterSet(content_type)
 #'     value <- rawToChar(value)
 #'     Encoding(value) <- charset
-#'     safeFromJSON(value)
+#'     jsonlite::fromJSON(value)
 #'   }
 #' }
 #' @md
@@ -69,24 +69,6 @@ addParser <- function(name, parser, pattern = NULL) {
 #' @param ... Raw values and headers are passed there.
 #' @export
 parser_json <- function(...) {
-  function(value, content_type = NULL, ...) {
-    charset <- getCharacterSet(content_type)
-    value <- rawToChar(value)
-    Encoding(value) <- charset
-    safeFromJSON(value)
-  }
-}
-
-
-
-
-#' YAML
-#' @rdname parsers
-#' @export
-parser_yaml <- function(...) {
-  if (!requireNamespace("yaml", quietly = TRUE)) {
-    stop("yaml must be installed for the yaml parser to work")
-  }
   function(value, content_type = NULL, ...) {
     charset <- getCharacterSet(content_type)
     value <- rawToChar(value)
@@ -134,9 +116,9 @@ parser_text <- function(...) {
 parser_rds <- function(...) {
   function(value, filename, ...) {
     tmp <- tempfile("plumb", fileext = paste0("_", basename(filename)))
+    on.exit(file.remove(tmp), add = TRUE)
     writeBin(value, tmp)
-    on.exit(file.remove(tmp))
-    list(readRDS(tmp))
+    readRDS(tmp)
   }
 }
 
@@ -154,13 +136,12 @@ parser_multi <- function(...) {
     boundary <- stri_match_first_regex(content_type, "boundary=([^; ]{2,})", case_insensitive = TRUE)[,2]
     toparse <- parse_multipart(value, boundary)
     # content-type detection
-    for (i in seq_len(length(toparse))) {
-      if (!is.null(toparse[[i]]$filename)) {
-        ext <- tools::file_ext(toparse[[i]]$filename)
-        toparse[[i]]$content_type <- getContentType(ext)
+    lapply(toparse, function(x) {
+      if (!is.null(x$filename)) {
+        x$content_type <- getContentType(tools::file_ext(x$filename))
       }
-    }
-    lapply(toparse, parseRaw)
+      parseRaw(x)
+    })
   }
 }
 
@@ -172,33 +153,36 @@ parser_multi <- function(...) {
 #' @param ... Raw values and headers are passed there.
 #' @export
 parser_octet <- function(...) {
-  function(value, filename, ...) {
-    if (!missing(filename) && getOption("plumber.saveFileToDisk", FALSE)) {
-      if (interactive()) {
-        writeBin(value, basename(filename))
-        ret <- basename(filename)
-        attr(ret, "filename") <- filename
-      } else {
-        tmp <- tempfile("plumb", fileext = paste0("_", basename(filename)))
-        writeBin(value, tmp)
-        ret <- tmp
-        attr(ret, "filename") <- filename
-      }
-      return(ret)
-    } else {
-      return(value)
-    }
+  function(value, filename = NULL, ...) {
+    attr(value, "filename") <- filename
+    return(value)
   }
 }
 
 
 
 
-#' @include globals.R
-addParser("json", parser_json, "application/json")
-addParser("yaml", parser_yaml, "application/x-yaml")
-addParser("query", parser_query, "application/x-www-form-urlencoded")
-addParser("text", parser_text, "text/")
-addParser("rds", parser_rds, "application/rds")
-addParser("multi", parser_multi, "multipart/form-data")
-addParser("octet", parser_octet, "application/octet")
+#' YAML
+#' @rdname parsers
+#' @export
+parser_yaml <- function(...) {
+  if (!requireNamespace("yaml", quietly = TRUE)) {
+    stop("yaml must be installed for the yaml parser to work")
+  }
+  function(value, content_type = NULL, ...) {
+    charset <- getCharacterSet(content_type)
+    value <- rawToChar(value)
+    Encoding(value) <- charset
+    safeFromJSON(value)
+  }
+}
+
+addParsers_onLoad <- function() {
+  addParser("json", parser_json, "application/json")
+  addParser("yaml", parser_json, "application/x-yaml")
+  addParser("query", parser_query, "application/x-www-form-urlencoded")
+  addParser("text", parser_text, "text/")
+  addParser("rds", parser_rds, "application/rds")
+  addParser("multi", parser_multi, "multipart/form-data")
+  addParser("octet", parser_octet, "application/octet")
+}

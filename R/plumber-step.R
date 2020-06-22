@@ -132,7 +132,6 @@ getRelevantArgs <- function(args, plumberExpression){
 #'
 #' Defines a terminal handler in a PLumber router.
 #'
-#' @importFrom stringi stri_match_first_regex
 #' @export
 PlumberEndpoint <- R6Class(
   "PlumberEndpoint",
@@ -161,18 +160,9 @@ PlumberEndpoint <- R6Class(
     tags = NA,
     #' @description ability to serve request
     #' @param req a request object
-    #' @param res a response object
     #' @return a logical. `TRUE` when endpoint can serve request.
-    canServe = function(req, res){
-      if (!is.na(stri_match_first_regex(req$PATH_INFO, private$regex$regex)[1,1])) {
-        if (req$REQUEST_METHOD %in% self$verbs) {
-          req$methodAllowed <- TRUE
-          return(TRUE)
-        } else {
-          req$methodAllowed <- FALSE
-        }
-      }
-      return(FALSE)
+    canServe = function(req){
+      req$REQUEST_METHOD %in% self$verbs && !is.na(stri_match_first_regex(req$PATH_INFO, private$regex$regex)[1,1])
     },
     #' @description Create a new `PlumberEndpoint` object
     #' @param verbs endpoint verb

@@ -73,13 +73,16 @@ test_that("plumb accepts a directory with a `plumber.R` file", {
   expect_equal(length(r$endpoints[[1]]), 5)
 
   # errors when no plumber.R found
-  expect_error(plumb(dir = test_path("files/static")), regexp="No plumber.R file found in the specified directory: files/static")
+  expect_error(plumb(dir = test_path("files/static")), regexp="No plumber.R file found in the specified directory: ")
+
   # errors when neither dir is empty and file is not given
   expect_error(plumb(dir=""), regexp="You must specify either a file or directory*")
+
   # reads from working dir if no args
   expect_error(plumb(), regexp="No plumber.R file found in the specified directory: .")
+
   # errors when both dir and file are given
-  expect_error(plumb(file=test_path("files/endpoints.R"), dir=test_path("files")), regexp="You must set either the file or the directory parameter, not both")
+  expect_silent(plumb(file = "endpoints.R", dir = test_path("files")))
 
 })
 
@@ -100,6 +103,12 @@ test_that("plumb() a dir leverages `entrypoint.R`", {
 
 test_that("bad `entrypoint.R`s throw", {
   expect_error(plumb(dir = test_path("files/entrypoint-bad/")), "runnable Plumber router")
+})
+
+test_that("plumb() a dir works with `entrypoint.R` and without `plumber.R`", {
+  r <- plumb(dir = test_path("files/no-plumber/"))
+  expect_equal(length(r$endpoints), 1)
+  expect_equal(length(r$endpoints[[1]]), 1)
 })
 
 test_that("Empty endpoints error", {
@@ -203,9 +212,6 @@ test_that("prints correctly", {
     "├──/static",
     "│  │ # Plumber static router serving from directory: ."
   )
-
-  skip_if_not(all(Encoding(printed) %in% Encoding(regexps)),
-              message = "UTF-8 Encoding support")
 
   for (i in 1:length(regexps)){
     expect_match(printed[i], regexps[i], info=paste0("on line ", i), fixed = TRUE)
@@ -346,7 +352,7 @@ test_that("invalid hooks err", {
 test_that("handle invokes correctly", {
   pr <- plumber$new()
   pr$handle("GET", "/trailslash", function(){ "getter" })
-  pr$handle("POST", "/trailslashp/", function(){ "poster" })
+  pr$handle("POST", "/trailslash/", function(){ "poster" })
 
   expect_equal(pr$route(make_req("GET", "/trailslash"), PlumberResponse$new()), "getter")
   res <- PlumberResponse$new()
@@ -354,15 +360,15 @@ test_that("handle invokes correctly", {
   expect_equal(res$status, 404)
   res <- PlumberResponse$new()
   pr$route(make_req("POST", "/trailslash"), res) # Wrong verb
-  expect_equal(res$status, 405)
+  expect_equal(res$status, 404)
 
-  expect_equal(pr$route(make_req("POST", "/trailslashp/"), PlumberResponse$new()), "poster")
+  expect_equal(pr$route(make_req("POST", "/trailslash/"), PlumberResponse$new()), "poster")
   res <- PlumberResponse$new()
-  pr$route(make_req("POST", "/trailslashp"), res) # w/o trailing slash
+  pr$route(make_req("POST", "/trailslash"), res) # w/o trailing slash
   expect_equal(res$status, 404)
   res <- PlumberResponse$new()
-  pr$route(make_req("GET", "/trailslashp/"), res) # Wrong verb
-  expect_equal(res$status, 405)
+  pr$route(make_req("GET", "/trailslash/"), res) # Wrong verb
+  expect_equal(res$status, 404)
 })
 
 test_that("handle with an endpoint works", {

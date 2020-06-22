@@ -1,3 +1,12 @@
+plumber (version)
+--------------------------------------------------------------------------------
+### Bug fixes
+
+* Fix `plumb()` function when `plumb()`ing a directory so that `plumber.R` is
+  not a requirement if a valid `entrypoint.R` file is found. 
+  (@blairj09, [#471](https://github.com/trestletech/plumber/pull/471)).
+  
+
 plumber 0.5.0
 --------------------------------------------------------------------------------
 ## Full changelog
@@ -33,7 +42,7 @@ plumber 0.5.0
 
 ### New features
 
-* Added Swagger support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez) 
+* Added Swagger support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez, #532)
 
 * Added support for promises in endpoints, filters, and hooks. (#248)
 
@@ -59,6 +68,8 @@ plumber 0.5.0
   (#328)
 
 * Improve speed of `canServe()` method of the `PlumberEndpoint` class (@atheriel, #484)
+
+* Add support for returning svg images using `#' @svg` (and with arguments `#' @svg (width = 200, height=500)`. (@pachamaltese, #398)
 
 ### Bug fixes
 
