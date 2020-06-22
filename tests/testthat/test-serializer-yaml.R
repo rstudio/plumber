@@ -1,6 +1,8 @@
 context("YAML serializer")
 
 test_that("YAML serializes properly", {
+  skip_if_not_installed("yaml")
+
   l <- list(a=1, b=2, c="hi")
   val <- serializer_yaml()(l, list(), PlumberResponse$new(), stop)
   expect_equal(val$status, 200L)
