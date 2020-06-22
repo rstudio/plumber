@@ -369,6 +369,19 @@ test_that("handle invokes correctly", {
   res <- PlumberResponse$new()
   pr$route(make_req("GET", "/trailslashp/"), res) # Wrong verb
   expect_equal(res$status, 405)
+
+
+})
+
+test_that("No 405 on same path, different verb", {
+
+  pr <- plumber$new()
+  pr$handle("GET", "/apathow", function(){ "getter" })
+  pr$handle("POST", "/apathow", function(){ "poster" })
+
+  expect_equal(pr$route(make_req("GET", "/apathow"), PlumberResponse$new()), "getter")
+  expect_equal(pr$route(make_req("POST", "/apathow"), PlumberResponse$new()), "poster")
+
 })
 
 test_that("handle with an endpoint works", {
