@@ -42,7 +42,7 @@ plumber 0.5.0
 
 ### New features
 
-* Add yaml support, serializer and parser. (@meztez)
+* Add yaml support, serializer and parser. (@meztez, #556)
 
 * Added Swagger support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez, #532) 
 
