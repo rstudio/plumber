@@ -16,8 +16,8 @@ plumber (version)
 * Fix OpenAPI url error when using an empty `HTTP_REFERER`. (@meztez)
 
 ### Breaking changes
-* `$run()` arguments `swagger` and `swaggerCallback` replaced by `ui` and `callback`. (@meztez)
-* Moved user provided OpenAPI Specification function from `$run()` to `$setApiHandler`. (@meztez)
+* `$run()` arguments `swagger` and `swaggerCallback` replaced by `ui` and `callback`. `ui` is now set to `TRUE` by default. (@meztez, #562)
+* Moved user provided OpenAPI Specification function from `$run()` to `$setApiHandler()`. (@meztez, #562)
 
 plumber 0.5.0
 --------------------------------------------------------------------------------
