@@ -1,15 +1,3 @@
-# Trace all options in packages, make sure all are documented
-# mm <- character()
-# for (f in dir("R", full.names = T)) {
-#   ct <- paste0(readLines(f, warn = F), collapse = "")
-#   m <- stringi::stri_match_all_regex(ct, "getOption\\([^,\\)]+,?\\)?")[[1]][,1]
-#   m <- gsub("\\s", "", m)
-#   if (length(m) > 0 && !is.na(m)) {
-#     mm <- c(mm, m)
-#   }
-# }
-# mm <- unique(sort(gsub("getOption|\\(|\"|,|'|\\)", "", mm)))
-# mm <- paste0("#' \\item{", mm, " (defaults to `fill`)}{document})")
 
 #' How to use Plumber options
 #'
