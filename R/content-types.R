@@ -52,7 +52,6 @@ getContentType <- function(ext, defaultType='application/octet-stream') {
   return(ct)
 }
 
-#4x perf improvement when contentType is set
 #' Request character set
 #' @param contentType Request Content-Type header
 #' @return Default to `UTF-8`. Otherwise return `charset` defined in request header.

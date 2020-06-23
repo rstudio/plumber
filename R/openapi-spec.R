@@ -251,8 +251,7 @@ getArgsMetadata <- function(plumberExpression){
     # Check that it is possible to transform arg value into
     # an example for the openAPI spec. Valid transform are
     # either a logical, a numeric, a character or a list that
-    # is json serializable. Otherwise set to NA. Otherwise
-    # it
+    # is json serializable. Otherwise set to NA.
     if (!is.logical(arg) && !is.numeric(arg) && !is.character(arg)
         && !(is.list(arg) && isJSONserializable(arg))) {
       message("Argument of class ", class(arg), " cannot be used to set default value in OpenAPI Specifications.")
