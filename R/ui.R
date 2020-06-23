@@ -21,7 +21,7 @@ mountUI <- function(pr, host, port, ui, callback, ...) {
 
   # Mount UIs
   if (isTRUE(ui)) {
-    ui <- getOption("plumber.ui", "Swagger")
+    ui <- getOption("plumber.ui", "swagger")
   }
   interface <- ui[1]
   ui_mount <- .globals$interfaces[[interface]]
