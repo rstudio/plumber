@@ -223,6 +223,7 @@ plumber <- R6Class(
       private$errorHandler <- defaultErrorHandler()
       private$notFoundHandler <- default404Handler
       private$maxSize <- getOption('plumber.maxRequestSize', 0) #0 Unlimited
+      private$ui_info <- list(ui = TRUE, args = list())
 
       # Add in the initial filters
       for (fn in names(filters)){
@@ -254,12 +255,9 @@ plumber <- R6Class(
     #' @param port a number or integer that indicates the server port that should
     #' be listened on. Note that on most Unix-like systems including Linux and
     #' Mac OS X, port numbers smaller than 1025 require root privileges.
-    #' @param ui a logical or a character vector. The default UI when `TRUE` is `swagger`.
     #' Other valid values are `FALSE` and `redoc`.
     #' @param debug `TRUE` provides more insight into your API errors.
     #' @param callback a callback function for taking action on UI url.
-    #' @param ... Other params to be passed down to ui functions, such as
-    #' `redoc_options` \code{redoc::\link[redoc]{redoc_spec}}.
     #' @details
     #' `port` does not need to be explicitly assigned.
     #'
@@ -269,7 +267,6 @@ plumber <- R6Class(
     run = function(
       host = '127.0.0.1',
       port = getOption('plumber.port'),
-      ui = TRUE,
       debug = interactive(),
       callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL)),
       ...
@@ -289,8 +286,8 @@ plumber <- R6Class(
         setwd(dirname(private$filename))
       }
 
-      if (isTRUE(ui) || isTRUE(ui %in% names(.globals$interfaces))) {
-        mountUI(self, host, port, ui, callback, ...)
+      if (isTRUE(private$ui_info$ui) || isTRUE(private$ui_info$ui %in% names(.globals$interfaces))) {
+        mountUI(self, host, port, private$ui_info, callback)
       }
 
       on.exit(private$runHooks("exit"), add = TRUE)
@@ -806,6 +803,15 @@ plumber <- R6Class(
       }
       private$apiHandler <- api_fun
     },
+    #' @description Set UI to use for API
+    #' @param ui a logical or a character value. The default UI when `TRUE` is `swagger`.
+    #' @param ... Other params to be passed down to ui functions.
+    setUI = function(ui, ...) {
+      private$ui_info = list(
+        ui = ui,
+        args = list(...)
+      )
+    }
     #' @description Add a filter to plumber router
     #' @param name a character string. Name of filter
     #' @param expr an expr that resolve to a filter function or a filter function
@@ -973,6 +979,7 @@ plumber <- R6Class(
     maxSize = NULL, # Max request size in bytes
 
     apiHandler = NULL,
+    ui_info = NULL,
 
     addFilterInternal = function(filter){
       # Create a new filter and add it to the router
@@ -1053,7 +1060,7 @@ plumber <- R6Class(
 
 urlHost <- function(scheme = "http", host, port, path = "", changeHostLocation = FALSE) {
   if (isTRUE(changeHostLocation)) {
-    # upgrade swaggerCallback location to be localhost and not catch-all addresses
+    # upgrade callback location to be localhost and not catch-all addresses
     # shiny: https://github.com/rstudio/shiny/blob/95173f6/R/server.R#L781-L786
     if (identical(host, "0.0.0.0")) {
       # RStudio IDE does NOT like 0.0.0.0 locations.

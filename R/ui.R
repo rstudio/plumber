@@ -2,7 +2,7 @@
 
 # Mount OpenAPI and UI
 #' @noRd
-mountUI <- function(pr, host, port, ui, callback, ...) {
+mountUI <- function(pr, host, port, ui_info, callback) {
 
   # Build api url
   api_url <- getOption(
@@ -20,10 +20,11 @@ mountUI <- function(pr, host, port, ui, callback, ...) {
   mountOpenAPI(pr, api_url)
 
   # Mount UIs
+  ui <- ui_info$ui
   if (isTRUE(ui)) {
     ui <- getOption("plumber.ui", "swagger")
   }
-  interface <- ui[1]
+  interface <- ui
   ui_mount <- .globals$interfaces[[interface]]
   if (!is.null(ui_mount)) {
     ui_url <- ui_mount(pr, api_url, ...)
@@ -80,7 +81,19 @@ mountOpenAPI <- function(pr, api_url) {
 #' Mount Interface UI
 #' @noRd
 mountInterfaces <- function(interface) {
-  mountInterface <- function(pr, api_url, ...) {
+
+  stopifnot(is.list(interface))
+  stopifnot(is.character(interface$package) && length(interface$package) == 1)
+
+  if (!requireNamespace(interface$package, quietly = TRUE)) {
+    stop(interface$package, " must be installed for the ", interface$name," UI to be displayed")
+  }
+
+  stopifnot(is.character(interface$name) && length(interface$name) == 1)
+  stopifnot(is.function(interface$static))
+  stopifnot(is.function(interface$index))
+
+  interfaceFunc <- function(pr, api_url, ...) {
     if (!requireNamespace(interface$package, quietly = TRUE)) {
       stop(interface$package, " must be installed for the ", interface$name," UI to be displayed")
     }
@@ -98,10 +111,10 @@ mountInterfaces <- function(interface) {
         serializer = serializer_html()
       )
     }
-    pr$mount(interfacePath, PlumberStatic$new(interface$static()))
+    pr$mount(interfacePath, PlumberStatic$new(interface$static(pr)))
     return(interfaceUrl)
   }
-  .globals$interfaces[[interface$name]] <- mountInterface
+  .globals$interfaces[[interface$name]] <- interfaceFunc
 }
 
 swaggerInterface <- list(
@@ -116,17 +129,17 @@ swaggerInterface <- list(
   static = swagger::swagger_path
 )
 
-# redocInterface <- list(
-#   package = "redoc",
-#   name = "redoc",
-#   index = function(redoc_options = structure(list(), names = character())) {
-#     redoc::redoc_spec(
-#       spec_url = "\' + window.location.origin + window.location.pathname.replace(/\\(__redoc__\\\\/|__redoc__\\\\/index.html\\)$/, '') + 'openapi.json' + \'",
-#       redoc_options = redoc_options
-#     )
-#   },
-#   static = redoc::redoc_path
-# )
+redocInterface <- list(
+  package = "redoc",
+  name = "redoc",
+  index = function(redoc_options = structure(list(), names = character())) {
+    redoc::redoc_spec(
+      spec_url = "\' + window.location.origin + window.location.pathname.replace(/\\(__redoc__\\\\/|__redoc__\\\\/index.html\\)$/, '') + 'openapi.json' + \'",
+      redoc_options = redoc_options
+    )
+  },
+  static = redoc::redoc_path
+)
 
 mountInterfaces(swaggerInterface)
-# mountInterfaces(redocInterface)
+mountInterfaces(redocInterface)
