@@ -1,7 +1,7 @@
 
 .onLoad <- function(...) {
 
-  addSwaggerInfo_onLoad()
+  addApiInfo_onLoad()
 
   addParsers_onLoad()
 

@@ -84,9 +84,9 @@ createPathRegex <- function(pathDef, funcParams = NULL){
   match <- stri_match_all(
     pathDef,
     # capture any plumber type (<arg:TYPE>).
-    # plumberToSwaggerType(types) will yell if it is unknown
+    # plumberToApiType(types) will yell if it is unknown
     # and can not be guessed from endpoint function args)
-    # <arg> will be given the TYPE `defaultSwaggerType`
+    # <arg> will be given the TYPE `defaultApiType`
     regex = "/<(\\.?[a-zA-Z][\\w_\\.]*)(?::([^>]*))?>"
   )[[1]]
   names <- match[,2]
@@ -106,10 +106,10 @@ createPathRegex <- function(pathDef, funcParams = NULL){
   plumberTypes <- stri_replace_all(match[,3], "$1", regex = "^\\[([^\\]]*)\\]$")
   if (length(funcParams) > 0) {
     # Override with detection of function args if type not found in map
-    idx <- !(plumberTypes %in% names(plumberToSwaggerTypeMap))
+    idx <- !(plumberTypes %in% names(plumberToApiTypeMap))
     plumberTypes[idx] <- sapply(funcParams, `[[`, "type")[names[idx]]
   }
-  swaggerTypes <- plumberToSwaggerType(plumberTypes, inPath = TRUE)
+  apiTypes <- plumberToApiType(plumberTypes, inPath = TRUE)
 
   areArrays <- stri_detect_regex(match[,3], "^\\[[^\\]]*\\]$")
   if (length(funcParams) > 0) {
@@ -117,11 +117,11 @@ createPathRegex <- function(pathDef, funcParams = NULL){
     idx <- (is.na(areArrays) | !areArrays)
     areArrays[idx] <- sapply(funcParams, `[[`, "isArray")[names[idx]]
   }
-  areArrays <- areArrays & supportsArray(swaggerTypes)
-  areArrays[is.na(areArrays)] <- defaultSwaggerIsArray
+  areArrays <- areArrays & apiTypes %in% filterApiTypes(TRUE, "arraySupport")
+  areArrays[is.na(areArrays)] <- defaultIsArray
 
   pathRegex <- pathDef
-  regexps <- typesToRegexps(swaggerTypes, areArrays)
+  regexps <- typesToRegexps(apiTypes, areArrays)
   for (regex in regexps) {
     pathRegex <- stri_replace_first_regex(
       pathRegex,
@@ -132,30 +132,30 @@ createPathRegex <- function(pathDef, funcParams = NULL){
 
   list(
     names = names,
-    types = swaggerTypes,
+    types = apiTypes,
     regex = paste0("^", pathRegex, "$"),
-    converters = typesToConverters(swaggerTypes, areArrays),
+    converters = typesToConverters(apiTypes, areArrays),
     areArrays = areArrays
   )
 }
 
 
-typesToRegexps <- function(swaggerTypes, areArrays = FALSE) {
+typesToRegexps <- function(apiTypes, areArrays = FALSE) {
   # return vector of regex strings
   mapply(
     function(x, y) {x[[y]]},
-    swaggerTypeInfo[swaggerTypes],
+    apiTypesInfo[apiTypes],
     ifelse(areArrays, "regexArray", "regex"),
     USE.NAMES = FALSE
   )
 }
 
 
-typesToConverters <- function(swaggerTypes, areArrays = FALSE) {
+typesToConverters <- function(apiTypes, areArrays = FALSE) {
   # return list of functions
   mapply(
     function(x, y) {x[[y]]},
-    swaggerTypeInfo[swaggerTypes],
+    apiTypesInfo[apiTypes],
     ifelse(areArrays, "converterArray", "converter"),
     USE.NAMES = FALSE
   )

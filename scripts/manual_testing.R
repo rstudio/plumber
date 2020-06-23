@@ -7,7 +7,7 @@ library(plumber)
 
 
 
-test_that("custom swagger file update function works", {
+test_that("custom OpenAPI Specification update function works", {
   pr <- plumber$new()
   pr$handle("GET", "/:path/here", function(){})
 
