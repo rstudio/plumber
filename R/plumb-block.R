@@ -12,7 +12,7 @@ stopOnLine <- function(lineNum, line, msg){
 #' @param lineNum The line number just above the function we're documenting
 #' @param file A character vector representing all the lines in the file
 #' @noRd
-parseBlock <- function(lineNum, file){
+plumbBlock <- function(lineNum, file){
   paths <- NULL
   preempt <- NULL
   filter <- NULL
@@ -180,14 +180,14 @@ parseBlock <- function(lineNum, file){
       if (is.na(name)){
         stopOnLine(lineNum, line, "No parameter specified.")
       }
-      type <- stri_replace_all(paramMat[1,4], "$1", regex = "^\\[([^\\]]*)\\]$")
-      type <- plumberToSwaggerType(type)
+      plumberType <- stri_replace_all(paramMat[1,4], "$1", regex = "^\\[([^\\]]*)\\]$")
+      apiType <- plumberToApiType(plumberType)
       isArray <- stri_detect_regex(paramMat[1,4], "^\\[[^\\]]*\\]$")
-      isArray <- isArray && supportsArray(type)
-      isArray[is.na(isArray)] <- defaultSwaggerIsArray
+      isArray <- isArray && apiType %in% filterApiTypes(TRUE, "arraySupport")
+      isArray[is.na(isArray)] <- defaultIsArray
       required <- identical(paramMat[1,5], "*")
 
-      params[[name]] <- list(desc=paramMat[1,6], type=type, required=required, isArray=isArray)
+      params[[name]] <- list(desc=paramMat[1,6], type=apiType, required=required, isArray=isArray)
     }
 
     tagMat <- stri_match(line, regex="^#['\\*]\\s*@tag\\s+(\\S.+)\\s*")
@@ -231,7 +231,7 @@ parseBlock <- function(lineNum, file){
 evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, mount) {
   lineNum <- srcref[1] - 1
 
-  block <- parseBlock(lineNum, file)
+  block <- plumbBlock(lineNum, file)
 
   if (sum(!is.null(block$filter), !is.null(block$paths), !is.null(block$assets)) > 1){
     stopOnLine(lineNum, file[lineNum], "A single function can only be a filter, an API endpoint, or an asset (@filter AND @get, @post, @assets, etc.)")

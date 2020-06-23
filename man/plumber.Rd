@@ -5,7 +5,7 @@
 \alias{plumber}
 \title{Plumber Router}
 \usage{
-plumb(file, dir = ".")
+plumb(file = NULL, dir = ".")
 }
 \arguments{
 \item{file}{path to file to plumb}
@@ -36,9 +36,9 @@ function, multiple handles will be added to \code{plumber} object. OpenAPI json
 file will be served on paths \verb{/openapi.json} and \verb{/swagger.json}. Swagger UI
 will be served on paths \verb{/__swagger__/index.html} and \verb{/__swagger__/}. When
 using a function, it will receive the plumber router as the first parameter
-and currrent swagger specifications as the second. This function should return a
-list containing swagger specifications.
-See \url{https://swagger.io/docs/specification/}
+and current OpenAPI Specification as the second. This function should return a
+list containing OpenAPI Specification.
+See \url{http://spec.openapis.org/oas/v3.0.3}
 
 \code{swaggerCallback} When set, it will be called with a character string corresponding
 to the swagger UI url. It allows RStudio to open swagger UI when plumber router
@@ -225,8 +225,9 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 \item \href{#method-set404Handler}{\code{plumber$set404Handler()}}
 \item \href{#method-setErrorHandler}{\code{plumber$setErrorHandler()}}
 \item \href{#method-filter}{\code{plumber$filter()}}
-\item \href{#method-swaggerFile}{\code{plumber$swaggerFile()}}
+\item \href{#method-apiSpec}{\code{plumber$apiSpec()}}
 \item \href{#method-openAPIFile}{\code{plumber$openAPIFile()}}
+\item \href{#method-swaggerFile}{\code{plumber$swaggerFile()}}
 \item \href{#method-addEndpoint}{\code{plumber$addEndpoint()}}
 \item \href{#method-addAssets}{\code{plumber$addAssets()}}
 \item \href{#method-addFilter}{\code{plumber$addFilter()}}
@@ -291,7 +292,7 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.}
 
-\item{\code{swagger}}{a function that enhances the existing swagger specification.}
+\item{\code{swagger}}{a function that enhances the existing OpenAPI Specification.}
 
 \item{\code{debug}}{\code{TRUE} provides more insight into your API errors.}
 
@@ -649,12 +650,12 @@ Add a filter to plumber router
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-swaggerFile"></a>}}
-\if{latex}{\out{\hypertarget{method-swaggerFile}{}}}
-\subsection{Method \code{swaggerFile()}}{
+\if{html}{\out{<a id="method-apiSpec"></a>}}
+\if{latex}{\out{\hypertarget{method-apiSpec}{}}}
+\subsection{Method \code{apiSpec()}}{
 Retrieve openAPI file
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{plumber$swaggerFile()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{plumber$apiSpec()}\if{html}{\out{</div>}}
 }
 
 }
@@ -665,6 +666,16 @@ Retrieve openAPI file
 Retrieve openAPI file
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$openAPIFile()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-swaggerFile"></a>}}
+\if{latex}{\out{\hypertarget{method-swaggerFile}{}}}
+\subsection{Method \code{swaggerFile()}}{
+Retrieve openAPI file
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{plumber$swaggerFile()}\if{html}{\out{</div>}}
 }
 
 }

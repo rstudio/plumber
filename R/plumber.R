@@ -82,9 +82,9 @@ plumb <- function(file = NULL, dir = ".") {
 }
 
 
-#' @include query-string.R
-#' @include post-body.R
-#' @include cookie-parser.R
+#' @include parse-query.R
+#' @include parse-body.R
+#' @include parser-cookie.R
 #' @include shared-secret-filter.R
 defaultPlumberFilters <- list(
   queryString = queryStringFilter,
@@ -185,8 +185,8 @@ hookable <- R6Class(
 #'   Plumber router.
 #' @include globals.R
 #' @include serializer-json.R
-#' @include parse-block.R
-#' @include parse-globals.R
+#' @include plumb-block.R
+#' @include plumb-globals.R
 #' @export
 #' @importFrom httpuv runServer
 #' @import crayon
@@ -246,7 +246,7 @@ plumber <- R6Class(
                         private$addFilterInternal, self$mount)
         }
 
-        private$globalSettings <- parseGlobals(private$lines)
+        private$globalSettings <- plumbGlobals(private$lines)
       }
 
     },
@@ -257,7 +257,7 @@ plumber <- R6Class(
     #' @param port a number or integer that indicates the server port that should
     #' be listened on. Note that on most Unix-like systems including Linux and
     #' Mac OS X, port numbers smaller than 1025 require root privileges.
-    #' @param swagger a function that enhances the existing swagger specification.
+    #' @param swagger a function that enhances the existing OpenAPI Specification.
     #' @param debug `TRUE` provides more insight into your API errors.
     #' @param swaggerCallback a callback function for taking action on the url for swagger page.
     #' @details
@@ -272,9 +272,9 @@ plumber <- R6Class(
     #' file will be served on paths `/openapi.json` and `/swagger.json`. Swagger UI
     #' will be served on paths `/__swagger__/index.html` and `/__swagger__/`. When
     #' using a function, it will receive the plumber router as the first parameter
-    #' and currrent swagger specifications as the second. This function should return a
-    #' list containing swagger specifications.
-    #' See \url{https://swagger.io/docs/specification/}
+    #' and current OpenAPI Specification as the second. This function should return a
+    #' list containing OpenAPI Specification.
+    #' See \url{http://spec.openapis.org/oas/v3.0.3}
     #'
     #' `swaggerCallback` When set, it will be called with a character string corresponding
     #' to the swagger UI url. It allows RStudio to open swagger UI when plumber router
@@ -315,9 +315,9 @@ plumber <- R6Class(
         if (!requireNamespace("swagger")) {
           stop("swagger must be installed for the Swagger UI to be displayed")
         }
-        spec <- self$swaggerFile()
+        spec <- self$apiSpec()
 
-        # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
+        # Create a function that's hardcoded to return the apiSpec -- regardless of env.
         swagger_fun <- function(req, res, ..., scheme = "deprecated", host = "deprecated", path = "deprecated") {
           if (!missing(scheme) || !missing(host) || !missing(path)) {
             warning("`scheme`, `host`, or `path` are not supported to produce swagger.json")
@@ -337,7 +337,7 @@ plumber <- R6Class(
           )
 
           if (is.function(swagger)) {
-            # allow users to update the swagger file themselves
+            # allow users to update the OpenAPI Specification themselves
             ret <- swagger(self, spec, ...)
             # Since users could have added more NA or NULL values...
             ret <- removeNaOrNulls(ret)
@@ -347,7 +347,7 @@ plumber <- R6Class(
           }
           ret
         }
-        # https://swagger.io/specification/#document-structure
+        # http://spec.openapis.org/oas/v3.0.3#document-structure
         # "It is RECOMMENDED that the root OpenAPI document be named: openapi.json or openapi.yaml."
         self$handle("GET", "/openapi.json", swagger_fun, serializer = serializer_unboxed_json())
         # keeping for legacy purposes
@@ -891,12 +891,12 @@ plumber <- R6Class(
       private$addFilterInternal(filter)
     },
     #' @description Retrieve openAPI file
-    swaggerFile = function() { #FIXME: test
+    apiSpec = function() { #FIXME: test
 
-      swaggerPaths <- private$swaggerFileWalkMountsInternal(self)
+      routerSpec <- private$routerSpecificationInternal(self)
 
       # Extend the previously parsed settings with the endpoints
-      def <- utils::modifyList(private$globalSettings, list(paths = swaggerPaths))
+      def <- utils::modifyList(private$globalSettings, list(paths = routerSpec))
 
       # Lay those over the default globals so we ensure that the required fields
       # (like API version) are satisfied.
@@ -909,7 +909,13 @@ plumber <- R6Class(
     },
     #' @description Retrieve openAPI file
     openAPIFile = function() {
-      self$swaggerFile()
+      warning("`$openAPIFile()` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$apiSpec()`.")
+      self$apiSpec()
+    },
+    #' @description Retrieve openAPI file
+    swaggerFile = function() {
+      warning("`$openAPIFile()` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$apiSpec()`.")
+      self$apiSpec()
     },
 
     ### Legacy/Deprecated
@@ -1038,7 +1044,7 @@ plumber <- R6Class(
     envir = NULL, # The environment in which all API execution will be conducted
     lines = NULL, # The lines constituting the API
     parsed = NULL, # The parsed representation of the API
-    globalSettings = list(info=list()), # Global settings for this API. Primarily used for Swagger docs.
+    globalSettings = list(info=list()), # Global settings for this API. Primarily used for OpenAPI Specification.
 
     errorHandler = NULL,
     notFoundHandler = NULL,
@@ -1071,7 +1077,7 @@ plumber <- R6Class(
       private$ends[[preempt]] <- c(private$ends[[preempt]], ep)
     },
 
-    swaggerFileWalkMountsInternal = function(router, parentPath = "") {
+    routerSpecificationInternal = function(router, parentPath = "") {
       remove_trailing_slash <- function(x) {
         sub("[/]$", "", x)
       }
@@ -1089,18 +1095,18 @@ plumber <- R6Class(
 
       for (endpoint in router$endpoints) {
         for (endpointEntry in endpoint) {
-          swaggerEndpoint <- prepareSwaggerEndpoint(
+          endpointSpec <- endpointSpecification(
             endpointEntry,
             join_paths(parentPath, endpointEntry$path)
           )
-          endpointList <- utils::modifyList(endpointList, swaggerEndpoint)
+          endpointList <- utils::modifyList(endpointList, endpointSpec)
         }
       }
 
       # recursively gather mounted enpoint entries
       if (length(router$mounts) > 0) {
         for (mountPath in names(router$mounts)) {
-          mountEndpoints <- private$swaggerFileWalkMountsInternal(
+          mountEndpoints <- private$routerSpecificationInternal(
             router$mounts[[mountPath]],
             join_paths(parentPath, mountPath)
           )
@@ -1108,7 +1114,7 @@ plumber <- R6Class(
         }
       }
 
-      # returning a single list of swagger entries
+      # returning a single list of OpenAPI Paths Objects
       endpointList
     }
   )
