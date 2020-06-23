@@ -9,7 +9,7 @@ test_that("Options set and get", {
   options(plumber.postBody = option_value)
 })
 
-test_that("all options used are optionsPlumber parameters", {
+test_that("all options used are `options_plumber()` parameters", {
   skip_on_cran() # only test in CI / locally
 
   ## `./R` will not exist when shiny is installed

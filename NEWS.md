@@ -48,7 +48,7 @@ plumber 0.5.0
 
 ### New features
 
-* Document plumber options. Add `optionsPlumber`. (@meztez, #555)
+* Document plumber options. Add `options_plumber`. (@meztez, #555)
 
 * Add yaml support, serializer and parser. (@meztez, #556)
 
