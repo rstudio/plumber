@@ -49,19 +49,19 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Jeff Allen \email{cran@trestletech.com}
+\strong{Maintainer}: Barret Schloerke \email{barret@rstudio.com}
 
 Authors:
 \itemize{
-  \item Barret Schloerke \email{barret@rstudio.com}
+  \item Jeff Allen \email{cran@trestletech.com} [conceptor]
 }
 
 Other contributors:
 \itemize{
-  \item  RStudio [copyright holder, funder]
+  \item Bruno Tremblay \email{bruno.tremblay@lacapitale.com} [contributor]
   \item Frans van Dunné \email{frans@ixpantia.com} [contributor]
   \item Sebastiaan Vandewoude \email{sebastiaanvandewoude@gmail.com} [contributor]
-  \item  SmartBear Software (swagger-ui) [contributor, copyright holder]
+  \item  RStudio [copyright holder, funder]
 }
 
 }
