@@ -3,8 +3,7 @@
 #'
 #' @section Options:
 #' There are a number of global options that affect Plumber's behavior. These can
-#' be set globally with \code{\link{options}} or with \code{\link{optionsPlumber}}. Current values
-#' can be retrieved with \code{\link{getOption}} or \code{\link{optionsPlumber}} without arguments.
+#' be set globally with [options()] or with [options_plumber()].
 #'
 #' \describe{
 #' \item{plumber.apiHost (defaults to `host` defined by `run` method, or an empty string
@@ -29,19 +28,19 @@
 #' @aliases plumber-options
 "_PACKAGE"
 
-#' Set plumber options or get non null plumber options
-#' @param apiHost see \code{\link{plumber-options}}
-#' @param debug see \code{\link{plumber-options}}
-#' @param maxRequestSize see \code{\link{plumber-options}}
-#' @param postBody see \code{\link{plumber-options}}
-#' @param port see \code{\link{plumber-options}}
-#' @param sharedSecret see \code{\link{plumber-options}}
-#' @param swagger.url see \code{\link{plumber-options}}
+#' Set plumber options
+#' @param apiHost see [plumber-options]
+#' @param debug see [plumber-options]
+#' @param maxRequestSize see [plumber-options]
+#' @param postBody see [plumber-options]
+#' @param port see [plumber-options]
+#' @param sharedSecret see [plumber-options]
+#' @param swagger.url see [plumber-options]
 #' @details
 #' Sets plumber options. Call without arguments to get current
 #' values.
 #' @export
-optionsPlumber <- function(
+options_plumber <- function(
   apiHost              = getOption("plumber.apiHost"),
   debug                = getOption("plumber.debug"),
   maxRequestSize       = getOption("plumber.maxRequestSize"),
@@ -50,20 +49,6 @@ optionsPlumber <- function(
   sharedSecret         = getOption("plumber.sharedSecret"),
   swagger.url          = getOption("plumber.swagger.url")
 ) {
-  if (all(
-    missing(apiHost),
-    missing(debug),
-    missing(maxRequestSize),
-    missing(postBody),
-    missing(port),
-    missing(sharedSecret),
-    missing(swagger.url)
-    )) {
-    options_names <- grep("^plumber", names(options()), value = TRUE)
-    set_options <- lapply(options_names, getOption)
-    names(set_options) <- options_names
-    return(set_options)
-  }
   options(
     plumber.apiHost = apiHost,
     plumber.debug = debug,
