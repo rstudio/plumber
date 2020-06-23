@@ -1,22 +1,22 @@
 context("global settings")
 
-test_that("parseOneGlobal parses with various formats", {
+test_that("plumbOneGlobal parses with various formats", {
   fields <- list(info=list())
 
   # No leading space
-  g <- parseOneGlobal(fields, "#'@apiTitle Title")
+  g <- plumbOneGlobal(fields, "#'@apiTitle Title")
   expect_equal(g$info$title, "Title")
 
   # Plumber-style
-  g <- parseOneGlobal(fields, "#* @apiTitle Title")
+  g <- plumbOneGlobal(fields, "#* @apiTitle Title")
   expect_equal(g$info$title, "Title")
 
   #Extra space
-  g <- parseOneGlobal(fields, "#*    @apiTitle     Title   ")
+  g <- plumbOneGlobal(fields, "#*    @apiTitle     Title   ")
   expect_equal(g$info$title, "Title")
 })
 
-test_that("parseGlobals works", {
+test_that("plumbGlobals works", {
   # Test all fields
   lines <- c("#' @apiTitle title",
              "#' @apiDescription description",
@@ -32,7 +32,7 @@ test_that("parseGlobals works", {
              "#' @apiTag tag description",
              "#' @apiTag tag2 description2")
 
-  fields <- parseGlobals(lines)
+  fields <- plumbGlobals(lines)
 
   expect_equal(fields, list(
     info=list(
@@ -55,5 +55,5 @@ test_that("parseGlobals works", {
 test_that("Globals can't contain duplicate tags", {
   lines <- c("#* @apiTag test description1",
              "#* @apiTag test description2")
-  expect_error(parseGlobals(lines), "Duplicate tag definition specified.")
+  expect_error(plumbGlobals(lines), "Duplicate tag definition specified.")
 })

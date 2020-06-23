@@ -1,153 +1,9 @@
 
 
-# calculate all swagger type information at once and use created information throughout package
-swaggerTypeInfo <- list()
-plumberToSwaggerTypeMap <- list()
-defaultSwaggerType <- structure("string", default = TRUE)
-defaultSwaggerIsArray <- structure(FALSE, default = TRUE)
-
-addSwaggerInfo_onLoad <- function() {
-  addSwaggerInfo <- function(swaggerType, plumberTypes,
-                             regex = NULL, converter = NULL,
-                             format = NULL,
-                             location = NULL,
-                             realType = NULL,
-                             arraySupport = FALSE) {
-    swaggerTypeInfo[[swaggerType]] <<-
-      list(
-        regex = regex,
-        converter = converter,
-        format = format,
-        location = location,
-        arraySupport = arraySupport,
-        realType = realType
-      )
-
-    if (arraySupport == TRUE) {
-      swaggerTypeInfo[[swaggerType]] <<- utils::modifyList(
-        swaggerTypeInfo[[swaggerType]],
-        list(regexArray = paste0("(?:(?:", regex, "),?)+"),
-             # Q: Do we need to safe guard against special characters, such as `,`?
-             # https://github.com/rstudio/plumber/pull/532#discussion_r439584727
-             # A: https://swagger.io/docs/specification/serialization/
-             # > Additionally, the allowReserved keyword specifies whether the reserved
-             # > characters :/?#[]@!$&'()*+,;= in parameter values are allowed to be sent as they are,
-             # > or should be percent-encoded. By default, allowReserved is false, and reserved characters
-             # > are percent-encoded. For example, / is encoded as %2F (or %2f), so that the parameter
-             # > value quotes/h2g2.txt will be sent as quotes%2Fh2g2.txt
-             converterArray = function(x) {converter(stri_split_fixed(x, ",")[[1]])})
-      )
-    }
-
-    for (plumberType in plumberTypes) {
-      plumberToSwaggerTypeMap[[plumberType]] <<- swaggerType
-    }
-    # make sure it could be called again
-    plumberToSwaggerTypeMap[[swaggerType]] <<- swaggerType
-
-    invisible(TRUE)
-  }
-
-  addSwaggerInfo(
-    "boolean",
-    c("bool", "boolean", "logical"),
-    "[01tfTF]|true|false|TRUE|FALSE",
-    as.logical,
-    location = c("query", "path"),
-    arraySupport = TRUE
-  )
-  addSwaggerInfo(
-    "number",
-    c("dbl", "double", "float", "number", "numeric"),
-    "-?\\\\d*\\\\.?\\\\d+",
-    as.numeric,
-    format = "double",
-    location = c("query", "path"),
-    arraySupport = TRUE
-  )
-  addSwaggerInfo(
-    "integer",
-    c("int", "integer"),
-    "-?\\\\d+",
-    as.integer,
-    format = "int64",
-    location = c("query", "path"),
-    arraySupport = TRUE
-  )
-  addSwaggerInfo(
-    "string",
-    c("chr", "str", "character", "string"),
-    "[^/]+",
-    as.character,
-    location = c("query", "path"),
-    arraySupport = TRUE
-  )
-  addSwaggerInfo(
-    "object",
-    c("list", "data.frame", "df"),
-    location = "requestBody"
-  )
-  addSwaggerInfo(
-    "file",
-    c("file", "binary"),
-    location = "requestBody",
-    format = "binary",
-    realType = "string"
-  )
-}
-
-
-#' Parse the given plumber type and return the typecast value
-#' @noRd
-plumberToSwaggerType <- function(type, inPath = FALSE) {
-  if (length(type) > 1) {
-    return(vapply(type, plumberToSwaggerType, character(1), inPath, USE.NAMES = FALSE))
-  }
-  # default type is "string" type
-  if (is.na(type)) {
-    return(defaultSwaggerType)
-  }
-
-  swaggerType <- plumberToSwaggerTypeMap[[as.character(type)]]
-  if (is.null(swaggerType)) {
-    warning(
-      "Unrecognized type: ", type, ". Using type: ", defaultSwaggerType,
-      call. = FALSE
-    )
-    swaggerType <- defaultSwaggerType
-  }
-  if (inPath && !"path" %in% swaggerTypeInfo[[swaggerType]]$location) {
-    warning(
-      "Unsupported path parameter type: ", type, ". Using type: ", defaultSwaggerType,
-      call. = FALSE
-    )
-    swaggerType <- defaultSwaggerType
-  }
-
-  return(swaggerType)
-}
-
-#' Check if swagger type supports array
-#' @noRd
-supportsArray <- function(swaggerTypes) {
-  vapply(
-    swaggerTypeInfo[swaggerTypes],
-    `[[`,
-    logical(1),
-    "arraySupport",
-    USE.NAMES = FALSE)
-}
-
-#' Filter swagger type
-#' @noRd
-filterSwaggerTypes <- function(matches, property) {
-  names(Filter(function(x) {any(matches %in% x[[property]])}, swaggerTypeInfo))
-}
-
 #' Convert the endpoints as they exist on the router to a list which can
-#' be converted into a swagger definition for these endpoints
+#' be converted into a OpenAPI Specification for these endpoints
 #' @noRd
-prepareSwaggerEndpoint <- function(routerEndpointEntry, path = routerEndpointEntry$path) {
+endpointSpecification <- function(routerEndpointEntry, path = routerEndpointEntry$path) {
   ret <- list()
 
   # We are sensitive to trailing slashes. Should we be?
@@ -160,14 +16,14 @@ prepareSwaggerEndpoint <- function(routerEndpointEntry, path = routerEndpointEnt
   # Get the params from endpoint func
   funcParams <- routerEndpointEntry$getFuncParams()
   for (verb in routerEndpointEntry$verbs) {
-    params <- extractSwaggerParams(routerEndpointEntry$params, pathParams, funcParams)
+    params <- parametersSpecification(routerEndpointEntry$params, pathParams, funcParams)
 
     # If we haven't already documented a path param, we should add it here.
     # FIXME: warning("Undocumented path parameters: ", paste0())
 
-    resps <- extractResponses(routerEndpointEntry$responses)
+    resps <- responsesSpecification(routerEndpointEntry$responses)
 
-    endptSwag <- list(
+    endptSpec <- list(
       summary = routerEndpointEntry$comments,
       responses = resps,
       parameters = params$parameters,
@@ -175,37 +31,37 @@ prepareSwaggerEndpoint <- function(routerEndpointEntry, path = routerEndpointEnt
       tags = routerEndpointEntry$tags
     )
 
-    ret[[cleanedPath]][[tolower(verb)]] <- endptSwag
+    ret[[cleanedPath]][[tolower(verb)]] <- endptSpec
   }
 
   ret
 }
 
-defaultResp <- list(
+defaultResponse <- list(
   "default" = list(
     description = "Default response."
   )
 )
-extractResponses <- function(resps){
+responsesSpecification <- function(resps){
   if (is.null(resps) || is.na(resps)){
-    resps <- defaultResp
+    resps <- defaultResponse
   } else if (!("default" %in% names(resps))){
-    resps <- c(resps, defaultResp)
+    resps <- c(resps, defaultResponse)
   }
   resps
 }
 
-#' Extract the swagger-friendly parameter definitions from the endpoint
+#' Extract the OpenAPI parameters Specification from the endpoint
 #' paramters.
 #' @noRd
-extractSwaggerParams <- function(endpointParams, pathParams, funcParams = NULL){
+parametersSpecification <- function(endpointParams, pathParams, funcParams = NULL){
 
   params <- list(
     parameters = list(),
     requestBody = list()
   )
-  inBody <- filterSwaggerTypes("requestBody", "location")
-  inRaw <- filterSwaggerTypes("binary", "format")
+  inBody <- filterApiTypes("requestBody", "location")
+  inRaw <- filterApiTypes("binary", "format")
   for (p in unique(c(names(endpointParams), pathParams$name, names(funcParams)))) {
 
     # Dealing with priorities endpointParams > pathParams > funcParams
@@ -226,12 +82,12 @@ extractSwaggerParams <- function(endpointParams, pathParams, funcParams = NULL){
       required <- TRUE
       style <- "simple"
       explode <- FALSE
-      type <- priorizeProperty(defaultSwaggerType,
+      type <- priorizeProperty(defaultApiType,
                                pathParams[pathParams$name == p,]$type,
                                endpointParams[[p]]$type,
                                funcParams[[p]]$type)
-      type <- plumberToSwaggerType(type, inPath = TRUE)
-      isArray <- priorizeProperty(defaultSwaggerIsArray,
+      type <- plumberToApiType(type, inPath = TRUE)
+      isArray <- priorizeProperty(defaultIsArray,
                                   pathParams[pathParams$name == p,]$isArray,
                                   endpointParams[[p]]$isArray,
                                   funcParams[[p]]$isArray)
@@ -239,18 +95,18 @@ extractSwaggerParams <- function(endpointParams, pathParams, funcParams = NULL){
       location <- "query"
       style <- "form"
       explode <- TRUE
-      type <- priorizeProperty(defaultSwaggerType,
+      type <- priorizeProperty(defaultApiType,
                                endpointParams[[p]]$type,
                                funcParams[[p]]$type)
-      type <- plumberToSwaggerType(type)
-      isArray <- priorizeProperty(defaultSwaggerIsArray,
+      type <- plumberToApiType(type)
+      isArray <- priorizeProperty(defaultIsArray,
                                   endpointParams[[p]]$isArray,
                                   funcParams[[p]]$isArray)
       required <- priorizeProperty(funcParams[[p]]$required,
                                    endpointParams[[p]]$required)
     }
 
-    # Building openapi definition
+    # Building OpenAPI Specification
     if (type %in% inBody) {
       if (length(params$requestBody) == 0L) {
         params$requestBody$content$`application/json`[["schema"]] <-
@@ -258,13 +114,13 @@ extractSwaggerParams <- function(endpointParams, pathParams, funcParams = NULL){
       }
       property <- list(
         type = type,
-        format = swaggerTypeInfo[[type]]$format,
+        format = apiTypesInfo[[type]]$format,
         example = funcParams[[p]]$example,
         description = endpointParams[[p]]$desc
       )
       if (type %in% inRaw) {
         names(params$requestBody$content) <- "multipart/form-data"
-        property$type <- swaggerTypeInfo[[type]]$realType
+        property$type <- apiTypesInfo[[type]]$realType
       }
       params$requestBody[[1]][[1]][[1]]$properties[[p]] <- property
       if (required) { params$requestBody[[1]][[1]][[1]]$required <-
@@ -277,7 +133,7 @@ extractSwaggerParams <- function(endpointParams, pathParams, funcParams = NULL){
         required = required,
         schema = list(
           type = type,
-          format = swaggerTypeInfo[[type]]$format,
+          format = apiTypesInfo[[type]]$format,
           default = funcParams[[p]]$default
         )
       )
@@ -286,7 +142,7 @@ extractSwaggerParams <- function(endpointParams, pathParams, funcParams = NULL){
           type = "array",
           items = list(
             type = type,
-            format = swaggerTypeInfo[[type]]$format
+            format = apiTypesInfo[[type]]$format
           ),
           default = funcParams[[p]]$default
         )
@@ -352,7 +208,7 @@ removeNaOrNulls <- function(x) {
   ret
 }
 
-#' For openapi definition
+#' For OpenAPI Specification
 #' @noRd
 priorizeProperty <- function(...) {
   l <- list(...)
@@ -385,7 +241,7 @@ getArgsMetadata <- function(plumberExpression){
   #return same format as getTypedParams or params?
   if (!is.function(plumberExpression)) plumberExpression <- eval(plumberExpression)
   args <- formals(plumberExpression)
-  lapply(args[!names(args) %in% c("...", "res", "req")], function(arg) {
+  lapply(args[!names(args) %in% c("req", "res", "...")], function(arg) {
     required <- identical(arg, formals(function(x){})$x)
     if (is.call(arg) || is.name(arg)) {
       arg <- tryCatch(
@@ -398,17 +254,19 @@ getArgsMetadata <- function(plumberExpression){
     # is json serializable. Otherwise set to NA.
     if (!is.logical(arg) && !is.numeric(arg) && !is.character(arg)
         && !(is.list(arg) && isJSONserializable(arg))) {
-      message("Argument of class ", class(arg), " cannot be used to set default value in OpenAPI specifications.")
+      message("Argument of class ", class(arg), " cannot be used to set default value in OpenAPI Specifications.")
       arg <- NA
     }
     type <- if (isNaOrNull(arg)) {NA} else {typeof(arg)}
-    type <- plumberToSwaggerType(type)
+    type <- plumberToApiType(type)
+    isArray <- {if (length(arg) > 1L && type %in% filterApiTypes(TRUE, "arraySupport")) TRUE else defaultIsArray}
     list(
       default = arg,
       example = arg,
       required = required,
-      isArray = {if (length(arg) > 1L & supportsArray(type)) TRUE else defaultSwaggerIsArray},
+      isArray = isArray,
       type = type
     )
   })
 }
+
