@@ -49,6 +49,13 @@ test_that("Test text parser", {
   expect_equal(parseBody("Ceci est un texte.", "text/html"), "Ceci est un texte.")
 })
 
+test_that("Test yaml parser", {
+  skip_if_not_installed("yaml")
+
+  r_object <- list(a=1,b=list(c=2,d=list(e=3,f=4:6)))
+  expect_equal(parseBody(charToRaw(yaml::as.yaml(r_object)), "application/x-yaml"), r_object)
+})
+
 test_that("Test multipart parser", {
 
   bin_file <- test_path("files/multipart-form.bin")

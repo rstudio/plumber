@@ -5,12 +5,12 @@ Title: An API Generator for R
 Version: 0.4.7.9000
 Roxygen: list(markdown = TRUE)
 Authors@R: c(
-  person(family = "RStudio", role = c("cph", "fnd")),
-  person("Jeff", "Allen", role="cre", email="cran@trestletech.com"),
-  person("Barret", "Schloerke", role="aut", email="barret@rstudio.com"),
-  person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"),
-  person("Sebastiaan", "Vandewoude", role="ctb", email="sebastiaanvandewoude@gmail.com"),
-  person(family="SmartBear Software", role=c("ctb", "cph"), comment="swagger-ui"))
+  person("Barret", "Schloerke", role = c("cre", "aut"), email = "barret@rstudio.com"),
+  person("Jeff", "Allen", role = c("aut", "ccp"), email = "cran@trestletech.com"),
+  person("Bruno", "Tremblay", role = "ctb", email = "bruno.tremblay@lacapitale.com"),
+  person("Frans", "van Dunné", role = "ctb", email = "frans@ixpantia.com"),
+  person("Sebastiaan", "Vandewoude", role="ctb", email = "sebastiaanvandewoude@gmail.com"),
+  person(family = "RStudio", role = c("cph", "fnd")))
 License: MIT + file LICENSE
 BugReports: https://github.com/rstudio/plumber/issues
 URL: https://www.rplumber.io (site)
@@ -40,7 +40,9 @@ Suggests:
     htmlwidgets,
     visNetwork,
     analogsea (>= 0.7.0),
-    later
+    later,
+    readr,
+    yaml
 Remotes:
     rstudio/swagger
 Collate:
@@ -69,10 +71,12 @@ Collate:
     'post-parsers.R'
     'response.R'
     'serializer-content-type.R'
+    'serializer-csv.R'
     'serializer-html.R'
     'serializer-htmlwidget.R'
     'serializer-rds.R'
     'serializer-xml.R'
+    'serializer-yaml.R'
     'serializer.R'
     'session-cookie.R'
     'swagger.R'
