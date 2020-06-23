@@ -8,13 +8,14 @@
 plumb(file = NULL, dir = ".")
 }
 \arguments{
-\item{file}{path to file to plumb}
+\item{file}{The file to parse as the plumber router definition.}
 
-\item{dir}{dir path where to look for file to plumb}
+\item{dir}{The directory containing the \code{plumber.R} file to parse as the
+plumber router definition. Alternatively, if an \code{entrypoint.R} file is
+found, it will take precedence and be responsible for returning a runnable
+router.}
 }
 \description{
-Plumber Router
-
 Plumber Router
 }
 \details{
@@ -24,72 +25,6 @@ eventually to a corresponding endpoint, if one is found.
 
 See \url{http://www.rplumber.io/docs/programmatic/} for additional
 details on the methods available on this object.
-
-\code{port} does not need to be explicitly assigned.
-
-\code{callback} When set, it will be called with a character string corresponding
-to the UI url. It allows RStudio to open UI when plumber router
-run method is executed using default \code{plumber.ui.url} option.
-
-Plumber routers can be “nested” by mounting one into another
-using the \code{mount()} method. This allows you to compartmentalize your API
-by paths which is a great technique for decomposing large APIs into smaller files.
-
-Plumber routers support the notion of "hooks" that can be registered
-to execute some code at a particular point in the lifecycle of a request.
-Plumber routers currently support four hooks:
-\enumerate{
-\item \code{preroute(data, req, res)}
-\item \code{postroute(data, req, res, value)}
-\item \code{preserialize(data, req, res, value)}
-\item \code{postserialize(data, req, res, value)}
-}
-In all of the above you have access to a disposable environment in the \code{data}
-parameter that is created as a temporary data store for each request. Hooks
-can store temporary data in these hooks that can be reused by other hooks
-processing this same request.
-
-One feature when defining hooks in Plumber routers is the ability to modify
-the returned value. The convention for such hooks is: any function that accepts
-a parameter named \code{value} is expected to return the new value. This could
-be an unmodified version of the value that was passed in, or it could be a
-mutated value. But in either case, if your hook accepts a parameter
-named \code{value}, whatever your hook returns will be used as the new value
-for the response.
-
-You can add hooks using the \code{registerHook} method, or you can add multiple
-hooks at once using the \code{registerHooks} method which takes a name list in
-which the names are the names of the hooks, and the values are the
-handlers themselves.
-
-The “handler” functions that you define in these handle calls
-are identical to the code you would have defined in your plumber.R file
-if you were using annotations to define your API. The handle() method
-takes additional arguments that allow you to control nuanced behavior
-of the endpoint like which filter it might preempt or which serializer
-it should use.
-
-required for httpuv interface
-
-required for httpuv interface
-
-required for httpuv interface
-
-Sets the default serializer of the router.
-
-Sets the handler that gets called if an
-incoming request can’t be served by any filter, endpoint, or sub-router.
-
-Sets the error handler which gets invoked if any filter or
-endpoint generates an error.
-
-addEndpoint has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{handle()} instead.
-
-addAssets has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{mount} and \code{PlumberStatic$new()} instead.
-
-addFilter has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{filter} instead.
-
-addGlobalProcessor has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{registerHook}(s) instead.
 }
 \examples{
 
@@ -228,7 +163,7 @@ Create a new \code{plumber} router
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{file}}{The file to parse as the plumber router definition}
+\item{\code{file}}{path to file to plumb}
 
 \item{\code{filters}}{a list of plumber filters}
 
@@ -244,7 +179,7 @@ A new \code{plumber} router
 \if{html}{\out{<a id="method-run"></a>}}
 \if{latex}{\out{\hypertarget{method-run}{}}}
 \subsection{Method \code{run()}}{
-Start an a server using \code{plumber} object.
+Start a server using \code{plumber} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$run(
   host = "127.0.0.1",
@@ -279,6 +214,14 @@ Other valid values are \code{FALSE} and \code{redoc}.}
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+\code{port} does not need to be explicitly assigned.
+
+\code{callback} When set, it will be called with a character string corresponding
+to the UI url. It allows RStudio to open UI when plumber router
+run method is executed using default \code{plumber.ui.url} option.
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mount"></a>}}
@@ -298,6 +241,12 @@ Mount a plumber router
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+Plumber routers can be “nested” by mounting one into another
+using the \code{mount()} method. This allows you to compartmentalize your API
+by paths which is a great technique for decomposing large APIs into smaller files.
+}
+
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{\dontrun{
@@ -336,6 +285,35 @@ Register a hook
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+Plumber routers support the notion of "hooks" that can be registered
+to execute some code at a particular point in the lifecycle of a request.
+Plumber routers currently support four hooks:
+\enumerate{
+\item \code{preroute(data, req, res)}
+\item \code{postroute(data, req, res, value)}
+\item \code{preserialize(data, req, res, value)}
+\item \code{postserialize(data, req, res, value)}
+}
+In all of the above you have access to a disposable environment in the \code{data}
+parameter that is created as a temporary data store for each request. Hooks
+can store temporary data in these hooks that can be reused by other hooks
+processing this same request.
+
+One feature when defining hooks in Plumber routers is the ability to modify
+the returned value. The convention for such hooks is: any function that accepts
+a parameter named \code{value} is expected to return the new value. This could
+be an unmodified version of the value that was passed in, or it could be a
+mutated value. But in either case, if your hook accepts a parameter
+named \code{value}, whatever your hook returns will be used as the new value
+for the response.
+
+You can add hooks using the \code{registerHook} method, or you can add multiple
+hooks at once using the \code{registerHooks} method which takes a name list in
+which the names are the names of the hooks, and the values are the
+handlers themselves.
+}
+
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{\dontrun{
@@ -394,6 +372,15 @@ Define endpoints
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+The “handler” functions that you define in these handle calls
+are identical to the code you would have defined in your plumber.R file
+if you were using annotations to define your API. The handle() method
+takes additional arguments that allow you to control nuanced behavior
+of the endpoint like which filter it might preempt or which serializer
+it should use.
+}
+
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{\dontrun{
@@ -487,6 +474,10 @@ httpuv interface call function
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+required for httpuv interface
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-onHeaders"></a>}}
@@ -504,6 +495,10 @@ httpuv interface onHeaders function
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+required for httpuv interface
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-onWSOpen"></a>}}
@@ -521,6 +516,10 @@ httpuv interface onWSOpen function
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+required for httpuv interface
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-setSerializer"></a>}}
@@ -537,6 +536,10 @@ httpuv interface onWSOpen function
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+Sets the default serializer of the router.
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set404Handler"></a>}}
@@ -553,6 +556,11 @@ httpuv interface onWSOpen function
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+Sets the handler that gets called if an
+incoming request can’t be served by any filter, endpoint, or sub-router.
+}
+
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{\dontrun{
@@ -580,6 +588,11 @@ pr$set404Handler(function(req, res) {cat(req$PATH_INFO)})
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+Sets the error handler which gets invoked if any filter or
+endpoint generates an error.
+}
+
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{\dontrun{
@@ -688,6 +701,10 @@ Retrieve openAPI file
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+addEndpoint has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{handle()} instead.
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-addAssets"></a>}}
@@ -708,6 +725,10 @@ Retrieve openAPI file
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+addAssets has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{mount} and \code{PlumberStatic$new()} instead.
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-addFilter"></a>}}
@@ -730,6 +751,10 @@ Retrieve openAPI file
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+addFilter has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{filter} instead.
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-addGlobalProcessor"></a>}}
@@ -746,6 +771,10 @@ Retrieve openAPI file
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+addGlobalProcessor has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{registerHook}(s) instead.
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

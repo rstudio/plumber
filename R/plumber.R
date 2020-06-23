@@ -11,9 +11,19 @@ enumerateVerbs <- function(v) {
   toupper(v)
 }
 
+#' Plumber Router
+#' @details Routers are the core request handler in plumber. A router is responsible for
+#' taking an incoming request, submitting it through the appropriate filters and
+#' eventually to a corresponding endpoint, if one is found.
+#'
+#' See \url{http://www.rplumber.io/docs/programmatic/} for additional
+#' details on the methods available on this object.
 #' @rdname plumber
-#' @param file path to file to plumb
-#' @param dir dir path where to look for file to plumb
+#' @param file The file to parse as the plumber router definition.
+#' @param dir The directory containing the `plumber.R` file to parse as the
+#'   plumber router definition. Alternatively, if an `entrypoint.R` file is
+#'   found, it will take precedence and be responsible for returning a runnable
+#'   router.
 #' @export
 plumb <- function(file = NULL, dir = ".") {
 
@@ -170,25 +180,11 @@ hookable <- R6Class(
 )
 
 
-#' Plumber Router
-#'
-#' Routers are the core request handler in plumber. A router is responsible for
-#' taking an incoming request, submitting it through the appropriate filters and
-#' eventually to a corresponding endpoint, if one is found.
-#'
-#' See \url{http://www.rplumber.io/docs/programmatic/} for additional
-#' details on the methods available on this object.
-#' @param file The file to parse as the plumber router definition
-#' @param dir The directory containing the `plumber.R` file to parse as the
-#'   plumber router definition. Alternatively, if an `entrypoint.R` file is
-#'   found, it will take precedence and be responsible for returning a runnable
-#'   Plumber router.
 #' @include globals.R
 #' @include serializer-json.R
 #' @include parse-block.R
 #' @include parse-globals.R
 #' @export
-#' @importFrom httpuv runServer
 #' @import crayon
 plumber <- R6Class(
   "plumber",
@@ -196,6 +192,7 @@ plumber <- R6Class(
   public = list(
     #' @description Create a new `plumber` router
     #' @param filters a list of plumber filters
+    #' @param file path to file to plumb
     #' @param envir an environment to be used as the enclosure for the routers execution
     #' @return A new `plumber` router
     initialize = function(file=NULL, filters=defaultPlumberFilters, envir){
@@ -250,7 +247,7 @@ plumber <- R6Class(
       }
 
     },
-    #' @description Start an a server using `plumber` object.
+    #' @description Start a server using `plumber` object.
     #' @param host a string that is a valid IPv4 or IPv6 address that is owned by
     #' this server, which the application will listen on. "0.0.0.0" represents
     #' all IPv4 addresses and "::/0" represents all IPv6 addresses.
