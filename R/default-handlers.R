@@ -2,6 +2,7 @@
 default404Handler <- function(req, res){
   if (isTRUE(req$methodNotAllowed)) {
     res$status = 405L
+    # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Allow
     res$setHeader("Allow", paste(req$verbsAllowed, collapse = ", "))
     return(list(error = "405 - Method Not Allowed"))
   }
