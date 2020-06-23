@@ -914,7 +914,7 @@ plumber <- R6Class(
     },
     #' @description Retrieve openAPI file
     swaggerFile = function() {
-      warning("`$openAPIFile()` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$apiSpec()`.")
+      warning("`$swaggerFile()` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$apiSpec()`.")
       self$apiSpec()
     },
 
