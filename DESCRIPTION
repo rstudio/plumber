@@ -66,7 +66,6 @@ Collate:
     'new-rstudio-project.R'
     'openapi-spec.R'
     'openapi-types.R'
-    'parsers-body.R'
     'paths.R'
     'plumber-response.R'
     'plumber-static.R'
