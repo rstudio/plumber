@@ -41,7 +41,8 @@ Suggests:
     visNetwork,
     analogsea (>= 0.7.0),
     later,
-    readr
+    readr,
+    yaml
 Remotes:
     rstudio/swagger
 Collate:
@@ -74,6 +75,7 @@ Collate:
     'serializer-htmlwidget.R'
     'serializer-rds.R'
     'serializer-xml.R'
+    'serializer-yaml.R'
     'serializer.R'
     'session-cookie.R'
     'swagger.R'
