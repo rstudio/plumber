@@ -41,6 +41,7 @@ Suggests:
     visNetwork,
     analogsea (>= 0.7.0),
     later,
+    readr,
     yaml
 Remotes:
     rstudio/swagger
@@ -69,6 +70,7 @@ Collate:
     'post-parsers.R'
     'response.R'
     'serializer-content-type.R'
+    'serializer-csv.R'
     'serializer-html.R'
     'serializer-htmlwidget.R'
     'serializer-rds.R'

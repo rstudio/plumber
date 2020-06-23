@@ -1,5 +1,11 @@
 plumber (version)
 --------------------------------------------------------------------------------
+
+### New features
+
+* CSV (UTF-8) serialization (@pachamaltese, #520)
+* SVG (UTF-8) serialization (@pachamaltese, #398)
+
 ### Bug fixes
 
 * Fix `plumb()` function when `plumb()`ing a directory so that `plumber.R` is
