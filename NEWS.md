@@ -1,5 +1,11 @@
 plumber (version)
 --------------------------------------------------------------------------------
+
+### New features
+
+* CSV (UTF-8) serialization (@pachamaltese, #520)
+* SVG (UTF-8) serialization (@pachamaltese, #398)
+
 ### Bug fixes
 
 * Fix `plumb()` function when `plumb()`ing a directory so that `plumber.R` is
@@ -42,7 +48,10 @@ plumber 0.5.0
 
 ### New features
 
-* Support HTTP 405 Code. (@meztez)
+
+* Support HTTP 405 Code. (@meztez, #554)
+
+* Add yaml support, serializer and parser. (@meztez, #556)
 
 * Added Swagger support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez, #532) 
 

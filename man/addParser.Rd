@@ -28,7 +28,7 @@ case sensitive.
 
 Parser function structure is something like below. Available parameters
 to build parser are \code{value}, \code{content_type} and \code{filename} (only available
-in \code{multipart-form} body).\if{html}{\out{<div class="r">}}\preformatted{parser <- function(...) \{
+in \code{multipart-form} body).\if{html}{\out{<div class="r">}}\preformatted{parser <- function() \{
   function(value, content_type = "ct", filename, ...) \{
     # do something with raw value
   \}
@@ -39,7 +39,7 @@ It should return a named list if you want values to map to
 plumber endpoint function args.
 }
 \examples{
-parser_json <- function(...) {
+parser_json <- function() {
   function(value, content_type = "application/json", ...) {
     charset <- getCharacterSet(content_type)
     value <- rawToChar(value)

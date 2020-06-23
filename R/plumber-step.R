@@ -132,7 +132,6 @@ getRelevantArgs <- function(args, plumberExpression){
 #'
 #' Defines a terminal handler in a PLumber router.
 #'
-#' @importFrom stringi stri_match_first_regex
 #' @export
 PlumberEndpoint <- R6Class(
   "PlumberEndpoint",
