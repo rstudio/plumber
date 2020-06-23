@@ -3,8 +3,8 @@ plumber (version)
 
 ### New features
 
-* Add support for `Redoc` OpenAPI UI. (@meztez)
-* Generalize interface integration. (@meztez)
+* Add support for `Redoc` OpenAPI UI. (@meztez, #562)
+* Generalize interface integration. (@meztez, #562)
 * CSV (UTF-8) serialization (@pachamaltese, #520)
 * SVG (UTF-8) serialization (@pachamaltese, #398)
 
