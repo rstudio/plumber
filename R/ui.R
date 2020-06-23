@@ -66,7 +66,7 @@ mountOpenAPI <- function(pr, api_url) {
       }
     }
 
-    utils::modifyList(list(servers = list(list(url = api_url, description = "OpenAPI"))), spec)
+    utils::modifyList(list(servers = list(list(url = api_url))), spec)
 
   }
   # http://spec.openapis.org/oas/v3.0.3#document-structure
@@ -116,17 +116,17 @@ swaggerInterface <- list(
   static = swagger::swagger_path
 )
 
-redocInterface <- list(
-  package = "redoc",
-  name = "redoc",
-  index = function(redoc_options = structure(list(), names = character())) {
-    redoc::redoc_spec(
-      spec_url = "\' + window.location.origin + window.location.pathname.replace(/\\(__redoc__\\\\/|__redoc__\\\\/index.html\\)$/, '') + 'openapi.json' + \'",
-      redoc_options = redoc_options
-    )
-  },
-  static = redoc::redoc_path
-)
+# redocInterface <- list(
+#   package = "redoc",
+#   name = "redoc",
+#   index = function(redoc_options = structure(list(), names = character())) {
+#     redoc::redoc_spec(
+#       spec_url = "\' + window.location.origin + window.location.pathname.replace(/\\(__redoc__\\\\/|__redoc__\\\\/index.html\\)$/, '') + 'openapi.json' + \'",
+#       redoc_options = redoc_options
+#     )
+#   },
+#   static = redoc::redoc_path
+# )
 
 mountInterfaces(swaggerInterface)
-mountInterfaces(redocInterface)
+# mountInterfaces(redocInterface)
