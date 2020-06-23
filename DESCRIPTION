@@ -67,6 +67,7 @@ Collate:
     'openapi-spec.R'
     'openapi-types.R'
     'paths.R'
+    'plumber-options.R'
     'plumber-response.R'
     'plumber-static.R'
     'plumber-step.R'
