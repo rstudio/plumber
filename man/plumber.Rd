@@ -5,7 +5,7 @@
 \alias{plumber}
 \title{Plumber Router}
 \usage{
-plumb(file, dir = ".")
+plumb(file = NULL, dir = ".")
 }
 \arguments{
 \item{file}{path to file to plumb}
@@ -26,23 +26,10 @@ See \url{http://www.rplumber.io/docs/programmatic/} for additional
 details on the methods available on this object.
 
 \code{port} does not need to be explicitly assigned.
-It will be attributed automatically in the following priority order :
-option \code{plumber.port}, \code{port} value in global environment, a random port
-between 3000 and 10000 that is not blacklisted. When in unable to find
-an available port, method will fail.
 
-\code{swagger} should be either a logial or set to a function . When \code{TRUE} or a
-function, multiple handles will be added to \code{plumber} object. OpenAPI json
-file will be served on paths \verb{/openapi.json} and \verb{/swagger.json}. Swagger UI
-will be served on paths \verb{/__swagger__/index.html} and \verb{/__swagger__/}. When
-using a function, it will receive the plumber router as the first parameter
-and currrent swagger specifications as the second. This function should return a
-list containing swagger specifications.
-See \url{https://swagger.io/docs/specification/}
-
-\code{swaggerCallback} When set, it will be called with a character string corresponding
-to the swagger UI url. It allows RStudio to open swagger UI when plumber router
-run method is executed using default \code{plumber.swagger.url} option.
+\code{callback} When set, it will be called with a character string corresponding
+to the UI url. It allows RStudio to open UI when plumber router
+run method is executed using default \code{plumber.ui.url} option.
 
 Plumber routers can be “nested” by mounting one into another
 using the \code{mount()} method. This allows you to compartmentalize your API
@@ -105,19 +92,6 @@ addFilter has been deprecated in v0.4.0 and will be removed in a coming release.
 addGlobalProcessor has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{registerHook}(s) instead.
 }
 \examples{
-
-## ------------------------------------------------
-## Method `plumber$run`
-## ------------------------------------------------
-
-\dontrun{
-pr <- plumber$new
-swagger <- function(pr_, spec) {
-  spec$servers[[1]]$description <- "MyCustomAPISpec"
-  spec
-}
-pr$run(swagger = swagger)
-}
 
 ## ------------------------------------------------
 ## Method `plumber$mount`
@@ -224,6 +198,7 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 \item \href{#method-setSerializer}{\code{plumber$setSerializer()}}
 \item \href{#method-set404Handler}{\code{plumber$set404Handler()}}
 \item \href{#method-setErrorHandler}{\code{plumber$setErrorHandler()}}
+\item \href{#method-setApiHandler}{\code{plumber$setApiHandler()}}
 \item \href{#method-filter}{\code{plumber$filter()}}
 \item \href{#method-swaggerFile}{\code{plumber$swaggerFile()}}
 \item \href{#method-openAPIFile}{\code{plumber$openAPIFile()}}
@@ -274,9 +249,10 @@ Start an a server using \code{plumber} object.
 \if{html}{\out{<div class="r">}}\preformatted{plumber$run(
   host = "127.0.0.1",
   port = getOption("plumber.port"),
-  swagger = interactive(),
+  ui = TRUE,
   debug = interactive(),
-  swaggerCallback = getOption("plumber.swagger.url", NULL)
+  callback = getOption("plumber.ui.callback", getOption("plumber.swagger.url", NULL)),
+  ...
 )}\if{html}{\out{</div>}}
 }
 
@@ -291,29 +267,18 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.}
 
-\item{\code{swagger}}{a function that enhances the existing swagger specification.}
+\item{\code{ui}}{a logical or a character vector. The default UI when \code{TRUE} is \code{swagger}.
+Other valid values are \code{FALSE} and \code{redoc}.}
 
 \item{\code{debug}}{\code{TRUE} provides more insight into your API errors.}
 
-\item{\code{swaggerCallback}}{a callback function for taking action on the url for swagger page.}
+\item{\code{callback}}{a callback function for taking action on UI url.}
+
+\item{\code{...}}{Other params to be passed down to ui functions, such as
+\code{redoc_options} \code{redoc::\link[redoc]{redoc_spec}}.}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{\dontrun{
-pr <- plumber$new
-swagger <- function(pr_, spec) {
-  spec$servers[[1]]$description <- "MyCustomAPISpec"
-  spec
-}
-pr$run(swagger = swagger)
-}
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mount"></a>}}
@@ -626,6 +591,23 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setApiHandler"></a>}}
+\if{latex}{\out{\hypertarget{method-setApiHandler}{}}}
+\subsection{Method \code{setApiHandler()}}{
+Add a function to customize what is returned in \verb{$apiSpec()}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{plumber$setApiHandler(api_fun = force)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{api_fun}}{This function should accept an OpenAPI Specification autogenerated by \code{plumber}.  It should return a list object in valid OpenAPI Specification format. This will not be validated.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-filter"></a>}}

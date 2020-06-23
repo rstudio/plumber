@@ -10,13 +10,22 @@ library(plumber)
 test_that("custom swagger file update function works", {
   pr <- plumber$new()
   pr$handle("GET", "/:path/here", function(){})
-
+  pr$setApiHandler(function(spec) {
+    spec$info$title <- Sys.time()
+    spec
+  })
   pr$run(
     port = 1234,
-    swagger = function(pr_, spec, ...) {
-      spec$info$title <- Sys.time()
-      spec
-    }
+    ui = "swagger"
+  )
+  pr$run(
+    port = 1234,
+    ui = "redoc"
+  )
+  pr$run(
+    port = 1235,
+    ui = "redoc",
+    redoc_options = list(scrollYOffset = 250, disableSearch = TRUE)
   )
 
   # validate that http://127.0.0.1:1234/__swagger__/ displays the system time as the api title

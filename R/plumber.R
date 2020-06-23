@@ -257,48 +257,29 @@ plumber <- R6Class(
     #' @param port a number or integer that indicates the server port that should
     #' be listened on. Note that on most Unix-like systems including Linux and
     #' Mac OS X, port numbers smaller than 1025 require root privileges.
-    #' @param swagger a function that enhances the existing swagger specification.
+    #' @param ui a logical or a character vector. The default UI when `TRUE` is `swagger`.
+    #' Other valid values are `FALSE` and `redoc`.
     #' @param debug `TRUE` provides more insight into your API errors.
-    #' @param swaggerCallback a callback function for taking action on the url for swagger page.
+    #' @param callback a callback function for taking action on UI url.
+    #' @param ... Other params to be passed down to ui functions, such as
+    #' `redoc_options` \code{redoc::\link[redoc]{redoc_spec}}.
     #' @details
     #' `port` does not need to be explicitly assigned.
-    #' It will be attributed automatically in the following priority order :
-    #' option `plumber.port`, `port` value in global environment, a random port
-    #' between 3000 and 10000 that is not blacklisted. When in unable to find
-    #' an available port, method will fail.
     #'
-    #' `swagger` should be either a logial or set to a function . When `TRUE` or a
-    #' function, multiple handles will be added to `plumber` object. OpenAPI json
-    #' file will be served on paths `/openapi.json` and `/swagger.json`. Swagger UI
-    #' will be served on paths `/__swagger__/index.html` and `/__swagger__/`. When
-    #' using a function, it will receive the plumber router as the first parameter
-    #' and currrent swagger specifications as the second. This function should return a
-    #' list containing swagger specifications.
-    #' See \url{https://swagger.io/docs/specification/}
-    #'
-    #' `swaggerCallback` When set, it will be called with a character string corresponding
-    #' to the swagger UI url. It allows RStudio to open swagger UI when plumber router
-    #' run method is executed using default `plumber.swagger.url` option.
-    #' @examples
-    #' \dontrun{
-    #' pr <- plumber$new
-    #' swagger <- function(pr_, spec) {
-    #'   spec$servers[[1]]$description <- "MyCustomAPISpec"
-    #'   spec
-    #' }
-    #' pr$run(swagger = swagger)
-    #' }
+    #' `callback` When set, it will be called with a character string corresponding
+    #' to the UI url. It allows RStudio to open UI when plumber router
+    #' run method is executed using default `plumber.ui.url` option.
     run = function(
       host = '127.0.0.1',
       port = getOption('plumber.port'),
-      swagger = interactive(),
+      ui = TRUE,
       debug = interactive(),
-      swaggerCallback = getOption('plumber.swagger.url', NULL)
+      callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL)),
+      ...
     ) {
       port <- findPort(port)
 
-
-      message("Running plumber API at ", urlHost(host, port, changeHostLocation = FALSE))
+      message("Running plumber API at ", urlHost(host = host, port = port, changeHostLocation = FALSE))
 
       priorDebug <- getOption("plumber.debug")
       on.exit({ options("plumber.debug" = priorDebug) })
@@ -311,71 +292,8 @@ plumber <- R6Class(
         setwd(dirname(private$filename))
       }
 
-      if (isTRUE(swagger) || is.function(swagger)) {
-        if (!requireNamespace("swagger")) {
-          stop("swagger must be installed for the Swagger UI to be displayed")
-        }
-        spec <- self$swaggerFile()
-
-        # Create a function that's hardcoded to return the swaggerfile -- regardless of env.
-        swagger_fun <- function(req, res, ..., scheme = "deprecated", host = "deprecated", path = "deprecated") {
-          if (!missing(scheme) || !missing(host) || !missing(path)) {
-            warning("`scheme`, `host`, or `path` are not supported to produce swagger.json")
-          }
-          # allows swagger-ui to provide proper callback location given the referrer location
-          # ex: rstudio cloud
-          # use the HTTP_REFERER so RSC can find the swagger location to ask
-          ## (can't directly ask for 127.0.0.1)
-          referrer_url <- req$HTTP_REFERER
-          referrer_url <- sub("index\\.html$", "", referrer_url)
-          referrer_url <- sub("__swagger__/$", "", referrer_url)
-          spec$servers <- list(
-            list(
-              url = referrer_url,
-              description = "OpenAPI"
-            )
-          )
-
-          if (is.function(swagger)) {
-            # allow users to update the swagger file themselves
-            ret <- swagger(self, spec, ...)
-            # Since users could have added more NA or NULL values...
-            ret <- removeNaOrNulls(ret)
-          } else {
-            # NA/NULL values already removed
-            ret <- spec
-          }
-          ret
-        }
-        # https://swagger.io/specification/#document-structure
-        # "It is RECOMMENDED that the root OpenAPI document be named: openapi.json or openapi.yaml."
-        self$handle("GET", "/openapi.json", swagger_fun, serializer = serializer_unboxed_json())
-        # keeping for legacy purposes
-        self$handle("GET", "/swagger.json", swagger_fun, serializer = serializer_unboxed_json())
-
-        swagger_index <- function(...) {
-          swagger::swagger_spec(
-            'window.location.origin + window.location.pathname.replace(/\\(__swagger__\\\\/|__swagger__\\\\/index.html\\)$/, "") + "openapi.json"',
-            version = "3"
-          )
-        }
-        for (path in c("/__swagger__/index.html", "/__swagger__/")) {
-          self$handle(
-            "GET", path, swagger_index,
-            serializer = serializer_html()
-          )
-        }
-        self$mount("/__swagger__", PlumberStatic$new(swagger::swagger_path()))
-
-        swaggerUrl <- paste0(
-          urlHost(getOption("plumber.apiHost", host), port, changeHostLocation = TRUE),
-          "/__swagger__/"
-        )
-        message("Running Swagger UI  at ", swaggerUrl, sep = "")
-        # notify swaggerCallback of plumber swagger location
-        if (!is.null(swaggerCallback) && is.function(swaggerCallback)) {
-          swaggerCallback(swaggerUrl)
-        }
+      if (isTRUE(ui) || isTRUE(ui %in% names(.globals$interfaces))) {
+        mountUI(self, host, port, ui, callback, ...)
       }
 
       on.exit(private$runHooks("exit"), add = TRUE)
@@ -882,6 +800,15 @@ plumber <- R6Class(
     setErrorHandler = function(fun){
       private$errorHandler <- fun
     },
+    #' @description Add a function to customize what is returned in `$apiSpec()`.
+    #' @param api_fun This function should accept an OpenAPI Specification autogenerated by `plumber`.  It should return a list object in valid OpenAPI Specification format. This will not be validated.
+    setApiHandler = function(api_fun = force) {
+      # allow null values
+      if (!is.null(api_fun)) {
+        stopifnot(is.function(api_fun))
+      }
+      private$apiHandler <- api_fun
+    },
     #' @description Add a filter to plumber router
     #' @param name a character string. Name of filter
     #' @param expr an expr that resolve to a filter function or a filter function
@@ -901,6 +828,10 @@ plumber <- R6Class(
       # Lay those over the default globals so we ensure that the required fields
       # (like API version) are satisfied.
       ret <- utils::modifyList(defaultGlobals, def)
+
+      if (!is.null(private$apiHandler)) {
+        ret <- private$apiHandler(ret)
+      }
 
       # remove NA or NULL values, which swagger doesn't like
       ret <- removeNaOrNulls(ret)
@@ -1044,6 +975,8 @@ plumber <- R6Class(
     notFoundHandler = NULL,
     maxSize = NULL, # Max request size in bytes
 
+    apiHandler = NULL,
+
     addFilterInternal = function(filter){
       # Create a new filter and add it to the router
       private$filts <- c(private$filts, filter)
@@ -1121,7 +1054,7 @@ plumber <- R6Class(
 
 
 
-urlHost <- function(host, port, changeHostLocation = FALSE) {
+urlHost <- function(scheme = "http", host, port, path = "", changeHostLocation = FALSE) {
   if (isTRUE(changeHostLocation)) {
     # upgrade swaggerCallback location to be localhost and not catch-all addresses
     # shiny: https://github.com/rstudio/shiny/blob/95173f6/R/server.R#L781-L786
@@ -1139,13 +1072,6 @@ urlHost <- function(host, port, changeHostLocation = FALSE) {
   if (grepl(":[^/]", host)) {
     host <- paste0("[", host, "]")
   }
-  # if no match against a protocol
-  if (!grepl("://", host)) {
-    # add http protocol
-    # RStudio IDE does NOT like empty protocols like "127.0.0.1:1234/route"
-    # Works if supplying "http://127.0.0.1:1234/route"
-    host <- paste0("http://", host)
-  }
 
-  paste0(host, ":", port)
+  paste0(scheme, "://", host, ":", port, path)
 }

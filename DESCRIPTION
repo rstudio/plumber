@@ -75,6 +75,7 @@ Collate:
     'serializer.R'
     'session-cookie.R'
     'swagger.R'
+    'ui.R'
     'utf8.R'
     'zzz.R'
 RoxygenNote: 7.1.0

@@ -360,3 +360,20 @@ test_that("priorize works as expected", {
   expect_identical(structure("zzz", default = TRUE), priorizeProperty(structure("zzz", default = TRUE), NULL, NA))
   expect_identical(NULL, priorizeProperty())
 })
+
+test_that("custom spec works", {
+  pr <- plumber$new()
+  pr$handle("POST", "/func1", function(){})
+  pr$handle("GET", "/func2", function(){})
+  pr$handle("GET", "/func3", function(){})
+  customSpec <- function(spec) {
+    custom <- list(info = list(description = "My Custom Spec", title = "This is only a test"))
+    return(utils::modifyList(spec, custom))
+  }
+  pr$setApiHandler(customSpec)
+  spec <- pr$swaggerFile()
+  expect_equal(spec$info$description, "My Custom Spec")
+  expect_equal(spec$info$title, "This is only a test")
+  expect_equal(class(spec$openapi), "character")
+})
+
