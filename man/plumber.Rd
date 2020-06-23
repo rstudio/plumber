@@ -5,7 +5,7 @@
 \alias{plumber}
 \title{Plumber Router}
 \usage{
-plumb(file, dir = ".")
+plumb(file = NULL, dir = ".")
 }
 \arguments{
 \item{file}{path to file to plumb}

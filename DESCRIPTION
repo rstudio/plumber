@@ -40,7 +40,8 @@ Suggests:
     htmlwidgets,
     visNetwork,
     analogsea (>= 0.7.0),
-    later
+    later,
+    readr
 Remotes:
     rstudio/swagger
 Collate:
@@ -68,6 +69,7 @@ Collate:
     'post-parsers.R'
     'response.R'
     'serializer-content-type.R'
+    'serializer-csv.R'
     'serializer-html.R'
     'serializer-htmlwidget.R'
     'serializer-rds.R'
