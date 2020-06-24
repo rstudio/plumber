@@ -24,6 +24,7 @@ plumbBlock <- function(lineNum, file){
   comments <- ""
   responses <- NULL
   tags <- NULL
+  routerModifier <- NULL
   while (lineNum > 0 && (stri_detect_regex(file[lineNum], pattern="^#['\\*]") || stri_trim_both(file[lineNum]) == "")){
 
     line <- file[lineNum]
@@ -207,6 +208,11 @@ plumbBlock <- function(lineNum, file){
       comments <- paste(comments, commentMat[1,2])
     }
 
+    routerModifierMat <- stri_match(line, regex="^#['\\*]\\s*@plumber(.*)$")
+    if (!is.na(routerModifierMat[1,2])) {
+      routerModifier <- TRUE
+    }
+
     lineNum <- lineNum - 1
   }
 
@@ -221,20 +227,21 @@ plumbBlock <- function(lineNum, file){
     params = rev(params),
     comments = comments,
     responses = responses,
-    tags = tags
+    tags = tags,
+    routerModifier = routerModifier
   )
 }
 
 #' Evaluate and activate a "block" of code found in a plumber API file.
 #' @include images.R
 #' @noRd
-evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, mount) {
+evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr) {
   lineNum <- srcref[1] - 1
 
   block <- plumbBlock(lineNum, file)
 
-  if (sum(!is.null(block$filter), !is.null(block$paths), !is.null(block$assets)) > 1){
-    stopOnLine(lineNum, file[lineNum], "A single function can only be a filter, an API endpoint, or an asset (@filter AND @get, @post, @assets, etc.)")
+  if (sum(!is.null(block$filter), !is.null(block$paths), !is.null(block$assets), !is.null(block$routerModifier)) > 1){
+    stopOnLine(lineNum, file[lineNum], "A single function can only be a filter, an API endpoint, an asset or a router modifier (@filter AND @get, @post, @assets, @plumber, etc.)")
   }
 
   # ALL if statements possibilities must eventually call eval(expr, envir)
@@ -279,10 +286,18 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, mou
     }
 
     stat <- PlumberStatic$new(block$assets$dir, expr)
-    mount(path, stat)
+    pr$mount(path, stat)
 
+  } else if (!is.null(block$routerModifier)) {
+    if (is.expression(expr)){
+      func <- eval(expr, envir)
+      if (is.function(func)) {
+        func(pr)
+        return()
+      }
+    }
+    message("Invalid expression for @plumber tag. Use form function(pr) {...}.")
   } else {
-
     eval(expr, envir)
   }
 }
