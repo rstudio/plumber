@@ -27,7 +27,7 @@ test_that("Errors call error handler", {
   }
 
   expect_equal(errors, 0)
-  serializer_json()(parse(text="hi"), list(), PlumberResponse$new("json"), err = errHandler)
+  serializer_json()(parse(text="hi"), list(), PlumberResponse$new("json"), errorHandler = errHandler)
   expect_equal(errors, 1)
 })
 
@@ -61,6 +61,6 @@ test_that("Unboxed JSON errors call error handler", {
   }
 
   expect_equal(errors, 0)
-  serializer_unboxed_json()(parse(text="hi"), list(), PlumberResponse$new("json"), err = errHandler)
+  serializer_unboxed_json()(parse(text="hi"), list(), PlumberResponse$new("json"), errorHandler = errHandler)
   expect_equal(errors, 1)
 })
