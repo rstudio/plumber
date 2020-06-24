@@ -48,8 +48,9 @@ plumber 0.5.0
 
 ### New features
 
-
 * Support HTTP 405 Code. (@meztez, #554)
+
+* Document plumber options. Add `options_plumber`. (@meztez, #555)
 
 * Add yaml support, serializer and parser. (@meztez, #556)
 
