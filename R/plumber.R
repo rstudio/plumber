@@ -223,7 +223,7 @@ plumber <- R6Class(
       private$errorHandler <- defaultErrorHandler()
       private$notFoundHandler <- default404Handler
       private$maxSize <- getOption('plumber.maxRequestSize', 0) #0 Unlimited
-      private$ui_info <- list(enabled = TRUE, ui = getOption("plumber.ui", "swagger"), args = list())
+      private$ui_info <- list(enabled = TRUE, ui = getOption("plumber.ui", TRUE), args = list())
 
       # Add in the initial filters
       for (fn in names(filters)){
@@ -285,8 +285,8 @@ plumber <- R6Class(
       }
 
       if (isTRUE(private$ui_info$enabled)) {
-        mountUI(self, host, port, private$ui_info, callback)
-        on.exit(unmountUI(self, private$ui_info), add = TRUE)
+        mount_ui(self, host, port, private$ui_info, callback)
+        on.exit(unmount_ui(self, private$ui_info), add = TRUE)
       }
 
       on.exit(private$runHooks("exit"), add = TRUE)
@@ -822,13 +822,17 @@ plumber <- R6Class(
       private$apiHandler <- api_fun
     },
     #' @description Set UI to use for API
-    #' @param enabled a logical value.
-    #' @param ui a character value. Default to `plumber.ui` option value.
+    #' @param ui a character value or a logical value. Default to `plumber.ui` option value.
     #' @param ... Other params to be passed to ui functions.
-    setUI = function(enabled = TRUE, ui = getOption("plumber.ui", "swagger"), ...) {
-      stopifnot(isTRUE(length(ui) == 1L) && isTRUE(length(enabled) == 1L))
-      stopifnot(is.logical(enabled))
-      stopifnot(is.character(ui))
+    setUI = function(ui = getOption("plumber.ui", TRUE), ...) {
+      stopifnot(isTRUE(length(ui) == 1L))
+      stopifnot(is.logical(ui) || is.character(ui))
+      if (isTRUE(ui) || is.character(ui)) {
+        enabled <- TRUE
+      } else {
+        enabled <- FALSE
+        ui <- "__not_enabled__"
+      }
       private$ui_info = list(
         enabled = enabled,
         ui = ui,
@@ -859,7 +863,7 @@ plumber <- R6Class(
         ret <- private$apiHandler(ret)
       }
 
-      # remove NA or NULL values, which swagger doesn't like
+      # remove NA or NULL values, which UI parsers do not like
       ret <- removeNaOrNulls(ret)
 
       ret

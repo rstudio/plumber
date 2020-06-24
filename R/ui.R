@@ -2,7 +2,7 @@
 
 # Mount OpenAPI and UI
 #' @noRd
-mountUI <- function(pr, host, port, ui_info, callback) {
+mount_ui <- function(pr, host, port, ui_info, callback) {
 
   # Build api url
   api_url <- getOption(
@@ -17,9 +17,13 @@ mountUI <- function(pr, host, port, ui_info, callback) {
   )
 
   # Mount openAPI spec paths openapi.json
-  mountOpenAPI(pr, api_url)
+  mount_open_api(pr, api_url)
 
   # Mount UIs
+  if (isTRUE(length(.globals$interfaces$mount)==0L)) {
+    message("No user interface loaded in namespace.")
+    return(NULL)
+  }
   ui_mount <- .globals$interfaces$mount[[ui_info$ui]]
   if (!is.null(ui_mount)) {
     ui_url <- do.call(ui_mount, c(list(pr, api_url), ui_info$args))
@@ -41,9 +45,9 @@ mountUI <- function(pr, host, port, ui_info, callback) {
 
 # Unmount OpenAPI and UI
 #' @noRd
-unmountUI <- function(pr, ui_info) {
+unmount_ui <- function(pr, ui_info) {
   # Unount openAPI spec paths openapi.json
-  unmountOpenAPI(pr)
+  unmount_open_api(pr)
 
   # Mount UIs
   ui_unmount <- .globals$interfaces$unmount[[ui_info$ui]]
@@ -54,13 +58,13 @@ unmountUI <- function(pr, ui_info) {
 
 #' Mount OpenAPI Specification to a plumber router
 #' @noRd
-mountOpenAPI <- function(pr, api_url) {
+mount_open_api <- function(pr, api_url) {
 
   spec <- pr$apiSpec()
 
   # Create a function that's hardcoded to return the OpenAPI specification -- regardless of env.
   openapi_fun <- function(req) {
-    # use the HTTP_REFERER so RSC can find the swagger location to ask
+    # use the HTTP_REFERER so RSC can find the UI location to ask
     ## (can't directly ask for 127.0.0.1)
     if (is.null(getOption("plumber.apiURL")) &&
         is.null(getOption("plumber.apiHost"))) {
@@ -89,7 +93,7 @@ mountOpenAPI <- function(pr, api_url) {
 
 #' Mount OpenAPI Specification to a plumber router
 #' @noRd
-unmountOpenAPI <- function(pr) {
+unmount_open_api <- function(pr) {
 
   pr$removeHandle("GET", "/openapi.json")
   return(NULL)
@@ -100,7 +104,7 @@ unmountOpenAPI <- function(pr) {
 #' @param interface An interface (list) that plumber can use to mount
 #' a UI.
 #' @export
-mountInterface <- function(interface) {
+mount_interface <- function(interface) {
 
   stopifnot(is.list(interface))
   stopifnot(is.character(interface$package) && length(interface$package) == 1L)
@@ -112,43 +116,43 @@ mountInterface <- function(interface) {
   stopifnot(is.character(interface$name) && length(interface$name) == 1L)
   stopifnot(is.function(interface$static))
   stopifnot(is.function(interface$index))
-  interfacePath <- paste0("/__", interface$name, "__/")
-  handlePaths <- paste0(interfacePath, c("index.html", ""))
+  interface_path <- paste0("/__", interface$name, "__/")
+  handle_paths <- paste0(interface_path, c("index.html", ""))
 
-  mountInterfaceFunc <- function(pr, api_url, ...) {
+  mount_interface_func <- function(pr, api_url, ...) {
     if (!requireNamespace(interface$package, quietly = TRUE)) {
       stop(interface$package, " must be installed for the ", interface$name," UI to be displayed")
     }
 
-    interfaceUrl <- paste0(api_url, interfacePath)
+    interface_url <- paste0(api_url, interface_path)
 
     interface_index <- function() {
       interface$index(...)
     }
-    for (path in handlePaths) {
+    for (path in handle_paths) {
       pr$handle(
         "GET", path, interface_index,
         serializer = serializer_html()
       )
     }
-    pr$mount(interfacePath, PlumberStatic$new(interface$static(...)))
-    return(interfaceUrl)
+    pr$mount(interface_path, PlumberStatic$new(interface$static(...)))
+    return(interface_url)
   }
-  unmountInterfaceFunc <- function(pr) {
-    for (path in handlePaths) {
+  unmount_interface_func <- function(pr) {
+    for (path in handle_paths) {
       pr$removeHandle("GET", path)
     }
-    pr$unmount(interfacePath)
+    pr$unmount(interface_path)
     return(NULL)
   }
 
-  .globals$interfaces$mount[[interface$name]] <- mountInterfaceFunc
-  .globals$interfaces$unmount[[interface$name]] <- unmountInterfaceFunc
+  .globals$interfaces$mount[[interface$name]] <- mount_interface_func
+  .globals$interfaces$unmount[[interface$name]] <- unmount_interface_func
 
   return(NULL)
 }
 
-swaggerInterface <- list(
+swagger_interface <- list(
   package = "swagger",
   name = "swagger",
   index = function(version = "3", ...) {
@@ -162,4 +166,4 @@ swaggerInterface <- list(
   }
 )
 
-mountInterface(swaggerInterface)
+mount_interface(swagger_interface)

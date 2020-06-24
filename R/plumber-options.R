@@ -34,7 +34,7 @@
 #' \item{plumber.swagger.url (defaults to `NULL`)}{A function. Called with
 #' a single parameter corresponding to ui url after Plumber server is ready. This can be used
 #' by RStudio to open UI when API is ran for the editor.}
-#' \item{plumber.ui (defaults to `swagger`)}{Name of the UI interface to use.}
+#' \item{plumber.ui (defaults to `TRUE`)}{Name of the UI interface to use.}
 #' \item{plumber.ui.callback (defaults to option `plumber.swagger.url`)}{A function. Called with
 #' a single parameter corresponding to ui url after Plumber server is ready. This can be used
 #' by RStudio to open UI when API is ran for the editor.}

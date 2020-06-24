@@ -662,15 +662,13 @@ Add a function to customize what is returned in \verb{$apiSpec()}.
 \subsection{Method \code{setUI()}}{
 Set UI to use for API
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{plumber$setUI(enabled = TRUE, ui = getOption("plumber.ui", "swagger"), ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{plumber$setUI(ui = getOption("plumber.ui", TRUE), ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{enabled}}{a logical value.}
-
-\item{\code{ui}}{a character value. Default to \code{plumber.ui} option value.}
+\item{\code{ui}}{a character value or a logical value. Default to \code{plumber.ui} option value.}
 
 \item{\code{...}}{Other params to be passed to ui functions.}
 }

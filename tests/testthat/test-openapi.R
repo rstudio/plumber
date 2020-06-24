@@ -377,3 +377,10 @@ test_that("custom spec works", {
   expect_equal(class(spec$openapi), "character")
 })
 
+test_that("no params plumber router still produces spec when there is a func params", {
+  pr <- plumber$new()
+  handler <- function(num) { sum(as.integer(num)) }
+  pr$handle("GET", "/sum", handler, serializer = serializer_json())
+  expect_silent(spec <- pr$apiSpec())
+  expect_equal(spec$paths$`/sum`$get$parameters[[1]]$name, "num")
+})

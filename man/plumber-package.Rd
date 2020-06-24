@@ -45,7 +45,7 @@ When \code{NULL}, secret is not validated. Otherwise, Plumber compares secret wi
 \item{plumber.swagger.url (defaults to \code{NULL})}{A function. Called with
 a single parameter corresponding to ui url after Plumber server is ready. This can be used
 by RStudio to open UI when API is ran for the editor.}
-\item{plumber.ui (defaults to \code{swagger})}{Name of the UI interface to use.}
+\item{plumber.ui (defaults to \code{TRUE})}{Name of the UI interface to use.}
 \item{plumber.ui.callback (defaults to option \code{plumber.swagger.url})}{A function. Called with
 a single parameter corresponding to ui url after Plumber server is ready. This can be used
 by RStudio to open UI when API is ran for the editor.}

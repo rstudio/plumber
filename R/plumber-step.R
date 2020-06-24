@@ -222,6 +222,13 @@ PlumberEndpoint <- R6Class(
     #' @description retrieve endpoint expression parameters
     getFuncParams = function() {
       getArgsMetadata(private$func)
+    },
+    #' @description retrieve endpoint defined parameters
+    getEndpointParams = function() {
+      if (is.na(self$params) || isTRUE(length(self$params) == 0L)) {
+        return(list())
+      }
+      self$params
     }
   ),
   private = list(
