@@ -5,17 +5,31 @@
 \title{Set plumber options}
 \usage{
 options_plumber(
+  apiScheme = getOption("plumber.apiScheme"),
   apiHost = getOption("plumber.apiHost"),
+  apiPort = getOption("plumber.apiPort"),
+  apiPath = getOption("plumber.apiPath"),
+  apiURL = getOption("plumber.apiURL"),
   debug = getOption("plumber.debug"),
   maxRequestSize = getOption("plumber.maxRequestSize"),
   postBody = getOption("plumber.postBody"),
   port = getOption("plumber.port"),
   sharedSecret = getOption("plumber.sharedSecret"),
-  swagger.url = getOption("plumber.swagger.url")
+  swagger.url = getOption("plumber.swagger.url"),
+  ui = getOption("plumber.ui"),
+  ui.callback = getOption("plumber.ui.callback")
 )
 }
 \arguments{
+\item{apiScheme}{see \link{plumber-options}}
+
 \item{apiHost}{see \link{plumber-options}}
+
+\item{apiPort}{see \link{plumber-options}}
+
+\item{apiPath}{see \link{plumber-options}}
+
+\item{apiURL}{see \link{plumber-options}}
 
 \item{debug}{see \link{plumber-options}}
 
@@ -28,6 +42,10 @@ options_plumber(
 \item{sharedSecret}{see \link{plumber-options}}
 
 \item{swagger.url}{see \link{plumber-options}}
+
+\item{ui}{see \link{plumber-options}}
+
+\item{ui.callback}{see \link{plumber-options}}
 }
 \description{
 Set plumber options

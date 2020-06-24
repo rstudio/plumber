@@ -371,7 +371,7 @@ test_that("custom spec works", {
     return(utils::modifyList(spec, custom))
   }
   pr$setApiHandler(customSpec)
-  spec <- pr$swaggerFile()
+  spec <- pr$apiSpec()
   expect_equal(spec$info$description, "My Custom Spec")
   expect_equal(spec$info$title, "This is only a test")
   expect_equal(class(spec$openapi), "character")

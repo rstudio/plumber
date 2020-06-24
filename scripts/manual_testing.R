@@ -10,23 +10,17 @@ library(plumber)
 test_that("custom OpenAPI Specification update function works", {
   pr <- plumber$new()
   pr$handle("GET", "/:path/here", function(){})
+  pr$handle("POST", "/:path/there", function(){})
   pr$setApiHandler(function(spec) {
     spec$info$title <- Sys.time()
     spec
   })
-  pr$run(
-    port = 1234,
-    ui = "swagger"
-  )
-  pr$run(
-    port = 1234,
-    ui = "redoc"
-  )
-  pr$run(
-    port = 1235,
-    ui = "redoc",
-    redoc_options = list(scrollYOffset = 250, disableSearch = TRUE)
-  )
+  pr$setUI(ui = "swagger")
+  pr$run(port = 1234)
+  pr$setUI(ui = "redoc")
+  pr$run(port = 1234)
+  pr$setUI(ui = "redoc", redoc_options = list(scrollYOffset = 250, disableSearch = TRUE))
+  pr$run(port = 1235)
 
   # validate that http://127.0.0.1:1234/__swagger__/ displays the system time as the api title
   # http://127.0.0.1:1234/__swagger__/

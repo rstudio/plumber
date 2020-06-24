@@ -20,17 +20,12 @@ mountUI <- function(pr, host, port, ui_info, callback) {
   mountOpenAPI(pr, api_url)
 
   # Mount UIs
-  ui <- ui_info$ui
-  if (isTRUE(ui)) {
-    ui <- getOption("plumber.ui", "swagger")
-  }
-  interface <- ui
-  ui_mount <- .globals$interfaces[[interface]]
+  ui_mount <- .globals$interfaces$mount[[ui_info$ui]]
   if (!is.null(ui_mount)) {
-    ui_url <- ui_mount(pr, api_url, ...)
-    message("Running ", interface, " UI at ", ui_url, sep = "")
+    ui_url <- do.call(ui_mount, c(list(pr, api_url), ui_info$args))
+    message("Running ", ui_info$ui, " UI at ", ui_url, sep = "")
   } else {
-    message("Ignored unknown user interface ", interface,". Supports ",
+    message("Ignored unknown user interface ", ui_info$ui,". Supports ",
             paste0('"', names(.globals$interfaces), '"', collapse = ", "))
   }
 
@@ -43,11 +38,24 @@ mountUI <- function(pr, host, port, ui_info, callback) {
 
 }
 
+# Unmount OpenAPI and UI
+#' @noRd
+unmountUI <- function(pr, ui_info) {
+  # Unount openAPI spec paths openapi.json
+  unmountOpenAPI(pr)
+
+  # Mount UIs
+  ui_unmount <- .globals$interfaces$unmount[[ui_info$ui]]
+  if (!is.null(ui_unmount)) {
+    ui_unmount(pr)
+  }
+}
+
 #' Mount OpenAPI Specification to a plumber router
 #' @noRd
 mountOpenAPI <- function(pr, api_url) {
 
-  spec <- pr$swaggerFile()
+  spec <- pr$apiSpec()
 
   # Create a function that's hardcoded to return the OpenAPI specification -- regardless of env.
   openapi_fun <- function(req) {
@@ -78,68 +86,88 @@ mountOpenAPI <- function(pr, api_url) {
 
 }
 
+#' Mount OpenAPI Specification to a plumber router
+#' @noRd
+unmountOpenAPI <- function(pr) {
+
+  pr$removeHandle("GET", "/openapi.json")
+
+}
+
 #' Mount Interface UI
 #' @noRd
-mountInterfaces <- function(interface) {
+mountInterface <- function(interface) {
 
   stopifnot(is.list(interface))
-  stopifnot(is.character(interface$package) && length(interface$package) == 1)
+  stopifnot(is.character(interface$package) && length(interface$package) == 1L)
 
   if (!requireNamespace(interface$package, quietly = TRUE)) {
     stop(interface$package, " must be installed for the ", interface$name," UI to be displayed")
   }
 
-  stopifnot(is.character(interface$name) && length(interface$name) == 1)
+  stopifnot(is.character(interface$name) && length(interface$name) == 1L)
   stopifnot(is.function(interface$static))
   stopifnot(is.function(interface$index))
+  interfacePath <- paste0("/__", interface$name, "__/")
+  handlePaths <- paste0(interfacePath, c("index.html", ""))
 
-  interfaceFunc <- function(pr, api_url, ...) {
+  mountInterfaceFunc <- function(pr, api_url, ...) {
     if (!requireNamespace(interface$package, quietly = TRUE)) {
       stop(interface$package, " must be installed for the ", interface$name," UI to be displayed")
     }
 
-    interfacePath <- paste0("/__", tolower(interface$name), "__/")
     interfaceUrl <- paste0(api_url, interfacePath)
 
-    html_content <- interface$index(...)
     interface_index <- function() {
-      html_content
+      interface$index(...)
     }
-    for (path in paste0(interfacePath, c("index.html", ""))) {
+    for (path in handlePaths) {
       pr$handle(
         "GET", path, interface_index,
         serializer = serializer_html()
       )
     }
-    pr$mount(interfacePath, PlumberStatic$new(interface$static(pr)))
+    pr$mount(interfacePath, PlumberStatic$new(interface$static(...)))
     return(interfaceUrl)
   }
-  .globals$interfaces[[interface$name]] <- interfaceFunc
+  unmountInterfaceFunc <- function(pr) {
+    for (path in handlePaths) {
+      pr$removeHandle("GET", path)
+    }
+    pr$unmount(interfacePath)
+    return(NULL)
+  }
+  .globals$interfaces$mount[[interface$name]] <- mountInterfaceFunc
+  .globals$interfaces$unmount[[interface$name]] <- unmountInterfaceFunc
 }
 
 swaggerInterface <- list(
   package = "swagger",
   name = "swagger",
-  index = function() {
+  index = function(version = "3", ...) {
     swagger::swagger_spec(
       api_path = 'window.location.origin + window.location.pathname.replace(/\\(__swagger__\\\\/|__swagger__\\\\/index.html\\)$/, "") + "openapi.json"',
-      version = "3"
+      version = version
     )
   },
-  static = swagger::swagger_path
+  static = function(version = "3", ...) {
+    swagger::swagger_path(version)
+  }
 )
 
 redocInterface <- list(
   package = "redoc",
   name = "redoc",
-  index = function(redoc_options = structure(list(), names = character())) {
+  index = function(redoc_options = structure(list(), names = character()), ...) {
     redoc::redoc_spec(
       spec_url = "\' + window.location.origin + window.location.pathname.replace(/\\(__redoc__\\\\/|__redoc__\\\\/index.html\\)$/, '') + 'openapi.json' + \'",
       redoc_options = redoc_options
     )
   },
-  static = redoc::redoc_path
+  static = function(...) {
+    redoc::redoc_path()
+  }
 )
 
-mountInterfaces(swaggerInterface)
-mountInterfaces(redocInterface)
+mountInterface(swaggerInterface)
+mountInterface(redocInterface)

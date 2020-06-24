@@ -17,9 +17,19 @@ There are a number of global options that affect Plumber's behavior. These can
 be set globally with \code{\link[=options]{options()}} or with \code{\link[=options_plumber]{options_plumber()}}.
 
 \describe{
+\item{plumber.apiScheme (defaults to \code{http}, or an empty string
+when used outside a running router)}{Scheme used to build UI url and server url for
+OpenAPI Specification.}
 \item{plumber.apiHost (defaults to \code{host} defined by \code{run} method, or an empty string
 when used outside a running router)}{Host used to build UI url and server url for
-OpenAPI specification.}
+OpenAPI Specification.}
+\item{plumber.apiPort (defaults to \code{port} defined by \code{run} method, or an empty string
+when used outside a running router)}{Port used to build UI url and server url for
+OpenAPI Specification.}
+\item{plumber.apiPath (defaults to an empty string)}{Path used to build UI url and server url for
+OpenAPI Specification.}
+\item{plumber.apiURL (defaults to the combination of the above options)}{UI url and server urls for
+OpenAPI Specification respecting pattern \verb{scheme://host:port/path}.}
 \item{plumber.debug (defaults to \code{FALSE})}{Provides more insight into your API errors. Alternatively,
 use parameter \code{debug} of plumber router \code{run} method}
 \item{plumber.maxRequestSize (defaults to \code{0})}{Maximum length in bytes of request body. Body larger
@@ -33,6 +43,10 @@ If the port is already in use, server will not be able to start.}
 When \code{NULL}, secret is not validated. Otherwise, Plumber compares secret with http header
 \code{PLUMBER_SHARED_SECRET}. Failure to match results in http error 400.}
 \item{plumber.swagger.url (defaults to \code{NULL})}{A function. Called with
+a single parameter corresponding to ui url after Plumber server is ready. This can be used
+by RStudio to open UI when API is ran for the editor.}
+\item{plumber.ui (defaults to \code{swagger})}{Name of the UI interface to use.}
+\item{plumber.ui.callback (defaults to option \code{plumber.swagger.url})}{A function. Called with
 a single parameter corresponding to ui url after Plumber server is ready. This can be used
 by RStudio to open UI when API is ran for the editor.}
 }

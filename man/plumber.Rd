@@ -122,8 +122,10 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 \item \href{#method-new}{\code{plumber$new()}}
 \item \href{#method-run}{\code{plumber$run()}}
 \item \href{#method-mount}{\code{plumber$mount()}}
+\item \href{#method-unmount}{\code{plumber$unmount()}}
 \item \href{#method-registerHook}{\code{plumber$registerHook()}}
 \item \href{#method-handle}{\code{plumber$handle()}}
+\item \href{#method-removeHandle}{\code{plumber$removeHandle()}}
 \item \href{#method-print}{\code{plumber$print()}}
 \item \href{#method-serve}{\code{plumber$serve()}}
 \item \href{#method-route}{\code{plumber$route()}}
@@ -134,6 +136,7 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 \item \href{#method-set404Handler}{\code{plumber$set404Handler()}}
 \item \href{#method-setErrorHandler}{\code{plumber$setErrorHandler()}}
 \item \href{#method-setApiHandler}{\code{plumber$setApiHandler()}}
+\item \href{#method-setUI}{\code{plumber$setUI()}}
 \item \href{#method-filter}{\code{plumber$filter()}}
 \item \href{#method-apiSpec}{\code{plumber$apiSpec()}}
 \item \href{#method-openAPIFile}{\code{plumber$openAPIFile()}}
@@ -185,10 +188,8 @@ Start a server using \code{plumber} object.
 \if{html}{\out{<div class="r">}}\preformatted{plumber$run(
   host = "127.0.0.1",
   port = getOption("plumber.port"),
-  ui = TRUE,
   debug = interactive(),
-  callback = getOption("plumber.ui.callback", getOption("plumber.swagger.url", NULL)),
-  ...
+  callback = getOption("plumber.ui.callback", getOption("plumber.swagger.url", NULL))
 )}\if{html}{\out{</div>}}
 }
 
@@ -203,58 +204,18 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.}
 
-<<<<<<< HEAD
-\item{\code{ui}}{a logical or a character vector. The default UI when \code{TRUE} is \code{swagger}.
-Other valid values are \code{FALSE} and \code{redoc}.}
-=======
-\item{\code{swagger}}{a function that enhances the existing OpenAPI Specification.}
->>>>>>> upstream/master
-
 \item{\code{debug}}{\code{TRUE} provides more insight into your API errors.}
 
 \item{\code{callback}}{a callback function for taking action on UI url.}
-
-\item{\code{...}}{Other params to be passed down to ui functions, such as
-\code{redoc_options} \code{redoc::\link[redoc]{redoc_spec}}.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Details}{
 \code{port} does not need to be explicitly assigned.
 
-<<<<<<< HEAD
 \code{callback} When set, it will be called with a character string corresponding
 to the UI url. It allows RStudio to open UI when plumber router
 run method is executed using default \code{plumber.ui.url} option.
-=======
-\code{swagger} should be either a logial or a function . When \code{TRUE} or a
-function, multiple handles will be added to \code{plumber} object. OpenAPI json
-file will be served on paths \verb{/openapi.json} and \verb{/swagger.json}. Swagger UI
-will be served on paths \verb{/__swagger__/index.html} and \verb{/__swagger__/}. When
-using a function, it will receive the plumber router as the first parameter
-and current OpenAPI Specification as the second. This function should return a
-list containing OpenAPI Specification.
-See \url{http://spec.openapis.org/oas/v3.0.3}
-
-\code{swaggerCallback} When set, it will be called with a character string corresponding
-to the swagger UI url. It allows RStudio to open swagger UI when plumber router
-run method is executed using default \code{plumber.swagger.url} option.
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{\dontrun{
-pr <- plumber$new
-swagger <- function(pr_, spec) {
-  spec$servers[[1]]$description <- "MyCustomAPISpec"
-  spec
-}
-pr$run(swagger = swagger)
-}
-}
-\if{html}{\out{</div>}}
-
->>>>>>> upstream/master
 }
 
 }
@@ -298,6 +259,23 @@ root$mount("/products", products)
 
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-unmount"></a>}}
+\if{latex}{\out{\hypertarget{method-unmount}{}}}
+\subsection{Method \code{unmount()}}{
+Unmount a plumber router
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{plumber$unmount(path)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{path}}{a character string. Where to mount router.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-registerHook"></a>}}
@@ -429,6 +407,27 @@ pr$handle("GET", "/", function(){
 
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-removeHandle"></a>}}
+\if{latex}{\out{\hypertarget{method-removeHandle}{}}}
+\subsection{Method \code{removeHandle()}}{
+Remove endpoints
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{plumber$removeHandle(methods, path, preempt)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{methods}}{a character string. http method.}
+
+\item{\code{path}}{a character string. Api endpoints}
+
+\item{\code{preempt}}{a preempt function.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
@@ -653,6 +652,27 @@ Add a function to customize what is returned in \verb{$apiSpec()}.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{api_fun}}{This function should accept an OpenAPI Specification autogenerated by \code{plumber}.  It should return a list object in valid OpenAPI Specification format. This will not be validated.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setUI"></a>}}
+\if{latex}{\out{\hypertarget{method-setUI}{}}}
+\subsection{Method \code{setUI()}}{
+Set UI to use for API
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{plumber$setUI(enabled = TRUE, ui = getOption("plumber.ui", "swagger"), ...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{enabled}}{a logical value.}
+
+\item{\code{ui}}{a character value. Default to \code{plumber.ui} option value.}
+
+\item{\code{...}}{Other params to be passed to ui functions.}
 }
 \if{html}{\out{</div>}}
 }

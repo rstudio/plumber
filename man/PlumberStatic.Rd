@@ -39,6 +39,7 @@ Creates a router that is backed by a directory of files on disk.
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="onWSOpen">}\href{../../plumber/html/plumber.html#method-onWSOpen}{\code{plumber::plumber$onWSOpen()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="openAPIFile">}\href{../../plumber/html/plumber.html#method-openAPIFile}{\code{plumber::plumber$openAPIFile()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="registerHook">}\href{../../plumber/html/plumber.html#method-registerHook}{\code{plumber::plumber$registerHook()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="removeHandle">}\href{../../plumber/html/plumber.html#method-removeHandle}{\code{plumber::plumber$removeHandle()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="route">}\href{../../plumber/html/plumber.html#method-route}{\code{plumber::plumber$route()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="run">}\href{../../plumber/html/plumber.html#method-run}{\code{plumber::plumber$run()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="serve">}\href{../../plumber/html/plumber.html#method-serve}{\code{plumber::plumber$serve()}}\out{</span>}
@@ -46,7 +47,9 @@ Creates a router that is backed by a directory of files on disk.
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="setApiHandler">}\href{../../plumber/html/plumber.html#method-setApiHandler}{\code{plumber::plumber$setApiHandler()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="setErrorHandler">}\href{../../plumber/html/plumber.html#method-setErrorHandler}{\code{plumber::plumber$setErrorHandler()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="setSerializer">}\href{../../plumber/html/plumber.html#method-setSerializer}{\code{plumber::plumber$setSerializer()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="setUI">}\href{../../plumber/html/plumber.html#method-setUI}{\code{plumber::plumber$setUI()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="swaggerFile">}\href{../../plumber/html/plumber.html#method-swaggerFile}{\code{plumber::plumber$swaggerFile()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="unmount">}\href{../../plumber/html/plumber.html#method-unmount}{\code{plumber::plumber$unmount()}}\out{</span>}
 }
 \out{</details>}
 }

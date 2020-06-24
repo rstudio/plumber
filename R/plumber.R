@@ -223,7 +223,7 @@ plumber <- R6Class(
       private$errorHandler <- defaultErrorHandler()
       private$notFoundHandler <- default404Handler
       private$maxSize <- getOption('plumber.maxRequestSize', 0) #0 Unlimited
-      private$ui_info <- list(ui = TRUE, args = list())
+      private$ui_info <- list(enabled = TRUE, ui = getOption("plumber.ui", "swagger"), args = list())
 
       # Add in the initial filters
       for (fn in names(filters)){
@@ -267,8 +267,7 @@ plumber <- R6Class(
       host = '127.0.0.1',
       port = getOption('plumber.port'),
       debug = interactive(),
-      callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL)),
-      ...
+      callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL))
     ) {
       port <- findPort(port)
 
@@ -285,8 +284,9 @@ plumber <- R6Class(
         setwd(dirname(private$filename))
       }
 
-      if (isTRUE(private$ui_info$ui) || isTRUE(private$ui_info$ui %in% names(.globals$interfaces))) {
+      if (isTRUE(private$ui_info$enabled)) {
         mountUI(self, host, port, private$ui_info, callback)
+        on.exit(unmountUI(self, private$ui_info), add = TRUE)
       }
 
       on.exit(private$runHooks("exit"), add = TRUE)
@@ -319,6 +319,18 @@ plumber <- R6Class(
       }
 
       private$mnts[[path]] <- router
+    },
+    #' @description Unmount a plumber router
+    #' @param path a character string. Where to mount router.
+    unmount = function(path){
+      # Ensure that the path has both a leading and trailing slash.
+      if (!startsWith(path, "/")) {
+        path <- paste0("/", path)
+      }
+      if (!endsWith(path, "/")) {
+        path <- paste0(path, "/")
+      }
+      private$mnts[[path]] <- NULL
     },
     #' @description Register a hook
     #' @param stage a character string. Point in the lifecycle of a request.
@@ -412,6 +424,13 @@ plumber <- R6Class(
         endpoint <- PlumberEndpoint$new(methods, path, handler, private$envir, serializer, ...)
       }
       private$addEndpointInternal(endpoint, preempt)
+    },
+    #' @description Remove endpoints
+    #' @param methods a character string. http method.
+    #' @param path a character string. Api endpoints
+    #' @param preempt a preempt function.
+    removeHandle = function(methods, path, preempt){
+      private$removeEndpointInternal(methods, path, preempt)
     },
     #' @description Print reprensation of plumber router.
     #' @param prefix a character string. Prefix to append to representation.
@@ -803,14 +822,19 @@ plumber <- R6Class(
       private$apiHandler <- api_fun
     },
     #' @description Set UI to use for API
-    #' @param ui a logical or a character value. The default UI when `TRUE` is `swagger`.
-    #' @param ... Other params to be passed down to ui functions.
-    setUI = function(ui, ...) {
+    #' @param enabled a logical value.
+    #' @param ui a character value. Default to `plumber.ui` option value.
+    #' @param ... Other params to be passed to ui functions.
+    setUI = function(enabled = TRUE, ui = getOption("plumber.ui", "swagger"), ...) {
+      stopifnot(isTRUE(length(ui) == 1L) && isTRUE(length(enabled) == 1L))
+      stopifnot(is.logical(enabled))
+      stopifnot(is.character(ui))
       private$ui_info = list(
+        enabled = enabled,
         ui = ui,
         args = list(...)
       )
-    }
+    },
     #' @description Add a filter to plumber router
     #' @param name a character string. Name of filter
     #' @param expr an expr that resolve to a filter function or a filter function
@@ -1011,6 +1035,22 @@ plumber <- R6Class(
       }
 
       private$ends[[preempt]] <- c(private$ends[[preempt]], ep)
+    },
+    removeEndpointInternal = function(methods, path, preempt){
+      noPreempt <- missing(preempt) || is.null(preempt)
+
+      if (noPreempt){
+        preempt <- "__no-preempt__"
+      }
+      i <- 0L; toRemove <- integer()
+      for (ep in private$ends[[preempt]]) {
+        i <- i + 1L
+        if (isTRUE(all(ep$verbs %in% methods)) &&
+            isTRUE(ep$path == path)) {
+          toRemove <- c(toRemove, i)
+        }
+      }
+      private$ends[[preempt]][toRemove] <- NULL
     },
 
     routerSpecificationInternal = function(router, parentPath = "") {
