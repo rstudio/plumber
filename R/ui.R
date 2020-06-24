@@ -155,19 +155,19 @@ swaggerInterface <- list(
   }
 )
 
-redocInterface <- list(
-  package = "redoc",
-  name = "redoc",
-  index = function(redoc_options = structure(list(), names = character()), ...) {
-    redoc::redoc_spec(
-      spec_url = "\' + window.location.origin + window.location.pathname.replace(/\\(__redoc__\\\\/|__redoc__\\\\/index.html\\)$/, '') + 'openapi.json' + \'",
-      redoc_options = redoc_options
-    )
-  },
-  static = function(...) {
-    redoc::redoc_path()
-  }
-)
+# redocInterface <- list(
+#   package = "redoc",
+#   name = "redoc",
+#   index = function(redoc_options = structure(list(), names = character()), ...) {
+#     redoc::redoc_spec(
+#       spec_url = "\' + window.location.origin + window.location.pathname.replace(/\\(__redoc__\\\\/|__redoc__\\\\/index.html\\)$/, '') + 'openapi.json' + \'",
+#       redoc_options = redoc_options
+#     )
+#   },
+#   static = function(...) {
+#     redoc::redoc_path()
+#   }
+# )
 
 mountInterface(swaggerInterface)
-mountInterface(redocInterface)
+# mountInterface(redocInterface)
