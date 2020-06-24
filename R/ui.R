@@ -4,6 +4,7 @@
 #' @noRd
 mount_ui <- function(pr, host, port, ui_info, callback) {
 
+  # return early if not enabled
   if (!isTRUE(ui_info$enabled)) {
     return(NULL)
   }
@@ -43,7 +44,7 @@ mount_ui <- function(pr, host, port, ui_info, callback) {
     callback(ui_url)
   }
 
-  return(NULL)
+  invisible()
 
 }
 
@@ -51,6 +52,7 @@ mount_ui <- function(pr, host, port, ui_info, callback) {
 #' @noRd
 unmount_ui <- function(pr, ui_info) {
 
+  # return early if not enabled
   if (!isTRUE(ui_info$enabled)) {
     return(NULL)
   }
