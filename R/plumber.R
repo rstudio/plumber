@@ -524,8 +524,6 @@ plumber <- R6Class(
         cat(prefix, "\u251c\u2500\u2500", crayon::green("[", f$name, "]", sep=""), "\n", sep="") # "+--"
       }
 
-      paths <- self$routes
-
       printEndpoints <- function(prefix, name, nodes, isLast){
         if (is.list(nodes)){
           verbs <- paste(sapply(nodes, function(n){ n$verbs }), collapse=", ")
@@ -568,8 +566,10 @@ plumber <- R6Class(
               names(node) == ""
             }
 
-          # print all endpoints in a single line with verbs attached together
+          # mounted routers at root location will also have a missing name.
+          # only look for endpoints
           are_endpoints <- has_no_name & vapply(node, inherits, logical(1), "PlumberEndpoint")
+          # print all endpoints in a single line with verbs attached together
           if (any(are_endpoints)) {
             printEndpoints(prefix, name, node[are_endpoints], isLast)
           }
@@ -590,7 +590,7 @@ plumber <- R6Class(
           cat("??")
         }
       }
-      printNode(paths, "", prefix, TRUE)
+      printNode(self$routes, "", prefix, TRUE)
 
       invisible(self)
     },
