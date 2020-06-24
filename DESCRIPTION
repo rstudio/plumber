@@ -43,7 +43,7 @@ Suggests:
     later,
     readr,
     yaml,
-    redoc
+    redoc (>= 2.0.0.30)
 Remotes:
     rstudio/swagger,
     meztez/redoc

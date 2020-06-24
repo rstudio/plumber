@@ -25,8 +25,9 @@ mountUI <- function(pr, host, port, ui_info, callback) {
     ui_url <- do.call(ui_mount, c(list(pr, api_url), ui_info$args))
     message("Running ", ui_info$ui, " UI at ", ui_url, sep = "")
   } else {
-    message("Ignored unknown user interface ", ui_info$ui,". Supports ",
-            paste0('"', names(.globals$interfaces), '"', collapse = ", "))
+    message("Unknown user interface \"", ui_info$ui,"\". ",
+            ". Maybe try library(", ui_info$ui,").")
+    return(NULL)
   }
 
   # Use callback when defined
@@ -34,7 +35,7 @@ mountUI <- function(pr, host, port, ui_info, callback) {
     callback(ui_url)
   }
 
-  return(invisible())
+  return(NULL)
 
 }
 
@@ -71,7 +72,7 @@ mountOpenAPI <- function(pr, api_url) {
         # Use HTTP_REFERER as fallback
         api_url <- req$HTTP_REFERER
         api_url <- sub("index\\.html$", "", api_url)
-        api_url <- sub(paste0("__(", paste0(names(.globals$interfaces), collapse = "|"),")__/$"), "", api_url)
+        api_url <- sub(paste0("__(", paste0(names(.globals$interfaces$mount), collapse = "|"),")__/$"), "", api_url)
       }
     }
 
@@ -82,7 +83,7 @@ mountOpenAPI <- function(pr, api_url) {
   # "It is RECOMMENDED that the root OpenAPI document be named: openapi.json"
   pr$handle("GET", "/openapi.json", openapi_fun, serializer = serializer_unboxed_json())
 
-  return(invisible())
+  return(NULL)
 
 }
 
@@ -91,11 +92,14 @@ mountOpenAPI <- function(pr, api_url) {
 unmountOpenAPI <- function(pr) {
 
   pr$removeHandle("GET", "/openapi.json")
+  return(NULL)
 
 }
 
 #' Mount Interface UI
-#' @noRd
+#' @param interface An interface (list) that plumber can use to mount
+#' a UI.
+#' @export
 mountInterface <- function(interface) {
 
   stopifnot(is.list(interface))
@@ -137,8 +141,11 @@ mountInterface <- function(interface) {
     pr$unmount(interfacePath)
     return(NULL)
   }
+
   .globals$interfaces$mount[[interface$name]] <- mountInterfaceFunc
   .globals$interfaces$unmount[[interface$name]] <- unmountInterfaceFunc
+
+  return(NULL)
 }
 
 swaggerInterface <- list(
@@ -155,19 +162,4 @@ swaggerInterface <- list(
   }
 )
 
-# redocInterface <- list(
-#   package = "redoc",
-#   name = "redoc",
-#   index = function(redoc_options = structure(list(), names = character()), ...) {
-#     redoc::redoc_spec(
-#       spec_url = "\' + window.location.origin + window.location.pathname.replace(/\\(__redoc__\\\\/|__redoc__\\\\/index.html\\)$/, '') + 'openapi.json' + \'",
-#       redoc_options = redoc_options
-#     )
-#   },
-#   static = function(...) {
-#     redoc::redoc_path()
-#   }
-# )
-
 mountInterface(swaggerInterface)
-# mountInterface(redocInterface)

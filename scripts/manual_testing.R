@@ -15,8 +15,12 @@ test_that("custom OpenAPI Specification update function works", {
     spec$info$title <- Sys.time()
     spec
   })
+  pr$setUI(ui = "redoc")
+  # Should get a message that redoc is unknown if library is not loaded
+  pr$run(port = 1234)
   pr$setUI(ui = "swagger")
   pr$run(port = 1234)
+  require(redoc)
   pr$setUI(ui = "redoc")
   pr$run(port = 1234)
   pr$setUI(ui = "redoc", redoc_options = list(scrollYOffset = 250, disableSearch = TRUE))
