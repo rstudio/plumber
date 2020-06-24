@@ -3,8 +3,8 @@ plumber (version)
 
 ### New features
 
-* Add support for `Redoc` OpenAPI UI. (@meztez)
-* Generalize interface integration. (@meztez)
+* Add support for `Redoc` OpenAPI UI. (@meztez, #562)
+* Generalize interface integration. (@meztez, #562)
 * CSV (UTF-8) serialization (@pachamaltese, #520)
 * SVG (UTF-8) serialization (@pachamaltese, #398)
 
@@ -16,8 +16,8 @@ plumber (version)
 * Fix OpenAPI url error when using an empty `HTTP_REFERER`. (@meztez)
 
 ### Breaking changes
-* `$run()` arguments `swagger` and `swaggerCallback` replaced by `ui` and `callback`. (@meztez)
-* Moved user provided OpenAPI Specification function from `$run()` to `$setApiHandler`. (@meztez)
+* `$run()` arguments `swagger` and `swaggerCallback` replaced by `ui` and `callback`. `ui` is now set to `TRUE` by default. (@meztez, #562)
+* Moved user provided OpenAPI Specification function from `$run()` to `$setApiHandler()`. (@meztez, #562)
 
 plumber 0.5.0
 --------------------------------------------------------------------------------
