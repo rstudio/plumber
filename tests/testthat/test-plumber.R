@@ -511,3 +511,26 @@ test_that("host is updated properly for printing", {
     "http://127.0.0.1:1234/v1"
   )
 })
+
+test_that("unmount works", {
+  pr <- plumber$new()
+  sub <- plumber$new()
+  sub$handle("GET", "/", function(){ 1 })
+  sub$handle("GET", "/nested/path", function(){ 2 })
+  pr$mount("/mount", sub)
+  pr$mount("/mount2", sub)
+  expect_equal(names(pr$mounts), c("/mount/", "/mount2/"))
+  expect_invisible(pr$unmount("/henry"))
+  expect_invisible(pr$unmount("/mount2/"))
+  expect_equal(names(pr$mounts), "/mount/")
+})
+
+test_that("removeHandle works", {
+  pr <- plumber$new()
+  pr$handle("GET", "/path1", function(){ 1 })
+  pr$handle("GET", "/path2", function(){ 2 })
+  expect_equal(length(pr$endpoints[[1]]), 2L)
+  expect_invisible(pr$removeHandle("GET", "/path1"))
+  expect_equal(length(pr$endpoints[[1]]), 1L)
+  expect_equal(pr$endpoints[[1]][[1]]$path, "/path2")
+})
