@@ -2,4 +2,4 @@
 .globals$serializers <- list()
 .globals$processors <- new.env()
 .globals$parsers <- list(func = list(), pattern = list())
-.globals$interfaces <- list()
+.globals$interfaces <- list(mount = list(), unmount = list())
