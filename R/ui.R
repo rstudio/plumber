@@ -6,7 +6,7 @@ mount_ui <- function(pr, host, port, ui_info, callback) {
 
   # return early if not enabled
   if (!isTRUE(ui_info$enabled)) {
-    return(NULL)
+    return()
   }
 
   # Build api url
@@ -27,7 +27,7 @@ mount_ui <- function(pr, host, port, ui_info, callback) {
   # Mount UIs
   if (isTRUE(length(.globals$interfaces$mount)==0L)) {
     message("No user interface loaded in namespace.")
-    return(NULL)
+    return()
   }
   ui_mount <- .globals$interfaces$mount[[ui_info$ui]]
   if (!is.null(ui_mount)) {
@@ -54,7 +54,7 @@ unmount_ui <- function(pr, ui_info) {
 
   # return early if not enabled
   if (!isTRUE(ui_info$enabled)) {
-    return(NULL)
+    return()
   }
 
   # Unount openAPI spec paths openapi.json
@@ -107,7 +107,7 @@ mount_open_api <- function(pr, api_url) {
 unmount_open_api <- function(pr) {
 
   pr$removeHandle("GET", "/openapi.json")
-  return(NULL)
+  invisible()
 
 }
 
@@ -154,13 +154,13 @@ mount_interface <- function(interface) {
       pr$removeHandle("GET", path)
     }
     pr$unmount(interface_path)
-    return(NULL)
+    invisible()
   }
 
   .globals$interfaces$mount[[interface$name]] <- mount_interface_func
   .globals$interfaces$unmount[[interface$name]] <- unmount_interface_func
 
-  return(NULL)
+  invisible()
 }
 
 swagger_interface <- list(
