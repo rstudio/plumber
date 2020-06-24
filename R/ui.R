@@ -4,6 +4,10 @@
 #' @noRd
 mount_ui <- function(pr, host, port, ui_info, callback) {
 
+  if (!isTRUE(ui_info$enabled)) {
+    return(NULL)
+  }
+
   # Build api url
   api_url <- getOption(
     "plumber.apiURL",
@@ -46,6 +50,11 @@ mount_ui <- function(pr, host, port, ui_info, callback) {
 # Unmount OpenAPI and UI
 #' @noRd
 unmount_ui <- function(pr, ui_info) {
+
+  if (!isTRUE(ui_info$enabled)) {
+    return(NULL)
+  }
+
   # Unount openAPI spec paths openapi.json
   unmount_open_api(pr)
 

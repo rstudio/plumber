@@ -16,7 +16,7 @@ test_image <- local({
 
     if (!isTRUE(test_little)) {
       # do not test the smaller image route
-      return()
+      return(NULL)
     }
     resp <- r$serve(make_req("GET", paste0("/little", name)), PlumberResponse$new())
     expect_equal(resp$status, 200)

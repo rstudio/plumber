@@ -381,6 +381,6 @@ test_that("no params plumber router still produces spec when there is a func par
   pr <- plumber$new()
   handler <- function(num) { sum(as.integer(num)) }
   pr$handle("GET", "/sum", handler, serializer = serializer_json())
-  expect_silent(spec <- pr$apiSpec())
+  spec <- pr$apiSpec()
   expect_equal(spec$paths$`/sum`$get$parameters[[1]]$name, "num")
 })
