@@ -17,3 +17,9 @@
 ^\.github
 ^\.httr-oauth$
 ^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^logo$
+^vignettes$
+^_release.md$
