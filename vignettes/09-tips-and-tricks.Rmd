@@ -1,0 +1,49 @@
+
+# Tips & Tricks {#tips-tricks}
+
+```{r, echo=FALSE,  out.width="45%", out.extra = 'style="float:right;"'}
+knitr::include_graphics("files/images/plumber_broken.png")
+```
+
+## Debugging
+
+If you've historically used R interactively, you may find it difficult to define functions that get executed at once without your input as Plumber requires. There are a couple of debugging techniques to be aware of when working on your Plumber APIs; these techniques are equally transferrable to debugging your R scripts, packages, or reports.
+
+### Print Debugging
+
+Most programmers first approach debugging by adding print statements to their code in order to inspect the state at some point. In R, `print()` or `cat()` can be used to print out some state. For instance, `cat("i is currently: ", i)` could be inserted in your code to help you ensure that the variable `i` is what it should be at that point in your code.
+
+This approach is equally viable with Plumber. When developing your Plumber API in an interactive environment, this debugging output will be logged to the same terminal where you called `run()` on your API. In a non-interactive production environment, these messages will be included in the API server logs for later inspection.
+
+### Interactive Debugging
+
+Print debugging is an obvious starting point, but most developers eventually wish for something more powerful. In R, this capacity is built in to the `browser()` function. If you're unfamiliar, `browser()` pauses the execution of some function and gives you an interactive session in which you can inspect the current value of internal variables or even proceed through your function one statement at a time.
+
+You can leverage `browser()` when developing your APIs locally by adding a `browser()` call in one of your filters or endpoints and then visiting your API in a client. This offers a powerful technique to use when you want to inspect multiple different variables or interact with the current state of things inside of your function. This is also a good way to get your hands dirty with Plumber and get better acquainted with how things behave at a low level. Consider the following API endpoint:
+
+```r
+#' @get /
+function(req, res){
+  browser()
+  
+  list(a=123)
+}
+```
+
+If you run this API locally and then visit the API in a web browser, you'll see your R session switch into debug mode when the request arrives, allowing you to look at the objects contained inside your `req` and `res` objects.
+
+## Testing
+
+// TODO docs for testing
+
+## Organizing Large Applications
+
+// TODO docs for organizing large apps
+
+## Swagger
+
+// TODO Docs for Swagger
+
+## Performance
+
+//TODO Run some load tests and show the performance/overhead of running Plumber.
