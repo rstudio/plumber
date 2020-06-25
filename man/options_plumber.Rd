@@ -2,7 +2,7 @@
 % Please edit documentation in R/plumber-options.R
 \name{options_plumber}
 \alias{options_plumber}
-\title{Set plumber options}
+\title{How to use Plumber options}
 \usage{
 options_plumber(
   apiHost = getOption("plumber.apiHost"),
@@ -15,24 +15,53 @@ options_plumber(
 )
 }
 \arguments{
-\item{apiHost}{see \link{plumber-options}}
+\item{apiHost}{see details}
 
-\item{debug}{see \link{plumber-options}}
+\item{debug}{see details}
 
-\item{maxRequestSize}{see \link{plumber-options}}
+\item{maxRequestSize}{see details}
 
-\item{postBody}{see \link{plumber-options}}
+\item{postBody}{see details}
 
-\item{port}{see \link{plumber-options}}
+\item{port}{see details}
 
-\item{sharedSecret}{see \link{plumber-options}}
+\item{sharedSecret}{see details}
 
-\item{swagger.url}{see \link{plumber-options}}
+\item{swagger.url}{see details}
+}
+\value{
+The complete, prior set of \code{\link[=options]{options()}} values.
+If a particular parameter is not supplied, it will return the current value.
+If no parameters are supplied, all returned values will be the current \code{\link[=options]{options()}} values.
 }
 \description{
-Set plumber options
+How to use Plumber options
 }
-\details{
-Sets plumber options. Call without arguments to get current
-values.
+\section{Options}{
+
+There are a number of global options that affect Plumber's behavior. These can
+be set globally with \code{\link[=options]{options()}} or with \code{\link[=options_plumber]{options_plumber()}}. Options set using
+\code{\link[=options_plumber]{options_plumber()}} should not include the \code{plumber.} prefix.
+
+\describe{
+\item{\code{plumber.apiHost} (defaults to \code{host} defined by \code{run} method, or an empty string
+when used outside a running router)}{Host used to build UI url and server url for
+OpenAPI specification.}
+\item{\code{plumber.debug} (defaults to \code{FALSE})}{Provides more insight into your API errors. Alternatively,
+use parameter \code{debug} of plumber router \code{run} method}
+\item{\code{plumber.maxRequestSize} (defaults to \code{0})}{Maximum length in bytes of request body. Body larger
+than maximum are rejected with http error 413. \code{0} means unlimited size.}
+\item{\code{plumber.postBody} (defaults to \code{TRUE})}{Copy post body content to \code{req$postBody} using system encoding.
+This should be set to \code{FALSE} if you do not need it. Default is \code{TRUE} to preserve compatibility with
+previous version behavior.}
+\item{\code{plumber.port} (defaults to \code{NULL})}{Port Plumber will attempt to use to start http server.
+If the port is already in use, server will not be able to start.}
+\item{\code{plumber.sharedSecret} (defaults to \code{NULL})}{Shared secret used to filter incoming request.
+When \code{NULL}, secret is not validated. Otherwise, Plumber compares secret with http header
+\code{PLUMBER_SHARED_SECRET}. Failure to match results in http error 400.}
+\item{\code{plumber.swagger.url} (defaults to \code{NULL})}{A function. Called with
+a single parameter corresponding to ui url after Plumber server is ready. This can be used
+by RStudio to open UI when API is ran for the editor.}
 }
+}
+

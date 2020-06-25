@@ -1,22 +1,5 @@
-plumber (version)
+plumber 1.0.0
 --------------------------------------------------------------------------------
-
-### New features
-
-* Add support for `#' @plumber` tag that modify plumber router programmatically using expression of the form `function(pr) {....}`. (@meztez and @blairj09, #568)
-* CSV (UTF-8) serialization (@pachamaltese, #520)
-* SVG (UTF-8) serialization (@pachamaltese, #398)
-
-### Bug fixes
-
-* Fix `plumb()` function when `plumb()`ing a directory so that `plumber.R` is
-  not a requirement if a valid `entrypoint.R` file is found. 
-  (@blairj09, [#471](https://github.com/trestletech/plumber/pull/471)).
-  
-
-plumber 0.5.0
---------------------------------------------------------------------------------
-## Full changelog
 
 ### Security
 
@@ -35,6 +18,7 @@ plumber 0.5.0
   API were using encrypted cookies and an attacker knew the encryption key in
   order to craft arbitrary cookies. (#325)
 
+
 ### Breaking changes
 
 * Plumber's swagger definition is now defined using
@@ -47,25 +31,36 @@ plumber 0.5.0
 
 * R repository modified to `focal-cran40` using Ubuntu 20.04 LTS for digital ocean provisioning (@meztez, #529)
 
+
 ### New features
 
-* Document plumber options. Add `options_plumber`. (@meztez, #555)
-
-* Add yaml support, serializer and parser. (@meztez, #556)
-
-* Added Swagger support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez, #532) 
-
 * Added support for promises in endpoints, filters, and hooks. (#248)
+
+* Add support for `#' @plumber` tag that modify plumber router programmatically using expression of the form `function(pr) {....}`. (@meztez and @blairj09, #568)
+
+* Added Swagger support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez, #532)
 
 * Added support to a router's run method to allow the `swagger` parameter to be a function that
   enhances the existing swagger specification before being returned to `/openapi.json`. (#365)
 
-* Add support for swagger for mounted routers (@bradleyhd, #274).
+* Added support for swagger for mounted routers (@bradleyhd, #274).
 
 
 ### Minor new features and improvements
 
+* Documented plumber options. Add `options_plumber`. (@meztez, #555)
+
+* Added yaml support, serializer and parser. (@meztez, #556)
+
+* Added csv serializer (@pachamaltese, #520)
+
+* Added svg serializer (@pachamaltese, #398)
+
 * Update documentation on R6 objects (@meztez, #530)
+
+* Fix `plumb()` function when `plumb()`ing a directory so that `plumber.R` is
+  not a requirement if a valid `entrypoint.R` file is found.
+  (@blairj09, [#471](https://github.com/trestletech/plumber/pull/471)).
 
 * If cookie information is too large (> 4093 bytes), a warning will be displayed. (#404)
 
@@ -81,6 +76,7 @@ plumber 0.5.0
 * Improve speed of `canServe()` method of the `PlumberEndpoint` class (@atheriel, #484)
 
 * Add support for returning svg images using `#' @svg` (and with arguments `#' @svg (width = 200, height=500)`. (@pachamaltese, #398)
+
 
 ### Bug fixes
 
@@ -101,6 +97,7 @@ plumber 0.5.0
 * Bumped version of httpuv to >= 1.4.5.9000 to address an unexpected segfault (@shapenaji, #289)
 
 * Date response header is now supplied by httpuv and not plumber. Fixes non standard date response header issues when using different locales. (@shrektan, #319, #380)
+
 
 
 plumber 0.4.6
