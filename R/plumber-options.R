@@ -1,6 +1,6 @@
 #' How to use Plumber options
-#'
-#' @details Options:
+#' @title Plumber options
+#' @details
 #' There are a number of global options that affect Plumber's behavior. These can
 #' be set globally with [options()] or with [options_plumber()]. Options set using
 #' [options_plumber()] should not include the `plumber.` prefix.
@@ -40,13 +40,19 @@
 #' by RStudio to open UI when API is ran for the editor. Defaults to option `plumber.swagger.url`}
 #' }
 #'
+#' @param apiScheme see details
 #' @param apiHost see details
+#' @param apiPort see details
+#' @param apiPath see details
+#' @param apiURL see details
 #' @param debug see details
 #' @param maxRequestSize see details
 #' @param postBody see details
 #' @param port see details
 #' @param sharedSecret see details
 #' @param swagger.url see details
+#' @param ui see details
+#' @param ui.callback see details
 #' @return
 #' The complete, prior set of [options()] values.
 #' If a particular parameter is not supplied, it will return the current value.

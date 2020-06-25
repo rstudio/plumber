@@ -2,7 +2,7 @@
 % Please edit documentation in R/plumber-options.R
 \name{options_plumber}
 \alias{options_plumber}
-\title{How to use Plumber options}
+\title{Plumber options}
 \usage{
 options_plumber(
   apiScheme = getOption("plumber.apiScheme"),
@@ -21,7 +21,15 @@ options_plumber(
 )
 }
 \arguments{
+\item{apiScheme}{see details}
+
 \item{apiHost}{see details}
+
+\item{apiPort}{see details}
+
+\item{apiPath}{see details}
+
+\item{apiURL}{see details}
 
 \item{debug}{see details}
 
@@ -34,6 +42,10 @@ options_plumber(
 \item{sharedSecret}{see details}
 
 \item{swagger.url}{see details}
+
+\item{ui}{see details}
+
+\item{ui.callback}{see details}
 }
 \value{
 The complete, prior set of \code{\link[=options]{options()}} values.
@@ -44,7 +56,6 @@ If no parameters are supplied, all returned values will be the current \code{\li
 How to use Plumber options
 }
 \details{
-Options:
 There are a number of global options that affect Plumber's behavior. These can
 be set globally with \code{\link[=options]{options()}} or with \code{\link[=options_plumber]{options_plumber()}}. Options set using
 \code{\link[=options_plumber]{options_plumber()}} should not include the \code{plumber.} prefix.
