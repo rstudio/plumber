@@ -36,7 +36,7 @@ plumber 1.0.0
 
 * Added support for promises in endpoints, filters, and hooks. (#248)
 
-* Add support for `#' @plumber` tag that modify plumber router programmatically using expression of the form `function(pr) {....}`. (@meztez and @blairj09, #568)
+* Add support for `#' @plumber` tag to gain programmatic access to the `plumber` router via `function(pr) {....}`. (@meztez and @blairj09, #568)
 
 * Added Swagger support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez, #532)
 
