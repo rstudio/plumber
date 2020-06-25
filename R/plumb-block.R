@@ -208,8 +208,8 @@ plumbBlock <- function(lineNum, file){
       comments <- paste(comments, commentMat[1,2])
     }
 
-    routerModifierMat <- stri_match(line, regex="^#['\\*]\\s*@plumber(.*)$")
-    if (!is.na(routerModifierMat[1,2])) {
+    routerModifierMat <- stri_match(line, regex="^#['\\*]\\s*@plumber")
+    if (!is.na(routerModifierMat[1,1])) {
       routerModifier <- TRUE
     }
 
