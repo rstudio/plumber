@@ -358,16 +358,14 @@ test_that("handle invokes correctly", {
   res <- PlumberResponse$new()
   pr$route(make_req("GET", "/trailslash/"), res) # With trailing slash
   expect_equal(res$status, 404)
-  res <- PlumberResponse$new()
-  pr$route(make_req("POST", "/trailslash"), res) # Wrong verb
+  res <- pr$call(make_req("POST", "/trailslash")) # Wrong verb
   expect_equal(res$status, 405)
 
   expect_equal(pr$route(make_req("POST", "/trailslashp/"), PlumberResponse$new()), "poster")
   res <- PlumberResponse$new()
   pr$route(make_req("POST", "/trailslashp"), res) # w/o trailing slash
   expect_equal(res$status, 404)
-  res <- PlumberResponse$new()
-  pr$route(make_req("GET", "/trailslashp/"), res) # Wrong verb
+  res <- pr$call(make_req("GET", "/trailslashp/")) # Wrong verb
   expect_equal(res$status, 405)
 
 

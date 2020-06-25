@@ -8,6 +8,22 @@ test_that("404 handler sets 404", {
   expect_match(val$error, "Not Found")
 })
 
+test_that("405 handling is ok, get the right verbs", {
+  pr <- plumber$new()
+  sub <- plumber$new()
+  sub$handle("GET", "/test", force)
+  pr$mount("/barret", sub)
+
+  expect_equal(allowed_verbs(pr, path_to_find = "/barret/test"), "GET")
+  expect_null(allowed_verbs(pr, path_to_find = "/subroute/not_found"), NULL)
+  expect_null(allowed_verbs(pr, path_to_find = "/barret/"), NULL)
+  expect_null(allowed_verbs(pr, path_to_find = "/barret/wrong"), NULL)
+
+  expect_false(is_405(pr, path_to_find = "/barret/test", "GET"))
+  expect_true(is_405(pr, path_to_find = "/barret/test", "POST"))
+  expect_false(is_405(pr, path_to_find = "/subroute/not_found"))
+})
+
 test_that("default error handler returns an object with an error property", {
   res <- PlumberResponse$new()
   options('plumber.debug' = FALSE)
