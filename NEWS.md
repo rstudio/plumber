@@ -18,6 +18,7 @@ plumber 1.0.0
   API were using encrypted cookies and an attacker knew the encryption key in
   order to craft arbitrary cookies. (#325)
 
+
 ### Breaking changes
 
 * Plumber's swagger definition is now defined using
@@ -30,20 +31,20 @@ plumber 1.0.0
 
 * R repository modified to `focal-cran40` using Ubuntu 20.04 LTS for digital ocean provisioning (@meztez, #529)
 
+
 ### New features
 
-* Added Swagger support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez, #532)
-
 * Added support for promises in endpoints, filters, and hooks. (#248)
+
+* Added Swagger support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez, #532)
 
 * Added support to a router's run method to allow the `swagger` parameter to be a function that
   enhances the existing swagger specification before being returned to `/openapi.json`. (#365)
 
 * Added support for swagger for mounted routers (@bradleyhd, #274).
-*
+
 
 ### Minor new features and improvements
-
 
 * Documented plumber options. Add `options_plumber`. (@meztez, #555)
 
@@ -74,6 +75,7 @@ plumber 1.0.0
 
 * Add support for returning svg images using `#' @svg` (and with arguments `#' @svg (width = 200, height=500)`. (@pachamaltese, #398)
 
+
 ### Bug fixes
 
 * Modified images serialization to use content-type serializer. Fixes issue with images pre/postserialize hooks (@meztez, #518).
@@ -93,6 +95,7 @@ plumber 1.0.0
 * Bumped version of httpuv to >= 1.4.5.9000 to address an unexpected segfault (@shapenaji, #289)
 
 * Date response header is now supplied by httpuv and not plumber. Fixes non standard date response header issues when using different locales. (@shrektan, #319, #380)
+
 
 
 plumber 0.4.6
