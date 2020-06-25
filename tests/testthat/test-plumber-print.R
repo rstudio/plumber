@@ -15,9 +15,6 @@ test_that("prints correctly", {
   stat <- PlumberStatic$new(".")
   pr$mount("/static", stat)
 
-  # base_pr <- plumber$new()
-  # base_pr$mount("/", pr)
-
   printed <- capture.output(print(pr))
 
   expected_output <- c(
