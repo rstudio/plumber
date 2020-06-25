@@ -296,7 +296,7 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr)
         return()
       }
     }
-    message("Invalid expression for @plumber tag. Use form function(pr) {pr$...}.")
+    message("Invalid expression for @plumber tag. Use form `function(pr) { }`.")
   } else {
     eval(expr, envir)
   }
