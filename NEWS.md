@@ -3,7 +3,7 @@ plumber (version)
 
 ### New features
 
-* Add support for @plumber tag that modify plumber router programmatically using expression of the form function(pr) {pr$...}.
+* Add support for `#' @plumber` tag that modify plumber router programmatically using expression of the form `function(pr) {....}`. (@meztez and @blairj09, #568)
 * CSV (UTF-8) serialization (@pachamaltese, #520)
 * SVG (UTF-8) serialization (@pachamaltese, #398)
 
