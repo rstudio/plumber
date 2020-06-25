@@ -22,21 +22,20 @@ mount_ui <- function(pr, host, port, ui_info, callback) {
   )
 
   # Mount openAPI spec paths openapi.json
-  mount_open_api(pr, api_url)
+  mount_openapi(pr, api_url)
 
   # Mount UIs
-  if (isTRUE(length(.globals$interfaces$mount)==0L)) {
-    message("No user interface loaded in namespace.")
+  if (isTRUE(length(.globals$UIs$mount)==0L)) {
+    message("No UI available in namespace. See help(add_ui).")
     return()
   }
-  ui_mount <- .globals$interfaces$mount[[ui_info$ui]]
+  ui_mount <- .globals$UIs$mount[[ui_info$ui]]
   if (!is.null(ui_mount)) {
     ui_url <- do.call(ui_mount, c(list(pr, api_url), ui_info$args))
     message("Running ", ui_info$ui, " UI at ", ui_url, sep = "")
   } else {
-    message("Unknown user interface \"", ui_info$ui,"\". ",
-            ". Maybe try library(", ui_info$ui,").")
-    return(NULL)
+    message("Unknown user interface \"", ui_info$ui,"\". Maybe try library(", ui_info$ui,").")
+    return()
   }
 
   # Use callback when defined
@@ -58,10 +57,10 @@ unmount_ui <- function(pr, ui_info) {
   }
 
   # Unount openAPI spec paths openapi.json
-  unmount_open_api(pr)
+  unmount_openapi(pr)
 
   # Mount UIs
-  ui_unmount <- .globals$interfaces$unmount[[ui_info$ui]]
+  ui_unmount <- .globals$UIs$unmount[[ui_info$ui]]
   if (!is.null(ui_unmount)) {
     ui_unmount(pr = pr)
   }
@@ -69,7 +68,7 @@ unmount_ui <- function(pr, ui_info) {
 
 #' Mount OpenAPI Specification to a plumber router
 #' @noRd
-mount_open_api <- function(pr, api_url) {
+mount_openapi <- function(pr, api_url) {
 
   spec <- pr$apiSpec()
 
@@ -87,7 +86,7 @@ mount_open_api <- function(pr, api_url) {
         # Use HTTP_REFERER as fallback
         api_url <- req$HTTP_REFERER
         api_url <- sub("index\\.html$", "", api_url)
-        api_url <- sub(paste0("__(", paste0(names(.globals$interfaces$mount), collapse = "|"),")__/$"), "", api_url)
+        api_url <- sub(paste0("__(", paste0(names(.globals$UIs$mount), collapse = "|"),")__/$"), "", api_url)
       }
     }
 
@@ -97,73 +96,80 @@ mount_open_api <- function(pr, api_url) {
   # http://spec.openapis.org/oas/v3.0.3#document-structure
   # "It is RECOMMENDED that the root OpenAPI document be named: openapi.json"
   pr$handle("GET", "/openapi.json", openapi_fun, serializer = serializer_unboxed_json())
+  pr$handle("GET", "/openapi.yaml", openapi_fun, serializer = serializer_yaml())
 
-  return(NULL)
+  invisible()
 
 }
 
 #' Mount OpenAPI Specification to a plumber router
 #' @noRd
-unmount_open_api <- function(pr) {
+unmount_openapi <- function(pr) {
 
   pr$removeHandle("GET", "/openapi.json")
+  pr$removeHandle("GET", "/openapi.yaml")
   invisible()
 
 }
 
-#' Mount Interface UI
-#' @param interface An interface (list) that plumber can use to mount
+#' Add UI for plumber to use
+#' @param ui A list of that plumber can use to mount
 #' a UI.
+#' @details [add_ui()] is used by package like `swagger` and `redoc`.
+#' When you load those package, it calls [add_ui()] to provide a user
+#' interface that can interpret your plumber OpenAPI Specifications.
+#'
+#' `ui` list expects the following values
+#' \describe{
+#' \item{package}{Name of the package required for the UI.}
+#' \item{name}{Name of the UI.}
+#' \item{index}{A function that returns the HTML content of the landing page of the UI.}
+#' \item{static}{A function that returns the path to the assets (images, javascript, css, fonts) the UI will use.}
+#' }
 #' @export
-mount_interface <- function(interface) {
+add_ui <- function(ui) {
 
-  stopifnot(is.list(interface))
-  stopifnot(is.character(interface$package) && length(interface$package) == 1L)
+  stopifnot(is.list(ui))
+  stopifnot(is.character(ui$package) && length(ui$package) == 1L)
 
-  if (!requireNamespace(interface$package, quietly = TRUE)) {
-    stop(interface$package, " must be installed for the ", interface$name," UI to be displayed")
+  if (!requireNamespace(ui$package, quietly = TRUE)) {
+    stop(ui$package, " must be installed for the ", ui$name," UI to be displayed")
   }
 
-  stopifnot(is.character(interface$name) && length(interface$name) == 1L)
-  stopifnot(is.function(interface$static))
-  stopifnot(is.function(interface$index))
-  interface_path <- paste0("/__", interface$name, "__/")
-  handle_paths <- paste0(interface_path, c("index.html", ""))
+  stopifnot(is.character(ui$name) && length(ui$name) == 1L)
+  stopifnot(is.function(ui$static))
+  stopifnot(is.function(ui$index))
+  ui_root <- paste0("/__", ui$name, "__/")
+  ui_path <- paste0(ui_root, c("index.html", ""))
 
-  mount_interface_func <- function(pr, api_url, ...) {
-    if (!requireNamespace(interface$package, quietly = TRUE)) {
-      stop(interface$package, " must be installed for the ", interface$name," UI to be displayed")
-    }
+  mount_ui_func <- function(pr, api_url, ...) {
 
-    interface_url <- paste0(api_url, interface_path)
+    ui_url <- paste0(api_url, ui_root)
 
-    interface_index <- function() {
-      interface$index(...)
+    ui_index <- function() {
+      ui$index(...)
     }
-    for (path in handle_paths) {
-      pr$handle(
-        "GET", path, interface_index,
-        serializer = serializer_html()
-      )
+    for (path in ui_path) {
+      pr$handle("GET", path, ui_index,  serializer = serializer_html())
     }
-    pr$mount(interface_path, PlumberStatic$new(interface$static(...)))
-    return(interface_url)
+    pr$mount(ui_root, PlumberStatic$new(ui$static(...)))
+    return(ui_url)
   }
-  unmount_interface_func <- function(pr) {
-    for (path in handle_paths) {
+  unmount_ui_func <- function(pr) {
+    for (path in ui_path) {
       pr$removeHandle("GET", path)
     }
-    pr$unmount(interface_path)
+    pr$unmount(ui_root)
     invisible()
   }
 
-  .globals$interfaces$mount[[interface$name]] <- mount_interface_func
-  .globals$interfaces$unmount[[interface$name]] <- unmount_interface_func
+  .globals$UIs$mount[[ui$name]] <- mount_ui_func
+  .globals$UIs$unmount[[ui$name]] <- unmount_ui_func
 
   invisible()
 }
 
-swagger_interface <- list(
+swagger_ui <- list(
   package = "swagger",
   name = "swagger",
   index = function(version = "3", ...) {
@@ -177,4 +183,4 @@ swagger_interface <- list(
   }
 )
 
-mount_interface(swagger_interface)
+add_ui(swagger_ui)
