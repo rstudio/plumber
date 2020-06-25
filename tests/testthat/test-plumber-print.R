@@ -78,8 +78,4 @@ test_that("prints correctly", {
   )
 
   expect_equal(printed, expected_output)
-  # for (i in 1:length(regexps)){
-  #   expect_match(printed[i], regexps[i], info=paste0("on line ", i), fixed = TRUE)
-  # }
-
 })
