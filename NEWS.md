@@ -1,28 +1,5 @@
-plumber (version)
+plumber 1.0.0
 --------------------------------------------------------------------------------
-
-### New features
-
-* Add support for `Redoc` OpenAPI UI. (@meztez, #562)
-* Generalize interface integration. (@meztez, #562)
-* CSV (UTF-8) serialization (@pachamaltese, #520)
-* SVG (UTF-8) serialization (@pachamaltese, #398)
-
-### Bug fixes
-
-* Fix `plumb()` function when `plumb()`ing a directory so that `plumber.R` is
-  not a requirement if a valid `entrypoint.R` file is found. 
-  (@blairj09, [#471](https://github.com/trestletech/plumber/pull/471)).
-* Fix OpenAPI url error when using an empty `HTTP_REFERER`. (@meztez)
-
-### Breaking changes
-* `$run()` arguments `swagger` removed and `swaggerCallback` replaced `callback`. `ui` is now set to enabled by default and
-managed through `$setUI()`. (@meztez, #562)
-* Moved user provided OpenAPI Specification function from `$run()` to `$setApiHandler()`. (@meztez, #562)
-
-plumber 0.5.0
---------------------------------------------------------------------------------
-## Full changelog
 
 ### Security
 
@@ -43,9 +20,11 @@ plumber 0.5.0
 
 ### Breaking changes
 
-* Plumber's swagger definition is now defined using
-  [OpenAPI 3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md),
+* Plumber's OpenAPI Specification is now defined using
+  [OpenAPI 3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md),
   upgrading from Swagger Specification. (#365)
+
+* Plumber router `$run()` method arguments `swagger` removed and `swaggerCallback` replaced by `callback`. User interface is now enabled by default and managed through Plumber router `$setUI()` method and option `plumber.ui`. (@meztez, #562)
 
 * The source files used in plumber **must use** the UTF-8 encoding if they contain
   non-ASCII characters (@shrektan, #312,
@@ -55,23 +34,31 @@ plumber 0.5.0
 
 ### New features
 
-* Document plumber options. Add `options_plumber`. (@meztez, #555)
-
-* Add yaml support, serializer and parser. (@meztez, #556)
-
-* Added Swagger support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez, #532) 
+* Generalize user interface integration. Plumber can now use other OpenAPI compatible user interfaces like `Redoc`. (@meztez, #562)
 
 * Added support for promises in endpoints, filters, and hooks. (#248)
 
-* Added support to a router's run method to allow the `swagger` parameter to be a function that
-  enhances the existing swagger specification before being returned to `/openapi.json`. (#365)
+* Added OpenAPI support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez, #532)
 
-* Add support for swagger for mounted routers (@bradleyhd, #274).
+* Added user provided OpenAPI Specification handler to Plumber router. Use `$setApiHandler()` to provide a function to alter the Plumber generated OpenAPI Specification returned by Plumber router method `$apiSpec()`. This also affects `/openapi.json` and `/openapi.yaml` (#365)(@meztez, #562)
 
+* Added OpenAPI Specification support for mounted routers (@bradleyhd, #274).
 
 ### Minor new features and improvements
 
+* Documented plumber options. Add `options_plumber`. (@meztez, #555)
+
+* Added yaml support, serializer and parser. (@meztez, #556)
+
+* Added csv serializer (@pachamaltese, #520)
+
+* Added svg serializer (@pachamaltese, #398)
+
 * Update documentation on R6 objects (@meztez, #530)
+
+* Fix `plumb()` function when `plumb()`ing a directory so that `plumber.R` is
+  not a requirement if a valid `entrypoint.R` file is found.
+  (@blairj09, [#471](https://github.com/trestletech/plumber/pull/471)).
 
 * If cookie information is too large (> 4093 bytes), a warning will be displayed. (#404)
 
@@ -89,6 +76,8 @@ plumber 0.5.0
 * Add support for returning svg images using `#' @svg` (and with arguments `#' @svg (width = 200, height=500)`. (@pachamaltese, #398)
 
 ### Bug fixes
+
+* Fix OpenAPI server url error when `HTTP_REFERER` is NULL. (@meztez, #562)
 
 * Modified images serialization to use content-type serializer. Fixes issue with images pre/postserialize hooks (@meztez, #518).
 

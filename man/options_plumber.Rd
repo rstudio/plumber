@@ -2,7 +2,7 @@
 % Please edit documentation in R/plumber-options.R
 \name{options_plumber}
 \alias{options_plumber}
-\title{Set plumber options}
+\title{How to use Plumber options}
 \usage{
 options_plumber(
   apiScheme = getOption("plumber.apiScheme"),
@@ -21,36 +21,66 @@ options_plumber(
 )
 }
 \arguments{
-\item{apiScheme}{see \link{plumber-options}}
+\item{apiHost}{see details}
 
-\item{apiHost}{see \link{plumber-options}}
+\item{debug}{see details}
 
-\item{apiPort}{see \link{plumber-options}}
+\item{maxRequestSize}{see details}
 
-\item{apiPath}{see \link{plumber-options}}
+\item{postBody}{see details}
 
-\item{apiURL}{see \link{plumber-options}}
+\item{port}{see details}
 
-\item{debug}{see \link{plumber-options}}
+\item{sharedSecret}{see details}
 
-\item{maxRequestSize}{see \link{plumber-options}}
-
-\item{postBody}{see \link{plumber-options}}
-
-\item{port}{see \link{plumber-options}}
-
-\item{sharedSecret}{see \link{plumber-options}}
-
-\item{swagger.url}{see \link{plumber-options}}
-
-\item{ui}{see \link{plumber-options}}
-
-\item{ui.callback}{see \link{plumber-options}}
+\item{swagger.url}{see details}
+}
+\value{
+The complete, prior set of \code{\link[=options]{options()}} values.
+If a particular parameter is not supplied, it will return the current value.
+If no parameters are supplied, all returned values will be the current \code{\link[=options]{options()}} values.
 }
 \description{
-Set plumber options
+How to use Plumber options
 }
 \details{
-Sets plumber options. Call without arguments to get current
-values.
+Options:
+There are a number of global options that affect Plumber's behavior. These can
+be set globally with \code{\link[=options]{options()}} or with \code{\link[=options_plumber]{options_plumber()}}. Options set using
+\code{\link[=options_plumber]{options_plumber()}} should not include the \code{plumber.} prefix.
+
+\describe{
+\item{\code{plumber.apiScheme}}{Scheme used to build UI url and server url for
+OpenAPI Specification. Defaults to \code{http}, or an empty string
+when used outside a running router}
+\item{\code{plumber.apiHost}}{Host used to build UI url and server url for
+OpenAPI Specification. Defaults to \code{host} defined by \code{run} method, or an empty string
+when used outside a running router}
+\item{\code{plumber.apiPort}}{Port used to build UI url and server url for
+OpenAPI Specification. Defaults to \code{port} defined by \code{run} method, or an empty string
+when used outside a running router}
+\item{\code{plumber.apiPath}}{Path used to build UI url and server url for
+OpenAPI Specification. Defaults to an empty string}
+\item{\code{plumber.apiURL}}{UI url and server urls for OpenAPI Specification respecting
+pattern \verb{scheme://host:port/path}. Defaults to the combination of the above options}
+\item{\code{plumber.debug}}{Provides more insight into your API errors. Alternatively,
+use parameter \code{debug} of plumber router \code{run} method. Defaults to \code{FALSE}}
+\item{\code{plumber.maxRequestSize}}{Maximum length in bytes of request body. Body larger
+than maximum are rejected with http error 413. \code{0} means unlimited size. Defaults to \code{0}}
+\item{\code{plumber.postBody}}{Copy post body content to \code{req$postBody} using system encoding.
+This should be set to \code{FALSE} if you do not need it. Default is \code{TRUE} to preserve compatibility with
+previous version behavior. Defaults to \code{TRUE}}
+\item{\code{plumber.port}}{Port Plumber will attempt to use to start http server.
+If the port is already in use, server will not be able to start. Defaults to \code{NULL}}
+\item{\code{plumber.sharedSecret}}{Shared secret used to filter incoming request.
+When \code{NULL}, secret is not validated. Otherwise, Plumber compares secret with http header
+\code{PLUMBER_SHARED_SECRET}. Failure to match results in http error 400. Defaults to \code{NULL}}
+\item{\code{plumber.swagger.url}}{A function. Called with
+a single parameter corresponding to ui url after Plumber server is ready. This can be used
+by RStudio to open UI when API is ran for the editor. Defaults to \code{NULL}}
+\item{\code{plumber.ui}}{Name of the UI interface to use. Defaults to \code{TRUE}}
+\item{\code{plumber.ui.callback}}{A function. Called with
+a single parameter corresponding to ui url after Plumber server is ready. This can be used
+by RStudio to open UI when API is ran for the editor. Defaults to option \code{plumber.swagger.url}}
+}
 }
