@@ -1,5 +1,15 @@
+---
+title: "Security"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Security}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-# Security {#security}
+```{r, include = FALSE}
+source("_helpers.R")
+```
 
 The majority of R programmers have not been trained to give much attention to the security of the code that they write. This is for good reason since running R code on your own machine with no external input gives little opportunity for attackers to leverage your R code to do anything malicious. However, as soon as you expose an API on a network, your concerns and thought process must adapt accordingly.
 
@@ -27,7 +37,7 @@ HTTPS is a secure form of HTTP. Many people are now aware that they should check
 
 These two assurances are critical if your API will be handling any sensitive data or performing actions intended only for authenticated users. Some hosting options support serving on both HTTP and HTTPS simultaneously. The most secure configuration would be to redirect incoming HTTP traffic to your HTTPS hosting option.
 
-As an added layer of protection, you can consider enabling [HTTP Strict Transport Security (HSTS)](https://www.troyhunt.com/understanding-http-strict-transport/). HSTS is a way to instruct clients that -- in the future -- they should refuse to connect to this server over unsecure HTTP. This ensures that no imposter server would be able to trick a client into connecting over insecure HTTP in the future. 
+As an added layer of protection, you can consider enabling [HTTP Strict Transport Security (HSTS)](https://www.troyhunt.com/understanding-http-strict-transport/). HSTS is a way to instruct clients that -- in the future -- they should refuse to connect to this server over unsecure HTTP. This ensures that no imposter server would be able to trick a client into connecting over insecure HTTP in the future.
 
 Unfortunately, Plumber does not implement HTTPS support natively, but most of the [documented hosting options](#hosting) offer ways to deploy HTTPS and HSTS in front of your Plumber API.
 
@@ -37,8 +47,7 @@ Denial of service (DoS) attacks are employed in order to temporarily shut down a
 
 However, there are practices that you should employ when designing your Plumber API to put safety guards around the work that an API request might instigate.
 
-```{r, echo=FALSE, results='asis'}
-include_r("files/apis/07-01-plot-unsafe.R")
+```{r, eval = FALSE, code = readLines("files/apis/07-01-plot-unsafe.R")}
 ```
 
 The expected output here is a harmless plot.
@@ -69,8 +78,7 @@ This plot, with 10,000 points added, took `r unname(t["elapsed"])` seconds to ge
 
 The solution, in this case, is to ensure that we have reasonable safety guards in place for any user input.
 
-```{r, echo=FALSE, results='asis'}
-include_r("files/apis/07-02-plot-safe.R")
+```{r, eval = FALSE, code = readLines("files/apis/07-02-plot-safe.R")}
 ```
 
 Here you can see that we only allow the user to request a graph with up to 1,000 points. Any requests exceeding that limit will immediately be terminated without any further computation.
@@ -81,19 +89,17 @@ You should be very attentive to the resources that could be consumed by any of y
 
 Any time you accept input from a user in your code, you should plan for the worst-case scenario. If, for example, your API endpoint allows the user to specify the name of a file that should be read out of a particular directory and then returns its contents, you might naively implement it like so.
 
-```{r, echo=FALSE, results='asis'}
-include_r("files/apis/07-03-file-unsafe.R")
+```{r, eval = FALSE, code = readLines("files/apis/07-03-file-unsafe.R")}
 ```
 
 Unfortunately, this API endpoint does not properly sanitize the user input. The user could set the `file` parameter to `../plumber.R` and now the endpoint would return the source code of your Plumber API. Of course they could just as easy attempt to read other files that might contain API keys or other sensitive data.
 
 One solution in this case is to strip all special characters off of the user input which will prevent users from being able to escape into a different directory.
 
-```{r, echo=FALSE, results='asis'}
-include_r("files/apis/07-04-file-safe.R")
+```{r, eval = FALSE, code = readLines("files/apis/07-04-file-safe.R")}
 ```
 
-File paths are not the only opportunity for malicious input to do damage to your system, however. Another way in which user input can be dangerous is an attack known as "cross site scripting," or "XSS." This attack can be leveraged whenever user input may be rendered in a user's browser. For instance if you had an endpoint which allows users to comment on a page and then later displays those comments to other users, an attacked could craft a comment such as: 
+File paths are not the only opportunity for malicious input to do damage to your system, however. Another way in which user input can be dangerous is an attack known as "cross site scripting," or "XSS." This attack can be leveraged whenever user input may be rendered in a user's browser. For instance if you had an endpoint which allows users to comment on a page and then later displays those comments to other users, an attacked could craft a comment such as:
 
 ```
 "This is a comment with JavaScript! <script>alert('I could do something bad here!');</script>
@@ -149,7 +155,7 @@ You should also be aware of how cookies will be handled and managed by clients. 
 
  - **expiration** - When the cookie should expire. Can either be a `POSIXt` object that gives the time explicitly, or a raw integer which will be interpreted as the number of seconds in the future when this cookie should expire. If no value is provided, the cookie will be a `session` cookie, meaning that it will persist until the user closes the tab/browser. Remember, however, that a client may accidentally or maliciously retain this cookie beyond its assigned expiration time. From a security standpoint, you cannot rely on a client to be well-behaved and to delete this cookie at the assigned time.
  - **http** - The `HttpOnly` property on a cookie determines whether or not the cookie should be accessible to JavaScript running on your domain. If you were using a cookie to persist user settings and host some JavaScript that may also leverage the preferences stored in that cookie, then you would want `http` parameter to be `FALSE`, indicating that the cookie should *not* be `HttpOnly`, and *should* be available to Javascript. If you were storing a session ID in the cookie that is only interpretable by the server, then you should set `http` to `TRUE`. There are a variety of attacks (such as "cross-site scripting") that would enable an attacker to run malicious JavaScript on your clients' machines, so it's wise to limit the amount of information accessible from JavaScript.
- - **secure** - If `TRUE`, instructs clients to only send the cookie when connecting to your server over HTTPS. HTTPS is a mechanism by which clients can gain more assurance that the server they're connected to is indeed the server that they intended to be communicating with.  If your API uses HTTPS, using secure cookies protects against a use case in which an attacker tricks one of your clients into connecting to an HTTP server impersonating your API. In that scenario, a client may send their cookies to this malicious server, at which point the attacker could use those cookies on your server to impersonate the actual user. Note that you shouldn't enable this until you have your API stably running HTTPS. 
+ - **secure** - If `TRUE`, instructs clients to only send the cookie when connecting to your server over HTTPS. HTTPS is a mechanism by which clients can gain more assurance that the server they're connected to is indeed the server that they intended to be communicating with.  If your API uses HTTPS, using secure cookies protects against a use case in which an attacker tricks one of your clients into connecting to an HTTP server impersonating your API. In that scenario, a client may send their cookies to this malicious server, at which point the attacker could use those cookies on your server to impersonate the actual user. Note that you shouldn't enable this until you have your API stably running HTTPS.
 
 Additionally, bear in mind that if an attacker gets physical access to a client who has a valid cookie, the attacker could copy that cookie off to a different machine and begin using it themselves. Unfortunately, you can't perfectly protect against such attacks, but you can minimize the impact by 1.) using shorter session lifetimes (perhaps a few hours instead of days), 2.) invalidating sessions after a period of user inactivity, or 3.) rotating the sesion ID periodically; this way you'd be able to detect that multiple clients were trying to use the same session and could take action. You can also consider adding an additional layer of security around very security-sensitive endpoints (like changing a user's password).
 

@@ -1,12 +1,21 @@
+---
+title: "Runtime"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Runtime}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-# Runtime {#runtime}
+```{r, include = FALSE}
+source("_helpers.R")
+```
 
 ## Execution Model {#execution-model}
 
 When you `plumb()` a file, Plumber calls `source()` on that file which will evaluate any top-level code that you have defined.
 
-```{r, echo=FALSE, results='asis'}
-include_r("files/apis/05-01-scope.R")
+```{r, eval = FALSE, code = readLines("files/apis/05-01-scope.R")}
 ```
 
 If you call `plumb()` on this file, the `counter` variable will be created and will live in the environment created for this API. However, the endpoint defined will not be evaluated until it is invoked in response to an incoming request. Because the endpoint uses `<<-`, the "double-assignment" operator, it mutates the `counter` variable that was previously defined when the file was `plumb()`d. This technique allows all endpoints and filters to share some data defined at the top-level of your API.
@@ -20,7 +29,7 @@ This can become important if you consider mounting routers onto one another. In 
  - A decorated R script, if provided, will be `source()`d.
  - All expressions will be evaluated.
  - All endpoint and filter functions will be executed.
- 
+
  It is important to be aware that subrouters, by default, would each have their own environment. If you want multiple Plumber routers to share an environment, you will need to provide a single, shared environment when you create the routers.
 
 ## Performance & Request Processing
@@ -38,17 +47,16 @@ Often, Plumber APIs will require coordination of some state. This state may need
 
 As previously discussed, R is single-threaded. Therefore it's important that you consider the fact that you may eventually need multiple R processes running in parallel to handle the incoming traffic of your API. While this may not seem important initially, you may thank yourself later for designing a "horizontally scalable" API (or one that can be scaled by adding more R processes in parallel).
 
-The key to building a horizontally scalable API is to ensure that each Plumber process is "stateless," meaning that any persistent state lives outside of the Plumber process. In any of the hosting environments that exist today, it is not guaranteed that two subsequent requests from a single client will be served by the same process. Thus it's never safe to assume that information stored in-memory will be available between requests for a horizontally scaled app. Below are a few options to consider to coordinate state for a Plumber API. 
+The key to building a horizontally scalable API is to ensure that each Plumber process is "stateless," meaning that any persistent state lives outside of the Plumber process. In any of the hosting environments that exist today, it is not guaranteed that two subsequent requests from a single client will be served by the same process. Thus it's never safe to assume that information stored in-memory will be available between requests for a horizontally scaled app. Below are a few options to consider to coordinate state for a Plumber API.
 
 ### In-Memory
 
 As shown previous in the [Execution Model section](#execution-model), it is possible to share state using the environment associated with the Plumber router.
 
-```{r, echo=FALSE, results='asis'}
-include_r("files/apis/05-01-scope.R")
+```{r, eval = FALSE, code = readLines("files/apis/05-01-scope.R")}
 ```
 
-This is the one approach presented that does not allow your Plumber process to be stateless. The approach is sufficient for coordinating state within a single process, but as you scale your API by adding processes, this state will no longer be coordinated between them. 
+This is the one approach presented that does not allow your Plumber process to be stateless. The approach is sufficient for coordinating state within a single process, but as you scale your API by adding processes, this state will no longer be coordinated between them.
 
 Therefore this approach can be effective for "read-only" data -- such as if you were to load a single, large dataset into memory when the API starts, then allow all filters and endpoints to reference that dataset moving forward -- but it will not allow you to share state across multiple processes as you scale. If you want to build a scalable, stateless application, you should avoid relying on the in-memory R environment to coordinate state between the pieces of your API.
 

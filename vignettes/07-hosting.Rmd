@@ -1,5 +1,15 @@
+---
+title: "Hosting"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Hosting}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-# Hosting {#hosting}
+```{r, include = FALSE}
+source("_helpers.R")
+```
 
 Once you have developed your Plumber API, the next step is to find a way to host it. If you haven't dealt with hosting an application on a server before, you may be tempted to run the `run()` command from an interactive session on your development machine (either your personal desktop or an RStudio Server instance) and direct traffic there. This is a dangerous idea for a number of reasons:
 
@@ -41,11 +51,11 @@ RStudio Connect automatically manages the number of R processes necessary to han
 
 ## Docker (Basic) {#docker}
 
-[Docker](https://docker.io) is a platform built on top of Linux Containers that allow you to run processes in an isolated environment; that environment might have certain resources/software pre-configured or may emulate a particular Linux environment like Ubuntu 14.04 or CentOS 7.3. 
+[Docker](https://docker.io) is a platform built on top of Linux Containers that allow you to run processes in an isolated environment; that environment might have certain resources/software pre-configured or may emulate a particular Linux environment like Ubuntu 14.04 or CentOS 7.3.
 
 We won't delve into the details of Docker or how to setup or install everything on your system. Docker provides some [great resources](https://docs.docker.com/) for those who are looking to get started. Here we'll assume that you have Docker installed and you're familiar with the basic commands required to spin up a container.
 
-In this article, we'll take advantage of the [trestletech/plumber](https://hub.docker.com/r/trestletech/plumber/) Docker image that bundles a recent version of R with the most recent version of plumber pre-installed (the underlying R image is courtesy of the [rocker](https://github.com/rocker-org/rocker) project). You can get this image with a 
+In this article, we'll take advantage of the [trestletech/plumber](https://hub.docker.com/r/trestletech/plumber/) Docker image that bundles a recent version of R with the most recent version of plumber pre-installed (the underlying R image is courtesy of the [rocker](https://github.com/rocker-org/rocker) project). You can get this image with a
 
 ```bash
 docker pull trestletech/plumber
@@ -135,7 +145,7 @@ In order to coordinate and run multiple Plumber processes on one server, **you s
 
 ### Multiple Plumber Applications
 
-We'll use Docker Compose to help us organize multiple Plumber processes. We won't go into detail about how to use Docker Compose, so if you're new you should familiarize yourself using the [official docs](https://docs.docker.com/compose). 
+We'll use Docker Compose to help us organize multiple Plumber processes. We won't go into detail about how to use Docker Compose, so if you're new you should familiarize yourself using the [official docs](https://docs.docker.com/compose).
 
 You should define a Docker Compose configuration that defines the behavior of every Plumber application that you want to run. You'll first want to setup a Dockerfile that defines the desired behavior for each of your applications (as [we outlined previously](#custom-dockerfiles). You could use a `docker-compose.yml` configuration like the following:
 
@@ -177,7 +187,7 @@ You can see that app2 is the simpler of the two apps; it just has the plumber de
 
 `app1` is our more complicated app. It has some extra data in another directory that needs to be loaded, and it has a custom Dockerfile. This could be because it has additional R packages or system dependencies that it requires.
 
-If you now run `docker-compose up`, Docker Compose will build the referenced images in your config file and then run them. You'll find that `app1` is available on port `7000` of the machine running Docker Compose, and `app2` is available on port `7001`. If you want these APIs to run in the background and survive restarts of your server, you can use the `-d` switch just like with `docker run`. 
+If you now run `docker-compose up`, Docker Compose will build the referenced images in your config file and then run them. You'll find that `app1` is available on port `7000` of the machine running Docker Compose, and `app2` is available on port `7001`. If you want these APIs to run in the background and survive restarts of your server, you can use the `-d` switch just like with `docker run`.
 
 ### Multiple Applications on One Port
 
@@ -198,7 +208,7 @@ In order to do this, we can use another Docker container running [nginx](https:/
      - app2
 ```
 
-This uses the nginx Docker image that will be downloaded for you. In order to run nginx in a meaningful way, we have to provide a configuration file and place it in `/etc/nginx/nginx.conf`, which we do by mounting a local file at that location on the container. 
+This uses the nginx Docker image that will be downloaded for you. In order to run nginx in a meaningful way, we have to provide a configuration file and place it in `/etc/nginx/nginx.conf`, which we do by mounting a local file at that location on the container.
 
 A basic nginx config file could look something like the following:
 
@@ -246,7 +256,7 @@ Docker Compose is intelligent enough to know to route traffic for `http://app1:8
 
 We should also get rid of the previous port mappings to ports `7000` and `7001` on our other applications, as we don't want to expose our APIs on those ports anymore.
 
-If you now run `docker compose up` again, you'll see your two application servers running but now have a new nginx server running, as well. And you'll find that if you visit your server on port 80, you'll see the "welcome to Nginx!" page. If you access `/app1` you'll be sent to `app1` just like we had hoped. 
+If you now run `docker compose up` again, you'll see your two application servers running but now have a new nginx server running, as well. And you'll find that if you visit your server on port 80, you'll see the "welcome to Nginx!" page. If you access `/app1` you'll be sent to `app1` just like we had hoped.
 
 ### Load Balancing
 
@@ -300,7 +310,7 @@ There are a variety of tools that were built to help manage web hosting in a sin
 
 ### Server Deployment and Preparation
 
-The first thing you'll need to do, regardless of which process manager you choose, is to deploy the R files containing your plumber applications to the server where they'll be hosted. Keep in mind that you'll also need to include any supplemental R files that are `source()`d in your plumber file, and any other datasets or dependencies that your files have. 
+The first thing you'll need to do, regardless of which process manager you choose, is to deploy the R files containing your plumber applications to the server where they'll be hosted. Keep in mind that you'll also need to include any supplemental R files that are `source()`d in your plumber file, and any other datasets or dependencies that your files have.
 
 You'll also need to make sure that the R packages you need (and the appropriate versions) are available on the remote server. You can either do this manually by installing those packages or you can consider using a tool like [Packrat](https://rstudio.github.io/packrat/) to help with this.
 
@@ -349,7 +359,7 @@ Unfortunately, pm2 doesn't understand R scripts natively; however, it is possibl
 
 library(plumber)
 pr <- plumb('myfile.R')
-pr$run(port=4000, host="0.0.0.0") 
+pr$run(port=4000, host="0.0.0.0")
 # Setting the host option on a VM instance ensures the application can be accessed externally.
 # (This may be only true for Linux users.)
 ```
@@ -366,7 +376,7 @@ You can use the `pm2 list` command to see which services pm2 is already running.
 pm2 start --interpreter="Rscript" /usr/local/plumber/myfile/run-myfile.R
 ```
 
-You should see some output about pm2 starting an instance of your service, followed by some status information from pm2. If everything worked properly, you'll see that your new service has been registered and is running. You can see this same output by executing `pm2 list` again. 
+You should see some output about pm2 starting an instance of your service, followed by some status information from pm2. If everything worked properly, you'll see that your new service has been registered and is running. You can see this same output by executing `pm2 list` again.
 
 Once you're happy with the pm2 services you have defined, you can use `pm2 save` to tell pm2 to retain the set of services you have running next time you boot the machine. All of the services you have defined will be automatically restarted for you.
 
@@ -378,17 +388,17 @@ Run `netstat -tulpn` to see how the application is being ran. If you see the app
 
 ### Logs and Management
 
-Now that you have your applications defined in pm2, you may want to drill down into them to manage or debug them. If you want to see more information, use the `pm2 show` command and specify the name of the application from `pm2 list`. This is usually the same as the name of the shell script you specified, so it may be something like `pm2 show run-myfile`. 
+Now that you have your applications defined in pm2, you may want to drill down into them to manage or debug them. If you want to see more information, use the `pm2 show` command and specify the name of the application from `pm2 list`. This is usually the same as the name of the shell script you specified, so it may be something like `pm2 show run-myfile`.
 
 You can peruse this information but keep an eye on the `restarts` count for your applications. If your application has had to restart many times, that implies that the process is crashing often, which is a sign that there's a problem in your code.
 
-Thankfully, pm2 automatically manages the log files from your underlying processes. If you ever need to check the log files of a service, you can just run `pm2 logs run-myfile`, where `myfile` is again the name of the service obtained from `pm2 list`. This command will show you the last few lines logged from your process, and then begin streaming any incoming log lines until you exit (`Ctrl-c`). 
+Thankfully, pm2 automatically manages the log files from your underlying processes. If you ever need to check the log files of a service, you can just run `pm2 logs run-myfile`, where `myfile` is again the name of the service obtained from `pm2 list`. This command will show you the last few lines logged from your process, and then begin streaming any incoming log lines until you exit (`Ctrl-c`).
 
 If you want a big-picture view of the health of your server and all the pm2 services, you can run `pm2 monit` which will show you a dashboard of the RAM and CPU usage of all your services.
 
 ## systemd {#systemd}
 
-> `systemd` is the service manager used by certain Linux distributions including RedHat/CentOS 7, SUSE 12, and Ubuntu versions 16.04 and later. 
+> `systemd` is the service manager used by certain Linux distributions including RedHat/CentOS 7, SUSE 12, and Ubuntu versions 16.04 and later.
 
 If you use a Linux server you can use `systemd` to run Plumber as a service that can be accessed from your local network or even outside your network depending on your firewall rules. This option is similar to using the [Docker method](#docker). One of the main advantages of using `systemd` over using Docker is that `systemd` won't bypass firewall rules (Docker does!) and avoids the overhead of running a container.
 
@@ -407,7 +417,7 @@ R -e 'install.packages("plumber", repos = "https://cran.rstudio.com/")'
 ```
 [Unit]
 Description=Plumber API
-# After=postgresql 
+# After=postgresql
 # (or mariadb, mysql, etc if you use a DB with Plumber, otherwise leave this commented)
 
 [Service]

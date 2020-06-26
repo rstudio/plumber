@@ -1,5 +1,15 @@
+---
+title: "Routing & Input"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Routing & Input}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-# Routing & Input {#routing-and-input}
+```{r, include = FALSE}
+source("_helpers.R")
+```
 
 ```{r, echo=FALSE,  out.width="45%", out.extra = 'style="float:right;"'}
 knitr::include_graphics("files/images/plumber_input.png")
@@ -7,7 +17,7 @@ knitr::include_graphics("files/images/plumber_input.png")
 
 Plumber's first job is to execute R code in response to incoming HTTP requests, so it's important to understand how incoming HTTP requests get translated into the execution of R functions.
 
-An incoming HTTP request must be "routed" to one or more R functions. Plumber has two distinct families of functions that it handles: endpoints and filters. 
+An incoming HTTP request must be "routed" to one or more R functions. Plumber has two distinct families of functions that it handles: endpoints and filters.
 
 Typically, when a request arrives to a Plumber router, Plumber begins by passing that request through its filters. Once the request has been processed by all the filters, the router will look for an endpoint that can satisfy the incoming request. If it finds one, it will invoke the endpoint and respond to the incoming request using the value the endpoint returned. If no endpoint matches the request, then a `404 Not Found` error will be returned (the behavior of which can be controlled by the [`set404Handler`](#customize-router) method).
 
@@ -15,8 +25,7 @@ Typically, when a request arrives to a Plumber router, Plumber begins by passing
 
 Endpoints are the terminal step in the process of serving a request. An endpoint can simply be viewed as the logic that is ultimately responsible for generating a response to a particular request. A request will be checked against each available endpoint until it finds an endpoint willing to serve it at which point it stops looking; i.e. a request will not ever be processed by more than one endpoint. You create an endpoint by annotating a function like so:
 
-```{r, echo=FALSE, results='asis'}
-include_r("files/apis/03-01-endpoint.R")
+```{r, eval=FALSE, code = readLines("files/apis/03-01-endpoint.R")}
 ```
 
 This annotation specifies that this function is responsible for generating the response to any `GET` request to `/hello`. The value returned from the function will be used as the response to the request (after being run through a serializer to e.g. convert the response into JSON). In this case, a `GET` response to `/hello` would return the content `["hello world"]` with a `JSON` `Content-Type`.
@@ -44,7 +53,7 @@ function(){
 
 ## Filters {#filters}
 
-Plumber filters can be used to define a "pipeline" for handling incoming requests. This allows API authors to break down complex logic into a sequence of independent, understandable steps. Unlike endpoints, a request may go through multiple Plumber filters before a response is generated. 
+Plumber filters can be used to define a "pipeline" for handling incoming requests. This allows API authors to break down complex logic into a sequence of independent, understandable steps. Unlike endpoints, a request may go through multiple Plumber filters before a response is generated.
 
 Typically, a Plumber router will pass a request through all the defined filters before it attempts to find an endpoint to satisfy the request. However, endpoints can "preempt" particular filters if they want to be considered for execution before some filter(s) registered in the router.
 
@@ -66,8 +75,8 @@ The most common behavior for a filter is to pass on the request to the next hand
 #* Log some information about the incoming request
 #* @filter logger
 function(req){
-  cat(as.character(Sys.time()), "-", 
-    req$REQUEST_METHOD, req$PATH_INFO, "-", 
+  cat(as.character(Sys.time()), "-",
+    req$REQUEST_METHOD, req$PATH_INFO, "-",
     req$HTTP_USER_AGENT, "@", req$REMOTE_ADDR, "\n")
   plumber::forward()
 }
@@ -120,8 +129,7 @@ In addition to having hard-coded routes like `/hello`, Plumber endpoints can hav
 
 A common REST convention is to include the identifier of an object in the API paths associated with it. So to lookup information about user #13, you might make a `GET` request to the path `/users/13`. Rather than having to register routes for every user your API might possibly encounter, you can use a dynamic route to associate an endpoint with a variety of paths.
 
-```{r, echo=FALSE, results='asis'}
-include_r("files/apis/03-01-dynamic.R")
+```{r, eval = FALSE, code = readLines("files/apis/03-01-dynamic.R")}
 ```
 
 This API uses the dynamic path `/users/<id>` to match any request that is of the form `/users/` followed by some path element like a number or letters. In this case, it will return information about the user if a user with the associated ID was found, or an empty object if not.
@@ -143,8 +151,7 @@ In both the hard-coded and dynamic examples given above, the parameters will be 
 
 Unless otherwise instructed, all parameters passed into plumber endpoints from query strings or dynamic paths will be character strings. For example, consider the following API.
 
-```{r, echo=FALSE, results='asis'}
-include_r("files/apis/03-02-types.R")
+```{r, eval = FALSE, code = readLines("files/apis/03-02-types.R")}
 ```
 
 Visiting http://localhost:8000/types/14 will return:
@@ -191,7 +198,7 @@ Plumber includes a static file server which can be used to host directories of s
 list()
 ```
 
-This example would expose the local directory `./files/static` at the default `/public` path on your server. So if you had a file `./files/static/branding.html`, it would be available on your Plumber server at `/public/branding.html`. 
+This example would expose the local directory `./files/static` at the default `/public` path on your server. So if you had a file `./files/static/branding.html`, it would be available on your Plumber server at `/public/branding.html`.
 
 You can optionally provide an additional argument to configure the public path used for your server. For instance
 
@@ -245,8 +252,7 @@ A query string may be appended to a URL in order to convey additional informatio
 
 Plumber will automatically forward information from the query string into the function being executed by aligning the name of the query string with the name of the function parameter. The following example defines a search API that mimics the example from [DuckDuckGo](https://duckduckgo.com) above but merely prints out what it receives.
 
-```{r, echo=FALSE, results='asis'}
-include_r("files/apis/03-03-search.R")
+```{r, eval = FALSE, code = readLines("files/apis/03-03-search.R")}
 ```
 
 Visiting http://localhost:8000/?q=bread&pretty=1 will print:
@@ -277,14 +283,13 @@ Some web browsers impose limitations on the length of a URL. Internet Explorer, 
 
 ### Request Body {#request-body}
 
-Another way to provide additional information inside an HTTP request is using the message body. Effectively, once a client specifies all the metadata about a request (the path it's trying to reach, some HTTP headers, etc.) it can then provide a message body. The maximum size of a request body depends largely on the technologies involved (client, proxies, etc.) but is typically at least 2MB -- much larger than a query string. This approach is most commonly seen with `PUT` and `POST` requests, though you could encounter it with other HTTP methods. 
+Another way to provide additional information inside an HTTP request is using the message body. Effectively, once a client specifies all the metadata about a request (the path it's trying to reach, some HTTP headers, etc.) it can then provide a message body. The maximum size of a request body depends largely on the technologies involved (client, proxies, etc.) but is typically at least 2MB -- much larger than a query string. This approach is most commonly seen with `PUT` and `POST` requests, though you could encounter it with other HTTP methods.
 
 Plumber will attempt to parse the request body in one of two ways: if it appears that the message is JSON, then Plumber will parse the body as a JSON message; otherwise it will decode it as a standard query string. Any fields provided in the message body in either format will be passed through as parameters to the function.
 
 Unfortunately, crafting a request with a message body requires a bit more work than making a `GET` request with a query string from your web browser, but you can use tools like `curl` on the command line or the [httr R package](https://github.com/hadley/httr/). We'll use `curl` for the examples below.
 
-```{r, echo=FALSE, results='asis'}
-include_r("files/apis/03-04-body.R")
+```{r, eval = FALSE, code = readLines("files/apis/03-04-body.R")}
 ```
 
 Running `curl --data "id=123&name=Jennifer" "http://localhost:8000/user"` will return:
@@ -309,8 +314,7 @@ If you've set encrypted cookies (as discussed in the [Encrypted Cookies section]
 
 HTTP headers attached to the incoming request are attached to the request object. They are prefixed with `HTTP_`, the name of the header is capitalized, and hyphens are substituted for underscores. e.g. the `Content-Type` HTTP header can be found as `req$HTTP_CONTENT_TYPE`.
 
-```{r, echo=FALSE, results='asis'}
-include_r("files/apis/03-05-headers.R")
+```{r, eval = FALSE, code = readLines("files/apis/03-05-headers.R")}
 ```
 
 Running `curl --header "customheader: abc123" http://localhost:8000` will return:
@@ -322,5 +326,3 @@ code_chunk(json_serialize(list(val="abc123")), "json")
 You can print out the names of all of the properties attached to the request by running `print(ls(req))` inside an endpoint.
 
 // TODO: Conflicts between path, query string, body?
-
-

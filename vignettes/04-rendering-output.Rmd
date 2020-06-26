@@ -1,5 +1,15 @@
+---
+title: "Rendering Output"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Rendering Output}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-# Rendering Output {#rendering-and-output}
+```{r, include = FALSE}
+source("_helpers.R")
+```
 
 ```{r, echo=FALSE,  out.width="45%", out.extra = 'style="float:right;"'}
 knitr::include_graphics("files/images/plumber_output.png")
@@ -30,16 +40,14 @@ Annotation | Content Type | Description/References
 
 In some instances it may be desirable to return a value directly from R without serialization. You can bypass serialization by returning the [response object](#response-object) from an endpoint. For example, consider the following API.
 
-```{r, echo=FALSE, results='asis'}
-include_r("files/apis/04-01-response.R")
+```{r, eval = FALSE, code = readLines("files/apis/04-01-response.R")}
 ```
 
 The response that is returned from this endpoint would contain the body `Literal text here!` with no `Content-Type` header and without any additional serialization.
 
 Similarly, you can leverage the `@serializer contentType` annotation which does no serialization of the response but specifies the contentType header. You can use this annotation when you want more control over the response that you send.
 
-```{r, echo=FALSE, results='asis'}
-include_r("files/apis/04-02-contenttype.R")
+```{r, eval = FALSE, code = readLines("files/apis/04-02-contenttype.R")}
 ```
 
 Running this API and visiting http://localhost:8000/pdf will download the PDF generated from R (or display the PDF natively, if your client supports it).
@@ -56,8 +64,7 @@ The value of the `a` element, though it's singular, is still rendered as an arra
 
 Consider the following API which returns all the letters lexicographically "higher" than the given letter.
 
-```{r, echo=FALSE, results='asis'}
-include_r("files/apis/04-03-letters.R")
+```{r, eval = FALSE, code = readLines("files/apis/04-03-letters.R")}
 ```
 
 This is an example of an API that, in some instance, produces a scalar, and in other instances produces a vector.
@@ -87,7 +94,7 @@ code_chunk(jsonlite::toJSON(e$exec(letter="Y"), auto_unbox = TRUE))
 
 The `/boxed` endpoint, as the name implies, produces "boxed" JSON output in which length-1 vectors are still rendered as an array. Conversely, the `/unboxed` endpoint sets `auto_unbox=TRUE` in its call to `jsonlite::toJSON`, causing length-1 R vectors to be rendered as JSON scalars.
 
-While R doesn't distinguish between scalars and vectors, API clients may respond very differently when encountering a JSON array versus an atomic value. You may find that your API clients will not respond gracefully when an object that they expected to be a vector becomes a scalar in one call. 
+While R doesn't distinguish between scalars and vectors, API clients may respond very differently when encountering a JSON array versus an atomic value. You may find that your API clients will not respond gracefully when an object that they expected to be a vector becomes a scalar in one call.
 
 For this reason, Plumber inherits the `jsonlite::toJSON` default of setting `auto_unbox=FALSE` which will result in all length-1 vectors still being rendered as JSON arrays. You can configure an endpoint to use the `unboxedJSON` serializer (as shown above) if you want to alter this behavior for a particular endpoint.
 
@@ -95,12 +102,11 @@ There are a couple of functions to be aware of around this feature set. If using
 
 ### Customizing Image Serializers
 
-The `@jpeg` and `@png` annotations cause the graphical output of an endpoint to be written to a file then returned to the client using the `jpeg()` or `png()` functions, respectively. These functions both accept a variety of additional options that customize the output including `width`, `height`, and `bg` among others. 
+The `@jpeg` and `@png` annotations cause the graphical output of an endpoint to be written to a file then returned to the client using the `jpeg()` or `png()` functions, respectively. These functions both accept a variety of additional options that customize the output including `width`, `height`, and `bg` among others.
 
-As of version 0.4.3 of plumber, these annotations now accept additional arguments that will be passed into these functions. This enables the creation of endpoints like: 
+As of version 0.4.3 of plumber, these annotations now accept additional arguments that will be passed into these functions. This enables the creation of endpoints like:
 
-```{r, echo=FALSE, results='asis'}
-include_r("files/apis/04-04-image.R")
+```{r, eval = FALSE, code = readLines("files/apis/04-04-image.R")}
 ```
 
 At a lower level, the arguments inside the parentheses will be used as the arguments to a `list()` call. Meaning that any R code that can be prefixed by `list` to form a valid R expression can be used. For example, `#' @png (width=2^10 + 1)` would be a valid annotation. This code is evaluated once when your API is `plumb()`d.
@@ -111,8 +117,7 @@ While this approach can be used to statically define the size of an image, it wi
 
 Plumber wraps each endpoint invocation so that it can gracefully capture errors.
 
-```{r, echo=FALSE, results='asis'}
-include_r("files/apis/04-05-error.R")
+```{r, eval = FALSE, code = readLines("files/apis/04-05-error.R")}
 ```
 
 If you run this API and visit http://localhost:8000/simple, you'll notice two things:
@@ -144,8 +149,7 @@ Before you make cookies an important part of your API's security model, be sure 
 
 Plumber can both set and receive plaint-text cookies. The API endpoint below will return a random letter, but it remembers your preferences on whether you like capitalized or lower-case letters.
 
-```{r, echo=FALSE, results='asis'}
-include_r("files/apis/06-01-capitalize.R")
+```{r, eval = FALSE, code = readLines("files/apis/06-01-capitalize.R")}
 ```
 
 Since this API is using a `PUT` request to test this API, we'll use `curl` on the command line to test it. (There's nothing about cookies that necessitates `PUT` requests; you could just as easily modify this API to use a `GET` request.) We can start by visiting the `/letter` endpoint and we'll see that the API defaults to a lower-case alphabet. `curl http://localhost:8000/letter`

@@ -1,5 +1,15 @@
+---
+title: "Tips & Tricks"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Tips & Tricks}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-# Tips & Tricks {#tips-tricks}
+```{r, include = FALSE}
+source("_helpers.R")
+```
 
 ```{r, echo=FALSE,  out.width="45%", out.extra = 'style="float:right;"'}
 knitr::include_graphics("files/images/plumber_broken.png")
@@ -25,7 +35,7 @@ You can leverage `browser()` when developing your APIs locally by adding a `brow
 #' @get /
 function(req, res){
   browser()
-  
+
   list(a=123)
 }
 ```

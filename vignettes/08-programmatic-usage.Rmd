@@ -1,5 +1,15 @@
+---
+title: "Programmatic Usage"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Programmatic Usage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-# Programmatic Usage {#programmatic-usage}
+```{r, include = FALSE}
+source("_helpers.R")
+```
 
 Typically, users define APIs using the "annotations," or special comments in their API source code. It is possible to define a Plumber API programmatically using the same underlying R6 objects that get created automatically when you define your API using annotations. Interacting with Plumber at this level can offer more control and specificity about how you want your API to behave.
 
@@ -64,7 +74,7 @@ Plumber routers support the notion of "hooks" that can be registered to execute 
  - `postroute(data, req, res, value)`
  - `preserialize(data, req, res, value)`
  - `postserialize(data, req, res, value)`
- 
+
  In all of the above you have access to a disposable environment in the `data` parameter that is created as a temporary data store for each request. Hooks can store temporary data in these hooks that can be reused by other hooks processing this same request.
 
 One feature when defining hooks in Plumber routers is the ability to modify the returned value. The convention for such hooks is: any function that accepts a parameter named `value` is expected to return the new value. This could be an unmodified version of the value that was passed in, or it could be a mutated value. But in either case, if your hook accepts a parameter named `value`, whatever your hook returns will be used as the new value for the response.
@@ -80,7 +90,7 @@ pr$registerHooks(list(
   preserialize=function(req, value){
     print("About to serialize this value:")
     print(value)
-    
+
     # Must return the value since we took one in. Here we're not choosing
     # to mutate it, but we could.
     value

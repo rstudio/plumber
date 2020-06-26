@@ -1,8 +1,16 @@
+---
+title: "Migration Guide"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Migration Guide}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
-# (APPENDIX) Appendix {-} 
+```{r, include = FALSE}
+source("_helpers.R")
+```
 
-# All Annotations
-	
 # Plumber 0.4.0 Migration Guide
 
 Plumber underwent a series of breaking changes as a part of the 0.4.0 release. These changes were made as an attempt to rectify some earlier mistakes and as an attempt to take care of all foreseeable breaking changes for the Plumber package.
@@ -13,5 +21,3 @@ There are a number of changes that users should consider when preparing to upgra
 2. Plumber no longer sets the `Access-Control-Allow-Origin` HTTP header to `*`. This was previously done for convenience but given the security implications we're reversing this decision. The previous behavior would have allowed web browsers to make requests of your API from other domains using JavaScript if the request used only standard HTTP headers and were a `GET`, `HEAD`, or `POST` request. These requests will no longer work by default. If you wish to allow an endpoint to be accessible from other origins in a web browser, you can use `res$setHeader("Access-Control-Allow-Origin", "*")` in an endpoint or filter.
 3. Rather than setting the default port to `8000`, **the port is now randomly selected**. This ensures that a shared server (like RStudio Server) will be able to support multiple people developing Plumber APIs concurrently without them having to manually identify an available port. This can be controlled by specifying the `port` parameter in the `run()` method or by setting the `plumber.port` option.
 4. **The object-oriented model for Plumber routers has changed**. If you're calling any of the following methods on your Plumber router, you will need to modify your code to use the newer alternatives: `addFilter`, `addEndpoint`, `addGlobalProcessor`, and `addAssets`. The code around these functions has undergone a major rewrite and some breaking changes have been introduced. These four functions are still supported with a deprecation warning in 0.4.0, but support is only best-effort. Certain parameters on these methods are no longer supported, so you should thoroughly test any Plumber API that leverages any of these methods before deploying version 0.4.0. [Updated documentation](#programmatic-usage) for using Plumber programmatically is now available.
-
-# Citations

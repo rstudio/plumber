@@ -1,4 +1,4 @@
-# plumber <a href='https://rstudio.github.io/plumber'><img src='man/figures/logo.png' align="right" height="138.5" /></a>
+# plumber <a href='https://rstudio.github.io/plumber'><img src='man/figures/logo.png' align="right" height="138.5" style="margin:10px;" /></a>
 
 <!-- badges: start -->
 [![R build status](https://github.com/rstudio/plumber/workflows/R-CMD-check/badge.svg)](https://github.com/rstudio/plumber/actions)
@@ -10,7 +10,7 @@
 
 <!-- <img align="right" src="https://www.rplumber.io/components/images/plumber-broken.png" /> -->
 
-The R Programming Language [@R-base] has become one of the most dominant programming languages for data analysis and visualization in recent years. At the same time, web services have become a common language for allowing various systems to interact with one another. The `plumber` R package [@plumber] allows users to expose existing R code as a service available to others on the Web. Plumber is best illustrated with an example:
+The [R Programming Language](http://www.R-project.org/) has become one of the most dominant programming languages for data analysis and visualization in recent years. At the same time, web services have become a common language for allowing various systems to interact with one another. The `plumber` R package allows users to expose existing R code as a service available to others on the Web. Plumber is best illustrated with an example:
 
 ```r
 # plumber.R
@@ -136,12 +136,10 @@ You can install the latest stable version from CRAN using the following command:
 install.packages("plumber")
 ```
 
-If you want to try out the latest development version, you can install it from
-GitHub. The easiest way to do that is by using `devtools`.
+If you want to try out the latest development version, you can install it from GitHub.
 
 ```r
-library(devtools)
-install_github("rstudio/plumber")
+remotes::install_github("rstudio/plumber")
 library(plumber)
 ```
 
@@ -171,7 +169,7 @@ A couple of other approaches to hosting plumber are also made available:
   an R package similar to Plumber but uses a more programmatic approach to
   constructing the API.
 
-## Provenance
-
-plumber was originally released as the `rapier` package and has since been
-renamed (7/13/2015).
+<!-- ## Provenance -->
+<!--  -->
+<!-- plumber was originally released as the `rapier` package and has since been -->
+<!-- renamed (7/13/2015). -->
