@@ -1,4 +1,4 @@
-# plumber <a href='https://rstudio.github.io/plumber'><img src='man/figures/logo.png' align="right" height="138.5" style="margin:10px;" /></a>
+# plumber <a href='https://rstudio.github.io/plumber'><img src='man/figures/logo.svg' align="right" height="138.5" style="margin:10px;" /></a>
 
 <!-- badges: start -->
 [![R build status](https://github.com/rstudio/plumber/workflows/R-CMD-check/badge.svg)](https://github.com/rstudio/plumber/actions)
