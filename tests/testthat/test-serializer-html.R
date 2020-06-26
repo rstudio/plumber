@@ -15,6 +15,6 @@ test_that("Errors call error handler", {
   }
 
   expect_equal(errors, 0)
-  serializer_html()(parse(stop("I crash")), list(), PlumberResponse$new("json"), err = errHandler)
+  serializer_html()(parse(stop("I crash")), list(), PlumberResponse$new("json"), errorHandler = errHandler)
   expect_equal(errors, 1)
 })

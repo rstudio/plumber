@@ -126,7 +126,7 @@ test_that("nullSerializer errors call error handler", {
   }
 
   expect_equal(errors, 0)
-  nullSerializer()(parse(stop("I crash")), list(), PlumberResponse$new("json"), err = errHandler)
+  nullSerializer()(parse(stop("I crash")), list(), PlumberResponse$new("json"), errorHandler = errHandler)
   expect_equal(errors, 1)
 })
 

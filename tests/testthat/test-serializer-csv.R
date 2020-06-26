@@ -31,6 +31,6 @@ test_that("Errors call error handler", {
   }
 
   expect_equal(errors, 0)
-  serializer_csv()(parse(text="hi"), data.frame(), PlumberResponse$new("csv"), err = errHandler)
+  serializer_csv()(parse(text="hi"), data.frame(), PlumberResponse$new("csv"), errorHandler = errHandler)
   expect_equal(errors, 1)
 })

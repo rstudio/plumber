@@ -3,7 +3,7 @@ context("htmlwidgets serializer")
 # Render a simple HTML widget using the visNetwork package
 renderWidget <- function(){
   skip_if_not_installed("visNetwork")
-  
+
   nodes <- data.frame(id = 1:6, title = paste("node", 1:6),
                       shape = c("dot", "square"),
                       size = 10:15, color = c("blue", "red"))
@@ -33,7 +33,7 @@ test_that("Errors call error handler", {
 
   expect_equal(errors, 0)
   suppressWarnings(
-    serializer_htmlwidget()(parse(text="hi"), list(), PlumberResponse$new("htmlwidget"), err = errHandler)
+    serializer_htmlwidget()(parse(text="hi"), list(), PlumberResponse$new("htmlwidget"), errorHandler = errHandler)
   )
   expect_equal(errors, 1)
 })
