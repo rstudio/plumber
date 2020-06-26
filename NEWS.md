@@ -43,6 +43,8 @@ plumber 1.0.0
 
 * Added support for swagger for mounted routers (@bradleyhd, #274).
 
+* Documentation is presented using pkgdown (#570)
+
 
 ### Minor new features and improvements
 
