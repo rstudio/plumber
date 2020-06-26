@@ -240,7 +240,7 @@ plumber <- R6Class(
           srcref <- attr(e, "srcref")[[1]][c(1,3)]
 
           evaluateBlock(srcref, private$lines, e, private$envir, private$addEndpointInternal,
-                        private$addFilterInternal, self$mount)
+                        private$addFilterInternal, self)
         }
 
         private$globalSettings <- plumbGlobals(private$lines)
@@ -524,8 +524,6 @@ plumber <- R6Class(
         cat(prefix, "\u251c\u2500\u2500", crayon::green("[", f$name, "]", sep=""), "\n", sep="") # "+--"
       }
 
-      paths <- self$routes
-
       printEndpoints <- function(prefix, name, nodes, isLast){
         if (is.list(nodes)){
           verbs <- paste(sapply(nodes, function(n){ n$verbs }), collapse=", ")
@@ -548,31 +546,51 @@ plumber <- R6Class(
           childPref <- prefix
         }
 
-        if (is.list(node)){
-          if (is.null(names(node))) {
-            # This is a list of Plumber endpoints all mounted at this location. Collapse
-            printEndpoints(prefix, name, node, isLast)
-          } else{
-            # It's a list of other stuff.
-            if (!isRoot){
-              cat(prefix, "\u251c\u2500\u2500/", name, "\n", sep="") # "+--"
-            }
-            for (i in 1:length(node)){
-              name <- names(node)[i]
-              printNode(node[[i]], name, childPref, isLast = i == length(node))
-            }
-          }
+        if (inherits(node, "PlumberEndpoint")) {
+          # base case
+          printEndpoints(prefix, name, node, isLast)
+
         } else if (inherits(node, "plumber")){
+          # base case
           cat(prefix, "\u251c\u2500\u2500/", name, "\n", sep="") # "+--"
           # It's a router, let it print itself
           print(node, prefix=childPref, topLevel=FALSE)
-        } else if (inherits(node, "PlumberEndpoint")){
-          printEndpoints(prefix, name, node, isLast)
+
+        } else if (is.list(node)) {
+
+          has_no_name <-
+            if (is.null(names(node))) {
+              TRUE
+            } else {
+              # there are other endpoints, so get only nodes with name ""
+              names(node) == ""
+            }
+
+          # mounted routers at root location will also have a missing name.
+          # only look for endpoints
+          are_endpoints <- has_no_name & vapply(node, inherits, logical(1), "PlumberEndpoint")
+          # print all endpoints in a single line with verbs attached together
+          if (any(are_endpoints)) {
+            printEndpoints(prefix, name, node[are_endpoints], isLast)
+          }
+
+          # recurse
+          if (any(!are_endpoints)) {
+            node <- node[!are_endpoints]
+            if (!isRoot){
+              cat(prefix, "\u251c\u2500\u2500/", name, "\n", sep="") # "+--"
+            }
+            for (i in seq_along(node)) {
+              name <- names(node)[i]
+              printNode(node[[i]], name, childPref, isLast = (i == length(node)))
+            }
+          }
+
         } else {
           cat("??")
         }
       }
-      printNode(paths, "", prefix, TRUE)
+      printNode(self$routes, "", prefix, TRUE)
 
       invisible(self)
     },

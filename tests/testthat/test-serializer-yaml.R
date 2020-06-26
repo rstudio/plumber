@@ -31,6 +31,6 @@ test_that("Errors call error handler", {
   }
 
   expect_equal(errors, 0)
-  serializer_yaml()(parse(text="hi"), list(), PlumberResponse$new("yaml"), err = errHandler)
+  serializer_yaml()(parse(text="hi"), list(), PlumberResponse$new("yaml"), errorHandler = errHandler)
   expect_equal(errors, 1)
 })
