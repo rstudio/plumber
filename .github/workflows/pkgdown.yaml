@@ -46,7 +46,7 @@ jobs:
         if: github.event_name != 'push'
         shell: Rscript {0}
         run: |
-          pkgdown::build_site()
+          pkgdown::build_site(new_process = FALSE)
           stopifnot(length(warnings()) == 0)
 
       - name: Build and Deploy Site
