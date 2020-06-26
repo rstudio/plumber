@@ -90,7 +90,7 @@ PlumberStatic <- R6Class(
       if (!topLevel){
         cat("\u2502 ")
       }
-      cat(crayon::silver("# Plumber static router serving from directory:", private$dir, "\n"))
+      cat(crayon::silver("# Plumber static router serving from directory: ", private$dir, "\n", sep = ""))
     }
   ), private=list(
     dir = NULL

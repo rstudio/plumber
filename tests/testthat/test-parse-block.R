@@ -13,9 +13,9 @@ test_that("plumbBlock works", {
     "#' @filter test",
     "#' @serializer json")
   b <- plumbBlock(length(lines), lines)
-  expect_length(b$path, 2)
-  expect_equal(b$path[[1]], list(verb="POST", path="/"))
-  expect_equal(b$path[[2]], list(verb="GET", path="/"))
+  expect_length(b$paths, 2)
+  expect_equal(b$paths[[1]], list(verb="POST", path="/"))
+  expect_equal(b$paths[[2]], list(verb="GET", path="/"))
   expect_equal(b$filter, "test")
 
   # due to covr changing some code, the return answer is very strange

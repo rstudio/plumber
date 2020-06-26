@@ -38,6 +38,8 @@ plumber 1.0.0
 
 * Added support for promises in endpoints, filters, and hooks. (#248)
 
+* Add support for `#' @plumber` tag to gain programmatic access to the `plumber` router via `function(pr) {....}`. (@meztez and @blairj09, #568)
+
 * Added OpenAPI support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez, #532)
 
 * Added user provided OpenAPI Specification handler to Plumber router. Use `$setApiHandler()` to provide a function to alter the Plumber generated OpenAPI Specification returned by Plumber router method `$apiSpec()`. This also affects `/openapi.json` and `/openapi.yaml` (#365)(@meztez, #562)
