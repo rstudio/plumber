@@ -17,7 +17,6 @@
 ^\.github
 ^\.httr-oauth$
 ^\.github$
-^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
 ^logo$
