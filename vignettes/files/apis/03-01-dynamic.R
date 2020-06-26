@@ -6,5 +6,5 @@ users <- data.frame(
 #' Lookup a user
 #' @get /users/<id>
 function(id){
-  subset(users, uid==id)
+  subset(users, uid %in% id)
 }
