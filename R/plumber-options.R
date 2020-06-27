@@ -1,4 +1,3 @@
-#' How to use Plumber options
 #' @title Plumber options
 #' @details
 #' There are a number of global options that affect Plumber's behavior. These can
