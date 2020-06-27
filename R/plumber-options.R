@@ -1,4 +1,4 @@
-#' @title Plumber options
+#' Plumber options
 #'
 #' There are a number of global options that affect Plumber's behavior. These can
 #' be set globally with [options()] or with [options_plumber()]. Options set using
