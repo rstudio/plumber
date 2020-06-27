@@ -169,6 +169,7 @@ add_ui <- function(ui) {
   invisible()
 }
 
+# TODO: Remove once UI load code moved to respective UI package
 swagger_ui <- list(
   package = "swagger",
   name = "swagger",
@@ -183,4 +184,7 @@ swagger_ui <- list(
   }
 )
 
-add_ui(swagger_ui)
+#' @noRd
+addUIs_onLoad <- function() {
+  add_ui(swagger_ui)
+}
