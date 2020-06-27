@@ -43,10 +43,12 @@ Suggests:
     later,
     readr,
     yaml,
-    redoc (>= 2.0.0.30)
+    redoc (>= 2.0.0.30),
+    rapidoc (>= 8.1.1)
 Remotes:
     rstudio/swagger,
-    meztez/redoc
+    meztez/redoc,
+    meztez/rapidoc
 Collate:
     'async.R'
     'content-types.R'

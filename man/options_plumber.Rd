@@ -53,13 +53,11 @@ If a particular parameter is not supplied, it will return the current value.
 If no parameters are supplied, all returned values will be the current \code{\link[=options]{options()}} values.
 }
 \description{
-How to use Plumber options
-}
-\details{
 There are a number of global options that affect Plumber's behavior. These can
 be set globally with \code{\link[=options]{options()}} or with \code{\link[=options_plumber]{options_plumber()}}. Options set using
 \code{\link[=options_plumber]{options_plumber()}} should not include the \code{plumber.} prefix.
-
+}
+\details{
 \describe{
 \item{\code{plumber.apiScheme}}{Scheme used to build UI url and server url for
 OpenAPI Specification. Defaults to \code{http}, or an empty string

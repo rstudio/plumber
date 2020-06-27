@@ -34,7 +34,7 @@ plumber 1.0.0
 
 ### New features
 
-* Generalize user interface integration. Plumber can now use other OpenAPI compatible user interfaces like `Redoc`. (@meztez, #562)
+* Generalize user interface integration. Plumber can now use other OpenAPI compatible user interfaces like `RapiDoc` and `Redoc`. (@meztez, #562)
 
 * Added support for promises in endpoints, filters, and hooks. (#248)
 

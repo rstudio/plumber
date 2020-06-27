@@ -115,7 +115,7 @@ unmount_openapi <- function(pr) {
 #' Add UI for plumber to use
 #' @param ui A list of that plumber can use to mount
 #' a UI.
-#' @details [add_ui()] is used by package like `swagger` and `redoc`.
+#' @details [add_ui()] is used by package like `rapidoc`, `redoc` and `swagger`.
 #' When you load those package, it calls [add_ui()] to provide a user
 #' interface that can interpret your plumber OpenAPI Specifications.
 #'

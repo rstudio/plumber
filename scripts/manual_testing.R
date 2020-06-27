@@ -22,11 +22,13 @@ test_that("custom OpenAPI Specification update function works", {
   pr$run(port = 1234)
   pr$setUI(ui = "swagger")
   pr$run(port = 1234)
-  require(redoc)
+  library(redoc)
   pr$setUI(ui = "redoc")
   pr$run(port = 1234)
-  pr$setUI(ui = "redoc", redoc_options = list(scrollYOffset = 250, disableSearch = TRUE))
+  pr$setUI(ui = "redoc", scrollYOffset = 250, disableSearch = TRUE)
   pr$run(port = 1235)
+  library(rapidoc)
+  pr$setUI(ui = "rapidoc", header_text = "Rumbepl")
 
   # validate that http://127.0.0.1:1234/__swagger__/ displays the system time as the api title
   # http://127.0.0.1:1234/__swagger__/
