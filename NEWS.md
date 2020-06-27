@@ -50,6 +50,8 @@ plumber 1.0.0
 
 * Support HTTP 405 Code. (@meztez, #554)
 
+* Attached the router to the incoming request object at `req$pr`. (@meztez, #554)
+
 * Documented plumber options. Add `options_plumber`. (@meztez, #555)
 
 * Added yaml support, serializer and parser. (@meztez, #556)
