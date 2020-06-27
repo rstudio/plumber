@@ -845,7 +845,10 @@ plumber <- R6Class(
     setUI = function(ui = getOption("plumber.ui", TRUE), ...) {
       stopifnot(isTRUE(length(ui) == 1L))
       stopifnot(is.logical(ui) || is.character(ui))
-      if (isTRUE(ui) || is.character(ui)) {
+      if (isTRUE(ui)) {
+        ui <- "swagger"
+      }
+      if (is.character(ui)) {
         enabled <- TRUE
       } else {
         enabled <- FALSE
