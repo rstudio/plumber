@@ -233,6 +233,8 @@ plumber <- R6Class(
       if (!is.null(file)){
         private$lines <- readUTF8(file)
         private$parsed <- parseUTF8(file)
+        private$disable <- TRUE
+        on.exit(private$disable <- FALSE, add = TRUE)
 
         for (i in 1:length(private$parsed)){
           e <- private$parsed[i]
@@ -288,6 +290,8 @@ plumber <- R6Class(
       debug = interactive(),
       swaggerCallback = getOption('plumber.swagger.url', NULL)
     ) {
+      if (isTRUE(private$disable)) {return()}
+
       port <- findPort(port)
 
 
@@ -1056,6 +1060,7 @@ plumber <- R6Class(
     lines = NULL, # The lines constituting the API
     parsed = NULL, # The parsed representation of the API
     globalSettings = list(info=list()), # Global settings for this API. Primarily used for OpenAPI Specification.
+    disable = NULL, # Disable run method during parsing of the Plumber file
 
     errorHandler = NULL,
     notFoundHandler = NULL,
