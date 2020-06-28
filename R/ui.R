@@ -96,6 +96,7 @@ mount_openapi <- function(pr, api_url) {
       else {
         # Use HTTP_REFERER as fallback
         api_url <- req$HTTP_REFERER
+        api_url <- sub("(\\?.*)?$", "", api_url)
         api_url <- sub("index\\.html$", "", api_url)
         api_url <- sub(paste0("__(", paste0(names(.globals$UIs$mount), collapse = "|"),")__/$"), "", api_url)
       }
