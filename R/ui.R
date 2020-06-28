@@ -29,12 +29,12 @@ mount_ui <- function(pr, host, port, ui_info, callback) {
     message("No UI available in namespace. See help(add_ui).")
     return()
   }
-  ui_mount <- .globals$UIs$mount[[ui_info$ui]]
-  if (!is.null(ui_mount)) {
+
+  if (is_ui_available(ui_info$ui)) {
+    ui_mount <- .globals$UIs$mount[[ui_info$ui]]
     ui_url <- do.call(ui_mount, c(list(pr, api_url), ui_info$args))
     message("Running ", ui_info$ui, " UI at ", ui_url, sep = "")
   } else {
-    message("Unknown user interface \"", ui_info$ui,"\". Maybe try library(", ui_info$ui,").")
     return()
   }
 
@@ -45,6 +45,17 @@ mount_ui <- function(pr, host, port, ui_info, callback) {
 
   invisible()
 
+}
+
+# Check is UI is available
+#' @noRd
+is_ui_available <- function(ui) {
+  if (isTRUE(ui %in% names(.globals$UIs$mount))) {
+    return(TRUE)
+  } else {
+    message("Unknown user interface \"", ui,"\". Maybe try library(", ui,").")
+    return(FALSE)
+  }
 }
 
 # Unmount OpenAPI and UI
@@ -146,10 +157,15 @@ add_ui <- function(ui) {
 
     ui_url <- paste0(api_url, ui_root)
 
+    # Save initial extra argument values
     args_index <- list(...)
 
-    ui_index <- function() {
-      do.call(ui$index, args_index)
+    ui_index <- function(...) {
+      # Override with arguments provided live with URI (i.e. index.html?version=2)
+      args <- utils::modifyList(args_index, list(...))
+      # Remove default arguments req and res
+      args <- args[!names(args) %in% c("req", "res")]
+      do.call(ui$index, args)
     }
     for (path in ui_path) {
       pr$handle("GET", path, ui_index,  serializer = serializer_html())

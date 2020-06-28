@@ -848,7 +848,7 @@ plumber <- R6Class(
       if (isTRUE(ui)) {
         ui <- "swagger"
       }
-      if (is.character(ui)) {
+      if (is.character(ui) && is_ui_available(ui)) {
         enabled <- TRUE
       } else {
         enabled <- FALSE
