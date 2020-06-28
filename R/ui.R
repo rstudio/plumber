@@ -146,8 +146,10 @@ add_ui <- function(ui) {
 
     ui_url <- paste0(api_url, ui_root)
 
+    args_index <- list(...)
+
     ui_index <- function() {
-      ui$index(...)
+      do.call(ui$index, args_index)
     }
     for (path in ui_path) {
       pr$handle("GET", path, ui_index,  serializer = serializer_html())
