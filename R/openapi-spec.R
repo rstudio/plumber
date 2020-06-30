@@ -125,7 +125,7 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
         property$type <- apiTypesInfo[[type]]$realType
         property$example <- NULL
         if (isArray) {
-          property$items <- list(property$type, property$format)
+          property$items <- list(type = property$type, format = property$format)
           property$type <- "array"
           property$format <- NULL
         }

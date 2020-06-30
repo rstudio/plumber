@@ -449,7 +449,7 @@ parser_multi <- function() {
     boundary <- stri_match_first_regex(content_type, "boundary=([^; ]{2,})", case_insensitive = TRUE)[,2]
     toparse <- parse_multipart(value, boundary)
     # content-type detection
-    lapply(toparse, function(x) {
+    args <- lapply(toparse, function(x) {
       if (
         is.null(x$content_type) ||
         # allows for files to be shipped as octect, but parsed using the matching value in `knownContentTypes`
@@ -463,6 +463,11 @@ parser_multi <- function() {
       }
       x$parsers <- parsers
       parse_raw(x)
+    })
+    # combine together args that share the same name
+    keys <- unique(names(args))
+    lapply(structure(keys, names = keys), function(arg) {
+      unname(args[names(args)==arg])
     })
   }
 }
