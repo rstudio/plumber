@@ -16,7 +16,7 @@ enumerateVerbs <- function(v) {
 #' taking an incoming request, submitting it through the appropriate filters and
 #' eventually to a corresponding endpoint, if one is found.
 #'
-#' See \url{http://www.rplumber.io/docs/articles/08-programmatic-usage.html} for additional
+#' See \url{http://www.rplumber.io/docs/articles/programmatic-usage.html} for additional
 #' details on the methods available on this object.
 #' @rdname plumber
 #' @param file The file to parse as the plumber router definition.

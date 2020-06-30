@@ -18,16 +18,16 @@ articles:
   navbar: Creating APIs
   # desc: description here
   contents:
-  - '01-introduction'
-  - '02-quickstart'
-  - '03-routing-and-input'
-  - '04-rendering-output'
-  - '05-execution-model'
-  - '06-security'
-  - '07-hosting'
-  - '08-programmatic-usage'
-  - '09-tips-and-tricks'
-  - '99-appendix-a'
+  - 'introduction'
+  - 'quickstart'
+  - 'routing-and-input'
+  - 'rendering-output'
+  - 'execution-model'
+  - 'security'
+  - 'hosting'
+  - 'programmatic-usage'
+  - 'tips-and-tricks'
+  - 'appendix-a'
 
 
 reference:
