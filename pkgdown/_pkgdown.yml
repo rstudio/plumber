@@ -1,7 +1,7 @@
 url: https://www.rplumber.io
 
-development:
-  mode: auto
+# development:
+#   mode: auto
 
 template:
   assets: pkgdown/assets
