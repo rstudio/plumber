@@ -11,12 +11,12 @@
 /docs/static/ /docs/routing-and-input.html#static-file-handler 302
 
 
-/docs/quickstart* /docs/articles/quickstart.html 302
-/docs/routing-and-input* /docs/articles/routing-and-input.html 302
-/docs/rendering-output* /docs/articles/rendering-output.html 302
-/docs/execution-model* /docs/articles/execution-model.html 302
-/docs/security* /docs/articles/security.html 302
-/docs/hosting* /docs/articles/hosting.html 302
-/docs/programmatic-usage* /docs/articles/programmatic-usage.html 302
-/docs/tips-and-tricks* /docs/articles/tips-and-tricks.html 302
-/docs/appendix-a* /docs/articles/migration.html 302
+/docs/quickstart* /articles/quickstart.html 302
+/docs/routing-and-input* /articles/routing-and-input.html 302
+/docs/rendering-output* /articles/rendering-output.html 302
+/docs/execution-model* /articles/execution-model.html 302
+/docs/security* /articles/security.html 302
+/docs/hosting* /articles/hosting.html 302
+/docs/programmatic-usage* /articles/programmatic-usage.html 302
+/docs/tips-and-tricks* /articles/tips-and-tricks.html 302
+/docs/appendix-a* /articles/migration.html 302

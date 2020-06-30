@@ -49,6 +49,6 @@ An exception is that objects of class \code{AsIs} (i.e. wrapped in \code{I()}) a
 \description{
 Serializers are used in Plumber to transform the R object produced by a
 filter/endpoint into an HTTP response that can be returned to the client. See
-\href{https://book.rplumber.io/docs/articles/rendering-output.html#serializers-1}{here} for
+\href{https://book.rplumber.io/articles/rendering-output.html#serializers-1}{here} for
 more details on Plumber serializers and how to customize their behavior.
 }
