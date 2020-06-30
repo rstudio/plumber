@@ -47,37 +47,10 @@ parseQS <- function(qs){
   }
 
   vals <- lapply(kv, `[`, 2)
+  names(vals) <- keys
 
   # If duplicates, combine
-  unique_keys <- unique(keys)
-
-  # equivalent code output, `split` is much faster with larger objects
-  # Testing on personal machine had a breakpoint around 150 letters as query parameters
-  ## n <- 150
-  ## k <- sample(letters, n, replace = TRUE)
-  ## v <- as.list(sample(1L, n, replace = TRUE))
-  ## microbenchmark::microbenchmark(
-  ##   split = {
-  ##     lapply(split(v, k), function(x) unname(unlist(x)))
-  ##   },
-  ##   not_split = {
-  ##     lapply(unique(k), function(x) {
-  ##       unname(unlist(v[k == x]))
-  ##     })
-  ##   }
-  ## )
-  vals <-
-    if (length(unique_keys) > 150) {
-      lapply(split(vals, keys), function(items) unname(unlist(items)))
-    } else {
-      # n < 150
-      lapply(unique_keys, function(key) {
-        unname(unlist(vals[keys == key]))
-      })
-    }
-  names(vals) <- unique_keys
-
-  return(vals)
+  combine_keys(vals)
 }
 
 createPathRegex <- function(pathDef, funcParams = NULL){
@@ -176,5 +149,62 @@ extractPathParams <- function(def, path){
     }
   }
 
+  vals
+}
+
+#' combine args that share the same name
+#' @noRd
+combine_keys <- function(obj, call_unlist = TRUE) {
+
+  keys <- names(obj)
+  vals <- unname(obj)
+  unique_keys <- unique(keys)
+
+  if (length(unique_keys) == length(keys)) {
+    return(obj)
+  }
+
+  cleanup_item <-
+    if (isTRUE(call_unlist)) {
+      function(x) {
+        unname(unlist(x))
+      }
+    } else {
+      function(x) {
+        if (isTRUE(length(x) > 1)) {
+          unname(x)
+        } else {
+          unname(x)[[1]]
+        }
+      }
+    }
+
+  # equivalent code output, `split` is much faster with larger objects
+  # Testing on personal machine had a breakpoint around 150 letters as query parameters
+  ## n <- 150
+  ## k <- sample(letters, n, replace = TRUE)
+  ## v <- as.list(sample(1L, n, replace = TRUE))
+  ## microbenchmark::microbenchmark(
+  ##   split = {
+  ##     lapply(split(v, k), function(x) unname(unlist(x)))
+  ##   },
+  ##   not_split = {
+  ##     lapply(unique(k), function(x) {
+  ##       unname(unlist(v[k == x]))
+  ##     })
+  ##   }
+  ## )
+  vals <-
+    if (length(unique_keys) > 150) {
+      lapply(split(vals, keys), function(items) {
+        cleanup_item(items)
+      })
+    } else {
+      # n < 150
+      lapply(unique_keys, function(key) {
+        cleanup_item(vals[keys == key])
+      })
+    }
+  names(vals) <- unique_keys
   vals
 }

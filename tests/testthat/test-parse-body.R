@@ -119,3 +119,10 @@ test_that("Test an array of files upload", {
   expect_equal(attr(parsed_body[["files"]][[2]], "filename"), "text2.bin")
   expect_equal(rawToChar(parsed_body[["files"]][[2]]), "b")
 })
+
+test_that("Key val combiner does not alter structure of results", {
+  sample1 <- list(a = women, b = 1:4, c = mtcars)
+  sample2 <- list(a = women, b = 1:4, a = mtcars, c=mtcars)
+  expect_equal(combine_keys(sample1, FALSE), sample1)
+  expect_equal(combine_keys(sample2, FALSE), list(a = list(women, mtcars), b = 1:4, c=mtcars))
+})

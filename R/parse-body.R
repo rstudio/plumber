@@ -465,15 +465,7 @@ parser_multi <- function() {
       parse_raw(x)
     })
     # combine together args that share the same name
-    keys <- unique(names(args))
-    for (k in keys) {
-      m <- which(names(args)==k)
-      if (isTRUE(length(m) > 1)) {
-        args[[m[1]]] <- unname(args[m])
-        args[m[-1]] <- NULL
-      }
-    }
-    return(args)
+    combine_keys(args, FALSE)
   }
 }
 
