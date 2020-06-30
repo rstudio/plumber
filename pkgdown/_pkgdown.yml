@@ -18,6 +18,7 @@ articles:
   navbar: Creating APIs
   # desc: description here
   contents:
+  - '01-introduction'
   - '02-quickstart'
   - '03-routing-and-input'
   - '04-rendering-output'
@@ -31,6 +32,7 @@ articles:
 
 reference:
 - title: All functions
+  # desc: description here
   contents:
   - 'PlumberEndpoint'
   - 'PlumberStatic'
