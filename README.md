@@ -5,6 +5,7 @@
 [![](https://www.r-pkg.org/badges/version/plumber)](https://www.r-pkg.org/pkg/plumber)
 [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/plumber?color=brightgreen)](https://www.r-pkg.org/pkg/plumber)
 [![codecov](https://codecov.io/gh/trestletech/plumber/branch/master/graph/badge.svg)](https://codecov.io/gh/trestletech/plumber)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/3d40399b-26dc-4302-ad4d-fc00d028b3a1/deploy-status)](https://app.netlify.com/sites/rplumber/deploys)
 [![RStudio community](https://img.shields.io/badge/community-plumber-blue?style=social&logo=rstudio&logoColor=75AADB)](https://community.rstudio.com/tags/plumber)
 <!-- badges: end -->
 

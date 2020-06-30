@@ -1,4 +1,4 @@
-url: https://rstudio.github.io/plumber
+url: https://www.rplumber.io
 
 # template:
 #   params:
@@ -27,7 +27,7 @@ articles:
   - 'hosting'
   - 'programmatic-usage'
   - 'tips-and-tricks'
-  - 'appendix-a'
+  - 'migration'
 
 
 reference:

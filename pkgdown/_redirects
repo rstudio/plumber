@@ -1,0 +1,22 @@
+/docs/endpoints/ /docs/routing-and-input.html#endpoints 302
+/docs/clustering/ /docs/hosting.html#pm2 302
+/docs/digitalocean/ /docs/hosting.html#digitalocean 302
+/docs/docker/ /docs/hosting.html#docker 302
+/docs/docker-advanced/ /docs/hosting.html#docker-advanced 302
+/docs/filters/ /docs/routing-and-input.html#filters 302
+/docs/hosting/ /docs/hosting.html#pm2 302
+/docs/programmatic/ /docs/programmatic-usage.html 302
+/docs/routing/ /docs/routing-and-input.html 302
+/docs/sessions/ /docs/rendering-and-output.html#setting-cookies 302
+/docs/static/ /docs/routing-and-input.html#static-file-handler 302
+
+
+/docs/quickstart* /docs/articles/quickstart.html 302
+/docs/routing-and-input* /docs/articles/routing-and-input.html 302
+/docs/rendering-output* /docs/articles/rendering-output.html 302
+/docs/execution-model* /docs/articles/execution-model.html 302
+/docs/security* /docs/articles/security.html 302
+/docs/hosting* /docs/articles/hosting.html 302
+/docs/programmatic-usage* /docs/articles/programmatic-usage.html 302
+/docs/tips-and-tricks* /docs/articles/tips-and-tricks.html 302
+/docs/appendix-a* /docs/articles/migration.html 302
