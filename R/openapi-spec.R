@@ -121,6 +121,12 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
       if (type %in% inRaw) {
         names(params$requestBody$content) <- "multipart/form-data"
         property$type <- apiTypesInfo[[type]]$realType
+        property$example <- NULL
+        if (isArray) {
+          property$items <- list(property$type, property$format)
+          property$type <- "array"
+          property$format <- NULL
+        }
       }
       params$requestBody[[1]][[1]][[1]]$properties[[p]] <- property
       if (required) { params$requestBody[[1]][[1]][[1]]$required <-
