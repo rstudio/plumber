@@ -1,0 +1,16 @@
+-----------------------------113514388833134833704250818942
+Content-Disposition: form-data; name="files"; filename="text1.bin"
+Content-Type: application/octet-stream
+
+a
+-----------------------------113514388833134833704250818942
+Content-Disposition: form-data; name="files"; filename="text2.bin"
+Content-Type: application/octet-stream
+
+b
+-----------------------------113514388833134833704250818942
+Content-Disposition: form-data; name="files"; filename="text3.bin"
+Content-Type: application/octet-stream
+
+c
+-----------------------------113514388833134833704250818942--

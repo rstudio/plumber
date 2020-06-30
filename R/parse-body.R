@@ -466,9 +466,14 @@ parser_multi <- function() {
     })
     # combine together args that share the same name
     keys <- unique(names(args))
-    lapply(structure(keys, names = keys), function(arg) {
-      unname(args[names(args)==arg])
-    })
+    for (k in keys) {
+      m <- which(names(args)==k)
+      if (isTRUE(length(m) > 1)) {
+        args[[m[1]]] <- unname(args[m])
+        args[m[-1]] <- NULL
+      }
+    }
+    return(args)
   }
 }
 
