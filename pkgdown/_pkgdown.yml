@@ -1,6 +1,10 @@
 url: https://www.rplumber.io
 
-# template:
+development:
+  mode: auto
+
+template:
+  assets: pkgdown/assets
 #   params:
 #     docsearch:
 #       api_key: "KEY"
