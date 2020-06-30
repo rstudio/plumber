@@ -171,7 +171,7 @@ plumber server." />
 plumber server.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/plumber/man/do_deploy_api.html'>do_deploy_api</a></span>(
+    <pre class="usage"><span class='fu'><a href='https://www.rplumber.io/reference/do_deploy_api.html'>do_deploy_api</a></span>(
   <span class='kw'>droplet</span>,
   <span class='kw'>path</span>,
   <span class='kw'>localPath</span>,
@@ -187,7 +187,7 @@ plumber server.</p>
     <tr>
       <th>droplet</th>
       <td><p>The droplet on which to act. It's expected that this droplet
-was provisioned using <code><a href='https://rdrr.io/pkg/plumber/man/do_provision.html'>do_provision()</a></code>.  See <code><a href='https://rdrr.io/pkg/analogsea/man/droplet.html'>analogsea::droplet()</a></code> to
+was provisioned using <code><a href='https://www.rplumber.io/reference/do_provision.html'>do_provision()</a></code>.  See <code><a href='https://rdrr.io/pkg/analogsea/man/droplet.html'>analogsea::droplet()</a></code> to
 obtain a reference to a running droplet.</p></td>
     </tr>
     <tr>
@@ -210,7 +210,7 @@ on your server. If unsure, try a number around <code>8000</code>.</p></td>
     <tr>
       <th>forward</th>
       <td><p>If <code>TRUE</code>, will setup requests targeting the root URL on the
-server to point to this application. See the <code><a href='https://rdrr.io/pkg/plumber/man/do_forward.html'>do_forward()</a></code> function for
+server to point to this application. See the <code><a href='https://www.rplumber.io/reference/do_forward.html'>do_forward()</a></code> function for
 more details.</p></td>
     </tr>
     <tr>
@@ -220,7 +220,7 @@ deployed API. By default, the interface is disabled.</p></td>
     </tr>
     <tr>
       <th>preflight</th>
-      <td><p>R commands to run after <code><a href='https://rdrr.io/pkg/plumber/man/plumber.html'>plumb()</a></code>ing the <code>plumber.R</code> file,
+      <td><p>R commands to run after <code><a href='https://www.rplumber.io/reference/plumber.html'>plumb()</a></code>ing the <code>plumber.R</code> file,
 but before <code>run()</code>ing the plumber service. This is an opportunity to e.g.
 add new filters. If you need to specify multiple commands, they should be
 semi-colon-delimited.</p></td>

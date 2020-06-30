@@ -171,7 +171,7 @@ req$session information for each server request." />
 <code>req$session</code> information for each server request.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/plumber/man/sessionCookie.html'>sessionCookie</a></span>(
+    <pre class="usage"><span class='fu'><a href='https://www.rplumber.io/reference/sessionCookie.html'>sessionCookie</a></span>(
   <span class='kw'>key</span>,
   name = <span class='st'>"plumber"</span>,
   expiration = <span class='fl'>FALSE</span>,
@@ -186,7 +186,7 @@ req$session information for each server request." />
       <th>key</th>
       <td><p>The secret key to use. This must be consistent across all R sessions
 where you want to save/restore encrypted cookies. It should be produced using
-<code><a href='https://rdrr.io/pkg/plumber/man/randomCookieKey.html'>randomCookieKey</a></code>. Please see the "Storing secure keys" section for more details
+<code><a href='https://www.rplumber.io/reference/randomCookieKey.html'>randomCookieKey</a></code>. Please see the "Storing secure keys" section for more details
 complex character string to bolster security.</p></td>
     </tr>
     <tr>
@@ -254,15 +254,15 @@ to prevent others from reading it.</p></li>
     <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 
 <span class='co'>## Set secret key using `keyring` (preferred method)</span>
-<span class='kw'>keyring</span>::<span class='fu'>key_set_with_value</span>(<span class='st'>"plumber_api"</span>, <span class='kw'>plumber</span>::<span class='fu'><a href='https://rdrr.io/pkg/plumber/man/randomCookieKey.html'>randomCookieKey</a></span>())
+<span class='kw'>keyring</span>::<span class='fu'>key_set_with_value</span>(<span class='st'>"plumber_api"</span>, <span class='kw'>plumber</span>::<span class='fu'><a href='https://www.rplumber.io/reference/randomCookieKey.html'>randomCookieKey</a></span>())
 
 
 <span class='co'># Load a plumber API</span>
-<span class='kw'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/plumber/man/plumber.html'>plumb</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='st'>"examples"</span>, <span class='st'>"01-append"</span>, <span class='st'>"plumber.R"</span>), package = <span class='st'>"plumber"</span>))
+<span class='kw'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://www.rplumber.io/reference/plumber.html'>plumb</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='st'>"examples"</span>, <span class='st'>"01-append"</span>, <span class='st'>"plumber.R"</span>), package = <span class='st'>"plumber"</span>))
 
 <span class='co'># Add cookie support and retrieve secret key using `keyring`</span>
 <span class='kw'>pr</span><span class='op'>$</span><span class='fu'>registerHooks</span>(
-  <span class='fu'><a href='https://rdrr.io/pkg/plumber/man/sessionCookie.html'>sessionCookie</a></span>(
+  <span class='fu'><a href='https://www.rplumber.io/reference/sessionCookie.html'>sessionCookie</a></span>(
     <span class='kw'>keyring</span>::<span class='fu'>key_get</span>(<span class='st'>"plumber_api"</span>)
   )
 )
@@ -274,17 +274,17 @@ to prevent others from reading it.</p></li>
 
 <span class='co'>## Save key to a local file</span>
 <span class='kw'>pswd_file</span> <span class='op'>&lt;-</span> <span class='st'>"normal_file.txt"</span>
-<span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='kw'>plumber</span>::<span class='fu'><a href='https://rdrr.io/pkg/plumber/man/randomCookieKey.html'>randomCookieKey</a></span>(), file = <span class='kw'>pswd_file</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='kw'>plumber</span>::<span class='fu'><a href='https://www.rplumber.io/reference/randomCookieKey.html'>randomCookieKey</a></span>(), file = <span class='kw'>pswd_file</span>)
 <span class='co'># Make file read-only</span>
 <span class='fu'><a href='https://rdrr.io/r/base/files2.html'>Sys.chmod</a></span>(<span class='kw'>pswd_file</span>, mode = <span class='st'>"0600"</span>)
 
 
 <span class='co'># Load a plumber API</span>
-<span class='kw'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/plumber/man/plumber.html'>plumb</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='st'>"examples"</span>, <span class='st'>"01-append"</span>, <span class='st'>"plumber.R"</span>), package = <span class='st'>"plumber"</span>))
+<span class='kw'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://www.rplumber.io/reference/plumber.html'>plumb</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='st'>"examples"</span>, <span class='st'>"01-append"</span>, <span class='st'>"plumber.R"</span>), package = <span class='st'>"plumber"</span>))
 
 <span class='co'># Add cookie support and retrieve secret key from file</span>
 <span class='kw'>pr</span><span class='op'>$</span><span class='fu'>registerHooks</span>(
-  <span class='fu'><a href='https://rdrr.io/pkg/plumber/man/sessionCookie.html'>sessionCookie</a></span>(
+  <span class='fu'><a href='https://www.rplumber.io/reference/sessionCookie.html'>sessionCookie</a></span>(
     <span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='kw'>pswd_file</span>, warn = <span class='fl'>FALSE</span>)
   )
 )
