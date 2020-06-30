@@ -9,3 +9,5 @@ plumber.Rcheck
 plumber_*.tar.gz
 yarn.lock
 node_modules
+inst/doc
+docs

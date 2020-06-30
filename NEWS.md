@@ -43,7 +43,7 @@ plumber 1.0.0
 * Added support to a router's run method to allow the `swagger` parameter to be a function that
   enhances the existing swagger specification before being returned to `/openapi.json`. (#365)
 
-* Added support for swagger for mounted routers (@bradleyhd, #274).
+* Documentation is presented using pkgdown (#570)
 
 
 ### Minor new features and improvements
@@ -76,6 +76,8 @@ plumber 1.0.0
 * Improve speed of `canServe()` method of the `PlumberEndpoint` class (@atheriel, #484)
 
 * Add support for returning svg images using `#' @svg` (and with arguments `#' @svg (width = 200, height=500)`. (@pachamaltese, #398)
+
+* Added support for swagger for mounted routers (@bradleyhd, #274).
 
 
 ### Bug fixes

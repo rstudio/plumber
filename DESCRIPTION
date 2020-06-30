@@ -13,8 +13,7 @@ Authors@R: c(
   person(family = "RStudio", role = c("cph", "fnd")))
 License: MIT + file LICENSE
 BugReports: https://github.com/rstudio/plumber/issues
-URL: https://www.rplumber.io (site)
-    https://github.com/rstudio/plumber (dev)
+URL: https://www.rplumber.io, https://github.com/rstudio/plumber
 Description: Gives the ability to automatically generate and serve an HTTP API
     from R functions using the annotations in the R documentation around your
     functions.

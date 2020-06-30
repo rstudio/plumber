@@ -1,0 +1,57 @@
+url: https://www.rplumber.io
+
+# template:
+#   params:
+#     docsearch:
+#       api_key: "KEY"
+#       index_name: "NAME"
+
+authors:
+  Barret Schloerke:
+    href: http://schloerke.com/
+  Jeff Allen:
+    href: https://trestletech.com/
+
+
+articles:
+- title: Creating APIs in R with Plumber
+  navbar: Creating APIs
+  # desc: description here
+  contents:
+  - 'introduction'
+  - 'quickstart'
+  - 'routing-and-input'
+  - 'rendering-output'
+  - 'execution-model'
+  - 'security'
+  - 'hosting'
+  - 'programmatic-usage'
+  - 'tips-and-tricks'
+  - 'migration'
+
+
+reference:
+- title: All functions
+  # desc: description here
+  contents:
+  - 'PlumberEndpoint'
+  - 'PlumberStatic'
+  - 'PlumberStep'
+  - 'addParser'
+  - 'addSerializer'
+  - 'do_configure_https'
+  - 'do_deploy_api'
+  - 'do_forward'
+  - 'do_provision'
+  - 'do_remove_api'
+  - 'do_remove_forward'
+  - 'forward'
+  - 'getCharacterSet'
+  - 'hookable'
+  - 'include_file'
+  - 'options_plumber'
+  - 'parsers'
+  - 'plumb'
+  - 'randomCookieKey'
+  - 'serializer_json'
+  - 'sessionCookie'

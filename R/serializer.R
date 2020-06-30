@@ -2,7 +2,7 @@
 #'
 #' Serializers are used in Plumber to transform the R object produced by a
 #' filter/endpoint into an HTTP response that can be returned to the client. See
-#' [here](https://book.rplumber.io/rendering-and-output.html#serializers) for
+#' [here](https://book.rplumber.io/docs/articles/rendering-output.html#serializers-1) for
 #' more details on Plumber serializers and how to customize their behavior.
 #' @name serializers
 #' @rdname serializers
