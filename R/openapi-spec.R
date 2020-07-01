@@ -124,11 +124,11 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
         names(params$requestBody$content) <- "multipart/form-data"
         property$type <- apiTypesInfo[[type]]$realType
         property$example <- NULL
-        if (isArray) {
-          property$items <- list(property$type, property$format)
-          property$type <- "array"
-          property$format <- NULL
-        }
+      }
+      if (isArray) {
+        property$items <- list(type = property$type, format = property$format)
+        property$type <- "array"
+        property$format <- NULL
       }
       params$requestBody[[1]][[1]][[1]]$properties[[p]] <- property
       if (required) { params$requestBody[[1]][[1]][[1]]$required <-
@@ -268,7 +268,7 @@ getArgsMetadata <- function(plumberExpression){
     }
     type <- if (isNaOrNull(arg)) {NA} else {typeof(arg)}
     type <- plumberToApiType(type)
-    isArray <- {if (length(arg) > 1L && type %in% filterApiTypes(TRUE, "arraySupport")) TRUE else defaultIsArray}
+    isArray <- isTRUE(length(arg) > 1L)
     list(
       default = arg,
       example = arg,

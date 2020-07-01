@@ -118,7 +118,6 @@ createPathRegex <- function(pathDef, funcParams = NULL){
     idx <- (is.na(areArrays) | !areArrays)
     areArrays[idx] <- sapply(funcParams, `[[`, "isArray")[names[idx]]
   }
-  areArrays <- areArrays & apiTypes %in% filterApiTypes(TRUE, "arraySupport")
   areArrays[is.na(areArrays)] <- defaultIsArray
 
   pathRegex <- pathDef
