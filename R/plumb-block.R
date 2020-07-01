@@ -231,7 +231,6 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
       plumberType <- stri_replace_all(paramMat[1,4], "$1", regex = "^\\[([^\\]]*)\\]$")
       apiType <- plumberToApiType(plumberType)
       isArray <- stri_detect_regex(paramMat[1,4], "^\\[[^\\]]*\\]$")
-      isArray <- isArray && apiType %in% filterApiTypes(TRUE, "arraySupport")
       isArray[is.na(isArray)] <- defaultIsArray
       required <- identical(paramMat[1,5], "*")
 
