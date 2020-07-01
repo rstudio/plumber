@@ -268,7 +268,7 @@ getArgsMetadata <- function(plumberExpression){
     }
     type <- if (isNaOrNull(arg)) {NA} else {typeof(arg)}
     type <- plumberToApiType(type)
-    isArray <- isTRUE(length(arg) > 1L)
+    isArray <- if (isTRUE(length(arg) > 1L)) {TRUE} else {defaultIsArray}
     list(
       default = arg,
       example = arg,
