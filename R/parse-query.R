@@ -156,12 +156,13 @@ extractPathParams <- function(def, path){
 combine_keys <- function(obj, call_unlist = TRUE) {
 
   keys <- names(obj)
-  vals <- unname(obj)
   unique_keys <- unique(keys)
 
   if (length(unique_keys) == length(keys)) {
     return(obj)
   }
+
+  vals <- unname(obj)
 
   cleanup_item <-
     if (isTRUE(call_unlist)) {

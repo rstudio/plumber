@@ -46,8 +46,8 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
 
   # parse as a query string
   if (length(content_type) == 0) {
-    # fast default to json when first byte is 7b (ascii {)
-    if (first_byte == as.raw(123L)) {
+    #fast default to json when first byte is 7b or 5b (ascii { or [)
+    if (first_byte %in% as.raw(c(91L, 123L))) {
       return(parsers$alias$json)
     }
 
@@ -340,7 +340,8 @@ parser_query <- function() {
 #' @export
 parser_json <- function(...) {
   parser_text(function(txt_value) {
-    safeFromJSON(txt_value, ...)
+    args <- safeFromJSON(txt_value, ...)
+    combine_keys(args, FALSE)
   })
 }
 

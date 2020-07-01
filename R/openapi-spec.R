@@ -126,9 +126,13 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
         property$example <- NULL
       }
       if (isArray) {
-        property$items <- list(type = property$type, format = property$format)
+        property$items <- list(
+          type = property$type,
+          format = property$format,
+          example = property$example)
         property$type <- "array"
         property$format <- NULL
+        property$example <- NULL
       }
       params$requestBody[[1]][[1]][[1]]$properties[[p]] <- property
       if (required) { params$requestBody[[1]][[1]][[1]]$required <-
