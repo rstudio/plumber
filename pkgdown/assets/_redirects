@@ -1,8 +1,8 @@
 /docs/endpoints/ /articles/routing-and-input.html#endpoints 302
 /docs/clustering/ /articles/hosting.html#pm2 302
 /docs/digitalocean/ /articles/hosting.html#digitalocean 302
-/docs/docker/ /docs/hosting.html#docker 302
-/docs/docker-advanced/ /docs/hosting.html#docker-advanced 302
+/docs/docker/ /articles/hosting.html#docker 302
+/docs/docker-advanced/ /articles/hosting.html#docker-advanced 302
 /docs/filters/ /articles/routing-and-input.html#filters 302
 /docs/hosting/ /articles/hosting.html#pm2 302
 /docs/programmatic/ /articles/programmatic-usage.html 302
