@@ -1062,7 +1062,7 @@ plumber <- R6Class(
       private$ends[[preempt]] <- c(private$ends[[preempt]], ep)
     },
     removeEndpointInternal = function(methods, path, preempt){
-      noPreempt <- missing(preempt) || is.null(preempt)
+      noPreempt <- is.null(preempt)
 
       if (noPreempt){
         preempt <- "__no-preempt__"
