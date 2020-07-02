@@ -332,10 +332,10 @@ plumber <- R6Class(
     #' }
     mount = function(path, router){
       # Ensure that the path has both a leading and trailing slash.
-      if (!startsWith(path, "/")) {
+      if (!grepl("^/", path)) {
         path <- paste0("/", path)
       }
-      if (!endsWith(path, "/")) {
+      if (!grepl("/$", path)) {
         path <- paste0(path, "/")
       }
 
