@@ -234,7 +234,9 @@ plumber <- R6Class(
         private$lines <- readUTF8(file)
         private$parsed <- parseUTF8(file)
         private$disable_run <- TRUE
-        on.exit(private$disable_run <- FALSE, add = TRUE)
+        on.exit({
+          private$disable_run <- FALSE
+        }, add = TRUE)
 
         for (i in 1:length(private$parsed)){
           e <- private$parsed[i]
