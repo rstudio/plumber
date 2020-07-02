@@ -24,3 +24,5 @@
 /docs/index.html  /articles/introduction.html 302
 
 /docs/* / 302
+
+/examples/* / 302
