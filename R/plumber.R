@@ -882,9 +882,7 @@ plumber <- R6Class(
       # (like API version) are satisfied.
       ret <- utils::modifyList(defaultGlobals, def)
 
-      if (!is.null(private$apiHandler)) {
-        ret <- private$apiHandler(ret)
-      }
+      ret <- private$apiHandler(ret)
 
       # remove NA or NULL values, which UI parsers do not like
       ret <- removeNaOrNulls(ret)
