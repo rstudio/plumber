@@ -324,10 +324,10 @@ plumber <- R6Class(
     #' @param path a character string. Where to mount router.
     unmount = function(path){
       # Ensure that the path has both a leading and trailing slash.
-      if (!startsWith(path, "/")) {
+      if (!grepl("^/", path)) {
         path <- paste0("/", path)
       }
-      if (!endsWith(path, "/")) {
+      if (!grepl("/$", path)) {
         path <- paste0(path, "/")
       }
       private$mnts[[path]] <- NULL
