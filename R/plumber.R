@@ -1032,7 +1032,7 @@ plumber <- R6Class(
     notFoundHandler = NULL,
     maxSize = NULL, # Max request size in bytes
 
-    apiHandler = NULL,
+    apiHandler = identity,
     ui_info = NULL,
 
     addFilterInternal = function(filter){
