@@ -188,7 +188,9 @@ Start a server using \code{plumber} object.
 \if{html}{\out{<div class="r">}}\preformatted{plumber$run(
   host = "127.0.0.1",
   port = getOption("plumber.port"),
+  swagger,
   debug = interactive(),
+  swaggerCallback,
   callback = getOption("plumber.ui.callback", getOption("plumber.swagger.url", NULL))
 )}\if{html}{\out{</div>}}
 }
@@ -204,7 +206,11 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.}
 
+\item{\code{swagger}}{Deprecated. Use \code{plumber} method \code{setUI} and \code{setApiHandler}.}
+
 \item{\code{debug}}{\code{TRUE} provides more insight into your API errors.}
+
+\item{\code{swaggerCallback}}{Deprecated. Use \code{callback} parameter.}
 
 \item{\code{callback}}{a callback function for taking action on UI url.}
 }
@@ -414,7 +420,7 @@ pr$handle("GET", "/", function(){
 \subsection{Method \code{removeHandle()}}{
 Remove endpoints
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{plumber$removeHandle(methods, path, preempt)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{plumber$removeHandle(methods, path, preempt = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -645,7 +651,7 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 \subsection{Method \code{setApiHandler()}}{
 Add a function to customize what is returned in \verb{$apiSpec()}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{plumber$setApiHandler(api_fun = force)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{plumber$setApiHandler(api_fun = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

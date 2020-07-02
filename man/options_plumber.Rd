@@ -15,7 +15,6 @@ options_plumber(
   postBody = getOption("plumber.postBody"),
   port = getOption("plumber.port"),
   sharedSecret = getOption("plumber.sharedSecret"),
-  swagger.url = getOption("plumber.swagger.url"),
   ui = getOption("plumber.ui"),
   ui.callback = getOption("plumber.ui.callback")
 )
@@ -40,8 +39,6 @@ options_plumber(
 \item{port}{see details}
 
 \item{sharedSecret}{see details}
-
-\item{swagger.url}{see details}
 
 \item{ui}{see details}
 
@@ -84,9 +81,6 @@ If the port is already in use, server will not be able to start. Defaults to \co
 \item{\code{plumber.sharedSecret}}{Shared secret used to filter incoming request.
 When \code{NULL}, secret is not validated. Otherwise, Plumber compares secret with http header
 \code{PLUMBER_SHARED_SECRET}. Failure to match results in http error 400. Defaults to \code{NULL}}
-\item{\code{plumber.swagger.url}}{A function. Called with
-a single parameter corresponding to ui url after Plumber server is ready. This can be used
-by RStudio to open UI when API is ran for the editor. Defaults to \code{NULL}}
 \item{\code{plumber.ui}}{Name of the UI interface to use. Defaults to \code{TRUE}}
 \item{\code{plumber.ui.callback}}{A function. Called with
 a single parameter corresponding to ui url after Plumber server is ready. This can be used

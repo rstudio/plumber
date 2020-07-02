@@ -224,6 +224,7 @@ plumber <- R6Class(
       private$notFoundHandler <- default404Handler
       private$maxSize <- getOption('plumber.maxRequestSize', 0) #0 Unlimited
       self$setUI()
+      self$setApiHandler()
 
       # Add in the initial filters
       for (fn in names(filters)){
@@ -255,7 +256,9 @@ plumber <- R6Class(
     #' @param port a number or integer that indicates the server port that should
     #' be listened on. Note that on most Unix-like systems including Linux and
     #' Mac OS X, port numbers smaller than 1025 require root privileges.
+    #' @param swagger Deprecated. Use `plumber` method `setUI` and `setApiHandler`.
     #' @param debug `TRUE` provides more insight into your API errors.
+    #' @param swaggerCallback Deprecated. Use `callback` parameter.
     #' @param callback a callback function for taking action on UI url.
     #' @details
     #' `port` does not need to be explicitly assigned.
@@ -266,9 +269,27 @@ plumber <- R6Class(
     run = function(
       host = '127.0.0.1',
       port = getOption('plumber.port'),
+      swagger,
       debug = interactive(),
+      swaggerCallback,
       callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL))
     ) {
+
+      if (!missing(swagger)) {
+        warning("`swagger` parameter has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$setUI()` and `$setApiHandler()`.")
+        if (is.function(swagger)) {
+          self$setUI = "swagger"
+          self$setApiHandler(swagger)
+        } else {
+          self$setUI(swagger)
+        }
+      }
+
+      if (!missing(swaggerCallback)) {
+        warning("`swaggerCallback` parameter has been deprecated in v1.0.0 and will be removed in a coming release. Please use `callback` parameter.")
+        callback = swaggerCallback
+      }
+
       port <- findPort(port)
 
       message("Running plumber API at ", urlHost(host = host, port = port, changeHostLocation = FALSE))
@@ -1032,7 +1053,7 @@ plumber <- R6Class(
     notFoundHandler = NULL,
     maxSize = NULL, # Max request size in bytes
 
-    apiHandler = identity,
+    apiHandler = NULL,
     ui_info = NULL,
 
     addFilterInternal = function(filter){
@@ -1067,14 +1088,13 @@ plumber <- R6Class(
       if (noPreempt){
         preempt <- "__no-preempt__"
       }
-      i <- 0L; toRemove <- integer()
-      for (ep in private$ends[[preempt]]) {
-        i <- i + 1L
-        if (isTRUE(all(ep$verbs %in% methods)) &&
-            isTRUE(ep$path == path)) {
-          toRemove <- c(toRemove, i)
-        }
-      }
+      toRemove <- vapply(
+        private$ends[[preempt]],
+        function(ep) {
+          isTRUE(all(ep$verbs %in% methods)) && isTRUE(ep$path == path)
+        },
+        logical(1))
+
       private$ends[[preempt]][toRemove] <- NULL
     },
 
@@ -1145,6 +1165,10 @@ urlHost <- function(scheme = "http", host, port, path = "", changeHostLocation =
   # if ipv6 address, surround in brackets
   if (grepl(":[^/]", host)) {
     host <- paste0("[", host, "]")
+  }
+
+  if (!nzchar(scheme)) {
+    scheme <- "http"
   }
 
   paste0(scheme, "://", host, ":", port, path)

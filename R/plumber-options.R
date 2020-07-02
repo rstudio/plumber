@@ -30,9 +30,6 @@
 #' \item{`plumber.sharedSecret`}{Shared secret used to filter incoming request.
 #' When `NULL`, secret is not validated. Otherwise, Plumber compares secret with http header
 #' `PLUMBER_SHARED_SECRET`. Failure to match results in http error 400. Defaults to `NULL`}
-#' \item{`plumber.swagger.url`}{A function. Called with
-#' a single parameter corresponding to ui url after Plumber server is ready. This can be used
-#' by RStudio to open UI when API is ran for the editor. Defaults to `NULL`}
 #' \item{`plumber.ui`}{Name of the UI interface to use. Defaults to `TRUE`}
 #' \item{`plumber.ui.callback`}{A function. Called with
 #' a single parameter corresponding to ui url after Plumber server is ready. This can be used
@@ -49,7 +46,6 @@
 #' @param postBody see details
 #' @param port see details
 #' @param sharedSecret see details
-#' @param swagger.url see details
 #' @param ui see details
 #' @param ui.callback see details
 #' @return
@@ -68,7 +64,6 @@ options_plumber <- function(
   postBody             = getOption("plumber.postBody"),
   port                 = getOption("plumber.port"),
   sharedSecret         = getOption("plumber.sharedSecret"),
-  swagger.url          = getOption("plumber.swagger.url"),
   ui                   = getOption("plumber.ui"),
   ui.callback          = getOption("plumber.ui.callback")
 ) {
@@ -83,7 +78,6 @@ options_plumber <- function(
     plumber.postBody = postBody,
     plumber.port = port,
     plumber.sharedSecret = sharedSecret,
-    plumber.swagger.url = swagger.url,
     plumber.ui = ui,
     plumber.ui.callback = ui.callback
   )
