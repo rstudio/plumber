@@ -293,7 +293,7 @@ plumber <- R6Class(
       swaggerCallback = getOption('plumber.swagger.url', NULL)
     ) {
       if (isTRUE(private$disable_run)) {
-        stop("Plumber router run method called from a router modifier expression (@plumber)")
+        stop("Plumber router `$run()` method should not be called while `plumb()`ing a file")
       }
 
       port <- findPort(port)
