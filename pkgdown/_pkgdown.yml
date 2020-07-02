@@ -1,7 +1,7 @@
 url: https://www.rplumber.io
 
-development:
-  mode: auto
+# development:
+#   mode: auto
 
 template:
   assets: pkgdown/assets
@@ -19,7 +19,7 @@ authors:
 
 articles:
 - title: Creating APIs in R with Plumber
-  navbar: Creating APIs
+  navbar: ~
   # desc: description here
   contents:
   - 'introduction'
@@ -32,7 +32,12 @@ articles:
   - 'programmatic-usage'
   - 'tips-and-tricks'
   - 'migration'
-
+# - title: Examples
+#   navbar: Examples
+#   # desc: description here
+#   contents:
+#   - 'ex-github'
+#   - 'ex-mailgun'
 
 reference:
 - title: All functions
