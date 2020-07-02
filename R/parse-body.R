@@ -434,8 +434,9 @@ parser_rds <- function(...) {
 #' @export
 parser_octet <- function() {
   function(value, filename = NULL, ...) {
-    attr(value, "filename") <- filename
-    value
+    arg <- list(value)
+    names(arg) <- filename
+    return(arg)
   }
 }
 
