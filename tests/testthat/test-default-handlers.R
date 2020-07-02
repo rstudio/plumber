@@ -15,9 +15,9 @@ test_that("405 handling is ok, get the right verbs", {
   pr$mount("/barret", sub)
 
   expect_equal(allowed_verbs(pr, path_to_find = "/barret/test"), "GET")
-  expect_null(allowed_verbs(pr, path_to_find = "/subroute/not_found"), NULL)
-  expect_null(allowed_verbs(pr, path_to_find = "/barret/"), NULL)
-  expect_null(allowed_verbs(pr, path_to_find = "/barret/wrong"), NULL)
+  expect_null(allowed_verbs(pr, path_to_find = "/subroute/not_found"))
+  expect_null(allowed_verbs(pr, path_to_find = "/barret/"))
+  expect_null(allowed_verbs(pr, path_to_find = "/barret/wrong"))
 
   expect_false(is_405(pr, path_to_find = "/barret/test", "GET"))
   expect_true(is_405(pr, path_to_find = "/barret/test", "POST"))
