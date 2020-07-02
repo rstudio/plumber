@@ -72,7 +72,7 @@ unmount_ui <- function(pr, ui_info) {
 
   # Mount UIs
   ui_unmount <- .globals$UIs$unmount[[ui_info$ui]]
-  if (!is.null(ui_unmount)) {
+  if (length(ui_unmount) && is.function(ui_unmount)) {
     ui_unmount(pr = pr)
   }
 }
