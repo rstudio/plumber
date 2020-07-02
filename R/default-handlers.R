@@ -59,7 +59,7 @@ allowed_verbs <- function(pr, path_to_find) {
 
     # if the front of the urls don't match, move on to next mount
     if (!identical(
-      substr(path_to_find, 0, nchar(mount_path)),
+      substr(path_to_find, 1, nchar(mount_path)),
       mount_path
     )) {
       next
