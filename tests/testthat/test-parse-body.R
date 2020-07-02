@@ -113,12 +113,12 @@ test_that("Test an array of files upload", {
   bin_file <- test_path("files/multipart-files-array.bin")
   body <- readBin(bin_file, what = "raw", n = file.info(bin_file)$size)
   parsed_body <- parseBody(body,
-                           "multipart/form-data; boundary=---------------------------113514388833134833704250818942",
-                           make_parser(c("multi", "octet")))
-  expect_equal(names(parsed_body), "files")
-  expect_length(parsed_body[["files"]], 3)
-  expect_equal(names(parsed_body[["files"]])[2], "text2.bin")
-  expect_equal(rawToChar(parsed_body[["files"]][[2]]), "b")
+                           "multipart/form-data; boundary=---------------------------286326291134907228894146459692",
+                           make_parser("all"))
+  expect_equal(names(parsed_body), c("files", "dt"))
+  expect_length(parsed_body[["files"]], 4)
+  expect_equal(names(parsed_body[["files"]])[2], "text1.bin")
+  expect_equal(rawToChar(parsed_body[["files"]][[2]]), "a")
 })
 
 test_that("Key val combiner does not alter structure of results", {
