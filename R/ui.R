@@ -39,7 +39,7 @@ mount_ui <- function(pr, host, port, ui_info, callback) {
   }
 
   # Use callback when defined
-  if (is.function(callback)) {
+  if (length(callback) && is.function(callback)) {
     callback(ui_url)
   }
 
