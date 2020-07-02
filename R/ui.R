@@ -25,7 +25,7 @@ mount_ui <- function(pr, host, port, ui_info, callback) {
   mount_openapi(pr, api_url)
 
   # Mount UIs
-  if (isTRUE(length(.globals$UIs$mount)==0L)) {
+  if (length(.globals$UIs$mount) == 0) {
     message("No UI available in namespace. See help(add_ui).")
     return()
   }
@@ -39,7 +39,7 @@ mount_ui <- function(pr, host, port, ui_info, callback) {
   }
 
   # Use callback when defined
-  if (is.function(callback)) {
+  if (length(callback) && is.function(callback)) {
     callback(ui_url)
   }
 
@@ -72,7 +72,7 @@ unmount_ui <- function(pr, ui_info) {
 
   # Mount UIs
   ui_unmount <- .globals$UIs$unmount[[ui_info$ui]]
-  if (!is.null(ui_unmount)) {
+  if (length(ui_unmount) && is.function(ui_unmount)) {
     ui_unmount(pr = pr)
   }
 }

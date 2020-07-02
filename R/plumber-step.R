@@ -225,7 +225,10 @@ PlumberEndpoint <- R6Class(
     },
     #' @description retrieve endpoint defined parameters
     getEndpointParams = function() {
-      if (is.na(self$params) || isTRUE(length(self$params) == 0L)) {
+      if (length(self$params) == 0) {
+        return(list())
+      }
+      if (isTRUE(is.na(self$params))) {
         return(list())
       }
       self$params
