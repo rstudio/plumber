@@ -845,7 +845,7 @@ plumber <- R6Class(
     #' @param ui a character value or a logical value. Default to `plumber.ui` option value.
     #' @param ... Other params to be passed to ui functions.
     setUI = function(ui = getOption("plumber.ui", TRUE), ...) {
-      stopifnot(isTRUE(length(ui) == 1L))
+      stopifnot(length(ui) == 1)
       stopifnot(is.logical(ui) || is.character(ui))
       if (isTRUE(ui)) {
         ui <- "swagger"
