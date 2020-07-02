@@ -22,3 +22,5 @@
 /docs/appendix-a* /articles/migration.html 302
 
 /docs/index.html  /articles/introduction.html 302
+
+/docs/* / 302
