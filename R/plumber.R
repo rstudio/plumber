@@ -223,7 +223,7 @@ plumber <- R6Class(
       private$errorHandler <- defaultErrorHandler()
       private$notFoundHandler <- default404Handler
       private$maxSize <- getOption('plumber.maxRequestSize', 0) #0 Unlimited
-      private$ui_info <- list(enabled = TRUE, ui = getOption("plumber.ui", TRUE), args = list())
+      self$setUI()
 
       # Add in the initial filters
       for (fn in names(filters)){
