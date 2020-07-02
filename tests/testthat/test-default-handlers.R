@@ -22,6 +22,17 @@ test_that("405 handling is ok, get the right verbs", {
   expect_false(is_405(pr, path_to_find = "/barret/test", "GET"))
   expect_true(is_405(pr, path_to_find = "/barret/test", "POST"))
   expect_false(is_405(pr, path_to_find = "/subroute/not_found"))
+
+  pr <- plumber$new()
+  sub <- plumber$new()
+  sub$handle("GET", "/test", force)
+  pr$mount("/", sub)
+
+  expect_equal(allowed_verbs(pr, path_to_find = "/test"), "GET")
+  expect_null(allowed_verbs(pr, path_to_find = "/subroute/not_found"))
+  expect_null(allowed_verbs(pr, path_to_find = "/barret/"))
+  expect_null(allowed_verbs(pr, path_to_find = "/barret/wrong"))
+
 })
 
 test_that("default error handler returns an object with an error property", {
