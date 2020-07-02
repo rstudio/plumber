@@ -17,3 +17,7 @@
 ^\.github
 ^\.httr-oauth$
 ^\.github$
+^docs$
+^pkgdown$
+^logo$
+^vignettes$
