@@ -76,7 +76,7 @@ allowed_verbs <- function(pr, path_to_find) {
   }
 
   # return verbs
-  return(verbs_allowed)
+  sort(unique(verbs_allowed))
 }
 
 #' @noRd
