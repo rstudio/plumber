@@ -48,6 +48,7 @@ reference:
   - 'PlumberStep'
   - 'addParser'
   - 'addSerializer'
+  - 'add_ui'
   - 'do_configure_https'
   - 'do_deploy_api'
   - 'do_forward'
