@@ -286,6 +286,7 @@ add_parsers_onLoad <- function() {
   add_parser("application/rds",                   parser_rds())
   add_parser("multipart/form-data",               parser_multi())
   add_parser("application/octet",                 parser_octet())
+  add_parser("application/octet-stream",          parser_octet())
 
   add_parser("text/plain", parser_text())
 
