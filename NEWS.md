@@ -56,9 +56,11 @@ plumber 1.0.0
 
 * Added yaml support, serializer and parser. (@meztez, #556)
 
-* Added csv serializer (@pachamaltese, #520)
+* Added `serializer_csv()` (@pachamaltese, #520)
 
-* Added svg serializer (@pachamaltese, #398)
+* Added svg image serializer (@pachamaltese, #398)
+
+* Added `serializer_headers(header_list)` method which sets a list of static headers for each serialized value. (#585)
 
 * Update documentation on R6 objects (@meztez, #530)
 
