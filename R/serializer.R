@@ -30,6 +30,23 @@ serializer_identity <- function(){
   serializer_identity_
 }
 
+
+# TODO-barret export and document
+as_attachment <- function(value, filename = NULL) {
+  stopifnot(is.character(filename) || is.null(filename))
+  if (is.character(filename)) {
+    stopifnot(length(filename) == 1)
+  }
+  structure(
+    list(
+      value = value,
+      filename = filename
+    ),
+    class = "plumber_disposition_attachment"
+  )
+}
+
+
 #' Plumber Serializers
 #'
 #' Serializers are used in Plumber to transform the R object produced by a
@@ -73,10 +90,27 @@ serialize_type <- function(content_type, serialize_fn = identity) {
   function(val, req, res, errorHandler) {
     tryCatch({
       # call serialize_fn within try catch to possibly call error handler
+      headers <- list("Content-Type" = content_type)
+      if (inherits(val, "plumber_disposition_attachment")) {
+        # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
+        headers[["Content-Disposition"]] <-
+          if (is.null(val$filename)) {
+            "attachment"
+          } else {
+            paste0(
+              "attachment; filename=\"",
+              #> path information should be stripped
+              basename(val$filename),
+              "\""
+            )
+          }
+        # make val the contained value and not the file structure
+        val <- val$value
+      }
       val <- serialize_fn(val)
-      with_content_type <- serializer_headers(list("Content-Type" = content_type))
+      with_headers <- serializer_headers(headers)
 
-      with_content_type(val, req, res, errorHandler)
+      with_headers(val, req, res, errorHandler)
     }, error = function(err) {
       errorHandler(req, res, err)
     })
@@ -151,6 +185,13 @@ serializer_yaml <- function(...) {
   })
 }
 
+#' @describeIn serializers Text serializer. See [format()] for more details.
+#' @export
+serializer_text <- function(...) {
+  serialize_type("text/plain; charset=UTF-8", function(val) {
+    format(val, ...)
+  })
+}
 
 
 
@@ -202,5 +243,6 @@ add_serializers_onLoad <- function() {
   addSerializer("rds",         serializer_rds)
   addSerializer("xml",         serializer_xml)
   addSerializer("yaml",        serializer_yaml)
+  addSerializer("text",        serializer_text)
   addSerializer("htmlwidget",  serializer_htmlwidget)
 }
