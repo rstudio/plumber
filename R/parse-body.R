@@ -245,7 +245,12 @@ parser_multi <- function() {
     toparse <- parse_multipart(value, boundary)
     # content-type detection
     lapply(toparse, function(x) {
-      if (is.null(x$content_type) || isTRUE(x$content_type == "application/octet-stream")) {
+      if (
+        is.null(x$content_type) ||
+        # allows for files to be shipped as octect, but parsed using the matching value in `knownContentTypes`
+        # (Ex: `.rds` files -> `application/rds` which has a proper RDS parser)
+        isTRUE(stri_detect_fixed(x$content_type, "application/octet-stream"))
+      ) {
         if (!is.null(x$filename)) {
           # Guess content-type from file extension
           x$content_type <- getContentType(tools::file_ext(x$filename))
