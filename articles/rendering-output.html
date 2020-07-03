@@ -17,7 +17,9 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Rendering Output">
+<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Rendering Output">
 <meta property="og:description" content="plumber">
 <meta property="og:image" content="https://www.rplumber.io/logo.svg">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -104,7 +106,13 @@
   </a>
 </li>
       </ul>
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
+      </form>
+      
+    </div>
 <!--/.nav-collapse -->
   </div>
 <!--/.container -->
@@ -339,7 +347,7 @@
 </pre></div>
 <p>Since this API is using a <code>PUT</code> request to test this API, we’ll use <code>curl</code> on the command line to test it. (There’s nothing about cookies that necessitates <code>PUT</code> requests; you could just as easily modify this API to use a <code>GET</code> request.) We can start by visiting the <code>/letter</code> endpoint and we’ll see that the API defaults to a lower-case alphabet. <code>curl http://localhost:8000/letter</code></p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">{</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a>  <span class="dt">"letter"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"x"</span><span class="ot">]</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>  <span class="dt">"letter"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"f"</span><span class="ot">]</span></span>
 <span id="cb13-3"><a href="#cb13-3"></a><span class="fu">}</span></span></code></pre></div>
 <p>If we send a <code>PUT</code> request and specify the <code>capital</code> parameter, a cookie will be set on the client which will allow the server to accommodate our preference in future requests. In <code>curl</code>, you need to specify a file in which you want to save these cookies using the <code>-c</code> option. This is a good reminder that clients handle cookies differently – some won’t support them at all – so be sure that the clients you intend to support with your API play nicely with cookies if you want to use them.</p>
 <p>To send a <code>PUT</code> request, setting the parameter <code>capital</code> to <code>1</code>, we could invoke: <code>curl -c cookies.txt -X PUT --data 'capital=1' "http://localhost:8000/preferences"</code>. If you print out the <code>cookies.txt</code> file, you should now see that it contains a single cookie called <code>capitalize</code> with a value of <code>1</code>.</p>
@@ -400,7 +408,20 @@
 </div>
 
   
-
-
-  </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
+  docsearch({
+    
+    
+    apiKey: '',
+    indexName: '',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+</body>
 </html>
