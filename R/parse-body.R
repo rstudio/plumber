@@ -45,8 +45,8 @@ parser_picker <- function(content_type, first_byte, filename = NULL) {
   # "application/json; charset=UTF-8"
   # to
   # "application/json"
-  if (grepl(";", content_type, fixed = TRUE)) {
-    content_type <- strsplit(content_type, ";")[[1]][1]
+  if (stri_detect_fixed(content_type, ";")) {
+    content_type <- stri_split_fixed(content_type, ";")[[1]][1]
   }
 
   parser <- parsers[[content_type]]
