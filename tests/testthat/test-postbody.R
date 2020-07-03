@@ -71,6 +71,6 @@ test_that("Test multipart parser", {
 test_that("Test multipart respect content-type", {
   bin_file <- test_path("files/multipart-ctype.bin")
   body <- readBin(bin_file, what = "raw", n = file.info(bin_file)$size)
-  parsed_body <- parseBody(body, "multipart/form-data; boundary=---------------------------90908882332870323642673870272")
+  parsed_body <- parse_body(body, "multipart/form-data; boundary=---------------------------90908882332870323642673870272")
   expect_equal(class(parsed_body$file), "character")
 })
