@@ -42,7 +42,9 @@ knownContentTypes <- list(
   dotx='application/vnd.openxmlformats-officedocument.wordprocessingml.template',
   xlam='application/vnd.ms-excel.addin.macroEnabled.12',
   xlsb='application/vnd.ms-excel.sheet.binary.macroEnabled.12',
-  rds='application/rds')
+  rds='application/rds',
+  tsv="text/tab-separated-values",
+  csv="text/csv")
 
 getContentType <- function(ext, defaultType='application/octet-stream') {
   ct <- knownContentTypes[[tolower(ext)]]

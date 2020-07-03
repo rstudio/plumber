@@ -1,21 +1,21 @@
 context("POST body")
 
 test_that("JSON is consumed on POST", {
-  expect_equal(parseBody('{"a":"1"}', content_type = NULL), list(a = "1"))
+  expect_equal(parse_body('{"a":"1"}', content_type = NULL), list(a = "1"))
 })
 
 test_that("ending in `==` does not produce a unexpected key", {
   # See https://github.com/rstudio/plumber/issues/463
-  expect_equal(parseBody("randomcharshere==", content_type = NULL), list())
+  expect_equal(parse_body("randomcharshere==", content_type = NULL), list())
 })
 
 test_that("Query strings on post are handled correctly", {
-  expect_equivalent(parseBody("a="), list()) # It's technically a named list()
-  expect_equal(parseBody("a=1&b=&c&d=1", content_type = NULL), list(a="1", d="1"))
+  expect_equivalent(parse_body("a="), list()) # It's technically a named list()
+  expect_equal(parse_body("a=1&b=&c&d=1", content_type = NULL), list(a="1", d="1"))
 })
 
 test_that("Able to handle UTF-8", {
-  expect_equal(parseBody('{"text":"Ã©lise"}', content_type = "application/json; charset=UTF-8")$text, "Ã©lise")
+  expect_equal(parse_body('{"text":"Ã©lise"}', content_type = "application/json; charset=UTF-8")$text, "Ã©lise")
 })
 
 #charset moved to part parsing
@@ -35,7 +35,7 @@ test_that("filter passes on content-type", {
     args = c()
   )
   with_mock(
-    parseBody = function(body, content_type = "unknown") {
+    parse_body = function(body, content_type = "unknown") {
       print(content_type)
       body
     },
@@ -46,21 +46,21 @@ test_that("filter passes on content-type", {
 
 # parsers
 test_that("Test text parser", {
-  expect_equal(parseBody("Ceci est un texte.", "text/html"), "Ceci est un texte.")
+  expect_equal(parse_body("Ceci est un texte.", "text/html"), "Ceci est un texte.")
 })
 
 test_that("Test yaml parser", {
   skip_if_not_installed("yaml")
 
   r_object <- list(a=1,b=list(c=2,d=list(e=3,f=4:6)))
-  expect_equal(parseBody(charToRaw(yaml::as.yaml(r_object)), "application/x-yaml"), r_object)
+  expect_equal(parse_body(charToRaw(yaml::as.yaml(r_object)), "application/x-yaml"), r_object)
 })
 
 test_that("Test multipart parser", {
 
   bin_file <- test_path("files/multipart-form.bin")
   body <- readBin(bin_file, what = "raw", n = file.info(bin_file)$size)
-  parsed_body <- parseBody(body, "multipart/form-data; boundary=----WebKitFormBoundaryMYdShB9nBc32BUhQ")
+  parsed_body <- parse_body(body, "multipart/form-data; boundary=----WebKitFormBoundaryMYdShB9nBc32BUhQ")
 
   expect_equal(names(parsed_body), c("json", "img1", "img2", "rds"))
   expect_equal(parsed_body[["rds"]], women)
