@@ -4,10 +4,10 @@
 \alias{parser_query}
 \alias{parser_json}
 \alias{parser_text}
-\alias{parser_csv}
-\alias{parser_tsv}
 \alias{parser_yaml}
 \alias{parser_read_file}
+\alias{parser_csv}
+\alias{parser_tsv}
 \alias{parser_rds}
 \alias{parser_octet}
 \alias{parser_multi}
@@ -19,13 +19,13 @@ parser_json(...)
 
 parser_text(parse_fn = identity)
 
-parser_csv(...)
-
-parser_tsv(...)
-
 parser_yaml(...)
 
 parser_read_file(read_fn = readLines)
+
+parser_csv(...)
+
+parser_tsv(...)
 
 parser_rds(...)
 
@@ -54,14 +54,14 @@ non-default behavior.
 
 \item \code{parser_text}: Helper parser to parse plain text
 
-\item \code{parser_csv}: CSV parser
-
-\item \code{parser_tsv}: TSV parser
-
 \item \code{parser_yaml}: YAML parser
 
 \item \code{parser_read_file}: Helper parser that writes the binary post body to a file and reads it back again using \code{read_fn}.
 This parser should be used when reading from a file is required.
+
+\item \code{parser_csv}: CSV parser
+
+\item \code{parser_tsv}: TSV parser
 
 \item \code{parser_rds}: RDS parser
 

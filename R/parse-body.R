@@ -168,24 +168,6 @@ parser_text <- function(parse_fn = identity) {
 }
 
 
-#' @describeIn parsers CSV parser
-#' @export
-parser_csv <- function(...) {
-  parser_text(function(val) {
-    utils::read.csv(val, ...)
-  })
-}
-
-
-#' @describeIn parsers TSV parser
-#' @export
-parser_tsv <- function(...) {
-  parser_text(function(val) {
-    utils::read.delim(val, ...)
-  })
-}
-
-
 #' @describeIn parsers YAML parser
 #' @export
 parser_yaml <- function(...) {
@@ -203,7 +185,7 @@ parser_yaml <- function(...) {
 #' @export
 parser_read_file <- function(read_fn = readLines) {
   stopifnot(is.function(read_fn))
-  function(value, filename, ...) {
+  function(value, filename = "", ...) {
     tmp <- tempfile("plumb", fileext = paste0("_", basename(filename)))
     on.exit({
       file.remove(tmp)
@@ -213,6 +195,24 @@ parser_read_file <- function(read_fn = readLines) {
   }
 }
 
+#' @describeIn parsers CSV parser
+#' @export
+parser_csv <- function(...) {
+  parser_read_file(function(val) {
+    utils::read.csv(val, ...)
+  })
+}
+
+
+#' @describeIn parsers TSV parser
+#' @export
+parser_tsv <- function(...) {
+  parser_read_file(function(val) {
+    utils::read.delim(val, ...)
+  })
+}
+
+
 #' @describeIn parsers RDS parser
 #' @export
 parser_rds <- function(...) {
@@ -220,8 +220,6 @@ parser_rds <- function(...) {
     readRDS(value, ...)
   })
 }
-
-
 
 
 #' @describeIn parsers Octet stream parser
