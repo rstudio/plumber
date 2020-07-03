@@ -192,7 +192,7 @@ parser_multi <- function() {
     toparse <- parse_multipart(value, boundary)
     # content-type detection
     lapply(toparse, function(x) {
-      if (!is.null(x$filename)) {
+      if (x$content_type %in% c(NULL, "application/octet-stream") && !is.null(x$filename)) {
         x$content_type <- getContentType(tools::file_ext(x$filename))
       }
       parseRaw(x)
