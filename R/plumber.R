@@ -837,6 +837,7 @@ plumber <- R6Class(
     call = function(req) {
       # Set the arguments to an empty list
       req$args <- list()
+      req$pr <- self
       req$.internal <- new.env()
 
       res <- PlumberResponse$new(private$serializer)

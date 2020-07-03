@@ -109,6 +109,8 @@ test_that("integration of path parsing works", {
   expect_equal(r$route(make_req("GET", "/car/ratio/."), PlumberResponse$new()),
                list(error = "404 - Resource Not Found"))
   expect_equal(r$route(make_req("GET", "/car/sold/true"), PlumberResponse$new()), TRUE)
+  expect_match(r$call(make_req("POST", "/car/sold/true"))$body,
+               "405 - Method Not Allowed")
 })
 
 test_that("multiple variations in path works nicely with function args detection", {

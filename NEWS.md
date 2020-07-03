@@ -48,6 +48,10 @@ plumber 1.0.0
 
 ### Minor new features and improvements
 
+* Support HTTP 405 Code. (@meztez, #554)
+
+* Attached the router to the incoming request object at `req$pr`. (@meztez, #554)
+
 * Documented plumber options. Add `options_plumber`. (@meztez, #555)
 
 * Added yaml support, serializer and parser. (@meztez, #556)
