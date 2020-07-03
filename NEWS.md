@@ -52,6 +52,8 @@ plumber 1.0.0
 
 * Added yaml support, serializer and parser. (@meztez, #556)
 
+* Added csv and tsv parsers (#584)
+
 * Added csv serializer (@pachamaltese, #520)
 
 * Added svg serializer (@pachamaltese, #398)
