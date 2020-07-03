@@ -171,10 +171,10 @@ combine_keys <- function(obj, call_unlist = TRUE) {
       }
     } else {
       function(x) {
-        if (isTRUE(length(x) > 1)) {
-          unname(x)
+        if (length(x) == 1) {
+          x[[1]]
         } else {
-          unname(x)[[1]]
+          do.call(c, x)
         }
       }
     }
