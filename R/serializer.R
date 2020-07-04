@@ -8,11 +8,14 @@
 #'
 #' @param name The name of the serializer (character string)
 #' @param serializer The serializer to be added.
+#' @param verbose Logical value which determines if a message should be printed when overwriting serializers
 #'
 #' @export
-addSerializer <- function(name, serializer) {
+addSerializer <- function(name, serializer, verbose = TRUE) {
   if (!is.null(.globals$serializers[[name]])) {
-    stop ("Already have a serializer by the name of ", name)
+    if (isTRUE(verbose)) {
+      stop ("Already have a serializer by the name of ", name)
+    }
   }
   .globals$serializers[[name]] <- serializer
 }
