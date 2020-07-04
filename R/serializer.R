@@ -81,31 +81,37 @@ serializer_headers <- function(headers, serialize_fn = identity) {
 
   function(val, req, res, errorHandler) {
     tryCatch({
-      Map(names(headers), headers, f = function(header, header_val) {
-        # `res` is an R6 object
-        res$setHeader(header, header_val)
-      })
 
       # handle `as_attachment()` before serializing
       if (inherits(val, "plumber_attachment")) {
         # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
-        if (is.null(headers[["Content-Disposition"]])) {
-          headers[["Content-Disposition"]] <-
-            if (is.null(val$filename)) {
-              "attachment"
-            } else {
-              paste0(
-                "attachment; filename=\"",
+        #> Used on the body itself, Content-Disposition has no effect.
+        ## Therefore `Content-Type` MUST exist
+        if (!is.null(headers[["Content-Type"]])) {
+          # do not overwrite pre-existing header value
+          if (is.null(headers[["Content-Disposition"]])) {
+            headers[["Content-Disposition"]] <-
+              if (is.null(val$filename)) {
+                "attachment"
+              } else {
                 #> path information should be stripped
-                basename(val$filename),
-                "\""
-              )
-            }
+                filename <- basename(val$filename)
+                if (stri_detect_fixed(filename, "\"") || stri_detect_fixed(filename, "'")) {
+                  stop("`filename` may not contain quotes")
+                }
+                paste0("attachment; filename=\"", filename, "\"")
+              }
+          }
         }
-
         # make `val` the contained value and not the `as_attachment()` structure
         val <- val$value
       }
+
+      # set headers after upgrading headers
+      Map(names(headers), headers, f = function(header, header_val) {
+        # `res` is an R6 object
+        res$setHeader(header, header_val)
+      })
 
       # serialize
       val <- serialize_fn(val)
@@ -128,7 +134,6 @@ serializer_content_type <- function(type, serialize_fn = identity) {
   if (missing(type)){
     stop("You must provide the custom content type to the serializer_content_type")
   }
-  stopifnot(is.function(serialize_fn))
 
   serializer_headers(
     list("Content-Type" = type),
