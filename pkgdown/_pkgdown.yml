@@ -5,10 +5,10 @@ url: https://www.rplumber.io
 
 template:
   assets: pkgdown/assets
-#   params:
-#     docsearch:
-#       api_key: "KEY"
-#       index_name: "NAME"
+  params:
+    docsearch:
+      apiKey: 'e8f0e2420e2e9aac7973efb2cc877b06'
+      indexName: 'rplumber'
 
 authors:
   Barret Schloerke:

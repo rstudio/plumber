@@ -41,6 +41,7 @@ each separate verb/path into its own endpoint, so we just do that.}
 \itemize{
 \item \href{#method-getTypedParams}{\code{PlumberEndpoint$getTypedParams()}}
 \item \href{#method-canServe}{\code{PlumberEndpoint$canServe()}}
+\item \href{#method-matchesPath}{\code{PlumberEndpoint$matchesPath()}}
 \item \href{#method-new}{\code{PlumberEndpoint$new()}}
 \item \href{#method-getPathParams}{\code{PlumberEndpoint$getPathParams()}}
 \item \href{#method-getFuncParams}{\code{PlumberEndpoint$getFuncParams()}}
@@ -85,6 +86,26 @@ ability to serve request
 }
 \subsection{Returns}{
 a logical. \code{TRUE} when endpoint can serve request.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-matchesPath"></a>}}
+\if{latex}{\out{\hypertarget{method-matchesPath}{}}}
+\subsection{Method \code{matchesPath()}}{
+determines if route matches requested path
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$matchesPath(path)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{path}}{a url path}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+a logical. \code{TRUE} when endpoint matches the requested path.
 }
 }
 \if{html}{\out{<hr>}}
