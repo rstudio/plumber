@@ -17,7 +17,8 @@ addSerializer <- function(name, serializer) {
   .globals$serializers[[name]] <- serializer
 }
 
-# internal function to use directly. Others should use `serializer_identity()`
+# internal function to use directly within this file only. (performance purposes)
+# Other files should use `serializer_identity()` to avoid confusion
 serializer_identity_ <- function(val, req, res, errorHandler) {
   tryCatch({
     res$body <- val
@@ -31,7 +32,24 @@ serializer_identity <- function(){
 }
 
 
-# TODO-barret export and document
+#' Return an attachment response
+#'
+#' This will set the appropriate fields in the `Content-Disposition` header value.
+#' To make sure the attachement is used, be sure your serializer eventually calls `serializer_headers`
+#'
+#' @param value Response value to be saved
+#' @param filename File name to use when saving the attachment.
+#'   If no `filename` is provided, the `value` will be treated as a regular attachment
+#' @return Object with class `"plumber_attachment"`
+#' @examples
+#' # plumber.R
+#'
+#' #' @get /data
+#' #' @serializer csv
+#' function() {
+#'   # will cause the file to be saved as `iris.csv`, not `data` or `data.csv`
+#'   as_attachment(iris, "iris.csv")
+#' }
 as_attachment <- function(value, filename = NULL) {
   stopifnot(is.character(filename) || is.null(filename))
   if (is.character(filename)) {
@@ -42,7 +60,7 @@ as_attachment <- function(value, filename = NULL) {
       value = value,
       filename = filename
     ),
-    class = "plumber_disposition_attachment"
+    class = "plumber_attachment"
   )
 }
 
@@ -53,18 +71,46 @@ as_attachment <- function(value, filename = NULL) {
 #' filter/endpoint into an HTTP response that can be returned to the client. See
 #' [here](https://book.rplumber.io/articles/rendering-output.html#serializers-1) for
 #' more details on Plumber serializers and how to customize their behavior.
-#' @describeIn serializers Add a static list of headers to each return value
+#' @describeIn serializers Add a static list of headers to each return value. Will add `Content-Disposition` header if a value is the result of `as_attachment()`.
 #' @param ... extra arguments supplied to respective internal serialization function.
 #' @param headers `list()` of headers to add to the response object
+#' @param serialize_fn Function to serialize the data. The result object will be converted to a character string. Ex: [jsonlite::toJSON()].
 #' @export
-serializer_headers <- function(headers) {
+serializer_headers <- function(headers, serialize_fn = identity) {
+  stopifnot(is.function(serialize_fn))
+
   function(val, req, res, errorHandler) {
     tryCatch({
       Map(names(headers), headers, f = function(header, header_val) {
-        # applied to r6 object
+        # `res` is an R6 object
         res$setHeader(header, header_val)
       })
 
+      # handle `as_attachment()` before serializing
+      if (inherits(val, "plumber_attachment")) {
+        # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
+        if (is.null(headers[["Content-Disposition"]])) {
+          headers[["Content-Disposition"]] <-
+            if (is.null(val$filename)) {
+              "attachment"
+            } else {
+              paste0(
+                "attachment; filename=\"",
+                #> path information should be stripped
+                basename(val$filename),
+                "\""
+              )
+            }
+        }
+
+        # make `val` the contained value and not the `as_attachment()` structure
+        val <- val$value
+      }
+
+      # serialize
+      val <- serialize_fn(val)
+
+      # return value
       serializer_identity_(val, req, res, errorHandler)
     }, error = function(err) {
       errorHandler(req, res, err)
@@ -78,45 +124,17 @@ serializer_headers <- function(headers) {
 # name can not change!
 #' @param type The value to provide for the `Content-Type` HTTP header.
 #' @export
-serializer_content_type <- function(type) {
+serializer_content_type <- function(type, serialize_fn = identity) {
   if (missing(type)){
     stop("You must provide the custom content type to the serializer_content_type")
   }
-  serialize_type(type, identity)
+  stopifnot(is.function(serialize_fn))
+
+  serializer_headers(
+    list("Content-Type" = type),
+    serialize_fn
+  )
 }
-
-serialize_type <- function(content_type, serialize_fn = identity) {
-
-  function(val, req, res, errorHandler) {
-    tryCatch({
-      # call serialize_fn within try catch to possibly call error handler
-      headers <- list("Content-Type" = content_type)
-      if (inherits(val, "plumber_disposition_attachment")) {
-        # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
-        headers[["Content-Disposition"]] <-
-          if (is.null(val$filename)) {
-            "attachment"
-          } else {
-            paste0(
-              "attachment; filename=\"",
-              #> path information should be stripped
-              basename(val$filename),
-              "\""
-            )
-          }
-        # make val the contained value and not the file structure
-        val <- val$value
-      }
-      val <- serialize_fn(val)
-      with_headers <- serializer_headers(headers)
-
-      with_headers(val, req, res, errorHandler)
-    }, error = function(err) {
-      errorHandler(req, res, err)
-    })
-  }
-}
-
 
 #' @describeIn serializers CSV serializer. See [readr::format_csv()] for more details.
 #' @export
@@ -125,7 +143,7 @@ serializer_csv <- function(...) {
     stop("`readr` must be installed for `serializer_csv` to work")
   }
 
-  serialize_type("text/csv; charset=UTF-8", function(val) {
+  serializer_content_type("text/csv; charset=UTF-8", function(val) {
     readr::format_csv(val, ...)
   })
 }
@@ -135,14 +153,14 @@ serializer_csv <- function(...) {
 #' @describeIn serializers HTML serializer
 #' @export
 serializer_html <- function() {
-  serialize_type("text/html; charset=UTF-8")
+  serializer_content_type("text/html; charset=UTF-8")
 }
 
 
 #' @describeIn serializers JSON serializer. See [jsonlite::toJSON()] for more details.
 #' @export
 serializer_json <- function(...) {
-  serialize_type("application/json; charset=UTF-8", function(val) {
+  serializer_content_type("application/json; charset=UTF-8", function(val) {
     toJSON(val, ...)
   })
 }
@@ -169,7 +187,7 @@ serializer_rds <- function(version = "2", ascii = FALSE, ...) {
       )
     }
   }
-  serialize_type("application/octet-stream", function(val) {
+  serializer_content_type("application/octet-stream", function(val) {
     base::serialize(val, NULL, ascii = ascii, version = version, ...)
   })
 }
@@ -180,7 +198,7 @@ serializer_yaml <- function(...) {
   if (!requireNamespace("yaml", quietly = TRUE)) {
     stop("yaml must be installed for the yaml serializer to work")
   }
-  serialize_type("application/x-yaml; charset=UTF-8", function(val) {
+  serializer_content_type("application/x-yaml; charset=UTF-8", function(val) {
     yaml::as.yaml(val, ...)
   })
 }
@@ -188,7 +206,7 @@ serializer_yaml <- function(...) {
 #' @describeIn serializers Text serializer. See [format()] for more details.
 #' @export
 serializer_text <- function(...) {
-  serialize_type("text/plain; charset=UTF-8", function(val) {
+  serializer_content_type("text/plain; charset=UTF-8", function(val) {
     format(val, ...)
   })
 }
@@ -203,7 +221,7 @@ serializer_htmlwidget <- function(...) {
           call. = FALSE)
   }
 
-  serialize_type("text/html; charset=UTF-8", function(val) {
+  serializer_content_type("text/html; charset=UTF-8", function(val) {
     # Write out a temp file. htmlwidgets (or pandoc?) seems to require that this
     # file end in .html or the selfcontained=TRUE argument has no effect.
     file <- tempfile(fileext = ".html")

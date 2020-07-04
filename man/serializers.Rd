@@ -9,12 +9,13 @@
 \alias{serializer_unboxed_json}
 \alias{serializer_rds}
 \alias{serializer_yaml}
+\alias{serializer_text}
 \alias{serializer_htmlwidget}
 \title{Plumber Serializers}
 \usage{
-serializer_headers(headers)
+serializer_headers(headers, serialize_fn = identity)
 
-serializer_content_type(type)
+serializer_content_type(type, serialize_fn = identity)
 
 serializer_csv(...)
 
@@ -28,10 +29,14 @@ serializer_rds(version = "2", ascii = FALSE, ...)
 
 serializer_yaml(...)
 
+serializer_text(...)
+
 serializer_htmlwidget(...)
 }
 \arguments{
 \item{headers}{\code{list()} of headers to add to the response object}
+
+\item{serialize_fn}{Function to serialize the data. The result object will be converted to a character string. Ex: \code{\link[jsonlite:toJSON]{jsonlite::toJSON()}}.}
 
 \item{type}{The value to provide for the \code{Content-Type} HTTP header.}
 
@@ -56,7 +61,7 @@ more details on Plumber serializers and how to customize their behavior.
 }
 \section{Functions}{
 \itemize{
-\item \code{serializer_headers}: Add a static list of headers to each return value
+\item \code{serializer_headers}: Add a static list of headers to each return value. Will add \code{Content-Disposition} header if a value is the result of \code{as_attachment()}.
 
 \item \code{serializer_content_type}: Adds a \code{Content-Type} header to the response object
 
@@ -71,6 +76,8 @@ more details on Plumber serializers and how to customize their behavior.
 \item \code{serializer_rds}: RDS serializer. See \code{\link[=serialize]{serialize()}} for more details.
 
 \item \code{serializer_yaml}: YAML serializer. See \code{\link[yaml:as.yaml]{yaml::as.yaml()}} for more details.
+
+\item \code{serializer_text}: Text serializer. See \code{\link[=format]{format()}} for more details.
 
 \item \code{serializer_htmlwidget}: htmlwidget serializer. See \code{\link[htmlwidgets:saveWidget]{htmlwidgets::saveWidget()}} for more details.
 }}
