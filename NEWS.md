@@ -60,7 +60,9 @@ plumber 1.0.0
 
 * Added svg image serializer (@pachamaltese, #398)
 
-* Added `serializer_headers(header_list)` method which sets a list of static headers for each serialized value (#585)
+* Added `serializer_headers(header_list)` method which sets a list of static headers for each serialized value. Heavily inspired from @ycphs (#455). (#585)
+
+* Added `as_attachment(value, filename)` method which allows routes to return a file attachment with a custom name. (#585)
 
 * Added `serializer_text()` (#585)
 
