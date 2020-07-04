@@ -25,13 +25,13 @@ mount_ui <- function(pr, host, port, ui_info, callback) {
   mount_openapi(pr, api_url)
 
   # Mount UIs
-  if (length(.globals$UIs$mount) == 0) {
+  if (length(.globals$UIs) == 0) {
     message("No UI available in namespace. See help(add_ui).")
     return()
   }
 
   if (is_ui_available(ui_info$ui)) {
-    ui_mount <- .globals$UIs$mount[[ui_info$ui]]
+    ui_mount <- .globals$UIs[[ui_info$ui]]$mount
     ui_url <- do.call(ui_mount, c(list(pr, api_url), ui_info$args))
     message("Running ", ui_info$ui, " UI at ", ui_url, sep = "")
   } else {
@@ -50,7 +50,7 @@ mount_ui <- function(pr, host, port, ui_info, callback) {
 # Check is UI is available
 #' @noRd
 is_ui_available <- function(ui) {
-  if (isTRUE(ui %in% names(.globals$UIs$mount))) {
+  if (isTRUE(ui %in% names(.globals$UIs))) {
     return(TRUE)
   } else {
     message("Unknown user interface \"", ui,"\". Maybe try library(", ui,").")
@@ -71,7 +71,7 @@ unmount_ui <- function(pr, ui_info) {
   unmount_openapi(pr)
 
   # Mount UIs
-  ui_unmount <- .globals$UIs$unmount[[ui_info$ui]]
+  ui_unmount <- .globals$UIs[[ui_info$ui]]$unmount
   if (length(ui_unmount) && is.function(ui_unmount)) {
     ui_unmount(pr = pr)
   }
@@ -98,7 +98,7 @@ mount_openapi <- function(pr, api_url) {
         api_url <- req$HTTP_REFERER
         api_url <- sub("(\\?.*)?$", "", api_url)
         api_url <- sub("index\\.html$", "", api_url)
-        api_url <- sub(paste0("__(", paste0(names(.globals$UIs$mount), collapse = "|"),")__/$"), "", api_url)
+        api_url <- sub(paste0("__(", paste0(names(.globals$UIs), collapse = "|"),")__/$"), "", api_url)
       }
     }
 
@@ -182,8 +182,8 @@ add_ui <- function(ui) {
     invisible()
   }
 
-  .globals$UIs$mount[[ui$name]] <- mount_ui_func
-  .globals$UIs$unmount[[ui$name]] <- unmount_ui_func
+  .globals$UIs[[ui$name]]$mount <- mount_ui_func
+  .globals$UIs[[ui$name]]$unmount <- unmount_ui_func
 
   invisible()
 }

@@ -92,8 +92,7 @@ addApiInfo_onLoad <- function() {
     c("file", "binary"),
     location = "requestBody",
     format = "binary",
-    realType = "string",
-    arraySupport = TRUE
+    realType = "string"
   )
 }
 
