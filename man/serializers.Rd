@@ -36,7 +36,7 @@ serializer_htmlwidget(...)
 \arguments{
 \item{headers}{\code{list()} of headers to add to the response object}
 
-\item{serialize_fn}{Function to serialize the data. The result object will be converted to a character string. Ex: \code{\link[jsonlite:toJSON]{jsonlite::toJSON()}}.}
+\item{serialize_fn}{Function to serialize the data. The result object will be converted to a character string. Ex: \code{jsonlite::toJSON}.}
 
 \item{type}{The value to provide for the \code{Content-Type} HTTP header.}
 
@@ -65,13 +65,13 @@ more details on Plumber serializers and how to customize their behavior.
 
 \item \code{serializer_content_type}: Adds a \code{Content-Type} header to the response object
 
-\item \code{serializer_csv}: CSV serializer. See \code{\link[readr:format_csv]{readr::format_csv()}} for more details.
+\item \code{serializer_csv}: CSV serializer. See \code{\link[readr:format_delim]{readr::format_csv()}} for more details.
 
 \item \code{serializer_html}: HTML serializer
 
-\item \code{serializer_json}: JSON serializer. See \code{\link[jsonlite:toJSON]{jsonlite::toJSON()}} for more details.
+\item \code{serializer_json}: JSON serializer. See \code{jsonlite::toJSON} for more details.
 
-\item \code{serializer_unboxed_json}: JSON serializer with \code{auto_unbox} defaulting to \code{TRUE}. See \code{\link[jsonlite:toJSON]{jsonlite::toJSON()}} for more details.
+\item \code{serializer_unboxed_json}: JSON serializer with \code{auto_unbox} defaulting to \code{TRUE}. See jsonlite::toJSON` for more details.
 
 \item \code{serializer_rds}: RDS serializer. See \code{\link[=serialize]{serialize()}} for more details.
 

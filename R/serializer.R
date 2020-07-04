@@ -74,7 +74,7 @@ as_attachment <- function(value, filename = NULL) {
 #' @describeIn serializers Add a static list of headers to each return value. Will add `Content-Disposition` header if a value is the result of `as_attachment()`.
 #' @param ... extra arguments supplied to respective internal serialization function.
 #' @param headers `list()` of headers to add to the response object
-#' @param serialize_fn Function to serialize the data. The result object will be converted to a character string. Ex: [jsonlite::toJSON()].
+#' @param serialize_fn Function to serialize the data. The result object will be converted to a character string. Ex: `jsonlite::toJSON`.
 #' @export
 serializer_headers <- function(headers, serialize_fn = identity) {
   stopifnot(is.function(serialize_fn))
@@ -141,7 +141,7 @@ serializer_content_type <- function(type, serialize_fn = identity) {
   )
 }
 
-#' @describeIn serializers CSV serializer. See [readr::format_csv()] for more details.
+#' @describeIn serializers CSV serializer. See \code{\link[readr:format_delim]{readr::format_csv()}} for more details.
 #' @export
 serializer_csv <- function(...) {
   if (!requireNamespace("readr", quietly = TRUE)) {
@@ -162,7 +162,7 @@ serializer_html <- function() {
 }
 
 
-#' @describeIn serializers JSON serializer. See [jsonlite::toJSON()] for more details.
+#' @describeIn serializers JSON serializer. See `jsonlite::toJSON` for more details.
 #' @export
 serializer_json <- function(...) {
   serializer_content_type("application/json; charset=UTF-8", function(val) {
@@ -170,7 +170,7 @@ serializer_json <- function(...) {
   })
 }
 
-#' @describeIn serializers JSON serializer with `auto_unbox` defaulting to `TRUE`. See [jsonlite::toJSON()] for more details.
+#' @describeIn serializers JSON serializer with `auto_unbox` defaulting to `TRUE`. See jsonlite::toJSON` for more details.
 #' @inheritParams jsonlite::toJSON
 #' @export
 serializer_unboxed_json <- function(auto_unbox = TRUE, ...) {
