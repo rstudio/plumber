@@ -14,7 +14,7 @@
 addSerializer <- function(name, serializer, verbose = TRUE) {
   if (!is.null(.globals$serializers[[name]])) {
     if (isTRUE(verbose)) {
-      stop ("Already have a serializer by the name of ", name)
+      warning("Overwriting serializer: ", name)
     }
   }
   .globals$serializers[[name]] <- serializer
