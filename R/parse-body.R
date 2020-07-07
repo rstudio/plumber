@@ -175,7 +175,7 @@ parser_yaml <- function(...) {
     if (!requireNamespace("yaml", quietly = TRUE)) {
       stop("yaml must be installed for the yaml parser to work")
     }
-    yaml::yaml.load(val, ...)
+    yaml::yaml.load(val, ..., eval.expr = FALSE)
   })
 }
 
