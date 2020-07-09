@@ -13,13 +13,11 @@ postBodyFilter <- function(req){
 }
 
 postbody_parser <- function(req, parsers = NULL) {
+  if (length(parsers) == 0) {return(list())}
   type <- req$HTTP_CONTENT_TYPE
   body <- req$postBodyRaw
-  if (length(body)>1) {
-    parse_body(body, type, parsers)
-  } else {
-    list()
-  }
+  if (is.null(body)) {return(list())}
+  parse_body(body, type, parsers)
 }
 
 parse_body <- function(body, content_type = NULL, parsers = NULL) {
@@ -86,37 +84,42 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
 #'
 #' A parser is responsible for decoding the raw body content of a request into
 #' a list of arguments that can be mapped to endpoint function arguments.
-#' For instance, the \code{parser_json} parser content-type `application/json`.
+#' For instance, \code{parser_json} parse content-type `application/json`.
 #'
-#' @param alias Short name to map parser
-#' @param parser The parser function to be added. This function should possibly
-#'   accept `value` and the named parameters `content_type` and `filename`.
-#'   Other parameters may be provided from [webutils::parse_multipart()].
-#'   To be safe, add a `...` to your function signature.
+#' @param alias Short name to map parser from the `@parser` plumber tag.
+#' @param parser The parser function to be added. This build the parser function.
 #' @param verbose Logical value which determines if a warning should be
-#'   displayed when patterns are overwritten.
+#'   displayed when alias in map are overwritten.
 #'
 #' @details
-#'
-#' Parser function structure is something like below. Available parameters
-#' to build parser are `value`, `content_type` and `filename` (only available
-#' in `multipart-form` body).
+#' When `parser` is evaluated, it should return a named list of functions.
+#' Content-types/Mime-types are used as the list names and will be matched to
+#' corresponding parsing function.
+#' Functions signature in the list should include `value`, `...` and
+#' possibly `content_type`, `filename`. Other parameters may be provided
+#' if you want to use the headers from [webutils::parse_multipart()].
+#' Parser function structure is something like below.
 #' ```r
-#' parser <- function(value, content_type = "ct", filename, ...) {
+#' parser <- () {
+#'  f <- function(value, ...) {
 #'   # do something with raw value
+#'  }
+#'  list("ct" = f)
 #' }
 #' ```
 #'
-#' It should return a named list if you want values to map to
-#' plumber endpoint function args.
-#'
 #' @examples
-#' parser_dcf <- function(value, content_type = "text/x-dcf", ...) {
-#'   charset <- getCharacterSet(content_type)
-#'   value <- rawToChar(value)
-#'   Encoding(value) <- charset
-#'   read.dcf(value)
+#' # Content-type header is mostly used to look up charset and adjust encoding
+#' parser_dcf <- function() {
+#'   parse_func <- function(value, content_type = "text/x-dcf", ...) {
+#'     charset <- getCharacterSet(content_type)
+#'     value <- rawToChar(value)
+#'     Encoding(value) <- charset
+#'     read.dcf(value)
+#'   }
+#'   return(invisible(list("text/x-dcf" = parse_func)))
 #' }
+#' add_parser("dcf", parser_dcf)
 #' @export
 add_parser <- function(alias, parser, verbose = TRUE) {
 
@@ -130,9 +133,14 @@ add_parser <- function(alias, parser, verbose = TRUE) {
 
   .globals$parsers[[alias]] <- parser
 
-  invisible(.globals$parsers)
+  invisible(list_parsers())
 }
 
+#' @export
+#' @describeIn add_parser List currently registered parsers
+list_parsers <- function() {
+  .globals$parsers
+}
 
 #' Plumber Parsers
 #'
@@ -141,15 +149,27 @@ add_parser <- function(alias, parser, verbose = TRUE) {
 #' functions when adding the parser to plumber. This will allow for
 #' non-default behavior.
 #'
+#' Parsers are optional. When unspecified, only the [parser_json()] and
+#' [parser_query()] are available. You can use `@parser parser` tag to
+#' activate parsers per endpoint. Multiple parsers can be activated for
+#' the same endpoint using multiple `@parser parser` tags.
+#'
 #' User should be aware that `rds` parsing should only be done from a
 #' trusted source. Do not accept `rds` files blindly.
+#'
+#' See [list_parsers()] for a list of registered parsers.
 #'
 #' @param ... parameters supplied to the appropriate internal function
 #' @describeIn parsers Query string parser
 #' @examples
 #' \dontrun{
 #' # Overwrite `text/json` parsing behavior to not allow JSON vectors to be simplified
-#' add_parser("text/json", parser_json(simplifyVector = FALSE))
+#' #* @parser json simplifyVector = FALSE
+#' # Activate `rds` parser in a multipart request
+#' #* @parser multi
+#' #* @parser rds
+#' pr <- plumber$new()
+#' pr$handle("GET", "/upload", function(rds) {rds}, parsers = c(parser_multi(), parser_rds()))
 #' }
 #' @export
 parser_query <- function() {
@@ -311,7 +331,21 @@ parser_multi <- function() {
   ))
 }
 
+#' @describeIn parsers All parsers
+#' @export
+parser_all <- function() {
+  return(invisible(
+    Reduce(function(a, b) {c(a, b())}, .globals$parsers, init = list())
+  ))
+}
 
+#' @describeIn parsers No parser
+#' @export
+parser_none <- function() {
+  return(invisible(
+    list()
+  ))
+}
 
 add_parsers_onLoad <- function() {
 
@@ -325,4 +359,6 @@ add_parsers_onLoad <- function() {
   add_parser("text", parser_text)
   add_parser("tsv", parser_tsv)
   add_parser("yaml", parser_yaml)
+  add_parser("all", parser_all)
+  add_parser("none", parser_none)
 }
