@@ -31,7 +31,7 @@ test_that("filter passes on content-type", {
       print(content_type)
       body
     },
-    expect_output(postbody_parser(req, ), "text/html; charset=testset"),
+    expect_output(postbody_parser(req, parser_text()), "text/html; charset=testset"),
     .env = "plumber"
   )
 })
