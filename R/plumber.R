@@ -221,7 +221,13 @@ plumber <- R6Class(
       # Initialize
       private$serializer <- serializer_json()
       # Default parsers to maintain legacy features
-      private$parsers <- c(parser_json(), parser_query())
+      private$parsers <- c(
+        parser_json(), 
+        parser_query(),
+        parser_text(),
+        parser_octet(),
+        parser_multi()
+      )
       private$errorHandler <- defaultErrorHandler()
       private$notFoundHandler <- default404Handler
       private$maxSize <- getOption('plumber.maxRequestSize', 0) #0 Unlimited
