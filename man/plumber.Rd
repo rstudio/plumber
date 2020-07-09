@@ -144,6 +144,7 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 \item \href{#method-onHeaders}{\code{plumber$onHeaders()}}
 \item \href{#method-onWSOpen}{\code{plumber$onWSOpen()}}
 \item \href{#method-setSerializer}{\code{plumber$setSerializer()}}
+\item \href{#method-setParsers}{\code{plumber$setParsers()}}
 \item \href{#method-set404Handler}{\code{plumber$set404Handler()}}
 \item \href{#method-setErrorHandler}{\code{plumber$setErrorHandler()}}
 \item \href{#method-filter}{\code{plumber$filter()}}
@@ -382,7 +383,16 @@ pr$handle("GET", "/", function(){ 123 })
 \subsection{Method \code{handle()}}{
 Define endpoints
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{plumber$handle(methods, path, handler, preempt, serializer, endpoint, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{plumber$handle(
+  methods,
+  path,
+  handler,
+  preempt,
+  serializer,
+  parsers,
+  endpoint,
+  ...
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -397,6 +407,8 @@ Define endpoints
 \item{\code{preempt}}{a preempt function.}
 
 \item{\code{serializer}}{a serializer function.}
+
+\item{\code{parsers}}{a named list of parsers.}
 
 \item{\code{endpoint}}{a \code{PlumberEndpoint} object.}
 
@@ -570,6 +582,26 @@ required for httpuv interface
 }
 \subsection{Details}{
 Sets the default serializer of the router.
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setParsers"></a>}}
+\if{latex}{\out{\hypertarget{method-setParsers}{}}}
+\subsection{Method \code{setParsers()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{plumber$setParsers(parsers)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{parsers}}{a named list of parsers}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+Sets the default parsers of the router.
 }
 
 }

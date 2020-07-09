@@ -2,43 +2,56 @@
 % Please edit documentation in R/parse-body.R
 \name{add_parser}
 \alias{add_parser}
+\alias{list_parsers}
 \title{Add a Parsers}
 \usage{
-add_parser(content_type, parser, verbose = TRUE)
+add_parser(alias, parser, verbose = TRUE)
+
+list_parsers()
 }
 \arguments{
-\item{content_type}{A string to match against the content-type of each part of
-the request body}
+\item{alias}{Short name to map parser from the \verb{@parser} plumber tag.}
 
-\item{parser}{The parser function to be added. This function should possibly
-accept \code{value} and the named parameters \code{content_type} and \code{filename}.
-Other parameters may be provided from \code{\link[webutils:parse_multipart]{webutils::parse_multipart()}}.
-To be safe, add a \code{...} to your function signature.}
+\item{parser}{The parser function to be added. This build the parser function.}
 
 \item{verbose}{Logical value which determines if a warning should be
-displayed when patterns are overwritten.}
+displayed when alias in map are overwritten.}
 }
 \description{
 A parser is responsible for decoding the raw body content of a request into
 a list of arguments that can be mapped to endpoint function arguments.
-For instance, the \code{parser_json} parser content-type \code{application/json}.
+For instance, \code{parser_json} parse content-type \code{application/json}.
 }
 \details{
-Parser function structure is something like below. Available parameters
-to build parser are \code{value}, \code{content_type} and \code{filename} (only available
-in \code{multipart-form} body).\if{html}{\out{<div class="r">}}\preformatted{parser <- function(value, content_type = "ct", filename, ...) \{
+When \code{parser} is evaluated, it should return a named list of functions.
+Content-types/Mime-types are used as the list names and will be matched to
+corresponding parsing function.
+Functions signature in the list should include \code{value}, \code{...} and
+possibly \code{content_type}, \code{filename}. Other parameters may be provided
+if you want to use the headers from \code{\link[webutils:parse_multipart]{webutils::parse_multipart()}}.
+Parser function structure is something like below.\if{html}{\out{<div class="r">}}\preformatted{parser <- () \{
+ f <- function(value, ...) \{
   # do something with raw value
+ \}
+ list("ct" = f)
 \}
 }\if{html}{\out{</div>}}
+}
+\section{Functions}{
+\itemize{
+\item \code{list_parsers}: List currently registered parsers
+}}
 
-It should return a named list if you want values to map to
-plumber endpoint function args.
-}
 \examples{
-parser_dcf <- function(value, content_type = "text/x-dcf", ...) {
-  charset <- getCharacterSet(content_type)
-  value <- rawToChar(value)
-  Encoding(value) <- charset
-  read.dcf(value)
+# Content-type header is mostly used to look up charset and adjust encoding
+parser_dcf <- function() {
+  parse_func <- function(value, content_type = "text/x-dcf", ...) {
+    charset <- getCharacterSet(content_type)
+    value <- rawToChar(value)
+    Encoding(value) <- charset
+    read.dcf(value)
+  }
+  return(invisible(list("text/x-dcf" = parse_func)))
 }
+add_parser("dcf", parser_dcf)
 }

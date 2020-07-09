@@ -222,7 +222,7 @@ plumber <- R6Class(
       private$serializer <- serializer_json()
       # Default parsers to maintain legacy features
       private$parsers <- c(
-        parser_json(), 
+        parser_json(),
         parser_query(),
         parser_text(),
         parser_octet(),
@@ -473,6 +473,7 @@ plumber <- R6Class(
     #' @param handler a handler function.
     #' @param preempt a preempt function.
     #' @param serializer a serializer function.
+    #' @param parsers a named list of parsers.
     #' @param endpoint a `PlumberEndpoint` object.
     #' @param ... additional arguments for `PlumberEndpoint` creation
     #' @details The “handler” functions that you define in these handle calls

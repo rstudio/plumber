@@ -334,8 +334,10 @@ parser_multi <- function() {
 #' @describeIn parsers All parsers
 #' @export
 parser_all <- function() {
+  parsers <- .globals$parsers
+  parsers$all <- NULL
   return(invisible(
-    Reduce(function(a, b) {c(a, b())}, .globals$parsers, init = list())
+    Reduce(function(a, b) {c(a, b())}, parsers, init = list())
   ))
 }
 

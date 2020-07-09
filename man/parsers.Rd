@@ -11,6 +11,8 @@
 \alias{parser_rds}
 \alias{parser_octet}
 \alias{parser_multi}
+\alias{parser_all}
+\alias{parser_none}
 \title{Plumber Parsers}
 \usage{
 parser_query()
@@ -32,6 +34,10 @@ parser_rds(...)
 parser_octet()
 
 parser_multi()
+
+parser_all()
+
+parser_none()
 }
 \arguments{
 \item{...}{parameters supplied to the appropriate internal function}
@@ -45,6 +51,17 @@ Parsers are used in Plumber to transform the raw body content received
 by a request to the API. Extra parameters may be provided to parser
 functions when adding the parser to plumber. This will allow for
 non-default behavior.
+}
+\details{
+Parsers are optional. When unspecified, only the \code{\link[=parser_json]{parser_json()}} and
+\code{\link[=parser_query]{parser_query()}} are available. You can use \verb{@parser parser} tag to
+activate parsers per endpoint. Multiple parsers can be activated for
+the same endpoint using multiple \verb{@parser parser} tags.
+
+User should be aware that \code{rds} parsing should only be done from a
+trusted source. Do not accept \code{rds} files blindly.
+
+See \code{\link[=list_parsers]{list_parsers()}} for a list of registered parsers.
 }
 \section{Functions}{
 \itemize{
@@ -68,11 +85,20 @@ This parser should be used when reading from a file is required.
 \item \code{parser_octet}: Octet stream parser
 
 \item \code{parser_multi}: Multi part parser. This parser will then parse each individual body with its respective parser
+
+\item \code{parser_all}: All parsers
+
+\item \code{parser_none}: No parser
 }}
 
 \examples{
 \dontrun{
 # Overwrite `text/json` parsing behavior to not allow JSON vectors to be simplified
-add_parser("text/json", parser_json(simplifyVector = FALSE))
+#* @parser json simplifyVector = FALSE
+# Activate `rds` parser in a multipart request
+#* @parser multi
+#* @parser rds
+pr <- plumber$new()
+pr$handle("GET", "/upload", function(rds) {rds}, parsers = c(parser_multi(), parser_rds()))
 }
 }
