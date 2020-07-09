@@ -2,11 +2,7 @@ postBodyFilter <- function(req){
   handled <- req$.internal$postBodyHandled
   if (is.null(handled) || handled != TRUE) {
     # This will return raw bytes
-    body <- req$rook.input$read()
-    type <- req$HTTP_CONTENT_TYPE
-    args <- parse_body(body, type)
-    req$args <- c(req$args, args)
-    req$postBodyRaw <- body
+    req$postBodyRaw <- req$rook.input$read()
     if (isTRUE(getOption("plumber.postBody", TRUE))) {
       req$rook.input$rewind()
       req$postBody <- paste0(req$rook.input$read_lines(), collapse = "\n")
@@ -16,20 +12,29 @@ postBodyFilter <- function(req){
   forward()
 }
 
-parse_body <- function(body, content_type = NULL) {
+postbody_parser <- function(req, parsers = NULL) {
+  type <- req$HTTP_CONTENT_TYPE
+  parse_body(req$postBodyRaw, type, parsers)
+}
+
+parse_body <- function(body, content_type = NULL, parsers = NULL) {
   if (!is.raw(body)) {body <- charToRaw(body)}
   toparse <- list(value = body, content_type = content_type)
   parse_raw(toparse)
 }
 
-parse_raw <- function(toparse) {
+parse_raw <- function(toparse, parsers = NULL) {
   if (length(toparse$value) == 0L) return(list())
-  parser <- parser_picker(toparse$content_type, toparse$value[1], toparse$filename)
-  do.call(parser, toparse)
+  parser <- parser_picker(toparse$content_type, toparse$value[1], toparse$filename, parsers)
+  if (!is.null(parser)) {
+   return(do.call(parser, toparse))
+  } else {
+    warning("No suitable parser found to handle request body.")
+    return(list())
+  }
 }
 
-parser_picker <- function(content_type, first_byte, filename = NULL) {
-  parsers <- .globals$parsers
+parser_picker <- function(content_type, first_byte, filename = NULL, parsers = NULL) {
 
   # parse as a query string
   if (is.null(content_type)) {
@@ -67,7 +72,7 @@ parser_picker <- function(content_type, first_byte, filename = NULL) {
     return(parsers$query)
   }
 
-  # octect
+  # octet
   parsers$octet
 }
 
@@ -78,8 +83,7 @@ parser_picker <- function(content_type, first_byte, filename = NULL) {
 #' a list of arguments that can be mapped to endpoint function arguments.
 #' For instance, the \code{parser_json} parser content-type `application/json`.
 #'
-#' @param content_type A string to match against the content-type of each part of
-#' the request body
+#' @param alias Short name to map parser
 #' @param parser The parser function to be added. This function should possibly
 #'   accept `value` and the named parameters `content_type` and `filename`.
 #'   Other parameters may be provided from [webutils::parse_multipart()].
@@ -109,17 +113,17 @@ parser_picker <- function(content_type, first_byte, filename = NULL) {
 #'   read.dcf(value)
 #' }
 #' @export
-add_parser <- function(content_type, parser, verbose = TRUE) {
+add_parser <- function(alias, parser, verbose = TRUE) {
 
-  if (!is.null(.globals$parsers[[content_type]])) {
+  if (!is.null(.globals$parsers[[alias]])) {
     if (isTRUE(verbose)) {
-      warning("Overwriting parser: ", content_type)
+      warning("Overwriting parser: ", alias)
     }
   }
 
   stopifnot(is.function(parser))
 
-  .globals$parsers[[content_type]] <- parser
+  .globals$parsers[[alias]] <- parser
 
   invisible(.globals$parsers)
 }
@@ -141,16 +145,25 @@ add_parser <- function(content_type, parser, verbose = TRUE) {
 #' }
 #' @export
 parser_query <- function() {
-  parser_text(parseQS)
+  parse_func <- parser_text(parseQS)
+  return(invisible(
+    list("application/x-www-form-urlencoded" = parse_func,
+         "query" = parse_func)
+  ))
 }
 
 
 #' @describeIn parsers JSON parser
 #' @export
 parser_json <- function(...) {
-  parser_text(function(value) {
+  parse_func <- parser_text(function(value) {
     safeFromJSON(value, ...)
-  })
+  })[[1]]
+  return(invisible(
+    list("application/json" = parse_func,
+         "text/json" = parse_func,
+         "json" = parse_func)
+  ))
 }
 
 
@@ -159,24 +172,34 @@ parser_json <- function(...) {
 #' @export
 parser_text <- function(parse_fn = identity) {
   stopifnot(is.function(parse_fn))
-  function(value, content_type = NULL, ...) {
+  parse_func <- function(value, content_type = NULL, ...) {
     charset <- getCharacterSet(content_type)
     value <- rawToChar(value)
     Encoding(value) <- charset
     parse_fn(value)
   }
+  return(invisible(
+    list("text/plain" = parse_func,
+         "text" = parse_func)
+  ))
 }
 
 
 #' @describeIn parsers YAML parser
 #' @export
 parser_yaml <- function(...) {
-  parser_text(function(val) {
+  parse_func <- parser_text(function(val) {
     if (!requireNamespace("yaml", quietly = TRUE)) {
       stop("yaml must be installed for the yaml parser to work")
     }
     yaml::yaml.load(val, ...)
-  })
+  })[[1]]
+  return(invisible(
+    list("application/yaml" = parse_func,
+         "application/x-yaml" = parse_func,
+         "text/yaml" = parse_func,
+         "text/x-yaml" = parse_func)
+  ))
 }
 
 #' @describeIn parsers Helper parser that writes the binary post body to a file and reads it back again using `read_fn`.
@@ -198,37 +221,54 @@ parser_read_file <- function(read_fn = readLines) {
 #' @describeIn parsers CSV parser
 #' @export
 parser_csv <- function(...) {
-  parser_read_file(function(val) {
+  parse_func <- parser_read_file(function(val) {
     utils::read.csv(val, ...)
   })
+  return(invisible(
+    list("application/csv" = parse_func,
+         "application/x-csv" = parse_func,
+         "text/csv" = parse_func,
+         "text/x-csv" = parse_func)
+  ))
 }
 
 
 #' @describeIn parsers TSV parser
 #' @export
 parser_tsv <- function(...) {
-  parser_read_file(function(val) {
+  parse_func <- parser_read_file(function(val) {
     utils::read.delim(val, ...)
   })
+  return(invisible(
+    list("application/tab-separated-values" = parse_func,
+         "text/tab-separated-values" = parse_func)
+  ))
 }
 
 
 #' @describeIn parsers RDS parser
 #' @export
 parser_rds <- function(...) {
-  parser_read_file(function(value) {
+  parse_func <- parser_read_file(function(value) {
     readRDS(value, ...)
   })
+  return(invisible(
+    list("application/rds" = parse_func)
+  ))
 }
 
 
 #' @describeIn parsers Octet stream parser
 #' @export
 parser_octet <- function() {
-  function(value, filename = NULL, ...) {
+  parse_func <- function(value, filename = NULL, ...) {
     attr(value, "filename") <- filename
     value
   }
+  return(invisible(
+    list("application/octet-stream" = parse_func,
+         "octet" = parse_func)
+  ))
 }
 
 
@@ -236,7 +276,7 @@ parser_octet <- function() {
 #' @export
 #' @importFrom webutils parse_multipart
 parser_multi <- function() {
-  function(value, content_type, ...) {
+  parse_func <- function(value, content_type, ...) {
     if (!stri_detect_fixed(content_type, "boundary=", case_insensitive = TRUE))
       stop("No boundary found in multipart content-type header: ", content_type)
     boundary <- stri_match_first_regex(content_type, "boundary=([^; ]{2,})", case_insensitive = TRUE)[,2]
@@ -257,42 +297,23 @@ parser_multi <- function() {
       parse_raw(x)
     })
   }
+  return(invisible(
+    list("multipart/form-data" = parse_func)
+  ))
 }
 
 
 
 add_parsers_onLoad <- function() {
 
-  # add both `application/XYZ` and `text/XYZ` parsers
-  for (type in c("application", "text")) {
-    mime_type <- function(x) {
-      paste0(type, "/", x)
-    }
-
-    add_parser(mime_type("json"),                 parser_json())
-
-    add_parser(mime_type("csv"),                  parser_csv())
-    add_parser(mime_type("x-csv"),                parser_csv())
-
-    add_parser(mime_type("yaml"),                 parser_yaml())
-    add_parser(mime_type("x-yaml"),               parser_yaml())
-
-    add_parser(mime_type("tab-separated-values"), parser_tsv())
-
-  }
-
-  # only one form of these parsers
-  add_parser("application/x-www-form-urlencoded", parser_query())
-  add_parser("application/rds",                   parser_rds())
-  add_parser("multipart/form-data",               parser_multi())
-  add_parser("application/octet-stream",          parser_octet())
-
-  add_parser("text/plain", parser_text())
-
-
-  # shorthand names for parser_picker
-  add_parser("text", parser_text())
-  add_parser("query", parser_query())
-  add_parser("octet", parser_octet())
-  add_parser("json", parser_json())
+  # shorthand names for parser plumbing
+  add_parser("csv", parser_csv)
+  add_parser("json", parser_json)
+  add_parser("multi", parser_multi)
+  add_parser("octet", parser_octet)
+  add_parser("query", parser_query)
+  add_parser("rds", parser_rds)
+  add_parser("text", parser_text)
+  add_parser("tsv", parser_tsv)
+  add_parser("yaml", parser_yaml)
 }

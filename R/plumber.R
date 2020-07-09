@@ -220,6 +220,7 @@ plumber <- R6Class(
 
       # Initialize
       private$serializer <- serializer_json()
+      private$parsers <- c(parser_json(), parser_query(), parser_text(), parser_octet(), parser_multi())
       private$errorHandler <- defaultErrorHandler()
       private$notFoundHandler <- default404Handler
       private$maxSize <- getOption('plumber.maxRequestSize', 0) #0 Unlimited
@@ -480,8 +481,8 @@ plumber <- R6Class(
     #'   "<html><h1>Programmatic Plumber!</h1></html>"
     #' }, serializer=plumber::serializer_html())
     #' }
-    handle = function(methods, path, handler, preempt, serializer, endpoint, ...){
-      epdef <- !missing(methods) || !missing(path) || !missing(handler) || !missing(serializer)
+    handle = function(methods, path, handler, preempt, serializer, parsers, endpoint, ...){
+      epdef <- !missing(methods) || !missing(path) || !missing(handler) || !missing(serializer) || !missing(parsers)
       if (!missing(endpoint) && epdef){
         stop("You must provide either the components for an endpoint (handler and serializer) OR provide the endpoint yourself. You cannot do both.")
       }
@@ -490,8 +491,11 @@ plumber <- R6Class(
         if (missing(serializer)){
           serializer <- private$serializer
         }
+        if (missing(parsers)){
+          parsers <- private$parsers
+        }
 
-        endpoint <- PlumberEndpoint$new(methods, path, handler, private$envir, serializer, ...)
+        endpoint <- PlumberEndpoint$new(methods, path, handler, private$envir, serializer, parsers, ...)
       }
       private$addEndpointInternal(endpoint, preempt)
     },
@@ -729,7 +733,16 @@ plumber <- R6Class(
           if (!is.null(h$serializer)) {
             res$serializer <- h$serializer
           }
-          req$args <- c(h$getPathParams(path), req$args)
+          if (!is.null(h$parsers)) {
+            parsers <- h$parsers
+          } else {
+            parsers <- private$parsers
+          }
+          req$args <- c(
+            h$getPathParams(path),
+            req$args,
+            postbody_parser(req, parsers)
+          )
           return(do.call(h$exec, req$args))
         }
       }
@@ -870,6 +883,11 @@ plumber <- R6Class(
     #' @param serializer a serializer function
     setSerializer = function(serializer){
       private$serializer <- serializer
+    },
+    #' @details Sets the default parsers of the router.
+    #' @param parsers a named list of parsers
+    setParsers = function(parsers){
+      private$parsers <- parsers
     },
     #' @details Sets the handler that gets called if an
     #' incoming request can’t be served by any filter, endpoint, or sub-router.
@@ -1047,6 +1065,7 @@ plumber <- R6Class(
     }
   ), private = list(
     serializer = NULL, # The default serializer for the router
+    parsers = NULL, # The default parsers for the router
 
     ends = list(), # List of endpoints indexed by their pre-empted filter.
     filts = NULL, # Array of filters
