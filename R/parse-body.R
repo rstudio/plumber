@@ -14,22 +14,27 @@ postBodyFilter <- function(req){
 
 postbody_parser <- function(req, parsers = NULL) {
   type <- req$HTTP_CONTENT_TYPE
-  parse_body(req$postBodyRaw, type, parsers)
+  body <- req$postBodyRaw
+  if (length(body)>1) {
+    parse_body(body, type, parsers)
+  } else {
+    list()
+  }
 }
 
 parse_body <- function(body, content_type = NULL, parsers = NULL) {
   if (!is.raw(body)) {body <- charToRaw(body)}
-  toparse <- list(value = body, content_type = content_type)
+  toparse <- list(value = body, content_type = content_type, parsers = parsers)
   parse_raw(toparse)
 }
 
-parse_raw <- function(toparse, parsers = NULL) {
+parse_raw <- function(toparse) {
   if (length(toparse$value) == 0L) return(list())
-  parser <- parser_picker(toparse$content_type, toparse$value[1], toparse$filename, parsers)
+  parser <- parser_picker(toparse$content_type, toparse$value[1], toparse$filename, toparse$parsers)
   if (!is.null(parser)) {
    return(do.call(parser, toparse))
   } else {
-    warning("No suitable parser found to handle request body.")
+    warning("No suitable parser found to handle request body type ", toparse$content_type, ".")
     return(list())
   }
 }
@@ -145,7 +150,7 @@ add_parser <- function(alias, parser, verbose = TRUE) {
 #' }
 #' @export
 parser_query <- function() {
-  parse_func <- parser_text(parseQS)
+  parse_func <- parser_text(parseQS)[[1]]
   return(invisible(
     list("application/x-www-form-urlencoded" = parse_func,
          "query" = parse_func)
@@ -276,7 +281,7 @@ parser_octet <- function() {
 #' @export
 #' @importFrom webutils parse_multipart
 parser_multi <- function() {
-  parse_func <- function(value, content_type, ...) {
+  parse_func <- function(value, content_type, parsers, ...) {
     if (!stri_detect_fixed(content_type, "boundary=", case_insensitive = TRUE))
       stop("No boundary found in multipart content-type header: ", content_type)
     boundary <- stri_match_first_regex(content_type, "boundary=([^; ]{2,})", case_insensitive = TRUE)[,2]
@@ -294,6 +299,7 @@ parser_multi <- function() {
           x$content_type <- getContentType(tools::file_ext(x$filename))
         }
       }
+      x$parsers <- parsers
       parse_raw(x)
     })
   }
