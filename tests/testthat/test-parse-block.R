@@ -160,4 +160,27 @@ test_that("@html parameters produce an error", {
   expect_block_error("#' @html (key = \"val\")", "unused argument")
 })
 
+test_that("@parser parameters produce an error or not", {
+  # due to covr changing some code, the return answer is very strange
+  testthat::skip_on_covr()
+
+  expect_block_fn <- function(lines, fn) {
+    b <- plumber:::plumbBlock(length(lines), lines)
+    expect_equal_functions(b$parsers, fn)
+  }
+  expect_block_error <- function(lines, ...) {
+    expect_error({
+      plumbBlock(length(lines), lines)
+    }, ...)
+  }
+
+  expect_block_fn("#' @parser octet", parser_octet())
+
+  expect_block_fn("#' @parser octet list()", parser_octet())
+  expect_block_fn("#' @parser octet list(         )", parser_octet())
+  expect_block_fn("#' @parser octet list     (         )     ", parser_octet())
+
+  expect_block_error("#' @parser octet list(key = \"val\")", "unused argument")
+})
+
 # TODO: more testing around filter, assets, endpoint, etc.

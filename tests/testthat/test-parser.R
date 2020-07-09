@@ -1,0 +1,18 @@
+context("Parsers tag")
+
+test_that("parsers work", {
+  r <- plumber$new(test_path("files/parsers.R"))
+  res <- PlumberResponse$new()
+  expect_identical(r$route(make_req("POST", "/none", body='{"a":1}'), res), structure(list(), names = character()))
+  expect_identical(r$route(make_req("POST", "/all", body='{"a":1}'), res), structure(list(1L), names = "a"))
+  expect_identical(r$route(make_req("POST", "/default", body='{"a":1}'), res), structure(list(1L), names = "a"))
+  bin_file <- test_path("files/multipart-ctype.bin")
+  bin_body <- readBin(bin_file, "raw", file.info(bin_file)$size)
+  expect_identical(r$route(make_req("POST", "/none", body=rawToChar(bin_body)), res), structure(list(), names = character()))
+  expect_message(r$route(make_req("POST", "/json", body=rawToChar(bin_body)), res), "No suitable parser found")
+  expect_equal(r$routes$none$parsers, list())
+  expect_equal(r$routes$all$parsers, parser_all())
+  expect_equal(r$routes$default$parsers, NULL)
+  expect_equal(r$routes$json$parsers, parser_json())
+  expect_equal(r$routes$repeated$parsers, parser_json())
+})
