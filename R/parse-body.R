@@ -34,7 +34,7 @@ parse_raw <- function(toparse) {
   if (!is.null(parser)) {
    return(do.call(parser, toparse))
   } else {
-    warning("No suitable parser found to handle request body type ", toparse$content_type, ".")
+    message("No suitable parser found to handle request body type ", toparse$content_type, ".")
     return(list())
   }
 }
@@ -140,6 +140,9 @@ add_parser <- function(alias, parser, verbose = TRUE) {
 #' by a request to the API. Extra parameters may be provided to parser
 #' functions when adding the parser to plumber. This will allow for
 #' non-default behavior.
+#'
+#' User should be aware that `rds` parsing should only be done from a
+#' trusted source. Do not accept `rds` files blindly.
 #'
 #' @param ... parameters supplied to the appropriate internal function
 #' @describeIn parsers Query string parser

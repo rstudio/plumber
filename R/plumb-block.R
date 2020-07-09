@@ -172,7 +172,8 @@ plumbBlock <- function(lineNum, file){
         argList <- list()
       }
       tryCatch({
-        parsers <- c(parsers, do.call(parser_builder, argList))
+        # Use modifyList instead of c to avoid duplicated parsers name
+        parsers <- utils::modifyList(parsers, do.call(parser_builder, argList))
       }, error = function(e) {
         stopOnLine(lineNum, line, paste0("Error creating parser: ", parser_alias, "\n", e))
       })
