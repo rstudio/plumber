@@ -1,0 +1,50 @@
+name: Docker
+
+on:
+  push:
+    branches:
+      - "master"
+      - "docker/**"
+
+
+jobs:
+  docker:
+    name: ${{ matrix.config.workdir }} - ${{ matrix.config.tag }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      # max-parallel: 2
+      fail-fast: false
+
+      matrix:
+        r_version:
+          - "latest"
+
+        config:
+        - name: CRAN
+          workdir: Docker/CRAN
+          # always overwrite the latest version with the CRAN version
+          tag: "v0.4.6,latest"
+          extra_buildargs: ",PLUMBER_VERSION=0.4.6"
+
+        - name: GitHub
+          workdir: Docker/GitHub
+          # 'next' tag signifies the next release
+          tag: "next"
+          extra_buildargs: ",PLUMBER_BRANCH=0.4.6"
+
+
+    steps:
+    - uses: actions/checkout@master
+
+    # https://github.com/marketplace/actions/publish-docker
+    - name: Build Base
+      uses: elgohr/Publish-Docker-Github-Action@2.12
+      with:
+        name: rstudio/shinycoreci
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        cache: ${{ github.event_name == 'push' }}
+        workdir: ${{ matrix.config.workdir }}
+        buildargs: "R_VERSION=${{ matrix.r_version }}${{ matrix.config.extra_buildargs }}"
+        tags: ${{ matrix.config.tag }}
