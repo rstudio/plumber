@@ -38,6 +38,7 @@ pr <- function(file = NULL,
 #' @param path The endpoint path
 #' @param handler a handler function
 #' @param preempt a preempt function
+#' @param serializer a plumber serializer
 #' @param endpoint a `PlumberEndpoint` object
 #' @param ... additional arguments for `PlumberEndpoint`
 #'
@@ -237,6 +238,7 @@ pr_mount <- function(pr,
 #' @param pr a plumber router
 #' @param stage a character string. Point in the lifecycle of a request.
 #' @param handler a hook function.
+#' @param handlers a named list of hook handlers
 #'
 #' @return a plumber router with the defined hook(s) added
 #'

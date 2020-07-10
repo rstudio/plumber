@@ -15,6 +15,8 @@ pr_register_hooks(pr, handlers)
 \item{stage}{a character string. Point in the lifecycle of a request.}
 
 \item{handler}{a hook function.}
+
+\item{handlers}{a named list of hook handlers}
 }
 \value{
 a plumber router with the defined hook(s) added

@@ -32,6 +32,8 @@ pr_head(pr, path, handler, preempt, serializer, endpoint, ...)
 
 \item{preempt}{a preempt function}
 
+\item{serializer}{a plumber serializer}
+
 \item{endpoint}{a \code{PlumberEndpoint} object}
 
 \item{...}{additional arguments for \code{PlumberEndpoint}}
