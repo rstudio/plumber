@@ -38,7 +38,7 @@ jobs:
     - uses: actions/checkout@master
 
     # https://github.com/marketplace/actions/publish-docker
-    - name: Build Base
+    - name: rstudio/plumber
       uses: elgohr/Publish-Docker-Github-Action@2.12
       with:
         name: rstudio/shinycoreci
