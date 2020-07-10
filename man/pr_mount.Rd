@@ -25,10 +25,10 @@ also invisibly returns the updated router.
 }
 \examples{
 \dontrun{
-pr1 <- pr_new() \%>\%
+pr1 <- pr() \%>\%
   pr_get("/hello", function() "Hello")
 
-pr_new() \%>\%
+pr() \%>\%
   pr_get("/goodbye", function() "Goodbye") \%>\%
   pr_mount("/hi", pr1) \%>\%
   pr_run()

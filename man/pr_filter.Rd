@@ -24,7 +24,7 @@ a response prior to the request reaching an endpoint.
 }
 \examples{
 \dontrun{
-pr_new() \%>\%
+pr() \%>\%
   pr_filter("foo", function(req, res) {
     print("This is filter foo")
     forward()

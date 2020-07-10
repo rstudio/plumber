@@ -8,12 +8,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' pr_new() %>%
+#' pr() %>%
 #'   pr_run()
 #' }
 #'
 #' @export
-pr_new <- function(file = NULL,
+pr <- function(file = NULL,
                    filters = defaultPlumberFilters,
                    envir = new.env(parent = .GlobalEnv)) {
   plumber$new(file = file, filters = filters, envir = envir)
@@ -45,15 +45,15 @@ pr_new <- function(file = NULL,
 #'
 #' @examples
 #' \dontrun{
-#' pr_new() %>%
+#' pr() %>%
 #'   pr_handle("GET", "/hi", function() "Hello World") %>%
 #'   pr_run()
 #'
-#' pr_new() %>%
+#' pr() %>%
 #'   pr_handle(c("GET", "POST"), "/hi", function() "Hello World") %>%
 #'   pr_run()
 #'
-#' pr_new() %>%
+#' pr() %>%
 #'   pr_get("/hi", function() "Hello World") %>%
 #'   pr_post("/echo", function(req, res) {
 #'     if (req$postBody == "") return("No input")
@@ -190,10 +190,10 @@ pr_head <- function(pr,
 #'
 #' @examples
 #' \dontrun{
-#' pr1 <- pr_new() %>%
+#' pr1 <- pr() %>%
 #'   pr_get("/hello", function() "Hello")
 #'
-#' pr_new() %>%
+#' pr() %>%
 #'   pr_get("/goodbye", function() "Goodbye") %>%
 #'   pr_mount("/hi", pr1) %>%
 #'   pr_run()
@@ -242,7 +242,7 @@ pr_mount <- function(pr,
 #'
 #' @examples
 #' \dontrun{
-#' pr_new() %>%
+#' pr() %>%
 #'   pr_register_hook("preroute", function(req){
 #'     cat("Routing a request for", req$PATH_INFO, "...\n")
 #'   }) %>%
@@ -291,7 +291,7 @@ pr_register_hooks <- function(pr,
 #' @return The plumber router with the new default serializer
 #'
 #' @export
-pr_set_serializer <- function(pr,
+pr_default_serializer <- function(pr,
                               serializer) {
   pr$setSerializer(serializer)
   invisible(pr)
@@ -314,14 +314,14 @@ pr_set_serializer <- function(pr,
 #'   res$body <- "Oops"
 #' }
 #'
-#' pr_new() %>%
+#' pr() %>%
 #'   pr_get("/hi", function() "Hello") %>%
-#'   pr_set_404_handler(handler_404) %>%
+#'   pr_404_handler(handler_404) %>%
 #'   pr_run()
 #' }
 #'
 #' @export
-pr_set_404_handler <- function(pr,
+pr_404_handler <- function(pr,
                                fun) {
   pr$set404Handler(fun)
   invisible(pr)
@@ -336,7 +336,7 @@ pr_set_404_handler <- function(pr,
 #' @return The plumber router with a modified error handler
 #'
 #' @export
-pr_set_error_handler <- function(pr,
+pr_error_handler <- function(pr,
                fun) {
   pr$setErrorHandler(fun)
   invisible(pr)
@@ -356,7 +356,7 @@ pr_set_error_handler <- function(pr,
 #'
 #' @examples
 #' \dontrun{
-#' pr_new() %>%
+#' pr() %>%
 #'   pr_filter("foo", function(req, res) {
 #'     print("This is filter foo")
 #'     forward()
@@ -404,10 +404,10 @@ pr_filter <- function(pr,
 #'
 #' @examples
 #' \dontrun{
-#' pr_new() %>%
+#' pr() %>%
 #'   pr_run()
 #'
-#' pr_new() %>%
+#' pr() %>%
 #'   pr_run(port = 5762, debug = TRUE)
 #' }
 #'

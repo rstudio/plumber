@@ -43,29 +43,29 @@ A plumber router with the handler added
 This collection of functions creates handlers for a Plumber router.
 }
 \details{
-The generic \code{pr_handle} creates a handle for the given methods. Specific
+The generic \code{\link[=pr_handle]{pr_handle()}} creates a handle for the given methods. Specific
 functions are implemented for the following HTTP methods:
 \itemize{
-\item GET
-\item POST
-\item PUT
-\item DELETE
-\item HEAD
-}
+\item \code{GET}
+\item \code{POST}
+\item \code{PUT}
+\item \code{DELETE}
+\item \code{HEAD}
 Each function mutates the plumber router in place, but also invisibly returns
 the updated router.
 }
+}
 \examples{
 \dontrun{
-pr_new() \%>\%
+pr() \%>\%
   pr_handle("GET", "/hi", function() "Hello World") \%>\%
   pr_run()
 
-pr_new() \%>\%
+pr() \%>\%
   pr_handle(c("GET", "POST"), "/hi", function() "Hello World") \%>\%
   pr_run()
 
-pr_new() \%>\%
+pr() \%>\%
   pr_get("/hi", function() "Hello World") \%>\%
   pr_post("/echo", function(req, res) {
     if (req$postBody == "") return("No input")

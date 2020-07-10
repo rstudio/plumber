@@ -49,10 +49,10 @@ run method is executed using default \code{plumber.swagger.url} option.
 }
 \examples{
 \dontrun{
-pr_new() \%>\%
+pr() \%>\%
   pr_run()
 
-pr_new() \%>\%
+pr() \%>\%
   pr_run(port = 5762, debug = TRUE)
 }
 

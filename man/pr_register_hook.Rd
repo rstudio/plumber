@@ -28,11 +28,11 @@ Plumber routers currently support four hooks:
 \item \code{postroute(data, req, res, value)}
 \item \code{preserialize(data, req, res, value)}
 \item \code{postserialize(data, req, res, value)}
-}
 In all of the above you have access to a disposable environment in the \code{data}
 parameter that is created as a temporary data store for each request. Hooks
 can store temporary data in these hooks that can be reused by other hooks
 processing this same request.
+}
 }
 \details{
 One feature when defining hooks in Plumber routers is the ability to modify
@@ -50,26 +50,26 @@ handlers themselves.
 }
 \examples{
 \dontrun{
-pr_new() \%>\%
+pr() \%>\%
   pr_register_hook("preroute", function(req){
     cat("Routing a request for", req$PATH_INFO, "...\n")
   }) \%>\%
   pr_register_hooks(list(
-  preserialize = function(req, value){
-    print("About to serialize this value:")
-    print(value)
+    preserialize = function(req, value){
+      print("About to serialize this value:")
+      print(value)
 
-    # Must return the value since we took one in. Here we're not choosing
-    # to mutate it, but we could.
-    value
-  },
-  postserialize = function(res){
-    print("We serialized the value as:")
-    print(res$body)
-  }
- )) \%>\%
- pr_handle("GET", "/", function(){ 123 }) \%>\%
- pr_run()
+      # Must return the value since we took one in. Here we're not choosing
+      # to mutate it, but we could.
+      value
+    },
+    postserialize = function(res){
+      print("We serialized the value as:")
+      print(res$body)
+    }
+  )) \%>\%
+  pr_handle("GET", "/", function(){ 123 }) \%>\%
+  pr_run()
 }
 
 }
