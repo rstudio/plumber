@@ -3,11 +3,14 @@
 \name{add_parser}
 \alias{add_parser}
 \alias{list_parsers}
+\alias{make_parsers}
 \title{Add a Parsers}
 \usage{
 add_parser(alias, parser, verbose = TRUE)
 
 list_parsers()
+
+make_parsers(parser_function, content_type)
 }
 \arguments{
 \item{alias}{Short name to map parser from the \verb{@parser} plumber tag.}
@@ -16,6 +19,11 @@ list_parsers()
 
 \item{verbose}{Logical value which determines if a warning should be
 displayed when alias in map are overwritten.}
+
+\item{parser_function}{A single functions to map to one or more Content-Type.}
+
+\item{content_type}{A vector of Content-Type or regex to be matched against a request
+Content-Type.}
 }
 \description{
 A parser is responsible for decoding the raw body content of a request into
@@ -40,18 +48,21 @@ Parser function structure is something like below.\if{html}{\out{<div class="r">
 \section{Functions}{
 \itemize{
 \item \code{list_parsers}: List currently registered parsers
+
+\item \code{make_parsers}: Make named list. Mapping content-type with parser.
 }}
 
 \examples{
 # Content-type header is mostly used to look up charset and adjust encoding
 parser_dcf <- function() {
-  parse_func <- function(value, content_type = "text/x-dcf", ...) {
+  f <- function(value, content_type = "text/x-dcf", ...) {
     charset <- getCharacterSet(content_type)
     value <- rawToChar(value)
     Encoding(value) <- charset
     read.dcf(value)
   }
-  return(invisible(list("text/x-dcf" = parse_func)))
+  ct <- "text/x-dcf"
+  return(make_parsers(f, ct))
 }
 add_parser("dcf", parser_dcf)
 }

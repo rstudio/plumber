@@ -14,5 +14,6 @@ test_that("parsers work", {
   expect_equal(r$routes$all$parsers, parser_all())
   expect_equal(r$routes$default$parsers, NULL)
   expect_equal(r$routes$json$parsers, parser_json())
+  expect_equal(r$routes$mixed$parsers, c(parser_json(), parser_query()))
   expect_equal(r$routes$repeated$parsers, parser_json())
 })

@@ -28,7 +28,12 @@ parse_body <- function(body, content_type = NULL, parsers = NULL) {
 
 parse_raw <- function(toparse) {
   if (length(toparse$value) == 0L) return(list())
-  parser <- parser_picker(toparse$content_type, toparse$value[1], toparse$filename, toparse$parsers)
+  parser <- parser_picker(
+    # Lower case content_type for parser matching
+    tolower(toparse$content_type),
+    toparse$value[1],
+    toparse$filename,
+    toparse$parsers)
   if (!is.null(parser)) {
    return(do.call(parser, toparse))
   } else {
@@ -40,13 +45,13 @@ parse_raw <- function(toparse) {
 parser_picker <- function(content_type, first_byte, filename = NULL, parsers = NULL) {
 
   # parse as a query string
-  if (is.null(content_type)) {
+  if (length(content_type) == 0) {
     # fast default to json when first byte is 7b (ascii {)
     if (first_byte == as.raw(123L)) {
-      return(parsers$json)
+      return(parsers$json_)
     }
 
-    return(parsers$query)
+    return(parsers$query_)
   }
 
   # remove trailing content type information
@@ -59,24 +64,29 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
 
   parser <- parsers[[content_type]]
 
-  # return known parser
+  # return known parser (exact match)
   if (!is.null(parser)) {
     return(parser)
   }
 
-  # return text parser
-  if (stri_startswith_fixed(content_type, "text/")) {
-    # text parser
-    return(parsers$text)
+  fpm <- stri_detect_regex(
+    content_type,
+    names(parsers),
+    max_count = 1)
+  fpm[is.na(fpm)] <- FALSE
+
+  # return known parser (first pattern match)
+  if (any(fpm)) {
+    return(parsers[[which(fpm)]])
   }
 
   # query string
   if (is.null(filename)) {
-    return(parsers$query)
+    return(parsers$query_)
   }
 
   # octet
-  parsers$octet
+  parsers$octet_
 }
 
 
@@ -111,13 +121,14 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
 #' @examples
 #' # Content-type header is mostly used to look up charset and adjust encoding
 #' parser_dcf <- function() {
-#'   parse_func <- function(value, content_type = "text/x-dcf", ...) {
+#'   f <- function(value, content_type = "text/x-dcf", ...) {
 #'     charset <- getCharacterSet(content_type)
 #'     value <- rawToChar(value)
 #'     Encoding(value) <- charset
 #'     read.dcf(value)
 #'   }
-#'   return(invisible(list("text/x-dcf" = parse_func)))
+#'   ct <- "text/x-dcf"
+#'   return(make_parsers(f, ct))
 #' }
 #' add_parser("dcf", parser_dcf)
 #' @export
@@ -140,6 +151,22 @@ add_parser <- function(alias, parser, verbose = TRUE) {
 #' @describeIn add_parser List currently registered parsers
 list_parsers <- function() {
   .globals$parsers
+}
+
+#' @export
+#' @describeIn add_parser Make named list. Mapping content-type with parser.
+#' @param parser_function A single functions to map to one or more Content-Type.
+#' @param content_type A vector of Content-Type or regex to be matched against a request
+#' Content-Type.
+make_parsers <- function(parser_function, content_type) {
+  invisible(
+    structure(
+      replicate(
+        length(content_type),
+        parser_function),
+      names = content_type
+    )
+  )
 }
 
 #' Plumber Parsers
@@ -173,25 +200,24 @@ list_parsers <- function() {
 #' }
 #' @export
 parser_query <- function() {
-  parse_func <- parser_text(parseQS)[[1]]
-  return(invisible(
-    list("application/x-www-form-urlencoded" = parse_func,
-         "query" = parse_func)
-  ))
+  f <- parser_text(parseQS)[[1]]
+  ct <- c("application/x-www-form-urlencoded",
+          "query_")
+  return(make_parsers(f, ct))
 }
 
 
 #' @describeIn parsers JSON parser
 #' @export
 parser_json <- function(...) {
-  parse_func <- parser_text(function(value) {
+  f <- parser_text(function(value) {
     safeFromJSON(value, ...)
   })[[1]]
-  return(invisible(
-    list("application/json" = parse_func,
-         "text/json" = parse_func,
-         "json" = parse_func)
-  ))
+  ct <- c("application/json",
+          "text/json",
+          "json$",
+          "json_")
+  return(make_parsers(f, ct))
 }
 
 
@@ -200,34 +226,32 @@ parser_json <- function(...) {
 #' @export
 parser_text <- function(parse_fn = identity) {
   stopifnot(is.function(parse_fn))
-  parse_func <- function(value, content_type = NULL, ...) {
+  f <- function(value, content_type = NULL, ...) {
     charset <- getCharacterSet(content_type)
     value <- rawToChar(value)
     Encoding(value) <- charset
     parse_fn(value)
   }
-  return(invisible(
-    list("text/plain" = parse_func,
-         "text" = parse_func)
-  ))
+  ct <- c("text/plain",
+          "^text/")
+  return(make_parsers(f, ct))
 }
 
 
 #' @describeIn parsers YAML parser
 #' @export
 parser_yaml <- function(...) {
-  parse_func <- parser_text(function(val) {
+  f <- parser_text(function(val) {
     if (!requireNamespace("yaml", quietly = TRUE)) {
       stop("yaml must be installed for the yaml parser to work")
     }
     yaml::yaml.load(val, ..., eval.expr = FALSE)
   })[[1]]
-  return(invisible(
-    list("application/yaml" = parse_func,
-         "application/x-yaml" = parse_func,
-         "text/yaml" = parse_func,
-         "text/x-yaml" = parse_func)
-  ))
+  ct <- c("application/yaml",
+          "application/x-yaml",
+          "text/yaml",
+          "text/x-yaml")
+  return(make_parsers(f, ct))
 }
 
 #' @describeIn parsers Helper parser that writes the binary post body to a file and reads it back again using `read_fn`.
@@ -249,54 +273,50 @@ parser_read_file <- function(read_fn = readLines) {
 #' @describeIn parsers CSV parser
 #' @export
 parser_csv <- function(...) {
-  parse_func <- parser_read_file(function(val) {
+  f <- parser_read_file(function(val) {
     utils::read.csv(val, ...)
   })
-  return(invisible(
-    list("application/csv" = parse_func,
-         "application/x-csv" = parse_func,
-         "text/csv" = parse_func,
-         "text/x-csv" = parse_func)
-  ))
+  ct <- c("application/csv",
+          "application/x-csv",
+          "text/csv",
+          "text/x-csv")
+  return(make_parsers(f, ct))
 }
 
 
 #' @describeIn parsers TSV parser
 #' @export
 parser_tsv <- function(...) {
-  parse_func <- parser_read_file(function(val) {
+  f <- parser_read_file(function(val) {
     utils::read.delim(val, ...)
   })
-  return(invisible(
-    list("application/tab-separated-values" = parse_func,
-         "text/tab-separated-values" = parse_func)
-  ))
+  ct <- c("application/tab-separated-values",
+          "text/tab-separated-values")
+  return(make_parsers(f, ct))
 }
 
 
 #' @describeIn parsers RDS parser
 #' @export
 parser_rds <- function(...) {
-  parse_func <- parser_read_file(function(value) {
+  f <- parser_read_file(function(value) {
     readRDS(value, ...)
   })
-  return(invisible(
-    list("application/rds" = parse_func)
-  ))
+  ct <- "application/rds"
+  return(make_parsers(f, ct))
 }
 
 
 #' @describeIn parsers Octet stream parser
 #' @export
 parser_octet <- function() {
-  parse_func <- function(value, filename = NULL, ...) {
+  f <- function(value, filename = NULL, ...) {
     attr(value, "filename") <- filename
     value
   }
-  return(invisible(
-    list("application/octet-stream" = parse_func,
-         "octet" = parse_func)
-  ))
+  ct <- c("application/octet-stream",
+          "octet_")
+  return(make_parsers(f, ct))
 }
 
 
@@ -304,7 +324,7 @@ parser_octet <- function() {
 #' @export
 #' @importFrom webutils parse_multipart
 parser_multi <- function() {
-  parse_func <- function(value, content_type, parsers, ...) {
+  f <- function(value, content_type, parsers, ...) {
     if (!stri_detect_fixed(content_type, "boundary=", case_insensitive = TRUE))
       stop("No boundary found in multipart content-type header: ", content_type)
     boundary <- stri_match_first_regex(content_type, "boundary=([^; ]{2,})", case_insensitive = TRUE)[,2]
@@ -326,9 +346,8 @@ parser_multi <- function() {
       parse_raw(x)
     })
   }
-  return(invisible(
-    list("multipart/form-data" = parse_func)
-  ))
+  ct <- "multipart/form-data"
+  return(make_parsers(f, ct))
 }
 
 #' @describeIn parsers All parsers
@@ -337,7 +356,7 @@ parser_all <- function() {
   parsers <- .globals$parsers
   parsers$all <- NULL
   return(invisible(
-    Reduce(function(a, b) {c(a, b())}, parsers, init = list())
+    Reduce(function(l, p) {c(l, p())}, parsers, init = list())
   ))
 }
 

@@ -176,7 +176,9 @@ plumbBlock <- function(lineNum, file){
         if (is.null(parsers)) {
           parsers <- do.call(parser_builder, argList)
         } else {
-          parsers <- utils::modifyList(parsers, do.call(parser_builder, argList))
+          # Since we plumb from bottom to top, put currently plumbed parsers in front
+          # Parsers will be added in the order the appear in the plumbed file
+          parsers <- utils::modifyList(do.call(parser_builder, argList), parsers)
         }
       }, error = function(e) {
         stopOnLine(lineNum, line, paste0("Error creating parser: ", parser_alias, "\n", e))
