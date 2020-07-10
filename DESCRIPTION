@@ -41,13 +41,9 @@ Suggests:
     analogsea (>= 0.7.0),
     later,
     readr,
-    yaml,
-    redoc (>= 2.0.0.30),
-    rapidoc (>= 8.1.1)
+    yaml
 Remotes:
-    rstudio/swagger,
-    meztez/redoc,
-    meztez/rapidoc
+    rstudio/swagger
 Collate:
     'async.R'
     'content-types.R'

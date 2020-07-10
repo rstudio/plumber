@@ -15,8 +15,8 @@ test_that("custom OpenAPI Specification update function works", {
     spec$info$title <- Sys.time()
     spec
   })
-  pr$setUI(ui = "redoc")
-  # Should get a message that redoc is unknown if library is not loaded
+  pr$setUI(ui = "wribbit")
+  # Should get a message that wribbit is unknown if library is not loaded
   pr$run(port = 1234)
 
   # validate that http://127.0.0.1:1234/__swagger__/ displays the system time as the api title
@@ -25,19 +25,6 @@ test_that("custom OpenAPI Specification update function works", {
   pr$run(port = 1234)
   pr$setUI(ui = "swagger")
   pr$run(port = 1234)
-
-  # Check that redoc works loads and options work
-  library(redoc)
-  pr$setUI(ui = "redoc")
-  pr$run(port = 1234)
-  pr$setUI(ui = "redoc", scrollYOffset = 250, disableSearch = TRUE)
-  pr$run(port = 1235)
-
-  # Same thing with rapidoc
-  library(rapidoc)
-  pr$setUI(ui = "rapidoc", heading_text = "Rumbepl", bg_color = "#457872")
-  pr$run(port = 1235)
-  # check that options can be changed on the fly http://127.0.0.1:1235/__rapidoc__/index.html?heading_text=Bobcat&bg_color=%23FFFFFF
 
 })
 

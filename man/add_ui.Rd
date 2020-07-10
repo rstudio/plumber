@@ -14,8 +14,8 @@ a UI.}
 Add UI for plumber to use
 }
 \details{
-\code{\link[=add_ui]{add_ui()}} is used by package like \code{rapidoc}, \code{redoc} and \code{swagger}.
-When you load those package, it calls \code{\link[=add_ui]{add_ui()}} to provide a user
+\code{\link[=add_ui]{add_ui()}} is used by other packages like \code{swagger}.
+When you load these packages, it calls \code{\link[=add_ui]{add_ui()}} to provide a user
 interface that can interpret your plumber OpenAPI Specifications.
 
 \code{ui} list expects the following values
