@@ -15,7 +15,7 @@
 #' @export
 pr_new <- function(file = NULL,
                    filters = defaultPlumberFilters,
-                   envir) {
+                   envir = new.env(parent = .GlobalEnv)) {
   plumber$new(file = file, filters = filters, envir = envir)
 }
 
@@ -23,15 +23,13 @@ pr_new <- function(file = NULL,
 #'
 #' This collection of functions creates handlers for a Plumber router.
 #'
-#' The generic \code{pr_handle} creates a handle for the given methods. Specific
+#' The generic [pr_handle()] creates a handle for the given methods. Specific
 #' functions are implemented for the following HTTP methods:
-#' \itemize{
-#'   \item GET
-#'   \item POST
-#'   \item PUT
-#'   \item DELETE
-#'   \item HEAD
-#' }
+#' * `GET`
+#' * `POST`
+#' * `PUT`
+#' * `DELETE`
+#' * `HEAD`
 #' Each function mutates the plumber router in place, but also invisibly returns
 #' the updated router.
 #'
@@ -95,14 +93,13 @@ pr_get <- function(pr,
                    serializer,
                    endpoint,
                    ...) {
-  pr$handle("GET",
+  pr_handle("GET",
             path = path,
             handler = handler,
             preempt = preempt,
             serializer = serializer,
             endpoint = endpoint,
             ...)
-  invisible(pr)
 }
 
 #' @rdname pr_handle
@@ -114,14 +111,13 @@ pr_post <- function(pr,
                     serializer,
                     endpoint,
                     ...) {
-  pr$handle("POST",
+  pr_handle("POST",
             path = path,
             handler = handler,
             preempt = preempt,
             serializer = serializer,
             endpoint = endpoint,
             ...)
-  invisible(pr)
 }
 
 #' @rdname pr_handle
@@ -133,14 +129,13 @@ pr_put <- function(pr,
                    serializer,
                    endpoint,
                    ...) {
-  pr$handle("PUT",
+  pr_handle("PUT",
             path = path,
             handler = handler,
             preempt = preempt,
             serializer = serializer,
             endpoint = endpoint,
             ...)
-  invisible(pr)
 }
 
 #' @rdname pr_handle
@@ -152,14 +147,13 @@ pr_delete <- function(pr,
                       serializer,
                       endpoint,
                       ...) {
-  pr$handle("DELETE",
+  pr_handle("DELETE",
             path = path,
             handler = handler,
             preempt = preempt,
             serializer = serializer,
             endpoint = endpoint,
             ...)
-  invisible(pr)
 }
 
 #' @rdname pr_handle
@@ -171,14 +165,13 @@ pr_head <- function(pr,
                     serializer,
                     endpoint,
                     ...) {
-  pr$handle("HEAD",
+  pr_handle("HEAD",
             path = path,
             handler = handler,
             preempt = preempt,
             serializer = serializer,
             endpoint = endpoint,
             ...)
-  invisible(pr)
 }
 
 #' Mount a plumber router
@@ -219,12 +212,10 @@ pr_mount <- function(pr,
 #' Plumber routers support the notion of "hooks" that can be registered
 #' to execute some code at a particular point in the lifecycle of a request.
 #' Plumber routers currently support four hooks:
-#' \enumerate{
-#'  \item `preroute(data, req, res)`
-#'  \item `postroute(data, req, res, value)`
-#'  \item `preserialize(data, req, res, value)`
-#'  \item `postserialize(data, req, res, value)`
-#' }
+#'  1. `preroute(data, req, res)`
+#'  2. `postroute(data, req, res, value)`
+#'  3. `preserialize(data, req, res, value)`
+#'  4. `postserialize(data, req, res, value)`
 #' In all of the above you have access to a disposable environment in the `data`
 #' parameter that is created as a temporary data store for each request. Hooks
 #' can store temporary data in these hooks that can be reused by other hooks
@@ -256,21 +247,21 @@ pr_mount <- function(pr,
 #'     cat("Routing a request for", req$PATH_INFO, "...\n")
 #'   }) %>%
 #'   pr_register_hooks(list(
-#'   preserialize = function(req, value){
-#'     print("About to serialize this value:")
-#'     print(value)
+#'     preserialize = function(req, value){
+#'       print("About to serialize this value:")
+#'       print(value)
 #'
-#'     # Must return the value since we took one in. Here we're not choosing
-#'     # to mutate it, but we could.
-#'     value
-#'   },
-#'   postserialize = function(res){
-#'     print("We serialized the value as:")
-#'     print(res$body)
-#'   }
-#'  )) %>%
-#'  pr_handle("GET", "/", function(){ 123 }) %>%
-#'  pr_run()
+#'       # Must return the value since we took one in. Here we're not choosing
+#'       # to mutate it, but we could.
+#'       value
+#'     },
+#'     postserialize = function(res){
+#'       print("We serialized the value as:")
+#'       print(res$body)
+#'     }
+#'   )) %>%
+#'   pr_handle("GET", "/", function(){ 123 }) %>%
+#'   pr_run()
 #' }
 #'
 #' @export
