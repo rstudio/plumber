@@ -24,14 +24,14 @@ jobs:
         - name: CRAN
           workdir: Docker/CRAN
           # always overwrite the latest version with the CRAN version
-          tag: "v0.4.6,latest"
+          tag_names: "v0.4.6,latest"
           extra_buildargs: ",PLUMBER_VERSION=0.4.6"
 
         - name: GitHub
           workdir: Docker/GitHub
           # 'next' tag signifies the next release
-          tag: "next"
-          extra_buildargs: ",PLUMBER_BRANCH=0.4.6"
+          tag_names: "next"
+          extra_buildargs: ",PLUMBER_BRANCH=master"
 
 
     steps:
@@ -47,4 +47,4 @@ jobs:
         cache: ${{ github.event_name == 'push' }}
         workdir: ${{ matrix.config.workdir }}
         buildargs: "R_VERSION=${{ matrix.r_version }}${{ matrix.config.extra_buildargs }}"
-        tags: ${{ matrix.config.tag }}
+        tag_names: ${{ matrix.config.tag }}
