@@ -298,7 +298,7 @@ pr_register_hooks <- function(pr,
 #' @return The plumber router with the new default serializer
 #'
 #' @export
-pr_default_serializer <- function(pr,
+pr_serializer <- function(pr,
                               serializer) {
   pr$setSerializer(serializer)
   invisible(pr)
