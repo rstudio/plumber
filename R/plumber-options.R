@@ -5,6 +5,8 @@
 #' [options_plumber()] should not include the `plumber.` prefix.
 #'
 #' \describe{
+#' \item{`plumber.apiURL`}{UI url and server urls for OpenAPI Specification respecting
+#' pattern `scheme://host:port/path`. Other UI url options will be ignored when set.}
 #' \item{`plumber.apiScheme`}{Scheme used to build UI url and server url for
 #' OpenAPI Specification. Defaults to `http`, or an empty string
 #' when used outside a running router}
@@ -16,8 +18,6 @@
 #' when used outside a running router}
 #' \item{`plumber.apiPath`}{Path used to build UI url and server url for
 #' OpenAPI Specification. Defaults to an empty string}
-#' \item{`plumber.apiURL`}{UI url and server urls for OpenAPI Specification respecting
-#' pattern `scheme://host:port/path`. Defaults to the combination of the above options}
 #' \item{`plumber.debug`}{Provides more insight into your API errors. Alternatively,
 #' use parameter `debug` of plumber router `run` method. Defaults to `FALSE`}
 #' \item{`plumber.maxRequestSize`}{Maximum length in bytes of request body. Body larger

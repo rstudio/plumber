@@ -56,6 +56,8 @@ be set globally with \code{\link[=options]{options()}} or with \code{\link[=opti
 }
 \details{
 \describe{
+\item{\code{plumber.apiURL}}{UI url and server urls for OpenAPI Specification respecting
+pattern \verb{scheme://host:port/path}. Other UI url options will be ignored when set.}
 \item{\code{plumber.apiScheme}}{Scheme used to build UI url and server url for
 OpenAPI Specification. Defaults to \code{http}, or an empty string
 when used outside a running router}
@@ -67,8 +69,6 @@ OpenAPI Specification. Defaults to \code{port} defined by \code{run} method, or 
 when used outside a running router}
 \item{\code{plumber.apiPath}}{Path used to build UI url and server url for
 OpenAPI Specification. Defaults to an empty string}
-\item{\code{plumber.apiURL}}{UI url and server urls for OpenAPI Specification respecting
-pattern \verb{scheme://host:port/path}. Defaults to the combination of the above options}
 \item{\code{plumber.debug}}{Provides more insight into your API errors. Alternatively,
 use parameter \code{debug} of plumber router \code{run} method. Defaults to \code{FALSE}}
 \item{\code{plumber.maxRequestSize}}{Maximum length in bytes of request body. Body larger

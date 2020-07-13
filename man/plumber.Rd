@@ -191,6 +191,7 @@ Start a server using \code{plumber} object.
   swagger,
   debug = interactive(),
   swaggerCallback,
+  ...,
   callback = getOption("plumber.ui.callback", getOption("plumber.swagger.url", NULL))
 )}\if{html}{\out{</div>}}
 }
@@ -212,6 +213,8 @@ Mac OS X, port numbers smaller than 1025 require root privileges.}
 
 \item{\code{swaggerCallback}}{Deprecated. Use \code{callback} parameter.}
 
+\item{\code{...}}{Unused.}
+
 \item{\code{callback}}{a callback function for taking action on UI url.}
 }
 \if{html}{\out{</div>}}
@@ -221,7 +224,7 @@ Mac OS X, port numbers smaller than 1025 require root privileges.}
 
 \code{callback} When set, it will be called with a character string corresponding
 to the UI url. It allows RStudio to open UI when plumber router
-run method is executed using default \code{plumber.ui.url} option.
+run method is executed using default \code{plumber.ui.callback} option.
 }
 
 }

@@ -263,19 +263,20 @@ plumber <- R6Class(
     #' @param swagger Deprecated. Use `plumber` method `setUI` and `setApiHandler`.
     #' @param debug `TRUE` provides more insight into your API errors.
     #' @param swaggerCallback Deprecated. Use `callback` parameter.
+    #' @param ... Unused.
     #' @param callback a callback function for taking action on UI url.
     #' @details
     #' `port` does not need to be explicitly assigned.
     #'
     #' `callback` When set, it will be called with a character string corresponding
     #' to the UI url. It allows RStudio to open UI when plumber router
-    #' run method is executed using default `plumber.ui.url` option.
+    #' run method is executed using default `plumber.ui.callback` option.
     run = function(
       host = '127.0.0.1',
       port = getOption('plumber.port'),
       swagger,
       debug = interactive(),
-      swaggerCallback, 
+      swaggerCallback,
       ...,
       callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL))
     ) {
