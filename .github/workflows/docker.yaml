@@ -9,7 +9,7 @@ on:
 
 jobs:
   docker:
-    name: ${{ matrix.config.workdir }} - ${{ matrix.config.tag_names }}
+    name: ${{ matrix.config.workdir }} - ${{ matrix.config.tags }}
     runs-on: ubuntu-latest
 
     strategy:
@@ -24,13 +24,13 @@ jobs:
         - name: CRAN
           workdir: Docker/CRAN
           # always overwrite the latest version with the CRAN version
-          tag_names: "v0.4.6,latest"
+          tags: "v0.4.6,latest"
           extra_buildargs: ",PLUMBER_VERSION=0.4.6"
 
         - name: GitHub
           workdir: Docker/GitHub
           # 'next' tag signifies the next release
-          tag_names: "next"
+          tags: "next"
           extra_buildargs: ",PLUMBER_BRANCH=master"
 
 
@@ -39,12 +39,12 @@ jobs:
 
     # https://github.com/marketplace/actions/publish-docker
     - name: rstudio/plumber
-      uses: elgohr/Publish-Docker-Github-Action@2.12
+      uses: elgohr/Publish-Docker-Github-Action@2.18
       with:
-        name: rstudio/shinycoreci
+        name: rstudio/plumber
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
         cache: ${{ github.event_name == 'push' }}
         workdir: ${{ matrix.config.workdir }}
         buildargs: "R_VERSION=${{ matrix.r_version }}${{ matrix.config.extra_buildargs }}"
-        tag_names: ${{ matrix.config.tag_names }}
+        tags: ${{ matrix.config.tags }}
