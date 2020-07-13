@@ -236,8 +236,8 @@ CMD ["/app/plumber.R"]</code></pre>
 <div id="automatically-run-on-restart" class="section level3">
 <h3 class="hasAnchor">
 <a href="#automatically-run-on-restart" class="anchor"></a>Automatically Run on Restart</h3>
-<p>If you want your container to start automatically when your machine is booted, you can use the <code>-d</code> switch for <code>docker run</code>.</p>
-<p><code>docker run -p 1234:8000 -d myCustomDocker</code> would run the custom image you created above automatically every time your machine boots and expose the plumber service on port <code>1234</code> of your host machine. Like all other hosting options, you’ll need to make sure that your firewall allows connections on port <code>1234</code> if you want others to be able to access your service.</p>
+<p>If you want your container to start automatically when your machine is booted, you can use the <code>--restart</code> parameter for <code>docker run</code>.</p>
+<p><code>docker run -p 1234:8000 -dit --restart=unless-stopped myCustomDocker</code> would run the custom image you created above automatically every time your machine boots and expose the plumber service on port <code>1234</code> of your host machine, unless the container is explicitly stopped. Like all other hosting options, you’ll need to make sure that your firewall allows connections on port <code>1234</code> if you want others to be able to access your service.</p>
 </div>
 </div>
 <div id="docker-advanced" class="section level2">
