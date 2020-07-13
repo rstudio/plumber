@@ -287,7 +287,7 @@ plumber <- R6Class(
       if (!missing(swagger)) {
         warning("`swagger` parameter has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$setUI()` and `$setApiHandler()`.")
         if (is.function(swagger)) {
-          self$setUI = TRUE
+          self$setUI(TRUE)
           self$setApiHandler(swagger)
         } else {
           self$setUI(swagger)
