@@ -40,6 +40,24 @@ articles:
 #   - 'ex-mailgun'
 
 reference:
+- title: Tidy Plumber
+  desc: Programmatic Plumber with pipes
+  contents:
+  - 'pr'
+  - 'pr_handle'
+  - 'pr_get'
+  - 'pr_post'
+  - 'pr_put'
+  - 'pr_delete'
+  - 'pr_head'
+  - 'pr_mount'
+  - 'pr_register_hook'
+  - 'pr_register_hooks'
+  - 'pr_default_serializer'
+  - 'pr_404_handler'
+  - 'pr_error_handler'
+  - 'pr_filter'
+  - 'pr_run'
 - title: All functions
   # desc: description here
   contents:
