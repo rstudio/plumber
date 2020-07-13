@@ -9,7 +9,7 @@ on:
 
 jobs:
   docker:
-    name: ${{ matrix.config.workdir }} - ${{ matrix.config.tag }}
+    name: ${{ matrix.config.workdir }} - ${{ matrix.config.tag_names }}
     runs-on: ubuntu-latest
 
     strategy:
@@ -47,4 +47,4 @@ jobs:
         cache: ${{ github.event_name == 'push' }}
         workdir: ${{ matrix.config.workdir }}
         buildargs: "R_VERSION=${{ matrix.r_version }}${{ matrix.config.extra_buildargs }}"
-        tag_names: ${{ matrix.config.tag }}
+        tag_names: ${{ matrix.config.tag_names }}
