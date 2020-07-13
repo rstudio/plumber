@@ -275,7 +275,8 @@ plumber <- R6Class(
       port = getOption('plumber.port'),
       swagger,
       debug = interactive(),
-      swaggerCallback,
+      swaggerCallback, 
+      ...,
       callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL))
     ) {
 
