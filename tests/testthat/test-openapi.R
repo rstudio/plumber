@@ -370,7 +370,7 @@ test_that("custom spec works", {
     custom <- list(info = list(description = "My Custom Spec", title = "This is only a test"))
     return(utils::modifyList(spec, custom))
   }
-  pr$setApiHandler(customSpec)
+  pr$apiSpecHandler(customSpec)
   spec <- pr$apiSpec()
   expect_equal(spec$info$description, "My Custom Spec")
   expect_equal(spec$info$title, "This is only a test")
