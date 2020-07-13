@@ -135,7 +135,7 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 \item \href{#method-setSerializer}{\code{plumber$setSerializer()}}
 \item \href{#method-set404Handler}{\code{plumber$set404Handler()}}
 \item \href{#method-setErrorHandler}{\code{plumber$setErrorHandler()}}
-\item \href{#method-apiSpecHandler}{\code{plumber$apiSpecHandler()}}
+\item \href{#method-apiSpecTransform}{\code{plumber$apiSpecTransform()}}
 \item \href{#method-setUI}{\code{plumber$setUI()}}
 \item \href{#method-filter}{\code{plumber$filter()}}
 \item \href{#method-apiSpec}{\code{plumber$apiSpec()}}
@@ -207,7 +207,7 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.}
 
-\item{\code{swagger}}{Deprecated. Use \code{plumber} method \code{setUI} and \code{apiSpecHandler}.}
+\item{\code{swagger}}{Deprecated. Use \code{plumber} method \code{setUI} and \code{apiSpecTransform}.}
 
 \item{\code{debug}}{\code{TRUE} provides more insight into your API errors.}
 
@@ -649,12 +649,12 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-apiSpecHandler"></a>}}
-\if{latex}{\out{\hypertarget{method-apiSpecHandler}{}}}
-\subsection{Method \code{apiSpecHandler()}}{
+\if{html}{\out{<a id="method-apiSpecTransform"></a>}}
+\if{latex}{\out{\hypertarget{method-apiSpecTransform}{}}}
+\subsection{Method \code{apiSpecTransform()}}{
 Add a function to customize what is returned in \verb{$apiSpec()}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{plumber$apiSpecHandler(api_fun = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{plumber$apiSpecTransform(api_fun = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

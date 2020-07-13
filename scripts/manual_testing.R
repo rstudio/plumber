@@ -11,7 +11,7 @@ test_that("custom OpenAPI Specification update function works", {
   pr <- plumber$new()
   pr$handle("GET", "/:path/here", function(){})
   pr$handle("POST", "/:path/there", function(){})
-  pr$apiSpecHandler(function(spec) {
+  pr$apiSpecTransform(function(spec) {
     spec$info$title <- Sys.time()
     spec
   })
