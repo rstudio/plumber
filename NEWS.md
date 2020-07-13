@@ -24,7 +24,7 @@ plumber 1.0.0
   [OpenAPI 3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md),
   upgrading from Swagger Specification. (#365)
 
-* Plumber router `$run()` method arguments `swagger` removed and `swaggerCallback` replaced by `callback`. User interface is now enabled by default and managed through Plumber router `$setUI()` method and option `plumber.ui`. (@meztez, #562)
+* Plumber router `$run()` method arguments `swagger` and `swaggerCallback` deprecated. Parameter `swaggerCallback` replaced by `callback`. User interface is now enabled by default and managed through Plumber router `$setUI()` method and option `plumber.ui`. (@meztez, #562)
 
 * The source files used in plumber **must use** the UTF-8 encoding if they contain
   non-ASCII characters (@shrektan, #312,
@@ -34,7 +34,8 @@ plumber 1.0.0
 
 ### New features
 
-* Generalize user interface integration. Plumber can now use other OpenAPI compatible user interfaces like `RapiDoc` and `Redoc`. (@meztez, #562)
+* Generalize user interface integration. Plumber can now use other OpenAPI compatible user interfaces like `RapiDoc` (https://github.com/mrin9/RapiDoc) and `Redoc` (https://github.com/Redocly/redoc). Pending CRAN approbations, R packages for
+both UIs integration are available from https://github.com/meztez/rapidoc/ and https://github.com/meztez/redoc/. (@meztez, #562)
 
 * Added support for promises in endpoints, filters, and hooks. (#248)
 
@@ -89,8 +90,6 @@ plumber 1.0.0
 
 
 ### Bug fixes
-
-* Fix OpenAPI server url error when `HTTP_REFERER` is NULL. (@meztez, #562)
 
 * Modified images serialization to use content-type serializer. Fixes issue with images pre/postserialize hooks (@meztez, #518).
 
