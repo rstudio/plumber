@@ -1,6 +1,5 @@
-FROM trestletech/plumber
-MAINTAINER Jeff Allen <docker@trestletech.com>
+FROM rstudio/plumber:next
 
 COPY github-key.txt /github-key
 
-CMD ["/examples/03-github/github.R"]
+CMD ["/usr/local/lib/R/site-library/plumber/examples/03-github/plumber.R"]

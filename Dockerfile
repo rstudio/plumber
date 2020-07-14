@@ -2,6 +2,7 @@
 ARG R_VERSION=latest
 
 FROM rocker/r-ver:${R_VERSION}
+LABEL maintainer="barret@rstudio.com"
 
 ARG PLUMBER_REF=master
 
