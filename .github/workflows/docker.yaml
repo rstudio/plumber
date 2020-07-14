@@ -13,7 +13,6 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
-      # max-parallel: 2
       fail-fast: false
 
       matrix:
@@ -22,16 +21,14 @@ jobs:
 
         config:
         - name: CRAN
-          workdir: Docker/CRAN
           # always overwrite the latest version with the CRAN version
           tags: "v0.4.6,latest"
-          extra_buildargs: ",PLUMBER_VERSION=0.4.6"
+          ref: "v0.4.6"
 
         - name: GitHub
-          workdir: Docker/GitHub
-          # 'next' tag signifies the next release
+          # 'next' tag signifies the _next_ release
           tags: "next"
-          extra_buildargs: ",PLUMBER_BRANCH=master"
+          ref: "master"
 
 
     steps:
@@ -45,6 +42,6 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
         cache: ${{ github.event_name == 'push' }}
-        workdir: ${{ matrix.config.workdir }}
-        buildargs: "R_VERSION=${{ matrix.r_version }}${{ matrix.config.extra_buildargs }}"
+        workdir: "."
+        buildargs: "R_VERSION=${{ matrix.r_version }},PLUMBER_REF=${{ matrix.config.ref }}${{ matrix.config.extra_buildargs }}"
         tags: ${{ matrix.config.tags }}
