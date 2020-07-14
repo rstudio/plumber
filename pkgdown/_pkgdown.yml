@@ -53,6 +53,7 @@ reference:
   - 'pr_mount'
   - 'pr_register_hook'
   - 'pr_register_hooks'
+  - 'pr_cookie'
   - 'pr_serializer'
   - 'pr_404_handler'
   - 'pr_error_handler'

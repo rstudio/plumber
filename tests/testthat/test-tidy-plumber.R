@@ -81,6 +81,25 @@ test_that("pr_register_hooks registers hooks", {
   expect_output(p$call(req), "Post-serialize hook")
 })
 
+test_that("pr_cookie adds cookie", {
+  p <- pr() %>%
+    pr_cookie(
+      randomCookieKey(),
+      name = "counter"
+    ) %>%
+    pr_get("/sessionCounter", function(req) {
+      count <- 0
+      if (!is.null(req$session$counter)){
+        count <- as.numeric(req$session$counter)
+      }
+      req$session$counter <- count + 1
+      return(paste0("This is visit #", count))
+    })
+
+  req <- make_req("GET", "/sessionCounter")
+  expect_match(p$call(req)$headers$`Set-Cookie`, "^counter=")
+})
+
 test_that("pr default functions perform as expected", {
   serialized <- function(...) {
     serializer_content_type("text/plain", function(val) {
