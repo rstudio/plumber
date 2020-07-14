@@ -20,7 +20,7 @@ cannot be served by an existing endpoint or filter.
 }
 \examples{
 \dontrun{
-handler_404 <- functin(req, res) {
+handler_404 <- function(req, res) {
   res$status <- 404
   res$body <- "Oops"
 }

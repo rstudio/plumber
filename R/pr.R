@@ -426,7 +426,7 @@ pr_serializer <- function(pr,
 #'
 #' @examples
 #' \dontrun{
-#' handler_404 <- functin(req, res) {
+#' handler_404 <- function(req, res) {
 #'   res$status <- 404
 #'   res$body <- "Oops"
 #' }
