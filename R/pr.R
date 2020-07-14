@@ -14,8 +14,8 @@
 #'
 #' @export
 pr <- function(file = NULL,
-                   filters = defaultPlumberFilters,
-                   envir = new.env(parent = .GlobalEnv)) {
+               filters = defaultPlumberFilters,
+               envir = new.env(parent = .GlobalEnv)) {
   plumber$new(file = file, filters = filters, envir = envir)
 }
 
@@ -409,7 +409,7 @@ pr_cookie <- function(pr,
 #'
 #' @export
 pr_serializer <- function(pr,
-                              serializer) {
+                          serializer) {
   pr$setSerializer(serializer)
   invisible(pr)
 }
@@ -439,7 +439,7 @@ pr_serializer <- function(pr,
 #'
 #' @export
 pr_404_handler <- function(pr,
-                               fun) {
+                           fun) {
   pr$set404Handler(fun)
   invisible(pr)
 }
@@ -454,7 +454,7 @@ pr_404_handler <- function(pr,
 #'
 #' @export
 pr_error_handler <- function(pr,
-               fun) {
+                             fun) {
   pr$setErrorHandler(fun)
   invisible(pr)
 }
