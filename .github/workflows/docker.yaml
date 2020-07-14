@@ -9,7 +9,7 @@ on:
 
 jobs:
   docker:
-    name: ${{ matrix.config.workdir }} - ${{ matrix.config.tags }}
+    name: ${{ matrix.config.tags }}
     runs-on: ubuntu-latest
 
     strategy:
