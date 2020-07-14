@@ -11,7 +11,7 @@ checkAnalogSea <- function() {
 
   suggests <- read.dcf(system.file("DESCRIPTION", package = "plumber"))[1, "Suggests"]
   pkgs <- strsplit(suggests, ",")[[1]]
-  analogsea_version <- gsub("[^.0-9]", "", pkgs[grepl("^analogsea ", pkgs)])
+  analogsea_version <- gsub("[^.0-9]", "", pkgs[grepl("^\\s*analogsea ", pkgs)])
   if (utils::packageVersion("analogsea") < package_version(analogsea_version)) {
     stop("The analogsea package is not high enough. Please update `analogsea`.",
          call. = FALSE)
@@ -150,13 +150,9 @@ install_nginx <- function(droplet){
 }
 
 install_new_r <- function(droplet){
-  analogsea::droplet_ssh(droplet, "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9")
+  analogsea::droplet_ssh(droplet, "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9")
   analogsea::droplet_ssh(droplet, "echo 'deb https://cran.rstudio.com/bin/linux/ubuntu focal-cran40/' >> /etc/apt/sources.list.d/cran.list")
-  # TODO: use the analogsea version once https://github.com/sckott/analogsea/issues/139 is resolved
-  #analogsea::debian_apt_get_update(droplet)
-  analogsea::droplet_ssh(droplet, "sudo apt-get update -qq")
-  analogsea::droplet_ssh(droplet, 'sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade')
-
+  analogsea::debian_apt_get_update()
   analogsea::debian_install_r(droplet)
 }
 
