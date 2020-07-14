@@ -152,7 +152,7 @@ install_nginx <- function(droplet){
 install_new_r <- function(droplet){
   analogsea::droplet_ssh(droplet, "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9")
   analogsea::droplet_ssh(droplet, "echo 'deb https://cran.rstudio.com/bin/linux/ubuntu focal-cran40/' >> /etc/apt/sources.list.d/cran.list")
-  analogsea::debian_apt_get_update()
+  analogsea::debian_apt_get_update(droplet)
   analogsea::debian_install_r(droplet)
 }
 
