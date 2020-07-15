@@ -44,6 +44,7 @@ serializer_identity <- function(){
 #' @param filename File name to use when saving the attachment.
 #'   If no `filename` is provided, the `value` will be treated as a regular attachment
 #' @return Object with class `"plumber_attachment"`
+#' @export
 #' @examples
 #' # plumber.R
 #'
