@@ -81,4 +81,4 @@ Collate:
     'session-cookie.R'
     'utf8.R'
     'zzz.R'
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1

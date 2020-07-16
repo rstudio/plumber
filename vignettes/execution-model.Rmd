@@ -24,7 +24,7 @@ If you call `plumb()` on this file, the `counter` variable will be created and w
 
 By default, when you create a new Plumber router (which happens implicitly when you call `plumb()` on a file), a new environment is created especially for this router. It is in this environment that all expressions will be evaluated and all endpoints invoked.
 
-This can become important if you consider mounting routers onto one another. In that case, you may expect that they would be able to share state via their environment, but that will not work by default. If you're [creating your routers programmatically](#programmatic-usage), then you can specify an environment when initializing your Plumber router using the `envir` parameter. This is the environment in which:
+This can become important if you consider mounting routers onto one another. In that case, you may expect that they would be able to share state via their environment, but that will not work by default. If you're [creating your routers programmatically](./execution-model.html#programmatic-usage), then you can specify an environment when initializing your Plumber router using the `envir` parameter. This is the environment in which:
 
  - A decorated R script, if provided, will be `source()`d.
  - All expressions will be evaluated.
@@ -39,7 +39,7 @@ R is a single-threaded programming language, meaning that it can only do one tas
 Incoming HTTP requests are serviced in the order in which they appeared, but if requests are coming in more quickly than they can be processed by the API, a backlog of requests will accrue. The common solutions to this problem are to do either or both of:
 
  1. Keep your API performant. All filters and endpoints should complete very quickly and any long-running or complicated tasks should be done outside of the API process.
- 2. Run multiple R processes to redundantly host a single Plumber API and load-balance incoming requests between all available processes. See the [hosting section](#hosting) for details on which hosting environments support this feature.
+ 2. Run multiple R processes to redundantly host a single Plumber API and load-balance incoming requests between all available processes. See the [hosting section](./hosting.html) for details on which hosting environments support this feature.
 
 ## Managing State
 
@@ -64,11 +64,11 @@ Therefore this approach can be effective for "read-only" data -- such as if you 
 
 Writing to files on disk is often the next most obvious choice for storing state. Plumber APIs could modify a data frame then use `write.csv()` to save that data to disk, or use `writeLines()` to append some new data to an existing file. These approaches enable your R process to be stateless, but are not always resilient to concurrency issues. For instance, if you've horizontally scaled your API to five R processes and two go to `write.csv()` simultaneously, you will either see one process's data get immediately overwritten by the other's, or -- even worse -- you may end up with a corrupted CSV file which can't be read. Unless otherwise stated, it's safe to assume that any R function that writes data to disk is not resilient to concurrency contention, so you should not rely on the filesystem to coordinate shared state for any more than a single R process running concurrently.
 
-It's also important to ask whether or not the [hosting platform](#hosting) you'll be using supports persistent storage on disk. For instance, Docker may insulate your R process from your hardware and not allow you to write outside of your container. RStudio Connect, too, will provision a new directory every time you deploy an updated version of your API which will discard any data you had written to disk up to that point. So if you're considering writing your state to disk long-term, be sure that your hosting environment supports persistent on-disk storage and that you've considered the concurrency implications of your code.
+It's also important to ask whether or not the [hosting platform](./hosting.html) you'll be using supports persistent storage on disk. For instance, Docker may insulate your R process from your hardware and not allow you to write outside of your container. RStudio Connect, too, will provision a new directory every time you deploy an updated version of your API which will discard any data you had written to disk up to that point. So if you're considering writing your state to disk long-term, be sure that your hosting environment supports persistent on-disk storage and that you've considered the concurrency implications of your code.
 
 ### Cookies {#state-cookies}
 
-HTTP cookies are a convention that allow web servers to send some state to a client with the expectation that the client would then include that state in future requests. See the [Setting Cookies section](#setting-cookies) for details on how to leverage cookies in Plumber.
+HTTP cookies are a convention that allow web servers to send some state to a client with the expectation that the client would then include that state in future requests. See the [Setting Cookies section](./rendering-output.html#setting-cookies) for details on how to leverage cookies in Plumber.
 
 // TODO: graphic
 
@@ -78,7 +78,7 @@ One issue with maintaining state in cookies is that their size should be kept to
 
 The most notable concern when considering using cookies to store state is that since your clients are responsible for storing and sending their state, you cannot expect that the state has not been tampered with. Thus, while it may be acceptable to store user preferences like `preferredColor="blue"`, you should *not* store authentication information like `userID=1493`, since the user could trivially change that cookie to another user's ID to impersonate them.
 
-If you'd like to use cookies to store information with guarantees that the user cannot either read or modify the state, see the [Encrypted Cookies section](#encrypted-cookies)).
+If you'd like to use cookies to store information with guarantees that the user cannot either read or modify the state, see the [Encrypted Cookies section](./rendering-output.html#encrypted-cookies)).
 
 ### External Data Store
 

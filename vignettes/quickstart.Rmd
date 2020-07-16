@@ -18,7 +18,7 @@ Plumber allows you to create APIs by merely decorating your existing R code with
 
 This file defines two Plumber "endpoints." One is hosted at the path `/echo` and simply echoes the message passed in; the other is hosted at the path `/plot` and returns an image showing a simple R plot.
 
-If you haven't installed `plumber` yet, see the [installation section](#installation). Once  you have `plumber` installed, you can use the `plumber::plumb()` function to translate this R file into a Plumber API:
+If you haven't installed `plumber` yet, see the [installation section](./index.html#installation). Once  you have `plumber` installed, you can use the `plumber::plumb()` function to translate this R file into a Plumber API:
 
 ```r
 pr <- plumber::plumb("plumber.R")
@@ -32,7 +32,7 @@ pr$run()
 
 You should see a message about your API running on your computer on port `8000`. The API will continue running in your R session until you press the `Esc` key. If you're running this code locally on your personal machine, you should be able to open [http://localhost:8000/echo](http://localhost:8000/echo) or [http://localhost:8000/plot](http://localhost:8000/plot) in a web browser to test your new API endpoints.
 
-> If you're using a tool like RStudio Server to run your R code on a remote machine, you should see the [networking section](#networking) for help with visiting your API.
+> If you're using a tool like RStudio Server to run your R code on a remote machine, you should see the [networking section](./security.html#networking) for help with visiting your API.
 
 The `/echo` endpoint should show output resembling the following.
 
@@ -68,7 +68,7 @@ res <- plumber:::PlumberResponse$new()
 do.call(e[['.__enclos_env__']]$private$func, list(spec="setosa"))
 ```
 
-As you might have guessed, the `spec=setosa` portion of the URL sets the `spec` parameter to `setosa`. More details on how Plumber processes inputs are available in the [Routing & Input Chapter](#routing-and-input).
+As you might have guessed, the `spec=setosa` portion of the URL sets the `spec` parameter to `setosa`. More details on how Plumber processes inputs are available in the [Routing & Input article](./routing-and-input.html).
 
 ## Customizing The Output
 
@@ -87,4 +87,4 @@ code_chunk(e$exec(), "html")
 
 You can even provide your own custom serializers and define how to translate the R object produced by your endpoint into the bits that will produce Plumber's HTTP response.
 
-You can find more details in the [Rendering & Output chapter](#rendering-and-output).
+You can find more details in the [Rendering & Output article](./rendering-output.html).
