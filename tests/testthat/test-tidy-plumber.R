@@ -50,7 +50,7 @@ test_that("pr_mount mounts router", {
     pr_get("/hello", function() "Hello")
 
   p2 <- pr() %>%
-    pr_mount("/hi", pr1)
+    pr_mount("/hi", p1)
 
   expect_equal(length(p2$mounts), 1)
 })
@@ -155,7 +155,7 @@ test_that("pr default functions perform as expected", {
 
   res <- p$call(req)
 
-  expect_equal(jsonlite::fromJSON(req$body)[[1]], "Custom Error Message")
+  expect_equal(jsonlite::fromJSON(res$body)[[1]], "Custom Error Message")
 })
 
 test_that("pr_filter adds filters", {
