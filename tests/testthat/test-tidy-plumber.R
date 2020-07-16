@@ -101,6 +101,7 @@ test_that("pr_cookie adds cookie", {
 })
 
 test_that("pr default functions perform as expected", {
+  # Serializer
   serialized <- function(...) {
     serializer_content_type("text/plain", function(val) {
       paste0("Serialized value: '", val, "'")
@@ -116,6 +117,45 @@ test_that("pr default functions perform as expected", {
   res <- p$call(req)
 
   expect_equal(res$body, "Serialized value: 'Hello'")
+
+  # 404 Handler
+  handler_404 <- function(req, res) {
+    res$status <- 404
+    res$body <- "Oops"
+  }
+
+  p <- pr() %>%
+    pr_get("/hello", function() "Hello") %>%
+    pr_404_handler(handler_404)
+
+  req <- make_req("GET", "/foo")
+
+  res <- p$call(req)
+
+  expect_equal(res$status, 404)
+  expect_equal(res$body, jsonlite::toJSON("Oops"))
+
+  # Error handler
+  handler_error <- function(req, res, err){
+    li <- list()
+    if (res$status == 200L){
+      res$status <- 500
+      li$error <- "Custom Error Message"
+    } else {
+      li$error <- "Custom Error Message"
+    }
+    li
+  }
+
+  p <- pr() %>%
+    pr_get("/hello", function() log("a")) %>%
+    pr_error_handler(handler_error)
+
+  req <- make_req("GET", "/hello")
+
+  res <- p$call(req)
+
+  expect_equal(jsonlite::fromJSON(req$body)[[1]], "Custom Error Message")
 })
 
 test_that("pr_filter adds filters", {
