@@ -45,6 +45,8 @@ plumber 1.0.0
 
 * Documentation is presented using pkgdown (#570)
 
+* Tidy API for easier programmatic usage (@blairj09, #590)
+
 
 ### Minor new features and improvements
 
