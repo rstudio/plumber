@@ -137,7 +137,7 @@
 <p><img src="files/images/plumber_input.png" width="45%" style="float:right;"></p>
 <p>Plumber’s first job is to execute R code in response to incoming HTTP requests, so it’s important to understand how incoming HTTP requests get translated into the execution of R functions.</p>
 <p>An incoming HTTP request must be “routed” to one or more R functions. Plumber has two distinct families of functions that it handles: endpoints and filters.</p>
-<p>Typically, when a request arrives to a Plumber router, Plumber begins by passing that request through its filters. Once the request has been processed by all the filters, the router will look for an endpoint that can satisfy the incoming request. If it finds one, it will invoke the endpoint and respond to the incoming request using the value the endpoint returned. If no endpoint matches the request, then a <code>404 Not Found</code> error will be returned (the behavior of which can be controlled by the <a href="#customize-router"><code>set404Handler</code></a> method).</p>
+<p>Typically, when a request arrives to a Plumber router, Plumber begins by passing that request through its filters. Once the request has been processed by all the filters, the router will look for an endpoint that can satisfy the incoming request. If it finds one, it will invoke the endpoint and respond to the incoming request using the value the endpoint returned. If no endpoint matches the request, then a <code>404 Not Found</code> error will be returned (the behavior of which can be controlled by the <a href="./programmatic-usage.html#customize-router"><code>set404Handler</code></a> method).</p>
 <div id="endpoints" class="section level2">
 <h2 class="hasAnchor">
 <a href="#endpoints" class="anchor"></a>Endpoints</h2>
@@ -209,7 +209,7 @@
   <span class="kw">plumber</span>::<span class="fu"><a href="../reference/forward.html">forward</a></span>()
 }
 </pre></div>
-<p>In this case, the <code>req</code> object is going to be extended to have an additional property named <code>username</code> which represents a value looked up from a cookie. This <code>req$username</code> property would be available to all subsequent filters and endpoints processing this request. (Note that this example is not a secure system for authentication; see the <a href="#state-cookies">section on using cookies to store state</a> for a longer discussion on why.) Once it has modified the request object, it passes control to the next handler using <code><a href="../reference/forward.html">forward()</a></code>.</p>
+<p>In this case, the <code>req</code> object is going to be extended to have an additional property named <code>username</code> which represents a value looked up from a cookie. This <code>req$username</code> property would be available to all subsequent filters and endpoints processing this request. (Note that this example is not a secure system for authentication; see the <a href="./execution-model.html#state-cookies">section on using cookies to store state</a> for a longer discussion on why.) Once it has modified the request object, it passes control to the next handler using <code><a href="../reference/forward.html">forward()</a></code>.</p>
 </div>
 <div id="return-a-response" class="section level3">
 <h3 class="hasAnchor">
@@ -231,7 +231,7 @@
 <div id="throw-an-error" class="section level3">
 <h3 class="hasAnchor">
 <a href="#throw-an-error" class="anchor"></a>Throw an Error</h3>
-<p>Finally, a filter can throw an error. This can occur if a mistake is made in the code defining the filter or if the filter intentionally invokes <code><a href="https://rdrr.io/r/base/stop.html">stop()</a></code> to trigger an error. In this case, the request will not be processed by any subsequent handlers and will immediately be sent to the router’s error handler. See <a href="#customize-router">router customization</a> for more details on how to customize this error handler.</p>
+<p>Finally, a filter can throw an error. This can occur if a mistake is made in the code defining the filter or if the filter intentionally invokes <code><a href="https://rdrr.io/r/base/stop.html">stop()</a></code> to trigger an error. In this case, the request will not be processed by any subsequent handlers and will immediately be sent to the router’s error handler. See <a href="./programmatic-usage.html#customize-router">router customization</a> for more details on how to customize this error handler.</p>
 </div>
 </div>
 <div id="dynamic-routes" class="section level2">
@@ -343,7 +343,7 @@
 </pre></div>
 <p>That enables you to serve your <code>/files/static/index.html</code> under the <a href="http://localhost:8000/" class="uri">http://localhost:8000/</a> root URL.</p>
 <p>The “implementation” of your server in the above examples is just an empty <code><a href="https://rdrr.io/r/base/list.html">list()</a></code>. You can also specify a <code>function()</code> like you do with the other plumber annotations. At this point, the implementation doesn’t alter the behavior of your static server. Eventually, this list or function may provide an opportunity to configure the server by changing things like cache control settings.</p>
-<p>If you’re configuring a Plumber router programmatically, you can instantiate a special static file router and mount it onto another router as discussed in the <a href="#mount-static">static file router section</a>.</p>
+<p>If you’re configuring a Plumber router programmatically, you can instantiate a special static file router and mount it onto another router as discussed in the <a href="./programmatic-usage.html#mount-static">static file router section</a>.</p>
 </div>
 <div id="input-handling" class="section level2">
 <h2 class="hasAnchor">
@@ -502,8 +502,8 @@
 <div id="read-cookies" class="section level3">
 <h3 class="hasAnchor">
 <a href="#read-cookies" class="anchor"></a>Cookies</h3>
-<p>If cookies are attached to the incoming request, they’ll be made available via <code>req$cookies</code>. This will contain a list of all the cookies that were included with the request. The names of the list correspond to the names of the cookies and the value for each element will be a character string. See the <a href="#setting-cookies">Setting Cookies section</a> for details on how to set cookies from Plumber.</p>
-<p>If you’ve set encrypted cookies (as discussed in the <a href="#encrypted-cookies">Encrypted Cookies section</a>), that session will be decrypted and made available at <code>req$session</code>.</p>
+<p>If cookies are attached to the incoming request, they’ll be made available via <code>req$cookies</code>. This will contain a list of all the cookies that were included with the request. The names of the list correspond to the names of the cookies and the value for each element will be a character string. See the <a href="./rendering-output.html#setting-cookies">Setting Cookies section</a> for details on how to set cookies from Plumber.</p>
+<p>If you’ve set encrypted cookies (as discussed in the <a href="./rendering-output.html#encrypted-cookies">Encrypted Cookies section</a>), that session will be decrypted and made available at <code>req$session</code>.</p>
 </div>
 <div id="headers" class="section level3">
 <h3 class="hasAnchor">
