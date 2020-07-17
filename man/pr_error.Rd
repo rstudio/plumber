@@ -19,3 +19,16 @@ The plumber router with a modified error handler
 Set the error handler that is invoked if any filter or endpoint generates an
 error
 }
+\examples{
+\dontrun{
+handler_error <- function(req, res, err){
+  res$status <- 500
+  list(error = "Custom Error Message")
+}
+
+pr() \%>\%
+  pr_get("/error", function() log("a")) \%>\%
+  pr_error(handler_error) \%>\%
+  pr_run()
+}
+}

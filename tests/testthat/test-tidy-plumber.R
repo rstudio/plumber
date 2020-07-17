@@ -137,24 +137,19 @@ test_that("pr default functions perform as expected", {
 
   # Error handler
   handler_error <- function(req, res, err){
-    li <- list()
-    if (res$status == 200L){
-      res$status <- 500
-      li$error <- "Custom Error Message"
-    } else {
-      li$error <- "Custom Error Message"
-    }
-    li
+    res$status <- 500
+    list(error = "Custom Error Message")
   }
 
   p <- pr() %>%
-    pr_get("/hello", function() log("a")) %>%
+    pr_get("/error", function() log("a")) %>%
     pr_error(handler_error)
 
-  req <- make_req("GET", "/hello")
+  req <- make_req("GET", "/error")
 
   res <- p$call(req)
 
+  expect_equal(res$status, 500)
   expect_equal(jsonlite::fromJSON(res$body)[[1]], "Custom Error Message")
 })
 

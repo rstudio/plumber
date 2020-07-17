@@ -452,6 +452,18 @@ pr_404 <- function(pr,
 #'
 #' @return The plumber router with a modified error handler
 #'
+#' @examples
+#' \dontrun{
+#' handler_error <- function(req, res, err){
+#'   res$status <- 500
+#'   list(error = "Custom Error Message")
+#' }
+#'
+#' pr() %>%
+#'   pr_get("/error", function() log("a")) %>%
+#'   pr_error(handler_error) %>%
+#'   pr_run()
+#' }
 #' @export
 pr_error <- function(pr,
                      fun) {
