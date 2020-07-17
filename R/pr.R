@@ -235,8 +235,8 @@ pr_mount <- function(pr,
 #' named `value`, whatever your hook returns will be used as the new value
 #' for the response.
 #'
-#' You can add hooks using the `pr_register_hook`, or you can add multiple
-#' hooks at once using `pr_register_hooks`, which takes a named list in
+#' You can add hooks using the `pr_hook`, or you can add multiple
+#' hooks at once using `pr_hooks`, which takes a named list in
 #' which the names are the names of the hooks, and the values are the
 #' handlers themselves.
 #'
@@ -250,10 +250,10 @@ pr_mount <- function(pr,
 #' @examples
 #' \dontrun{
 #' pr() %>%
-#'   pr_register_hook("preroute", function(req){
+#'   pr_hook("preroute", function(req){
 #'     cat("Routing a request for", req$PATH_INFO, "...\n")
 #'   }) %>%
-#'   pr_register_hooks(list(
+#'   pr_hooks(list(
 #'     preserialize = function(req, value){
 #'       print("About to serialize this value:")
 #'       print(value)
@@ -272,17 +272,17 @@ pr_mount <- function(pr,
 #' }
 #'
 #' @export
-pr_register_hook <- function(pr,
-                             stage,
-                             handler) {
+pr_hook <- function(pr,
+                    stage,
+                    handler) {
   pr$registerHook(stage = stage, handler = handler)
   invisible(pr)
 }
 
-#' @rdname pr_register_hook
+#' @rdname pr_hook
 #' @export
-pr_register_hooks <- function(pr,
-                              handlers) {
+pr_hooks <- function(pr,
+                     handlers) {
   pr$registerHooks(handlers)
   invisible(pr)
 }
@@ -433,13 +433,13 @@ pr_serializer <- function(pr,
 #'
 #' pr() %>%
 #'   pr_get("/hi", function() "Hello") %>%
-#'   pr_404_handler(handler_404) %>%
+#'   pr_404(handler_404) %>%
 #'   pr_run()
 #' }
 #'
 #' @export
-pr_404_handler <- function(pr,
-                           fun) {
+pr_404 <- function(pr,
+                   fun) {
   pr$set404Handler(fun)
   invisible(pr)
 }
@@ -453,8 +453,8 @@ pr_404_handler <- function(pr,
 #' @return The plumber router with a modified error handler
 #'
 #' @export
-pr_error_handler <- function(pr,
-                             fun) {
+pr_error <- function(pr,
+                     fun) {
   pr$setErrorHandler(fun)
   invisible(pr)
 }

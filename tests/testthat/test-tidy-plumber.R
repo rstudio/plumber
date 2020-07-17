@@ -55,9 +55,9 @@ test_that("pr_mount mounts router", {
   expect_equal(length(p2$mounts), 1)
 })
 
-test_that("pr_register_hooks registers hooks", {
+test_that("pr_hooks registers hooks", {
   p <- pr() %>%
-    pr_register_hook("preroute", function() print("Pre-route hook")) %>%
+    pr_hook("preroute", function() print("Pre-route hook")) %>%
     pr_get("/hello", function() "Hello")
 
   req <- make_req("GET", "/hello")
@@ -72,7 +72,7 @@ test_that("pr_register_hooks registers hooks", {
   )
 
   p <- pr() %>%
-    pr_register_hooks(hooks) %>%
+    pr_hooks(hooks) %>%
     pr_get("/hello", function() "Hello")
 
   expect_output(p$call(req), "Pre-route hook")
@@ -126,7 +126,7 @@ test_that("pr default functions perform as expected", {
 
   p <- pr() %>%
     pr_get("/hello", function() "Hello") %>%
-    pr_404_handler(handler_404)
+    pr_404(handler_404)
 
   req <- make_req("GET", "/foo")
 
@@ -149,7 +149,7 @@ test_that("pr default functions perform as expected", {
 
   p <- pr() %>%
     pr_get("/hello", function() log("a")) %>%
-    pr_error_handler(handler_error)
+    pr_error(handler_error)
 
   req <- make_req("GET", "/hello")
 
