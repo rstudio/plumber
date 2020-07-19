@@ -49,6 +49,12 @@ jobs:
           pkgdown::build_site(new_process = FALSE)
           stopifnot(length(warnings()) <= 1) # having trouble getting rid of an incomplete final line warning
 
+      - name: Git Config
+        if: github.event_name == 'push'
+        run: |
+          git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com" && \
+            git config --local user.name "${GITHUB_ACTOR}"
+
       - name: Build and Deploy Site
         if: github.event_name == 'push'
         shell: Rscript {0}
