@@ -2,7 +2,7 @@
 
 # Mount OpenAPI and UI
 #' @noRd
-mount_ui <- function(pr, host, port, ui_info, callback) {
+mount_ui <- function(pr, host, port, ui_info) {
 
   # return early if not enabled
   if (!isTRUE(ui_info$enabled)) {
@@ -38,10 +38,8 @@ mount_ui <- function(pr, host, port, ui_info, callback) {
     return()
   }
 
-  # Use callback when defined
-  if (length(callback) && is.function(callback)) {
-    callback(ui_url)
-  }
+  # Use callback
+  ui_info$callback(ui_url)
 
   invisible()
 

@@ -224,6 +224,7 @@ plumber <- R6Class(
       private$notFoundHandler <- default404Handler
       private$maxSize <- getOption('plumber.maxRequestSize', 0) #0 Unlimited
       self$setUI()
+      self$setDebug()
       self$apiSpecTransform()
 
       # Add in the initial filters
@@ -260,44 +261,15 @@ plumber <- R6Class(
     #' @param port a number or integer that indicates the server port that should
     #' be listened on. Note that on most Unix-like systems including Linux and
     #' Mac OS X, port numbers smaller than 1025 require root privileges.
-    #' @param swagger Deprecated. Use `plumber` method `setUI` and `apiSpecTransform`.
-    #' @param debug `TRUE` provides more insight into your API errors.
-    #' @param swaggerCallback Deprecated. Use `callback` parameter.
-    #' @param ... Unused.
-    #' @param callback a callback function for taking action on UI url.
     #' @details
     #' `port` does not need to be explicitly assigned.
-    #'
-    #' `callback` When set, it will be called with a character string corresponding
-    #' to the UI url. It allows RStudio to open UI when plumber router
-    #' run method is executed using default `plumber.ui.callback` option.
     run = function(
       host = '127.0.0.1',
-      port = getOption('plumber.port'),
-      swagger,
-      debug = interactive(),
-      swaggerCallback,
-      ...,
-      callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL))
+      port = getOption('plumber.port')
     ) {
 
       if (isTRUE(private$disable_run)) {
         stop("Plumber router `$run()` method should not be called while `plumb()`ing a file")
-      }
-
-      if (!missing(swagger)) {
-        warning("`swagger` parameter has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$setUI()` and `$apiSpecTransform()`.")
-        if (is.function(swagger)) {
-          self$setUI(TRUE)
-          self$apiSpecTransform(swagger)
-        } else {
-          self$setUI(swagger)
-        }
-      }
-
-      if (!missing(swaggerCallback)) {
-        warning("`swaggerCallback` parameter has been deprecated in v1.0.0 and will be removed in a coming release. Please use `callback` parameter.")
-        callback = swaggerCallback
       }
 
       port <- findPort(port)
@@ -306,7 +278,7 @@ plumber <- R6Class(
 
       priorDebug <- getOption("plumber.debug")
       on.exit({ options("plumber.debug" = priorDebug) })
-      options("plumber.debug" = debug)
+      options("plumber.debug" = private$debug)
 
       # Set and restore the wd to make it appear that the proc is running local to the file's definition.
       if (!is.null(private$filename)){
@@ -316,7 +288,7 @@ plumber <- R6Class(
       }
 
       if (isTRUE(private$ui_info$enabled)) {
-        mount_ui(self, host, port, private$ui_info, callback)
+        mount_ui(self, host, port, private$ui_info)
         on.exit(unmount_ui(self, private$ui_info), add = TRUE)
       }
 
@@ -875,8 +847,9 @@ plumber <- R6Class(
     },
     #' @description Set UI to use for API
     #' @param ui a character value or a logical value. Default to `plumber.ui` option value.
+    #' @param callback a callback function for taking action on UI url.
     #' @param ... Other params to be passed to ui functions.
-    setUI = function(ui = getOption("plumber.ui", TRUE), ...) {
+    setUI = function(ui = getOption("plumber.ui", TRUE), callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL)), ...) {
       stopifnot(length(ui) == 1)
       stopifnot(is.logical(ui) || is.character(ui))
       if (isTRUE(ui)) {
@@ -888,11 +861,23 @@ plumber <- R6Class(
         enabled <- FALSE
         ui <- "__not_enabled__"
       }
+      # Use callback when defined
+      if (!length(callback) || !is.function(callback)) {
+        callback = as.null
+      }
       private$ui_info = list(
         enabled = enabled,
         ui = ui,
+        callback = callback,
         args = list(...)
       )
+    },
+    #' @description Set UI to use for API
+    #' @param debug `TRUE` provides more insight into your API errors.
+    setDebug = function(debug = interactive()) {
+      stopifnot(length(debug) == 1)
+      stopifnot(is.logical(debug))
+      private$debug = debug
     },
     #' @description Add a filter to plumber router
     #' @param name a character string. Name of filter
@@ -1067,6 +1052,7 @@ plumber <- R6Class(
 
     apiHandler = NULL,
     ui_info = NULL,
+    debug = NULL,
 
     addFilterInternal = function(filter){
       # Create a new filter and add it to the router

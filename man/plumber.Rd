@@ -137,6 +137,7 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 \item \href{#method-setErrorHandler}{\code{plumber$setErrorHandler()}}
 \item \href{#method-apiSpecTransform}{\code{plumber$apiSpecTransform()}}
 \item \href{#method-setUI}{\code{plumber$setUI()}}
+\item \href{#method-setDebug}{\code{plumber$setDebug()}}
 \item \href{#method-filter}{\code{plumber$filter()}}
 \item \href{#method-apiSpec}{\code{plumber$apiSpec()}}
 \item \href{#method-openAPIFile}{\code{plumber$openAPIFile()}}
@@ -185,15 +186,7 @@ A new \code{plumber} router
 \subsection{Method \code{run()}}{
 Start a server using \code{plumber} object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{plumber$run(
-  host = "127.0.0.1",
-  port = getOption("plumber.port"),
-  swagger,
-  debug = interactive(),
-  swaggerCallback,
-  ...,
-  callback = getOption("plumber.ui.callback", getOption("plumber.swagger.url", NULL))
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{plumber$run(host = "127.0.0.1", port = getOption("plumber.port"))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -206,25 +199,11 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 \item{\code{port}}{a number or integer that indicates the server port that should
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.}
-
-\item{\code{swagger}}{Deprecated. Use \code{plumber} method \code{setUI} and \code{apiSpecTransform}.}
-
-\item{\code{debug}}{\code{TRUE} provides more insight into your API errors.}
-
-\item{\code{swaggerCallback}}{Deprecated. Use \code{callback} parameter.}
-
-\item{\code{...}}{Unused.}
-
-\item{\code{callback}}{a callback function for taking action on UI url.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Details}{
 \code{port} does not need to be explicitly assigned.
-
-\code{callback} When set, it will be called with a character string corresponding
-to the UI url. It allows RStudio to open UI when plumber router
-run method is executed using default \code{plumber.ui.callback} option.
 }
 
 }
@@ -671,7 +650,11 @@ Add a function to customize what is returned in \verb{$apiSpec()}.
 \subsection{Method \code{setUI()}}{
 Set UI to use for API
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{plumber$setUI(ui = getOption("plumber.ui", TRUE), ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{plumber$setUI(
+  ui = getOption("plumber.ui", TRUE),
+  callback = getOption("plumber.ui.callback", getOption("plumber.swagger.url", NULL)),
+  ...
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -679,7 +662,26 @@ Set UI to use for API
 \describe{
 \item{\code{ui}}{a character value or a logical value. Default to \code{plumber.ui} option value.}
 
+\item{\code{callback}}{a callback function for taking action on UI url.}
+
 \item{\code{...}}{Other params to be passed to ui functions.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setDebug"></a>}}
+\if{latex}{\out{\hypertarget{method-setDebug}{}}}
+\subsection{Method \code{setDebug()}}{
+Set UI to use for API
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{plumber$setDebug(debug = interactive())}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{debug}}{\code{TRUE} provides more insight into your API errors.}
 }
 \if{html}{\out{</div>}}
 }
