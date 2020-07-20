@@ -90,48 +90,55 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
 }
 
 
-#' Add a Parsers
+#' Manage parsers
 #'
 #' A parser is responsible for decoding the raw body content of a request into
 #' a list of arguments that can be mapped to endpoint function arguments.
-#' For instance, \code{parser_json} parse content-type `application/json`.
+#' For instance, [parser_json()] parse content-type `application/json`.
 #'
-#' @param alias Short name to map parser from the `@parser` plumber tag.
+#' @param alias An alias to map parser from the `@parser` plumber tag to the global parsers list.
 #' @param parser The parser function to be added. This build the parser function.
+#' @param fixed A character vector of fixed string to be matched against a request `content-type` to use `parser`.
+#' @param regex A character vector of [regex] string to be matched against a request `content-type` to use `parser`.
+#' @param shortname A character value to reference a parser by a shortname. (For internal use only)
 #' @param verbose Logical value which determines if a warning should be
-#'   displayed when alias in map are overwritten.
+#' displayed when alias in map are overwritten.
 #'
 #' @details
-#' When `parser` is evaluated, it should return a named list of functions.
-#' Content-types/Mime-types are used as the list names and will be matched to
-#' corresponding parsing function.
-#' Functions signature in the list should include `value`, `...` and
+#' When `parser` is evaluated, it should return a parser function.
+#' Parser matching is done first by `content-type` header matching on `fixed` then by using a
+#' regular expressions on `regex`. Note that plumber strip the header from `; charset*` to
+#' perform matching.
+#'
+#' There is a special case when no `content-type` header is
+#' provided that will use a [parser_json()] when it detects a `json` string.
+#'
+#' Functions signature should include `value`, `...` and
 #' possibly `content_type`, `filename`. Other parameters may be provided
 #' if you want to use the headers from [webutils::parse_multipart()].
+#'
 #' Parser function structure is something like below.
 #' ```r
 #' parser <- () {
-#'  f <- function(value, ...) {
+#'  function(value, ...) {
 #'   # do something with raw value
 #'  }
-#'  make_parsers(f, fixed = "ct")
 #' }
 #' ```
 #'
 #' @examples
-#' # Content-type header is mostly used to look up charset and adjust encoding
+#' # `content-type` header is mostly used to look up charset and adjust encoding
 #' parser_dcf <- function() {
-#'   f <- function(value, content_type = "text/x-dcf", ...) {
+#'   function(value, content_type = "text/x-dcf", ...) {
 #'     charset <- getCharacterSet(content_type)
 #'     value <- rawToChar(value)
 #'     Encoding(value) <- charset
 #'     read.dcf(value)
 #'   }
-#'   return(make_parsers(f, fixed = "text/x-dcf"))
 #' }
-#' add_parser("dcf", parser_dcf)
+#' add_parser("dcf", parser_dcf, fixed = "text/x-dcf")
 #' @export
-add_parser <- function(alias, parser, verbose = TRUE) {
+add_parser <- function(alias, parser, fixed = NULL, regex = NULL, shortname = NULL, verbose = TRUE) {
 
   if (!is.null(.globals$parsers[[alias]])) {
     if (isTRUE(verbose)) {
@@ -141,7 +148,44 @@ add_parser <- function(alias, parser, verbose = TRUE) {
 
   stopifnot(is.function(parser))
 
-  .globals$parsers[[alias]] <- parser
+  if (length(c(fixed, regex, shortname))) {
+
+    parsers_list <- function(...) {
+
+      parser_function <- do.call(parser, list(...))
+
+      create_list <- function(names) {
+        stats::setNames(
+          replicate(
+            length(names),
+            parser_function),
+          names
+        )
+      }
+
+        parsers <- list()
+
+        if (length(shortname) > 0) {
+          parsers[[shortname]] <- parser_function
+        }
+        if (length(fixed) > 0) {
+          parsers$fixed <- create_list(fixed)
+        }
+        if (length(regex) > 0) {
+          parsers$regex <- create_list(regex)
+        }
+
+        return(parsers)
+
+    }
+
+  } else {
+
+    parsers_list = parser
+
+  }
+
+  .globals$parsers[[alias]] <- parsers_list
 
   invisible(list_parsers())
 }
@@ -152,36 +196,17 @@ list_parsers <- function() {
   .globals$parsers
 }
 
+#' @describeIn add_parser Select from global parsers and create
+#' a formatted parsers list for programmatic use.
 #' @export
-#' @describeIn add_parser Make named list. Mapping content-type with parser.
-#' @param parser_function A single functions to map to one or more Content-Type.
-#' @param fixed A character vector of fixed string to be matched against a request Content-Type.
-#' @param regex A character vector of [regex] string to be matched against a request Content-Type.
-#' @param shortname A character value to reference a parser by a shortname. (For internal use only)
-#' Content-Type.
-make_parsers <- function(parser_function, fixed = NULL, regex = NULL, shortname = NULL) {
-  if (any(shortname %in% c("fixed", "regex"))) {
-    stop("Shortnames `fixed` and `regex` are reserved for internal use.")
-  }
-  create_list <- function(names) {
-    stats::setNames(
-      replicate(
-        length(names),
-        parser_function),
-      names
-    )
-  }
-  parsers <- list()
-  if (length(shortname) > 0) {
-    parsers$shortname <- create_list(shortname)
-  }
-  if (length(fixed) > 0) {
-    parsers$fixed <- create_list(fixed)
-  }
-  if (length(regex) > 0) {
-    parsers$regex <- create_list(regex)
-  }
-  invisible(parsers)
+select_parsers <- function(alias = character()) {
+  parsers <- .globals$parsers[alias]
+  # remove to avoid infinite recursion
+  parsers$all <- NULL
+  return(invisible(
+    # Lambda function to get each parser `p()` list
+    Reduce(function(l, p) {utils::modifyList(l, p())}, parsers, init = list())
+  ))
 }
 
 #' Plumber Parsers
@@ -191,10 +216,10 @@ make_parsers <- function(parser_function, fixed = NULL, regex = NULL, shortname 
 #' functions when adding the parser to plumber. This will allow for
 #' non-default behavior.
 #'
-#' Parsers are optional. When unspecified, only the [parser_json()] and
-#' [parser_query()] are available. You can use `@parser parser` tag to
-#' activate parsers per endpoint. Multiple parsers can be activated for
-#' the same endpoint using multiple `@parser parser` tags.
+#' Parsers are optional. When unspecified, only the [parser_json()],
+#' [parser_octet()], [parser_query()] and [parser_text()] are available.
+#' You can use `@parser parser` tag to activate parsers per endpoint.
+#' Multiple parsers can be activated for the same endpoint using multiple `@parser parser` tags.
 #'
 #' User should be aware that `rds` parsing should only be done from a
 #' trusted source. Do not accept `rds` files blindly.
@@ -215,18 +240,16 @@ make_parsers <- function(parser_function, fixed = NULL, regex = NULL, shortname 
 #' }
 #' @export
 parser_query <- function() {
-  f <- parser_text(parseQS)$text
-  return(make_parsers(f, fixed = "application/x-www-form-urlencoded", shortname = "query"))
+  parser_text(parseQS)
 }
 
 
 #' @describeIn parsers JSON parser
 #' @export
 parser_json <- function(...) {
-  f <- parser_text(function(value) {
+  parser_text(function(value) {
     safeFromJSON(value, ...)
-  })$text
-  return(make_parsers(f, fixed = c("application/json", "text/json"), regex = "json$", shortname = "json"))
+  })
 }
 
 
@@ -235,26 +258,24 @@ parser_json <- function(...) {
 #' @export
 parser_text <- function(parse_fn = identity) {
   stopifnot(is.function(parse_fn))
-  f <- function(value, content_type = NULL, ...) {
+  function(value, content_type = NULL, ...) {
     charset <- getCharacterSet(content_type)
     value <- rawToChar(value)
     Encoding(value) <- charset
     parse_fn(value)
   }
-  return(make_parsers(f, fixed = "text/plain", regex = "^text/", shortname = "text"))
 }
 
 
 #' @describeIn parsers YAML parser
 #' @export
 parser_yaml <- function(...) {
-  f <- parser_text(function(val) {
+  parser_text(function(val) {
     if (!requireNamespace("yaml", quietly = TRUE)) {
       stop("yaml must be installed for the yaml parser to work")
     }
     yaml::yaml.load(val, ..., eval.expr = FALSE)
-  })$text
-  return(make_parsers(f,  fixed = c("application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml")))
+  })
 }
 
 #' @describeIn parsers Helper parser that writes the binary post body to a file and reads it back again using `read_fn`.
@@ -276,41 +297,37 @@ parser_read_file <- function(read_fn = readLines) {
 #' @describeIn parsers CSV parser
 #' @export
 parser_csv <- function(...) {
-  f <- parser_read_file(function(val) {
+  parser_read_file(function(val) {
     utils::read.csv(val, ...)
   })
-  return(make_parsers(f, fixed = c("application/csv", "application/x-csv", "text/csv", "text/x-csv")))
 }
 
 
 #' @describeIn parsers TSV parser
 #' @export
 parser_tsv <- function(...) {
-  f <- parser_read_file(function(val) {
+  parser_read_file(function(val) {
     utils::read.delim(val, ...)
   })
-  return(make_parsers(f, fixed = c("application/tab-separated-values", "text/tab-separated-values")))
 }
 
 
 #' @describeIn parsers RDS parser
 #' @export
 parser_rds <- function(...) {
-  f <- parser_read_file(function(value) {
+  parser_read_file(function(value) {
     readRDS(value, ...)
   })
-  return(make_parsers(f, fixed = "application/rds"))
 }
 
 
 #' @describeIn parsers Octet stream parser
 #' @export
 parser_octet <- function() {
-  f <- function(value, filename = NULL, ...) {
+  function(value, filename = NULL, ...) {
     attr(value, "filename") <- filename
     value
   }
-  return(make_parsers(f, fixed = "application/octet-stream", shortname = "octet"))
 }
 
 
@@ -318,7 +335,7 @@ parser_octet <- function() {
 #' @export
 #' @importFrom webutils parse_multipart
 parser_multi <- function() {
-  f <- function(value, content_type, parsers, ...) {
+  function(value, content_type, parsers, ...) {
     if (!stri_detect_fixed(content_type, "boundary=", case_insensitive = TRUE))
       stop("No boundary found in multipart content-type header: ", content_type)
     boundary <- stri_match_first_regex(content_type, "boundary=([^; ]{2,})", case_insensitive = TRUE)[,2]
@@ -340,41 +357,32 @@ parser_multi <- function() {
       parse_raw(x)
     })
   }
-  return(make_parsers(f, fixed = "multipart/form-data"))
 }
 
-#' @describeIn parsers All parsers
+#' @describeIn parsers All parsers (For internal use only)
 #' @export
 parser_all <- function() {
-  parsers <- .globals$parsers
-  # remove to avoid infinite recursion
-  parsers$all <- NULL
-  return(invisible(
-    # Lambda function to get each parser `p()` list
-    Reduce(function(l, p) {utils::modifyList(p(), l)}, parsers, init = list())
-  ))
+  select_parsers(names(.globals$parsers))
 }
 
-#' @describeIn parsers No parser
+#' @describeIn parsers No parser (For internal use only)
 #' @export
 parser_none <- function() {
-  return(invisible(
-    list()
-  ))
+  select_parsers()
 }
 
 add_parsers_onLoad <- function() {
 
   # parser alias names for plumbing
-  add_parser("csv", parser_csv)
-  add_parser("json", parser_json)
-  add_parser("multi", parser_multi)
-  add_parser("octet", parser_octet)
-  add_parser("query", parser_query)
-  add_parser("rds", parser_rds)
-  add_parser("text", parser_text)
-  add_parser("tsv", parser_tsv)
-  add_parser("yaml", parser_yaml)
+  add_parser("csv", parser_csv, fixed = c("application/csv", "application/x-csv", "text/csv", "text/x-csv"))
+  add_parser("json", parser_json, fixed = c("application/json", "text/json"), regex = "json$", shortname = "json")
+  add_parser("multi", parser_multi, fixed = "multipart/form-data")
+  add_parser("octet", parser_octet, fixed = "application/octet-stream", shortname = "octet")
+  add_parser("query", parser_query, fixed = "application/x-www-form-urlencoded", shortname = "query")
+  add_parser("rds", parser_rds, fixed = "application/rds")
+  add_parser("text", parser_text, fixed = "text/plain", regex = "^text/", shortname = "text")
+  add_parser("tsv", parser_tsv, fixed = c("application/tab-separated-values", "text/tab-separated-values"))
+  add_parser("yaml", parser_yaml, fixed = c("application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"))
   add_parser("all", parser_all)
   add_parser("none", parser_none)
 }

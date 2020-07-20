@@ -3,49 +3,58 @@
 \name{add_parser}
 \alias{add_parser}
 \alias{list_parsers}
-\alias{make_parsers}
-\title{Add a Parsers}
+\alias{select_parsers}
+\title{Manage parsers}
 \usage{
-add_parser(alias, parser, verbose = TRUE)
+add_parser(
+  alias,
+  parser,
+  fixed = NULL,
+  regex = NULL,
+  shortname = NULL,
+  verbose = TRUE
+)
 
 list_parsers()
 
-make_parsers(parser_function, fixed = NULL, regex = NULL, shortname = NULL)
+select_parsers(alias = character())
 }
 \arguments{
-\item{alias}{Short name to map parser from the \verb{@parser} plumber tag.}
+\item{alias}{An alias to map parser from the \verb{@parser} plumber tag to the global parsers list.}
 
 \item{parser}{The parser function to be added. This build the parser function.}
 
+\item{fixed}{A character vector of fixed string to be matched against a request \code{content-type} to use \code{parser}.}
+
+\item{regex}{A character vector of \link{regex} string to be matched against a request \code{content-type} to use \code{parser}.}
+
+\item{shortname}{A character value to reference a parser by a shortname. (For internal use only)}
+
 \item{verbose}{Logical value which determines if a warning should be
 displayed when alias in map are overwritten.}
-
-\item{parser_function}{A single functions to map to one or more Content-Type.}
-
-\item{fixed}{A character vector of fixed string to be matched against a request Content-Type.}
-
-\item{regex}{A character vector of \link{regex} string to be matched against a request Content-Type.}
-
-\item{shortname}{A character value to reference a parser by a shortname.
-Content-Type.}
 }
 \description{
 A parser is responsible for decoding the raw body content of a request into
 a list of arguments that can be mapped to endpoint function arguments.
-For instance, \code{parser_json} parse content-type \code{application/json}.
+For instance, \code{\link[=parser_json]{parser_json()}} parse content-type \code{application/json}.
 }
 \details{
-When \code{parser} is evaluated, it should return a named list of functions.
-Content-types/Mime-types are used as the list names and will be matched to
-corresponding parsing function.
-Functions signature in the list should include \code{value}, \code{...} and
+When \code{parser} is evaluated, it should return a parser function.
+Parser matching is done first by \code{content-type} header matching on \code{fixed} then by using a
+regular expressions on \code{regex}. Note that plumber strip the header from \verb{; charset*} to
+perform matching.
+
+There is a special case when no \code{content-type} header is
+provided that will use a \code{\link[=parser_json]{parser_json()}} when it detects a \code{json} string.
+
+Functions signature should include \code{value}, \code{...} and
 possibly \code{content_type}, \code{filename}. Other parameters may be provided
 if you want to use the headers from \code{\link[webutils:parse_multipart]{webutils::parse_multipart()}}.
+
 Parser function structure is something like below.\if{html}{\out{<div class="r">}}\preformatted{parser <- () \{
- f <- function(value, ...) \{
+ function(value, ...) \{
   # do something with raw value
  \}
- make_parsers(f, fixed = "ct")
 \}
 }\if{html}{\out{</div>}}
 }
@@ -53,19 +62,19 @@ Parser function structure is something like below.\if{html}{\out{<div class="r">
 \itemize{
 \item \code{list_parsers}: List currently registered parsers
 
-\item \code{make_parsers}: Make named list. Mapping content-type with parser.
+\item \code{select_parsers}: Select from global parsers and create
+a formatted parsers list for programmatic use.
 }}
 
 \examples{
-# Content-type header is mostly used to look up charset and adjust encoding
+# `content-type` header is mostly used to look up charset and adjust encoding
 parser_dcf <- function() {
-  f <- function(value, content_type = "text/x-dcf", ...) {
+  function(value, content_type = "text/x-dcf", ...) {
     charset <- getCharacterSet(content_type)
     value <- rawToChar(value)
     Encoding(value) <- charset
     read.dcf(value)
   }
-  return(make_parsers(f, fixed = "text/x-dcf"))
 }
-add_parser("dcf", parser_dcf)
+add_parser("dcf", parser_dcf, fixed = "text/x-dcf")
 }

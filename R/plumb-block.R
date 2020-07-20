@@ -163,7 +163,7 @@ plumbBlock <- function(lineNum, file){
         stopOnLine(lineNum, line, paste0("No such @parser registered: ", parser_alias))
       }
 
-      parser_builder <- .globals$parsers[[parser_alias]]
+      parser <- .globals$parsers[[parser_alias]]
 
       if (!is.na(parsersMat[1, 4]) && parsersMat[1,4] != ""){
         # We have an arg to pass in to the parser
@@ -174,11 +174,11 @@ plumbBlock <- function(lineNum, file){
       tryCatch({
         # Use modifyList instead of c to avoid duplicated parsers name
         if (is.null(parsers)) {
-          parsers <- do.call(parser_builder, argList)
+          parsers <- do.call(parser, argList)
         } else {
           # Since we plumb from bottom to top, put currently plumbed parsers in front
           # Parsers will be added in the order the appear in the plumbed file
-          parsers <- utils::modifyList(do.call(parser_builder, argList), parsers)
+          parsers <- utils::modifyList(do.call(parser, argList), parsers)
         }
       }, error = function(e) {
         stopOnLine(lineNum, line, paste0("Error creating parser: ", parser_alias, "\n", e))

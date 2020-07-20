@@ -174,11 +174,11 @@ test_that("@parser parameters produce an error or not", {
     }, ...)
   }
 
-  expect_block_fn("#' @parser octet", parser_octet())
+  expect_block_fn("#' @parser octet", select_parsers("octet"))
 
-  expect_block_fn("#' @parser octet list()", parser_octet())
-  expect_block_fn("#' @parser octet list(         )", parser_octet())
-  expect_block_fn("#' @parser octet list     (         )     ", parser_octet())
+  expect_block_fn("#' @parser octet list()", select_parsers("octet"))
+  expect_block_fn("#' @parser octet list(         )", select_parsers("octet"))
+  expect_block_fn("#' @parser octet list     (         )     ", select_parsers("octet"))
 
   expect_block_error("#' @parser octet list(key = \"val\")", "unused argument")
 })

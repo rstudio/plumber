@@ -53,10 +53,10 @@ functions when adding the parser to plumber. This will allow for
 non-default behavior.
 }
 \details{
-Parsers are optional. When unspecified, only the \code{\link[=parser_json]{parser_json()}} and
-\code{\link[=parser_query]{parser_query()}} are available. You can use \verb{@parser parser} tag to
-activate parsers per endpoint. Multiple parsers can be activated for
-the same endpoint using multiple \verb{@parser parser} tags.
+Parsers are optional. When unspecified, only the \code{\link[=parser_json]{parser_json()}},
+\code{\link[=parser_octet]{parser_octet()}}, \code{\link[=parser_query]{parser_query()}} and \code{\link[=parser_text]{parser_text()}} are available.
+You can use \verb{@parser parser} tag to activate parsers per endpoint.
+Multiple parsers can be activated for the same endpoint using multiple \verb{@parser parser} tags.
 
 User should be aware that \code{rds} parsing should only be done from a
 trusted source. Do not accept \code{rds} files blindly.
@@ -86,9 +86,9 @@ This parser should be used when reading from a file is required.
 
 \item \code{parser_multi}: Multi part parser. This parser will then parse each individual body with its respective parser
 
-\item \code{parser_all}: All parsers
+\item \code{parser_all}: All parsers (For internal use only)
 
-\item \code{parser_none}: No parser
+\item \code{parser_none}: No parser (For internal use only)
 }}
 
 \examples{
