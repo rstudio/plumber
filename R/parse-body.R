@@ -157,7 +157,7 @@ list_parsers <- function() {
 #' @param parser_function A single functions to map to one or more Content-Type.
 #' @param fixed A character vector of fixed string to be matched against a request Content-Type.
 #' @param regex A character vector of [regex] string to be matched against a request Content-Type.
-#' @param shortname A character value to reference a parser by a shortname.
+#' @param shortname A character value to reference a parser by a shortname. (For internal use only)
 #' Content-Type.
 make_parsers <- function(parser_function, fixed = NULL, regex = NULL, shortname = NULL) {
   if (any(shortname %in% c("fixed", "regex"))) {
