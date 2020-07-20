@@ -361,7 +361,7 @@ parser_none <- function() {
 
 add_parsers_onLoad <- function() {
 
-  # shorthand names for parser plumbing
+  # parser alias names for plumbing
   add_parser("csv", parser_csv)
   add_parser("json", parser_json)
   add_parser("multi", parser_multi)
