@@ -77,7 +77,9 @@ test_that("Test multipart parser", {
 
   bin_file <- test_path("files/multipart-form.bin")
   body <- readBin(bin_file, what = "raw", n = file.info(bin_file)$size)
-  parsed_body <- parse_body(body, "multipart/form-data; boundary=----WebKitFormBoundaryMYdShB9nBc32BUhQ", c(parser_multi(), parser_json(), parser_rds(), parser_octet()))
+  parsed_body <- parse_body(body,
+                            "multipart/form-data; boundary=----WebKitFormBoundaryMYdShB9nBc32BUhQ",
+                            Reduce(utils::modifyList, list(parser_multi(), parser_json(), parser_rds(), parser_octet())))
 
   expect_equal(names(parsed_body), c("json", "img1", "img2", "rds"))
   expect_equal(parsed_body[["rds"]], women)
@@ -89,6 +91,8 @@ test_that("Test multipart parser", {
 test_that("Test multipart respect content-type", {
   bin_file <- test_path("files/multipart-ctype.bin")
   body <- readBin(bin_file, what = "raw", n = file.info(bin_file)$size)
-  parsed_body <- parse_body(body, "multipart/form-data; boundary=---------------------------90908882332870323642673870272", c(parser_multi(), parser_tsv()))
+  parsed_body <- parse_body(body,
+                            "multipart/form-data; boundary=---------------------------90908882332870323642673870272",
+                            Reduce(utils::modifyList, list(parser_multi(), parser_tsv())))
   expect_s3_class(parsed_body$file, "data.frame")
 })

@@ -10,7 +10,7 @@ add_parser(alias, parser, verbose = TRUE)
 
 list_parsers()
 
-make_parsers(parser_function, content_type)
+make_parsers(parser_function, fixed = NULL, regex = NULL, shortname = NULL)
 }
 \arguments{
 \item{alias}{Short name to map parser from the \verb{@parser} plumber tag.}
@@ -22,7 +22,11 @@ displayed when alias in map are overwritten.}
 
 \item{parser_function}{A single functions to map to one or more Content-Type.}
 
-\item{content_type}{A vector of Content-Type or regex to be matched against a request
+\item{fixed}{A character vector of fixed string to be matched against a request Content-Type.}
+
+\item{regex}{A character vector of \link{regex} string to be matched against a request Content-Type.}
+
+\item{shortname}{A character value to reference a parser by a shortname.
 Content-Type.}
 }
 \description{
@@ -41,7 +45,7 @@ Parser function structure is something like below.\if{html}{\out{<div class="r">
  f <- function(value, ...) \{
   # do something with raw value
  \}
- list("ct" = f)
+ make_parsers(f, fixed = "ct")
 \}
 }\if{html}{\out{</div>}}
 }
@@ -61,8 +65,7 @@ parser_dcf <- function() {
     Encoding(value) <- charset
     read.dcf(value)
   }
-  ct <- "text/x-dcf"
-  return(make_parsers(f, ct))
+  return(make_parsers(f, fixed = "text/x-dcf"))
 }
 add_parser("dcf", parser_dcf)
 }
