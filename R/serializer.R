@@ -14,7 +14,7 @@
 addSerializer <- function(name, serializer, verbose = TRUE) {
   if (!is.null(.globals$serializers[[name]])) {
     if (isTRUE(verbose)) {
-      warning("Overwriting serializer: ", name)
+      message("Overwriting serializer: ", name)
     }
   }
   .globals$serializers[[name]] <- serializer
@@ -78,7 +78,7 @@ as_attachment <- function(value, filename = NULL) {
 #' @describeIn serializers Add a static list of headers to each return value. Will add `Content-Disposition` header if a value is the result of `as_attachment()`.
 #' @param ... extra arguments supplied to respective internal serialization function.
 #' @param headers `list()` of headers to add to the response object
-#' @param serialize_fn Function to serialize the data. The result object will be converted to a character string. Ex: `jsonlite::toJSON`.
+#' @param serialize_fn Function to serialize the data. The result object will be converted to a character string. Ex: [jsonlite::parse_json()].
 #' @export
 serializer_headers <- function(headers, serialize_fn = identity) {
   stopifnot(is.function(serialize_fn))
@@ -212,13 +212,47 @@ serializer_yaml <- function(...) {
   })
 }
 
-#' @describeIn serializers Text serializer. See [format()] for more details.
+#' @describeIn serializers Text serializer. See [as.character()] for more details.
 #' @export
-serializer_text <- function(...) {
+serializer_text <- function(..., serialize_fn = as.character) {
   serializer_content_type("text/plain; charset=UTF-8", function(val) {
-    format(val, ...)
+    serialize_fn(val, ...)
   })
 }
+
+
+
+#' @describeIn serializers Text serializer. See [format()] for more details.
+#' @export
+serializer_format <- function(...) {
+  serializer_text(..., serialize_fn = format)
+}
+
+#' @describeIn serializers Text serializer. Captures the output of [print()]
+#' @export
+serializer_print <- function(...) {
+  serializer_text(serialize_fn = function(x) {
+    paste0(
+      collapse = "\n",
+      utils::capture.output({
+        print(x, ...)
+      })
+    )
+  })
+}
+#' @describeIn serializers Text serializer. Captures the output of [cat()]
+#' @export
+serializer_cat <- function(...) {
+  serializer_text(serialize_fn = function(x) {
+    paste0(
+      collapse = "\n",
+      utils::capture.output({
+        cat(x, ...)
+      })
+    )
+  })
+}
+
 
 
 
@@ -271,5 +305,8 @@ add_serializers_onLoad <- function() {
   addSerializer("xml",         serializer_xml)
   addSerializer("yaml",        serializer_yaml)
   addSerializer("text",        serializer_text)
+  addSerializer("format",        serializer_format)
+  addSerializer("print",        serializer_print)
+  addSerializer("cat",        serializer_cat)
   addSerializer("htmlwidget",  serializer_htmlwidget)
 }

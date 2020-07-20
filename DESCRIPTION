@@ -44,7 +44,7 @@ Suggests:
     yaml
 Remotes:
     rstudio/swagger
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Collate: 
     'async.R'
     'content-types.R'

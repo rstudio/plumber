@@ -10,6 +10,9 @@
 \alias{serializer_rds}
 \alias{serializer_yaml}
 \alias{serializer_text}
+\alias{serializer_format}
+\alias{serializer_print}
+\alias{serializer_cat}
 \alias{serializer_htmlwidget}
 \title{Plumber Serializers}
 \usage{
@@ -29,14 +32,20 @@ serializer_rds(version = "2", ascii = FALSE, ...)
 
 serializer_yaml(...)
 
-serializer_text(...)
+serializer_text(..., serialize_fn = as.character)
+
+serializer_format(...)
+
+serializer_print(...)
+
+serializer_cat(...)
 
 serializer_htmlwidget(...)
 }
 \arguments{
 \item{headers}{\code{list()} of headers to add to the response object}
 
-\item{serialize_fn}{Function to serialize the data. The result object will be converted to a character string. Ex: \code{jsonlite::toJSON}.}
+\item{serialize_fn}{Function to serialize the data. The result object will be converted to a character string. Ex: \code{\link[jsonlite:read_json]{jsonlite::parse_json()}}.}
 
 \item{type}{The value to provide for the \code{Content-Type} HTTP header.}
 
@@ -77,7 +86,13 @@ more details on Plumber serializers and how to customize their behavior.
 
 \item \code{serializer_yaml}: YAML serializer. See \code{\link[yaml:as.yaml]{yaml::as.yaml()}} for more details.
 
-\item \code{serializer_text}: Text serializer. See \code{\link[=format]{format()}} for more details.
+\item \code{serializer_text}: Text serializer. See \code{\link[=as.character]{as.character()}} for more details.
+
+\item \code{serializer_format}: Text serializer. See \code{\link[=format]{format()}} for more details.
+
+\item \code{serializer_print}: Text serializer. Captures the output of \code{\link[=print]{print()}}
+
+\item \code{serializer_cat}: Text serializer. Captures the output of \code{\link[=cat]{cat()}}
 
 \item \code{serializer_htmlwidget}: htmlwidget serializer. See \code{\link[htmlwidgets:saveWidget]{htmlwidgets::saveWidget()}} for more details.
 }}

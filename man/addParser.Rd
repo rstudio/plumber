@@ -44,7 +44,7 @@ parser_json <- function() {
     charset <- getCharacterSet(content_type)
     value <- rawToChar(value)
     Encoding(value) <- charset
-    jsonlite::fromJSON(value)
+    jsonlite::parse_json(value, simplifyVector = TRUE)
   }
 }
 }
