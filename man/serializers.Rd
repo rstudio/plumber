@@ -45,7 +45,7 @@ serializer_htmlwidget(...)
 \arguments{
 \item{headers}{\code{list()} of headers to add to the response object}
 
-\item{serialize_fn}{Function to serialize the data. The result object will be converted to a character string. Ex: \code{\link[jsonlite:read_json]{jsonlite::parse_json()}}.}
+\item{serialize_fn}{Function to serialize the data. The result object will be converted to a character string. Ex: \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}}.}
 
 \item{type}{The value to provide for the \code{Content-Type} HTTP header.}
 

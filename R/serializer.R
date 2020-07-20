@@ -78,7 +78,7 @@ as_attachment <- function(value, filename = NULL) {
 #' @describeIn serializers Add a static list of headers to each return value. Will add `Content-Disposition` header if a value is the result of `as_attachment()`.
 #' @param ... extra arguments supplied to respective internal serialization function.
 #' @param headers `list()` of headers to add to the response object
-#' @param serialize_fn Function to serialize the data. The result object will be converted to a character string. Ex: [jsonlite::parse_json()].
+#' @param serialize_fn Function to serialize the data. The result object will be converted to a character string. Ex: [jsonlite::toJSON()].
 #' @export
 serializer_headers <- function(headers = list(), serialize_fn = identity) {
   stopifnot(is.function(serialize_fn))
