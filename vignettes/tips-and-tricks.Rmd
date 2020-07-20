@@ -42,10 +42,6 @@ function(req, res){
 
 If you run this API locally and then visit the API in a web browser, you'll see your R session switch into debug mode when the request arrives, allowing you to look at the objects contained inside your `req` and `res` objects.
 
-## Organizing Large Applications
-
-// TODO docs for organizing large apps
-
 ## Swagger
 
 // TODO Docs for Swagger
