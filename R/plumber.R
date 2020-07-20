@@ -223,7 +223,10 @@ plumber <- R6Class(
       private$errorHandler <- defaultErrorHandler()
       private$notFoundHandler <- default404Handler
       private$maxSize <- getOption('plumber.maxRequestSize', 0) #0 Unlimited
+
+      # initialize with defaults of each function
       self$setUI()
+      private$ui_info$init <- TRUE # set to know if `$setUI()` has been called before `$run()`
       self$setDebug()
       self$apiSpecTransform()
 
@@ -261,15 +264,54 @@ plumber <- R6Class(
     #' @param port a number or integer that indicates the server port that should
     #' be listened on. Note that on most Unix-like systems including Linux and
     #' Mac OS X, port numbers smaller than 1025 require root privileges.
+    #' @param debug Deprecated. See `$setDebug()`
+    #' @param swagger Deprecated. See `$setUI(ui)` or `$apiSpecTransform()`
+    #' @param swaggerCallback Deprecated. See `$setUI(callback)`
     #' @details
     #' `port` does not need to be explicitly assigned.
     run = function(
       host = '127.0.0.1',
-      port = getOption('plumber.port')
+      port = getOption('plumber.port'),
+      debug = stop("deprecated"),
+      swagger = stop("deprecated"),
+      swaggerCallback = stop("deprecated")
     ) {
 
       if (isTRUE(private$disable_run)) {
         stop("Plumber router `$run()` method should not be called while `plumb()`ing a file")
+      }
+
+      # Legacy support for RStudio pro products.
+      # Checks must be kept for >= 2 yrs after plumber v1.0.0 release date
+      if (!missing(debug)) {
+        message("`$run(debug)` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$setDebug(debug)`")
+        self$setDebug(debug)
+      }
+      if (!missing(swagger)) {
+        if (is.function(swagger)) {
+          # between v1.0.0 and v0.4.6
+          message("`$run(swagger)` has been deprecated in v1.0.0 and will be removed in a coming release. To alter the swagger spec, please use `$apiSpecTransform(api_fun)`")
+          self$apiSpecTransform(swagger)
+        } else {
+          if (isTRUE(private$ui_info$init)) {
+            # <= v0.4.6
+            message("`$run(swagger)` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$setUI(ui)`")
+            self$setUI(swagger)
+          } else {
+            # $setUI has been called (other than during initialization).
+            # Believe that it is the correct behavior
+            # Warn about updating the run method
+            message(
+              "`$run(swagger)` has been deprecated in v1.0.0 and will be removed in a coming release.\n",
+              "The plumber UI has already been set. Ignoring `swagger` parameter.\n",
+              "Please use update your `$run()` method."
+            )
+          }
+        }
+      }
+      if (!missing(swaggerCallback)) {
+        message("`$run(swaggerCallback)` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$setUI(callback)`")
+        private$ui_info$callback <- swaggerCallback
       }
 
       port <- findPort(port)

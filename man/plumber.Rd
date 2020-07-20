@@ -186,7 +186,13 @@ A new \code{plumber} router
 \subsection{Method \code{run()}}{
 Start a server using \code{plumber} object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{plumber$run(host = "127.0.0.1", port = getOption("plumber.port"))}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{plumber$run(
+  host = "127.0.0.1",
+  port = getOption("plumber.port"),
+  debug = stop("deprecated"),
+  swagger = stop("deprecated"),
+  swaggerCallback = stop("deprecated")
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -199,6 +205,12 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 \item{\code{port}}{a number or integer that indicates the server port that should
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.}
+
+\item{\code{debug}}{Deprecated. See \verb{$setDebug()}}
+
+\item{\code{swagger}}{Deprecated. See \verb{$setUI(ui)} or \verb{$apiSpecTransform()}}
+
+\item{\code{swaggerCallback}}{Deprecated. See \verb{$setUI(callback)}}
 }
 \if{html}{\out{</div>}}
 }
