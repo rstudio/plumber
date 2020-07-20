@@ -347,6 +347,7 @@ parser_multi <- function() {
 #' @export
 parser_all <- function() {
   parsers <- .globals$parsers
+  # remove to avoid infinite recursion
   parsers$all <- NULL
   return(invisible(
     # Lambda function to get each parser `p()` list
