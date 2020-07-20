@@ -57,8 +57,6 @@ Plumber filters can be used to define a "pipeline" for handling incoming request
 
 Typically, a Plumber router will pass a request through all the defined filters before it attempts to find an endpoint to satisfy the request. However, endpoints can "preempt" particular filters if they want to be considered for execution before some filter(s) registered in the router.
 
-// TODO: graphic
-
 Filters can do one of three things in handling a request:
 
 1. Forward control onto the next handler, potentially after mutating the request.
