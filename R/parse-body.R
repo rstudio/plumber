@@ -163,20 +163,20 @@ make_parsers <- function(parser_function, fixed = NULL, regex = NULL, shortname 
   if (any(shortname %in% c("fixed", "regex"))) {
     stop("Shortnames `fixed` and `regex` are reserved for internal use.")
   }
-  m <- function(n) {
-    structure(
+  create_list <- function(names) {
+    stats::setNames(
       replicate(
-        length(n),
+        length(names),
         parser_function),
-      names = n
+      names
     )
   }
-  parsers <- m(shortname)
+  parsers <- create_list(shortname)
   if (length(fixed) > 0) {
-    parsers <- c(parsers, list("fixed" = m(fixed)))
+    parsers$fixed <- create_list(fixed)
   }
   if (length(regex) > 0) {
-    parsers <- c(parsers, list("regex" = m(regex)))
+    parsers$regex <- create_list(regex)
   }
   invisible(parsers)
 }
