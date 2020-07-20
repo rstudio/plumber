@@ -1,8 +1,8 @@
 #' Create a new Plumber router
 #'
-#' @param filters a list of plumber filters
-#' @param file path to file to plumb
-#' @param envir an environment to be used as the enclosure for the routers execution
+#' @param filters A list of plumber filters
+#' @param file Path to file to plumb
+#' @param envir An environment to be used as the enclosure for the routers execution
 #'
 #' @return A new `plumber` router
 #'
@@ -23,7 +23,7 @@ pr <- function(file = NULL,
 #'
 #' This collection of functions creates handlers for a Plumber router.
 #'
-#' The generic [pr_handle()] creates a handle for the given methods. Specific
+#' The generic [pr_handle()] creates a handle for the given method(s). Specific
 #' functions are implemented for the following HTTP methods:
 #' * `GET`
 #' * `POST`
@@ -36,11 +36,11 @@ pr <- function(file = NULL,
 #' @param pr A plumber router
 #' @param methods Character vector of HTTP methods
 #' @param path The endpoint path
-#' @param handler a handler function
-#' @param preempt a preempt function
-#' @param serializer a plumber serializer
-#' @param endpoint a `PlumberEndpoint` object
-#' @param ... additional arguments for `PlumberEndpoint`
+#' @param handler A handler function
+#' @param preempt A preempt function
+#' @param serializer A plumber serializer
+#' @param endpoint A `PlumberEndpoint` object
+#' @param ... Additional arguments for `PlumberEndpoint`
 #'
 #' @return A plumber router with the handler added
 #'
@@ -58,7 +58,7 @@ pr <- function(file = NULL,
 #'   pr_get("/hi", function() "Hello World") %>%
 #'   pr_post("/echo", function(req, res) {
 #'     if (req$postBody == "") return("No input")
-#'     input <- jsonlite::fromJSON(req$POST_BODY)
+#'     input <- jsonlite::fromJSON(req$postBody)
 #'     list(
 #'       input = input
 #'     )
@@ -75,6 +75,7 @@ pr_handle <- function(pr,
                       serializer,
                       endpoint,
                       ...) {
+  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
   pr$handle(methods = methods,
             path = path,
             handler = handler,
@@ -185,14 +186,14 @@ pr_head <- function(pr,
 #' Plumber routers can be “nested” by mounting one into another
 #' using the `mount()` method. This allows you to compartmentalize your API
 #' by paths which is a great technique for decomposing large APIs into smaller
-#' files. This function mutates the plumber router (\code{pr}) in place, but
+#' files. This function mutates the plumber router ([pr()]) in place, but
 #' also invisibly returns the updated router.
 #'
-#' @param pr the host plumber router.
-#' @param path a character string. Where to mount router.
-#' @param router a plumber router. Router to be mounted.
+#' @param pr The host plumber router.
+#' @param path A character string. Where to mount router.
+#' @param router A plumber router. Router to be mounted.
 #'
-#' @return a plumber router with the supplied router mounted
+#' @return A plumber router with the supplied router mounted
 #'
 #' @examples
 #' \dontrun{
@@ -209,6 +210,7 @@ pr_head <- function(pr,
 pr_mount <- function(pr,
                      path,
                      router) {
+  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
   pr$mount(path = path, router = router)
   invisible(pr)
 }
@@ -240,12 +242,12 @@ pr_mount <- function(pr,
 #' which the names are the names of the hooks, and the values are the
 #' handlers themselves.
 #'
-#' @param pr a plumber router
-#' @param stage a character string. Point in the lifecycle of a request.
-#' @param handler a hook function.
-#' @param handlers a named list of hook handlers
+#' @param pr A plumber router
+#' @param stage A character string. Point in the lifecycle of a request.
+#' @param handler A hook function.
+#' @param handlers A named list of hook handlers
 #'
-#' @return a plumber router with the defined hook(s) added
+#' @return A plumber router with the defined hook(s) added
 #'
 #' @examples
 #' \dontrun{
@@ -275,6 +277,7 @@ pr_mount <- function(pr,
 pr_hook <- function(pr,
                     stage,
                     handler) {
+  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
   pr$registerHook(stage = stage, handler = handler)
   invisible(pr)
 }
@@ -283,6 +286,7 @@ pr_hook <- function(pr,
 #' @export
 pr_hooks <- function(pr,
                      handlers) {
+  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
   pr$registerHooks(handlers)
   invisible(pr)
 }
@@ -391,6 +395,7 @@ pr_cookie <- function(pr,
                       expiration = FALSE,
                       http = TRUE,
                       secure = FALSE) {
+  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
   pr$registerHooks(
     sessionCookie(key = key, name = name, expiration = expiration, http = http, secure = secure)
   )
@@ -403,13 +408,14 @@ pr_cookie <- function(pr,
 #' default serializer to the function supplied via \code{serializer}
 #'
 #' @param pr A plumber router
-#' @param serializer a serializer function
+#' @param serializer A serializer function
 #'
 #' @return The plumber router with the new default serializer
 #'
 #' @export
 pr_serializer <- function(pr,
                           serializer) {
+  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
   pr$setSerializer(serializer)
   invisible(pr)
 }
@@ -419,8 +425,8 @@ pr_serializer <- function(pr,
 #' This function allows a custom error message to be returned when a request
 #' cannot be served by an existing endpoint or filter.
 #'
-#' @param pr a plumber router
-#' @param fun a handler function
+#' @param pr A plumber router
+#' @param fun A handler function
 #'
 #' @return The plumber router with a modified 404 handler
 #'
@@ -440,6 +446,7 @@ pr_serializer <- function(pr,
 #' @export
 pr_404 <- function(pr,
                    fun) {
+  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
   pr$set404Handler(fun)
   invisible(pr)
 }
@@ -447,8 +454,8 @@ pr_404 <- function(pr,
 #' Set the error handler that is invoked if any filter or endpoint generates an
 #' error
 #'
-#' @param pr a plumber router
-#' @param fun a handler function
+#' @param pr A plumber router
+#' @param fun A handler function
 #'
 #' @return The plumber router with a modified error handler
 #'
@@ -467,6 +474,7 @@ pr_404 <- function(pr,
 #' @export
 pr_error <- function(pr,
                      fun) {
+  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
   pr$setErrorHandler(fun)
   invisible(pr)
 }
@@ -476,10 +484,10 @@ pr_error <- function(pr,
 #' Filters can be used to modify an incoming request, return an error, or return
 #' a response prior to the request reaching an endpoint.
 #'
-#' @param pr a plumber router
-#' @param name a character string. Name of filter
-#' @param expr an expr that resolve to a filter function or a filter function
-#' @param serializer a serializer function
+#' @param pr A plumber router
+#' @param name A character string. Name of filter
+#' @param expr An expr that resolve to a filter function or a filter function
+#' @param serializer A serializer function
 #'
 #' @return The plumber router with the defined filter added
 #'
@@ -499,6 +507,7 @@ pr_filter <- function(pr,
                       name,
                       expr,
                       serializer) {
+  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
   pr$filter(name = name, expr = expr, serializer = serializer)
   invisible(pr)
 }
@@ -521,15 +530,15 @@ pr_filter <- function(pr,
 #' run method is executed using default `plumber.swagger.url` option.
 #'
 #' @param pr A plumber router
-#' @param host a string that is a valid IPv4 or IPv6 address that is owned by
+#' @param host A string that is a valid IPv4 or IPv6 address that is owned by
 #' this server, which the application will listen on. "0.0.0.0" represents
 #' all IPv4 addresses and "::/0" represents all IPv6 addresses.
-#' @param port a number or integer that indicates the server port that should
+#' @param port A number or integer that indicates the server port that should
 #' be listened on. Note that on most Unix-like systems including Linux and
 #' Mac OS X, port numbers smaller than 1025 require root privileges.
-#' @param swagger a function that enhances the existing OpenAPI Specification.
+#' @param swagger A function that enhances the existing OpenAPI Specification.
 #' @param debug `TRUE` provides more insight into your API errors.
-#' @param swaggerCallback a callback function for taking action on the url for swagger page.
+#' @param swaggerCallback A callback function for taking action on the url for swagger page.
 #'
 #' @examples
 #' \dontrun{
@@ -548,6 +557,7 @@ pr_run <- function(pr,
                    debug = interactive(),
                    swaggerCallback = getOption('plumber.swagger.url', NULL)
 ) {
+  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
   pr$run(host = host,
          port = port,
          swagger = swagger,

@@ -9,7 +9,7 @@ pr_serializer(pr, serializer)
 \arguments{
 \item{pr}{A plumber router}
 
-\item{serializer}{a serializer function}
+\item{serializer}{A serializer function}
 }
 \value{
 The plumber router with the new default serializer

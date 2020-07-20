@@ -11,11 +11,11 @@ pr(
 )
 }
 \arguments{
-\item{file}{path to file to plumb}
+\item{file}{Path to file to plumb}
 
-\item{filters}{a list of plumber filters}
+\item{filters}{A list of plumber filters}
 
-\item{envir}{an environment to be used as the enclosure for the routers execution}
+\item{envir}{An environment to be used as the enclosure for the routers execution}
 }
 \value{
 A new \code{plumber} router

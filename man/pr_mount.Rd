@@ -7,20 +7,20 @@
 pr_mount(pr, path, router)
 }
 \arguments{
-\item{pr}{the host plumber router.}
+\item{pr}{The host plumber router.}
 
-\item{path}{a character string. Where to mount router.}
+\item{path}{A character string. Where to mount router.}
 
-\item{router}{a plumber router. Router to be mounted.}
+\item{router}{A plumber router. Router to be mounted.}
 }
 \value{
-a plumber router with the supplied router mounted
+A plumber router with the supplied router mounted
 }
 \description{
 Plumber routers can be “nested” by mounting one into another
 using the \code{mount()} method. This allows you to compartmentalize your API
 by paths which is a great technique for decomposing large APIs into smaller
-files. This function mutates the plumber router (\code{pr}) in place, but
+files. This function mutates the plumber router (\code{\link[=pr]{pr()}}) in place, but
 also invisibly returns the updated router.
 }
 \examples{

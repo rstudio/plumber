@@ -28,15 +28,15 @@ pr_head(pr, path, handler, preempt, serializer, endpoint, ...)
 
 \item{path}{The endpoint path}
 
-\item{handler}{a handler function}
+\item{handler}{A handler function}
 
-\item{preempt}{a preempt function}
+\item{preempt}{A preempt function}
 
-\item{serializer}{a plumber serializer}
+\item{serializer}{A plumber serializer}
 
-\item{endpoint}{a \code{PlumberEndpoint} object}
+\item{endpoint}{A \code{PlumberEndpoint} object}
 
-\item{...}{additional arguments for \code{PlumberEndpoint}}
+\item{...}{Additional arguments for \code{PlumberEndpoint}}
 }
 \value{
 A plumber router with the handler added
@@ -45,7 +45,7 @@ A plumber router with the handler added
 This collection of functions creates handlers for a Plumber router.
 }
 \details{
-The generic \code{\link[=pr_handle]{pr_handle()}} creates a handle for the given methods. Specific
+The generic \code{\link[=pr_handle]{pr_handle()}} creates a handle for the given method(s). Specific
 functions are implemented for the following HTTP methods:
 \itemize{
 \item \code{GET}
@@ -71,7 +71,7 @@ pr() \%>\%
   pr_get("/hi", function() "Hello World") \%>\%
   pr_post("/echo", function(req, res) {
     if (req$postBody == "") return("No input")
-    input <- jsonlite::fromJSON(req$POST_BODY)
+    input <- jsonlite::fromJSON(req$postBody)
     list(
       input = input
     )

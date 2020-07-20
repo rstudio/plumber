@@ -8,9 +8,9 @@ error}
 pr_error(pr, fun)
 }
 \arguments{
-\item{pr}{a plumber router}
+\item{pr}{A plumber router}
 
-\item{fun}{a handler function}
+\item{fun}{A handler function}
 }
 \value{
 The plumber router with a modified error handler

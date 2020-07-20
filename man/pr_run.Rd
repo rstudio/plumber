@@ -16,19 +16,19 @@ pr_run(
 \arguments{
 \item{pr}{A plumber router}
 
-\item{host}{a string that is a valid IPv4 or IPv6 address that is owned by
+\item{host}{A string that is a valid IPv4 or IPv6 address that is owned by
 this server, which the application will listen on. "0.0.0.0" represents
 all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 
-\item{port}{a number or integer that indicates the server port that should
+\item{port}{A number or integer that indicates the server port that should
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.}
 
-\item{swagger}{a function that enhances the existing OpenAPI Specification.}
+\item{swagger}{A function that enhances the existing OpenAPI Specification.}
 
 \item{debug}{\code{TRUE} provides more insight into your API errors.}
 
-\item{swaggerCallback}{a callback function for taking action on the url for swagger page.}
+\item{swaggerCallback}{A callback function for taking action on the url for swagger page.}
 }
 \description{
 \code{port} does not need to be explicitly assigned.

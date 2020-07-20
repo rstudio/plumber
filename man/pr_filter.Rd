@@ -7,13 +7,13 @@
 pr_filter(pr, name, expr, serializer)
 }
 \arguments{
-\item{pr}{a plumber router}
+\item{pr}{A plumber router}
 
-\item{name}{a character string. Name of filter}
+\item{name}{A character string. Name of filter}
 
-\item{expr}{an expr that resolve to a filter function or a filter function}
+\item{expr}{An expr that resolve to a filter function or a filter function}
 
-\item{serializer}{a serializer function}
+\item{serializer}{A serializer function}
 }
 \value{
 The plumber router with the defined filter added

@@ -10,16 +10,16 @@ pr_hook(pr, stage, handler)
 pr_hooks(pr, handlers)
 }
 \arguments{
-\item{pr}{a plumber router}
+\item{pr}{A plumber router}
 
-\item{stage}{a character string. Point in the lifecycle of a request.}
+\item{stage}{A character string. Point in the lifecycle of a request.}
 
-\item{handler}{a hook function.}
+\item{handler}{A hook function.}
 
-\item{handlers}{a named list of hook handlers}
+\item{handlers}{A named list of hook handlers}
 }
 \value{
-a plumber router with the defined hook(s) added
+A plumber router with the defined hook(s) added
 }
 \description{
 Plumber routers support the notion of "hooks" that can be registered

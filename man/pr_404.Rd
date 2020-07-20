@@ -7,9 +7,9 @@
 pr_404(pr, fun)
 }
 \arguments{
-\item{pr}{a plumber router}
+\item{pr}{A plumber router}
 
-\item{fun}{a handler function}
+\item{fun}{A handler function}
 }
 \value{
 The plumber router with a modified 404 handler
