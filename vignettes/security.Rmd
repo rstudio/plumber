@@ -140,8 +140,6 @@ First and foremost, recognize that that the client has the ability to modify or 
 
 There are two common work-arounds to this concern. You can store all session information on the server identified by long, cryptographically random IDs and only rely on the cookie to store the ID. Or you can use signed/encrypted cookies, as detailed in the [section on setting encrypted cookies](./rendering-output.html#encrypted-cookies).
 
-// TODO: demo of an API that uses cryptographically secure session IDs
-
 You should also be aware of how cookies will be handled and managed by clients. You can manage these properties by providing different parameters to the `setCookie()` call.
 
  - **expiration** - When the cookie should expire. Can either be a `POSIXt` object that gives the time explicitly, or a raw integer which will be interpreted as the number of seconds in the future when this cookie should expire. If no value is provided, the cookie will be a `session` cookie, meaning that it will persist until the user closes the tab/browser. Remember, however, that a client may accidentally or maliciously retain this cookie beyond its assigned expiration time. From a security standpoint, you cannot rely on a client to be well-behaved and to delete this cookie at the assigned time.
