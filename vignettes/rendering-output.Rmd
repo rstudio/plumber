@@ -177,10 +177,6 @@ pr$run()
 
 The function passed to `setErrorHandler` will be invoked anytime R execution fails with an error.
 
-## Custom Serializers
-
-// TODO
-
 ## Setting Cookies {#setting-cookies}
 
 As part of fulfilling a request, a Plumber API can choose to set HTTP cookies on the client.  HTTP APIs don't implicitly contain a notion of a "session." Without some additional information, Plumber has no way of ascertaining whether or not two HTTP requests that come in are associated with the same user. Cookies offer a way to commission the client to store some state on your behalf so that selected data can outlive a single HTTP request; the full implications of using cookies to track state in your API are discussed [here](./execution-model.html#state-cookies). The two forms of Plumber cookies -- plain-text and encrypted -- are discussed in the following sections.
