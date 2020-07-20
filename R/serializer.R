@@ -167,7 +167,7 @@ serializer_html <- function() {
 }
 
 
-#' @describeIn serializers JSON serializer. See `jsonlite::toJSON` for more details.
+#' @describeIn serializers JSON serializer. See [jsonlite::toJSON()] for more details.
 #' @export
 serializer_json <- function(...) {
   serializer_content_type("application/json; charset=UTF-8", function(val) {
@@ -175,7 +175,7 @@ serializer_json <- function(...) {
   })
 }
 
-#' @describeIn serializers JSON serializer with `auto_unbox` defaulting to `TRUE`. See jsonlite::toJSON` for more details.
+#' @describeIn serializers JSON serializer with `auto_unbox` defaulting to `TRUE`. See [jsonlite::toJSON()] for more details.
 #' @inheritParams jsonlite::toJSON
 #' @export
 serializer_unboxed_json <- function(auto_unbox = TRUE, ...) {

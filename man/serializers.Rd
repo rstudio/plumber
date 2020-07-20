@@ -16,7 +16,7 @@
 \alias{serializer_htmlwidget}
 \title{Plumber Serializers}
 \usage{
-serializer_headers(headers, serialize_fn = identity)
+serializer_headers(headers = list(), serialize_fn = identity)
 
 serializer_content_type(type, serialize_fn = identity)
 
@@ -65,7 +65,7 @@ An exception is that objects of class \code{AsIs} (i.e. wrapped in \code{I()}) a
 \description{
 Serializers are used in Plumber to transform the R object produced by a
 filter/endpoint into an HTTP response that can be returned to the client. See
-\href{https://www.rplumber.io/articles/rendering-output.html#serializers-1}{here} for
+\href{https://book.rplumber.io/articles/rendering-output.html#serializers-1}{here} for
 more details on Plumber serializers and how to customize their behavior.
 }
 \section{Functions}{
@@ -78,9 +78,9 @@ more details on Plumber serializers and how to customize their behavior.
 
 \item \code{serializer_html}: HTML serializer
 
-\item \code{serializer_json}: JSON serializer. See \code{jsonlite::toJSON} for more details.
+\item \code{serializer_json}: JSON serializer. See \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}} for more details.
 
-\item \code{serializer_unboxed_json}: JSON serializer with \code{auto_unbox} defaulting to \code{TRUE}. See jsonlite::toJSON` for more details.
+\item \code{serializer_unboxed_json}: JSON serializer with \code{auto_unbox} defaulting to \code{TRUE}. See \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}} for more details.
 
 \item \code{serializer_rds}: RDS serializer. See \code{\link[=serialize]{serialize()}} for more details.
 
