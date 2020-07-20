@@ -132,11 +132,6 @@ cors_disabled <- function(a, b){
 ```
 Understand that, this is a temporary workaround and can constitute critical security issues if some endpoints that shouldn't be exposed through `CORS` and have been enabled by default.
 
-
-## Cross-Site Request Forgery (CSRF, or XSRF)
-
-// TODO XSRF
-
 ## Cookies {#security-cookies}
 
 In the [section on setting cookies](./rendering-output.html#setting-cookies), we discussed the mechanics of setting cookies. However, if you intend to use cookies for any security-sensitive purpose, you should be aware of some ways that cookies can be exploited.
