@@ -277,8 +277,6 @@ code_chunk(json_serialize(e$exec()), "json")
 
 Some web browsers impose limitations on the length of a URL. Internet Explorer, in particular, caps the query string at 2,048 characters. If you need to send large amounts of data from a client to your API, it would likely be a better idea to send it in a [request body](#request-body).
 
-//TODO: Redundant keys?
-
 ### Request Body {#request-body}
 
 Another way to provide additional information inside an HTTP request is using the message body. Effectively, once a client specifies all the metadata about a request (the path it's trying to reach, some HTTP headers, etc.) it can then provide a message body. The maximum size of a request body depends largely on the technologies involved (client, proxies, etc.) but is typically at least 2MB -- much larger than a query string. This approach is most commonly seen with `PUT` and `POST` requests, though you could encounter it with other HTTP methods.
