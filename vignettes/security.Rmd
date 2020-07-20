@@ -39,7 +39,7 @@ These two assurances are critical if your API will be handling any sensitive dat
 
 As an added layer of protection, you can consider enabling [HTTP Strict Transport Security (HSTS)](https://www.troyhunt.com/understanding-http-strict-transport/). HSTS is a way to instruct clients that -- in the future -- they should refuse to connect to this server over unsecure HTTP. This ensures that no imposter server would be able to trick a client into connecting over insecure HTTP in the future.
 
-Unfortunately, Plumber does not implement HTTPS support natively, but most of the [documented hosting options](#hosting) offer ways to deploy HTTPS and HSTS in front of your Plumber API.
+Unfortunately, Plumber does not implement HTTPS support natively, but most of the [documented hosting options](./hosting.html) offer ways to deploy HTTPS and HSTS in front of your Plumber API.
 
 ## Denial Of Service (DoS) {#dos}
 
@@ -143,11 +143,11 @@ Understand that, this is a temporary workaround and can constitute critical secu
 
 ## Cookies {#security-cookies}
 
-In the [section on setting cookies](#setting-cookies), we discussed the mechanics of setting cookies. However, if you intend to use cookies for any security-sensitive purpose, you should be aware of some ways that cookies can be exploited.
+In the [section on setting cookies](./rendering-output.html#setting-cookies), we discussed the mechanics of setting cookies. However, if you intend to use cookies for any security-sensitive purpose, you should be aware of some ways that cookies can be exploited.
 
 First and foremost, recognize that that the client has the ability to modify or fabricate the cookies that they send to your API. So storing preferences that the user themselves provided in a cookie is not a concern. Storing something with security implications -- like the identity of the user making requests -- however, would be; a malicious user would just need to modify the user ID saved in their cookie in order to trick your API into thinking that they were someone they're not.
 
-There are two common work-arounds to this concern. You can store all session information on the server identified by long, cryptographically random IDs and only rely on the cookie to store the ID. Or you can use signed/encrypted cookies, as detailed in the [section on setting encrypted cookies](#encrypted-cookies).
+There are two common work-arounds to this concern. You can store all session information on the server identified by long, cryptographically random IDs and only rely on the cookie to store the ID. Or you can use signed/encrypted cookies, as detailed in the [section on setting encrypted cookies](./rendering-output.html#encrypted-cookies).
 
 // TODO: demo of an API that uses cryptographically secure session IDs
 
