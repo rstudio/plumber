@@ -171,7 +171,10 @@ make_parsers <- function(parser_function, fixed = NULL, regex = NULL, shortname 
       names
     )
   }
-  parsers <- create_list(shortname)
+  parsers <- list()
+  if (length(shortname) > 0) {
+    parsers$shortname <- create_list(shortname)
+  }
   if (length(fixed) > 0) {
     parsers$fixed <- create_list(fixed)
   }
