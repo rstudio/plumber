@@ -39,7 +39,9 @@ mount_ui <- function(pr, host, port, ui_info) {
   }
 
   # Use callback
-  ui_info$callback(ui_url)
+  if (is.function(ui_info$callback)) {
+    ui_info$callback(ui_url)
+  }
 
   invisible()
 
