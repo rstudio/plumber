@@ -80,8 +80,9 @@ as_attachment <- function(value, filename = NULL) {
 #' @param headers `list()` of headers to add to the response object
 #' @param serialize_fn Function to serialize the data. The result object will be converted to a character string. Ex: [jsonlite::parse_json()].
 #' @export
-serializer_headers <- function(headers, serialize_fn = identity) {
+serializer_headers <- function(headers = list(), serialize_fn = identity) {
   stopifnot(is.function(serialize_fn))
+  stopifnot(is.list(headers))
 
   function(val, req, res, errorHandler) {
     tryCatch({
