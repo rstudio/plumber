@@ -41,9 +41,11 @@ Suggests:
     analogsea (>= 0.7.0),
     later,
     readr,
-    yaml
+    yaml,
+    plumberDeploy
 Remotes:
-    rstudio/swagger
+    rstudio/swagger,
+    meztez/plumberDeploy
 Collate:
     'async.R'
     'content-types.R'
@@ -58,7 +60,6 @@ Collate:
     'parse-query.R'
     'plumber.R'
     'default-handlers.R'
-    'digital-ocean.R'
     'find-port.R'
     'includes.R'
     'json.R'
