@@ -160,6 +160,9 @@ list_parsers <- function() {
 #' @param shortname A character value to reference a parser by a shortname.
 #' Content-Type.
 make_parsers <- function(parser_function, fixed = NULL, regex = NULL, shortname = NULL) {
+  if (any(shortname %in% c("fixed", "regex"))) {
+    stop("Shortnames `fixed` and `regex` are reserved for internal use.")
+  }
   m <- function(n) {
     structure(
       replicate(
@@ -209,7 +212,7 @@ make_parsers <- function(parser_function, fixed = NULL, regex = NULL, shortname 
 #' }
 #' @export
 parser_query <- function() {
-  f <- parser_text(parseQS)[[1]]
+  f <- parser_text(parseQS)$text
   return(make_parsers(f, fixed = "application/x-www-form-urlencoded", shortname = "query"))
 }
 
@@ -219,7 +222,7 @@ parser_query <- function() {
 parser_json <- function(...) {
   f <- parser_text(function(value) {
     safeFromJSON(value, ...)
-  })[[1]]
+  })$text
   return(make_parsers(f, fixed = c("application/json", "text/json"), regex = "json$", shortname = "json"))
 }
 
@@ -235,7 +238,7 @@ parser_text <- function(parse_fn = identity) {
     Encoding(value) <- charset
     parse_fn(value)
   }
-  return(make_parsers(f, fixed = "text/plain", regex = "^text/"))
+  return(make_parsers(f, fixed = "text/plain", regex = "^text/", shortname = "text"))
 }
 
 
@@ -247,7 +250,7 @@ parser_yaml <- function(...) {
       stop("yaml must be installed for the yaml parser to work")
     }
     yaml::yaml.load(val, ..., eval.expr = FALSE)
-  })[[1]]
+  })$text
   return(make_parsers(f,  fixed = c("application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml")))
 }
 
