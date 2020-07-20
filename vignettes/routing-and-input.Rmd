@@ -320,5 +320,3 @@ code_chunk(json_serialize(list(val="abc123")), "json")
 ```
 
 You can print out the names of all of the properties attached to the request by running `print(ls(req))` inside an endpoint.
-
-// TODO: Conflicts between path, query string, body?
