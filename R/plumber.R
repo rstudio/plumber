@@ -195,7 +195,7 @@ plumber <- R6Class(
     #' @param file path to file to plumb
     #' @param envir an environment to be used as the enclosure for the routers execution
     #' @return A new `plumber` router
-    initialize = function(file=NULL, filters=defaultPlumberFilters, envir){
+    initialize = function(file = NULL, filters = defaultPlumberFilters, envir) {
 
       if (!is.null(file)){
         if (!file.exists(file)){
@@ -851,7 +851,7 @@ plumber <- R6Class(
     },
     #' @details Sets the default serializer of the router.
     #' @param serializer a serializer function
-    setSerializer = function(serializer){
+    setSerializer = function(serializer) {
       private$serializer <- serializer
     },
     #' @details Sets the handler that gets called if an
@@ -891,7 +891,11 @@ plumber <- R6Class(
     #' @param ui a character value or a logical value. Default to `plumber.ui` option value.
     #' @param callback a callback function for taking action on UI url.
     #' @param ... Other params to be passed to ui functions.
-    setUI = function(ui = getOption("plumber.ui", TRUE), callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL)), ...) {
+    setUI = function(
+      ui = getOption("plumber.ui", TRUE),
+      callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL)),
+      ...
+    ) {
       stopifnot(length(ui) == 1)
       stopifnot(is.logical(ui) || is.character(ui))
       if (isTRUE(ui)) {
@@ -918,8 +922,7 @@ plumber <- R6Class(
     #' @param debug `TRUE` provides more insight into your API errors.
     setDebug = function(debug = interactive()) {
       stopifnot(length(debug) == 1)
-      stopifnot(is.logical(debug))
-      private$debug = debug
+      private$debug = isTRUE(debug)
     },
     #' @description Add a filter to plumber router
     #' @param name a character string. Name of filter
