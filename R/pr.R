@@ -413,7 +413,7 @@ pr_cookie <- function(pr,
 #' @return The plumber router with the new default serializer
 #'
 #' @export
-pr_serializer <- function(pr,
+pr_set_serializer <- function(pr,
                           serializer) {
   if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
   pr$setSerializer(serializer)
@@ -439,12 +439,12 @@ pr_serializer <- function(pr,
 #'
 #' pr() %>%
 #'   pr_get("/hi", function() "Hello") %>%
-#'   pr_404(handler_404) %>%
+#'   pr_set_404(handler_404) %>%
 #'   pr_run()
 #' }
 #'
 #' @export
-pr_404 <- function(pr,
+pr_set_404 <- function(pr,
                    fun) {
   if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
   pr$set404Handler(fun)
@@ -468,11 +468,11 @@ pr_404 <- function(pr,
 #'
 #' pr() %>%
 #'   pr_get("/error", function() log("a")) %>%
-#'   pr_error(handler_error) %>%
+#'   pr_set_error(handler_error) %>%
 #'   pr_run()
 #' }
 #' @export
-pr_error <- function(pr,
+pr_set_error <- function(pr,
                      fun) {
   if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
   pr$setErrorHandler(fun)
