@@ -13,7 +13,7 @@ pr(
 \arguments{
 \item{file}{Path to file to plumb}
 
-\item{filters}{A list of plumber filters}
+\item{filters}{A list of Plumber filters}
 
 \item{envir}{An environment to be used as the enclosure for the routers execution}
 }

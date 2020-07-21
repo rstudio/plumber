@@ -22,7 +22,7 @@ pr_delete(pr, path, handler, preempt, serializer, endpoint, ...)
 pr_head(pr, path, handler, preempt, serializer, endpoint, ...)
 }
 \arguments{
-\item{pr}{A plumber router}
+\item{pr}{A Plumber router}
 
 \item{methods}{Character vector of HTTP methods}
 
@@ -32,14 +32,14 @@ pr_head(pr, path, handler, preempt, serializer, endpoint, ...)
 
 \item{preempt}{A preempt function}
 
-\item{serializer}{A plumber serializer}
+\item{serializer}{A Plumber serializer}
 
 \item{endpoint}{A \code{PlumberEndpoint} object}
 
 \item{...}{Additional arguments for \code{PlumberEndpoint}}
 }
 \value{
-A plumber router with the handler added
+A Plumber router with the handler added
 }
 \description{
 This collection of functions creates handlers for a Plumber router.
@@ -53,7 +53,7 @@ functions are implemented for the following HTTP methods:
 \item \code{PUT}
 \item \code{DELETE}
 \item \code{HEAD}
-Each function mutates the plumber router in place, but also invisibly returns
+Each function mutates the Plumber router in place, but also invisibly returns
 the updated router.
 }
 }

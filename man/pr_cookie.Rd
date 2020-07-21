@@ -14,7 +14,7 @@ pr_cookie(
 )
 }
 \arguments{
-\item{pr}{A plumber router}
+\item{pr}{A Plumber router}
 
 \item{key}{The secret key to use. This must be consistent across all R sessions
 where you want to save/restore encrypted cookies. It should be produced using

@@ -8,12 +8,12 @@ error}
 pr_set_error(pr, fun)
 }
 \arguments{
-\item{pr}{A plumber router}
+\item{pr}{A Plumber router}
 
 \item{fun}{A handler function}
 }
 \value{
-The plumber router with a modified error handler
+The Plumber router with a modified error handler
 }
 \description{
 Set the error handler that is invoked if any filter or endpoint generates an

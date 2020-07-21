@@ -7,12 +7,12 @@
 pr_set_404(pr, fun)
 }
 \arguments{
-\item{pr}{A plumber router}
+\item{pr}{A Plumber router}
 
 \item{fun}{A handler function}
 }
 \value{
-The plumber router with a modified 404 handler
+The Plumber router with a modified 404 handler
 }
 \description{
 This function allows a custom error message to be returned when a request

@@ -1,6 +1,6 @@
 #' Create a new Plumber router
 #'
-#' @param filters A list of plumber filters
+#' @param filters A list of Plumber filters
 #' @param file Path to file to plumb
 #' @param envir An environment to be used as the enclosure for the routers execution
 #'
@@ -30,19 +30,19 @@ pr <- function(file = NULL,
 #' * `PUT`
 #' * `DELETE`
 #' * `HEAD`
-#' Each function mutates the plumber router in place, but also invisibly returns
+#' Each function mutates the Plumber router in place, but also invisibly returns
 #' the updated router.
 #'
-#' @param pr A plumber router
+#' @param pr A Plumber router
 #' @param methods Character vector of HTTP methods
 #' @param path The endpoint path
 #' @param handler A handler function
 #' @param preempt A preempt function
-#' @param serializer A plumber serializer
+#' @param serializer A Plumber serializer
 #' @param endpoint A `PlumberEndpoint` object
 #' @param ... Additional arguments for `PlumberEndpoint`
 #'
-#' @return A plumber router with the handler added
+#' @return A Plumber router with the handler added
 #'
 #' @examples
 #' \dontrun{
@@ -181,19 +181,19 @@ pr_head <- function(pr,
             ...)
 }
 
-#' Mount a plumber router
+#' Mount a Plumber router
 #'
 #' Plumber routers can be “nested” by mounting one into another
 #' using the `mount()` method. This allows you to compartmentalize your API
 #' by paths which is a great technique for decomposing large APIs into smaller
-#' files. This function mutates the plumber router ([pr()]) in place, but
+#' files. This function mutates the Plumber router ([pr()]) in place, but
 #' also invisibly returns the updated router.
 #'
-#' @param pr The host plumber router.
+#' @param pr The host Plumber router.
 #' @param path A character string. Where to mount router.
-#' @param router A plumber router. Router to be mounted.
+#' @param router A Plumber router. Router to be mounted.
 #'
-#' @return A plumber router with the supplied router mounted
+#' @return A Plumber router with the supplied router mounted
 #'
 #' @examples
 #' \dontrun{
@@ -242,12 +242,12 @@ pr_mount <- function(pr,
 #' which the names are the names of the hooks, and the values are the
 #' handlers themselves.
 #'
-#' @param pr A plumber router
+#' @param pr A Plumber router
 #' @param stage A character string. Point in the lifecycle of a request.
 #' @param handler A hook function.
 #' @param handlers A named list of hook handlers
 #'
-#' @return A plumber router with the defined hook(s) added
+#' @return A Plumber router with the defined hook(s) added
 #'
 #' @examples
 #' \dontrun{
@@ -320,7 +320,7 @@ pr_hooks <- function(pr,
 #'   to prevent others from reading it.
 #' } Examples of both of these solutions are done in the Examples section.
 #'
-#' @param pr A plumber router
+#' @param pr A Plumber router
 #' @param key The secret key to use. This must be consistent across all R sessions
 #'   where you want to save/restore encrypted cookies. It should be produced using
 #'   \code{\link{randomCookieKey}}. Please see the "Storing secure keys" section for more details
@@ -407,10 +407,10 @@ pr_cookie <- function(pr,
 #' By default, Plumber serializes responses to JSON. This function updates the
 #' default serializer to the function supplied via \code{serializer}
 #'
-#' @param pr A plumber router
+#' @param pr A Plumber router
 #' @param serializer A serializer function
 #'
-#' @return The plumber router with the new default serializer
+#' @return The Plumber router with the new default serializer
 #'
 #' @export
 pr_set_serializer <- function(pr,
@@ -425,10 +425,10 @@ pr_set_serializer <- function(pr,
 #' This function allows a custom error message to be returned when a request
 #' cannot be served by an existing endpoint or filter.
 #'
-#' @param pr A plumber router
+#' @param pr A Plumber router
 #' @param fun A handler function
 #'
-#' @return The plumber router with a modified 404 handler
+#' @return The Plumber router with a modified 404 handler
 #'
 #' @examples
 #' \dontrun{
@@ -454,10 +454,10 @@ pr_set_404 <- function(pr,
 #' Set the error handler that is invoked if any filter or endpoint generates an
 #' error
 #'
-#' @param pr A plumber router
+#' @param pr A Plumber router
 #' @param fun A handler function
 #'
-#' @return The plumber router with a modified error handler
+#' @return The Plumber router with a modified error handler
 #'
 #' @examples
 #' \dontrun{
@@ -479,17 +479,17 @@ pr_set_error <- function(pr,
   invisible(pr)
 }
 
-#' Add a filter to plumber router
+#' Add a filter to Plumber router
 #'
 #' Filters can be used to modify an incoming request, return an error, or return
 #' a response prior to the request reaching an endpoint.
 #'
-#' @param pr A plumber router
+#' @param pr A Plumber router
 #' @param name A character string. Name of filter
 #' @param expr An expr that resolve to a filter function or a filter function
 #' @param serializer A serializer function
 #'
-#' @return The plumber router with the defined filter added
+#' @return The Plumber router with the defined filter added
 #'
 #' @examples
 #' \dontrun{
@@ -520,16 +520,16 @@ pr_filter <- function(pr,
 #' function, multiple handles will be added to `plumber` object. OpenAPI json
 #' file will be served on paths `/openapi.json` and `/swagger.json`. Swagger UI
 #' will be served on paths `/__swagger__/index.html` and `/__swagger__/`. When
-#' using a function, it will receive the plumber router as the first parameter
+#' using a function, it will receive the Plumber router as the first parameter
 #' and current OpenAPI Specification as the second. This function should return a
 #' list containing OpenAPI Specification.
 #' See \url{http://spec.openapis.org/oas/v3.0.3}
 #'
 #' `swaggerCallback` When set, it will be called with a character string corresponding
-#' to the swagger UI url. It allows RStudio to open swagger UI when plumber router
+#' to the swagger UI url. It allows RStudio to open swagger UI when Plumber router
 #' run method is executed using default `plumber.swagger.url` option.
 #'
-#' @param pr A plumber router
+#' @param pr A Plumber router
 #' @param host A string that is a valid IPv4 or IPv6 address that is owned by
 #' this server, which the application will listen on. "0.0.0.0" represents
 #' all IPv4 addresses and "::/0" represents all IPv6 addresses.

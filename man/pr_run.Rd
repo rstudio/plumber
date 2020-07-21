@@ -14,7 +14,7 @@ pr_run(
 )
 }
 \arguments{
-\item{pr}{A plumber router}
+\item{pr}{A Plumber router}
 
 \item{host}{A string that is a valid IPv4 or IPv6 address that is owned by
 this server, which the application will listen on. "0.0.0.0" represents
@@ -38,13 +38,13 @@ Mac OS X, port numbers smaller than 1025 require root privileges.}
 function, multiple handles will be added to \code{plumber} object. OpenAPI json
 file will be served on paths \verb{/openapi.json} and \verb{/swagger.json}. Swagger UI
 will be served on paths \verb{/__swagger__/index.html} and \verb{/__swagger__/}. When
-using a function, it will receive the plumber router as the first parameter
+using a function, it will receive the Plumber router as the first parameter
 and current OpenAPI Specification as the second. This function should return a
 list containing OpenAPI Specification.
 See \url{http://spec.openapis.org/oas/v3.0.3}
 
 \code{swaggerCallback} When set, it will be called with a character string corresponding
-to the swagger UI url. It allows RStudio to open swagger UI when plumber router
+to the swagger UI url. It allows RStudio to open swagger UI when Plumber router
 run method is executed using default \code{plumber.swagger.url} option.
 }
 \examples{

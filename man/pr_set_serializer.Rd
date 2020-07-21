@@ -7,12 +7,12 @@
 pr_set_serializer(pr, serializer)
 }
 \arguments{
-\item{pr}{A plumber router}
+\item{pr}{A Plumber router}
 
 \item{serializer}{A serializer function}
 }
 \value{
-The plumber router with the new default serializer
+The Plumber router with the new default serializer
 }
 \description{
 By default, Plumber serializes responses to JSON. This function updates the

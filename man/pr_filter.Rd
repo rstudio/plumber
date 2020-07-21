@@ -2,12 +2,12 @@
 % Please edit documentation in R/pr.R
 \name{pr_filter}
 \alias{pr_filter}
-\title{Add a filter to plumber router}
+\title{Add a filter to Plumber router}
 \usage{
 pr_filter(pr, name, expr, serializer)
 }
 \arguments{
-\item{pr}{A plumber router}
+\item{pr}{A Plumber router}
 
 \item{name}{A character string. Name of filter}
 
@@ -16,7 +16,7 @@ pr_filter(pr, name, expr, serializer)
 \item{serializer}{A serializer function}
 }
 \value{
-The plumber router with the defined filter added
+The Plumber router with the defined filter added
 }
 \description{
 Filters can be used to modify an incoming request, return an error, or return
