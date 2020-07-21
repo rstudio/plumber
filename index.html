@@ -138,14 +138,14 @@
 <span class="co">#* Echo back the input</span>
 <span class="co">#* @param msg The message to echo</span>
 <span class="co">#* @get /echo</span>
-<span class="fu">function</span>(<span class="kw">msg</span>=<span class="st">""</span>){
+<span class="fu">function</span>(<span class="kw">msg</span>=<span class="st">""</span>) {
   <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(msg = <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"The message is: '"</span>, <span class="kw">msg</span>, <span class="st">"'"</span>))
 }
 
 <span class="co">#* Plot a histogram</span>
 <span class="co">#* @png</span>
 <span class="co">#* @get /plot</span>
-<span class="fu">function</span>(){
+<span class="fu">function</span>() {
   <span class="kw">rand</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">100</span>)
   <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span>(<span class="kw">rand</span>)
 }
@@ -154,7 +154,7 @@
 <span class="co">#* @param a The first number to add</span>
 <span class="co">#* @param b The second number to add</span>
 <span class="co">#* @post /sum</span>
-<span class="fu">function</span>(<span class="kw">a</span>, <span class="kw">b</span>){
+<span class="fu">function</span>(<span class="kw">a</span>, <span class="kw">b</span>) {
   <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="kw">a</span>) <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="kw">b</span>)
 }
 </pre></div>

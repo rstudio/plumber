@@ -185,7 +185,7 @@ For instance, the <code>parser_json</code> parser content-type <code>application
 The list of available parsers in plumber is global.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://www.rplumber.io/reference/addParser.html'>addParser</a></span>(<span class='kw'>name</span>, <span class='kw'>parser</span>, pattern = <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>addParser</span>(<span class='kw'>name</span>, <span class='kw'>parser</span>, pattern = <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -224,10 +224,10 @@ plumber endpoint function args.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>parser_json</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>() {
   <span class='fu'>function</span>(<span class='kw'>value</span>, <span class='kw'>content_type</span> = <span class='st'>"application/json"</span>, <span class='kw'>...</span>) {
-    <span class='kw'>charset</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://www.rplumber.io/reference/getCharacterSet.html'>getCharacterSet</a></span>(<span class='kw'>content_type</span>)
+    <span class='kw'>charset</span> <span class='op'>&lt;-</span> <span class='fu'><a href='getCharacterSet.html'>getCharacterSet</a></span>(<span class='kw'>content_type</span>)
     <span class='kw'>value</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rawConversion.html'>rawToChar</a></span>(<span class='kw'>value</span>)
     <span class='fu'><a href='https://rdrr.io/r/base/Encoding.html'>Encoding</a></span>(<span class='kw'>value</span>) <span class='op'>&lt;-</span> <span class='kw'>charset</span>
-    <span class='kw'>jsonlite</span>::<span class='fu'><a href='https://jeroen.cran.dev/jsonlite/reference/fromJSON.html'>fromJSON</a></span>(<span class='kw'>value</span>)
+    <span class='kw'>jsonlite</span>::<span class='fu'><a href='https://jeroen.cran.dev/jsonlite/reference/read_json.html'>parse_json</a></span>(<span class='kw'>value</span>, simplifyVector = <span class='fl'>TRUE</span>)
   }
 }</div></pre>
   </div>

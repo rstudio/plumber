@@ -179,7 +179,7 @@
     <p>How to use Plumber options</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://www.rplumber.io/reference/options_plumber.html'>options_plumber</a></span>(
+    <pre class="usage"><span class='fu'>options_plumber</span>(
   apiHost = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.apiHost"</span>),
   debug = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.debug"</span>),
   maxRequestSize = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.maxRequestSize"</span>),
@@ -232,8 +232,8 @@ If no parameters are supplied, all returned values will be the current <code><a 
     
 
 <p>There are a number of global options that affect Plumber's behavior. These can
-be set globally with <code><a href='https://rdrr.io/r/base/options.html'>options()</a></code> or with <code><a href='https://www.rplumber.io/reference/options_plumber.html'>options_plumber()</a></code>. Options set using
-<code><a href='https://www.rplumber.io/reference/options_plumber.html'>options_plumber()</a></code> should not include the <code>plumber.</code> prefix.</p>
+be set globally with <code><a href='https://rdrr.io/r/base/options.html'>options()</a></code> or with <code>options_plumber()</code>. Options set using
+<code>options_plumber()</code> should not include the <code>plumber.</code> prefix.</p>
 <dl>
 <dt><code>plumber.apiHost</code> (defaults to <code>host</code> defined by <code>run</code> method, or an empty string
 when used outside a running router)</dt><dd><p>Host used to build UI url and server url for

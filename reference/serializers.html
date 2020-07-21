@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plumber Serializers — serializer_json • plumber</title>
+<title>Plumber Serializers — serializer_headers • plumber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,7 +52,7 @@
 
 
 
-<meta property="og:title" content="Plumber Serializers — serializer_json" />
+<meta property="og:title" content="Plumber Serializers — serializer_headers" />
 <meta property="og:description" content="Serializers are used in Plumber to transform the R object produced by a
 filter/endpoint into an HTTP response that can be returned to the client. See
 here for
@@ -174,36 +174,58 @@ more details on Plumber serializers and how to customize their behavior." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plumber Serializers</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/serializer-json.R'><code>R/serializer-json.R</code></a>, <a href='https://github.com/rstudio/plumber/blob/master/R/serializer-content-type.R'><code>R/serializer-content-type.R</code></a>, <a href='https://github.com/rstudio/plumber/blob/master/R/serializer-csv.R'><code>R/serializer-csv.R</code></a>, and 5 more</small>
+    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/serializer.R'><code>R/serializer.R</code></a></small>
     <div class="hidden name"><code>serializers.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Serializers are used in Plumber to transform the R object produced by a
 filter/endpoint into an HTTP response that can be returned to the client. See
-<a href='https://www.rplumber.io/articles/rendering-output.html#serializers-1'>here</a> for
+<a href='https://book.rplumber.io/articles/rendering-output.html#serializers-1'>here</a> for
 more details on Plumber serializers and how to customize their behavior.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://www.rplumber.io/reference/serializers.html'>serializer_json</a></span>(<span class='kw'>...</span>)
+    <pre class="usage"><span class='fu'>serializer_headers</span>(headers = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), serialize_fn = <span class='kw'>identity</span>)
 
-<span class='fu'><a href='https://www.rplumber.io/reference/serializers.html'>serializer_unboxed_json</a></span>(auto_unbox = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)
+<span class='fu'>serializer_content_type</span>(<span class='kw'>type</span>, serialize_fn = <span class='kw'>identity</span>)
 
-<span class='fu'><a href='https://www.rplumber.io/reference/serializers.html'>serializer_content_type</a></span>(<span class='kw'>type</span>)
+<span class='fu'>serializer_csv</span>(<span class='kw'>...</span>)
 
-<span class='fu'><a href='https://www.rplumber.io/reference/serializers.html'>serializer_csv</a></span>(<span class='kw'>...</span>)
+<span class='fu'>serializer_html</span>()
 
-<span class='fu'><a href='https://www.rplumber.io/reference/serializers.html'>serializer_html</a></span>()
+<span class='fu'>serializer_json</span>(<span class='kw'>...</span>)
 
-<span class='fu'><a href='https://www.rplumber.io/reference/serializers.html'>serializer_htmlwidget</a></span>(<span class='kw'>...</span>)
+<span class='fu'>serializer_unboxed_json</span>(auto_unbox = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)
 
-<span class='fu'><a href='https://www.rplumber.io/reference/serializers.html'>serializer_rds</a></span>(version = <span class='st'>"2"</span>, ascii = <span class='fl'>FALSE</span>, <span class='kw'>...</span>)
+<span class='fu'>serializer_rds</span>(version = <span class='st'>"2"</span>, ascii = <span class='fl'>FALSE</span>, <span class='kw'>...</span>)
 
-<span class='fu'><a href='https://www.rplumber.io/reference/serializers.html'>serializer_yaml</a></span>(<span class='kw'>...</span>)</pre>
+<span class='fu'>serializer_yaml</span>(<span class='kw'>...</span>)
+
+<span class='fu'>serializer_text</span>(<span class='kw'>...</span>, serialize_fn = <span class='kw'>as.character</span>)
+
+<span class='fu'>serializer_format</span>(<span class='kw'>...</span>)
+
+<span class='fu'>serializer_print</span>(<span class='kw'>...</span>)
+
+<span class='fu'>serializer_cat</span>(<span class='kw'>...</span>)
+
+<span class='fu'>serializer_htmlwidget</span>(<span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>headers</th>
+      <td><p><code><a href='https://rdrr.io/r/base/list.html'>list()</a></code> of headers to add to the response object</p></td>
+    </tr>
+    <tr>
+      <th>serialize_fn</th>
+      <td><p>Function to serialize the data. The result object will be converted to a character string. Ex: <code><a href='https://jeroen.cran.dev/jsonlite/reference/fromJSON.html'>jsonlite::toJSON()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>type</th>
+      <td><p>The value to provide for the <code>Content-Type</code> HTTP header.</p></td>
+    </tr>
     <tr>
       <th>...</th>
       <td><p>extra arguments supplied to respective internal serialization function.</p></td>
@@ -212,10 +234,6 @@ more details on Plumber serializers and how to customize their behavior.</p>
       <th>auto_unbox</th>
       <td><p>automatically <code><a href='https://jeroen.cran.dev/jsonlite/reference/unbox.html'>unbox</a></code> all atomic vectors of length 1. It is usually safer to avoid this and instead use the <code><a href='https://jeroen.cran.dev/jsonlite/reference/unbox.html'>unbox</a></code> function to unbox individual elements.
 An exception is that objects of class <code>AsIs</code> (i.e. wrapped in <code><a href='https://rdrr.io/r/base/AsIs.html'>I()</a></code>) are not automatically unboxed. This is a way to mark single values as length-1 arrays.</p></td>
-    </tr>
-    <tr>
-      <th>type</th>
-      <td><p>The value to provide for the <code>Content-Type</code> HTTP header.</p></td>
     </tr>
     <tr>
       <th>version</th>
@@ -231,6 +249,24 @@ An exception is that objects of class <code>AsIs</code> (i.e. wrapped in <code><
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
+
+    
+<ul>
+<li><p><code>serializer_headers</code>: Add a static list of headers to each return value. Will add <code>Content-Disposition</code> header if a value is the result of <code><a href='as_attachment.html'>as_attachment()</a></code>.</p></li>
+<li><p><code>serializer_content_type</code>: Adds a <code>Content-Type</code> header to the response object</p></li>
+<li><p><code>serializer_csv</code>: CSV serializer. See <code><a href='https://readr.tidyverse.org/reference/format_delim.html'>readr::format_csv()</a></code> for more details.</p></li>
+<li><p><code>serializer_html</code>: HTML serializer</p></li>
+<li><p><code>serializer_json</code>: JSON serializer. See <code><a href='https://jeroen.cran.dev/jsonlite/reference/fromJSON.html'>jsonlite::toJSON()</a></code> for more details.</p></li>
+<li><p><code>serializer_unboxed_json</code>: JSON serializer with <code>auto_unbox</code> defaulting to <code>TRUE</code>. See <code><a href='https://jeroen.cran.dev/jsonlite/reference/fromJSON.html'>jsonlite::toJSON()</a></code> for more details.</p></li>
+<li><p><code>serializer_rds</code>: RDS serializer. See <code><a href='https://rdrr.io/r/base/serialize.html'>serialize()</a></code> for more details.</p></li>
+<li><p><code>serializer_yaml</code>: YAML serializer. See <code><a href='https://rdrr.io/pkg/yaml/man/as.yaml.html'>yaml::as.yaml()</a></code> for more details.</p></li>
+<li><p><code>serializer_text</code>: Text serializer. See <code><a href='https://rdrr.io/r/base/character.html'>as.character()</a></code> for more details.</p></li>
+<li><p><code>serializer_format</code>: Text serializer. See <code><a href='https://rdrr.io/r/base/format.html'>format()</a></code> for more details.</p></li>
+<li><p><code>serializer_print</code>: Text serializer. Captures the output of <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></p></li>
+<li><p><code>serializer_cat</code>: Text serializer. Captures the output of <code><a href='https://rdrr.io/r/base/cat.html'>cat()</a></code></p></li>
+<li><p><code>serializer_htmlwidget</code>: htmlwidget serializer. See <code><a href='https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html'>htmlwidgets::saveWidget()</a></code> for more details.</p></li>
+</ul>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

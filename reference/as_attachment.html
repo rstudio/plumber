@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add HTTPS to a plumber Droplet — do_configure_https • plumber</title>
+<title>Return an attachment response — as_attachment • plumber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +52,9 @@
 
 
 
-<meta property="og:title" content="Add HTTPS to a plumber Droplet — do_configure_https" />
-<meta property="og:description" content="Adds TLS/SSL (HTTPS) to a droplet created using do_provision()." />
+<meta property="og:title" content="Return an attachment response — as_attachment" />
+<meta property="og:description" content="This will set the appropriate fields in the Content-Disposition header value.
+To make sure the attachement is used, be sure your serializer eventually calls serializer_headers" />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
 
 
@@ -170,72 +171,49 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add HTTPS to a plumber Droplet</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/digital-ocean.R'><code>R/digital-ocean.R</code></a></small>
-    <div class="hidden name"><code>do_configure_https.Rd</code></div>
+    <h1>Return an attachment response</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/serializer.R'><code>R/serializer.R</code></a></small>
+    <div class="hidden name"><code>as_attachment.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Adds TLS/SSL (HTTPS) to a droplet created using <code><a href='do_provision.html'>do_provision()</a></code>.</p>
+    <p>This will set the appropriate fields in the <code>Content-Disposition</code> header value.
+To make sure the attachement is used, be sure your serializer eventually calls <code>serializer_headers</code></p>
     </div>
 
-    <pre class="usage"><span class='fu'>do_configure_https</span>(
-  <span class='kw'>droplet</span>,
-  <span class='kw'>domain</span>,
-  <span class='kw'>email</span>,
-  termsOfService = <span class='fl'>FALSE</span>,
-  force = <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>as_attachment</span>(<span class='kw'>value</span>, filename = <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>droplet</th>
-      <td><p>The droplet on which to act. See <code><a href='https://rdrr.io/pkg/analogsea/man/droplet.html'>analogsea::droplet()</a></code>.</p></td>
+      <th>value</th>
+      <td><p>Response value to be saved</p></td>
     </tr>
     <tr>
-      <th>domain</th>
-      <td><p>The domain name associated with this instance. Used to obtain a
-TLS/SSL certificate.</p></td>
-    </tr>
-    <tr>
-      <th>email</th>
-      <td><p>Your email address; given only to letsencrypt when requesting a
-certificate to enable them to contact you about issues with renewal or
-security.</p></td>
-    </tr>
-    <tr>
-      <th>termsOfService</th>
-      <td><p>Set to <code>TRUE</code> to agree to the letsencrypt subscriber
-agreement. At the time of writing, the current version is available <a href='https://letsencrypt.org/documents/LE-SA-v1.1.1-August-1-2016.pdf'>here</a>.
-Must be set to true to obtain a certificate through letsencrypt.</p></td>
-    </tr>
-    <tr>
-      <th>force</th>
-      <td><p>If <code>FALSE</code>, will abort if it believes that the given domain name
-is not yet pointing at the appropriate IP address for this droplet. If
-<code>TRUE</code>, will ignore this check and attempt to proceed regardless.</p></td>
+      <th>filename</th>
+      <td><p>File name to use when saving the attachment.
+If no <code>filename</code> is provided, the <code>value</code> will be treated as a regular attachment</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>In order to get a TLS/SSL certificate, you need to point a domain name to the
-IP address associated with your droplet. If you don't already have a domain
-name, you can register one <a href='http://tres.tl/domain'>here</a>. Point a (sub)domain
-to the IP address associated with your plumber droplet before calling this
-function. These changes may take a few minutes or hours to propagate around
-the Internet, but once complete you can then execute this function with the
-given domain to be granted a TLS/SSL certificate for that domain.</p>
-<p>Obtains a free TLS/SSL certificate from
-<a href='https://letsencrypt.org/'>letsencrypt</a> and installs it in nginx. It also
-configures nginx to route all unencrypted HTTP traffic (port 80) to HTTPS.
-Your TLS certificate will be automatically renewed and deployed. It also
-opens port 443 in the firewall to allow incoming HTTPS traffic.</p>
-<p>Historically, HTTPS certificates required payment in advance. If you
-appreciate this service, consider <a href='https://letsencrypt.org/donate/'>donating to the letsencrypt project</a>.</p>
+    <p>Object with class <code>"plumber_attachment"</code></p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># plumber.R</span>
+
+<span class='co'>#' @get /data</span>
+<span class='co'>#' @serializer csv</span>
+<span class='fu'>function</span>() {
+  <span class='co'># will cause the file to be saved as `iris.csv`, not `data` or `data.csv`</span>
+  <span class='fu'>as_attachment</span>(<span class='kw'>iris</span>, <span class='st'>"iris.csv"</span>)
+}</div><div class='output co'>#&gt; function() {
+#&gt;   # will cause the file to be saved as `iris.csv`, not `data` or `data.csv`
+#&gt;   as_attachment(iris, "iris.csv")
+#&gt; }
+#&gt; &lt;environment: 0x7fc0ae72b318&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

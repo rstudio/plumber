@@ -179,7 +179,7 @@
     <p>Plumber Router</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://www.rplumber.io/reference/plumber.html'>plumb</a></span>(file = <span class='kw'>NULL</span>, dir = <span class='st'>"."</span>)</pre>
+    <pre class="usage"><span class='fu'>plumb</span>(file = <span class='kw'>NULL</span>, dir = <span class='st'>"."</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -206,7 +206,7 @@ eventually to a corresponding endpoint, if one is found.</p>
 details on the methods available on this object.</p>
     <h2 class="hasAnchor" id="super-class"><a class="anchor" href="#super-class"></a>Super class</h2>
 
-    <p><code><a href='https://www.rplumber.io/reference/hookable.html'>plumber::hookable</a></code> -&gt; <code>plumber</code></p>
+    <p><code><a href='hookable.html'>plumber::hookable</a></code> -&gt; <code>plumber</code></p>
     <h2 class="hasAnchor" id="active-bindings"><a class="anchor" href="#active-bindings"></a>Active bindings</h2>
 
     <p><div class="r6-active-bindings"></p><dl>
@@ -791,7 +791,7 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 <span class='kw'>pr</span> <span class='op'>&lt;-</span> <span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>new</span>()
 <span class='kw'>pr</span><span class='op'>$</span><span class='fu'>handle</span>(<span class='st'>"GET"</span>, <span class='st'>"/"</span>, <span class='fu'>function</span>(){
   <span class='st'>"&lt;html&gt;&lt;h1&gt;Programmatic Plumber!&lt;/h1&gt;&lt;/html&gt;"</span>
-}, serializer=<span class='kw'>plumber</span>::<span class='fu'><a href='https://www.rplumber.io/reference/serializers.html'>serializer_html</a></span>())
+}, serializer=<span class='kw'>plumber</span>::<span class='fu'><a href='serializer_headers.html'>serializer_html</a></span>())
 }
 
 <span class='co'>## ------------------------------------------------</span>
