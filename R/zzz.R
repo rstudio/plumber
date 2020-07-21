@@ -5,4 +5,6 @@
 
   addParsers_onLoad()
 
+  add_serializers_onLoad()
+
 }

@@ -19,7 +19,7 @@ Plumber's first job is to execute R code in response to incoming HTTP requests, 
 
 An incoming HTTP request must be "routed" to one or more R functions. Plumber has two distinct families of functions that it handles: endpoints and filters.
 
-Typically, when a request arrives to a Plumber router, Plumber begins by passing that request through its filters. Once the request has been processed by all the filters, the router will look for an endpoint that can satisfy the incoming request. If it finds one, it will invoke the endpoint and respond to the incoming request using the value the endpoint returned. If no endpoint matches the request, then a `404 Not Found` error will be returned (the behavior of which can be controlled by the [`set404Handler`](#customize-router) method).
+Typically, when a request arrives to a Plumber router, Plumber begins by passing that request through its filters. Once the request has been processed by all the filters, the router will look for an endpoint that can satisfy the incoming request. If it finds one, it will invoke the endpoint and respond to the incoming request using the value the endpoint returned. If no endpoint matches the request, then a `404 Not Found` error will be returned (the behavior of which can be controlled by the [`set404Handler`](./programmatic-usage.html#customize-router) method).
 
 ## Endpoints {#endpoints}
 
@@ -56,8 +56,6 @@ function(){
 Plumber filters can be used to define a "pipeline" for handling incoming requests. This allows API authors to break down complex logic into a sequence of independent, understandable steps. Unlike endpoints, a request may go through multiple Plumber filters before a response is generated.
 
 Typically, a Plumber router will pass a request through all the defined filters before it attempts to find an endpoint to satisfy the request. However, endpoints can "preempt" particular filters if they want to be considered for execution before some filter(s) registered in the router.
-
-// TODO: graphic
 
 Filters can do one of three things in handling a request:
 
@@ -99,7 +97,7 @@ function(req){
 }
 ```
 
-In this case, the `req` object is going to be extended to have an additional property named `username` which represents a value looked up from a cookie. This `req$username` property would be available to all subsequent filters and endpoints processing this request. (Note that this example is not a secure system for authentication; see the [section on using cookies to store state](#state-cookies) for a longer discussion on why.) Once it has modified the request object, it passes control to the next handler using `forward()`.
+In this case, the `req` object is going to be extended to have an additional property named `username` which represents a value looked up from a cookie. This `req$username` property would be available to all subsequent filters and endpoints processing this request. (Note that this example is not a secure system for authentication; see the [section on using cookies to store state](./execution-model.html#state-cookies) for a longer discussion on why.) Once it has modified the request object, it passes control to the next handler using `forward()`.
 
 ### Return a Response
 
@@ -121,7 +119,7 @@ A common cause of errors in Plumber APIs is forgetting to invoke `forward()` in 
 
 ### Throw an Error
 
-Finally, a filter can throw an error. This can occur if a mistake is made in the code defining the filter or if the filter intentionally invokes `stop()` to trigger an error. In this case, the request will not be processed by any subsequent handlers and will immediately be sent to the router's error handler. See [router customization](#customize-router) for more details on how to customize this error handler.
+Finally, a filter can throw an error. This can occur if a mistake is made in the code defining the filter or if the filter intentionally invokes `stop()` to trigger an error. In this case, the request will not be processed by any subsequent handlers and will immediately be sent to the router's error handler. See [router customization](./programmatic-usage.html#customize-router) for more details on how to customize this error handler.
 
 ## Dynamic Routes {#dynamic-routes}
 
@@ -217,7 +215,7 @@ That enables you to serve your `/files/static/index.html` under the http://local
 
 The "implementation" of your server in the above examples is just an empty `list()`. You can also specify a `function()` like you do with the other plumber annotations. At this point, the implementation doesn't alter the behavior of your static server. Eventually, this list or function may provide an opportunity to configure the server by changing things like cache control settings.
 
-If you're configuring a Plumber router programmatically, you can instantiate a special static file router and mount it onto another router as discussed in the [static file router section](#mount-static).
+If you're configuring a Plumber router programmatically, you can instantiate a special static file router and mount it onto another router as discussed in the [static file router section](./programmatic-usage.html#mount-static).
 
 ## Input Handling {#input-handling}
 
@@ -279,8 +277,6 @@ code_chunk(json_serialize(e$exec()), "json")
 
 Some web browsers impose limitations on the length of a URL. Internet Explorer, in particular, caps the query string at 2,048 characters. If you need to send large amounts of data from a client to your API, it would likely be a better idea to send it in a [request body](#request-body).
 
-//TODO: Redundant keys?
-
 ### Request Body {#request-body}
 
 Another way to provide additional information inside an HTTP request is using the message body. Effectively, once a client specifies all the metadata about a request (the path it's trying to reach, some HTTP headers, etc.) it can then provide a message body. The maximum size of a request body depends largely on the technologies involved (client, proxies, etc.) but is typically at least 2MB -- much larger than a query string. This approach is most commonly seen with `PUT` and `POST` requests, though you could encounter it with other HTTP methods.
@@ -306,9 +302,9 @@ As demonstrated above, the raw request body is made available as `req$postBody`.
 
 ### Cookies {#read-cookies}
 
-If cookies are attached to the incoming request, they'll be made available via `req$cookies`. This will contain a list of all the cookies that were included with the request. The names of the list correspond to the names of the cookies and the value for each element will be a character string. See the [Setting Cookies section](#setting-cookies) for details on how to set cookies from Plumber.
+If cookies are attached to the incoming request, they'll be made available via `req$cookies`. This will contain a list of all the cookies that were included with the request. The names of the list correspond to the names of the cookies and the value for each element will be a character string. See the [Setting Cookies section](./rendering-output.html#setting-cookies) for details on how to set cookies from Plumber.
 
-If you've set encrypted cookies (as discussed in the [Encrypted Cookies section](#encrypted-cookies)), that session will be decrypted and made available at `req$session`.
+If you've set encrypted cookies (as discussed in the [Encrypted Cookies section](./rendering-output.html#encrypted-cookies)), that session will be decrypted and made available at `req$session`.
 
 ### Headers
 
@@ -324,5 +320,3 @@ code_chunk(json_serialize(list(val="abc123")), "json")
 ```
 
 You can print out the names of all of the properties attached to the request by running `print(ls(req))` inside an endpoint.
-
-// TODO: Conflicts between path, query string, body?

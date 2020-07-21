@@ -64,7 +64,7 @@ serve_route <- function(pr, route) {
 
   pr$serve(
     make_req("GET", route),
-    PlumberResponse$new(nullSerializer())
+    PlumberResponse$new(serializer_identity())
   )
 }
 

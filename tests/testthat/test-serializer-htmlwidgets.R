@@ -20,7 +20,7 @@ test_that("htmlwidgets serialize properly", {
   w <- renderWidget()
   val <- serializer_htmlwidget()(w, list(), PlumberResponse$new(), stop)
   expect_equal(val$status, 200L)
-  expect_equal(val$headers$`Content-Type`, "text/html; charset=utf-8")
+  expect_equal(val$headers$`Content-Type`, "text/html; charset=UTF-8")
   # Check that content is encoded
   expect_match(val$body, "url(data:image/png;base64", fixed = TRUE)
 })

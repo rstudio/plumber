@@ -17,7 +17,24 @@ knitr::include_graphics("files/images/plumber_output.png")
 
 ## The Response Object {#response-object}
 
-// TODO
+The plumber response object is stored as an environment, much like [the request object](./routing-and-input.html#the-request-object-1). The response object, which is accessible as `res` from within plumber functions, contains the following objects:
+
+Name | Example | Description
+---- | ------- | -----------------------
+`headers` | `list(header = "abc")` | A list of HTTP headers to include in the response
+`body` | `NULL` | This is set to the serialized output of the handler _unless_ the response object is directly returned from the handler (see [bypassing serialization](#bypassing-serialization))
+`status` | `200` | The [HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) included in the response
+
+The response object also contains the following methods that can be invoked:
+
+Name | Example | Description
+---- | ------- | -----------------------
+`setCookie` | `res$setCookie("foo", "bar")` | Sets an HTTP cookie on the client
+`removeCookie` | `res$removeCookie("foo")` | Removes an HTTP cookie
+`setHeader` | `res$setHeader(foo = "bar")` | Sets a header that's available in `res$headers`
+`toResponse` | `res$toResponse()` | Renders the response object as a list containing `status`, `headers`, and `body`.
+
+The other methods (`clone`, `initialize`, and `serializer`) should not be directly invoked on the response object.
 
 ## Serializers
 
@@ -133,17 +150,38 @@ e <- pr$endpoints[[1]][[2]]
 code_chunk(json_serialize(e$exec(res=list(status=1))), "json")
 ```
 
-// TODO: example of setErrorHandler on router.
+A custom error handler can be set using the `setErrorHandler()` method:
 
-## Custom Serializers
+```{r, eval = FALSE}
+pr <- plumber$new()
+pr$handle("GET", "/simple", function() stop("I'm an error!"))
+pr$setErrorHandler(function(req, res, err){
+  res$status <- 500
+  list(error = "An error occurred. Please contact your administrator.")
+})
+pr$run()
+```
 
-// TODO
+If you run this API and visit http://localhost:8000/simple, you'll notice that the custom error message provided in the error handler is included in the browser. Since we didn't do anything with the actual error message, nothing is printed to the console. If we wanted to include the error in the console, we could do the following:
+
+```{r, eval = FALSE}
+pr <- plumber$new()
+pr$handle("GET", "/simple", function() stop("I'm an error!"))
+pr$setErrorHandler(function(req, res, err){
+  print(err)
+  res$status <- 500
+  list(error = "An error occurred. Please contact your administrator.")
+})
+pr$run()
+```
+
+The function passed to `setErrorHandler` will be invoked anytime R execution fails with an error.
 
 ## Setting Cookies {#setting-cookies}
 
-As part of fulfilling a request, a Plumber API can choose to set HTTP cookies on the client.  HTTP APIs don't implicitly contain a notion of a "session." Without some additional information, Plumber has no way of ascertaining whether or not two HTTP requests that come in are associated with the same user. Cookies offer a way to commission the client to store some state on your behalf so that selected data can outlive a single HTTP request; the full implications of using cookies to track state in your API are discussed [here](#state-cookies). The two forms of Plumber cookies -- plain-text and encrypted -- are discussed in the following sections.
+As part of fulfilling a request, a Plumber API can choose to set HTTP cookies on the client.  HTTP APIs don't implicitly contain a notion of a "session." Without some additional information, Plumber has no way of ascertaining whether or not two HTTP requests that come in are associated with the same user. Cookies offer a way to commission the client to store some state on your behalf so that selected data can outlive a single HTTP request; the full implications of using cookies to track state in your API are discussed [here](./execution-model.html#state-cookies). The two forms of Plumber cookies -- plain-text and encrypted -- are discussed in the following sections.
 
-Before you make cookies an important part of your API's security model, be sure to understand the section on the [security considerations when working with cookies](#security-cookies).
+Before you make cookies an important part of your API's security model, be sure to understand the section on the [security considerations when working with cookies](./security.html#security-cookies).
 
 ### Setting Unencrypted Cookies
 
@@ -170,7 +208,7 @@ The `setCookie` method accepts a variety of additional options to customize how 
 
 Other options that can be set on the cookie include `path` (the path on your domain at which the cookie should be installed on the client); `http` (controls whether or not the cookie should be accessible to JavaScript running on this domain -- where `TRUE` means that the cookie is HTTP-only, and not accessible from JavaScript); and `secure` (if `TRUE`, instructs the browser to only send the cookie over HTTPS, not insecure HTTP.
 
-If you're using cookies to infer any security-sensitive properties (such as to identify a user, or determine what resources this client should have access to), be sure to see the [Security chapter](#security) -- in particular [the section on the security implications of cookies](#security-cookies).
+If you're using cookies to infer any security-sensitive properties (such as to identify a user, or determine what resources this client should have access to), be sure to see the [Security article](./security.html) -- in particular [the section on the security implications of cookies](./security.html#security-cookies).
 
 ### Setting Encrypted Cookies {#encrypted-cookies}
 

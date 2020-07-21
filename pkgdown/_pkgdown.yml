@@ -73,6 +73,7 @@ reference:
   - 'PlumberStep'
   - 'addParser'
   - 'addSerializer'
+  - 'as_attachment'
   - 'do_configure_https'
   - 'do_deploy_api'
   - 'do_forward'
