@@ -222,6 +222,7 @@ priorizeProperty <- function(...) {
 
 #' Check if x is JSON serializable
 #' @noRd
+#' @importFrom jsonlite toJSON
 isJSONserializable <- function(x) {
   tryCatch(
     {
@@ -269,4 +270,3 @@ getArgsMetadata <- function(plumberExpression){
     )
   })
 }
-

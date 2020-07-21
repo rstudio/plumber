@@ -169,6 +169,7 @@ serializer_html <- function() {
 
 #' @describeIn serializers JSON serializer. See [jsonlite::toJSON()] for more details.
 #' @export
+#' @importFrom jsonlite toJSON
 serializer_json <- function(...) {
   serializer_content_type("application/json; charset=UTF-8", function(val) {
     toJSON(val, ...)
