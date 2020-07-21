@@ -180,10 +180,6 @@ hookable <- R6Class(
 )
 
 
-#' @include globals.R
-#' @include serializer-json.R
-#' @include plumb-block.R
-#' @include plumb-globals.R
 #' @export
 #' @import crayon
 plumber <- R6Class(

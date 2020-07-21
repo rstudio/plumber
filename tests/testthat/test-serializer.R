@@ -13,7 +13,7 @@ test_that("JSON is the default serializer", {
   res <- PlumberResponse$new()
 
   r <- plumber$new(test_path("files/router.R"))
-  expect_equal(r$serve(make_req("GET", "/"), res)$headers$`Content-Type`, "application/json")
+  expect_equal(r$serve(make_req("GET", "/"), res)$headers$`Content-Type`, "application/json; charset=UTF-8")
 })
 
 test_that("Overridden serializers apply on filters and endpoints", {
@@ -112,21 +112,21 @@ test_that("Non-existant serializers fail", {
 })
 
 
-test_that("nullSerializer serializes properly", {
+test_that("serializer_identity serializes properly", {
   v <- "<html><h1>Hi!</h1></html>"
-  val <- nullSerializer()(v, list(), PlumberResponse$new(), stop)
+  val <- serializer_identity()(v, list(), PlumberResponse$new(), stop)
   expect_equal(val$status, 200L)
   expect_equal(val$body, v)
 })
 
-test_that("nullSerializer errors call error handler", {
+test_that("serializer_identity errors call error handler", {
   errors <- 0
   errHandler <- function(req, res, err){
     errors <<- errors + 1
   }
 
   expect_equal(errors, 0)
-  nullSerializer()(parse(stop("I crash")), list(), PlumberResponse$new("json"), errorHandler = errHandler)
+  serializer_identity()(parse(stop("I crash")), list(), PlumberResponse$new("json"), errorHandler = errHandler)
   expect_equal(errors, 1)
 })
 
