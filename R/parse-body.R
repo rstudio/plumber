@@ -368,7 +368,8 @@ parser_all <- function() {
 #' @describeIn parsers No parser (For internal use only)
 #' @export
 parser_none <- function() {
-  select_parsers()
+  # do not select any parsers
+  select_parsers(character())
 }
 
 add_parsers_onLoad <- function() {
