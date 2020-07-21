@@ -174,7 +174,6 @@
 <a href="#filters" class="anchor"></a>Filters</h2>
 <p>Plumber filters can be used to define a “pipeline” for handling incoming requests. This allows API authors to break down complex logic into a sequence of independent, understandable steps. Unlike endpoints, a request may go through multiple Plumber filters before a response is generated.</p>
 <p>Typically, a Plumber router will pass a request through all the defined filters before it attempts to find an endpoint to satisfy the request. However, endpoints can “preempt” particular filters if they want to be considered for execution before some filter(s) registered in the router.</p>
-<p>// TODO: graphic</p>
 <p>Filters can do one of three things in handling a request:</p>
 <ol style="list-style-type: decimal">
 <li>Forward control onto the next handler, potentially after mutating the request.</li>
@@ -472,7 +471,6 @@
 <div class="sourceCode" id="cb17"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb17-1"><a href="#cb17-1"></a><span class="ot">[</span><span class="st">"The q parameter is ''. The pretty parameter is '0'."</span><span class="ot">]</span></span></code></pre></div>
 <p>(Note that the raw query string is available as <code>req$QUERY_STRING</code>.)</p>
 <p>Some web browsers impose limitations on the length of a URL. Internet Explorer, in particular, caps the query string at 2,048 characters. If you need to send large amounts of data from a client to your API, it would likely be a better idea to send it in a <a href="#request-body">request body</a>.</p>
-<p>//TODO: Redundant keys?</p>
 </div>
 <div id="request-body" class="section level3">
 <h3 class="hasAnchor">
@@ -523,7 +521,6 @@
 <span id="cb21-2"><a href="#cb21-2"></a>  <span class="dt">"val"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"abc123"</span><span class="ot">]</span></span>
 <span id="cb21-3"><a href="#cb21-3"></a><span class="fu">}</span></span></code></pre></div>
 <p>You can print out the names of all of the properties attached to the request by running <code><a href="https://rdrr.io/r/base/print.html">print(ls(req))</a></code> inside an endpoint.</p>
-<p>// TODO: Conflicts between path, query string, body?</p>
 </div>
 </div>
   </div>

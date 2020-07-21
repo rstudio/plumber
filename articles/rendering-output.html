@@ -138,7 +138,73 @@
 <div id="response-object" class="section level2">
 <h2 class="hasAnchor">
 <a href="#response-object" class="anchor"></a>The Response Object</h2>
-<p>// TODO</p>
+<p>The plumber response object is stored as an environment, much like <a href="./routing-and-input.html#the-request-object-1">the request object</a>. The response object, which is accessible as <code>res</code> from within plumber functions, contains the following objects:</p>
+<table class="table">
+<colgroup>
+<col width="11%">
+<col width="20%">
+<col width="67%">
+</colgroup>
+<thead><tr class="header">
+<th>Name</th>
+<th>Example</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>headers</code></td>
+<td><code><a href="https://rdrr.io/r/base/list.html">list(header = "abc")</a></code></td>
+<td>A list of HTTP headers to include in the response</td>
+</tr>
+<tr class="even">
+<td><code>body</code></td>
+<td><code>NULL</code></td>
+<td>This is set to the serialized output of the handler <em>unless</em> the response object is directly returned from the handler (see <a href="#bypassing-serialization">bypassing serialization</a>)</td>
+</tr>
+<tr class="odd">
+<td><code>status</code></td>
+<td><code>200</code></td>
+<td>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status">HTTP status code</a> included in the response</td>
+</tr>
+</tbody>
+</table>
+<p>The response object also contains the following methods that can be invoked:</p>
+<table class="table">
+<colgroup>
+<col width="11%">
+<col width="20%">
+<col width="67%">
+</colgroup>
+<thead><tr class="header">
+<th>Name</th>
+<th>Example</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>setCookie</code></td>
+<td><code>res$setCookie("foo", "bar")</code></td>
+<td>Sets an HTTP cookie on the client</td>
+</tr>
+<tr class="even">
+<td><code>removeCookie</code></td>
+<td><code>res$removeCookie("foo")</code></td>
+<td>Removes an HTTP cookie</td>
+</tr>
+<tr class="odd">
+<td><code>setHeader</code></td>
+<td><code>res$setHeader(foo = "bar")</code></td>
+<td>Sets a header that’s available in <code>res$headers</code>
+</td>
+</tr>
+<tr class="even">
+<td><code>toResponse</code></td>
+<td><code>res$toResponse()</code></td>
+<td>Renders the response object as a list containing <code>status</code>, <code>headers</code>, and <code>body</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>The other methods (<code>clone</code>, <code>initialize</code>, and <code>serializer</code>) should not be directly invoked on the response object.</p>
 </div>
 <div id="serializers" class="section level2">
 <h2 class="hasAnchor">
@@ -303,12 +369,28 @@
 <div class="sourceCode" id="cb11"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">{</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a>  <span class="dt">"error"</span><span class="fu">:</span> <span class="st">"Your request did not include a required parameter."</span></span>
 <span id="cb11-3"><a href="#cb11-3"></a><span class="fu">}</span></span></code></pre></div>
-<p>// TODO: example of setErrorHandler on router.</p>
-</div>
-<div id="custom-serializers" class="section level2">
-<h2 class="hasAnchor">
-<a href="#custom-serializers" class="anchor"></a>Custom Serializers</h2>
-<p>// TODO</p>
+<p>A custom error handler can be set using the <code>setErrorHandler()</code> method:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit">
+<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">plumber</span><span class="op">$</span><span class="fu">new</span>()
+<span class="kw">pr</span><span class="op">$</span><span class="fu">handle</span>(<span class="st">"GET"</span>, <span class="st">"/simple"</span>, <span class="fu">function</span>() <span class="fu"><a href="https://rdrr.io/r/base/stop.html">stop</a></span>(<span class="st">"I'm an error!"</span>))
+<span class="kw">pr</span><span class="op">$</span><span class="fu">setErrorHandler</span>(<span class="fu">function</span>(<span class="kw">req</span>, <span class="kw">res</span>, <span class="kw">err</span>){
+  <span class="kw">res</span><span class="op">$</span><span class="kw">status</span> <span class="op">&lt;-</span> <span class="fl">500</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(error = <span class="st">"An error occurred. Please contact your administrator."</span>)
+})
+<span class="kw">pr</span><span class="op">$</span><span class="fu">run</span>()
+</pre></div>
+<p>If you run this API and visit <a href="http://localhost:8000/simple" class="uri">http://localhost:8000/simple</a>, you’ll notice that the custom error message provided in the error handler is included in the browser. Since we didn’t do anything with the actual error message, nothing is printed to the console. If we wanted to include the error in the console, we could do the following:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit">
+<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">plumber</span><span class="op">$</span><span class="fu">new</span>()
+<span class="kw">pr</span><span class="op">$</span><span class="fu">handle</span>(<span class="st">"GET"</span>, <span class="st">"/simple"</span>, <span class="fu">function</span>() <span class="fu"><a href="https://rdrr.io/r/base/stop.html">stop</a></span>(<span class="st">"I'm an error!"</span>))
+<span class="kw">pr</span><span class="op">$</span><span class="fu">setErrorHandler</span>(<span class="fu">function</span>(<span class="kw">req</span>, <span class="kw">res</span>, <span class="kw">err</span>){
+  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw">err</span>)
+  <span class="kw">res</span><span class="op">$</span><span class="kw">status</span> <span class="op">&lt;-</span> <span class="fl">500</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(error = <span class="st">"An error occurred. Please contact your administrator."</span>)
+})
+<span class="kw">pr</span><span class="op">$</span><span class="fu">run</span>()
+</pre></div>
+<p>The function passed to <code>setErrorHandler</code> will be invoked anytime R execution fails with an error.</p>
 </div>
 <div id="setting-cookies" class="section level2">
 <h2 class="hasAnchor">
@@ -319,7 +401,7 @@
 <h3 class="hasAnchor">
 <a href="#setting-unencrypted-cookies" class="anchor"></a>Setting Unencrypted Cookies</h3>
 <p>Plumber can both set and receive plaint-text cookies. The API endpoint below will return a random letter, but it remembers your preferences on whether you like capitalized or lower-case letters.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit">
+<div class="sourceCode" id="cb14"><pre class="downlit">
 <span class="co">#' @put /preferences</span>
 <span class="fu">function</span>(<span class="kw">res</span>, <span class="kw">capital</span>){
   <span class="co">if</span> (<span class="fu"><a href="https://rdrr.io/r/base/missing.html">missing</a></span>(<span class="kw">capital</span>)){
@@ -346,9 +428,9 @@
 }
 </pre></div>
 <p>Since this API is using a <code>PUT</code> request to test this API, we’ll use <code>curl</code> on the command line to test it. (There’s nothing about cookies that necessitates <code>PUT</code> requests; you could just as easily modify this API to use a <code>GET</code> request.) We can start by visiting the <code>/letter</code> endpoint and we’ll see that the API defaults to a lower-case alphabet. <code>curl http://localhost:8000/letter</code></p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">{</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a>  <span class="dt">"letter"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"y"</span><span class="ot">]</span></span>
-<span id="cb13-3"><a href="#cb13-3"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">{</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>  <span class="dt">"letter"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"m"</span><span class="ot">]</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="fu">}</span></span></code></pre></div>
 <p>If we send a <code>PUT</code> request and specify the <code>capital</code> parameter, a cookie will be set on the client which will allow the server to accommodate our preference in future requests. In <code>curl</code>, you need to specify a file in which you want to save these cookies using the <code>-c</code> option. This is a good reminder that clients handle cookies differently – some won’t support them at all – so be sure that the clients you intend to support with your API play nicely with cookies if you want to use them.</p>
 <p>To send a <code>PUT</code> request, setting the parameter <code>capital</code> to <code>1</code>, we could invoke: <code>curl -c cookies.txt -X PUT --data 'capital=1' "http://localhost:8000/preferences"</code>. If you print out the <code>cookies.txt</code> file, you should now see that it contains a single cookie called <code>capitalize</code> with a value of <code>1</code>.</p>
 <p>We can make another <code>GET</code> request to <code>/letter</code> to see if it accommodates our preferences. But we’ll need to tell <code>curl</code> to use the cookies file we just created when sending this request using the <code>-b</code> switch: <code>curl -b cookies.txt http://localhost:8000/letter</code>. You should now see that the API is returning a random capitalized letter.</p>
@@ -361,7 +443,7 @@
 <a href="#encrypted-cookies" class="anchor"></a>Setting Encrypted Cookies</h3>
 <p>In addition to storing plain-text cookies, Plumber also supports handling cookies that are encrypted. Encrypted cookies prevent your users from seeing what is stored inside of them and also sign their contents so that users can’t modify what is stored.</p>
 <p>To use this feature, you must explicitly add it to your router after constructing it. For example, you could run the following sequence of commands to create a router that supports encrypted session cookies.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit">
+<div class="sourceCode" id="cb16"><pre class="downlit">
 <span class="kw">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plumb.html">plumb</a></span>(<span class="st">"myfile.R"</span>)
 <span class="kw">pr</span><span class="op">$</span><span class="fu">registerHooks</span>(<span class="fu"><a href="../reference/sessionCookie.html">sessionCookie</a></span>(<span class="st">"mySecretHere"</span>, <span class="st">"cookieName"</span>))
 <span class="kw">pr</span><span class="op">$</span><span class="fu">run</span>()
@@ -369,7 +451,7 @@
 <p>You’ll notice the above example is using the <code>sessionCookie</code> hooks that come with Plumber. By adding registering these hooks on your router, you’ll ensure that the <code>req$session</code> object is made available on incoming requests and is persisted to the cookie named <code>cookieName</code> when the response is ready to be sent to the user. In this example, the key used to encrypt the data is <code>"mySecretHere"</code>, which is obviously a very weak secret key.</p>
 <p>Unlike <code>res$setHeader()</code>, the values attached to <code>req$session</code> <em>are</em> serialized via <code>jsonlite</code>; so you’re free to use more complex data structures like lists in your session. Also unlike <code>res$setHeaders()</code>, <code>req$session</code> encrypts the data using the secret key you provide as the first argument to the <code><a href="../reference/sessionCookie.html">sessionCookie()</a></code> function.</p>
 <p>As an example, we’ll store an encrypted cookie that counts how many times this client has visited a particular endpoint:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit">
+<div class="sourceCode" id="cb17"><pre class="downlit">
 <span class="co">#* @get /sessionCounter</span>
 <span class="fu">function</span>(<span class="kw">req</span>){
   <span class="kw">count</span> <span class="op">&lt;-</span> <span class="fl">0</span>

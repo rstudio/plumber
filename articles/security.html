@@ -180,7 +180,7 @@
 <p>This plot takes a negligible amount of time to create.</p>
 <p>However, plots with more points will take more time to create.</p>
 <p><img src="security_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>This plot, with 10,000 points added, took 0.302 seconds to generate. While that doesn’t sound like much, if we exposed this API publicly on the Internet, an attacker could easily generate enough traffic on this endpoint to overwhelm the Plumber process. Even worse, an attacker could make a request on this endpoint with millions or billions of points which might cause our server to run out of memory or consume so much CPU that it deprives other important system resources. Either case could result in our Plumber process crashing altogether.</p>
+<p>This plot, with 10,000 points added, took 0.337 seconds to generate. While that doesn’t sound like much, if we exposed this API publicly on the Internet, an attacker could easily generate enough traffic on this endpoint to overwhelm the Plumber process. Even worse, an attacker could make a request on this endpoint with millions or billions of points which might cause our server to run out of memory or consume so much CPU that it deprives other important system resources. Either case could result in our Plumber process crashing altogether.</p>
 <p>The solution, in this case, is to ensure that we have reasonable safety guards in place for any user input.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="co">#' This is an example of an safe endpoint which</span>
@@ -236,8 +236,6 @@
 <div id="cross-origin-resource-sharing-cors" class="section level2">
 <h2 class="hasAnchor">
 <a href="#cross-origin-resource-sharing-cors" class="anchor"></a>Cross-Origin Resource Sharing (CORS)</h2>
-<p>// TODO: revisit this when CORS is properly implemented in plumber</p>
-<p>//TODO {introduction on CORS principles}</p>
 <p>By default, the API endpoint forbids “cross-domain” requests, but it’s possible with a workaround to override this behavior creating a custom function that will forward the right headers to the API using a filter such as the following snippet.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="co">#* @filter cors</span>
@@ -256,18 +254,12 @@
 </pre></div>
 <p>Understand that, this is a temporary workaround and can constitute critical security issues if some endpoints that shouldn’t be exposed through <code>CORS</code> and have been enabled by default.</p>
 </div>
-<div id="cross-site-request-forgery-csrf-or-xsrf" class="section level2">
-<h2 class="hasAnchor">
-<a href="#cross-site-request-forgery-csrf-or-xsrf" class="anchor"></a>Cross-Site Request Forgery (CSRF, or XSRF)</h2>
-<p>// TODO XSRF</p>
-</div>
 <div id="security-cookies" class="section level2">
 <h2 class="hasAnchor">
 <a href="#security-cookies" class="anchor"></a>Cookies</h2>
 <p>In the <a href="./rendering-output.html#setting-cookies">section on setting cookies</a>, we discussed the mechanics of setting cookies. However, if you intend to use cookies for any security-sensitive purpose, you should be aware of some ways that cookies can be exploited.</p>
 <p>First and foremost, recognize that that the client has the ability to modify or fabricate the cookies that they send to your API. So storing preferences that the user themselves provided in a cookie is not a concern. Storing something with security implications – like the identity of the user making requests – however, would be; a malicious user would just need to modify the user ID saved in their cookie in order to trick your API into thinking that they were someone they’re not.</p>
 <p>There are two common work-arounds to this concern. You can store all session information on the server identified by long, cryptographically random IDs and only rely on the cookie to store the ID. Or you can use signed/encrypted cookies, as detailed in the <a href="./rendering-output.html#encrypted-cookies">section on setting encrypted cookies</a>.</p>
-<p>// TODO: demo of an API that uses cryptographically secure session IDs</p>
 <p>You should also be aware of how cookies will be handled and managed by clients. You can manage these properties by providing different parameters to the <code>setCookie()</code> call.</p>
 <ul>
 <li>
@@ -279,7 +271,6 @@
 </ul>
 <p>Additionally, bear in mind that if an attacker gets physical access to a client who has a valid cookie, the attacker could copy that cookie off to a different machine and begin using it themselves. Unfortunately, you can’t perfectly protect against such attacks, but you can minimize the impact by 1.) using shorter session lifetimes (perhaps a few hours instead of days), 2.) invalidating sessions after a period of user inactivity, or 3.) rotating the sesion ID periodically; this way you’d be able to detect that multiple clients were trying to use the same session and could take action. You can also consider adding an additional layer of security around very security-sensitive endpoints (like changing a user’s password).</p>
 <p>Lastly, if using encrypted cookies to store sensitive information, you should remember that expiring a cookie is an instruction that you’re sending to the client that may or may not be honored. Thus if you were to set an encrypted cookie on a client to authenticate the user and that user wishes to log out, all you can do is instruct the client that they should delete that cookie. If the cookie had been stolen or if a misbehaving client doesn’t delete the cookie, it’s possible that that cookie could still be used to continue making authenticated requests to your API.</p>
-<p>// TODO: cookies with regards to XSRF, or nest XSRF under this section?</p>
 </div>
   </div>
 
