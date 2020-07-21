@@ -199,7 +199,7 @@ list_parsers <- function() {
 #' @describeIn add_parser Select from global parsers and create
 #' a formatted parsers list for programmatic use.
 #' @export
-select_parsers <- function(alias = character()) {
+select_parsers <- function(alias) {
   parsers <- .globals$parsers[alias]
   # remove to avoid infinite recursion
   parsers$all <- NULL
