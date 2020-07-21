@@ -21,7 +21,7 @@ The plumber response object is stored as an environment, much like [the request 
 
 Name | Example | Description
 ---- | ------- | -----------------------
-`headers` | `list(header = "abc")` | A list of headers to include in the response
+`headers` | `list(header = "abc")` | A list of HTTP headers to include in the response
 `body` | `NULL` | This is set to the serialized output of the handler _unless_ the response object is directly returned from the handler (see [bypassing serialization](#bypassing-serialization))
 `status` | `200` | The [HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) included in the response
 
