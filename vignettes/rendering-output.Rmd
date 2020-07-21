@@ -17,7 +17,24 @@ knitr::include_graphics("files/images/plumber_output.png")
 
 ## The Response Object {#response-object}
 
-// TODO
+The plumber response object is stored as an environment, much like [the request object](./routing-and-input.html#the-request-object-1). The response object, which is accessible as `res` from within plumber functions, contains the following objects:
+
+Name | Example | Description
+---- | ------- | -----------------------
+`headers` | `list(header = "abc")` | A list of HTTP headers to include in the response
+`body` | `NULL` | This is set to the serialized output of the handler _unless_ the response object is directly returned from the handler (see [bypassing serialization](#bypassing-serialization))
+`status` | `200` | The [HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) included in the response
+
+The response object also contains the following methods that can be invoked:
+
+Name | Example | Description
+---- | ------- | -----------------------
+`setCookie` | `res$setCookie("foo", "bar")` | Sets an HTTP cookie on the client
+`removeCookie` | `res$removeCookie("foo")` | Removes an HTTP cookie
+`setHeader` | `res$setHeader(foo = "bar")` | Sets a header that's available in `res$headers`
+`toResponse` | `res$toResponse()` | Renders the response object as a list containing `status`, `headers`, and `body`.
+
+The other methods (`clone`, `initialize`, and `serializer`) should not be directly invoked on the response object.
 
 ## Serializers
 
@@ -133,11 +150,32 @@ e <- pr$endpoints[[1]][[2]]
 code_chunk(json_serialize(e$exec(res=list(status=1))), "json")
 ```
 
-// TODO: example of setErrorHandler on router.
+A custom error handler can be set using the `setErrorHandler()` method:
 
-## Custom Serializers
+```{r, eval = FALSE}
+pr <- plumber$new()
+pr$handle("GET", "/simple", function() stop("I'm an error!"))
+pr$setErrorHandler(function(req, res, err){
+  res$status <- 500
+  list(error = "An error occurred. Please contact your administrator.")
+})
+pr$run()
+```
 
-// TODO
+If you run this API and visit http://localhost:8000/simple, you'll notice that the custom error message provided in the error handler is included in the browser. Since we didn't do anything with the actual error message, nothing is printed to the console. If we wanted to include the error in the console, we could do the following:
+
+```{r, eval = FALSE}
+pr <- plumber$new()
+pr$handle("GET", "/simple", function() stop("I'm an error!"))
+pr$setErrorHandler(function(req, res, err){
+  print(err)
+  res$status <- 500
+  list(error = "An error occurred. Please contact your administrator.")
+})
+pr$run()
+```
+
+The function passed to `setErrorHandler` will be invoked anytime R execution fails with an error.
 
 ## Setting Cookies {#setting-cookies}
 
