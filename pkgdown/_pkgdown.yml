@@ -42,9 +42,9 @@ articles:
 reference:
 - title: Router
   contents:
+  - 'plumb'
   - 'pr'
   - 'pr_run'
-  - 'plumb'
 - title: Router Methods
   contents:
   - 'pr_get'
