@@ -203,10 +203,10 @@ select_parsers <- function(alias) {
   parsers <- .globals$parsers[alias]
   # remove to avoid infinite recursion
   parsers$all <- NULL
-  return(invisible(
+  return(
     # Lambda function to get each parser `p()` list
     Reduce(function(l, p) {utils::modifyList(l, p())}, parsers, init = list())
-  ))
+  )
 }
 
 #' Plumber Parsers
