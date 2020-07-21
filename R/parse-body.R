@@ -33,13 +33,13 @@ parse_raw <- function(toparse) {
     tolower(toparse$content_type),
     toparse$value[1],
     toparse$filename,
-    toparse$parsers)
-  if (!is.null(parser)) {
-   return(do.call(parser, toparse))
-  } else {
+    toparse$parsers
+  )
+  if (is.null(parser)) {
     message("No suitable parser found to handle request body type ", toparse$content_type, ".")
     return(list())
   }
+  do.call(parser, toparse)
 }
 
 parser_picker <- function(content_type, first_byte, filename = NULL, parsers = NULL) {
