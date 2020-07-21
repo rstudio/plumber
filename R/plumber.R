@@ -304,7 +304,7 @@ plumber <- R6Class(
             message(
               "`$run(swagger)` has been deprecated in v1.0.0 and will be removed in a coming release.\n",
               "The plumber UI has already been set. Ignoring `swagger` parameter.\n",
-              "Please use update your `$run()` method."
+              "Please update your `$run()` method."
             )
           }
         }
