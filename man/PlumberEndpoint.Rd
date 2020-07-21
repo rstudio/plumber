@@ -33,6 +33,8 @@ each separate verb/path into its own endpoint, so we just do that.}
 \item{\code{params}}{endpoint parameters}
 
 \item{\code{tags}}{endpoint tags}
+
+\item{\code{parsers}}{step allowed parsers}
 }
 \if{html}{\out{</div>}}
 }
@@ -98,6 +100,7 @@ Create a new \code{PlumberEndpoint} object
   expr,
   envir,
   serializer,
+  parsers,
   lines,
   params,
   comments,
@@ -118,6 +121,8 @@ Create a new \code{PlumberEndpoint} object
 \item{\code{envir}}{endpoint environment}
 
 \item{\code{serializer}}{endpoint serializer}
+
+\item{\code{parsers}}{endpoint parsers}
 
 \item{\code{lines}}{endpoint block}
 

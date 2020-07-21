@@ -19,6 +19,7 @@ plumbBlock <- function(lineNum, file){
   image <- NULL
   imageAttr <- NULL
   serializer <- NULL
+  parsers <- NULL
   assets <- NULL
   params <- NULL
   comments <- ""
@@ -102,7 +103,7 @@ plumbBlock <- function(lineNum, file){
       }
 
       if (!s %in% names(.globals$serializers)){
-        stop("No such @serializer registered: ", s)
+        stopOnLine(lineNum, line, paste0("No such @serializer registered: ", s))
       }
 
       ser <- .globals$serializers[[s]]
@@ -130,7 +131,7 @@ plumbBlock <- function(lineNum, file){
       }
 
       if (!is.na(s) && !s %in% names(.globals$serializers)){
-        stop("No such @serializer registered: ", s)
+        stopOnLine(lineNum, line, paste0("No such @serializer registered: ", s))
       }
       shortSerAttr <- trimws(shortSerMat[1,3])
       if(!identical(shortSerAttr, "") && !grepl("^\\(.*\\)$", shortSerAttr)){
@@ -147,6 +148,40 @@ plumbBlock <- function(lineNum, file){
         serializer <- do.call(.globals$serializers[[s]], argList)
       }, error = function(e) {
         stopOnLine(lineNum, line, paste0("Error creating serializer: ", s, "\n", e))
+      })
+
+    }
+
+    parsersMat <- stri_match(line, regex="^#['\\*]\\s*@parser(\\s+([^\\s]+)\\s*(.*)\\s*$)?")
+    if (!is.na(parsersMat[1,1])){
+      parser_alias <- stri_trim_both(parsersMat[1,3])
+      if (is.na(parser_alias) || parser_alias == ""){
+        stopOnLine(lineNum, line, "No @parser specified")
+      }
+
+      if (!parser_alias %in% names(.globals$parsers)){
+        stopOnLine(lineNum, line, paste0("No such @parser registered: ", parser_alias))
+      }
+
+      parser <- .globals$parsers[[parser_alias]]
+
+      if (!is.na(parsersMat[1, 4]) && parsersMat[1,4] != ""){
+        # We have an arg to pass in to the parser
+        argList <- eval(parse(text=parsersMat[1,4]))
+      } else {
+        argList <- list()
+      }
+      tryCatch({
+        # Use modifyList instead of c to avoid duplicated parsers name
+        if (is.null(parsers)) {
+          parsers <- do.call(parser, argList)
+        } else {
+          # Since we plumb from bottom to top, put currently plumbed parsers in front
+          # Parsers will be added in the order the appear in the plumbed file
+          parsers <- utils::modifyList(do.call(parser, argList), parsers)
+        }
+      }, error = function(e) {
+        stopOnLine(lineNum, line, paste0("Error creating parser: ", parser_alias, "\n", e))
       })
 
     }
@@ -223,6 +258,7 @@ plumbBlock <- function(lineNum, file){
     image = image,
     imageAttr = imageAttr,
     serializer = serializer,
+    parsers = parsers,
     assets = assets,
     params = rev(params),
     comments = comments,
@@ -247,7 +283,7 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr)
   # ALL if statements possibilities must eventually call eval(expr, envir)
   if (!is.null(block$paths)){
     lapply(block$paths, function(p){
-      ep <- PlumberEndpoint$new(p$verb, p$path, expr, envir, block$serializer, srcref, block$params, block$comments, block$responses, block$tags)
+      ep <- PlumberEndpoint$new(p$verb, p$path, expr, envir, block$serializer, block$parsers, srcref, block$params, block$comments, block$responses, block$tags)
 
       if (!is.null(block$image)){
         # Arguments to pass in to the image serializer

@@ -2,43 +2,79 @@
 % Please edit documentation in R/parse-body.R
 \name{add_parser}
 \alias{add_parser}
-\title{Add a Parsers}
+\alias{list_parsers}
+\alias{select_parsers}
+\title{Manage parsers}
 \usage{
-add_parser(content_type, parser, verbose = TRUE)
+add_parser(
+  alias,
+  parser,
+  fixed = NULL,
+  regex = NULL,
+  shortname = NULL,
+  verbose = TRUE
+)
+
+list_parsers()
+
+select_parsers(alias = character())
 }
 \arguments{
-\item{content_type}{A string to match against the content-type of each part of
-the request body}
+\item{alias}{An alias to map parser from the \verb{@parser} plumber tag to the global parsers list.}
 
-\item{parser}{The parser function to be added. This function should possibly
-accept \code{value} and the named parameters \code{content_type} and \code{filename}.
-Other parameters may be provided from \code{\link[webutils:parse_multipart]{webutils::parse_multipart()}}.
-To be safe, add a \code{...} to your function signature.}
+\item{parser}{The parser function to be added. This build the parser function.}
+
+\item{fixed}{A character vector of fixed string to be matched against a request \code{content-type} to use \code{parser}.}
+
+\item{regex}{A character vector of \link{regex} string to be matched against a request \code{content-type} to use \code{parser}.}
+
+\item{shortname}{A character value to reference a parser by a shortname. (For internal use only)}
 
 \item{verbose}{Logical value which determines if a warning should be
-displayed when patterns are overwritten.}
+displayed when alias in map are overwritten.}
 }
 \description{
 A parser is responsible for decoding the raw body content of a request into
 a list of arguments that can be mapped to endpoint function arguments.
-For instance, the \code{parser_json} parser content-type \code{application/json}.
+For instance, \code{\link[=parser_json]{parser_json()}} parse content-type \code{application/json}.
 }
 \details{
-Parser function structure is something like below. Available parameters
-to build parser are \code{value}, \code{content_type} and \code{filename} (only available
-in \code{multipart-form} body).\if{html}{\out{<div class="r">}}\preformatted{parser <- function(value, content_type = "ct", filename, ...) \{
+When \code{parser} is evaluated, it should return a parser function.
+Parser matching is done first by \code{content-type} header matching on \code{fixed} then by using a
+regular expressions on \code{regex}. Note that plumber strip the header from \verb{; charset*} to
+perform matching.
+
+There is a special case when no \code{content-type} header is
+provided that will use a \code{\link[=parser_json]{parser_json()}} when it detects a \code{json} string.
+
+Functions signature should include \code{value}, \code{...} and
+possibly \code{content_type}, \code{filename}. Other parameters may be provided
+if you want to use the headers from \code{\link[webutils:parse_multipart]{webutils::parse_multipart()}}.
+
+Parser function structure is something like below.\if{html}{\out{<div class="r">}}\preformatted{parser <- () \{
+ function(value, ...) \{
   # do something with raw value
+ \}
 \}
 }\if{html}{\out{</div>}}
+}
+\section{Functions}{
+\itemize{
+\item \code{list_parsers}: List currently registered parsers
 
-It should return a named list if you want values to map to
-plumber endpoint function args.
-}
+\item \code{select_parsers}: Select from global parsers and create
+a formatted parsers list for programmatic use.
+}}
+
 \examples{
-parser_dcf <- function(value, content_type = "text/x-dcf", ...) {
-  charset <- getCharacterSet(content_type)
-  value <- rawToChar(value)
-  Encoding(value) <- charset
-  read.dcf(value)
+# `content-type` header is mostly used to look up charset and adjust encoding
+parser_dcf <- function() {
+  function(value, content_type = "text/x-dcf", ...) {
+    charset <- getCharacterSet(content_type)
+    value <- rawToChar(value)
+    Encoding(value) <- charset
+    read.dcf(value)
+  }
 }
+add_parser("dcf", parser_dcf, fixed = "text/x-dcf")
 }

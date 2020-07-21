@@ -158,6 +158,8 @@ PlumberEndpoint <- R6Class(
     params = NA,
     #' @field tags endpoint tags
     tags = NA,
+    #' @field parsers step allowed parsers
+    parsers = NULL,
     #' @description ability to serve request
     #' @param req a request object
     #' @return a logical. `TRUE` when endpoint can serve request.
@@ -170,6 +172,7 @@ PlumberEndpoint <- R6Class(
     #' @param expr endpoint expr
     #' @param envir endpoint environment
     #' @param serializer endpoint serializer
+    #' @param parsers endpoint parsers
     #' @param lines endpoint block
     #' @param params endpoint params
     #' @param comments endpoint comments
@@ -178,7 +181,7 @@ PlumberEndpoint <- R6Class(
     #' @details Parameters values are obtained from parsing blocks of lines in a plumber file.
     #' They can also be provided manually for historical reasons.
     #' @return A new `PlumberEndpoint` object
-    initialize = function(verbs, path, expr, envir, serializer, lines, params, comments, responses, tags){
+    initialize = function(verbs, path, expr, envir, serializer, parsers, lines, params, comments, responses, tags){
       self$verbs <- verbs
       self$path <- path
 
@@ -194,6 +197,9 @@ PlumberEndpoint <- R6Class(
 
       if (!missing(serializer) && !is.null(serializer)){
         self$serializer <- serializer
+      }
+      if (!missing(parsers) && !is.null(parsers)){
+        self$parsers <- parsers
       }
       if (!missing(lines)){
         self$lines <- lines

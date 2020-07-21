@@ -1,8 +1,8 @@
-#' @importFrom jsonlite validate fromJSON toJSON
+#' @importFrom jsonlite validate toJSON
 #' @noRd
-safeFromJSON <- function(txt, ...) {
+safeFromJSON <- function(txt, simplifyVector = TRUE, ...) {
   if (!validate(txt)) {
     stop("Argument 'txt' is not a valid JSON string.")
   }
-  fromJSON(txt, ...)
+  jsonlite::parse_json(txt, simplifyVector, ...)
 }
