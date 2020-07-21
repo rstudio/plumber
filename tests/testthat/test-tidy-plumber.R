@@ -109,7 +109,7 @@ test_that("pr default functions perform as expected", {
   }
 
   p <- pr() %>%
-    pr_set_serializer(serialized) %>%
+    pr_set_serializer(serialized()) %>%
     pr_get("/hello", function() "Hello")
 
   req <- make_req("GET", "/hello")
