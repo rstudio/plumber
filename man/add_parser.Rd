@@ -17,7 +17,7 @@ add_parser(
 
 list_parsers()
 
-select_parsers(alias = character())
+select_parsers(alias)
 }
 \arguments{
 \item{alias}{An alias to map parser from the \verb{@parser} plumber tag to the global parsers list.}
