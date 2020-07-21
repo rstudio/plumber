@@ -109,7 +109,7 @@ test_that("pr default functions perform as expected", {
   }
 
   p <- pr() %>%
-    pr_serializer(serialized) %>%
+    pr_set_serializer(serialized) %>%
     pr_get("/hello", function() "Hello")
 
   req <- make_req("GET", "/hello")
@@ -126,7 +126,7 @@ test_that("pr default functions perform as expected", {
 
   p <- pr() %>%
     pr_get("/hello", function() "Hello") %>%
-    pr_404(handler_404)
+    pr_set_404(handler_404)
 
   req <- make_req("GET", "/foo")
 
@@ -143,7 +143,7 @@ test_that("pr default functions perform as expected", {
 
   p <- pr() %>%
     pr_get("/error", function() log("a")) %>%
-    pr_error(handler_error)
+    pr_set_error(handler_error)
 
   req <- make_req("GET", "/error")
 
