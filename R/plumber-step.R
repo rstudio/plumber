@@ -199,7 +199,7 @@ PlumberEndpoint <- R6Class(
         self$serializer <- serializer
       }
       if (!missing(parsers) && !is.null(parsers)){
-        self$parsers <- parsers
+        self$parsers <- select_parsers(parsers)
       }
       if (!missing(lines)){
         self$lines <- lines
