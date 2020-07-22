@@ -28,7 +28,8 @@ Imports:
     crayon,
     promises (>= 1.1.0),
     sodium,
-    swagger (> 3.20.3)
+    swagger (> 3.20.3),
+    magrittr
 LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
@@ -70,7 +71,9 @@ Collate:
     'plumber-response.R'
     'plumber-static.R'
     'plumber-step.R'
+    'pr.R'
     'serializer.R'
     'session-cookie.R'
     'utf8.R'
+    'utils-pipe.R'
     'zzz.R'

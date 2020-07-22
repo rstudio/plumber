@@ -40,6 +40,31 @@ articles:
 #   - 'ex-mailgun'
 
 reference:
+- title: Router
+  contents:
+  - 'plumb'
+  - 'pr'
+  - 'pr_run'
+- title: Router Methods
+  contents:
+  - 'pr_get'
+  - 'pr_post'
+  - 'pr_put'
+  - 'pr_delete'
+  - 'pr_head'
+  - 'pr_handle'
+  - 'pr_mount'
+- title: Router Hooks
+  contents:
+  - 'pr_hook'
+  - 'pr_hooks'
+  - 'pr_cookie'
+  - 'pr_filter'
+- title: Router Defaults
+  contents:
+  - 'pr_set_serializer'
+  - 'pr_set_404'
+  - 'pr_set_error'
 - title: All functions
   # desc: description here
   contents:
@@ -61,7 +86,6 @@ reference:
   - 'include_file'
   - 'options_plumber'
   - 'parsers'
-  - 'plumb'
   - 'randomCookieKey'
   - 'serializer_json'
   - 'sessionCookie'
