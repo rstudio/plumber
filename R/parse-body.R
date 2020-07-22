@@ -72,12 +72,12 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
   fpm <- stri_detect_regex(
     content_type,
     names(parsers$regex),
-    max_count = 1)
-  fpm[is.na(fpm)] <- FALSE
+    max_count = 1
+  )
 
   # return known parser (first regex pattern match)
   if (any(fpm)) {
-    return(parsers$regex[[which(fpm)]])
+    return(parsers$regex[[which(fpm)[1]]])
   }
 
   # query string
@@ -199,7 +199,7 @@ list_parsers <- function() {
 #' @describeIn add_parser Select from global parsers and create
 #' a formatted parsers list for programmatic use.
 #' @export
-select_parsers <- function(alias) {
+get_parsers <- function(aliases) {
   parsers <- .globals$parsers[alias]
   # remove to avoid infinite recursion
   parsers$all <- NULL
@@ -270,10 +270,10 @@ parser_text <- function(parse_fn = identity) {
 #' @describeIn parsers YAML parser
 #' @export
 parser_yaml <- function(...) {
+  if (!requireNamespace("yaml", quietly = TRUE)) {
+    stop("yaml must be installed for the yaml parser to work")
+  }
   parser_text(function(val) {
-    if (!requireNamespace("yaml", quietly = TRUE)) {
-      stop("yaml must be installed for the yaml parser to work")
-    }
     yaml::yaml.load(val, ..., eval.expr = FALSE)
   })
 }
@@ -297,8 +297,8 @@ parser_read_file <- function(read_fn = readLines) {
 #' @describeIn parsers CSV parser
 #' @export
 parser_csv <- function(...) {
-  parser_read_file(function(val) {
-    utils::read.csv(val, ...)
+  parser_read_file(function(tmpfile) {
+    utils::read.csv(tmpfile, ...)
   })
 }
 
@@ -306,8 +306,8 @@ parser_csv <- function(...) {
 #' @describeIn parsers TSV parser
 #' @export
 parser_tsv <- function(...) {
-  parser_read_file(function(val) {
-    utils::read.delim(val, ...)
+  parser_read_file(function(tmpfile) {
+    utils::read.delim(tmpfile, ...)
   })
 }
 
@@ -315,8 +315,8 @@ parser_tsv <- function(...) {
 #' @describeIn parsers RDS parser
 #' @export
 parser_rds <- function(...) {
-  parser_read_file(function(value) {
-    readRDS(value, ...)
+  parser_read_file(function(tmpfile) {
+    readRDS(tmpfile, ...)
   })
 }
 
@@ -376,7 +376,7 @@ add_parsers_onLoad <- function() {
 
   # parser alias names for plumbing
   add_parser("csv", parser_csv, fixed = c("application/csv", "application/x-csv", "text/csv", "text/x-csv"))
-  add_parser("json", parser_json, fixed = c("application/json", "text/json"), regex = "json$", shortname = "json")
+  add_parser("json", parser_json, fixed = c("application/json", "text/json"), shortname = "json")
   add_parser("multi", parser_multi, fixed = "multipart/form-data")
   add_parser("octet", parser_octet, fixed = "application/octet-stream", shortname = "octet")
   add_parser("query", parser_query, fixed = "application/x-www-form-urlencoded", shortname = "query")
