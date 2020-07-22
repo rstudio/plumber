@@ -34,7 +34,6 @@ LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
     testthat (>= 0.11.0),
-    XML,
     rmarkdown,
     base64enc,
     htmlwidgets,
@@ -46,7 +45,7 @@ Suggests:
 Remotes:
     rstudio/swagger
 RoxygenNote: 7.1.1
-Collate: 
+Collate:
     'async.R'
     'content-types.R'
     'shared-secret-filter.R'
