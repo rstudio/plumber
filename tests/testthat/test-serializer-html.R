@@ -4,7 +4,7 @@ test_that("HTML serializes properly", {
   v <- "<html><h1>Hi!</h1></html>"
   val <- serializer_html()(v, list(), PlumberResponse$new(), stop)
   expect_equal(val$status, 200L)
-  expect_equal(val$headers$`Content-Type`, "text/html; charset=utf-8")
+  expect_equal(val$headers$`Content-Type`, "text/html; charset=UTF-8")
   expect_equal(val$body, v)
 })
 

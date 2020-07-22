@@ -4,12 +4,14 @@
 \alias{addSerializer}
 \title{Add a Serializer}
 \usage{
-addSerializer(name, serializer)
+addSerializer(name, serializer, verbose = TRUE)
 }
 \arguments{
 \item{name}{The name of the serializer (character string)}
 
 \item{serializer}{The serializer to be added.}
+
+\item{verbose}{Logical value which determines if a message should be printed when overwriting serializers}
 }
 \description{
 A serializer is responsible for translating a generated R value into output

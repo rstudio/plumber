@@ -3,7 +3,7 @@
 \name{add_parser}
 \alias{add_parser}
 \alias{list_parsers}
-\alias{select_parsers}
+\alias{get_parsers}
 \title{Manage parsers}
 \usage{
 add_parser(
@@ -17,7 +17,7 @@ add_parser(
 
 list_parsers()
 
-select_parsers(alias)
+get_parsers(aliases)
 }
 \arguments{
 \item{alias}{An alias to map parser from the \verb{@parser} plumber tag to the global parsers list.}
@@ -62,7 +62,7 @@ Parser function structure is something like below.\if{html}{\out{<div class="r">
 \itemize{
 \item \code{list_parsers}: List currently registered parsers
 
-\item \code{select_parsers}: Select from global parsers and create
+\item \code{get_parsers}: Select from global parsers and create
 a formatted parsers list for programmatic use.
 }}
 

@@ -45,8 +45,14 @@ plumber 1.0.0
 
 * Documentation is presented using pkgdown (#570)
 
+* Tidy API for easier programmatic usage (@blairj09, #590)
+
 
 ### Minor new features and improvements
+
+* Support HTTP 405 Code. (@meztez, #554)
+
+* Attached the router to the incoming request object at `req$pr`. (@meztez, #554)
 
 * Documented plumber options. Add `options_plumber`. (@meztez, #555)
 
@@ -54,9 +60,15 @@ plumber 1.0.0
 
 * Added csv and tsv parsers (#584)
 
-* Added csv serializer (@pachamaltese, #520)
+* Added `serializer_csv()` (@pachamaltese, #520)
 
-* Added svg serializer (@pachamaltese, #398)
+* Added svg image serializer (@pachamaltese, #398)
+
+* Added `serializer_headers(header_list)` method which sets a list of static headers for each serialized value. Heavily inspired from @ycphs (#455). (#585)
+
+* Added `as_attachment(value, filename)` method which allows routes to return a file attachment with a custom name. (#585)
+
+* Added `serializer_text()` (#585)
 
 * Update documentation on R6 objects (@meztez, #530)
 

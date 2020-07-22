@@ -164,7 +164,13 @@ PlumberEndpoint <- R6Class(
     #' @param req a request object
     #' @return a logical. `TRUE` when endpoint can serve request.
     canServe = function(req){
-      req$REQUEST_METHOD %in% self$verbs && !is.na(stri_match_first_regex(req$PATH_INFO, private$regex$regex)[1,1])
+      req$REQUEST_METHOD %in% self$verbs && self$matchesPath(req$PATH_INFO)
+    },
+    #' @description determines if route matches requested path
+    #' @param path a url path
+    #' @return a logical. `TRUE` when endpoint matches the requested path.
+    matchesPath = function(path) {
+      !is.na(stri_match_first_regex(path, private$regex$regex)[1,1])
     },
     #' @description Create a new `PlumberEndpoint` object
     #' @param verbs endpoint verb

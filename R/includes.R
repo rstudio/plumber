@@ -36,7 +36,7 @@ include_file <- function(file, res, content_type){
 #' @rdname include_file
 #' @export
 include_html <- function(file, res){
-  include_file(file, res, content_type="text/html; charset=utf-8")
+  include_file(file, res, content_type="text/html; charset=UTF-8")
 }
 
 #' @rdname include_file
@@ -57,4 +57,3 @@ include_rmd <- function(file, res, format = NULL){
   f <- rmarkdown::render(file, format, quiet=TRUE)
   include_html(f, res)
 }
-
