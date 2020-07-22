@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return an attachment response — as_attachment • plumber</title>
+<title>Mount a Plumber router — pr_mount • plumber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,9 +52,12 @@
 
 
 
-<meta property="og:title" content="Return an attachment response — as_attachment" />
-<meta property="og:description" content="This will set the appropriate fields in the Content-Disposition header value.
-To make sure the attachement is used, be sure your serializer eventually calls serializer_headers" />
+<meta property="og:title" content="Mount a Plumber router — pr_mount" />
+<meta property="og:description" content="Plumber routers can be “nested” by mounting one into another
+using the mount() method. This allows you to compartmentalize your API
+by paths which is a great technique for decomposing large APIs into smaller
+files. This function mutates the Plumber router (pr()) in place, but
+also invisibly returns the updated router." />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
 
 
@@ -171,49 +174,53 @@ To make sure the attachement is used, be sure your serializer eventually calls s
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return an attachment response</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/serializer.R'><code>R/serializer.R</code></a></small>
-    <div class="hidden name"><code>as_attachment.Rd</code></div>
+    <h1>Mount a Plumber router</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/pr.R'><code>R/pr.R</code></a></small>
+    <div class="hidden name"><code>pr_mount.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This will set the appropriate fields in the <code>Content-Disposition</code> header value.
-To make sure the attachement is used, be sure your serializer eventually calls <code>serializer_headers</code></p>
+    <p>Plumber routers can be “nested” by mounting one into another
+using the <code>mount()</code> method. This allows you to compartmentalize your API
+by paths which is a great technique for decomposing large APIs into smaller
+files. This function mutates the Plumber router (<code><a href='pr.html'>pr()</a></code>) in place, but
+also invisibly returns the updated router.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_attachment</span>(<span class='kw'>value</span>, filename = <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>pr_mount</span>(<span class='kw'>pr</span>, <span class='kw'>path</span>, <span class='kw'>router</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>value</th>
-      <td><p>Response value to be saved</p></td>
+      <th>pr</th>
+      <td><p>The host Plumber router.</p></td>
     </tr>
     <tr>
-      <th>filename</th>
-      <td><p>File name to use when saving the attachment.
-If no <code>filename</code> is provided, the <code>value</code> will be treated as a regular attachment</p></td>
+      <th>path</th>
+      <td><p>A character string. Where to mount router.</p></td>
+    </tr>
+    <tr>
+      <th>router</th>
+      <td><p>A Plumber router. Router to be mounted.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Object with class <code>"plumber_attachment"</code></p>
+    <p>A Plumber router with the supplied router mounted</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># plumber.R</span>
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='kw'>pr1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_handle.html'>pr_get</a></span>(<span class='st'>"/hello"</span>, <span class='fu'>function</span>() <span class='st'>"Hello"</span>)
 
-<span class='co'>#' @get /data</span>
-<span class='co'>#' @serializer csv</span>
-<span class='fu'>function</span>() {
-  <span class='co'># will cause the file to be saved as `iris.csv`, not `data` or `data.csv`</span>
-  <span class='fu'>as_attachment</span>(<span class='kw'>iris</span>, <span class='st'>"iris.csv"</span>)
-}</div><div class='output co'>#&gt; function() {
-#&gt;   # will cause the file to be saved as `iris.csv`, not `data` or `data.csv`
-#&gt;   as_attachment(iris, "iris.csv")
-#&gt; }
-#&gt; &lt;environment: 0x7fe3259a0e98&gt;</div></pre>
+<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_handle.html'>pr_get</a></span>(<span class='st'>"/goodbye"</span>, <span class='fu'>function</span>() <span class='st'>"Goodbye"</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'>pr_mount</span>(<span class='st'>"/hi"</span>, <span class='kw'>pr1</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

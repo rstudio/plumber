@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return an attachment response — as_attachment • plumber</title>
+<title>Start a server using plumber object — pr_run • plumber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,9 +52,8 @@
 
 
 
-<meta property="og:title" content="Return an attachment response — as_attachment" />
-<meta property="og:description" content="This will set the appropriate fields in the Content-Disposition header value.
-To make sure the attachement is used, be sure your serializer eventually calls serializer_headers" />
+<meta property="og:title" content="Start a server using plumber object — pr_run" />
+<meta property="og:description" content="port does not need to be explicitly assigned." />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
 
 
@@ -171,49 +170,80 @@ To make sure the attachement is used, be sure your serializer eventually calls s
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return an attachment response</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/serializer.R'><code>R/serializer.R</code></a></small>
-    <div class="hidden name"><code>as_attachment.Rd</code></div>
+    <h1>Start a server using <code>plumber</code> object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/pr.R'><code>R/pr.R</code></a></small>
+    <div class="hidden name"><code>pr_run.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This will set the appropriate fields in the <code>Content-Disposition</code> header value.
-To make sure the attachement is used, be sure your serializer eventually calls <code>serializer_headers</code></p>
+    <p><code>port</code> does not need to be explicitly assigned.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_attachment</span>(<span class='kw'>value</span>, filename = <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>pr_run</span>(
+  <span class='kw'>pr</span>,
+  host = <span class='st'>"127.0.0.1"</span>,
+  port = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.port"</span>),
+  swagger = <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>(),
+  debug = <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>(),
+  swaggerCallback = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.swagger.url"</span>, <span class='kw'>NULL</span>)
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>value</th>
-      <td><p>Response value to be saved</p></td>
+      <th>pr</th>
+      <td><p>A Plumber router</p></td>
     </tr>
     <tr>
-      <th>filename</th>
-      <td><p>File name to use when saving the attachment.
-If no <code>filename</code> is provided, the <code>value</code> will be treated as a regular attachment</p></td>
+      <th>host</th>
+      <td><p>A string that is a valid IPv4 or IPv6 address that is owned by
+this server, which the application will listen on. "0.0.0.0" represents
+all IPv4 addresses and "::/0" represents all IPv6 addresses.</p></td>
+    </tr>
+    <tr>
+      <th>port</th>
+      <td><p>A number or integer that indicates the server port that should
+be listened on. Note that on most Unix-like systems including Linux and
+Mac OS X, port numbers smaller than 1025 require root privileges.</p></td>
+    </tr>
+    <tr>
+      <th>swagger</th>
+      <td><p>A function that enhances the existing OpenAPI Specification.</p></td>
+    </tr>
+    <tr>
+      <th>debug</th>
+      <td><p><code>TRUE</code> provides more insight into your API errors.</p></td>
+    </tr>
+    <tr>
+      <th>swaggerCallback</th>
+      <td><p>A callback function for taking action on the url for swagger page.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Object with class <code>"plumber_attachment"</code></p>
+    <p><code>swagger</code> should be either a logical or a function . When <code>TRUE</code> or a
+function, multiple handles will be added to <code>plumber</code> object. OpenAPI json
+file will be served on paths <code>/openapi.json</code> and <code>/swagger.json</code>. Swagger UI
+will be served on paths <code>/__swagger__/index.html</code> and <code>/__swagger__/</code>. When
+using a function, it will receive the Plumber router as the first parameter
+and current OpenAPI Specification as the second. This function should return a
+list containing OpenAPI Specification.
+See <a href='http://spec.openapis.org/oas/v3.0.3'>http://spec.openapis.org/oas/v3.0.3</a></p>
+<p><code>swaggerCallback</code> When set, it will be called with a character string corresponding
+to the swagger UI url. It allows RStudio to open swagger UI when Plumber router
+run method is executed using default <code>plumber.swagger.url</code> option.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># plumber.R</span>
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
+  <span class='fu'>pr_run</span>()
 
-<span class='co'>#' @get /data</span>
-<span class='co'>#' @serializer csv</span>
-<span class='fu'>function</span>() {
-  <span class='co'># will cause the file to be saved as `iris.csv`, not `data` or `data.csv`</span>
-  <span class='fu'>as_attachment</span>(<span class='kw'>iris</span>, <span class='st'>"iris.csv"</span>)
-}</div><div class='output co'>#&gt; function() {
-#&gt;   # will cause the file to be saved as `iris.csv`, not `data` or `data.csv`
-#&gt;   as_attachment(iris, "iris.csv")
-#&gt; }
-#&gt; &lt;environment: 0x7fe3259a0e98&gt;</div></pre>
+<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
+  <span class='fu'>pr_run</span>(port = <span class='fl'>5762</span>, debug = <span class='fl'>TRUE</span>)
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
