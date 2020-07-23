@@ -217,7 +217,7 @@ plumber <- R6Class(
       # Initialize
       private$serializer <- serializer_json()
       # Default parsers to maintain legacy features
-      private$parsers <- c("json", "query", "text", "octet", "multi")
+      private$default_parsers <- c("json", "query", "text", "octet", "multi")
       private$errorHandler <- defaultErrorHandler()
       private$notFoundHandler <- default404Handler
       private$maxSize <- getOption('plumber.maxRequestSize', 0) #0 Unlimited
@@ -487,17 +487,17 @@ plumber <- R6Class(
     #'   "<html><h1>Programmatic Plumber!</h1></html>"
     #' }, serializer=plumber::serializer_html())
     #' }
-    handle = function(methods, path, handler, preempt, serializer, parsers, endpoint, ...){
+    handle = function(methods, path, handler, preempt, serializer, parsers, endpoint, ...) {
       epdef <- !missing(methods) || !missing(path) || !missing(handler) || !missing(serializer) || !missing(parsers)
       if (!missing(endpoint) && epdef){
         stop("You must provide either the components for an endpoint (handler and serializer) OR provide the endpoint yourself. You cannot do both.")
       }
 
-      if (epdef){
-        if (missing(serializer)){
+      if (epdef) {
+        if (missing(serializer)) {
           serializer <- private$serializer
         }
-        if (missing(parsers)){
+        if (missing(parsers)) {
           parsers <- private$parsers
         }
 
@@ -893,8 +893,8 @@ plumber <- R6Class(
     },
     #' @details Sets the default parsers of the router.
     #' @param parsers a named list of parsers
-    setParsers = function(parsers){
-      private$parsers <- parsers
+    setParsers = function(parsers) {
+      private$default_parsers <- parsers
     },
     #' @details Sets the handler that gets called if an
     #' incoming request can’t be served by any filter, endpoint, or sub-router.
@@ -1072,7 +1072,7 @@ plumber <- R6Class(
     }
   ), private = list(
     serializer = NULL, # The default serializer for the router
-    parsers = NULL, # The default parsers for the router
+    default_parsers = NULL, # The default parsers for the router
 
     ends = list(), # List of endpoints indexed by their pre-empted filter.
     filts = NULL, # Array of filters
