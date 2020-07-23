@@ -100,7 +100,6 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
 #' @param parser The parser function to be added. This build the parser function.
 #' @param fixed A character vector of fixed string to be matched against a request `content-type` to use `parser`.
 #' @param regex A character vector of [regex] string to be matched against a request `content-type` to use `parser`.
-#' @param shortname A character value to reference a parser by a shortname. (For internal use only)
 #' @param verbose Logical value which determines if a warning should be
 #' displayed when alias in map are overwritten.
 #'
@@ -136,9 +135,15 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
 #'     read.dcf(value)
 #'   }
 #' }
-#' add_parser("dcf", parser_dcf, fixed = "text/x-dcf")
+#' register_parser("dcf", parser_dcf, fixed = "text/x-dcf")
 #' @export
-add_parser <- function(alias, parser, fixed = NULL, regex = NULL, shortname = NULL, verbose = TRUE) {
+register_parser <- function(
+  alias,
+  parser,
+  fixed = NULL,
+  regex = NULL,
+  verbose = TRUE
+) {
 
   if (!is.null(.globals$parsers[[alias]])) {
     if (isTRUE(verbose)) {
@@ -148,46 +153,43 @@ add_parser <- function(alias, parser, fixed = NULL, regex = NULL, shortname = NU
 
   stopifnot(is.function(parser))
 
-  if (length(c(fixed, regex, shortname))) {
-
-    parsers_list <- function(...) {
-
-      parser_function <- do.call(parser, list(...))
-
-      create_list <- function(names) {
-        stats::setNames(
-          replicate(
-            length(names),
-            parser_function),
-          names
-        )
-      }
-
-        parsers <- list()
-
-        if (length(shortname) > 0) {
-          parsers[[shortname]] <- parser_function
-        }
-        if (length(fixed) > 0) {
-          parsers$fixed <- create_list(fixed)
-        }
-        if (length(regex) > 0) {
-          parsers$regex <- create_list(regex)
-        }
-
-        return(parsers)
-
-    }
-
-  } else {
-
-    parsers_list = parser
-
+  if (length(c(fixed, regex)) == 0) {
+    stop("At least one value of `fixed` and `regex` is required to register a parser")
   }
 
-  .globals$parsers[[alias]] <- parsers_list
+  # Init the parser function with outside arguments
+  init_parser_func <- function(...) {
+    parser_function <- do.call(parser, list(...))
 
-  invisible(list_parsers())
+    parser_formals <- formals(parser_function)
+    if (!("..." %in% names(parser_formals))) {
+      stop("For parser '", alias, "', please add a `...` argument to the returned function for possible future parameter expansion")
+    }
+
+    create_list <- function(names) {
+      stats::setNames(
+        replicate(
+          length(names),
+          parser_function),
+        names
+      )
+    }
+
+    parser_info <- list(
+      alias = create_list(alias)
+    )
+    if (length(fixed) > 0) {
+      parser_info$fixed <- create_list(fixed)
+    }
+    if (length(regex) > 0) {
+      parser_info$regex <- create_list(regex)
+    }
+
+    return(parser_info)
+  }
+
+  .globals$parsers[[alias]] <- init_parser_func
+  invisible(.globals$parsers)
 }
 
 #' @export
