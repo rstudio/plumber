@@ -164,9 +164,9 @@ test_that("@parser parameters produce an error or not", {
   # due to covr changing some code, the return answer is very strange
   testthat::skip_on_covr()
 
-  expect_block_fn <- function(lines, fn) {
-    b <- plumber:::plumbBlock(length(lines), lines)
-    expect_equal_functions(b$parsers, fn)
+  expect_block_parser <- function(lines, fn) {
+    b <- plumbBlock(length(lines), lines)
+    expect_equal(b$parsers, fn)
   }
   expect_block_error <- function(lines, ...) {
     expect_error({
@@ -174,13 +174,25 @@ test_that("@parser parameters produce an error or not", {
     }, ...)
   }
 
-  expect_block_fn("#' @parser octet", select_parsers("octet"))
 
-  expect_block_fn("#' @parser octet list()", select_parsers("octet"))
-  expect_block_fn("#' @parser octet list(         )", select_parsers("octet"))
-  expect_block_fn("#' @parser octet list     (         )     ", select_parsers("octet"))
+  expected <- list(octet = list())
+  expect_block_parser("#' @parser octet",  expected)
 
-  expect_block_error("#' @parser octet list(key = \"val\")", "unused argument")
+  expect_block_parser("#' @parser octet list()", expected)
+  expect_block_parser("#' @parser octet list(         )", expected)
+  expect_block_parser("#' @parser octet list     (         )     ", expected)
+
+  expect_error({
+    evaluateBlock(
+      srcref = 3, # which evaluates to line 2
+      file = c("#' @get /test", "#' @parser octet list(key = \"val\")"),
+      expr = substitute(identity),
+      envir = new.env(),
+      addEndpoint = function(a, b, ...) { str(list(a , b, ...)); browser()},
+      addFilter = as.null,
+      pr = plumber$new()
+    )
+  }, "unused argument (key = \"val\")", fixed = TRUE)
 })
 
 # TODO: more testing around filter, assets, endpoint, etc.

@@ -1,54 +1,32 @@
-#* @post /none
-#* @parser none
-function(...){
+return_inputs <- function(...) {
   ret <- list(...)
   ret$req <- NULL
   ret$res <- NULL
   ret
 }
 
-#* @post /all
-#* @parser all
-function(...){
-  ret <- list(...)
-  ret$req <- NULL
-  ret$res <- NULL
-  ret
-}
 
 #* @post /default
-function(...){
-  ret <- list(...)
-  ret$req <- NULL
-  ret$res <- NULL
-  ret
-}
+return_inputs
 
 #* @post /json
 #* @parser json
-function(...){
-  ret <- list(...)
-  ret$req <- NULL
-  ret$res <- NULL
-  ret
-}
+return_inputs
 
 #* @post /mixed
-#* @parser json
 #* @parser query
-function(...){
-  ret <- list(...)
-  ret$req <- NULL
-  ret$res <- NULL
-  ret
-}
+#* @parser json
+return_inputs
 
 #* @post /repeated
 #* @parser json
 #* @parser json
-function(...){
-  ret <- list(...)
-  ret$req <- NULL
-  ret$res <- NULL
-  ret
-}
+return_inputs
+
+#* @post /none
+#* @parser none
+return_inputs
+
+#* @post /all
+#* @parser all
+return_inputs
