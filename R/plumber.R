@@ -218,7 +218,7 @@ plumber <- R6Class(
       # Initialize
       private$serializer <- serializer_json()
       # Default parsers to maintain legacy features
-      private$default_parsers <- c("json", "query", "text", "octet", "multi")
+      private$default_parsers <- make_parser(c("json", "query", "text", "octet", "multi"))
       private$errorHandler <- defaultErrorHandler()
       private$notFoundHandler <- default404Handler
       private$maxSize <- getOption('plumber.maxRequestSize', 0) #0 Unlimited
@@ -744,7 +744,7 @@ plumber <- R6Class(
             if (!is.null(h$parsers)) {
               h$parsers
             } else {
-              make_parser(private$default_parsers)
+              private$default_parsers
             }
           req$args <- c(
             h$getPathParams(path),
@@ -894,9 +894,9 @@ plumber <- R6Class(
       private$serializer <- serializer
     },
     #' @details Sets the default parsers of the router.
-    #' @param parsers a named list of parsers
+    #' @param parsers A value to be parsed by [make_parser()]
     setParsers = function(parsers) {
-      private$default_parsers <- parsers
+      private$default_parsers <- make_parser(parsers)
     },
     #' @details Sets the handler that gets called if an
     #' incoming request can’t be served by any filter, endpoint, or sub-router.
