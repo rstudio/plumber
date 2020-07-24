@@ -11,7 +11,6 @@
 \alias{parser_rds}
 \alias{parser_octet}
 \alias{parser_multi}
-\alias{parser_all}
 \alias{parser_none}
 \title{Plumber Parsers}
 \usage{
@@ -34,8 +33,6 @@ parser_rds(...)
 parser_octet()
 
 parser_multi()
-
-parser_all()
 
 parser_none()
 }
@@ -85,8 +82,6 @@ This parser should be used when reading from a file is required.
 \item \code{parser_octet}: Octet stream parser. Will add a filename attribute if the filename exists
 
 \item \code{parser_multi}: Multi part parser. This parser will then parse each individual body with its respective parser
-
-\item \code{parser_all}: Enable all parsers. Not recommended due to security concerns.
 
 \item \code{parser_none}: No parser. Will not process the postBody.
 }}

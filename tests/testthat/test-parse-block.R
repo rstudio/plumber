@@ -188,7 +188,7 @@ test_that("@parser parameters produce an error or not", {
       file = c("#' @get /test", "#' @parser octet list(key = \"val\")"),
       expr = substitute(identity),
       envir = new.env(),
-      addEndpoint = function(a, b, ...) { str(list(a , b, ...)); browser()},
+      addEndpoint = function(a, b, ...) { stop("should not reach here")},
       addFilter = as.null,
       pr = plumber$new()
     )

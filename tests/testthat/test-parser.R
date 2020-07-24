@@ -16,24 +16,22 @@ test_that("parsers can be combined", {
   expect_parsers(c("query", "json"), c("query", "json"), sort_items = FALSE)
 
   expect_parsers("all", setdiff(registered_parsers(), c("all", "none")))
-  expect_parsers(TRUE, setdiff(registered_parsers(), c("all", "none")))
   expect_parsers(list(all = list()), setdiff(registered_parsers(), c("all", "none")))
+  expect_parsers(TRUE, setdiff(registered_parsers(), c("all", "none")))
+
+
 
   # make sure parameters are not overwritten even when including all
   parsers_plain <- make_parser(list(all = list(), json = list(simplifyVector = FALSE)))
-  expect_equal(
-    parsers_plain$alias$json(jsonlite::toJSON(1:3) %>% charToRaw()),
-    list(1,2,3)
-  )
+  json_input <- parsers_plain$alias$json(charToRaw(jsonlite::toJSON(1:3)))
+  expect_equal(json_input, list(1,2,3))
 
   parsers_guess <- make_parser(list(all = list(), json = list(simplifyVector = TRUE)))
-  expect_equal(
-    parsers_guess$alias$json(jsonlite::toJSON(1:3) %>% charToRaw()),
-    c(1,2,3)
-  )
+  json_input <- parsers_guess$alias$json(charToRaw(jsonlite::toJSON(1:3)))
+  expect_equal(json_input, c(1,2,3))
 
   # check that parsers return already combined parsers
-  expect_parsers(parsers_plain, setdiff(registered_parsers(), c("all", "none")))
+  expect_equal(make_parser(parsers_plain), parsers_plain)
 })
 
 test_that("parsers work", {
@@ -48,6 +46,28 @@ test_that("parsers work", {
   expect_identical(r$route(make_req("POST", "/none", body=rawToChar(bin_body)), res), structure(list(), names = character()))
   expect_message(r$route(make_req("POST", "/json", body=rawToChar(bin_body)), res), "No suitable parser found")
 
+  bin_file <- test_path("files/multipart-form.bin")
+  bin_body <- readBin(bin_file, "raw", file.info(bin_file)$size)
+
+
+  req <- new.env()
+  req$REQUEST_METHOD <- "POST"
+  req$PATH_INFO <- "/all"
+  req$QUERY_STRING <- ""
+  req$HTTP_CONTENT_TYPE <- "multipart/form-data; boundary=----WebKitFormBoundaryMYdShB9nBc32BUhQ"
+  req$rook.input <- list(read_lines = function(){ stop("should not be executed") },
+                         read = function(){ bin_body },
+                         rewind = function(){ length(bin_body) })
+  withr::with_options(list(plumber.postBody = FALSE), {
+    parsed_body <- r$route(req, PlumberResponse$new())
+  })
+  expect_equal(names(parsed_body), c("json", "img1", "img2", "rds"))
+  expect_equal(parsed_body[["rds"]], women)
+  expect_equal(attr(parsed_body[["img1"]], "filename"), "avatar2-small.png")
+  expect_equal(parsed_body[["json"]], list(a=2,b=4,c=list(w=3,t=5)))
+
+
+  # expect parsers match
   expect_equal(r$routes$none$parsers, make_parser("none"))
   expect_equal(r$routes$all$parsers, make_parser("all"))
   expect_equal(r$routes$default$parsers, NULL)
