@@ -4,7 +4,11 @@ on:
   push:
     branches:
       - "master"
+  pull_request:
+    branches:
       - "docker/**"
+  schedule:
+    - cron:  '0 0 1 * *' # first of every month
 
 
 jobs:
@@ -41,7 +45,7 @@ jobs:
         name: rstudio/plumber
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-        cache: ${{ github.event_name == 'push' }}
+        cache: false
         workdir: "."
         buildargs: "R_VERSION=${{ matrix.r_version }},PLUMBER_REF=${{ matrix.config.ref }}${{ matrix.config.extra_buildargs }}"
         tags: ${{ matrix.config.tags }}
