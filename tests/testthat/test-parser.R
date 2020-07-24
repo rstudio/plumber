@@ -58,9 +58,13 @@ test_that("parsers work", {
   req$rook.input <- list(read_lines = function(){ stop("should not be executed") },
                          read = function(){ bin_body },
                          rewind = function(){ length(bin_body) })
-  withr::with_options(list(plumber.postBody = FALSE), {
-    parsed_body <- r$route(req, PlumberResponse$new())
-  })
+
+  parsed_body <-
+    local({
+      op <- options(plumber.postBody = FALSE)
+      on.exit({options(op)}, add = TRUE)
+      r$route(req, PlumberResponse$new())
+    })
   expect_equal(names(parsed_body), c("json", "img1", "img2", "rds"))
   expect_equal(parsed_body[["rds"]], women)
   expect_equal(attr(parsed_body[["img1"]], "filename"), "avatar2-small.png")
