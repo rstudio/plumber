@@ -118,24 +118,34 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
 #'
 #' Parser function structure is something like below.
 #' ```r
-#' parser <- () {
-#'  function(value, ...) {
-#'   # do something with raw value
-#'  }
+#' parser <- (parser_arguments_here) {
+#'   # return a function to parse a raw value
+#'   function(value, ...) {
+#'     # do something with raw value
+#'   }
 #' }
 #' ```
 #'
 #' @examples
 #' # `content-type` header is mostly used to look up charset and adjust encoding
-#' parser_dcf <- function() {
+#' parser_dcf <- function(...) {
 #'   function(value, content_type = "text/x-dcf", ...) {
 #'     charset <- getCharacterSet(content_type)
 #'     value <- rawToChar(value)
 #'     Encoding(value) <- charset
-#'     read.dcf(value)
+#'     read.dcf(value, ...)
 #'   }
 #' }
-#' register_parser("dcf", parser_dcf, fixed = "text/x-dcf")
+#'
+#' # Could also leverage existing parsers
+#' parser_dcf <- function(...) {
+#'   parser_read_file(function(tmpfile) {
+#'     read.dcf(tmpfile, ...)
+#'   })
+#' }
+#'
+#' # Register the newly created parser
+#' \dontrun{register_parser("dcf", parser_dcf, fixed = "text/x-dcf")}
 #' @export
 register_parser <- function(
   alias,
@@ -207,9 +217,17 @@ registered_parsers <- function() {
 #'
 #' If `"all"` is found in any `alias` character value or list name, all remaining parsers will be added.  When using a list, aliases already defined will maintain their existing argument values.  All other parser aliases will use their default arguments.
 #' @examples
+#' # provide a character string
 #' make_parser("json")
-#' make_parser(json = list())
-#' make_parser(json = list(simplifyVector = FALSE))
+#'
+#' # provide a named list with no arguments
+#' make_parser(list(json = list()))
+#'
+#' # provide a named list with arguments; include `rds`
+#' make_parser(list(json = list(simplifyVector = FALSE), rds = list()))
+#'
+#' # default plumber parsers
+#' make_parser(c("json", "query", "text", "octet", "multi"))
 #' @export
 make_parser <- function(aliases) {
   if (inherits(aliases, "plumber_parsed_parsers")) {

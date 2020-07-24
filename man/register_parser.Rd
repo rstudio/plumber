@@ -52,10 +52,11 @@ Functions signature should include \code{value}, \code{...} and
 possibly \code{content_type}, \code{filename}. Other parameters may be provided
 if you want to use the headers from \code{\link[webutils:parse_multipart]{webutils::parse_multipart()}}.
 
-Parser function structure is something like below.\if{html}{\out{<div class="r">}}\preformatted{parser <- () \{
- function(value, ...) \{
-  # do something with raw value
- \}
+Parser function structure is something like below.\if{html}{\out{<div class="r">}}\preformatted{parser <- (parser_arguments_here) \{
+  # return a function to parse a raw value
+  function(value, ...) \{
+    # do something with raw value
+  \}
 \}
 }\if{html}{\out{</div>}}
 }
@@ -68,16 +69,33 @@ Parser function structure is something like below.\if{html}{\out{<div class="r">
 
 \examples{
 # `content-type` header is mostly used to look up charset and adjust encoding
-parser_dcf <- function() {
+parser_dcf <- function(...) {
   function(value, content_type = "text/x-dcf", ...) {
     charset <- getCharacterSet(content_type)
     value <- rawToChar(value)
     Encoding(value) <- charset
-    read.dcf(value)
+    read.dcf(value, ...)
   }
 }
-register_parser("dcf", parser_dcf, fixed = "text/x-dcf")
+
+# Could also leverage existing parsers
+parser_dcf <- function(...) {
+  parser_read_file(function(tmpfile) {
+    read.dcf(tmpfile, ...)
+  })
+}
+
+# Register the newly created parser
+\dontrun{register_parser("dcf", parser_dcf, fixed = "text/x-dcf")}
+# provide a character string
 make_parser("json")
-make_parser(json = list())
-make_parser(json = list(simplifyVector = FALSE))
+
+# provide a named list with no arguments
+make_parser(list(json = list()))
+
+# provide a named list with arguments; include `rds`
+make_parser(list(json = list(simplifyVector = FALSE), rds = list()))
+
+# default plumber parsers
+make_parser(c("json", "query", "text", "octet", "multi"))
 }
