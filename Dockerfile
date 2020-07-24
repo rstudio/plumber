@@ -17,9 +17,9 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
 
 RUN install2.r remotes
 
-# Bust cache at this step
-# https://stackoverflow.com/a/55621942/591574
-ADD https://github.com/rstudio/plumber/commits/ _docker_cache
+## Remove this comment to always bust the Docker cache at this step
+## https://stackoverflow.com/a/55621942/591574
+#ADD https://github.com/rstudio/plumber/commits/ _docker_cache
 
 RUN Rscript -e "remotes::install_github('rstudio/plumber@${PLUMBER_REF}')"
 
