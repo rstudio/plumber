@@ -218,7 +218,7 @@ make_parser <- function(aliases) {
       stop("aliases can not be `NA` values")
     }
     # turn aliases into a named list with empty values
-    aliases <- setNames(
+    aliases <- stats::setNames(
       replicate(length(aliases), {list()}),
       aliases
     )
@@ -290,7 +290,7 @@ make_parser <- function(aliases) {
 #' User should be aware that `rds` parsing should only be done from a
 #' trusted source. Do not accept `rds` files blindly.
 #'
-#' See [list_parsers()] for a list of registered parsers.
+#' See [registered_parsers()] for a list of registered parsers.
 #'
 #' @param ... parameters supplied to the appropriate internal function
 #' @describeIn parsers Query string parser

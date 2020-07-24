@@ -143,7 +143,7 @@ Create a new \code{PlumberEndpoint} object
 
 \item{\code{serializer}}{endpoint serializer}
 
-\item{\code{parsers}}{endpoint parsers}
+\item{\code{parsers}}{endpoint parsers. If provided, the value will be sent processed by \code{\link[=make_parser]{make_parser()}}}
 
 \item{\code{lines}}{endpoint block}
 

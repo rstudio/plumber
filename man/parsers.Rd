@@ -61,7 +61,7 @@ Multiple parsers can be activated for the same endpoint using multiple \verb{@pa
 User should be aware that \code{rds} parsing should only be done from a
 trusted source. Do not accept \code{rds} files blindly.
 
-See \code{\link[=list_parsers]{list_parsers()}} for a list of registered parsers.
+See \code{\link[=registered_parsers]{registered_parsers()}} for a list of registered parsers.
 }
 \section{Functions}{
 \itemize{
@@ -82,13 +82,13 @@ This parser should be used when reading from a file is required.
 
 \item \code{parser_rds}: RDS parser
 
-\item \code{parser_octet}: Octet stream parser
+\item \code{parser_octet}: Octet stream parser. Will add a filename attribute if the filename exists
 
 \item \code{parser_multi}: Multi part parser. This parser will then parse each individual body with its respective parser
 
-\item \code{parser_all}: All parsers (For internal use only)
+\item \code{parser_all}: Enable all parsers. Not recommended due to security concerns.
 
-\item \code{parser_none}: No parser (For internal use only)
+\item \code{parser_none}: No parser. Will not process the postBody.
 }}
 
 \examples{

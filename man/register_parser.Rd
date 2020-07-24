@@ -3,19 +3,19 @@
 \name{register_parser}
 \alias{register_parser}
 \alias{registered_parsers}
-\alias{combine_parsers}
+\alias{make_parser}
 \title{Manage parsers}
 \usage{
 register_parser(alias, parser, fixed = NULL, regex = NULL, verbose = TRUE)
 
 registered_parsers()
 
-combine_parsers(aliases)
+make_parser(aliases)
 }
 \arguments{
 \item{alias}{An alias to map parser from the \verb{@parser} plumber tag to the global parsers list.}
 
-\item{parser}{The parser function to be added. This build the parser function.}
+\item{parser}{The parser function to be added. This build the parser function. See Details for more information.}
 
 \item{fixed}{A character vector of fixed string to be matched against a request \code{content-type} to use \code{parser}.}
 
@@ -29,6 +29,7 @@ displayed when alias in map are overwritten.}
 \item A character vector of \code{alias} names.
 \item A named \code{list()} whose keysare \code{alias} names and values are arguments to be applied with \code{\link[=do.call]{do.call()}}
 \item A \code{TRUE} value, which will default to combining all parsers. This is great for seeing what is possible, but not great for security purposes.
+\item Already combined parsers. (Will be returned immediately.)
 }}
 }
 \description{
@@ -60,7 +61,7 @@ Parser function structure is something like below.\if{html}{\out{<div class="r">
 \itemize{
 \item \code{registered_parsers}: Return all registered parsers
 
-\item \code{combine_parsers}: Select from global parsers and create a combined parsers list for programmatic use.
+\item \code{make_parser}: Select from global parsers and create a combined parser list for programmatic use.
 }}
 
 \examples{
