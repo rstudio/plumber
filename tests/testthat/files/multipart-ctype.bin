@@ -1,5 +1,5 @@
 -----------------------------90908882332870323642673870272
-Content-Disposition: form-data; name="file"; filename="sample.tsv"
+Content-Disposition: form-data; name="sample_name"; filename="sample.tsv"
 Content-Type: text/tab-separated-values
 
 x	y	z
