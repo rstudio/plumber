@@ -340,10 +340,10 @@ parser_text <- function(parse_fn = identity) {
 #' @describeIn parsers YAML parser
 #' @export
 parser_yaml <- function(...) {
-  if (!requireNamespace("yaml", quietly = TRUE)) {
-    stop("yaml must be installed for the yaml parser to work")
-  }
   parser_text(function(val) {
+    if (!requireNamespace("yaml", quietly = TRUE)) {
+      stop("yaml must be installed for the yaml parser to work")
+    }
     yaml::yaml.load(val, ..., eval.expr = FALSE)
   })
 }
@@ -367,10 +367,10 @@ parser_read_file <- function(read_fn = readLines) {
 #' @describeIn parsers CSV parser
 #' @export
 parser_csv <- function(...) {
-  if (!requireNamespace("readr", quietly = TRUE)) {
-    stop("`readr` must be installed for `parser_csv` to work")
-  }
   parser_read_file(function(tmpfile) {
+    if (!requireNamespace("readr", quietly = TRUE)) {
+      stop("`readr` must be installed for `parser_csv` to work")
+    }
     readr::read_csv(tmpfile, ...)
   })
 }
@@ -379,10 +379,10 @@ parser_csv <- function(...) {
 #' @describeIn parsers TSV parser
 #' @export
 parser_tsv <- function(...) {
-  if (!requireNamespace("readr", quietly = TRUE)) {
-    stop("`readr` must be installed for `parser_tsv` to work")
-  }
   parser_read_file(function(tmpfile) {
+    if (!requireNamespace("readr", quietly = TRUE)) {
+      stop("`readr` must be installed for `parser_tsv` to work")
+    }
     readr::read_tsv(tmpfile, ...)
   })
 }
@@ -454,7 +454,6 @@ register_parsers_onLoad <- function() {
   register_parser("text", parser_text, fixed = "text/plain", regex = "^text/")
   register_parser("tsv", parser_tsv, fixed = c("application/tab-separated-values", "text/tab-separated-values"))
   register_parser("yaml", parser_yaml, fixed = c("application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"))
-  register_parser("all", parser_all, regex = "*")
   register_parser("none", parser_none, regex = "*")
 
   parser_all <- function() {
