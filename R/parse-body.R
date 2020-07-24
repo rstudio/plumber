@@ -48,10 +48,10 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
   if (length(content_type) == 0) {
     # fast default to json when first byte is 7b (ascii {)
     if (first_byte == as.raw(123L)) {
-      return(parsers$json)
+      return(parsers$alias$json)
     }
 
-    return(parsers$query)
+    return(parsers$alias$query)
   }
 
   # remove trailing content type information
@@ -82,11 +82,11 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
 
   # query string
   if (is.null(filename)) {
-    return(parsers$query)
+    return(parsers$alias$query)
   }
 
   # octet
-  parsers$octet
+  parsers$alias$octet
 }
 
 
@@ -97,7 +97,7 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
 #' For instance, [parser_json()] parse content-type `application/json`.
 #'
 #' @param alias An alias to map parser from the `@parser` plumber tag to the global parsers list.
-#' @param parser The parser function to be added. This build the parser function.
+#' @param parser The parser function to be added. This build the parser function. See Details for more information.
 #' @param fixed A character vector of fixed string to be matched against a request `content-type` to use `parser`.
 #' @param regex A character vector of [regex] string to be matched against a request `content-type` to use `parser`.
 #' @param verbose Logical value which determines if a warning should be
@@ -192,23 +192,87 @@ register_parser <- function(
   invisible(.globals$parsers)
 }
 
+#' @describeIn register_parser Return all registered parsers
 #' @export
-#' @describeIn add_parser List currently registered parsers
-list_parsers <- function() {
-  .globals$parsers
+registered_parsers <- function() {
+  names(.globals$parsers)
 }
 
-#' @describeIn add_parser Select from global parsers and create
-#' a formatted parsers list for programmatic use.
+#' @describeIn register_parser Select from global parsers and create a combined parser list for programmatic use.
+#' @param aliases Can be one of:
+#'   * A character vector of `alias` names.
+#'   * A named `list()` whose keysare `alias` names and values are arguments to be applied with [do.call()]
+#'   * A `TRUE` value, which will default to combining all parsers. This is great for seeing what is possible, but not great for security purposes.
+#'   * Already combined parsers. (Will be returned immediately.)
 #' @export
-get_parsers <- function(aliases) {
-  parsers <- .globals$parsers[alias]
-  # remove to avoid infinite recursion
-  parsers$all <- NULL
-  return(
-    # Lambda function to get each parser `p()` list
-    Reduce(function(l, p) {utils::modifyList(l, p())}, parsers, init = list())
-  )
+make_parser <- function(aliases) {
+  if (inherits(aliases, "plumber_parsed_parsers")) {
+    return(aliases)
+  }
+  if (isTRUE(aliases)) {
+    # use all available parsers except ("none")
+    aliases <- setdiff(registered_parsers(), c("all", "none"))
+  }
+  if (is.character(aliases)) {
+    if (any(is.na(aliases))) {
+      stop("aliases can not be `NA` values")
+    }
+    # turn aliases into a named list with empty values
+    aliases <- setNames(
+      replicate(length(aliases), {list()}),
+      aliases
+    )
+  }
+
+  stopifnot(is.list(aliases))
+  if (is.null(names(aliases))) {
+    stop("aliases must be able to convert to a named list")
+  }
+
+  local({
+    aliases_not_found <- !(names(aliases) %in% registered_parsers())
+    if (any(aliases_not_found)) {
+      missing_aliases <- names(aliases)[aliases_not_found]
+      stop("Aliases not available: ", paste0(missing_aliases, collapse = ", "), ". See: registered_parsers()")
+    }
+  })
+
+  # if "all" is found, add all remaining registered parsers (except 'none') to the `aliases` list
+  if ("all" %in% names(aliases)) {
+    all_parser_names <- setdiff(registered_parsers(), c("all", "none"))
+    # remove to avoid infinite recursion
+    aliases$all <- NULL
+    names_to_add <- setdiff(all_parser_names, names(aliases))
+    if (length(names_to_add)) {
+      aliases[names_to_add] <- replicate(length(names_to_add), list())
+    }
+  }
+
+
+  # convert parser functions into initialized information
+  parser_infos <-
+    lapply(
+      names(aliases),
+      function(alias) {
+        # get init function
+        init_parser_func <- .globals$parsers[[alias]]
+        # call outer parser function to init the params for inner function
+        do.call(init_parser_func, aliases[[alias]])
+      }
+    )
+
+  # combine information into a single list
+  combined_parser_info <-
+    Reduce(
+      function(cur_parser_info, parser_info) {
+        utils::modifyList(cur_parser_info, parser_info)
+      },
+      parser_infos,
+      init = list()
+    )
+
+  class(combined_parser_info) <- c("plumber_parsed_parsers", class(combined_parser_info))
+  combined_parser_info
 }
 
 #' Plumber Parsers
@@ -249,8 +313,8 @@ parser_query <- function() {
 #' @describeIn parsers JSON parser
 #' @export
 parser_json <- function(...) {
-  parser_text(function(value) {
-    safeFromJSON(value, ...)
+  parser_text(function(txt_value) {
+    safeFromJSON(txt_value, ...)
   })
 }
 
@@ -262,9 +326,9 @@ parser_text <- function(parse_fn = identity) {
   stopifnot(is.function(parse_fn))
   function(value, content_type = NULL, ...) {
     charset <- getCharacterSet(content_type)
-    value <- rawToChar(value)
-    Encoding(value) <- charset
-    parse_fn(value)
+    txt_value <- rawToChar(value)
+    Encoding(txt_value) <- charset
+    parse_fn(txt_value)
   }
 }
 
@@ -299,8 +363,11 @@ parser_read_file <- function(read_fn = readLines) {
 #' @describeIn parsers CSV parser
 #' @export
 parser_csv <- function(...) {
+  if (!requireNamespace("readr", quietly = TRUE)) {
+    stop("`readr` must be installed for `parser_csv` to work")
+  }
   parser_read_file(function(tmpfile) {
-    utils::read.csv(tmpfile, ...)
+    readr::read_csv(tmpfile, ...)
   })
 }
 
@@ -308,8 +375,11 @@ parser_csv <- function(...) {
 #' @describeIn parsers TSV parser
 #' @export
 parser_tsv <- function(...) {
+  if (!requireNamespace("readr", quietly = TRUE)) {
+    stop("`readr` must be installed for `parser_tsv` to work")
+  }
   parser_read_file(function(tmpfile) {
-    utils::read.delim(tmpfile, ...)
+    readr::read_tsv(tmpfile, ...)
   })
 }
 
@@ -323,7 +393,7 @@ parser_rds <- function(...) {
 }
 
 
-#' @describeIn parsers Octet stream parser
+#' @describeIn parsers Octet stream parser. Will add a filename attribute if the filename exists
 #' @export
 parser_octet <- function() {
   function(value, filename = NULL, ...) {
@@ -361,31 +431,42 @@ parser_multi <- function() {
   }
 }
 
-#' @describeIn parsers All parsers (For internal use only)
+#' @describeIn parsers Enable all parsers. Not recommended due to security concerns.
 #' @export
 parser_all <- function() {
-  select_parsers(names(.globals$parsers))
+  function(value, content_type, filename, ...) {
+    # re-perform parse_raw(), but provide all parsers
+    parse_raw(
+      # mimic the shape of the output of `webutils::parse_multipart` + parsers
+      list(
+        content_type = content_type,
+        value = value,
+        filename = filename,
+        parsers = .globals$parsers
+      )
+    )
+  }
 }
 
-#' @describeIn parsers No parser (For internal use only)
+#' @describeIn parsers No parser. Will not process the postBody.
 #' @export
 parser_none <- function() {
-  # do not select any parsers
-  select_parsers(character())
+  function(value, ...) {
+    value
+  }
 }
 
-add_parsers_onLoad <- function() {
-
+register_parsers_onLoad <- function() {
   # parser alias names for plumbing
-  add_parser("csv", parser_csv, fixed = c("application/csv", "application/x-csv", "text/csv", "text/x-csv"))
-  add_parser("json", parser_json, fixed = c("application/json", "text/json"), shortname = "json")
-  add_parser("multi", parser_multi, fixed = "multipart/form-data")
-  add_parser("octet", parser_octet, fixed = "application/octet-stream", shortname = "octet")
-  add_parser("query", parser_query, fixed = "application/x-www-form-urlencoded", shortname = "query")
-  add_parser("rds", parser_rds, fixed = "application/rds")
-  add_parser("text", parser_text, fixed = "text/plain", regex = "^text/", shortname = "text")
-  add_parser("tsv", parser_tsv, fixed = c("application/tab-separated-values", "text/tab-separated-values"))
-  add_parser("yaml", parser_yaml, fixed = c("application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"))
-  add_parser("all", parser_all)
-  add_parser("none", parser_none)
+  register_parser("csv", parser_csv, fixed = c("application/csv", "application/x-csv", "text/csv", "text/x-csv"))
+  register_parser("json", parser_json, fixed = c("application/json", "text/json"))
+  register_parser("multi", parser_multi, fixed = "multipart/form-data")
+  register_parser("octet", parser_octet, fixed = "application/octet-stream")
+  register_parser("query", parser_query, fixed = "application/x-www-form-urlencoded")
+  register_parser("rds", parser_rds, fixed = "application/rds")
+  register_parser("text", parser_text, fixed = "text/plain", regex = "^text/")
+  register_parser("tsv", parser_tsv, fixed = c("application/tab-separated-values", "text/tab-separated-values"))
+  register_parser("yaml", parser_yaml, fixed = c("application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"))
+  register_parser("all", parser_all, regex = "*")
+  register_parser("none", parser_none, regex = "*")
 }
