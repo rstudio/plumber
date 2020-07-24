@@ -739,11 +739,12 @@ plumber <- R6Class(
           if (!is.null(h$serializer)) {
             res$serializer <- h$serializer
           }
-          if (!is.null(h$parsers)) {
-            parsers <- h$parsers
-          } else {
-            parsers <- private$parsers
-          }
+          parsers <-
+            if (!is.null(h$parsers)) {
+              h$parsers
+            } else {
+              make_parser(private$default_parsers)
+            }
           req$args <- c(
             h$getPathParams(path),
             req$args,

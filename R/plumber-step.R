@@ -178,7 +178,7 @@ PlumberEndpoint <- R6Class(
     #' @param expr endpoint expr
     #' @param envir endpoint environment
     #' @param serializer endpoint serializer
-    #' @param parsers endpoint parsers
+    #' @param parsers endpoint parsers. If provided, the value will be sent processed by [make_parser()]
     #' @param lines endpoint block
     #' @param params endpoint params
     #' @param comments endpoint comments
@@ -204,8 +204,8 @@ PlumberEndpoint <- R6Class(
       if (!missing(serializer) && !is.null(serializer)){
         self$serializer <- serializer
       }
-      if (!missing(parsers) && !is.null(parsers)){
-        self$parsers <- select_parsers(parsers)
+      if (!missing(parsers) && !is.null(parsers)) {
+        self$parsers <- make_parser(parsers)
       }
       if (!missing(lines)){
         self$lines <- lines
