@@ -106,5 +106,5 @@ test_that("Test multipart respect content-type", {
   parsed_body <- parse_body(body,
                             "multipart/form-data; boundary=---------------------------90908882332870323642673870272",
                             make_parser(c("multi", "tsv")))
-  expect_s3_class(parsed_body$file, "data.frame")
+  expect_s3_class(parsed_body$sample_name, "data.frame")
 })
