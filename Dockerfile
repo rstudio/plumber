@@ -17,7 +17,7 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
 
 RUN install2.r remotes
 
-# But cache at this step
+# Bust cache at this step
 # https://stackoverflow.com/a/55621942/591574
 ADD https://github.com/rstudio/plumber/commits/ _docker_cache
 
