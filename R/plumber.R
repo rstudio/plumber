@@ -102,7 +102,8 @@ defaultPlumberFilters <- list(
   cookieParser = cookieFilter,
   sharedSecret = sharedSecretFilter)
 
-#' hookable
+#' @keywords internal
+#' @title hookable
 hookable <- R6Class(
   "hookable",
   public=list(
