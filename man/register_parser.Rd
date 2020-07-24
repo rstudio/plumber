@@ -27,10 +27,12 @@ displayed when alias in map are overwritten.}
 \item{aliases}{Can be one of:
 \itemize{
 \item A character vector of \code{alias} names.
-\item A named \code{list()} whose keysare \code{alias} names and values are arguments to be applied with \code{\link[=do.call]{do.call()}}
+\item A named \code{list()} whose keys are \code{alias} names and values are arguments to be applied with \code{\link[=do.call]{do.call()}}
 \item A \code{TRUE} value, which will default to combining all parsers. This is great for seeing what is possible, but not great for security purposes.
 \item Already combined parsers. (Will be returned immediately.)
-}}
+}
+
+If \code{"all"} is found in any \code{alias} character value or list name, all remaining parsers will be added.  When using a list, aliases already defined will maintain their existing argument values.  All other parser aliases will use their default arguments.}
 }
 \description{
 A parser is responsible for decoding the raw body content of a request into
@@ -75,4 +77,7 @@ parser_dcf <- function() {
   }
 }
 register_parser("dcf", parser_dcf, fixed = "text/x-dcf")
+make_parser("json")
+make_parser(json = list())
+make_parser(json = list(simplifyVector = FALSE))
 }

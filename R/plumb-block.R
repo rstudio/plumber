@@ -102,7 +102,7 @@ plumbBlock <- function(lineNum, file){
         stopOnLine(lineNum, line, "Multiple @serializers specified for one function.")
       }
 
-      if (!s %in% names(.globals$serializers)){
+      if (!(s %in% registered_serializers())){
         stopOnLine(lineNum, line, paste0("No such @serializer registered: ", s))
       }
 
@@ -130,7 +130,7 @@ plumbBlock <- function(lineNum, file){
         stopOnLine(lineNum, line, "Multiple @serializers specified for one function (shorthand serializers like @json count, too).")
       }
 
-      if (!is.na(s) && !s %in% names(.globals$serializers)){
+      if (!is.na(s) && !(s %in% registered_serializers())){
         stopOnLine(lineNum, line, paste0("No such @serializer registered: ", s))
       }
       shortSerAttr <- trimws(shortSerMat[1,3])

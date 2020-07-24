@@ -79,7 +79,7 @@ reference:
 - title: Response
   contents:
   - 'as_attachment'
-  - 'addSerializer'
+  - 'register_serializer'
   - 'serializer_json'
   - 'include_file'
 

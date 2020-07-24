@@ -54,6 +54,7 @@ Collate:
     'parse-query.R'
     'plumber.R'
     'default-handlers.R'
+    'deprecated.R'
     'digital-ocean.R'
     'find-port.R'
     'globals.R'

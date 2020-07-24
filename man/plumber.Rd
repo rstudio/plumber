@@ -596,7 +596,7 @@ Sets the default serializer of the router.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{parsers}}{a named list of parsers}
+\item{\code{parsers}}{A value to be parsed by \code{\link[=make_parser]{make_parser()}}}
 }
 \if{html}{\out{</div>}}
 }

@@ -195,7 +195,7 @@ register_parser <- function(
 #' @describeIn register_parser Return all registered parsers
 #' @export
 registered_parsers <- function() {
-  names(.globals$parsers)
+  sort(names(.globals$parsers))
 }
 
 #' @describeIn register_parser Select from global parsers and create a combined parser list for programmatic use.
@@ -206,6 +206,10 @@ registered_parsers <- function() {
 #'   * Already combined parsers. (Will be returned immediately.)
 #'
 #' If `"all"` is found in any `alias` character value or list name, all remaining parsers will be added.  When using a list, aliases already defined will maintain their existing argument values.  All other parser aliases will use their default arguments.
+#' @examples
+#' make_parser("json")
+#' make_parser(json = list())
+#' make_parser(json = list(simplifyVector = FALSE))
 #' @export
 make_parser <- function(aliases) {
   if (inherits(aliases, "plumber_parsed_parsers")) {
