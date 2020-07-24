@@ -201,9 +201,11 @@ registered_parsers <- function() {
 #' @describeIn register_parser Select from global parsers and create a combined parser list for programmatic use.
 #' @param aliases Can be one of:
 #'   * A character vector of `alias` names.
-#'   * A named `list()` whose keysare `alias` names and values are arguments to be applied with [do.call()]
+#'   * A named `list()` whose keys are `alias` names and values are arguments to be applied with [do.call()]
 #'   * A `TRUE` value, which will default to combining all parsers. This is great for seeing what is possible, but not great for security purposes.
 #'   * Already combined parsers. (Will be returned immediately.)
+#'
+#' If `"all"` is found in any `alias` character value or list name, all remaining parsers will be added.  When using a list, aliases already defined will maintain their existing argument values.  All other parser aliases will use their default arguments.
 #' @export
 make_parser <- function(aliases) {
   if (inherits(aliases, "plumber_parsed_parsers")) {
@@ -211,11 +213,14 @@ make_parser <- function(aliases) {
   }
   if (isTRUE(aliases)) {
     # use all available parsers except ("none")
-    aliases <- setdiff(registered_parsers(), c("all", "none"))
+    aliases <- "all"
   }
   if (is.character(aliases)) {
     if (any(is.na(aliases))) {
       stop("aliases can not be `NA` values")
+    }
+    if ("all" %in% aliases) {
+      aliases <- setdiff(registered_parsers(), c("all", "none"))
     }
     # turn aliases into a named list with empty values
     aliases <- stats::setNames(
@@ -247,7 +252,6 @@ make_parser <- function(aliases) {
       aliases[names_to_add] <- replicate(length(names_to_add), list())
     }
   }
-
 
   # convert parser functions into initialized information
   parser_infos <-
@@ -431,23 +435,6 @@ parser_multi <- function() {
   }
 }
 
-#' @describeIn parsers Enable all parsers. Not recommended due to security concerns.
-#' @export
-parser_all <- function() {
-  function(value, content_type, filename, ...) {
-    # re-perform parse_raw(), but provide all parsers
-    parse_raw(
-      # mimic the shape of the output of `webutils::parse_multipart` + parsers
-      list(
-        content_type = content_type,
-        value = value,
-        filename = filename,
-        parsers = .globals$parsers
-      )
-    )
-  }
-}
-
 #' @describeIn parsers No parser. Will not process the postBody.
 #' @export
 parser_none <- function() {
@@ -469,4 +456,9 @@ register_parsers_onLoad <- function() {
   register_parser("yaml", parser_yaml, fixed = c("application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"))
   register_parser("all", parser_all, regex = "*")
   register_parser("none", parser_none, regex = "*")
+
+  parser_all <- function() {
+    stop("This function should never be called. It should be handled by `make_parser('all')`")
+  }
+  register_parser("all", parser_all, regex = "*")
 }
