@@ -13,8 +13,6 @@ pr_set_ui_callback(
 \item{pr}{A Plumber router}
 
 \item{callback}{a callback function for taking action on UI url.}
-
-\item{...}{Other params to be passed to \code{ui} functions.}
 }
 \value{
 The Plumber router with the new UI callback setting.

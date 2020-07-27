@@ -19,6 +19,6 @@ handler <- function(num) { sum(as.integer(num)) }
 
 pr$handle("GET", "/sum", handler, serializer = serializer_json())
 
-pr$apiSpecTransform(api_fun = openapi_func)
+pr$set_api_spec(api = openapi_func)
 
 pr$apiSpec()
