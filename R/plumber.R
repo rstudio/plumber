@@ -224,7 +224,7 @@ plumber <- R6Class(
       self$set_ui()
       private$ui_info$init <- TRUE # set to know if `$set_ui()` has been called before `$run()`
       self$set_ui_callback()
-      self$setDebug()
+      self$set_debug()
       self$set_api_spec()
 
       # Add in the initial filters
@@ -261,7 +261,7 @@ plumber <- R6Class(
     #' @param port a number or integer that indicates the server port that should
     #' be listened on. Note that on most Unix-like systems including Linux and
     #' Mac OS X, port numbers smaller than 1025 require root privileges.
-    #' @param debug Deprecated. See `$setDebug()`
+    #' @param debug Deprecated. See `$set_debug()`
     #' @param swagger Deprecated. See `$set_ui(ui)` or `$set_api_spec()`
     #' @param swaggerCallback Deprecated. See `$set_ui(callback)`
     #' @details
@@ -281,8 +281,8 @@ plumber <- R6Class(
       # Legacy support for RStudio pro products.
       # Checks must be kept for >= 2 yrs after plumber v1.0.0 release date
       if (!missing(debug)) {
-        message("`$run(debug)` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$setDebug(debug)`")
-        self$setDebug(debug)
+        message("`$run(debug)` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$set_debug(debug)`")
+        self$set_debug(debug)
       }
       if (!missing(swagger)) {
         if (is.function(swagger)) {
@@ -921,7 +921,7 @@ plumber <- R6Class(
     },
     #' @description Set debug value to include error messages
     #' @param debug `TRUE` provides more insight into your API errors.
-    setDebug = function(debug = interactive()) {
+    set_debug = function(debug = interactive()) {
       stopifnot(length(debug) == 1)
       private$debug = isTRUE(debug)
     },
