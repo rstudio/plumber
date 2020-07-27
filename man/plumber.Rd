@@ -125,7 +125,7 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 \item \href{#method-unmount}{\code{plumber$unmount()}}
 \item \href{#method-registerHook}{\code{plumber$registerHook()}}
 \item \href{#method-handle}{\code{plumber$handle()}}
-\item \href{#method-removeHandle}{\code{plumber$removeHandle()}}
+\item \href{#method-remove_handle}{\code{plumber$remove_handle()}}
 \item \href{#method-print}{\code{plumber$print()}}
 \item \href{#method-serve}{\code{plumber$serve()}}
 \item \href{#method-route}{\code{plumber$route()}}
@@ -137,7 +137,7 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 \item \href{#method-setErrorHandler}{\code{plumber$setErrorHandler()}}
 \item \href{#method-set_ui}{\code{plumber$set_ui()}}
 \item \href{#method-set_ui_callback}{\code{plumber$set_ui_callback()}}
-\item \href{#method-setDebug}{\code{plumber$setDebug()}}
+\item \href{#method-set_debug}{\code{plumber$set_debug()}}
 \item \href{#method-filter}{\code{plumber$filter()}}
 \item \href{#method-set_api_spec}{\code{plumber$set_api_spec()}}
 \item \href{#method-get_api_spec}{\code{plumber$get_api_spec()}}
@@ -209,7 +209,7 @@ Mac OS X, port numbers smaller than 1025 require root privileges.}
 
 \item{\code{swagger}}{Deprecated. See \verb{$set_ui(ui)} or \verb{$set_api_spec()}}
 
-\item{\code{debug}}{Deprecated. See \verb{$setDebug()}}
+\item{\code{debug}}{Deprecated. See \verb{$set_debug()}}
 
 \item{\code{swaggerCallback}}{Deprecated. See \verb{$set_ui(callback)}}
 }
@@ -410,12 +410,12 @@ pr$handle("GET", "/", function(){
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-removeHandle"></a>}}
-\if{latex}{\out{\hypertarget{method-removeHandle}{}}}
-\subsection{Method \code{removeHandle()}}{
+\if{html}{\out{<a id="method-remove_handle"></a>}}
+\if{latex}{\out{\hypertarget{method-remove_handle}{}}}
+\subsection{Method \code{remove_handle()}}{
 Remove endpoints
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{plumber$removeHandle(methods, path, preempt = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{plumber$remove_handle(methods, path, preempt = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -683,12 +683,12 @@ Plumber router \code{\link[=pr_run]{pr_run()}} method is executed using default 
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setDebug"></a>}}
-\if{latex}{\out{\hypertarget{method-setDebug}{}}}
-\subsection{Method \code{setDebug()}}{
+\if{html}{\out{<a id="method-set_debug"></a>}}
+\if{latex}{\out{\hypertarget{method-set_debug}{}}}
+\subsection{Method \code{set_debug()}}{
 Set debug value to include error messages
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{plumber$setDebug(debug = interactive())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{plumber$set_debug(debug = interactive())}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

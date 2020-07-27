@@ -116,7 +116,7 @@ mount_openapi <- function(pr, api_url) {
 #' @noRd
 unmount_openapi <- function(pr) {
 
-  pr$removeHandle("GET", "/openapi.json")
+  pr$remove_handle("GET", "/openapi.json")
   invisible()
 
 }
@@ -174,7 +174,7 @@ register_ui <- function(ui) {
   }
   unmount_ui_func <- function(pr) {
     for (path in ui_path) {
-      pr$removeHandle("GET", path)
+      pr$remove_handle("GET", path)
     }
     pr$unmount(ui_root)
     invisible()

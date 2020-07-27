@@ -492,12 +492,12 @@ test_that("unmount works", {
   expect_equal(names(pr$mounts), "/mount/")
 })
 
-test_that("removeHandle works", {
+test_that("remove_handle works", {
   pr <- plumber$new()
   pr$handle("GET", "/path1", function(){ 1 })
   pr$handle("GET", "/path2", function(){ 2 })
   expect_equal(length(pr$endpoints[[1]]), 2L)
-  expect_invisible(pr$removeHandle("GET", "/path1"))
+  expect_invisible(pr$remove_handle("GET", "/path1"))
   expect_equal(length(pr$endpoints[[1]]), 1L)
   expect_equal(pr$endpoints[[1]][[1]]$path, "/path2")
 })

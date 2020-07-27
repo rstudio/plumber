@@ -477,7 +477,7 @@ plumber <- R6Class(
     #' @param methods a character string. http method.
     #' @param path a character string. Api endpoints
     #' @param preempt a preempt function.
-    removeHandle = function(methods, path, preempt = NULL){
+    remove_handle = function(methods, path, preempt = NULL){
       private$removeEndpointInternal(methods, path, preempt)
     },
     #' @description Print reprensation of plumber router.
