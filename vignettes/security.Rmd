@@ -113,10 +113,6 @@ In summary, be sure to separate "trusted" from "untrusted" objects in your API i
 
 ## Cross-Origin Resource Sharing (CORS)
 
-// TODO: revisit this when CORS is properly implemented in plumber
-
-//TODO {introduction on CORS principles}
-
 By default, the API endpoint forbids "cross-domain" requests, but it's possible with a workaround to override this behavior creating a custom function that will forward the right headers to the API using a filter such as the following snippet.
 
 ```r
@@ -136,11 +132,6 @@ cors_disabled <- function(a, b){
 ```
 Understand that, this is a temporary workaround and can constitute critical security issues if some endpoints that shouldn't be exposed through `CORS` and have been enabled by default.
 
-
-## Cross-Site Request Forgery (CSRF, or XSRF)
-
-// TODO XSRF
-
 ## Cookies {#security-cookies}
 
 In the [section on setting cookies](./rendering-output.html#setting-cookies), we discussed the mechanics of setting cookies. However, if you intend to use cookies for any security-sensitive purpose, you should be aware of some ways that cookies can be exploited.
@@ -148,8 +139,6 @@ In the [section on setting cookies](./rendering-output.html#setting-cookies), we
 First and foremost, recognize that that the client has the ability to modify or fabricate the cookies that they send to your API. So storing preferences that the user themselves provided in a cookie is not a concern. Storing something with security implications -- like the identity of the user making requests -- however, would be; a malicious user would just need to modify the user ID saved in their cookie in order to trick your API into thinking that they were someone they're not.
 
 There are two common work-arounds to this concern. You can store all session information on the server identified by long, cryptographically random IDs and only rely on the cookie to store the ID. Or you can use signed/encrypted cookies, as detailed in the [section on setting encrypted cookies](./rendering-output.html#encrypted-cookies).
-
-// TODO: demo of an API that uses cryptographically secure session IDs
 
 You should also be aware of how cookies will be handled and managed by clients. You can manage these properties by providing different parameters to the `setCookie()` call.
 
@@ -160,5 +149,3 @@ You should also be aware of how cookies will be handled and managed by clients. 
 Additionally, bear in mind that if an attacker gets physical access to a client who has a valid cookie, the attacker could copy that cookie off to a different machine and begin using it themselves. Unfortunately, you can't perfectly protect against such attacks, but you can minimize the impact by 1.) using shorter session lifetimes (perhaps a few hours instead of days), 2.) invalidating sessions after a period of user inactivity, or 3.) rotating the sesion ID periodically; this way you'd be able to detect that multiple clients were trying to use the same session and could take action. You can also consider adding an additional layer of security around very security-sensitive endpoints (like changing a user's password).
 
 Lastly, if using encrypted cookies to store sensitive information, you should remember that expiring a cookie is an instruction that you're sending to the client that may or may not be honored. Thus if you were to set an encrypted cookie on a client to authenticate the user and that user wishes to log out, all you can do is instruct the client that they should delete that cookie. If the cookie had been stolen or if a misbehaving client doesn't delete the cookie, it's possible that that cookie could still be used to continue making authenticated requests to your API.
-
-// TODO: cookies with regards to XSRF, or nest XSRF under this section?

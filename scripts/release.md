@@ -10,12 +10,6 @@
 1. `devtools::release()`,
   * (don't actually release in the last step)
   * DON'T LIE!!
-1. Run the docker image in inst/check on the release candidate. Note that you will need to change the CMD to checkout the release branch so you're testing it, not master.
-  1. ```{bash}
-cd inst/check
-docker build -t plumber_docker .
-docker run plumber_docker
-```
 
 
 ## Release Steps

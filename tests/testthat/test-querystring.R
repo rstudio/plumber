@@ -6,8 +6,13 @@ test_that("query strings are properly parsed", {
   expect_equal(parseQS("a=1&b=2&c=url%20encoded"), list(a="1", b="2", c="url encoded"))
 })
 
+test_that("path parameters do not convert + to space", {
+  r <- plumber$new(test_path("files/path-params.R"))
+  expect_equal(r$route(make_req("GET", "/car/a+b"), PlumberResponse$new()), "a+b")
+})
+
 test_that("special characters in query strings are handled properly", {
-  expect_equal(parseQS("?a=1+.#"), list(a="1+.#"))
+  expect_equal(parseQS("?a=1+.#"), list(a="1 .#"))
   expect_equal(parseQS("?a=a%20b"), list(a="a b"))
   expect_equal(parseQS('?a=%2C%2B%2F%3F%25%26'), list(a=",+/?%&"))
 })

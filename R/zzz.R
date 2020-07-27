@@ -8,4 +8,7 @@
   # TODO: Remove once UI load code moved to respective UI package
   addUIs_onLoad()
 
+  add_serializers_onLoad()
+
+
 }

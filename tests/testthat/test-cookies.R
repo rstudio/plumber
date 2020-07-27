@@ -212,7 +212,7 @@ test_that("cookie encyption fails smoothly", {
   # garbage in, no key
   expect_error({
     decodeCookie(garbage, NULL)
-  }, "(not a valid JSON string|embedded nul in string)")
+  }) # error from jsonlite::parse_json()
   # garbage in, key
   expect_error({
     decodeCookie(garbage, asCookieKey(randomCookieKey()))
@@ -234,8 +234,8 @@ test_that("cookie encyption fails smoothly", {
     # encrypted, no decryption
     list(
       a = asCookieKey(randomCookieKey()),
-      b = NULL,
-      error = "(not a valid JSON string|embedded nul in string)"
+      b = NULL
+      # error from jsonlite::parse_json()
     )
   )
 

@@ -6,8 +6,8 @@ test_that("safeFromJSON is safe", {
   expect_equal(a, list(key="value"))
 
   # File paths fail
-  expect_error(safeFromJSON("/etc/passwd"), "not a valid JSON string")
+  expect_error(safeFromJSON("/etc/passwd")) # error from jsonlite::parse_json()
 
   # Remote URLs fail
-  expect_error(safeFromJSON("http://server.org/data.json"), "not a valid JSON string")
+  expect_error(safeFromJSON("http://server.org/data.json")) # error from jsonlite::parse_json()
 })
