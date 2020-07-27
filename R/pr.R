@@ -1,3 +1,11 @@
+validate_pr <- function(pr) {
+  if (!inherits(pr, "plumber")) {
+    stop("`pr` must be an object of class `plumber`.")
+  }
+}
+
+
+
 #' Create a new Plumber router
 #'
 #' @param filters A list of Plumber filters
@@ -75,7 +83,7 @@ pr_handle <- function(pr,
                       serializer,
                       endpoint,
                       ...) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
+  validate_pr(pr)
   pr$handle(methods = methods,
             path = path,
             handler = handler,
@@ -210,7 +218,7 @@ pr_head <- function(pr,
 pr_mount <- function(pr,
                      path,
                      router) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
+  validate_pr(pr)
   pr$mount(path = path, router = router)
   invisible(pr)
 }
@@ -277,7 +285,7 @@ pr_mount <- function(pr,
 pr_hook <- function(pr,
                     stage,
                     handler) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
+  validate_pr(pr)
   pr$registerHook(stage = stage, handler = handler)
   invisible(pr)
 }
@@ -286,7 +294,7 @@ pr_hook <- function(pr,
 #' @export
 pr_hooks <- function(pr,
                      handlers) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
+  validate_pr(pr)
   pr$registerHooks(handlers)
   invisible(pr)
 }
@@ -395,89 +403,14 @@ pr_cookie <- function(pr,
                       expiration = FALSE,
                       http = TRUE,
                       secure = FALSE) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
+  validate_pr(pr)
   pr$registerHooks(
     sessionCookie(key = key, name = name, expiration = expiration, http = http, secure = secure)
   )
   invisible(pr)
 }
 
-#' Set the default serializer of the router
-#'
-#' By default, Plumber serializes responses to JSON. This function updates the
-#' default serializer to the function supplied via \code{serializer}
-#'
-#' @param pr A Plumber router
-#' @param serializer A serializer function
-#'
-#' @return The Plumber router with the new default serializer
-#'
-#' @export
-pr_set_serializer <- function(pr,
-                          serializer) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
-  pr$setSerializer(serializer)
-  invisible(pr)
-}
 
-#' Set the handler that is called when the incoming request can't be served
-#'
-#' This function allows a custom error message to be returned when a request
-#' cannot be served by an existing endpoint or filter.
-#'
-#' @param pr A Plumber router
-#' @param fun A handler function
-#'
-#' @return The Plumber router with a modified 404 handler
-#'
-#' @examples
-#' \dontrun{
-#' handler_404 <- function(req, res) {
-#'   res$status <- 404
-#'   res$body <- "Oops"
-#' }
-#'
-#' pr() %>%
-#'   pr_get("/hi", function() "Hello") %>%
-#'   pr_set_404(handler_404) %>%
-#'   pr_run()
-#' }
-#'
-#' @export
-pr_set_404 <- function(pr,
-                   fun) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
-  pr$set404Handler(fun)
-  invisible(pr)
-}
-
-#' Set the error handler that is invoked if any filter or endpoint generates an
-#' error
-#'
-#' @param pr A Plumber router
-#' @param fun A handler function
-#'
-#' @return The Plumber router with a modified error handler
-#'
-#' @examples
-#' \dontrun{
-#' handler_error <- function(req, res, err){
-#'   res$status <- 500
-#'   list(error = "Custom Error Message")
-#' }
-#'
-#' pr() %>%
-#'   pr_get("/error", function() log("a")) %>%
-#'   pr_set_error(handler_error) %>%
-#'   pr_run()
-#' }
-#' @export
-pr_set_error <- function(pr,
-                     fun) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
-  pr$setErrorHandler(fun)
-  invisible(pr)
-}
 
 #' Add a filter to Plumber router
 #'
@@ -507,7 +440,7 @@ pr_filter <- function(pr,
                       name,
                       expr,
                       serializer) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
+  validate_pr(pr)
   pr$filter(name = name, expr = expr, serializer = serializer)
   invisible(pr)
 }
@@ -536,9 +469,6 @@ pr_filter <- function(pr,
 #' @param port A number or integer that indicates the server port that should
 #' be listened on. Note that on most Unix-like systems including Linux and
 #' Mac OS X, port numbers smaller than 1025 require root privileges.
-#' @param swagger A function that enhances the existing OpenAPI Specification.
-#' @param debug `TRUE` provides more insight into your API errors.
-#' @param swaggerCallback A callback function for taking action on the url for swagger page.
 #'
 #' @examples
 #' \dontrun{
@@ -552,15 +482,9 @@ pr_filter <- function(pr,
 #' @export
 pr_run <- function(pr,
                    host = '127.0.0.1',
-                   port = getOption('plumber.port'),
-                   swagger = interactive(),
-                   debug = interactive(),
-                   swaggerCallback = getOption('plumber.swagger.url', NULL)
+                   port = getOption('plumber.port')
 ) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
+  validate_pr(pr)
   pr$run(host = host,
-         port = port,
-         swagger = swagger,
-         debug = debug,
-         swaggerCallback = swaggerCallback)
+         port = port)
 }

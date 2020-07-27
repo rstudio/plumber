@@ -886,7 +886,7 @@ plumber <- R6Class(
     #' @description Set UI to use for API
     #' @param ui a character value or a logical value. Default to `plumber.ui` option value.
     #' @param callback a callback function for taking action on UI url.
-    #' @param ... Other params to be passed to ui functions.
+    #' @param ... Other params to be passed to `ui` functions.
     setUI = function(
       ui = getOption("plumber.ui", TRUE),
       callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL)),
@@ -914,7 +914,7 @@ plumber <- R6Class(
         args = list(...)
       )
     },
-    #' @description Set UI to use for API
+    #' @description Set debug value to include error messages
     #' @param debug `TRUE` provides more insight into your API errors.
     setDebug = function(debug = interactive()) {
       stopifnot(length(debug) == 1)

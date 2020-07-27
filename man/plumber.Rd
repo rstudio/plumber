@@ -676,7 +676,7 @@ Set UI to use for API
 
 \item{\code{callback}}{a callback function for taking action on UI url.}
 
-\item{\code{...}}{Other params to be passed to ui functions.}
+\item{\code{...}}{Other params to be passed to \code{ui} functions.}
 }
 \if{html}{\out{</div>}}
 }
@@ -685,7 +685,7 @@ Set UI to use for API
 \if{html}{\out{<a id="method-setDebug"></a>}}
 \if{latex}{\out{\hypertarget{method-setDebug}{}}}
 \subsection{Method \code{setDebug()}}{
-Set UI to use for API
+Set debug value to include error messages
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$setDebug(debug = interactive())}\if{html}{\out{</div>}}
 }

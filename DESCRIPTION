@@ -71,6 +71,7 @@ Collate:
     'plumber-static.R'
     'plumber-step.R'
     'pr.R'
+    'pr_set.R'
     'serializer.R'
     'session-cookie.R'
     'ui.R'

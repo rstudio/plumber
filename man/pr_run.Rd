@@ -4,14 +4,7 @@
 \alias{pr_run}
 \title{Start a server using \code{plumber} object}
 \usage{
-pr_run(
-  pr,
-  host = "127.0.0.1",
-  port = getOption("plumber.port"),
-  swagger = interactive(),
-  debug = interactive(),
-  swaggerCallback = getOption("plumber.swagger.url", NULL)
-)
+pr_run(pr, host = "127.0.0.1", port = getOption("plumber.port"))
 }
 \arguments{
 \item{pr}{A Plumber router}
@@ -23,12 +16,6 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 \item{port}{A number or integer that indicates the server port that should
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.}
-
-\item{swagger}{A function that enhances the existing OpenAPI Specification.}
-
-\item{debug}{\code{TRUE} provides more insight into your API errors.}
-
-\item{swaggerCallback}{A callback function for taking action on the url for swagger page.}
 }
 \description{
 \code{port} does not need to be explicitly assigned.

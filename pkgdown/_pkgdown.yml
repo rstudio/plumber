@@ -71,6 +71,8 @@ reference:
 - title: All functions
   # desc: description here
   contents:
+  - 'pr_set_ui'
+  - 'pr_set_debug'
   - 'PlumberEndpoint'
   - 'PlumberStatic'
   - 'PlumberStep'

@@ -1,0 +1,160 @@
+#' Set the default serializer of the router
+#'
+#' By default, Plumber serializes responses to JSON. This function updates the
+#' default serializer to the function supplied via \code{serializer}
+#'
+#' @param pr A Plumber router
+#' @param serializer A serializer function
+#'
+#' @return The Plumber router with the new default serializer
+#'
+#' @export
+pr_set_serializer <- function(pr,
+                          serializer) {
+  validate_pr(pr)
+  pr$setSerializer(serializer)
+  invisible(pr)
+}
+
+#' Set the handler that is called when the incoming request can't be served
+#'
+#' This function allows a custom error message to be returned when a request
+#' cannot be served by an existing endpoint or filter.
+#'
+#' @param pr A Plumber router
+#' @param fun A handler function
+#'
+#' @return The Plumber router with a modified 404 handler
+#'
+#' @examples
+#' \dontrun{
+#' handler_404 <- function(req, res) {
+#'   res$status <- 404
+#'   res$body <- "Oops"
+#' }
+#'
+#' pr() %>%
+#'   pr_get("/hi", function() "Hello") %>%
+#'   pr_set_404(handler_404) %>%
+#'   pr_run()
+#' }
+#'
+#' @export
+pr_set_404 <- function(pr,
+                   fun) {
+  validate_pr(pr)
+  pr$set404Handler(fun)
+  invisible(pr)
+}
+
+#' Set the error handler that is invoked if any filter or endpoint generates an
+#' error
+#'
+#' @param pr A Plumber router
+#' @param fun An error handler function. This should accept `req`, `res`, and the error value
+#'
+#' @return The Plumber router with a modified error handler
+#'
+#' @examples
+#' \dontrun{
+#' handler_error <- function(req, res, err){
+#'   res$status <- 500
+#'   list(error = "Custom Error Message")
+#' }
+#'
+#' pr() %>%
+#'   pr_get("/error", function() log("a")) %>%
+#'   pr_set_error(handler_error) %>%
+#'   pr_run()
+#' }
+#' @export
+pr_set_error <- function(pr,
+                     fun) {
+  validate_pr(pr)
+  pr$setErrorHandler(fun)
+  invisible(pr)
+}
+
+
+
+
+#' Set debug value to include error messages of routes cause an error
+#'
+#' To hide any error messages in production, set the debug value to `FALSE`.
+#' The `debug` value is enabled by default for [interactive()] sessions.
+#'
+#' @param pr A Plumber router
+#' @param debug `TRUE` provides more insight into your API errors.
+#' @return The Plumber router with the new debug setting.
+#' @export
+#' @examples
+#' \dontrun{
+#' # Will contain the original error message
+#' pr() %>%
+#'   pr_set_debug(TRUE) %>%
+#'   pr_get("/boom", function() stop("boom")) %>%
+#'   pr_run()
+#'
+#' # Will NOT contain an error message
+#' pr() %>%
+#'   pr_set_debug(FALSE) %>%
+#'   pr_get("/boom", function() stop("boom")) %>%
+#'   pr_run()
+#' }
+pr_set_debug <- function(pr, debug = interactive()) {
+  validate_pr(pr)
+  pr$setDebug(debug = debug)
+  invisible(pr)
+}
+
+
+#' Set the API user interface
+#'
+#' @param pr A Plumber router
+#' @param ui a character value or a logical value. Default to `plumber.ui` option value.
+#' @param callback a callback function for taking action on UI url.
+#' @param ... Other params to be passed to `ui` functions.
+#' @return The Plumber router with the new UI settings.
+#' @export
+#' @examples
+#' \dontrun{
+#' ## View API using Swagger UI
+#' # Official Website: https://swagger.io/tools/swagger-ui/
+#' # install.packages("swagger")
+#' if (require(swagger)) {
+#'   pr() %>%
+#'     pr_set_ui("swagger") %>%
+#'     pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) %>%
+#'     pr_run()
+#' }
+#'
+#' ## View API using Redoc
+#' # Official Website: https://github.com/Redocly/redoc
+#' # remotes::install_github("https://github.com/meztez/redoc/")
+#' if (require(redoc)) {
+#'   pr() %>%
+#'     pr_set_ui("redoc") %>%
+#'     pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) %>%
+#'     pr_run()
+#' }
+#'
+#' ## View API using RapiDoc
+#' # Official Website: https://github.com/mrin9/RapiDoc
+#' # remotes::install_github("https://github.com/meztez/rapidoc/")
+#' if (require(rapidoc)) {
+#'   pr() %>%
+#'     pr_set_ui("rapidoc") %>%
+#'     pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) %>%
+#'     pr_run()
+#' }
+#' }
+pr_set_ui <- function(
+  pr,
+  ui = getOption("plumber.ui", TRUE),
+  callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL)),
+  ...
+) {
+  validate_pr(pr)
+  pr$setUI(ui = ui, callback = callback, ...)
+  invisible(pr)
+}
