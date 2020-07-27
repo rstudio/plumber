@@ -47,8 +47,8 @@ Creates a router that is backed by a directory of files on disk.
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="setDebug">}\href{../../plumber/html/plumber.html#method-setDebug}{\code{plumber::plumber$setDebug()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="setErrorHandler">}\href{../../plumber/html/plumber.html#method-setErrorHandler}{\code{plumber::plumber$setErrorHandler()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="setSerializer">}\href{../../plumber/html/plumber.html#method-setSerializer}{\code{plumber::plumber$setSerializer()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="setUI">}\href{../../plumber/html/plumber.html#method-setUI}{\code{plumber::plumber$setUI()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="set_api_spec">}\href{../../plumber/html/plumber.html#method-set_api_spec}{\code{plumber::plumber$set_api_spec()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="set_ui">}\href{../../plumber/html/plumber.html#method-set_ui}{\code{plumber::plumber$set_ui()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="set_ui_callback">}\href{../../plumber/html/plumber.html#method-set_ui_callback}{\code{plumber::plumber$set_ui_callback()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="swaggerFile">}\href{../../plumber/html/plumber.html#method-swaggerFile}{\code{plumber::plumber$swaggerFile()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="unmount">}\href{../../plumber/html/plumber.html#method-unmount}{\code{plumber::plumber$unmount()}}\out{</span>}

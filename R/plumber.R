@@ -221,8 +221,8 @@ plumber <- R6Class(
       private$maxSize <- getOption('plumber.maxRequestSize', 0) #0 Unlimited
 
       # initialize with defaults of each function
-      self$setUI()
-      private$ui_info$init <- TRUE # set to know if `$setUI()` has been called before `$run()`
+      self$set_ui()
+      private$ui_info$init <- TRUE # set to know if `$set_ui()` has been called before `$run()`
       self$set_ui_callback()
       self$setDebug()
       self$set_api_spec()
@@ -262,8 +262,8 @@ plumber <- R6Class(
     #' be listened on. Note that on most Unix-like systems including Linux and
     #' Mac OS X, port numbers smaller than 1025 require root privileges.
     #' @param debug Deprecated. See `$setDebug()`
-    #' @param swagger Deprecated. See `$setUI(ui)` or `$set_api_spec()`
-    #' @param swaggerCallback Deprecated. See `$setUI(callback)`
+    #' @param swagger Deprecated. See `$set_ui(ui)` or `$set_api_spec()`
+    #' @param swaggerCallback Deprecated. See `$set_ui(callback)`
     #' @details
     #' `port` does not need to be explicitly assigned.
     run = function(
@@ -292,10 +292,10 @@ plumber <- R6Class(
         } else {
           if (isTRUE(private$ui_info$init)) {
             # <= v0.4.6
-            message("`$run(swagger)` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$setUI(ui)`")
-            self$setUI(swagger)
+            message("`$run(swagger)` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$set_ui(ui)`")
+            self$set_ui(swagger)
           } else {
-            # $setUI has been called (other than during initialization).
+            # $set_ui() has been called (other than during initialization).
             # Believe that it is the correct behavior
             # Warn about updating the run method
             message(
@@ -904,7 +904,7 @@ plumber <- R6Class(
     #' @description Set UI to use for API
     #' @param ui a character value or a logical value. Default to `plumber.ui` option value.
     #' @param ... Other params to be passed to `ui` functions.
-    setUI = function(
+    set_ui = function(
       ui = getOption("plumber.ui", TRUE),
       ...
     ) {

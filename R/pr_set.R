@@ -163,7 +163,7 @@ pr_set_ui <- function(
   ...
 ) {
   validate_pr(pr)
-  pr$setUI(ui = ui, ...)
+  pr$set_ui(ui = ui, ...)
   invisible(pr)
 }
 

@@ -136,7 +136,7 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 \item \href{#method-set404Handler}{\code{plumber$set404Handler()}}
 \item \href{#method-setErrorHandler}{\code{plumber$setErrorHandler()}}
 \item \href{#method-set_api_spec}{\code{plumber$set_api_spec()}}
-\item \href{#method-setUI}{\code{plumber$setUI()}}
+\item \href{#method-set_ui}{\code{plumber$set_ui()}}
 \item \href{#method-set_ui_callback}{\code{plumber$set_ui_callback()}}
 \item \href{#method-setDebug}{\code{plumber$setDebug()}}
 \item \href{#method-filter}{\code{plumber$filter()}}
@@ -207,11 +207,11 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.}
 
-\item{\code{swagger}}{Deprecated. See \verb{$setUI(ui)} or \verb{$set_api_spec()}}
+\item{\code{swagger}}{Deprecated. See \verb{$set_ui(ui)} or \verb{$set_api_spec()}}
 
 \item{\code{debug}}{Deprecated. See \verb{$setDebug()}}
 
-\item{\code{swaggerCallback}}{Deprecated. See \verb{$setUI(callback)}}
+\item{\code{swaggerCallback}}{Deprecated. See \verb{$set_ui(callback)}}
 }
 \if{html}{\out{</div>}}
 }
@@ -664,12 +664,12 @@ The value returned will not be validated for OAS compatibility.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setUI"></a>}}
-\if{latex}{\out{\hypertarget{method-setUI}{}}}
-\subsection{Method \code{setUI()}}{
+\if{html}{\out{<a id="method-set_ui"></a>}}
+\if{latex}{\out{\hypertarget{method-set_ui}{}}}
+\subsection{Method \code{set_ui()}}{
 Set UI to use for API
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{plumber$setUI(ui = getOption("plumber.ui", TRUE), ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{plumber$set_ui(ui = getOption("plumber.ui", TRUE), ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
