@@ -163,7 +163,7 @@ register_ui <- function(ui) {
       # Override with arguments provided live with URI (i.e. index.html?version=2)
       args <- utils::modifyList(args_index, list(...))
       # Remove default arguments req and res
-      args <- args[!names(args) %in% c("req", "res")]
+      args <- args[!(names(args) %in% c("req", "res"))]
       do.call(ui$index, args)
     }
     for (path in ui_path) {

@@ -244,7 +244,7 @@ getArgsMetadata <- function(plumberExpression){
   #return same format as getTypedParams or params?
   if (!is.function(plumberExpression)) plumberExpression <- eval(plumberExpression)
   args <- formals(plumberExpression)
-  lapply(args[!names(args) %in% c("req", "res", "...")], function(arg) {
+  lapply(args[! (names(args) %in% c("req", "res", "..."))], function(arg) {
     required <- identical(arg, formals(function(x){})$x)
     if (is.call(arg) || is.name(arg)) {
       arg <- tryCatch(
