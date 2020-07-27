@@ -65,6 +65,9 @@ reference:
   - 'pr_set_serializer'
   - 'pr_set_404'
   - 'pr_set_error'
+- title: API Interface
+  contents:
+  - 'register_ui'
 - title: All functions
   # desc: description here
   contents:
@@ -73,7 +76,6 @@ reference:
   - 'PlumberStep'
   - 'addParser'
   - 'addSerializer'
-  - 'add_ui'
   - 'as_attachment'
   - 'do_configure_https'
   - 'do_deploy_api'

@@ -26,7 +26,7 @@ mount_ui <- function(pr, host, port, ui_info) {
 
   # Mount UIs
   if (length(.globals$UIs) == 0) {
-    message("No UI available in namespace. See help(add_ui).")
+    message("No UI available in namespace. See help(register_ui).")
     return()
   }
 
@@ -127,8 +127,8 @@ unmount_openapi <- function(pr) {
 #' Add UI for plumber to use
 #' @param ui A list of that plumber can use to mount
 #' a UI.
-#' @details [add_ui()] is used by other packages like `swagger`.
-#' When you load these packages, it calls [add_ui()] to provide a user
+#' @details [register_ui()] is used by other packages like `swagger`.
+#' When you load these packages, it calls [register_ui()] to provide a user
 #' interface that can interpret your plumber OpenAPI Specifications.
 #'
 #' `ui` list expects the following values
@@ -139,7 +139,7 @@ unmount_openapi <- function(pr) {
 #' \item{static}{A function that returns the path to the assets (images, javascript, css, fonts) the UI will use.}
 #' }
 #' @export
-add_ui <- function(ui) {
+register_ui <- function(ui) {
 
   stopifnot(is.list(ui))
   stopifnot(is.character(ui$package) && length(ui$package) == 1L)
@@ -204,6 +204,6 @@ swagger_ui <- list(
 )
 
 #' @noRd
-addUIs_onLoad <- function() {
-  add_ui(swagger_ui)
+register_uis_onLoad <- function() {
+  register_ui(swagger_ui)
 }
