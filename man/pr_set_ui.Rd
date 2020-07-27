@@ -4,19 +4,12 @@
 \alias{pr_set_ui}
 \title{Set the API user interface}
 \usage{
-pr_set_ui(
-  pr,
-  ui = getOption("plumber.ui", TRUE),
-  callback = getOption("plumber.ui.callback", getOption("plumber.swagger.url", NULL)),
-  ...
-)
+pr_set_ui(pr, ui = getOption("plumber.ui", TRUE), ...)
 }
 \arguments{
 \item{pr}{A Plumber router}
 
 \item{ui}{a character value or a logical value. Default to \code{plumber.ui} option value.}
-
-\item{callback}{a callback function for taking action on UI url.}
 
 \item{...}{Other params to be passed to \code{ui} functions.}
 }
@@ -24,7 +17,15 @@ pr_set_ui(
 The Plumber router with the new UI settings.
 }
 \description{
-Set the API user interface
+\code{ui} should be either a logical or a character value matching a registered ui.
+When \code{TRUE} or a
+function, multiple handles will be added to \code{plumber} object. OpenAPI json
+file will be served on paths \verb{/openapi.json} and \verb{/swagger.json}. Swagger UI
+will be served on paths \verb{/__swagger__/index.html} and \verb{/__swagger__/}. When
+using a function, it will receive the Plumber router as the first parameter
+and current OpenAPI Specification as the second. This function should return a
+list containing OpenAPI Specification.
+See \url{http://spec.openapis.org/oas/v3.0.3}
 }
 \examples{
 \dontrun{

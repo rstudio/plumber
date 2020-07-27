@@ -137,6 +137,7 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 \item \href{#method-setErrorHandler}{\code{plumber$setErrorHandler()}}
 \item \href{#method-apiSpecTransform}{\code{plumber$apiSpecTransform()}}
 \item \href{#method-setUI}{\code{plumber$setUI()}}
+\item \href{#method-set_ui_callback}{\code{plumber$set_ui_callback()}}
 \item \href{#method-setDebug}{\code{plumber$setDebug()}}
 \item \href{#method-filter}{\code{plumber$filter()}}
 \item \href{#method-apiSpec}{\code{plumber$apiSpec()}}
@@ -662,11 +663,7 @@ Add a function to customize what is returned in \verb{$apiSpec()}.
 \subsection{Method \code{setUI()}}{
 Set UI to use for API
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{plumber$setUI(
-  ui = getOption("plumber.ui", TRUE),
-  callback = getOption("plumber.ui.callback", getOption("plumber.swagger.url", NULL)),
-  ...
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{plumber$setUI(ui = getOption("plumber.ui", TRUE), ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -674,9 +671,26 @@ Set UI to use for API
 \describe{
 \item{\code{ui}}{a character value or a logical value. Default to \code{plumber.ui} option value.}
 
-\item{\code{callback}}{a callback function for taking action on UI url.}
-
 \item{\code{...}}{Other params to be passed to \code{ui} functions.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_ui_callback"></a>}}
+\if{latex}{\out{\hypertarget{method-set_ui_callback}{}}}
+\subsection{Method \code{set_ui_callback()}}{
+Set UI callback to notify where the API is located
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{plumber$set_ui_callback(
+  callback = getOption("plumber.ui.callback", getOption("plumber.swagger.url", NULL))
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{callback}}{a callback function for taking action on UI url. (Also accepts \code{NULL} values to disable the \code{callback}.)}
 }
 \if{html}{\out{</div>}}
 }

@@ -20,20 +20,6 @@ Mac OS X, port numbers smaller than 1025 require root privileges.}
 \description{
 \code{port} does not need to be explicitly assigned.
 }
-\details{
-\code{swagger} should be either a logical or a function . When \code{TRUE} or a
-function, multiple handles will be added to \code{plumber} object. OpenAPI json
-file will be served on paths \verb{/openapi.json} and \verb{/swagger.json}. Swagger UI
-will be served on paths \verb{/__swagger__/index.html} and \verb{/__swagger__/}. When
-using a function, it will receive the Plumber router as the first parameter
-and current OpenAPI Specification as the second. This function should return a
-list containing OpenAPI Specification.
-See \url{http://spec.openapis.org/oas/v3.0.3}
-
-\code{swaggerCallback} When set, it will be called with a character string corresponding
-to the swagger UI url. It allows RStudio to open swagger UI when Plumber router
-run method is executed using default \code{plumber.swagger.url} option.
-}
 \examples{
 \dontrun{
 pr() \%>\%

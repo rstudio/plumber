@@ -136,6 +136,7 @@ unmount_openapi <- function(pr) {
 #' \item{static}{A function that returns the path to the assets (images, javascript, css, fonts) the UI will use.}
 #' }
 #' @export
+#' @rdname register_ui
 register_ui <- function(ui) {
 
   stopifnot(is.list(ui))
@@ -183,6 +184,11 @@ register_ui <- function(ui) {
   .globals$UIs[[ui$name]]$unmount <- unmount_ui_func
 
   invisible()
+}
+#' @export
+#' @rdname register_ui
+registered_ui <- function() {
+  sort(names(.globals$UIs))
 }
 
 # TODO: Remove once UI load code moved to respective UI package

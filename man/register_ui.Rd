@@ -2,9 +2,12 @@
 % Please edit documentation in R/ui.R
 \name{register_ui}
 \alias{register_ui}
+\alias{registered_ui}
 \title{Add UI for plumber to use}
 \usage{
 register_ui(ui)
+
+registered_ui()
 }
 \arguments{
 \item{ui}{A list of that plumber can use to mount
