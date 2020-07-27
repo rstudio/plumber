@@ -190,8 +190,8 @@ Start a server using \code{plumber} object.
 \if{html}{\out{<div class="r">}}\preformatted{plumber$run(
   host = "127.0.0.1",
   port = getOption("plumber.port"),
-  debug = stop("deprecated"),
   swagger = stop("deprecated"),
+  debug = stop("deprecated"),
   swaggerCallback = stop("deprecated")
 )}\if{html}{\out{</div>}}
 }
@@ -207,9 +207,9 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.}
 
-\item{\code{debug}}{Deprecated. See \verb{$setDebug()}}
-
 \item{\code{swagger}}{Deprecated. See \verb{$setUI(ui)} or \verb{$apiSpecTransform()}}
+
+\item{\code{debug}}{Deprecated. See \verb{$setDebug()}}
 
 \item{\code{swaggerCallback}}{Deprecated. See \verb{$setUI(callback)}}
 }
