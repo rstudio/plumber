@@ -81,7 +81,7 @@ unmount_ui <- function(pr, ui_info) {
 #' @noRd
 mount_openapi <- function(pr, api_url) {
 
-  spec <- pr$apiSpec()
+  spec <- pr$get_api_spec()
 
   # Create a function that's hardcoded to return the OpenAPI specification -- regardless of env.
   openapi_fun <- function(req) {
