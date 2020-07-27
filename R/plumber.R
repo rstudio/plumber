@@ -223,6 +223,7 @@ plumber <- R6Class(
       # initialize with defaults of each function
       self$setUI()
       private$ui_info$init <- TRUE # set to know if `$setUI()` has been called before `$run()`
+      self$set_ui_callback()
       self$setDebug()
       self$apiSpecTransform()
 
@@ -306,8 +307,8 @@ plumber <- R6Class(
         }
       }
       if (!missing(swaggerCallback)) {
-        message("`$run(swaggerCallback)` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$setUI(callback)`")
-        private$ui_info$callback <- swaggerCallback
+        message("`$run(swaggerCallback)` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$set_ui_callback(callback)`")
+        self$set_ui_callback(swaggerCallback)
       }
 
       port <- findPort(port)
@@ -326,7 +327,13 @@ plumber <- R6Class(
       }
 
       if (isTRUE(private$ui_info$enabled)) {
-        mount_ui(self, host, port, private$ui_info)
+        mount_ui(
+          pr = self,
+          host = host,
+          port = port,
+          ui_info = private$ui_info,
+          callback = private$ui_callback
+        )
         on.exit(unmount_ui(self, private$ui_info), add = TRUE)
       }
 
@@ -885,11 +892,9 @@ plumber <- R6Class(
     },
     #' @description Set UI to use for API
     #' @param ui a character value or a logical value. Default to `plumber.ui` option value.
-    #' @param callback a callback function for taking action on UI url.
     #' @param ... Other params to be passed to `ui` functions.
     setUI = function(
       ui = getOption("plumber.ui", TRUE),
-      callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL)),
       ...
     ) {
       stopifnot(length(ui) == 1)
@@ -903,16 +908,22 @@ plumber <- R6Class(
         enabled <- FALSE
         ui <- "__not_enabled__"
       }
+      private$ui_info = list(
+        enabled = enabled,
+        ui = ui,
+        args = list(...)
+      )
+    },
+    #' @description Set UI callback to notify where the API is located
+    #' @param callback a callback function for taking action on UI url. (Also accepts `NULL` values to disable the `callback`.)
+    set_ui_callback = function(
+      callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL))
+    ) {
       # Use callback when defined
       if (!length(callback) || !is.function(callback)) {
         callback = as.null
       }
-      private$ui_info = list(
-        enabled = enabled,
-        ui = ui,
-        callback = callback,
-        args = list(...)
-      )
+      private$ui_callback = callback
     },
     #' @description Set debug value to include error messages
     #' @param debug `TRUE` provides more insight into your API errors.

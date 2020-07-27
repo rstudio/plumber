@@ -110,9 +110,18 @@ pr_set_debug <- function(pr, debug = interactive()) {
 
 #' Set the API user interface
 #'
+#' `ui` should be either a logical or a character value matching a registered ui.
+#' When `TRUE` or a
+#' function, multiple handles will be added to `plumber` object. OpenAPI json
+#' file will be served on paths `/openapi.json` and `/swagger.json`. Swagger UI
+#' will be served on paths `/__swagger__/index.html` and `/__swagger__/`. When
+#' using a function, it will receive the Plumber router as the first parameter
+#' and current OpenAPI Specification as the second. This function should return a
+#' list containing OpenAPI Specification.
+#' See \url{http://spec.openapis.org/oas/v3.0.3}
+#'
 #' @param pr A Plumber router
 #' @param ui a character value or a logical value. Default to `plumber.ui` option value.
-#' @param callback a callback function for taking action on UI url.
 #' @param ... Other params to be passed to `ui` functions.
 #' @return The Plumber router with the new UI settings.
 #' @export
@@ -151,10 +160,38 @@ pr_set_debug <- function(pr, debug = interactive()) {
 pr_set_ui <- function(
   pr,
   ui = getOption("plumber.ui", TRUE),
-  callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL)),
   ...
 ) {
   validate_pr(pr)
-  pr$setUI(ui = ui, callback = callback, ...)
+  pr$setUI(ui = ui, ...)
+  invisible(pr)
+}
+
+
+#' Set the `callback` to tell where the API user interface is located
+#'
+#' When set, it will be called with a character string corresponding
+#' to the API UI url. This allows RStudio to open `swagger` UI when a
+#' Plumber router [pr_run()] method is executed using default `plumber.ui.callback` option.
+#'
+#' @param pr A Plumber router
+#' @param callback a callback function for taking action on UI url.
+#' @param ... Other params to be passed to `ui` functions.
+#' @return The Plumber router with the new UI callback setting.
+#' @export
+#' @examples
+#' \dontrun{
+#' pr() %>%
+#'   pr_set_ui(TRUE) %>%
+#'   pr_set_ui_callback(function(url) { message("API location: ", url) }) %>%
+#'   pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) %>%
+#'   pr_run()
+#' }
+pr_set_ui_callback <- function(
+  pr,
+  callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL))
+) {
+  validate_pr(pr)
+  pr$set_ui_callback(callback = callback)
   invisible(pr)
 }

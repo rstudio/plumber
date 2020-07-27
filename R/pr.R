@@ -449,18 +449,6 @@ pr_filter <- function(pr,
 #'
 #' `port` does not need to be explicitly assigned.
 #'
-#' `swagger` should be either a logical or a function . When `TRUE` or a
-#' function, multiple handles will be added to `plumber` object. OpenAPI json
-#' file will be served on paths `/openapi.json` and `/swagger.json`. Swagger UI
-#' will be served on paths `/__swagger__/index.html` and `/__swagger__/`. When
-#' using a function, it will receive the Plumber router as the first parameter
-#' and current OpenAPI Specification as the second. This function should return a
-#' list containing OpenAPI Specification.
-#' See \url{http://spec.openapis.org/oas/v3.0.3}
-#'
-#' `swaggerCallback` When set, it will be called with a character string corresponding
-#' to the swagger UI url. It allows RStudio to open swagger UI when Plumber router
-#' run method is executed using default `plumber.swagger.url` option.
 #'
 #' @param pr A Plumber router
 #' @param host A string that is a valid IPv4 or IPv6 address that is owned by
