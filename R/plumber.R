@@ -268,8 +268,8 @@ plumber <- R6Class(
     run = function(
       host = '127.0.0.1',
       port = getOption('plumber.port'),
-      debug = stop("deprecated"),
       swagger = stop("deprecated"),
+      debug = stop("deprecated"),
       swaggerCallback = stop("deprecated")
     ) {
 
