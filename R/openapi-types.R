@@ -6,7 +6,7 @@ plumberToApiTypeMap <- list()
 defaultApiType <- structure("string", default = TRUE)
 defaultIsArray <- structure(FALSE, default = TRUE)
 
-addApiInfo_onLoad <- function() {
+add_api_info_onLoad <- function() {
   addApiInfo <- function(apiType, plumberTypes,
                          regex = NULL, converter = NULL,
                          format = NULL,

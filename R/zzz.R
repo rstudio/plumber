@@ -1,7 +1,7 @@
 
 .onLoad <- function(...) {
 
-  addApiInfo_onLoad()
+  add_api_info_onLoad()
 
   addParsers_onLoad()
 
