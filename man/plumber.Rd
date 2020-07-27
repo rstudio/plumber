@@ -663,7 +663,11 @@ Set UI to use for API
 \if{html}{\out{<a id="method-set_ui_callback"></a>}}
 \if{latex}{\out{\hypertarget{method-set_ui_callback}{}}}
 \subsection{Method \code{set_ui_callback()}}{
-Set UI callback to notify where the API is located
+Set UI callback to notify where the API is located.
+
+When set, it will be called with a character string corresponding
+to the API UI url. This allows RStudio to open \code{swagger} UI when a
+Plumber router \code{\link[=pr_run]{pr_run()}} method is executed using default \code{plumber.ui.callback} option.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$set_ui_callback(
   callback = getOption("plumber.ui.callback", getOption("plumber.swagger.url", NULL))

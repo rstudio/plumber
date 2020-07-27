@@ -903,7 +903,12 @@ plumber <- R6Class(
         args = list(...)
       )
     },
-    #' @description Set UI callback to notify where the API is located
+    #' @description Set UI callback to notify where the API is located.
+    #'
+    #' When set, it will be called with a character string corresponding
+    #' to the API UI url. This allows RStudio to open `swagger` UI when a
+    #' Plumber router [pr_run()] method is executed using default `plumber.ui.callback` option.
+    #'
     #' @param callback a callback function for taking action on UI url. (Also accepts `NULL` values to disable the `callback`.)
     set_ui_callback = function(
       callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL))
