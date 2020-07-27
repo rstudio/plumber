@@ -108,10 +108,8 @@ mount_openapi <- function(pr, api_url) {
   # http://spec.openapis.org/oas/v3.0.3#document-structure
   # "It is RECOMMENDED that the root OpenAPI document be named: openapi.json"
   pr$handle("GET", "/openapi.json", openapi_fun, serializer = serializer_unboxed_json())
-  pr$handle("GET", "/openapi.yaml", openapi_fun, serializer = serializer_yaml())
 
   invisible()
-
 }
 
 #' Mount OpenAPI Specification to a plumber router
@@ -119,7 +117,6 @@ mount_openapi <- function(pr, api_url) {
 unmount_openapi <- function(pr) {
 
   pr$removeHandle("GET", "/openapi.json")
-  pr$removeHandle("GET", "/openapi.yaml")
   invisible()
 
 }
