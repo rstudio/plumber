@@ -42,12 +42,17 @@ jobs:
       - name: Install package
         run: R CMD INSTALL .
 
+      - name: Validate all topics exist (PR)
+        if: github.event_name != 'push'
+        shell: Rscript {0}
+        run: |
+          pkgdown::build_reference_index()
+          stopifnot(length(warnings()) == 0)
       - name: Build Site (PR)
         if: github.event_name != 'push'
         shell: Rscript {0}
         run: |
           pkgdown::build_site(new_process = FALSE)
-          stopifnot(length(warnings()) <= 1) # having trouble getting rid of an incomplete final line warning
 
       - name: Git Config
         if: github.event_name == 'push'

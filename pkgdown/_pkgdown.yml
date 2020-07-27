@@ -62,17 +62,18 @@ reference:
   - 'pr_filter'
 - title: Router Defaults
   contents:
+  - 'pr_set_ui'
   - 'pr_set_serializer'
   - 'pr_set_404'
   - 'pr_set_error'
+  - 'pr_set_debug'
+  - 'pr_set_ui_callback'
 - title: API Interface
   contents:
   - 'register_ui'
 - title: All functions
   # desc: description here
   contents:
-  - 'pr_set_ui'
-  - 'pr_set_debug'
   - 'PlumberEndpoint'
   - 'PlumberStatic'
   - 'PlumberStep'
