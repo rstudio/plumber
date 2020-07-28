@@ -109,7 +109,11 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
 
       if (!is.na(serMat[1, 4]) && serMat[1,4] != ""){
         # We have an arg to pass in to the serializer
-        argList <- eval(parse(text=serMat[1,4]), envir)
+        argList <- tryCatch({
+          eval(parse(text=serMat[1,4]), envir)
+        }, error = function(e) {
+          stopOnLine(lineNum, line, e)
+        })
       } else {
         argList <- list()
       }
@@ -139,7 +143,11 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
 
       if (shortSerAttr != "") {
         # We have an arg to pass in to the serializer
-        argList <- eval(parse(text=paste0("list", shortSerAttr)), envir)
+        argList <- tryCatch({
+          eval(parse(text=paste0("list", shortSerAttr)), envir)
+        }, error = function(e) {
+          stopOnLine(lineNum, line, e)
+        })
       } else {
         argList <- list()
       }
@@ -254,7 +262,11 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr)
         imageArgs <- NULL
         if (!identical(block$imageAttr, "")){
           call <- paste("list", block$imageAttr)
-          imageArgs <- eval(parse(text=call), envir)
+          imageArgs <- tryCatch({
+            eval(parse(text=call), envir)
+          }, error = function(e) {
+            stopOnLine(lineNum, file[lineNum], e)
+          })
         }
 
         if (block$image == "png"){
@@ -290,7 +302,11 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr)
 
   } else if (!is.null(block$routerModifier)) {
     if (is.expression(expr)){
-      func <- eval(expr, envir)
+      func <- tryCatch({
+        eval(expr, envir)
+      }, error = function(e) {
+        stopOnLine(lineNum, file[lineNum], e)
+      })
       if (is.function(func)) {
         func(pr)
         return()
@@ -298,6 +314,10 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr)
     }
     stopOnLine(lineNum, file[lineNum], "Invalid expression for @plumber tag, please use the form `function(pr) { }`.")
   } else {
-    eval(expr, envir)
+    tryCatch({
+      eval(expr, envir)
+    }, error = function(e) {
+      stopOnLine(lineNum, file[lineNum], e)
+    })
   }
 }
