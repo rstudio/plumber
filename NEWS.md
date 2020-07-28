@@ -98,6 +98,8 @@ plumber 1.0.0
 
 ### Bug fixes
 
+* Handle plus signs in URI as space characters instead of actual plus signs (@meztez, #618)
+
 * Modified images serialization to use content-type serializer. Fixes issue with images pre/postserialize hooks (@meztez, #518).
 
 * Fix possible bugs due to mounted routers without leading slashes (@atheriel, #476 #501).
