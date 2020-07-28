@@ -17,7 +17,7 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
   preempt <- NULL
   filter <- NULL
   image <- NULL
-  imageAttr <- NULL
+  imageArgs<- NULL
   serializer <- NULL
   assets <- NULL
   params <- NULL
@@ -174,6 +174,16 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
       if(!identical(imageAttr, "") && !grepl("^\\(.*\\)$", imageAttr, perl=TRUE)){
         stopOnLine(lineNum, line, "Supplemental arguments to the image serializer must be surrounded by parentheses, as in `#' @png (width=200)`")
       }
+      # Arguments to pass in to the image serializer
+      imageArgs <- NULL
+      if (!identical(imageAttr, "")){
+        call <- paste("list", imageAttr)
+        imageArgs <- tryCatch({
+          eval(parse(text=call), envir)
+        }, error = function(e) {
+          stopOnLine(lineNum, line, e)
+        })
+      }
     }
 
     responseMat <- stri_match(line, regex="^#['\\*]\\s*@response\\s+(\\w+)\\s+(\\S.+)\\s*$")
@@ -229,7 +239,7 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
     preempt = preempt,
     filter = filter,
     image = image,
-    imageAttr = imageAttr,
+    imageArgs = imageArgs,
     serializer = serializer,
     assets = assets,
     params = rev(params),
@@ -258,25 +268,14 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr)
       ep <- PlumberEndpoint$new(p$verb, p$path, expr, envir, block$serializer, srcref, block$params, block$comments, block$responses, block$tags)
 
       if (!is.null(block$image)){
-        # Arguments to pass in to the image serializer
-        imageArgs <- NULL
-        if (!identical(block$imageAttr, "")){
-          call <- paste("list", block$imageAttr)
-          imageArgs <- tryCatch({
-            eval(parse(text=call), envir)
-          }, error = function(e) {
-            stopOnLine(lineNum, file[lineNum], e)
-          })
-        }
-
         if (block$image == "png"){
-          ep$registerHooks(render_png(imageArgs))
+          ep$registerHooks(render_png(block$imageArgs))
           ep$serializer <- serializer_content_type("image/png")
         } else if (block$image == "jpeg"){
-          ep$registerHooks(render_jpeg(imageArgs))
+          ep$registerHooks(render_jpeg(block$imageArgs))
           ep$serializer <- serializer_content_type("image/jpeg")
         } else if (block$image == "svg"){
-          ep$registerHooks(render_svg(imageArgs))
+          ep$registerHooks(render_svg(block$imageArgs))
           ep$serializer <- serializer_content_type("image/svg+xml")
         } else {
           stop("Image format not found: ", block$image)
