@@ -74,7 +74,7 @@ plumber 1.0.0
 
 * Fix `plumb()` function when `plumb()`ing a directory so that `plumber.R` is
   not a requirement if a valid `entrypoint.R` file is found.
-  (@blairj09, [#471](https://github.com/trestletech/plumber/pull/471)).
+  (@blairj09, [#471](https://github.com/rstudio/plumber/pull/471)).
 
 * If cookie information is too large (> 4093 bytes), a warning will be displayed. (#404)
 
