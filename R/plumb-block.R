@@ -12,7 +12,7 @@ stopOnLine <- function(lineNum, line, msg){
 #' @param lineNum The line number just above the function we're documenting
 #' @param file A character vector representing all the lines in the file
 #' @noRd
-plumbBlock <- function(lineNum, file){
+plumbBlock <- function(lineNum, file, envir = parent.frame()){
   paths <- NULL
   preempt <- NULL
   filter <- NULL
@@ -109,7 +109,7 @@ plumbBlock <- function(lineNum, file){
 
       if (!is.na(serMat[1, 4]) && serMat[1,4] != ""){
         # We have an arg to pass in to the serializer
-        argList <- eval(parse(text=serMat[1,4]))
+        argList <- eval(parse(text=serMat[1,4]), envir)
       } else {
         argList <- list()
       }
@@ -139,7 +139,7 @@ plumbBlock <- function(lineNum, file){
 
       if (shortSerAttr != "") {
         # We have an arg to pass in to the serializer
-        argList <- eval(parse(text=paste0("list", shortSerAttr)))
+        argList <- eval(parse(text=paste0("list", shortSerAttr)), envir)
       } else {
         argList <- list()
       }
@@ -238,7 +238,7 @@ plumbBlock <- function(lineNum, file){
 evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr) {
   lineNum <- srcref[1] - 1
 
-  block <- plumbBlock(lineNum, file)
+  block <- plumbBlock(lineNum, file, envir)
 
   if (sum(!is.null(block$filter), !is.null(block$paths), !is.null(block$assets), !is.null(block$routerModifier)) > 1){
     stopOnLine(lineNum, file[lineNum], "A single function can only be a filter, an API endpoint, an asset or a router modifier (@filter AND @get, @post, @assets, @plumber, etc.)")
@@ -254,7 +254,7 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr)
         imageArgs <- NULL
         if (!identical(block$imageAttr, "")){
           call <- paste("list", block$imageAttr)
-          imageArgs <- eval(parse(text=call))
+          imageArgs <- eval(parse(text=call), envir)
         }
 
         if (block$image == "png"){

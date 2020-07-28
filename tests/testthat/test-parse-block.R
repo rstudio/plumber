@@ -160,4 +160,8 @@ test_that("@html parameters produce an error", {
   expect_block_error("#' @html (key = \"val\")", "unused argument")
 })
 
+test_that("Plumbing block use the right environment", {
+  expect_silent(plumb(test_path("files/plumb-envir.R")))
+})
+
 # TODO: more testing around filter, assets, endpoint, etc.
