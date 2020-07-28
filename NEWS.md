@@ -31,6 +31,8 @@ plumber 1.0.0
 
 * R repository modified to `focal-cran40` using Ubuntu 20.04 LTS for digital ocean provisioning (@meztez, #529)
 
+* Digital Ocean helper functions and deployment documentation moved to package `plumberDeploy` (@meztez, #621)
+
 
 ### New features
 
