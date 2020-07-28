@@ -234,7 +234,7 @@ make_parser <- function(aliases) {
     return(aliases)
   }
   if (isTRUE(aliases)) {
-    # use all available parsers except ("none")
+    # use all parsers
     aliases <- "all"
   }
   if (is.character(aliases)) {
@@ -242,6 +242,7 @@ make_parser <- function(aliases) {
       stop("aliases can not be `NA` values")
     }
     if ("all" %in% aliases) {
+      # use all available parsers expect `all` and `none`
       aliases <- setdiff(registered_parsers(), c("all", "none"))
     }
     # turn aliases into a named list with empty values
@@ -264,7 +265,7 @@ make_parser <- function(aliases) {
     }
   })
 
-  # if "all" is found, add all remaining registered parsers (except 'none') to the `aliases` list
+  # if "all" is found, remove "all" and add all remaining registered parsers (except 'none') to the `aliases` list
   if ("all" %in% names(aliases)) {
     all_parser_names <- setdiff(registered_parsers(), c("all", "none"))
     # remove to avoid infinite recursion
