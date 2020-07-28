@@ -1,6 +1,5 @@
-FROM trestletech/plumber
-MAINTAINER Jeff Allen <docker@trestletech.com>
+FROM rstudio/plumber:next
 
 RUN R -e "install.packages('htmltools')"
 
-CMD ["/examples/07-mailgun/mailgun.R"]
+CMD ["/usr/local/lib/R/site-library/plumber/examples/07-mailgun/plumber.R"]

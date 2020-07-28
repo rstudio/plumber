@@ -45,8 +45,12 @@ plumber 1.0.0
 
 * Documentation is presented using pkgdown (#570)
 
+* Tidy API for easier programmatic usage (@blairj09, #590)
+
 
 ### Minor new features and improvements
+
+* Updated Docker files. New Docker repo is now [`rstudio/plumber`](https://hub.docker.com/r/rstudio/plumber/tags). Updates heavily inspired from @mskyttner (#459). (#589)
 
 * Support HTTP 405 Code. (@meztez, #554)
 
@@ -56,9 +60,15 @@ plumber 1.0.0
 
 * Added yaml support, serializer and parser. (@meztez, #556)
 
-* Added csv serializer (@pachamaltese, #520)
+* Added `serializer_csv()` (@pachamaltese, #520)
 
-* Added svg serializer (@pachamaltese, #398)
+* Added svg image serializer (@pachamaltese, #398)
+
+* Added `serializer_headers(header_list)` method which sets a list of static headers for each serialized value. Heavily inspired from @ycphs (#455). (#585)
+
+* Added `as_attachment(value, filename)` method which allows routes to return a file attachment with a custom name. (#585)
+
+* Added `serializer_text()` (#585)
 
 * Update documentation on R6 objects (@meztez, #530)
 
@@ -85,6 +95,8 @@ plumber 1.0.0
 
 
 ### Bug fixes
+
+* Handle plus signs in URI as space characters instead of actual plus signs (@meztez, #618)
 
 * Modified images serialization to use content-type serializer. Fixes issue with images pre/postserialize hooks (@meztez, #518).
 

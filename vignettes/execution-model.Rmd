@@ -70,8 +70,6 @@ It's also important to ask whether or not the hosting platform you'll be using s
 
 HTTP cookies are a convention that allow web servers to send some state to a client with the expectation that the client would then include that state in future requests. See the [Setting Cookies section](./rendering-output.html#setting-cookies) for details on how to leverage cookies in Plumber.
 
-// TODO: graphic
-
 All modern web browsers support cookies (unless configured not to) and many other clients do, as well, though some clients require additional configuration in order to do so. If you're confident that the intended clients for your API support cookies then you could consider storing some state in cookies. This approach mitigates concerns about horizontal scalability, as the state is written to each client independently and then included in subsequent requests from that client. This also minimizes the infrastructure requirements for hosting your Plumber APIs since you don't need to setup a system capable of storing all of this state; instead, you've commissioned your clients to store their own state.
 
 One issue with maintaining state in cookies is that their size should be kept to a minimum. Clients impose restrictions differently, but you should not plan to store more than 4kB of information in a cookie. And realize that whatever information gets placed in the cookie must be retransmitted by the client with *every* request. This can significantly increase the size of each HTTP request that your clients make.

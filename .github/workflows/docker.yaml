@@ -1,0 +1,48 @@
+name: Docker
+
+on:
+  push:
+    branches:
+      - "master"
+  schedule:
+    - cron:  '0 0 1 * *' # first of every month
+
+
+jobs:
+  docker:
+    name: ${{ matrix.config.tags }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        r_version:
+          - "latest"
+
+        config:
+        - name: CRAN
+          # always overwrite the latest version with the CRAN version
+          tags: "v0.4.6,latest"
+          ref: "v0.4.6"
+
+        - name: GitHub
+          # 'next' tag signifies the _next_ release
+          tags: "next"
+          ref: "master"
+
+
+    steps:
+    - uses: actions/checkout@master
+
+    # https://github.com/marketplace/actions/publish-docker
+    - name: rstudio/plumber
+      uses: elgohr/Publish-Docker-Github-Action@2.18
+      with:
+        name: rstudio/plumber
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        cache: false
+        workdir: "."
+        buildargs: "R_VERSION=${{ matrix.r_version }},PLUMBER_REF=${{ matrix.config.ref }}${{ matrix.config.extra_buildargs }}"
+        tags: ${{ matrix.config.tags }}
