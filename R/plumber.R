@@ -187,6 +187,8 @@ plumber <- R6Class(
   inherit = hookable,
   public = list(
     #' @description Create a new `plumber` router
+    #'
+    #' See also [plumb()], [pr()]
     #' @param filters a list of plumber filters
     #' @param file path to file to plumb
     #' @param envir an environment to be used as the enclosure for the routers execution
@@ -255,17 +257,19 @@ plumber <- R6Class(
 
     },
     #' @description Start a server using `plumber` object.
+    #'
+    #' See also: [pr_run()]
     #' @param host a string that is a valid IPv4 or IPv6 address that is owned by
     #' this server, which the application will listen on. "0.0.0.0" represents
     #' all IPv4 addresses and "::/0" represents all IPv6 addresses.
     #' @param port a number or integer that indicates the server port that should
     #' be listened on. Note that on most Unix-like systems including Linux and
     #' Mac OS X, port numbers smaller than 1025 require root privileges.
+    #'
+    #' This value does not need to be explicitly assigned.
     #' @param debug Deprecated. See `$set_debug()`
     #' @param swagger Deprecated. See `$set_ui(ui)` or `$set_api_spec()`
     #' @param swaggerCallback Deprecated. See `$set_ui(callback)`
-    #' @details
-    #' `port` does not need to be explicitly assigned.
     run = function(
       host = '127.0.0.1',
       port = getOption('plumber.port'),
@@ -286,9 +290,10 @@ plumber <- R6Class(
       }
       if (!missing(swagger)) {
         if (is.function(swagger)) {
-          # between v1.0.0 and v0.4.6
+          # between v0.4.6 and v1.0.0
           message("`$run(swagger)` has been deprecated in v1.0.0 and will be removed in a coming release. To alter the swagger spec, please use `$set_api_spec(api)`")
           self$set_api_spec(swagger)
+          # spec is now enabled by default. Do not alter
         } else {
           if (isTRUE(private$ui_info$init)) {
             # <= v0.4.6
@@ -342,14 +347,17 @@ plumber <- R6Class(
       httpuv::runServer(host, port, self)
     },
     #' @description Mount a plumber router
-    #' @param path a character string. Where to mount router.
-    #' @param router a plumber router. Router to be mounted.
-    #' @details Plumber routers can be “nested” by mounting one into another
+    #'
+    #' Plumber routers can be “nested” by mounting one into another
     #' using the `mount()` method. This allows you to compartmentalize your API
     #' by paths which is a great technique for decomposing large APIs into smaller files.
+    #'
+    #' See also: [pr_mount()]
+    #' @param path a character string. Where to mount router.
+    #' @param router a plumber router. Router to be mounted.
     #' @examples
     #' \dontrun{
-    #' root <- plumber$new()
+    #' root <- pr()
     #'
     #' users <- plumber$new("users.R")
     #' root$mount("/users", users)
@@ -369,7 +377,7 @@ plumber <- R6Class(
       private$mnts[[path]] <- router
     },
     #' @description Unmount a plumber router
-    #' @param path a character string. Where to mount router.
+    #' @param path a character string. Where to unmount router.
     unmount = function(path){
       # Ensure that the path has both a leading and trailing slash.
       if (!grepl("^/", path)) {
@@ -381,6 +389,8 @@ plumber <- R6Class(
       private$mnts[[path]] <- NULL
     },
     #' @description Register a hook
+    #'
+    #' See also: [pr_hook()], [pr_hooks()]
     #' @param stage a character string. Point in the lifecycle of a request.
     #' @param handler a hook function.
     #' @details Plumber routers support the notion of "hooks" that can be registered
@@ -411,7 +421,7 @@ plumber <- R6Class(
     #' handlers themselves.
     #' @examples
     #' \dontrun{
-    #' pr <- plumber$new()
+    #' pr <- pr()
     #' pr$registerHook("preroute", function(req){
     #'   cat("Routing a request for", req$PATH_INFO, "...\n")
     #' })
@@ -438,6 +448,15 @@ plumber <- R6Class(
       super$registerHook(stage, handler)
     },
     #' @description Define endpoints
+    #'
+    #' The “handler” functions that you define in these handle calls
+    #' are identical to the code you would have defined in your plumber.R file
+    #' if you were using annotations to define your API. The handle() method
+    #' takes additional arguments that allow you to control nuanced behavior
+    #' of the endpoint like which filter it might preempt or which serializer
+    #' it should use.
+    #'
+    #' See also: [pr_handle()], [pr_get()], [pr_post()], [pr_put()], [pr_delete()]
     #' @param methods a character string. http method.
     #' @param path a character string. Api endpoints
     #' @param handler a handler function.
@@ -445,15 +464,9 @@ plumber <- R6Class(
     #' @param serializer a serializer function.
     #' @param endpoint a `PlumberEndpoint` object.
     #' @param ... additional arguments for `PlumberEndpoint` creation
-    #' @details The “handler” functions that you define in these handle calls
-    #' are identical to the code you would have defined in your plumber.R file
-    #' if you were using annotations to define your API. The handle() method
-    #' takes additional arguments that allow you to control nuanced behavior
-    #' of the endpoint like which filter it might preempt or which serializer
-    #' it should use.
     #' @examples
     #' \dontrun{
-    #' pr <- plumber$new()
+    #' pr <- pr()
     #' pr$handle("GET", "/", function(){
     #'   "<html><h1>Programmatic Plumber!</h1></html>"
     #' }, serializer=plumber::serializer_html())
@@ -852,34 +865,50 @@ plumber <- R6Class(
     onWSOpen = function(ws){
       warning("WebSockets not supported.")
     },
-    #' @details Sets the default serializer of the router.
+    #' @description Sets the default serializer of the router.
+    #'
+    #' See also: [pr_set_serializer()]
     #' @param serializer a serializer function
+    #' @examples
+    #' \dontrun{
+    #' pr <- pr()
+    #' pr$setSerializer(serializer_unboxed_json())
+    #' }
     setSerializer = function(serializer) {
       private$serializer <- serializer
     },
-    #' @details Sets the handler that gets called if an
+    #' @description Sets the handler that gets called if an
     #' incoming request can’t be served by any filter, endpoint, or sub-router.
+    #'
+    #' See also: [pr_set_404()]
     #' @param fun a handler function.
     #' @examples
     #' \dontrun{
-    #' pr <- plumber$new()
+    #' pr <- pr()
     #' pr$set404Handler(function(req, res) {cat(req$PATH_INFO)})
     #' }
     set404Handler = function(fun){
       private$notFoundHandler <- fun
     },
-    #' @details Sets the error handler which gets invoked if any filter or
+    #' @description Sets the error handler which gets invoked if any filter or
     #' endpoint generates an error.
+    #'
+    #' See also: [pr_set_404()]
     #' @param fun a handler function.
     #' @examples
     #' \dontrun{
-    #' pr <- plumber$new()
-    #' pr$setErrorHandler(function(req, res) {cat(res$body)})
+    #' pr <- pr()
+    #' pr$setErrorHandler(function(req, res, err) {
+    #'   message("Found error: ")
+    #'   str(err)
+    #' })
     #' }
     setErrorHandler = function(fun){
       private$errorHandler <- fun
     },
     #' @description Set UI to use for API
+    #'
+    #' See also: [pr_set_ui()]
     #' @param ui a character value or a logical value. Default to `plumber.ui` option value.
     #' @param ... Other params to be passed to `ui` functions.
     set_ui = function(
@@ -909,6 +938,7 @@ plumber <- R6Class(
     #' to the API UI url. This allows RStudio to open `swagger` UI when a
     #' Plumber router [pr_run()] method is executed using default `plumber.ui.callback` option.
     #'
+    #' See also: [pr_set_ui_callback()]
     #' @param callback a callback function for taking action on UI url. (Also accepts `NULL` values to disable the `callback`.)
     set_ui_callback = function(
       callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL))
@@ -921,6 +951,7 @@ plumber <- R6Class(
     },
     #' @description Set debug value to include error messages
     #' @param debug `TRUE` provides more insight into your API errors.
+    #' @seealso [pr_set_debug()]
     set_debug = function(debug = interactive()) {
       stopifnot(length(debug) == 1)
       private$debug = isTRUE(debug)
@@ -929,14 +960,21 @@ plumber <- R6Class(
     #' @param name a character string. Name of filter
     #' @param expr an expr that resolve to a filter function or a filter function
     #' @param serializer a serializer function
+    #' @seealso [pr_filter()]
     filter = function(name, expr, serializer){
       filter <- PlumberFilter$new(name, expr, private$envir, serializer)
       private$addFilterInternal(filter)
     },
-    #' @description Add a function to customize what is returned in `$get_api_spec()`.
+    #' @description
+    #' Add a function to customize what is returned in `$get_api_spec()`.
+    #'
+    #' Note, the returned value will be sent through [serializer_unboxed_json()] which will turn all length 1 vectors into atomic values.
+    #' To force a vector to serialize to an array of size 1, be sure to call [as.list()] on your value. `list()` objects are always serialized to an array value.
+    #'
+    #' See also: [pr_set_api_spec()]
     #' @param api This can be
     #'   * an OpenAPI Specification formatted list object
-    #'   * a function that accepts an OpenAPI Specification autogenerated by `plumber` and returns a OpenAPI Specification formatted list object.
+    #'   * a function that accepts the OpenAPI Specification autogenerated by `plumber` and returns a OpenAPI Specification formatted list object.
     #'
     #'  The value returned will not be validated for OAS compatibility.
     set_api_spec = function(api = NULL) {
@@ -974,19 +1012,10 @@ plumber <- R6Class(
 
       ret
     },
-    #' @description Retrieve openAPI file
-    openAPIFile = function() {
-      warning("`$openAPIFile()` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$get_api_spec()`.")
-      self$get_api_spec()
-    },
-    #' @description Retrieve openAPI file
-    swaggerFile = function() {
-      warning("`$swaggerFile()` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$get_api_spec()`.")
-      self$get_api_spec()
-    },
+
 
     ### Legacy/Deprecated
-    #' @details addEndpoint has been deprecated in v0.4.0 and will be removed in a coming release. Please use `handle()` instead.
+    #' @description addEndpoint has been deprecated in v0.4.0 and will be removed in a coming release. Please use `handle()` instead.
     #' @param verbs verbs
     #' @param path path
     #' @param expr expr
@@ -1003,7 +1032,7 @@ plumber <- R6Class(
 
       self$handle(verbs, path, expr, preempt, serializer)
     },
-    #' @details addAssets has been deprecated in v0.4.0 and will be removed in a coming release. Please use `mount` and `PlumberStatic$new()` instead.
+    #' @description addAssets has been deprecated in v0.4.0 and will be removed in a coming release. Please use `mount` and `PlumberStatic$new()` instead.
     #' @param dir dir
     #' @param path path
     #' @param options options
@@ -1035,6 +1064,16 @@ plumber <- R6Class(
     addGlobalProcessor = function(proc){
       warning("addGlobalProcessor has been deprecated in v0.4.0 and will be removed in a coming release. Please use `registerHook`(s) instead.")
       self$registerHooks(proc)
+    },
+    #' @description Deprecated. Retrieve openAPI file
+    openAPIFile = function() {
+      warning("`$openAPIFile()` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$get_api_spec()`.")
+      self$get_api_spec()
+    },
+    #' @description Deprecated. Retrieve openAPI file
+    swaggerFile = function() {
+      warning("`$swaggerFile()` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$get_api_spec()`.")
+      self$get_api_spec()
     }
   ), active = list(
     #' @field endpoints plumber router endpoints read-only

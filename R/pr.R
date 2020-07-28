@@ -41,7 +41,7 @@ pr <- function(file = NULL,
 #' Each function mutates the Plumber router in place, but also invisibly returns
 #' the updated router.
 #'
-#' @param pr A Plumber router
+#' @template param_pr
 #' @param methods Character vector of HTTP methods
 #' @param path The endpoint path
 #' @param handler A handler function
@@ -250,7 +250,7 @@ pr_mount <- function(pr,
 #' which the names are the names of the hooks, and the values are the
 #' handlers themselves.
 #'
-#' @param pr A Plumber router
+#' @template param_pr
 #' @param stage A character string. Point in the lifecycle of a request.
 #' @param handler A hook function.
 #' @param handlers A named list of hook handlers
@@ -328,7 +328,7 @@ pr_hooks <- function(pr,
 #'   to prevent others from reading it.
 #' } Examples of both of these solutions are done in the Examples section.
 #'
-#' @param pr A Plumber router
+#' @template param_pr
 #' @param key The secret key to use. This must be consistent across all R sessions
 #'   where you want to save/restore encrypted cookies. It should be produced using
 #'   \code{\link{randomCookieKey}}. Please see the "Storing secure keys" section for more details
@@ -417,7 +417,7 @@ pr_cookie <- function(pr,
 #' Filters can be used to modify an incoming request, return an error, or return
 #' a response prior to the request reaching an endpoint.
 #'
-#' @param pr A Plumber router
+#' @template param_pr
 #' @param name A character string. Name of filter
 #' @param expr An expr that resolve to a filter function or a filter function
 #' @param serializer A serializer function
@@ -450,7 +450,7 @@ pr_filter <- function(pr,
 #' `port` does not need to be explicitly assigned.
 #'
 #'
-#' @param pr A Plumber router
+#' @template param_pr
 #' @param host A string that is a valid IPv4 or IPv6 address that is owned by
 #' this server, which the application will listen on. "0.0.0.0" represents
 #' all IPv4 addresses and "::/0" represents all IPv6 addresses.
