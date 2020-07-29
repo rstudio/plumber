@@ -165,7 +165,11 @@ plumbBlock <- function(lineNum, file){
 
       if (!is.na(parsersMat[1, 4]) && parsersMat[1,4] != ""){
         # We have an arg to pass in to the parser
-        arg_list <- eval(parse(text=parsersMat[1,4]))
+        arg_list <- tryCatch({
+          eval(parse(text=parsersMat[1,4]), envir)
+        }, error = function(e) {
+          stopOnLine(lineNum, line, e)
+        })
       } else {
         arg_list <- list()
       }
