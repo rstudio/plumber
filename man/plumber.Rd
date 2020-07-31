@@ -467,7 +467,7 @@ Remove endpoints
 \if{html}{\out{<a id="method-print"></a>}}
 \if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
-Print reprensation of plumber router.
+Print representation of plumber router.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$print(prefix = "", topLevel = TRUE, ...)}\if{html}{\out{</div>}}
 }

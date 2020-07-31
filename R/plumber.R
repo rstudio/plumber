@@ -368,7 +368,7 @@ plumber <- R6Class(
     #' products <- plumber$new("products.R")
     #' root$mount("/products", products)
     #' }
-    mount = function(path, router){
+    mount = function(path, router) {
       # Ensure that the path has both a leading and trailing slash.
       if (!grepl("^/", path)) {
         path <- paste0("/", path)
@@ -381,7 +381,7 @@ plumber <- R6Class(
     },
     #' @description Unmount a plumber router
     #' @param path a character string. Where to unmount router.
-    unmount = function(path){
+    unmount = function(path) {
       # Ensure that the path has both a leading and trailing slash.
       if (!grepl("^/", path)) {
         path <- paste0("/", path)
@@ -500,7 +500,7 @@ plumber <- R6Class(
     remove_handle = function(methods, path, preempt = NULL){
       private$removeEndpointInternal(methods, path, preempt)
     },
-    #' @description Print reprensation of plumber router.
+    #' @description Print representation of plumber router.
     #' @param prefix a character string. Prefix to append to representation.
     #' @param topLevel a logical value. When method executed on top level
     #' router, set to `TRUE`.

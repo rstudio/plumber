@@ -23,9 +23,8 @@ interface that can interpret your plumber OpenAPI Specifications.
 
 \code{ui} list expects the following values
 \describe{
-\item{package}{Name of the package required for the UI.}
 \item{name}{Name of the UI.}
 \item{index}{A function that returns the HTML content of the landing page of the UI.}
-\item{static}{A function that returns the path to the assets (images, javascript, css, fonts) the UI will use.}
+\item{static}{A function that returns the path to the static assets (images, javascript, css, fonts) the UI will use.}
 }
 }
