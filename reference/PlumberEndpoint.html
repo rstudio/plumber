@@ -223,6 +223,7 @@ each separate verb/path into its own endpoint, so we just do that.</p></dd>
 <li><p><a href='#method-new'><code>PlumberEndpoint$new()</code></a></p></li>
 <li><p><a href='#method-getPathParams'><code>PlumberEndpoint$getPathParams()</code></a></p></li>
 <li><p><a href='#method-getFuncParams'><code>PlumberEndpoint$getFuncParams()</code></a></p></li>
+<li><p><a href='#method-getEndpointParams'><code>PlumberEndpoint$getEndpointParams()</code></a></p></li>
 <li><p><a href='#method-clone'><code>PlumberEndpoint$clone()</code></a></p></li>
 </ul>
 <p><details open ><summary>Inherited methods</summary>
@@ -291,8 +292,7 @@ each separate verb/path into its own endpoint, so we just do that.</p></dd>
 
 <dt><code>serializer</code></dt><dd><p>Endpoint serializer</p></dd>
 
-<dt><code>parsers</code></dt><dd><p>Endpoint parsers.
-Can be one of:
+<dt><code>parsers</code></dt><dd><p>Can be one of:
 <ul>
 <li><p>A <code>NULL</code> value</p></li>
 <li><p>A character vector of parser names</p></li>
@@ -328,6 +328,11 @@ When using a list, parser information already defined will maintain their existi
 <a id="method-getFuncParams"></a></p><h3>Method <code>getFuncParams()</code></h3>
 <p>retrieve endpoint expression parameters</p><h3>Usage</h3>
 <p><div class="r"></p><pre><span class='kw'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>getFuncParams</span>()</pre><p></div></p>
+
+<p><hr>
+<a id="method-getEndpointParams"></a></p><h3>Method <code>getEndpointParams()</code></h3>
+<p>retrieve endpoint defined parameters</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='kw'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>getEndpointParams</span>()</pre><p></div></p>
 
 <p><hr>
 <a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>

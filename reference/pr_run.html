@@ -179,21 +179,14 @@
     <p><code>port</code> does not need to be explicitly assigned.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pr_run</span>(
-  <span class='kw'>pr</span>,
-  host = <span class='st'>"127.0.0.1"</span>,
-  port = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.port"</span>),
-  swagger = <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>(),
-  debug = <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>(),
-  swaggerCallback = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.swagger.url"</span>, <span class='kw'>NULL</span>)
-)</pre>
+    <pre class="usage"><span class='fu'>pr_run</span>(<span class='kw'>pr</span>, host = <span class='st'>"127.0.0.1"</span>, port = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.port"</span>, <span class='kw'>NULL</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>pr</th>
-      <td><p>A Plumber router</p></td>
+      <td><p>A Plumber router. Note: The supplied Plumber router will also be updated in place as well as returned by the function.</p></td>
     </tr>
     <tr>
       <th>host</th>
@@ -207,33 +200,8 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.</p></td>
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.</p></td>
     </tr>
-    <tr>
-      <th>swagger</th>
-      <td><p>A function that enhances the existing OpenAPI Specification.</p></td>
-    </tr>
-    <tr>
-      <th>debug</th>
-      <td><p><code>TRUE</code> provides more insight into your API errors.</p></td>
-    </tr>
-    <tr>
-      <th>swaggerCallback</th>
-      <td><p>A callback function for taking action on the url for swagger page.</p></td>
-    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><code>swagger</code> should be either a logical or a function . When <code>TRUE</code> or a
-function, multiple handles will be added to <code>plumber</code> object. OpenAPI json
-file will be served on paths <code>/openapi.json</code> and <code>/swagger.json</code>. Swagger UI
-will be served on paths <code>/__swagger__/index.html</code> and <code>/__swagger__/</code>. When
-using a function, it will receive the Plumber router as the first parameter
-and current OpenAPI Specification as the second. This function should return a
-list containing OpenAPI Specification.
-See <a href='http://spec.openapis.org/oas/v3.0.3'>http://spec.openapis.org/oas/v3.0.3</a></p>
-<p><code>swaggerCallback</code> When set, it will be called with a character string corresponding
-to the swagger UI url. It allows RStudio to open swagger UI when Plumber router
-run method is executed using default <code>plumber.swagger.url</code> option.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {

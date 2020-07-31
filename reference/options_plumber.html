@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>How to use Plumber options — options_plumber • plumber</title>
+<title>Plumber options — options_plumber • plumber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +52,10 @@
 
 
 
-<meta property="og:title" content="How to use Plumber options — options_plumber" />
-<meta property="og:description" content="How to use Plumber options" />
+<meta property="og:title" content="Plumber options — options_plumber" />
+<meta property="og:description" content="There are a number of global options that affect Plumber's behavior. These can
+be set globally with options() or with options_plumber(). Options set using
+options_plumber() should not include the plumber. prefix." />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
 
 
@@ -170,30 +172,53 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>How to use Plumber options</h1>
+    <h1>Plumber options</h1>
     <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/plumber-options.R'><code>R/plumber-options.R</code></a></small>
     <div class="hidden name"><code>options_plumber.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>How to use Plumber options</p>
+    <p>There are a number of global options that affect Plumber's behavior. These can
+be set globally with <code><a href='https://rdrr.io/r/base/options.html'>options()</a></code> or with <code>options_plumber()</code>. Options set using
+<code>options_plumber()</code> should not include the <code>plumber.</code> prefix.</p>
     </div>
 
     <pre class="usage"><span class='fu'>options_plumber</span>(
+  apiScheme = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.apiScheme"</span>),
   apiHost = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.apiHost"</span>),
+  apiPort = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.apiPort"</span>),
+  apiPath = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.apiPath"</span>),
+  apiURL = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.apiURL"</span>),
   debug = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.debug"</span>),
   maxRequestSize = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.maxRequestSize"</span>),
   postBody = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.postBody"</span>),
   port = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.port"</span>),
   sharedSecret = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.sharedSecret"</span>),
-  swagger.url = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.swagger.url"</span>)
+  ui = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.ui"</span>),
+  ui.callback = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.ui.callback"</span>)
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>apiScheme</th>
+      <td><p>see details</p></td>
+    </tr>
+    <tr>
       <th>apiHost</th>
+      <td><p>see details</p></td>
+    </tr>
+    <tr>
+      <th>apiPort</th>
+      <td><p>see details</p></td>
+    </tr>
+    <tr>
+      <th>apiPath</th>
+      <td><p>see details</p></td>
+    </tr>
+    <tr>
+      <th>apiURL</th>
       <td><p>see details</p></td>
     </tr>
     <tr>
@@ -217,7 +242,11 @@
       <td><p>see details</p></td>
     </tr>
     <tr>
-      <th>swagger.url</th>
+      <th>ui</th>
+      <td><p>see details</p></td>
+    </tr>
+    <tr>
+      <th>ui.callback</th>
       <td><p>see details</p></td>
     </tr>
     </table>
@@ -227,32 +256,39 @@
     <p>The complete, prior set of <code><a href='https://rdrr.io/r/base/options.html'>options()</a></code> values.
 If a particular parameter is not supplied, it will return the current value.
 If no parameters are supplied, all returned values will be the current <code><a href='https://rdrr.io/r/base/options.html'>options()</a></code> values.</p>
-    <h2 class="hasAnchor" id="options"><a class="anchor" href="#options"></a>Options</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     
-
-<p>There are a number of global options that affect Plumber's behavior. These can
-be set globally with <code><a href='https://rdrr.io/r/base/options.html'>options()</a></code> or with <code>options_plumber()</code>. Options set using
-<code>options_plumber()</code> should not include the <code>plumber.</code> prefix.</p>
 <dl>
-<dt><code>plumber.apiHost</code> (defaults to <code>host</code> defined by <code>run</code> method, or an empty string
-when used outside a running router)</dt><dd><p>Host used to build UI url and server url for
-OpenAPI specification.</p></dd>
-<dt><code>plumber.debug</code> (defaults to <code>FALSE</code>)</dt><dd><p>Provides more insight into your API errors. Alternatively,
-use parameter <code>debug</code> of plumber router <code>run</code> method</p></dd>
-<dt><code>plumber.maxRequestSize</code> (defaults to <code>0</code>)</dt><dd><p>Maximum length in bytes of request body. Body larger
-than maximum are rejected with http error 413. <code>0</code> means unlimited size.</p></dd>
-<dt><code>plumber.postBody</code> (defaults to <code>TRUE</code>)</dt><dd><p>Copy post body content to <code>req$postBody</code> using system encoding.
+<dt><code>plumber.apiURL</code></dt><dd><p>UI url and server urls for OpenAPI Specification respecting
+pattern <code>scheme://host:port/path</code>. Other UI url options will be ignored when set.</p></dd>
+<dt><code>plumber.apiScheme</code></dt><dd><p>Scheme used to build UI url and server url for
+OpenAPI Specification. Defaults to <code>http</code>, or an empty string
+when used outside a running router</p></dd>
+<dt><code>plumber.apiHost</code></dt><dd><p>Host used to build UI url and server url for
+OpenAPI Specification. Defaults to <code>host</code> defined by <code>run</code> method, or an empty string
+when used outside a running router</p></dd>
+<dt><code>plumber.apiPort</code></dt><dd><p>Port used to build UI url and server url for
+OpenAPI Specification. Defaults to <code>port</code> defined by <code>run</code> method, or an empty string
+when used outside a running router</p></dd>
+<dt><code>plumber.apiPath</code></dt><dd><p>Path used to build UI url and server url for
+OpenAPI Specification. Defaults to an empty string</p></dd>
+<dt><code>plumber.debug</code></dt><dd><p>Provides more insight into your API errors. Alternatively,
+use parameter <code>debug</code> of plumber router <code>run</code> method. Defaults to <code>FALSE</code></p></dd>
+<dt><code>plumber.maxRequestSize</code></dt><dd><p>Maximum length in bytes of request body. Body larger
+than maximum are rejected with http error 413. <code>0</code> means unlimited size. Defaults to <code>0</code></p></dd>
+<dt><code>plumber.postBody</code></dt><dd><p>Copy post body content to <code>req$postBody</code> using system encoding.
 This should be set to <code>FALSE</code> if you do not need it. Default is <code>TRUE</code> to preserve compatibility with
-previous version behavior.</p></dd>
-<dt><code>plumber.port</code> (defaults to <code>NULL</code>)</dt><dd><p>Port Plumber will attempt to use to start http server.
-If the port is already in use, server will not be able to start.</p></dd>
-<dt><code>plumber.sharedSecret</code> (defaults to <code>NULL</code>)</dt><dd><p>Shared secret used to filter incoming request.
+previous version behavior. Defaults to <code>TRUE</code></p></dd>
+<dt><code>plumber.port</code></dt><dd><p>Port Plumber will attempt to use to start http server.
+If the port is already in use, server will not be able to start. Defaults to <code>NULL</code></p></dd>
+<dt><code>plumber.sharedSecret</code></dt><dd><p>Shared secret used to filter incoming request.
 When <code>NULL</code>, secret is not validated. Otherwise, Plumber compares secret with http header
-<code>PLUMBER_SHARED_SECRET</code>. Failure to match results in http error 400.</p></dd>
-<dt><code>plumber.swagger.url</code> (defaults to <code>NULL</code>)</dt><dd><p>A function. Called with
+<code>PLUMBER_SHARED_SECRET</code>. Failure to match results in http error 400. Defaults to <code>NULL</code></p></dd>
+<dt><code>plumber.ui</code></dt><dd><p>Name of the UI interface to use. Defaults to <code>TRUE</code></p></dd>
+<dt><code>plumber.ui.callback</code></dt><dd><p>A function. Called with
 a single parameter corresponding to ui url after Plumber server is ready. This can be used
-by RStudio to open UI when API is ran for the editor.</p></dd>
+by RStudio to open UI when API is ran for the editor. Defaults to option <code>plumber.swagger.url</code></p></dd>
 
 </dl>
 

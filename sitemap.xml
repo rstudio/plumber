@@ -85,10 +85,25 @@
     <loc>https://www.rplumber.io/reference/pr_set_404.html</loc>
   </url>
   <url>
+    <loc>https://www.rplumber.io/reference/pr_set_api_spec.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/reference/pr_set_debug.html</loc>
+  </url>
+  <url>
     <loc>https://www.rplumber.io/reference/pr_set_error.html</loc>
   </url>
   <url>
+    <loc>https://www.rplumber.io/reference/pr_set_parsers.html</loc>
+  </url>
+  <url>
     <loc>https://www.rplumber.io/reference/pr_set_serializer.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/reference/pr_set_ui.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/reference/pr_set_ui_callback.html</loc>
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/randomCookieKey.html</loc>
@@ -98,6 +113,9 @@
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/register_serializer.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/reference/register_ui.html</loc>
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/serializers.html</loc>

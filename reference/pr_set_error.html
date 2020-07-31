@@ -175,7 +175,7 @@ error" />
     <div class="page-header">
     <h1>Set the error handler that is invoked if any filter or endpoint generates an
 error</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/pr.R'><code>R/pr.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/pr_set.R'><code>R/pr_set.R</code></a></small>
     <div class="hidden name"><code>pr_set_error.Rd</code></div>
     </div>
 
@@ -191,11 +191,11 @@ error</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>pr</th>
-      <td><p>A Plumber router</p></td>
+      <td><p>A Plumber router. Note: The supplied Plumber router will also be updated in place as well as returned by the function.</p></td>
     </tr>
     <tr>
       <th>fun</th>
-      <td><p>A handler function</p></td>
+      <td><p>An error handler function. This should accept <code>req</code>, <code>res</code>, and the error value</p></td>
     </tr>
     </table>
 

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add handler to Plumber router — pr_handle • plumber</title>
+<title>Set the default endpoint parsers for the router — pr_set_parsers • plumber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +52,9 @@
 
 
 
-<meta property="og:title" content="Add handler to Plumber router — pr_handle" />
-<meta property="og:description" content="This collection of functions creates handlers for a Plumber router." />
+<meta property="og:title" content="Set the default endpoint parsers for the router — pr_set_parsers" />
+<meta property="og:description" content="By default, Plumber will parse JSON, text, query strings, octet streams, and multipart bodies. This function updates the
+default parsers for any endpoint that does not define their own parsers." />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
 
 
@@ -170,26 +171,17 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add handler to Plumber router</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/pr.R'><code>R/pr.R</code></a></small>
-    <div class="hidden name"><code>pr_handle.Rd</code></div>
+    <h1>Set the default endpoint parsers for the router</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/pr_set.R'><code>R/pr_set.R</code></a></small>
+    <div class="hidden name"><code>pr_set_parsers.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This collection of functions creates handlers for a Plumber router.</p>
+    <p>By default, Plumber will parse JSON, text, query strings, octet streams, and multipart bodies. This function updates the
+default parsers for any endpoint that does not define their own parsers.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pr_handle</span>(<span class='kw'>pr</span>, <span class='kw'>methods</span>, <span class='kw'>path</span>, <span class='kw'>handler</span>, <span class='kw'>preempt</span>, <span class='kw'>serializer</span>, <span class='kw'>endpoint</span>, <span class='kw'>...</span>)
-
-<span class='fu'>pr_get</span>(<span class='kw'>pr</span>, <span class='kw'>path</span>, <span class='kw'>handler</span>, <span class='kw'>preempt</span>, <span class='kw'>serializer</span>, <span class='kw'>endpoint</span>, <span class='kw'>...</span>)
-
-<span class='fu'>pr_post</span>(<span class='kw'>pr</span>, <span class='kw'>path</span>, <span class='kw'>handler</span>, <span class='kw'>preempt</span>, <span class='kw'>serializer</span>, <span class='kw'>endpoint</span>, <span class='kw'>...</span>)
-
-<span class='fu'>pr_put</span>(<span class='kw'>pr</span>, <span class='kw'>path</span>, <span class='kw'>handler</span>, <span class='kw'>preempt</span>, <span class='kw'>serializer</span>, <span class='kw'>endpoint</span>, <span class='kw'>...</span>)
-
-<span class='fu'>pr_delete</span>(<span class='kw'>pr</span>, <span class='kw'>path</span>, <span class='kw'>handler</span>, <span class='kw'>preempt</span>, <span class='kw'>serializer</span>, <span class='kw'>endpoint</span>, <span class='kw'>...</span>)
-
-<span class='fu'>pr_head</span>(<span class='kw'>pr</span>, <span class='kw'>path</span>, <span class='kw'>handler</span>, <span class='kw'>preempt</span>, <span class='kw'>serializer</span>, <span class='kw'>endpoint</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>pr_set_parsers</span>(<span class='kw'>pr</span>, <span class='kw'>parsers</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -199,74 +191,37 @@
       <td><p>A Plumber router. Note: The supplied Plumber router will also be updated in place as well as returned by the function.</p></td>
     </tr>
     <tr>
-      <th>methods</th>
-      <td><p>Character vector of HTTP methods</p></td>
-    </tr>
-    <tr>
-      <th>path</th>
-      <td><p>The endpoint path</p></td>
-    </tr>
-    <tr>
-      <th>handler</th>
-      <td><p>A handler function</p></td>
-    </tr>
-    <tr>
-      <th>preempt</th>
-      <td><p>A preempt function</p></td>
-    </tr>
-    <tr>
-      <th>serializer</th>
-      <td><p>A Plumber serializer</p></td>
-    </tr>
-    <tr>
-      <th>endpoint</th>
-      <td><p>A <code>PlumberEndpoint</code> object</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Additional arguments for <code>PlumberEndpoint</code></p></td>
+      <th>parsers</th>
+      <td><p>Can be one of:</p><ul>
+<li><p>A <code>NULL</code> value</p></li>
+<li><p>A character vector of parser names</p></li>
+<li><p>A named <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code> whose keys are parser names names and values are arguments to be applied with <code><a href='https://rdrr.io/r/base/do.call.html'>do.call()</a></code></p></li>
+<li><p>A <code>TRUE</code> value, which will default to combining all parsers. This is great for seeing what is possible, but not great for security purposes</p></li>
+</ul>
+
+<p>If the parser name <code>"all"</code> is found in any character value or list name, all remaining parsers will be added.
+When using a list, parser information already defined will maintain their existing argument values.  All remaining parsers will use their default arguments.</p>
+<p>Example:</p><pre><span class='co'># provide a character string</span>
+<span class='kw'>parsers</span> <span class='op'>=</span> <span class='st'>"json"</span>
+
+<span class='co'># provide a named list with no arguments</span>
+<span class='kw'>parsers</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(json = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+
+<span class='co'># provide a named list with arguments; include `rds`</span>
+<span class='kw'>parsers</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(json = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(simplifyVector = <span class='fl'>FALSE</span>), rds = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+
+<span class='co'># default plumber parsers</span>
+<span class='kw'>parsers</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"json"</span>, <span class='st'>"query"</span>, <span class='st'>"text"</span>, <span class='st'>"octet"</span>, <span class='st'>"multi"</span>)</pre></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A Plumber router with the handler added</p>
+    <p>The Plumber router with the new default <a href='PlumberEndpoint.html'>PlumberEndpoint</a> parsers</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The generic <code>pr_handle()</code> creates a handle for the given method(s). Specific
-functions are implemented for the following HTTP methods:</p><ul>
-<li><p><code>GET</code></p></li>
-<li><p><code>POST</code></p></li>
-<li><p><code>PUT</code></p></li>
-<li><p><code>DELETE</code></p></li>
-<li><p><code>HEAD</code>
-Each function mutates the Plumber router in place, but also invisibly returns
-the updated router.</p></li>
-</ul>
+    <p>Note: The default set of parsers will be completely replaced if any value is supplied. Be sure to include all of your parsers that you would like to include.</p>
 
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'>pr_handle</span>(<span class='st'>"GET"</span>, <span class='st'>"/hi"</span>, <span class='fu'>function</span>() <span class='st'>"Hello World"</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
-
-<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'>pr_handle</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"GET"</span>, <span class='st'>"POST"</span>), <span class='st'>"/hi"</span>, <span class='fu'>function</span>() <span class='st'>"Hello World"</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
-
-<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'>pr_get</span>(<span class='st'>"/hi"</span>, <span class='fu'>function</span>() <span class='st'>"Hello World"</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'>pr_post</span>(<span class='st'>"/echo"</span>, <span class='fu'>function</span>(<span class='kw'>req</span>, <span class='kw'>res</span>) {
-    <span class='co'>if</span> (<span class='kw'>req</span><span class='op'>$</span><span class='kw'>postBody</span> <span class='op'>==</span> <span class='st'>""</span>) <span class='fu'><a href='https://rdrr.io/r/base/function.html'>return</a></span>(<span class='st'>"No input"</span>)
-    <span class='kw'>input</span> <span class='op'>&lt;-</span> <span class='kw'>jsonlite</span>::<span class='fu'><a href='https://jeroen.cran.dev/jsonlite/reference/fromJSON.html'>fromJSON</a></span>(<span class='kw'>req</span><span class='op'>$</span><span class='kw'>postBody</span>)
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      input = <span class='kw'>input</span>
-    )
-  }) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
-}
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

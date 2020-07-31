@@ -189,7 +189,8 @@
 <h3 class="hasAnchor">
 <a href="#breaking-changes" class="anchor"></a>Breaking changes</h3>
 <ul>
-<li><p>Plumber’s swagger definition is now defined using <a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md">OpenAPI 3</a>, upgrading from Swagger Specification. (<a href='https://github.com/rstudio/plumber/issues/365'>#365</a>)</p></li>
+<li><p>Plumber’s OpenAPI Specification is now defined using <a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md">OpenAPI 3</a>, upgrading from Swagger Specification. (<a href='https://github.com/rstudio/plumber/issues/365'>#365</a>)</p></li>
+<li><p>Plumber router <code>$run()</code> method arguments <code>swagger</code>, <code>swaggerCallback</code> and <code>debug</code> are now deprecated. User interface and url callback are now enabled by default and managed through Plumber router <code>$set_ui()</code>, <code>$set_ui_callback()</code>, and <code>$set_debug()</code> methods and options <code>plumber.ui</code> and <code>plumber.ui.callback</code>. (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/562'>#562</a>)</p></li>
 <li>
 <p>The source files used in plumber <strong>must use</strong> the UTF-8 encoding if they contain non-ASCII characters (<a href='https://github.com/shrektan'>@shrektan</a>, <a href='https://github.com/rstudio/plumber/issues/312'>#312</a>,</p>
 <p><a href='https://github.com/rstudio/plumber/issues/328'>#328</a>).</p>
@@ -201,9 +202,11 @@
 <h3 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h3>
 <ul>
+<li><p>Generalize user interface integration. Plumber can now use other OpenAPI compatible user interfaces like <code>RapiDoc</code> (<a href="https://github.com/mrin9/RapiDoc" class="uri">https://github.com/mrin9/RapiDoc</a>) and <code>Redoc</code> (<a href="https://github.com/Redocly/redoc" class="uri">https://github.com/Redocly/redoc</a>). Pending CRAN approbations, R packages for both UIs integration are available from <a href="https://github.com/meztez/rapidoc/" class="uri">https://github.com/meztez/rapidoc/</a> and <a href="https://github.com/meztez/redoc/" class="uri">https://github.com/meztez/redoc/</a>. (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/562'>#562</a>)</p></li>
 <li><p>Added support for promises in endpoints, filters, and hooks. (<a href='https://github.com/rstudio/plumber/issues/248'>#248</a>)</p></li>
 <li><p>Add support for <code>#' <a href='https://github.com/plumber'>@plumber</a></code> tag to gain programmatic access to the <code>plumber</code> router via <code>function(pr) {....}</code>. (<a href='https://github.com/meztez'>@meztez</a> and <a href='https://github.com/blairj09'>@blairj09</a>, <a href='https://github.com/rstudio/plumber/issues/568'>#568</a>)</p></li>
-<li><p>Added Swagger support for array parameters using syntax <code>name:[type]</code> and new type <code>list</code> (synonym df, data.frame). (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/532'>#532</a>)</p></li>
+<li><p>Added OpenAPI support for array parameters using syntax <code>name:[type]</code> and new type <code>list</code> (synonym df, data.frame). (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/532'>#532</a>)</p></li>
+<li><p>Added user provided OpenAPI Specification handler to Plumber router. Use <code>$set_api_spec()</code> to provide a function to alter the Plumber generated OpenAPI Specification returned by Plumber router method <code>$get_api_spec()</code>. This also affects <code>/openapi.json</code> and <code>/openapi.yaml</code> (<a href='https://github.com/rstudio/plumber/issues/365'>#365</a>)(<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/562'>#562</a>)</p></li>
 <li><p>Added support to a router’s run method to allow the <code>swagger</code> parameter to be a function that enhances the existing swagger specification before being returned to <code>/openapi.json</code>. (<a href='https://github.com/rstudio/plumber/issues/365'>#365</a>)</p></li>
 <li><p>Documentation is presented using pkgdown (<a href='https://github.com/rstudio/plumber/issues/570'>#570</a>)</p></li>
 <li><p>Tidy API for easier programmatic usage (<a href='https://github.com/blairj09'>@blairj09</a>, <a href='https://github.com/rstudio/plumber/issues/590'>#590</a>)</p></li>
