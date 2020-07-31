@@ -428,6 +428,18 @@ parser_rds <- function(...) {
   })
 }
 
+#' @describeIn parsers feather parser. See [feather::read_feather()] for more details.
+#' @export
+parser_feather <- function(...) {
+  parser_read_file(function(tmpfile) {
+    if (!requireNamespace("feather", quietly = TRUE)) {
+      stop("`feather` must be installed for `parser_feather` to work")
+    }
+    feather::read_feather(tmpfile, ...)
+  })
+}
+
+
 
 #' @describeIn parsers Octet stream parser. Will add a filename attribute if the filename exists
 #' @export

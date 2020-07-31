@@ -84,6 +84,26 @@ test_that("Test tsv parser", {
   expect_equal(parsed, r_object)
 })
 
+test_that("Test feather parser", {
+  skip_if_not_installed("feather")
+
+  tmp <- tempfile()
+  on.exit({
+    file.remove(tmp)
+  }, add = TRUE)
+
+  r_object <- iris
+  feather::write_feather(r_object, tmp)
+  val <- readBin(tmp, "raw", 10000)
+
+  parsed <- parse_body(val, "application/feather", make_parser("feather"))
+  # convert from feather tibble to data.frame
+  parsed <- as.data.frame(parsed, stringsAsFactors = FALSE)
+  attr(parsed, "spec") <- NULL
+
+  expect_equal(parsed, r_object)
+})
+
 test_that("Test multipart parser", {
   # also tests rds and the octet -> content type conversion
 

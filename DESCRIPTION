@@ -41,7 +41,8 @@ Suggests:
     analogsea (>= 0.7.0),
     later,
     readr,
-    yaml
+    yaml,
+    feather
 Remotes:
     rstudio/swagger
 RoxygenNote: 7.1.1

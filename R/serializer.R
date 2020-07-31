@@ -209,6 +209,26 @@ serializer_rds <- function(version = "2", ascii = FALSE, ...) {
   })
 }
 
+#' @describeIn serializers feather serializer. See [feather::write_feather] for more details.
+#' @export
+serializer_feather <- function() {
+  if (!requireNamespace("feather", quietly = TRUE)) {
+    stop("`feather` must be installed for `serializer_feather` to work")
+  }
+  serializer_content_type("application/feather; charset=UTF-8", function(val) {
+    tmpfile <- tempfile(fileext = ".feather")
+    on.exit({
+      if (file.exists(tmpfile)) {
+        unlink(tmpfile)
+      }
+    }, add = TRUE)
+
+    feather::write_feather(val, tmpfile)
+    readBin(tmpfile, what = "raw", n = file.info(tmpfile)$size)
+  })
+}
+
+
 #' @describeIn serializers YAML serializer. See [yaml::as.yaml()] for more details.
 #' @export
 serializer_yaml <- function(...) {
