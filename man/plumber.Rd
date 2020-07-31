@@ -728,7 +728,7 @@ pr$setErrorHandler(function(req, res, err) {
 \subsection{Method \code{set_ui()}}{
 Set UI to use for API
 
-See also: \code{\link[=pr_set_ui]{pr_set_ui()}}
+See also: \code{\link[=pr_set_ui]{pr_set_ui()}}, \code{\link[=register_ui]{register_ui()}}, \code{\link[=registered_uis]{registered_uis()}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$set_ui(ui = getOption("plumber.ui", TRUE), ...)}\if{html}{\out{</div>}}
 }
