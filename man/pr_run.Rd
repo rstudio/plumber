@@ -4,7 +4,7 @@
 \alias{pr_run}
 \title{Start a server using \code{plumber} object}
 \usage{
-pr_run(pr, host = "127.0.0.1", port = getOption("plumber.port"))
+pr_run(pr, host = "127.0.0.1", port = getOption("plumber.port", NULL))
 }
 \arguments{
 \item{pr}{A Plumber router. Note: The supplied Plumber router will also be updated in place as well as returned by the function.}

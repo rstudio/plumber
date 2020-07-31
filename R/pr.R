@@ -470,7 +470,7 @@ pr_filter <- function(pr,
 #' @export
 pr_run <- function(pr,
                    host = '127.0.0.1',
-                   port = getOption('plumber.port')
+                   port = getOption('plumber.port', NULL)
 ) {
   validate_pr(pr)
   pr$run(host = host,

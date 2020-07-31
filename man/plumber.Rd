@@ -206,7 +206,7 @@ See also: \code{\link[=pr_run]{pr_run()}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$run(
   host = "127.0.0.1",
-  port = getOption("plumber.port"),
+  port = getOption("plumber.port", NULL),
   swagger = stop("deprecated"),
   debug = stop("deprecated"),
   swaggerCallback = stop("deprecated")
@@ -224,7 +224,7 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.
 
-This value does not need to be explicitly assigned.}
+This value does not need to be explicitly assigned. To explicity set it, see \code{\link[=options_plumber]{options_plumber()}}.}
 
 \item{\code{swagger}}{Deprecated. See \verb{$set_ui(ui)} or \verb{$set_api_spec()}}
 
@@ -736,7 +736,8 @@ See also: \code{\link[=pr_set_ui]{pr_set_ui()}}, \code{\link[=register_ui]{regis
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{ui}}{a character value or a logical value. Default to \code{plumber.ui} option value.}
+\item{\code{ui}}{a character value or a logical value. Defaults to `options("plumber.ui").
+If using \code{\link[=options_plumber]{options_plumber()}}, the value must be set before initializing your Plumber router.}
 
 \item{\code{...}}{Other params to be passed to \code{ui} functions.}
 }
@@ -751,7 +752,9 @@ Set UI callback to notify where the API is located.
 
 When set, it will be called with a character string corresponding
 to the API UI url. This allows RStudio to open \code{swagger} UI when a
-Plumber router \code{\link[=pr_run]{pr_run()}} method is executed using default \code{plumber.ui.callback} option.
+Plumber router \code{\link[=pr_run]{pr_run()}} method is executed.
+
+If using \code{\link[=options_plumber]{options_plumber()}}, the value must be set before initializing your Plumber router.
 
 See also: \code{\link[=pr_set_ui_callback]{pr_set_ui_callback()}}
 \subsection{Usage}{

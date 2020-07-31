@@ -138,7 +138,8 @@ pr_set_debug <- function(pr, debug = interactive()) {
 #'
 #' @template param_pr
 
-#' @param ui a character value or a logical value. Default to `plumber.ui` option value.
+#' @param ui a character value or a logical value.
+#' If using [options_plumber()], the value must be set before initializing your Plumber router.
 #' @param ... Other params to be passed to `ui` functions.
 #' @return The Plumber router with the new UI settings.
 #' @export
@@ -189,7 +190,9 @@ pr_set_ui <- function(
 #'
 #' When set, it will be called with a character string corresponding
 #' to the API UI url. This allows RStudio to open `swagger` UI when a
-#' Plumber router [pr_run()] method is executed using default `plumber.ui.callback` option.
+#' Plumber router [pr_run()] method.
+#'
+#' If using [options_plumber()], the value must be set before initializing your Plumber router.
 #'
 #' @template param_pr
 #' @param callback a callback function for taking action on UI url.

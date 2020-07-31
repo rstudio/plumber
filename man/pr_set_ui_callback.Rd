@@ -20,7 +20,10 @@ The Plumber router with the new UI callback setting.
 \description{
 When set, it will be called with a character string corresponding
 to the API UI url. This allows RStudio to open \code{swagger} UI when a
-Plumber router \code{\link[=pr_run]{pr_run()}} method is executed using default \code{plumber.ui.callback} option.
+Plumber router \code{\link[=pr_run]{pr_run()}} method.
+}
+\details{
+If using \code{\link[=options_plumber]{options_plumber()}}, the value must be set before initializing your Plumber router.
 }
 \examples{
 \dontrun{

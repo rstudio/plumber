@@ -66,8 +66,10 @@ reference:
 
 - title: Router Defaults
   contents:
+  - 'pr_set_api_spec'
   - 'pr_set_ui'
   - 'pr_set_serializer'
+  - 'pr_set_parsers'
   - 'pr_set_404'
   - 'pr_set_error'
   - 'pr_set_debug'
@@ -75,6 +77,8 @@ reference:
 
 - title: API Interface
   contents:
+  - 'pr_set_api_spec'
+  - 'pr_set_ui'
   - 'register_ui'
 - title: All functions
   # desc: description here

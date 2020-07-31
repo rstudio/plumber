@@ -267,13 +267,13 @@ plumber <- R6Class(
     #' be listened on. Note that on most Unix-like systems including Linux and
     #' Mac OS X, port numbers smaller than 1025 require root privileges.
     #'
-    #' This value does not need to be explicitly assigned.
+    #' This value does not need to be explicitly assigned. To explicity set it, see [options_plumber()].
     #' @param debug Deprecated. See `$set_debug()`
     #' @param swagger Deprecated. See `$set_ui(ui)` or `$set_api_spec()`
     #' @param swaggerCallback Deprecated. See `$set_ui_callback()`
     run = function(
       host = '127.0.0.1',
-      port = getOption('plumber.port'),
+      port = getOption('plumber.port', NULL),
       swagger = stop("deprecated"),
       debug = stop("deprecated"),
       swaggerCallback = stop("deprecated")
@@ -930,7 +930,8 @@ plumber <- R6Class(
     #' @description Set UI to use for API
     #'
     #' See also: [pr_set_ui()], [register_ui()], [registered_uis()]
-    #' @param ui a character value or a logical value. Default to `plumber.ui` option value.
+    #' @param ui a character value or a logical value. Defaults to `options("plumber.ui").
+    #'  If using [options_plumber()], the value must be set before initializing your Plumber router.
     #' @param ... Other params to be passed to `ui` functions.
     set_ui = function(
       ui = getOption("plumber.ui", TRUE),
@@ -957,7 +958,9 @@ plumber <- R6Class(
     #'
     #' When set, it will be called with a character string corresponding
     #' to the API UI url. This allows RStudio to open `swagger` UI when a
-    #' Plumber router [pr_run()] method is executed using default `plumber.ui.callback` option.
+    #' Plumber router [pr_run()] method is executed.
+    #'
+    #' If using [options_plumber()], the value must be set before initializing your Plumber router.
     #'
     #' See also: [pr_set_ui_callback()]
     #' @param callback a callback function for taking action on UI url. (Also accepts `NULL` values to disable the `callback`.)
