@@ -107,6 +107,12 @@ mount_openapi <- function(pr, api_url) {
   }
   # http://spec.openapis.org/oas/v3.0.3#document-structure
   # "It is RECOMMENDED that the root OpenAPI document be named: openapi.json"
+  for (ep in pr$endpoints[["__no-preempt__"]]) {
+    if (ep$path == "/openapi.json") {
+      message("Overwritting existing `/openapi.json` route. Use `$set_api_spec()` to define your OpenAPI Spec")
+      break
+    }
+  }
   pr$handle("GET", "/openapi.json", openapi_fun, serializer = serializer_unboxed_json())
 
   invisible()
@@ -165,6 +171,12 @@ register_ui <- function(ui) {
       ui_router$handle("GET", path, ui_index, serializer = serializer_html())
     }
     ui_router$mount("/", PlumberStatic$new(ui$static(...)))
+
+    if (!is.null(pr$mounts[[ui_root]])) {
+      message("Overwritting existing `", ui_root, "` mount")
+      message("")
+    }
+
     pr$mount(ui_root, ui_router)
 
     ui_url <- paste0(api_url, ui_root)
