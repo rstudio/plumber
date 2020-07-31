@@ -21,3 +21,4 @@
 ^pkgdown$
 ^logo$
 ^vignettes$
+^man-roxygen

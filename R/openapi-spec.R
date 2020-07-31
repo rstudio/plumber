@@ -13,10 +13,12 @@ endpointSpecification <- function(routerEndpointEntry, path = routerEndpointEntr
 
   # Get the params from the path
   pathParams <- routerEndpointEntry$getTypedParams()
-  # Get the params from endpoint func
+  # Get the params from endpoint expression
   funcParams <- routerEndpointEntry$getFuncParams()
+  # Get the plumber decoration defined endpoint params
+  endpointParams <- routerEndpointEntry$getEndpointParams()
   for (verb in routerEndpointEntry$verbs) {
-    params <- parametersSpecification(routerEndpointEntry$params, pathParams, funcParams)
+    params <- parametersSpecification(endpointParams, pathParams, funcParams)
 
     # If we haven't already documented a path param, we should add it here.
     # FIXME: warning("Undocumented path parameters: ", paste0())
@@ -242,7 +244,7 @@ getArgsMetadata <- function(plumberExpression){
   #return same format as getTypedParams or params?
   if (!is.function(plumberExpression)) plumberExpression <- eval(plumberExpression)
   args <- formals(plumberExpression)
-  lapply(args[!names(args) %in% c("req", "res", "...")], function(arg) {
+  lapply(args[! (names(args) %in% c("req", "res", "..."))], function(arg) {
     required <- identical(arg, formals(function(x){})$x)
     if (is.call(arg) || is.name(arg)) {
       arg <- tryCatch(

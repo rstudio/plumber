@@ -60,7 +60,7 @@ test_that("params are parsed", {
 #test_that("endpointSpecification works", {
 #})
 
-test_that("apiSpec works with mounted routers", {
+test_that("get_api_spec works with mounted routers", {
   # parameter in path
   pr <- plumber$new()
   pr$handle("GET", "/nested/:path/here", function(){})
@@ -110,7 +110,7 @@ test_that("apiSpec works with mounted routers", {
   pr$mount("/sub4", pr4)
   pr4$mount("/", pr5)
 
-  paths <- names(pr$apiSpec()$paths)
+  paths <- names(pr$get_api_spec()$paths)
   expect_length(paths, 7)
   expect_equal(paths, c("/nested/:path/here", "/sub2/something",
     "/sub2/", "/sub2/sub3/else", "/sub2/sub3/", "/sub4/completely",
@@ -274,7 +274,7 @@ test_that("api kitchen sink", {
   }
 
   validate_spec <- function(pr) {
-    spec <- jsonlite::toJSON(pr$apiSpec(), auto_unbox = TRUE)
+    spec <- jsonlite::toJSON(pr$get_api_spec(), auto_unbox = TRUE)
     tmpfile <- tempfile(fileext = ".json")
     on.exit({
       unlink(tmpfile)
@@ -359,4 +359,28 @@ test_that("priorize works as expected", {
   expect_identical(NULL, priorizeProperty(NULL, NULL, NULL))
   expect_identical(structure("zzz", default = TRUE), priorizeProperty(structure("zzz", default = TRUE), NULL, NA))
   expect_identical(NULL, priorizeProperty())
+})
+
+test_that("custom spec works", {
+  pr <- plumber$new()
+  pr$handle("POST", "/func1", function(){})
+  pr$handle("GET", "/func2", function(){})
+  pr$handle("GET", "/func3", function(){})
+  customSpec <- function(spec) {
+    custom <- list(info = list(description = "My Custom Spec", title = "This is only a test"))
+    return(utils::modifyList(spec, custom))
+  }
+  pr$set_api_spec(customSpec)
+  spec <- pr$get_api_spec()
+  expect_equal(spec$info$description, "My Custom Spec")
+  expect_equal(spec$info$title, "This is only a test")
+  expect_equal(class(spec$openapi), "character")
+})
+
+test_that("no params plumber router still produces spec when there is a func params", {
+  pr <- plumber$new()
+  handler <- function(num) { sum(as.integer(num)) }
+  pr$handle("GET", "/sum", handler, serializer = serializer_json())
+  spec <- pr$get_api_spec()
+  expect_equal(spec$paths$`/sum`$get$parameters[[1]]$name, "num")
 })

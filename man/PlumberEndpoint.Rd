@@ -47,6 +47,7 @@ each separate verb/path into its own endpoint, so we just do that.}
 \item \href{#method-new}{\code{PlumberEndpoint$new()}}
 \item \href{#method-getPathParams}{\code{PlumberEndpoint$getPathParams()}}
 \item \href{#method-getFuncParams}{\code{PlumberEndpoint$getFuncParams()}}
+\item \href{#method-getEndpointParams}{\code{PlumberEndpoint$getEndpointParams()}}
 \item \href{#method-clone}{\code{PlumberEndpoint$clone()}}
 }
 }
@@ -143,8 +144,7 @@ Create a new \code{PlumberEndpoint} object
 
 \item{\code{serializer}}{Endpoint serializer}
 
-\item{\code{parsers}}{Endpoint parsers.
-Can be one of:
+\item{\code{parsers}}{Can be one of:
 \itemize{
 \item A \code{NULL} value
 \item A character vector of parser names
@@ -204,6 +204,16 @@ retrieve endpoint path parameters
 retrieve endpoint expression parameters
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$getFuncParams()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getEndpointParams"></a>}}
+\if{latex}{\out{\hypertarget{method-getEndpointParams}{}}}
+\subsection{Method \code{getEndpointParams()}}{
+retrieve endpoint defined parameters
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$getEndpointParams()}\if{html}{\out{</div>}}
 }
 
 }

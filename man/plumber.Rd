@@ -29,24 +29,11 @@ details on the methods available on this object.
 \examples{
 
 ## ------------------------------------------------
-## Method `plumber$run`
-## ------------------------------------------------
-
-\dontrun{
-pr <- plumber$new
-swagger <- function(pr_, spec) {
-  spec$servers[[1]]$description <- "MyCustomAPISpec"
-  spec
-}
-pr$run(swagger = swagger)
-}
-
-## ------------------------------------------------
 ## Method `plumber$mount`
 ## ------------------------------------------------
 
 \dontrun{
-root <- plumber$new()
+root <- pr()
 
 users <- plumber$new("users.R")
 root$mount("/users", users)
@@ -60,7 +47,7 @@ root$mount("/products", products)
 ## ------------------------------------------------
 
 \dontrun{
-pr <- plumber$new()
+pr <- pr()
 pr$registerHook("preroute", function(req){
   cat("Routing a request for", req$PATH_INFO, "...\n")
 })
@@ -87,10 +74,19 @@ pr$handle("GET", "/", function(){ 123 })
 ## ------------------------------------------------
 
 \dontrun{
-pr <- plumber$new()
+pr <- pr()
 pr$handle("GET", "/", function(){
   "<html><h1>Programmatic Plumber!</h1></html>"
 }, serializer=plumber::serializer_html())
+}
+
+## ------------------------------------------------
+## Method `plumber$setSerializer`
+## ------------------------------------------------
+
+\dontrun{
+pr <- pr()
+pr$setSerializer(serializer_unboxed_json())
 }
 
 ## ------------------------------------------------
@@ -98,7 +94,7 @@ pr$handle("GET", "/", function(){
 ## ------------------------------------------------
 
 \dontrun{
-pr <- plumber$new()
+pr <- pr()
 pr$set404Handler(function(req, res) {cat(req$PATH_INFO)})
 }
 
@@ -107,8 +103,11 @@ pr$set404Handler(function(req, res) {cat(req$PATH_INFO)})
 ## ------------------------------------------------
 
 \dontrun{
-pr <- plumber$new()
-pr$setErrorHandler(function(req, res) {cat(res$body)})
+pr <- pr()
+pr$setErrorHandler(function(req, res, err) {
+  message("Found error: ")
+  str(err)
+})
 }
 }
 \section{Super class}{
@@ -135,8 +134,10 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 \item \href{#method-new}{\code{plumber$new()}}
 \item \href{#method-run}{\code{plumber$run()}}
 \item \href{#method-mount}{\code{plumber$mount()}}
+\item \href{#method-unmount}{\code{plumber$unmount()}}
 \item \href{#method-registerHook}{\code{plumber$registerHook()}}
 \item \href{#method-handle}{\code{plumber$handle()}}
+\item \href{#method-remove_handle}{\code{plumber$remove_handle()}}
 \item \href{#method-print}{\code{plumber$print()}}
 \item \href{#method-serve}{\code{plumber$serve()}}
 \item \href{#method-route}{\code{plumber$route()}}
@@ -144,17 +145,21 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 \item \href{#method-onHeaders}{\code{plumber$onHeaders()}}
 \item \href{#method-onWSOpen}{\code{plumber$onWSOpen()}}
 \item \href{#method-setSerializer}{\code{plumber$setSerializer()}}
-\item \href{#method-setParsers}{\code{plumber$setParsers()}}
+\item \href{#method-set_parsers}{\code{plumber$set_parsers()}}
 \item \href{#method-set404Handler}{\code{plumber$set404Handler()}}
 \item \href{#method-setErrorHandler}{\code{plumber$setErrorHandler()}}
+\item \href{#method-set_ui}{\code{plumber$set_ui()}}
+\item \href{#method-set_ui_callback}{\code{plumber$set_ui_callback()}}
+\item \href{#method-set_debug}{\code{plumber$set_debug()}}
 \item \href{#method-filter}{\code{plumber$filter()}}
-\item \href{#method-apiSpec}{\code{plumber$apiSpec()}}
-\item \href{#method-openAPIFile}{\code{plumber$openAPIFile()}}
-\item \href{#method-swaggerFile}{\code{plumber$swaggerFile()}}
+\item \href{#method-set_api_spec}{\code{plumber$set_api_spec()}}
+\item \href{#method-get_api_spec}{\code{plumber$get_api_spec()}}
 \item \href{#method-addEndpoint}{\code{plumber$addEndpoint()}}
 \item \href{#method-addAssets}{\code{plumber$addAssets()}}
 \item \href{#method-addFilter}{\code{plumber$addFilter()}}
 \item \href{#method-addGlobalProcessor}{\code{plumber$addGlobalProcessor()}}
+\item \href{#method-openAPIFile}{\code{plumber$openAPIFile()}}
+\item \href{#method-swaggerFile}{\code{plumber$swaggerFile()}}
 \item \href{#method-clone}{\code{plumber$clone()}}
 }
 }
@@ -170,6 +175,8 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{plumber} router
+
+See also \code{\link[=plumb]{plumb()}}, \code{\link[=pr]{pr()}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$new(file = NULL, filters = defaultPlumberFilters, envir)}\if{html}{\out{</div>}}
 }
@@ -194,13 +201,15 @@ A new \code{plumber} router
 \if{latex}{\out{\hypertarget{method-run}{}}}
 \subsection{Method \code{run()}}{
 Start a server using \code{plumber} object.
+
+See also: \code{\link[=pr_run]{pr_run()}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$run(
   host = "127.0.0.1",
-  port = getOption("plumber.port"),
-  swagger = interactive(),
-  debug = interactive(),
-  swaggerCallback = getOption("plumber.swagger.url", NULL)
+  port = getOption("plumber.port", NULL),
+  swagger = stop("deprecated"),
+  debug = stop("deprecated"),
+  swaggerCallback = stop("deprecated")
 )}\if{html}{\out{</div>}}
 }
 
@@ -213,54 +222,30 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 
 \item{\code{port}}{a number or integer that indicates the server port that should
 be listened on. Note that on most Unix-like systems including Linux and
-Mac OS X, port numbers smaller than 1025 require root privileges.}
+Mac OS X, port numbers smaller than 1025 require root privileges.
 
-\item{\code{swagger}}{a function that enhances the existing OpenAPI Specification.}
+This value does not need to be explicitly assigned. To explicity set it, see \code{\link[=options_plumber]{options_plumber()}}.}
 
-\item{\code{debug}}{\code{TRUE} provides more insight into your API errors.}
+\item{\code{swagger}}{Deprecated. See \verb{$set_ui(ui)} or \verb{$set_api_spec()}}
 
-\item{\code{swaggerCallback}}{a callback function for taking action on the url for swagger page.}
+\item{\code{debug}}{Deprecated. See \verb{$set_debug()}}
+
+\item{\code{swaggerCallback}}{Deprecated. See \verb{$set_ui_callback()}}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Details}{
-\code{port} does not need to be explicitly assigned.
-
-\code{swagger} should be either a logial or a function . When \code{TRUE} or a
-function, multiple handles will be added to \code{plumber} object. OpenAPI json
-file will be served on paths \verb{/openapi.json} and \verb{/swagger.json}. Swagger UI
-will be served on paths \verb{/__swagger__/index.html} and \verb{/__swagger__/}. When
-using a function, it will receive the plumber router as the first parameter
-and current OpenAPI Specification as the second. This function should return a
-list containing OpenAPI Specification.
-See \url{http://spec.openapis.org/oas/v3.0.3}
-
-\code{swaggerCallback} When set, it will be called with a character string corresponding
-to the swagger UI url. It allows RStudio to open swagger UI when plumber router
-run method is executed using default \code{plumber.swagger.url} option.
-}
-
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{\dontrun{
-pr <- plumber$new
-swagger <- function(pr_, spec) {
-  spec$servers[[1]]$description <- "MyCustomAPISpec"
-  spec
-}
-pr$run(swagger = swagger)
-}
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mount"></a>}}
 \if{latex}{\out{\hypertarget{method-mount}{}}}
 \subsection{Method \code{mount()}}{
 Mount a plumber router
+
+Plumber routers can be “nested” by mounting one into another
+using the \code{mount()} method. This allows you to compartmentalize your API
+by paths which is a great technique for decomposing large APIs into smaller files.
+
+See also: \code{\link[=pr_mount]{pr_mount()}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$mount(path, router)}\if{html}{\out{</div>}}
 }
@@ -274,16 +259,10 @@ Mount a plumber router
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Details}{
-Plumber routers can be “nested” by mounting one into another
-using the \code{mount()} method. This allows you to compartmentalize your API
-by paths which is a great technique for decomposing large APIs into smaller files.
-}
-
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{\dontrun{
-root <- plumber$new()
+root <- pr()
 
 users <- plumber$new("users.R")
 root$mount("/users", users)
@@ -298,10 +277,29 @@ root$mount("/products", products)
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-unmount"></a>}}
+\if{latex}{\out{\hypertarget{method-unmount}{}}}
+\subsection{Method \code{unmount()}}{
+Unmount a plumber router
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{plumber$unmount(path)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{path}}{a character string. Where to unmount router.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-registerHook"></a>}}
 \if{latex}{\out{\hypertarget{method-registerHook}{}}}
 \subsection{Method \code{registerHook()}}{
 Register a hook
+
+See also: \code{\link[=pr_hook]{pr_hook()}}, \code{\link[=pr_hooks]{pr_hooks()}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$registerHook(
   stage = c("preroute", "postroute", "preserialize", "postserialize", "exit"),
@@ -350,7 +348,7 @@ handlers themselves.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{\dontrun{
-pr <- plumber$new()
+pr <- pr()
 pr$registerHook("preroute", function(req){
   cat("Routing a request for", req$PATH_INFO, "...\n")
 })
@@ -382,6 +380,15 @@ pr$handle("GET", "/", function(){ 123 })
 \if{latex}{\out{\hypertarget{method-handle}{}}}
 \subsection{Method \code{handle()}}{
 Define endpoints
+
+The “handler” functions that you define in these handle calls
+are identical to the code you would have defined in your plumber.R file
+if you were using annotations to define your API. The handle() method
+takes additional arguments that allow you to control nuanced behavior
+of the endpoint like which filter it might preempt or which serializer
+it should use.
+
+See also: \code{\link[=pr_handle]{pr_handle()}}, \code{\link[=pr_get]{pr_get()}}, \code{\link[=pr_post]{pr_post()}}, \code{\link[=pr_put]{pr_put()}}, \code{\link[=pr_delete]{pr_delete()}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$handle(
   methods,
@@ -416,19 +423,10 @@ Define endpoints
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Details}{
-The “handler” functions that you define in these handle calls
-are identical to the code you would have defined in your plumber.R file
-if you were using annotations to define your API. The handle() method
-takes additional arguments that allow you to control nuanced behavior
-of the endpoint like which filter it might preempt or which serializer
-it should use.
-}
-
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{\dontrun{
-pr <- plumber$new()
+pr <- pr()
 pr$handle("GET", "/", function(){
   "<html><h1>Programmatic Plumber!</h1></html>"
 }, serializer=plumber::serializer_html())
@@ -440,10 +438,31 @@ pr$handle("GET", "/", function(){
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-remove_handle"></a>}}
+\if{latex}{\out{\hypertarget{method-remove_handle}{}}}
+\subsection{Method \code{remove_handle()}}{
+Remove endpoints
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{plumber$remove_handle(methods, path, preempt = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{methods}}{a character string. http method.}
+
+\item{\code{path}}{a character string. Api endpoints}
+
+\item{\code{preempt}}{a preempt function.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
 \if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
-Print reprensation of plumber router.
+Print representation of plumber router.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$print(prefix = "", topLevel = TRUE, ...)}\if{html}{\out{</div>}}
 }
@@ -569,6 +588,9 @@ required for httpuv interface
 \if{html}{\out{<a id="method-setSerializer"></a>}}
 \if{latex}{\out{\hypertarget{method-setSerializer}{}}}
 \subsection{Method \code{setSerializer()}}{
+Sets the default serializer of the router.
+
+See also: \code{\link[=pr_set_serializer]{pr_set_serializer()}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$setSerializer(serializer)}\if{html}{\out{</div>}}
 }
@@ -580,25 +602,31 @@ required for httpuv interface
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Details}{
-Sets the default serializer of the router.
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+pr <- pr()
+pr$setSerializer(serializer_unboxed_json())
+}
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setParsers"></a>}}
-\if{latex}{\out{\hypertarget{method-setParsers}{}}}
-\subsection{Method \code{setParsers()}}{
+\if{html}{\out{<a id="method-set_parsers"></a>}}
+\if{latex}{\out{\hypertarget{method-set_parsers}{}}}
+\subsection{Method \code{set_parsers()}}{
+Sets the default parsers of the router.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{plumber$setParsers(parsers)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{plumber$set_parsers(parsers)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{parsers}}{Set default endpoint parsers. Initialized to \code{c("json", "query", "text", "octet", "multi")}
-
-Can be one of:
+\item{\code{parsers}}{Can be one of:
 \itemize{
 \item A \code{NULL} value
 \item A character vector of parser names
@@ -625,7 +653,7 @@ parsers = c("json", "query", "text", "octet", "multi")
 \if{html}{\out{</div>}}
 }
 \subsection{Details}{
-Sets the default parsers of the router.
+Initialized to \code{c("json", "query", "text", "octet", "multi")}
 }
 
 }
@@ -633,6 +661,10 @@ Sets the default parsers of the router.
 \if{html}{\out{<a id="method-set404Handler"></a>}}
 \if{latex}{\out{\hypertarget{method-set404Handler}{}}}
 \subsection{Method \code{set404Handler()}}{
+Sets the handler that gets called if an
+incoming request can’t be served by any filter, endpoint, or sub-router.
+
+See also: \code{\link[=pr_set_404]{pr_set_404()}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$set404Handler(fun)}\if{html}{\out{</div>}}
 }
@@ -644,15 +676,10 @@ Sets the default parsers of the router.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Details}{
-Sets the handler that gets called if an
-incoming request can’t be served by any filter, endpoint, or sub-router.
-}
-
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{\dontrun{
-pr <- plumber$new()
+pr <- pr()
 pr$set404Handler(function(req, res) {cat(req$PATH_INFO)})
 }
 }
@@ -665,6 +692,10 @@ pr$set404Handler(function(req, res) {cat(req$PATH_INFO)})
 \if{html}{\out{<a id="method-setErrorHandler"></a>}}
 \if{latex}{\out{\hypertarget{method-setErrorHandler}{}}}
 \subsection{Method \code{setErrorHandler()}}{
+Sets the error handler which gets invoked if any filter or
+endpoint generates an error.
+
+See also: \code{\link[=pr_set_404]{pr_set_404()}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$setErrorHandler(fun)}\if{html}{\out{</div>}}
 }
@@ -676,16 +707,14 @@ pr$set404Handler(function(req, res) {cat(req$PATH_INFO)})
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Details}{
-Sets the error handler which gets invoked if any filter or
-endpoint generates an error.
-}
-
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{\dontrun{
-pr <- plumber$new()
-pr$setErrorHandler(function(req, res) {cat(res$body)})
+pr <- pr()
+pr$setErrorHandler(function(req, res, err) {
+  message("Found error: ")
+  str(err)
+})
 }
 }
 \if{html}{\out{</div>}}
@@ -694,10 +723,80 @@ pr$setErrorHandler(function(req, res) {cat(res$body)})
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_ui"></a>}}
+\if{latex}{\out{\hypertarget{method-set_ui}{}}}
+\subsection{Method \code{set_ui()}}{
+Set UI to use for API
+
+See also: \code{\link[=pr_set_ui]{pr_set_ui()}}, \code{\link[=register_ui]{register_ui()}}, \code{\link[=registered_uis]{registered_uis()}}
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{plumber$set_ui(ui = getOption("plumber.ui", TRUE), ...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{ui}}{a character value or a logical value. Defaults to `options("plumber.ui"). See \code{\link[=pr_set_ui]{pr_set_ui()}} for examples.
+If using \code{\link[=options_plumber]{options_plumber()}}, the value must be set before initializing your Plumber router.}
+
+\item{\code{...}}{Other params to be passed to \code{ui} functions.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_ui_callback"></a>}}
+\if{latex}{\out{\hypertarget{method-set_ui_callback}{}}}
+\subsection{Method \code{set_ui_callback()}}{
+Set UI callback to notify where the API is located.
+
+When set, it will be called with a character string corresponding
+to the API UI url. This allows RStudio to open \code{swagger} UI when a
+Plumber router \code{\link[=pr_run]{pr_run()}} method is executed.
+
+If using \code{\link[=options_plumber]{options_plumber()}}, the value must be set before initializing your Plumber router.
+
+See also: \code{\link[=pr_set_ui_callback]{pr_set_ui_callback()}}
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{plumber$set_ui_callback(
+  callback = getOption("plumber.ui.callback", getOption("plumber.swagger.url", NULL))
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{callback}}{a callback function for taking action on UI url. (Also accepts \code{NULL} values to disable the \code{callback}.)}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_debug"></a>}}
+\if{latex}{\out{\hypertarget{method-set_debug}{}}}
+\subsection{Method \code{set_debug()}}{
+Set debug value to include error messages
+
+See also: \code{\link[=pr_set_debug]{pr_set_debug()}}
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{plumber$set_debug(debug = interactive())}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{debug}}{\code{TRUE} provides more insight into your API errors.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-filter"></a>}}
 \if{latex}{\out{\hypertarget{method-filter}{}}}
 \subsection{Method \code{filter()}}{
 Add a filter to plumber router
+
+See also: \code{\link[=pr_filter]{pr_filter()}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$filter(name, expr, serializer)}\if{html}{\out{</div>}}
 }
@@ -715,32 +814,40 @@ Add a filter to plumber router
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-apiSpec"></a>}}
-\if{latex}{\out{\hypertarget{method-apiSpec}{}}}
-\subsection{Method \code{apiSpec()}}{
-Retrieve openAPI file
+\if{html}{\out{<a id="method-set_api_spec"></a>}}
+\if{latex}{\out{\hypertarget{method-set_api_spec}{}}}
+\subsection{Method \code{set_api_spec()}}{
+Add a function to customize what is returned in \verb{$get_api_spec()}.
+
+Note, the returned value will be sent through \code{\link[=serializer_unboxed_json]{serializer_unboxed_json()}} which will turn all length 1 vectors into atomic values.
+To force a vector to serialize to an array of size 1, be sure to call \code{\link[=as.list]{as.list()}} on your value. \code{list()} objects are always serialized to an array value.
+
+See also: \code{\link[=pr_set_api_spec]{pr_set_api_spec()}}
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{plumber$apiSpec()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{plumber$set_api_spec(api = NULL)}\if{html}{\out{</div>}}
 }
 
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-openAPIFile"></a>}}
-\if{latex}{\out{\hypertarget{method-openAPIFile}{}}}
-\subsection{Method \code{openAPIFile()}}{
-Retrieve openAPI file
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{plumber$openAPIFile()}\if{html}{\out{</div>}}
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{api}}{This can be
+\itemize{
+\item an OpenAPI Specification formatted list object
+\item a function that accepts the OpenAPI Specification autogenerated by \code{plumber} and returns a OpenAPI Specification formatted list object.
 }
 
+The value returned will not be validated for OAS compatibility.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-swaggerFile"></a>}}
-\if{latex}{\out{\hypertarget{method-swaggerFile}{}}}
-\subsection{Method \code{swaggerFile()}}{
+\if{html}{\out{<a id="method-get_api_spec"></a>}}
+\if{latex}{\out{\hypertarget{method-get_api_spec}{}}}
+\subsection{Method \code{get_api_spec()}}{
 Retrieve openAPI file
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{plumber$swaggerFile()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{plumber$get_api_spec()}\if{html}{\out{</div>}}
 }
 
 }
@@ -748,6 +855,7 @@ Retrieve openAPI file
 \if{html}{\out{<a id="method-addEndpoint"></a>}}
 \if{latex}{\out{\hypertarget{method-addEndpoint}{}}}
 \subsection{Method \code{addEndpoint()}}{
+addEndpoint has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{handle()} instead.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$addEndpoint(
   verbs,
@@ -782,15 +890,12 @@ Retrieve openAPI file
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Details}{
-addEndpoint has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{handle()} instead.
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-addAssets"></a>}}
 \if{latex}{\out{\hypertarget{method-addAssets}{}}}
 \subsection{Method \code{addAssets()}}{
+addAssets has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{mount} and \code{PlumberStatic$new()} instead.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$addAssets(dir, path = "/public", options = list())}\if{html}{\out{</div>}}
 }
@@ -806,10 +911,6 @@ addEndpoint has been deprecated in v0.4.0 and will be removed in a coming releas
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Details}{
-addAssets has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{mount} and \code{PlumberStatic$new()} instead.
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-addFilter"></a>}}
@@ -854,6 +955,26 @@ addFilter has been deprecated in v0.4.0 and will be removed in a coming release.
 }
 \subsection{Details}{
 addGlobalProcessor has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{registerHook}(s) instead.
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-openAPIFile"></a>}}
+\if{latex}{\out{\hypertarget{method-openAPIFile}{}}}
+\subsection{Method \code{openAPIFile()}}{
+Deprecated. Retrieve openAPI file
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{plumber$openAPIFile()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-swaggerFile"></a>}}
+\if{latex}{\out{\hypertarget{method-swaggerFile}{}}}
+\subsection{Method \code{swaggerFile()}}{
+Deprecated. Retrieve openAPI file
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{plumber$swaggerFile()}\if{html}{\out{</div>}}
 }
 
 }

@@ -1,3 +1,11 @@
+validate_pr <- function(pr) {
+  if (!inherits(pr, "plumber")) {
+    stop("`pr` must be an object of class `plumber`.")
+  }
+}
+
+
+
 #' Create a new Plumber router
 #'
 #' @param filters A list of Plumber filters
@@ -33,7 +41,7 @@ pr <- function(file = NULL,
 #' Each function mutates the Plumber router in place, but also invisibly returns
 #' the updated router.
 #'
-#' @param pr A Plumber router
+#' @template param_pr
 #' @param methods Character vector of HTTP methods
 #' @param path The endpoint path
 #' @param handler A handler function
@@ -75,7 +83,7 @@ pr_handle <- function(pr,
                       serializer,
                       endpoint,
                       ...) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
+  validate_pr(pr)
   pr$handle(methods = methods,
             path = path,
             handler = handler,
@@ -210,7 +218,7 @@ pr_head <- function(pr,
 pr_mount <- function(pr,
                      path,
                      router) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
+  validate_pr(pr)
   pr$mount(path = path, router = router)
   invisible(pr)
 }
@@ -242,7 +250,7 @@ pr_mount <- function(pr,
 #' which the names are the names of the hooks, and the values are the
 #' handlers themselves.
 #'
-#' @param pr A Plumber router
+#' @template param_pr
 #' @param stage A character string. Point in the lifecycle of a request.
 #' @param handler A hook function.
 #' @param handlers A named list of hook handlers
@@ -277,7 +285,7 @@ pr_mount <- function(pr,
 pr_hook <- function(pr,
                     stage,
                     handler) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
+  validate_pr(pr)
   pr$registerHook(stage = stage, handler = handler)
   invisible(pr)
 }
@@ -286,7 +294,7 @@ pr_hook <- function(pr,
 #' @export
 pr_hooks <- function(pr,
                      handlers) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
+  validate_pr(pr)
   pr$registerHooks(handlers)
   invisible(pr)
 }
@@ -320,7 +328,7 @@ pr_hooks <- function(pr,
 #'   to prevent others from reading it.
 #' } Examples of both of these solutions are done in the Examples section.
 #'
-#' @param pr A Plumber router
+#' @template param_pr
 #' @param key The secret key to use. This must be consistent across all R sessions
 #'   where you want to save/restore encrypted cookies. It should be produced using
 #'   \code{\link{randomCookieKey}}. Please see the "Storing secure keys" section for more details
@@ -395,96 +403,21 @@ pr_cookie <- function(pr,
                       expiration = FALSE,
                       http = TRUE,
                       secure = FALSE) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
+  validate_pr(pr)
   pr$registerHooks(
     sessionCookie(key = key, name = name, expiration = expiration, http = http, secure = secure)
   )
   invisible(pr)
 }
 
-#' Set the default serializer of the router
-#'
-#' By default, Plumber serializes responses to JSON. This function updates the
-#' default serializer to the function supplied via \code{serializer}
-#'
-#' @param pr A Plumber router
-#' @param serializer A serializer function
-#'
-#' @return The Plumber router with the new default serializer
-#'
-#' @export
-pr_set_serializer <- function(pr,
-                          serializer) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
-  pr$setSerializer(serializer)
-  invisible(pr)
-}
 
-#' Set the handler that is called when the incoming request can't be served
-#'
-#' This function allows a custom error message to be returned when a request
-#' cannot be served by an existing endpoint or filter.
-#'
-#' @param pr A Plumber router
-#' @param fun A handler function
-#'
-#' @return The Plumber router with a modified 404 handler
-#'
-#' @examples
-#' \dontrun{
-#' handler_404 <- function(req, res) {
-#'   res$status <- 404
-#'   res$body <- "Oops"
-#' }
-#'
-#' pr() %>%
-#'   pr_get("/hi", function() "Hello") %>%
-#'   pr_set_404(handler_404) %>%
-#'   pr_run()
-#' }
-#'
-#' @export
-pr_set_404 <- function(pr,
-                   fun) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
-  pr$set404Handler(fun)
-  invisible(pr)
-}
-
-#' Set the error handler that is invoked if any filter or endpoint generates an
-#' error
-#'
-#' @param pr A Plumber router
-#' @param fun A handler function
-#'
-#' @return The Plumber router with a modified error handler
-#'
-#' @examples
-#' \dontrun{
-#' handler_error <- function(req, res, err){
-#'   res$status <- 500
-#'   list(error = "Custom Error Message")
-#' }
-#'
-#' pr() %>%
-#'   pr_get("/error", function() log("a")) %>%
-#'   pr_set_error(handler_error) %>%
-#'   pr_run()
-#' }
-#' @export
-pr_set_error <- function(pr,
-                     fun) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
-  pr$setErrorHandler(fun)
-  invisible(pr)
-}
 
 #' Add a filter to Plumber router
 #'
 #' Filters can be used to modify an incoming request, return an error, or return
 #' a response prior to the request reaching an endpoint.
 #'
-#' @param pr A Plumber router
+#' @template param_pr
 #' @param name A character string. Name of filter
 #' @param expr An expr that resolve to a filter function or a filter function
 #' @param serializer A serializer function
@@ -507,7 +440,7 @@ pr_filter <- function(pr,
                       name,
                       expr,
                       serializer) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
+  validate_pr(pr)
   pr$filter(name = name, expr = expr, serializer = serializer)
   invisible(pr)
 }
@@ -516,29 +449,14 @@ pr_filter <- function(pr,
 #'
 #' `port` does not need to be explicitly assigned.
 #'
-#' `swagger` should be either a logical or a function . When `TRUE` or a
-#' function, multiple handles will be added to `plumber` object. OpenAPI json
-#' file will be served on paths `/openapi.json` and `/swagger.json`. Swagger UI
-#' will be served on paths `/__swagger__/index.html` and `/__swagger__/`. When
-#' using a function, it will receive the Plumber router as the first parameter
-#' and current OpenAPI Specification as the second. This function should return a
-#' list containing OpenAPI Specification.
-#' See \url{http://spec.openapis.org/oas/v3.0.3}
 #'
-#' `swaggerCallback` When set, it will be called with a character string corresponding
-#' to the swagger UI url. It allows RStudio to open swagger UI when Plumber router
-#' run method is executed using default `plumber.swagger.url` option.
-#'
-#' @param pr A Plumber router
+#' @template param_pr
 #' @param host A string that is a valid IPv4 or IPv6 address that is owned by
 #' this server, which the application will listen on. "0.0.0.0" represents
 #' all IPv4 addresses and "::/0" represents all IPv6 addresses.
 #' @param port A number or integer that indicates the server port that should
 #' be listened on. Note that on most Unix-like systems including Linux and
 #' Mac OS X, port numbers smaller than 1025 require root privileges.
-#' @param swagger A function that enhances the existing OpenAPI Specification.
-#' @param debug `TRUE` provides more insight into your API errors.
-#' @param swaggerCallback A callback function for taking action on the url for swagger page.
 #'
 #' @examples
 #' \dontrun{
@@ -552,15 +470,9 @@ pr_filter <- function(pr,
 #' @export
 pr_run <- function(pr,
                    host = '127.0.0.1',
-                   port = getOption('plumber.port'),
-                   swagger = interactive(),
-                   debug = interactive(),
-                   swaggerCallback = getOption('plumber.swagger.url', NULL)
+                   port = getOption('plumber.port', NULL)
 ) {
-  if (!inherits(pr, "plumber")) stop("`pr` must be an object of class `plumber`.")
+  validate_pr(pr)
   pr$run(host = host,
-         port = port,
-         swagger = swagger,
-         debug = debug,
-         swaggerCallback = swaggerCallback)
+         port = port)
 }

@@ -450,27 +450,54 @@ test_that("filters and endpoints executed in the appropriate environment", {
 test_that("host is updated properly for printing", {
 
   expect_identical(
-    urlHost("1:1:1", 1234),
+    urlHost(host = "1:1:1", port = 1234),
     "http://[1:1:1]:1234"
   )
   expect_identical(
-    urlHost("::", 1234, FALSE),
+    urlHost(host = "::", port = 1234, changeHostLocation = FALSE),
     "http://[::]:1234"
   )
   expect_identical(
-    urlHost("::", 1234, TRUE),
+    urlHost(host = "::", port = 1234, changeHostLocation = TRUE),
     "http://[::1]:1234"
   )
   expect_identical(
-    urlHost("1.2.3.4", 1234),
+    urlHost(host = "1.2.3.4", port = 1234),
     "http://1.2.3.4:1234"
   )
   expect_identical(
-    urlHost("0.0.0.0", 1234, FALSE),
+    urlHost(host = "0.0.0.0", port = 1234, changeHostLocation = FALSE),
     "http://0.0.0.0:1234"
   )
   expect_identical(
-    urlHost("0.0.0.0", 1234, TRUE),
+    urlHost(host = "0.0.0.0", port = 1234, changeHostLocation = TRUE),
     "http://127.0.0.1:1234"
   )
+  expect_identical(
+    urlHost(scheme = "http", host = "0.0.0.0", port = 1234, path = "/v1", changeHostLocation = TRUE),
+    "http://127.0.0.1:1234/v1"
+  )
+})
+
+test_that("unmount works", {
+  pr <- plumber$new()
+  sub <- plumber$new()
+  sub$handle("GET", "/", function(){ 1 })
+  sub$handle("GET", "/nested/path", function(){ 2 })
+  pr$mount("/mount", sub)
+  pr$mount("/mount2", sub)
+  expect_equal(names(pr$mounts), c("/mount/", "/mount2/"))
+  expect_invisible(pr$unmount("/henry"))
+  expect_invisible(pr$unmount("/mount2/"))
+  expect_equal(names(pr$mounts), "/mount/")
+})
+
+test_that("remove_handle works", {
+  pr <- plumber$new()
+  pr$handle("GET", "/path1", function(){ 1 })
+  pr$handle("GET", "/path2", function(){ 2 })
+  expect_equal(length(pr$endpoints[[1]]), 2L)
+  expect_invisible(pr$remove_handle("GET", "/path1"))
+  expect_equal(length(pr$endpoints[[1]]), 1L)
+  expect_equal(pr$endpoints[[1]][[1]]$path, "/path2")
 })

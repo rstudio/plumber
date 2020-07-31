@@ -34,6 +34,8 @@ test_that("all options used are `options_plumber()` parameters", {
   }
   options_used <- unique(sort(gsub("getOption|\\(|\"|,|'|\\)", "", matches)))
   plumber_options_used <- grep("^plumber", options_used, value = TRUE)
+  deprecated_options <-  c("plumber.swagger.url")
+  plumber_options_used <- plumber_options_used[!(plumber_options_used %in% deprecated_options)]
   ### code to match formals
   options_plumber_formals <- paste0("plumber.", sort(names(formals(options_plumber))))
 

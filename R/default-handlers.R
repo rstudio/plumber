@@ -1,4 +1,3 @@
-#' @include plumber.R
 default404Handler <- function(req, res){
   if (is_405(req$pr, req$PATH_INFO, req$REQUEST_METHOD)) {
     res$status <- 405L
