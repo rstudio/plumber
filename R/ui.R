@@ -25,7 +25,7 @@ mount_ui <- function(pr, host, port, ui_info, callback) {
   mount_openapi(pr, api_url)
 
   # Mount UIs
-  if (length(.globals$UIs) == 0) {
+  if (length(registered_uis()) == 0) {
     message("No UI available in namespace. See help(register_ui).")
     return()
   }
@@ -50,7 +50,7 @@ mount_ui <- function(pr, host, port, ui_info, callback) {
 # Check is UI is available
 #' @noRd
 is_ui_available <- function(ui) {
-  if (isTRUE(ui %in% names(.globals$UIs))) {
+  if (isTRUE(ui %in% registered_uis())) {
     return(TRUE)
   } else {
     message("Unknown user interface \"", ui,"\". Maybe try library(", ui,").")
@@ -98,7 +98,7 @@ mount_openapi <- function(pr, api_url) {
         api_url <- req$HTTP_REFERER
         api_url <- sub("(\\?.*)?$", "", api_url)
         api_url <- sub("index\\.html$", "", api_url)
-        api_url <- sub(paste0("__(", paste0(names(.globals$UIs), collapse = "|"),")__/$"), "", api_url)
+        api_url <- sub(paste0("__(", paste0(registered_uis(), collapse = "|"),")__/$"), "", api_url)
       }
     }
 
@@ -187,7 +187,7 @@ register_ui <- function(ui) {
 }
 #' @export
 #' @rdname register_ui
-registered_ui <- function() {
+registered_uis <- function() {
   sort(names(.globals$UIs))
 }
 
