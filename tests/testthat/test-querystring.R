@@ -60,7 +60,7 @@ test_that("different lengths of query string return same shape", {
       parseQS(
         paste0("?", paste0(keys, "=", vals, collapse = "&"))
       ),
-      setNames(
+      stats::setNames(
         lapply(unique(keys), function(key) {
           unname(unlist(vals[keys == key]))
         }),

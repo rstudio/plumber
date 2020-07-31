@@ -87,17 +87,17 @@ test_that("plumb accepts a directory with a `plumber.R` file", {
 })
 
 test_that("plumb() a dir leverages `entrypoint.R`", {
-  expect_null(plumber:::.globals$serializers$fake, "This just that your Plumber environment is dirty. Restart your R session.")
+  expect_null(.globals$serializers$fake, "This just that your Plumber environment is dirty. Restart your R session.")
 
   r <- plumb(dir = test_path("files/entrypoint/"))
   expect_equal(length(r$endpoints), 1)
   expect_equal(length(r$endpoints[[1]]), 1)
 
   # A global serializer was added by entrypoint.R before parsing
-  expect_true(!is.null(plumber:::.globals$serializers$fake))
+  expect_true(!is.null(.globals$serializers$fake))
 
   # Clean up after ourselves
-  gl <- plumber:::.globals
+  gl <- .globals
   gl$serializers["fake"] <- NULL
 })
 

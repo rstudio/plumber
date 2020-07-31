@@ -55,6 +55,8 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 ### Minor new features and improvements
 
+* When `plumb()`ing a file, arguments supplied to parsers and serializers may be values defined earlier in the file. (@meztez, #620)
+
 * Updated Docker files. New Docker repo is now [`rstudio/plumber`](https://hub.docker.com/r/rstudio/plumber/tags). Updates heavily inspired from @mskyttner (#459). (#589)
 
 * Support HTTP 405 Code. (@meztez, #554)
@@ -64,6 +66,8 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 * Documented plumber options. Add `options_plumber`. (@meztez, #555)
 
 * Added yaml support, serializer and parser. (@meztez, #556)
+
+* Added parsers: `parser_csv()`, `parser_json()`, `parser_multi()`, `parser_octet()`, `parser_query()`, `parser_rds()`, `parser_text()`, `parser_tsv()`, `parser_yaml()`, `parser_none()`, and pseudo `"all"` (#584)
 
 * Added `serializer_csv()` (@pachamaltese, #520)
 
@@ -79,7 +83,7 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 * Fix `plumb()` function when `plumb()`ing a directory so that `plumber.R` is
   not a requirement if a valid `entrypoint.R` file is found.
-  (@blairj09, [#471](https://github.com/trestletech/plumber/pull/471)).
+  (@blairj09, [#471](https://github.com/rstudio/plumber/pull/471)).
 
 * If cookie information is too large (> 4093 bytes), a warning will be displayed. (#404)
 

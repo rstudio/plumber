@@ -29,7 +29,6 @@ Plumber router \code{\link[=pr_run]{pr_run()}} method is executed using default 
 \dontrun{
 # Set the API Spec to a function to use the auto-generated OAS object
 pr() \%>\%
-  pr_set_ui(TRUE) \%>\%
   pr_set_api_spec(function(spec) {
     spec$info$title <- Sys.time()
     spec
@@ -39,7 +38,6 @@ pr() \%>\%
 
 # Set the API Spec using an object
 pr() \%>\%
-  pr_set_ui(TRUE) \%>\%
   pr_set_api_spec(my_custom_object) \%>\%
   pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) \%>\%
   pr_run()

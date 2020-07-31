@@ -25,7 +25,6 @@ Plumber router \code{\link[=pr_run]{pr_run()}} method is executed using default 
 \examples{
 \dontrun{
 pr() \%>\%
-  pr_set_ui(TRUE) \%>\%
   pr_set_ui_callback(function(url) { message("API location: ", url) }) \%>\%
   pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) \%>\%
   pr_run()

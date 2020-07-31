@@ -45,6 +45,8 @@ reference:
   - 'plumb'
   - 'pr'
   - 'pr_run'
+  - 'options_plumber'
+
 - title: Router Methods
   contents:
   - 'pr_get'
@@ -54,12 +56,14 @@ reference:
   - 'pr_head'
   - 'pr_handle'
   - 'pr_mount'
+
 - title: Router Hooks
   contents:
   - 'pr_hook'
   - 'pr_hooks'
   - 'pr_cookie'
   - 'pr_filter'
+
 - title: Router Defaults
   contents:
   - 'pr_set_ui'
@@ -68,30 +72,46 @@ reference:
   - 'pr_set_error'
   - 'pr_set_debug'
   - 'pr_set_ui_callback'
+
 - title: API Interface
   contents:
   - 'register_ui'
 - title: All functions
   # desc: description here
+
+- title: POST Body and Query String Parsers
+  contents:
+  - 'register_parser'
+  - 'parser_query'
+  - 'getCharacterSet'
+
+- title: Response
+  contents:
+  - 'as_attachment'
+  - 'register_serializer'
+  - 'serializer_json'
+  - 'include_file'
+
+- title: Cookies and Filters
+  contents:
+  - 'pr_cookie'
+  - 'randomCookieKey'
+  - 'sessionCookie'
+  - 'forward'
+
+- title: R6 Constructors
   contents:
   - 'PlumberEndpoint'
   - 'PlumberStatic'
   - 'PlumberStep'
-  - 'addParser'
-  - 'addSerializer'
-  - 'as_attachment'
+  - 'hookable'
+
+- title: Digital Ocean
+  desc: TO BE REMOVED FROM PLUMBER!!!
+  contents:
   - 'do_configure_https'
   - 'do_deploy_api'
   - 'do_forward'
   - 'do_provision'
   - 'do_remove_api'
   - 'do_remove_forward'
-  - 'forward'
-  - 'getCharacterSet'
-  - 'hookable'
-  - 'include_file'
-  - 'options_plumber'
-  - 'parsers'
-  - 'randomCookieKey'
-  - 'serializer_json'
-  - 'sessionCookie'

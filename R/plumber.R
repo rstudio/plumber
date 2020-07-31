@@ -102,7 +102,8 @@ defaultPlumberFilters <- list(
   cookieParser = cookieFilter,
   sharedSecret = sharedSecretFilter)
 
-#' hookable
+#' @keywords internal
+#' @title hookable
 hookable <- R6Class(
   "hookable",
   public=list(
@@ -218,6 +219,8 @@ plumber <- R6Class(
 
       # Initialize
       private$serializer <- serializer_json()
+      # Default parsers to maintain legacy features
+      private$default_parsers <- make_parser(c("json", "query", "text", "octet", "multi"))
       private$errorHandler <- defaultErrorHandler()
       private$notFoundHandler <- default404Handler
       private$maxSize <- getOption('plumber.maxRequestSize', 0) #0 Unlimited
@@ -462,6 +465,7 @@ plumber <- R6Class(
     #' @param handler a handler function.
     #' @param preempt a preempt function.
     #' @param serializer a serializer function.
+    #' @param parsers a named list of parsers.
     #' @param endpoint a `PlumberEndpoint` object.
     #' @param ... additional arguments for `PlumberEndpoint` creation
     #' @examples
@@ -471,18 +475,21 @@ plumber <- R6Class(
     #'   "<html><h1>Programmatic Plumber!</h1></html>"
     #' }, serializer=plumber::serializer_html())
     #' }
-    handle = function(methods, path, handler, preempt, serializer, endpoint, ...){
-      epdef <- !missing(methods) || !missing(path) || !missing(handler) || !missing(serializer)
+    handle = function(methods, path, handler, preempt, serializer, parsers, endpoint, ...) {
+      epdef <- !missing(methods) || !missing(path) || !missing(handler) || !missing(serializer) || !missing(parsers)
       if (!missing(endpoint) && epdef){
         stop("You must provide either the components for an endpoint (handler and serializer) OR provide the endpoint yourself. You cannot do both.")
       }
 
-      if (epdef){
-        if (missing(serializer)){
+      if (epdef) {
+        if (missing(serializer)) {
           serializer <- private$serializer
         }
+        if (missing(parsers)) {
+          parsers <- private$parsers
+        }
 
-        endpoint <- PlumberEndpoint$new(methods, path, handler, private$envir, serializer, ...)
+        endpoint <- PlumberEndpoint$new(methods, path, handler, private$envir, serializer, parsers, ...)
       }
       private$addEndpointInternal(endpoint, preempt)
     },
@@ -727,7 +734,17 @@ plumber <- R6Class(
           if (!is.null(h$serializer)) {
             res$serializer <- h$serializer
           }
-          req$args <- c(h$getPathParams(path), req$args)
+          parsers <-
+            if (!is.null(h$parsers)) {
+              h$parsers
+            } else {
+              private$default_parsers
+            }
+          req$args <- c(
+            h$getPathParams(path),
+            req$args,
+            postbody_parser(req, parsers)
+          )
           return(do.call(h$exec, req$args))
         }
       }
@@ -876,6 +893,35 @@ plumber <- R6Class(
     #' }
     setSerializer = function(serializer) {
       private$serializer <- serializer
+    },
+    #' @description Sets the default parsers of the router.
+    #' @param parsers Set default endpoint parsers. Initialized to `c("json", "query", "text", "octet", "multi")`
+    #'
+    #'   Can be one of:
+    #'   * A `NULL` value
+    #'   * A character vector of parser names
+    #'   * A named `list()` whose keys are parser names names and values are arguments to be applied with [do.call()]
+    #'   * A `TRUE` value, which will default to combining all parsers. This is great for seeing what is possible, but not great for security purposes
+    #'
+    #'   If the parser name `"all"` is found in any character value or list name, all remaining parsers will be added.
+    #'   When using a list, parser information already defined will maintain their existing argument values.  All remaining parsers will use their default arguments.
+    #'
+    #' Example:
+    #' ```
+    #' # provide a character string
+    #' parsers = "json"
+    #'
+    #' # provide a named list with no arguments
+    #' parsers = list(json = list())
+    #'
+    #' # provide a named list with arguments; include `rds`
+    #' parsers = list(json = list(simplifyVector = FALSE), rds = list())
+    #'
+    #' # default plumber parsers
+    #' parsers = c("json", "query", "text", "octet", "multi")
+    #' ```
+    setParsers = function(parsers) {
+      private$default_parsers <- make_parser(parsers)
     },
     #' @description Sets the handler that gets called if an
     #' incoming request can’t be served by any filter, endpoint, or sub-router.
@@ -1142,6 +1188,7 @@ plumber <- R6Class(
     }
   ), private = list(
     serializer = NULL, # The default serializer for the router
+    default_parsers = NULL, # The default parsers for the router
 
     ends = list(), # List of endpoints indexed by their pre-empted filter.
     filts = NULL, # Array of filters

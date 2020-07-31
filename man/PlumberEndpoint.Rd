@@ -33,6 +33,8 @@ each separate verb/path into its own endpoint, so we just do that.}
 \item{\code{params}}{endpoint parameters}
 
 \item{\code{tags}}{endpoint tags}
+
+\item{\code{parsers}}{step allowed parsers}
 }
 \if{html}{\out{</div>}}
 }
@@ -120,6 +122,7 @@ Create a new \code{PlumberEndpoint} object
   expr,
   envir,
   serializer,
+  parsers,
   lines,
   params,
   comments,
@@ -131,25 +134,46 @@ Create a new \code{PlumberEndpoint} object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{verbs}}{endpoint verb}
+\item{\code{verbs}}{Endpoint verb Ex: \code{"GET"}, \code{"POST"}}
 
-\item{\code{path}}{endpoint path}
+\item{\code{path}}{Endpoint path. Ex: \code{"/index.html"}, \code{"/foo/bar/baz"}}
 
-\item{\code{expr}}{endpoint expr}
+\item{\code{expr}}{Endpoint expression or function.}
 
-\item{\code{envir}}{endpoint environment}
+\item{\code{envir}}{Endpoint environment}
 
-\item{\code{serializer}}{endpoint serializer}
+\item{\code{serializer}}{Endpoint serializer}
 
-\item{\code{lines}}{endpoint block}
+\item{\code{parsers}}{Endpoint parsers.
+Can be one of:
+\itemize{
+\item A \code{NULL} value
+\item A character vector of parser names
+\item A named \code{list()} whose keys are parser names names and values are arguments to be applied with \code{\link[=do.call]{do.call()}}
+\item A \code{TRUE} value, which will default to combining all parsers. This is great for seeing what is possible, but not great for security purposes
+}
 
-\item{\code{params}}{endpoint params}
+If the parser name \code{"all"} is found in any character value or list name, all remaining parsers will be added.
+When using a list, parser information already defined will maintain their existing argument values.  All remaining parsers will use their default arguments.
 
-\item{\code{comments}}{endpoint comments}
+Example:\preformatted{# provide a character string
+parsers = "json"
 
-\item{\code{responses}}{endpoint responses}
+# provide a named list with no arguments
+parsers = list(json = list())
 
-\item{\code{tags}}{endpoint tags}
+# provide a named list with arguments; include `rds`
+parsers = list(json = list(simplifyVector = FALSE), rds = list())
+
+# default plumber parsers
+parsers = c("json", "query", "text", "octet", "multi")
+}}
+
+\item{\code{lines}}{Endpoint block}
+
+\item{\code{params}}{Endpoint params}
+
+\item{\code{comments, responses, tags}}{Values to be used within the OpenAPI Spec}
 }
 \if{html}{\out{</div>}}
 }

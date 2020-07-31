@@ -39,7 +39,7 @@ Plumber includes helper functions that enable you to automatically provision a P
 1. (Optional) [Setup a domain name](http://tres.tl/dns) for your Plumber server so you can use www.myplumberserver.com instead of the server's IP address.
 1. (Optional) Configure SSL
 
-Getting everything connected the first time can be a bit of work, but once you have `analogsea` connected to your DigitalOcean account, you're now able to spin up new Plumber servers in DigitalOcean hosting your APIs with just a couple of R commands. You can even write [scripts that provision an entire Plumber server](https://github.com/trestletech/plumber/blob/d9f4acc163168ae179c55e781cfa43f03551f825/inst/hosted-new.R) with multiple APIs associated.
+Getting everything connected the first time can be a bit of work, but once you have `analogsea` connected to your DigitalOcean account, you're now able to spin up new Plumber servers in DigitalOcean hosting your APIs with just a couple of R commands. You can even write [scripts that provision an entire Plumber server](https://github.com/rstudio/plumber/blob/d9f4acc163168ae179c55e781cfa43f03551f825/inst/hosted-new.R) with multiple APIs associated.
 
 ## RStudio Connect {#rstudio-connect}
 
@@ -55,33 +55,33 @@ RStudio Connect automatically manages the number of R processes necessary to han
 
 We won't delve into the details of Docker or how to setup or install everything on your system. Docker provides some [great resources](https://docs.docker.com/) for those who are looking to get started. Here we'll assume that you have Docker installed and you're familiar with the basic commands required to spin up a container.
 
-In this article, we'll take advantage of the [trestletech/plumber](https://hub.docker.com/r/trestletech/plumber/) Docker image that bundles a recent version of R with the most recent version of plumber pre-installed (the underlying R image is courtesy of the [rocker](https://github.com/rocker-org/rocker) project). You can get this image with a
+In this article, we'll take advantage of the [rstudio/plumber](https://hub.docker.com/r/rstudio/plumber/) Docker image that bundles a recent version of R with the most recent version of plumber pre-installed (the underlying R image is courtesy of the [rocker](https://github.com/rocker-org/rocker) project). You can get this image with a
 
 ```bash
-docker pull trestletech/plumber
+docker pull rstudio/plumber
 ```
 
 Remember that this will get you the current snapshot of Plumber and will continue to use that image until you run `pull` again.
 
 ### Default Dockerfile
 
-We'll start by just running a single Plumber application in Docker just to see things at work. By default, the `trestletech/plumber` image will take the first argument after the image name as the name of the file that you want to `plumb()` and serve on port `8000`. So right away you can run one of the examples that's included in plumber as it is already installed on the image.
+We'll start by just running a single Plumber application in Docker just to see things at work. By default, the `rstudio/plumber` image will take the first argument after the image name as the name of the file that you want to `plumb()` and serve on port `8000`. So right away you can run one of the examples that's included in plumber as it is already installed on the image.
 
 ```bash
-docker run --rm -p 8000:8000 trestletech/plumber
+docker run --rm -p 8000:8000 rstudio/plumber
 ```
 
 which is the same as:
 
 ```bash
-docker run --rm -p 8000:8000 trestletech/plumber \
+docker run --rm -p 8000:8000 rstudio/plumber \
   /usr/local/lib/R/site-library/plumber/examples/04-mean-sum/plumber.R
 ```
 
  - `docker run` tells Docker to run a new container
  - `--rm` tells Docker to clean-up after the container when it's done
  - `-p 8000:8000` says to map port 8000 from the plumber container (which is where we'll run the server) to port 8000 of your local machine
- - `trestletech/plumber` is the name of the image we want to run
+ - `rstudio/plumber` is the name of the image we want to run
  - `/usr/local/lib/R/site-library/plumber/examples/03-mean-sum/plumber.R` is the path **inside of the Docker container** to the Plumber file you want to host. You'll note that you do not need plumber installed on your host machine for this to work, nor does the path `/usr/local/...` need to exist on your host machine. This references the path inside of the docker container where the R file you want to `plumb()` can be found. This `mean-sum` path is the default path that the image uses if you don't specify one yourself.
 
 This will ask Plumber to `plumb` and `run` the file you specified on port 8000 of that new container. Because you used the `-p` argument, port 8000 of your local machine will be forwarded into your container. You can test this by running this on the machine where Docker is running: `curl localhost:8000/mean`, or if you know the IP address of the machine where Docker is running, you could visit it in a web browser. The `/mean` path is one that's defined in the plumber file we just specified -- you should get an single number in an array back (`[-0.1993]`).
@@ -91,33 +91,33 @@ If that works, you can try using one of your own plumber files in this arrangeme
 For instance if you have a plumber file saved in your current directory called `api.R`, you could use the following command
 
 ```bash
-docker run --rm -p 8000:8000 -v `pwd`/api.R:/plumber.R trestletech/plumber /plumber.R
+docker run --rm -p 8000:8000 -v `pwd`/api.R:/plumber.R rstudio/plumber /plumber.R
 ```
 
 You'll notice that we used the `-v` argument to specify a "volume" that should be mapped from our host machine into the Docker container. We defined that the location of that file should be at `/plumber.R`, so that's the argument we give last to tell the container where to look for the plumber definition. You can use this same technique to share a whole directory instead of just passing in a single R file; this approach is useful if your Plumber API depends on other files.
 
-You can also use the `trestletech/plumber` image just like you use any other. For example, if you want to start a container based on this image and poke around in a bash shell:
+You can also use the `rstudio/plumber` image just like you use any other. For example, if you want to start a container based on this image and poke around in a bash shell:
 
 ```bash
-docker run -it --rm --entrypoint /bin/bash trestletech/plumber
+docker run -it --rm --entrypoint /bin/bash rstudio/plumber
 ```
 
-This can be a handy way to debug problems. Prepare the command that you think should work then add `--entrypoint /bin/bash` before `trestletech/plumber` and explore a bit. Alternatively, you can try to run the R process and spawn the plumber application yourself and see where things go wrong (often a missing package or missing file).
+This can be a handy way to debug problems. Prepare the command that you think should work then add `--entrypoint /bin/bash` before `rstudio/plumber` and explore a bit. Alternatively, you can try to run the R process and spawn the plumber application yourself and see where things go wrong (often a missing package or missing file).
 
 ### Custom Dockerfiles {#custom-dockerfiles}
 
-You can build upon the `trestletech/plumber` image and build your own Docker image by writing your own Dockerfile. Dockerfiles have a vast array of options and possible configurations, so [see the official docs](https://docs.docker.com/engine/reference/builder/) if you want to learn more about any of these options.
+You can build upon the `rstudio/plumber` image and build your own Docker image by writing your own Dockerfile. Dockerfiles have a vast array of options and possible configurations, so [see the official docs](https://docs.docker.com/engine/reference/builder/) if you want to learn more about any of these options.
 
 A couple of commands that are relevant here:
 
  - `RUN` runs a command and persists the side-effects in the Docker image you're building. So if you want to build a new image that has the `broom` package, you could add a line in your Dockerfile that says `RUN R -e "install.packages('broom')"` which would make the `broom` package available in your new Docker image.
- - `ENTRYPOINT` is the command to run when starting the image. `trestletech/plumber` specifies an entrypoint that starts R, `plumb()`s a file, then `run()`s the router. If you want to change how plumber starts, or run some extra commands (like add a global processor) before you run the router, you'll need to provide a custom `ENTRYPOINT`.
- - `CMD` these are the default arguments to provide to `ENTRYPOINT`. `trestletech/plumber` uses only the first argument as the name of the file that you want to `plumb()`.
+ - `ENTRYPOINT` is the command to run when starting the image. `rstudio/plumber` specifies an entrypoint that starts R, `plumb()`s a file, then `run()`s the router. If you want to change how plumber starts, or run some extra commands (like add a global processor) before you run the router, you'll need to provide a custom `ENTRYPOINT`.
+ - `CMD` these are the default arguments to provide to `ENTRYPOINT`. `rstudio/plumber` uses only the first argument as the name of the file that you want to `plumb()`.
 
 So your custom Dockerfile could be as simple as:
 
 ```
-FROM trestletech/plumber
+FROM rstudio/plumber
 MAINTAINER Docker User <docker@user.org>
 
 RUN R -e "install.packages('broom')"
@@ -125,7 +125,7 @@ RUN R -e "install.packages('broom')"
 CMD ["/app/plumber.R"]
 ```
 
-This Dockerfile would just extend the `trestletech/plumber` image in two ways. First, it `RUN`s one additional command to install the `broom` package. Second, it customizes the default `CMD` argument that will be used when running the image. In this case, you would be expected to mount a Plumber application into the container at `/app/plumber.R`
+This Dockerfile would just extend the `rstudio/plumber` image in two ways. First, it `RUN`s one additional command to install the `broom` package. Second, it customizes the default `CMD` argument that will be used when running the image. In this case, you would be expected to mount a Plumber application into the container at `/app/plumber.R`
 
 You could then build your custom Docker image from this Dockerfile using the command `docker build -t mycustomdocker .` (where `.` -- the current directory -- is the directory where that Dockerfile is stored).
 
@@ -161,7 +161,7 @@ services:
     ports:
      - "7000:8000"
   app2:
-    image: trestletech/plumber
+    image: rstudio/plumber
     command: /app/plumber.R
     volumes:
      - ../app2:/app

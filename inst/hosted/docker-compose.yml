@@ -1,18 +1,18 @@
 version: '2'
 services:
-  append: 
-    image: trestletech/plumber
+  append:
+    image: rstudio/plumber
     command: '/examples/01-append/appender.R'
     volumes:
      - ../examples:/examples
     restart: always
-  filters: 
-    image: trestletech/plumber
+  filters:
+    image: rstudio/plumber
     command: '/examples/02-filters/filters.R'
     volumes:
      - ../examples:/examples
     restart: always
-  github: 
+  github:
     build: ../examples/03-github/
     volumes:
      - ../examples:/examples

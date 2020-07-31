@@ -1,5 +1,5 @@
 
-#' Add a Serializer
+#' Register a Serializer
 #'
 #' A serializer is responsible for translating a generated R value into output
 #' that a remote user can understand. For instance, the \code{serializer_json}
@@ -9,9 +9,9 @@
 #' @param name The name of the serializer (character string)
 #' @param serializer The serializer to be added.
 #' @param verbose Logical value which determines if a message should be printed when overwriting serializers
-#'
+#' @describeIn register_serializer Register a serializer with a name
 #' @export
-addSerializer <- function(name, serializer, verbose = TRUE) {
+register_serializer <- function(name, serializer, verbose = TRUE) {
   if (!is.null(.globals$serializers[[name]])) {
     if (isTRUE(verbose)) {
       message("Overwriting serializer: ", name)
@@ -19,6 +19,12 @@ addSerializer <- function(name, serializer, verbose = TRUE) {
   }
   .globals$serializers[[name]] <- serializer
 }
+#' @describeIn register_serializer Return a list of all registered serializers
+#' @export
+registered_serializers <- function(name) {
+  sort(names(.globals$serializers))
+}
+
 
 # internal function to use directly within this file only. (performance purposes)
 # Other files should use `serializer_identity()` to avoid confusion
@@ -272,7 +278,9 @@ serializer_htmlwidget <- function(...) {
     file <- tempfile(fileext = ".html")
     on.exit({
       # Delete the temp file
-      file.remove(file)
+      if (file.exists(file)) {
+        file.remove(file)
+      }
     })
 
     # Write the widget out to a file (doesn't currently support in-memory connections - pandoc)

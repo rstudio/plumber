@@ -101,7 +101,7 @@ test_that("async hooks create async execution", {
   # make an exhaustive matrix of T/F values of which hooks are async
   hooks_are_async <- do.call(
     expand.grid,
-    lapply(setNames(hooks, hooks), function(...) c(FALSE, TRUE))
+    lapply(stats::setNames(hooks, hooks), function(...) c(FALSE, TRUE))
   )
 
   # remove the all FALSE row
