@@ -144,8 +144,7 @@ Create a new \code{PlumberEndpoint} object
 
 \item{\code{serializer}}{Endpoint serializer}
 
-\item{\code{parsers}}{Endpoint parsers.
-Can be one of:
+\item{\code{parsers}}{Can be one of:
 \itemize{
 \item A \code{NULL} value
 \item A character vector of parser names

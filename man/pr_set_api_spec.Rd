@@ -7,7 +7,7 @@
 pr_set_api_spec(pr, api)
 }
 \arguments{
-\item{pr}{A Plumber router}
+\item{pr}{A Plumber router. Note: The supplied Plumber router will also be updated in place as well as returned by the function.}
 
 \item{api}{This can be
 \itemize{

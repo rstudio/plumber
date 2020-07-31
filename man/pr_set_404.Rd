@@ -7,7 +7,7 @@
 pr_set_404(pr, fun)
 }
 \arguments{
-\item{pr}{A Plumber router}
+\item{pr}{A Plumber router. Note: The supplied Plumber router will also be updated in place as well as returned by the function.}
 
 \item{fun}{A handler function}
 }

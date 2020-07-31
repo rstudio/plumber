@@ -15,6 +15,25 @@ pr_set_serializer <- function(pr, serializer) {
   invisible(pr)
 }
 
+#' Set the default endpoint parsers for the router
+#'
+#' By default, Plumber will parse JSON, text, query strings, octet streams, and multipart bodies. This function updates the
+#' default parsers for any endpoint that does not define their own parsers.
+#'
+#' Note: The default set of parsers will be completely replaced if any value is supplied. Be sure to include all of your parsers that you would like to include.
+#'
+#' @template param_pr
+#' @template pr_set_parsers__parsers
+#'
+#' @return The Plumber router with the new default [PlumberEndpoint] parsers
+#'
+#' @export
+pr_set_parsers <- function(pr, parsers) {
+  validate_pr(pr)
+  pr$set_parsers(parsers)
+  invisible(pr)
+}
+
 #' Set the handler that is called when the incoming request can't be served
 #'
 #' This function allows a custom error message to be returned when a request

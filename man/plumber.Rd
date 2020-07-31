@@ -626,9 +626,7 @@ Sets the default parsers of the router.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{parsers}}{Set default endpoint parsers. Initialized to \code{c("json", "query", "text", "octet", "multi")}
-
-Can be one of:
+\item{\code{parsers}}{Can be one of:
 \itemize{
 \item A \code{NULL} value
 \item A character vector of parser names
@@ -654,6 +652,10 @@ parsers = c("json", "query", "text", "octet", "multi")
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+Initialized to \code{c("json", "query", "text", "octet", "multi")}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set404Handler"></a>}}
