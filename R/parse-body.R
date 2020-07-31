@@ -371,22 +371,6 @@ parser_yaml <- function(...) {
   })
 }
 
-#' @describeIn parsers Helper parser that writes the binary post body to a file and reads it back again using `read_fn`.
-#'   This parser should be used when reading from a file is required.
-#' @param read_fn function used to read a the content of a file. Ex: [readRDS()]
-#' @export
-parser_read_file <- function(read_fn = readLines) {
-  stopifnot(is.function(read_fn))
-  function(value, filename = "", ...) {
-    tmp <- tempfile("plumb", fileext = paste0("_", basename(filename)))
-    on.exit({
-      file.remove(tmp)
-    }, add = TRUE)
-    writeBin(value, tmp)
-    read_fn(tmp)
-  }
-}
-
 #' @describeIn parsers CSV parser
 #' @export
 parser_csv <- function(...) {
@@ -408,6 +392,23 @@ parser_tsv <- function(...) {
     }
     readr::read_tsv(tmpfile, ...)
   })
+}
+
+
+#' @describeIn parsers Helper parser that writes the binary post body to a file and reads it back again using `read_fn`.
+#'   This parser should be used when reading from a file is required.
+#' @param read_fn function used to read a the content of a file. Ex: [readRDS()]
+#' @export
+parser_read_file <- function(read_fn = readLines) {
+  stopifnot(is.function(read_fn))
+  function(value, filename = "", ...) {
+    tmp <- tempfile("plumb", fileext = paste0("_", basename(filename)))
+    on.exit({
+      file.remove(tmp)
+    }, add = TRUE)
+    writeBin(value, tmp)
+    read_fn(tmp)
+  }
 }
 
 
