@@ -336,7 +336,7 @@ parser_query <- function() {
 }
 
 
-#' @describeIn parsers JSON parser
+#' @describeIn parsers JSON parser. See [jsonlite::parse_json()] for more details. (Defaults to using `simplifyVectors = TRUE`)
 #' @export
 parser_json <- function(...) {
   parser_text(function(txt_value) {
@@ -359,7 +359,7 @@ parser_text <- function(parse_fn = identity) {
 }
 
 
-#' @describeIn parsers YAML parser
+#' @describeIn parsers YAML parser. See [yaml::yaml.load()] for more details.
 #' @export
 parser_yaml <- function(...) {
   parser_text(function(val) {
@@ -370,7 +370,7 @@ parser_yaml <- function(...) {
   })
 }
 
-#' @describeIn parsers CSV parser
+#' @describeIn parsers CSV parser. See [readr::read_csv()] for more details.
 #' @export
 parser_csv <- function(...) {
   parse_fn <- function(raw_val) {
@@ -385,7 +385,7 @@ parser_csv <- function(...) {
 }
 
 
-#' @describeIn parsers TSV parser
+#' @describeIn parsers TSV parser. See [readr::read_tsv()] for more details.
 #' @export
 parser_tsv <- function(...) {
   parse_fn <- function(raw_val) {
@@ -419,7 +419,7 @@ parser_read_file <- function(read_fn = readLines) {
 }
 
 
-#' @describeIn parsers RDS parser
+#' @describeIn parsers RDS parser. See [readRDS()] for more details.
 #' @export
 parser_rds <- function(...) {
   parser_read_file(function(tmpfile) {
