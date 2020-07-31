@@ -49,6 +49,8 @@ test_that("Test yaml parser", {
 })
 
 test_that("Test csv parser", {
+  skip_if_not_installed("readr")
+
   tmp <- tempfile()
   on.exit({
     file.remove(tmp)
@@ -67,6 +69,8 @@ test_that("Test csv parser", {
 })
 
 test_that("Test tsv parser", {
+  skip_if_not_installed("readr")
+
   tmp <- tempfile()
   on.exit({
     file.remove(tmp)
