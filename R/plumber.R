@@ -930,7 +930,7 @@ plumber <- R6Class(
     #' @description Set UI to use for API
     #'
     #' See also: [pr_set_ui()], [register_ui()], [registered_uis()]
-    #' @param ui a character value or a logical value. Defaults to `options("plumber.ui").
+    #' @param ui a character value or a logical value. Defaults to `options("plumber.ui"). See [pr_set_ui()] for examples.
     #'  If using [options_plumber()], the value must be set before initializing your Plumber router.
     #' @param ... Other params to be passed to `ui` functions.
     set_ui = function(

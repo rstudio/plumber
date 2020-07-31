@@ -59,5 +59,11 @@ if (require(rapidoc)) {
     pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) \%>\%
     pr_run()
 }
+
+## Disable the OpenAPI Spec UI
+pr() \%>\%
+  pr_set_ui(FALSE) \%>\%
+  pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) \%>\%
+  pr_run()
 }
 }

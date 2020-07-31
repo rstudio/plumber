@@ -174,6 +174,12 @@ pr_set_debug <- function(pr, debug = interactive()) {
 #'     pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) %>%
 #'     pr_run()
 #' }
+#'
+#' ## Disable the OpenAPI Spec UI
+#' pr() %>%
+#'   pr_set_ui(FALSE) %>%
+#'   pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) %>%
+#'   pr_run()
 #' }
 pr_set_ui <- function(
   pr,

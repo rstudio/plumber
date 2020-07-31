@@ -736,7 +736,7 @@ See also: \code{\link[=pr_set_ui]{pr_set_ui()}}, \code{\link[=register_ui]{regis
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{ui}}{a character value or a logical value. Defaults to `options("plumber.ui").
+\item{\code{ui}}{a character value or a logical value. Defaults to `options("plumber.ui"). See \code{\link[=pr_set_ui]{pr_set_ui()}} for examples.
 If using \code{\link[=options_plumber]{options_plumber()}}, the value must be set before initializing your Plumber router.}
 
 \item{\code{...}}{Other params to be passed to \code{ui} functions.}
