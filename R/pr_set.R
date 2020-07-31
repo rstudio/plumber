@@ -9,8 +9,7 @@
 #' @return The Plumber router with the new default serializer
 #'
 #' @export
-pr_set_serializer <- function(pr,
-                          serializer) {
+pr_set_serializer <- function(pr, serializer) {
   validate_pr(pr)
   pr$setSerializer(serializer)
   invisible(pr)
@@ -40,8 +39,7 @@ pr_set_serializer <- function(pr,
 #' }
 #'
 #' @export
-pr_set_404 <- function(pr,
-                   fun) {
+pr_set_404 <- function(pr, fun) {
   validate_pr(pr)
   pr$set404Handler(fun)
   invisible(pr)
@@ -68,8 +66,7 @@ pr_set_404 <- function(pr,
 #'   pr_run()
 #' }
 #' @export
-pr_set_error <- function(pr,
-                     fun) {
+pr_set_error <- function(pr, fun) {
   validate_pr(pr)
   pr$setErrorHandler(fun)
   invisible(pr)
@@ -182,7 +179,6 @@ pr_set_ui <- function(
 #' @examples
 #' \dontrun{
 #' pr() %>%
-#'   pr_set_ui(TRUE) %>%
 #'   pr_set_ui_callback(function(url) { message("API location: ", url) }) %>%
 #'   pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) %>%
 #'   pr_run()
@@ -211,7 +207,6 @@ pr_set_ui_callback <- function(
 #' \dontrun{
 #' # Set the API Spec to a function to use the auto-generated OAS object
 #' pr() %>%
-#'   pr_set_ui(TRUE) %>%
 #'   pr_set_api_spec(function(spec) {
 #'     spec$info$title <- Sys.time()
 #'     spec
@@ -221,7 +216,6 @@ pr_set_ui_callback <- function(
 #'
 #' # Set the API Spec using an object
 #' pr() %>%
-#'   pr_set_ui(TRUE) %>%
 #'   pr_set_api_spec(my_custom_object) %>%
 #'   pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) %>%
 #'   pr_run()

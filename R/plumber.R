@@ -269,7 +269,7 @@ plumber <- R6Class(
     #' This value does not need to be explicitly assigned.
     #' @param debug Deprecated. See `$set_debug()`
     #' @param swagger Deprecated. See `$set_ui(ui)` or `$set_api_spec()`
-    #' @param swaggerCallback Deprecated. See `$set_ui(callback)`
+    #' @param swaggerCallback Deprecated. See `$set_ui_callback()`
     run = function(
       host = '127.0.0.1',
       port = getOption('plumber.port'),
@@ -926,7 +926,7 @@ plumber <- R6Class(
         enabled <- FALSE
         ui <- "__not_enabled__"
       }
-      private$ui_info = list(
+      private$ui_info <- list(
         enabled = enabled,
         ui = ui,
         args = list(...)
@@ -945,16 +945,16 @@ plumber <- R6Class(
     ) {
       # Use callback when defined
       if (!length(callback) || !is.function(callback)) {
-        callback = as.null
+        callback <- function(...) { NULL }
       }
-      private$ui_callback = callback
+      private$ui_callback <- callback
     },
     #' @description Set debug value to include error messages
     #' @param debug `TRUE` provides more insight into your API errors.
     #' @seealso [pr_set_debug()]
     set_debug = function(debug = interactive()) {
       stopifnot(length(debug) == 1)
-      private$debug = isTRUE(debug)
+      private$debug <- isTRUE(debug)
     },
     #' @description Add a filter to plumber router
     #' @param name a character string. Name of filter
@@ -984,7 +984,7 @@ plumber <- R6Class(
         } else {
           if (!is.function(api)) {
             # function to return the api object
-            function(...) {
+            function(x) {
               api
             }
           } else {

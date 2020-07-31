@@ -24,7 +24,7 @@ plumber 1.0.0
   [OpenAPI 3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md),
   upgrading from Swagger Specification. (#365)
 
-* Plumber router `$run()` method arguments `swagger`, `swaggerCallback` and `...` deprecated. User interface and url callback are now enabled by default and managed through Plumber router `$set_ui()` method and option `plumber.ui`. (@meztez, #562)
+* Plumber router `$run()` method arguments `swagger`, `swaggerCallback` and `debug` are now deprecated. User interface and url callback are now enabled by default and managed through Plumber router `$set_ui()`, `$set_ui_callback()`, and `$set_debug()` methods and options `plumber.ui` and `plumber.ui.callback`. (@meztez, #562)
 
 * The source files used in plumber **must use** the UTF-8 encoding if they contain
   non-ASCII characters (@shrektan, #312,
