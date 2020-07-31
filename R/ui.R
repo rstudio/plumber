@@ -139,21 +139,15 @@ unmount_openapi <- function(pr) {
 register_ui <- function(ui) {
 
   stopifnot(is.list(ui))
-  stopifnot(is.character(ui$package) && length(ui$package) == 1L)
-
-  if (!requireNamespace(ui$package, quietly = TRUE)) {
-    stop(ui$package, " must be installed for the ", ui$name," UI to be displayed")
-  }
-
   stopifnot(is.character(ui$name) && length(ui$name) == 1L)
+  stopifnot(grepl("^[a-zA-Z0-9_]+$", ui$name))
   stopifnot(is.function(ui$static))
   stopifnot(is.function(ui$index))
+
   ui_root <- paste0("/__", ui$name, "__/")
-  ui_path <- paste0(ui_root, c("index.html", ""))
+  ui_paths <- c("/index.html", "/")
 
   mount_ui_func <- function(pr, api_url, ...) {
-
-    ui_url <- paste0(api_url, ui_root)
 
     # Save initial extra argument values
     args_index <- list(...)
@@ -165,16 +159,18 @@ register_ui <- function(ui) {
       args <- args[!(names(args) %in% c("req", "res"))]
       do.call(ui$index, args)
     }
-    for (path in ui_path) {
-      pr$handle("GET", path, ui_index,  serializer = serializer_html())
+
+    ui_router <- plumber$new()
+    for (path in ui_paths) {
+      ui_router$handle("GET", path, ui_index, serializer = serializer_html())
     }
-    pr$mount(ui_root, PlumberStatic$new(ui$static(...)))
+    ui_router$mount("/", PlumberStatic$new(ui$static(...)))
+    pr$mount(ui_root, ui_router)
+
+    ui_url <- paste0(api_url, ui_root)
     return(ui_url)
   }
   unmount_ui_func <- function(pr) {
-    for (path in ui_path) {
-      pr$remove_handle("GET", path)
-    }
     pr$unmount(ui_root)
     invisible()
   }
