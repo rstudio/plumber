@@ -424,6 +424,7 @@ parser_read_file <- function(read_fn = readLines) {
 #' @export
 parser_rds <- function(...) {
   parser_read_file(function(tmpfile) {
+    # `readRDS()` does not work with `rawConnection()`
     readRDS(tmpfile, ...)
   })
 }
