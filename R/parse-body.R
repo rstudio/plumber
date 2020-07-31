@@ -228,7 +228,6 @@ registered_parsers <- function() {
 #'
 #' # default plumber parsers
 #' make_parser(c("json", "query", "text", "octet", "multi"))
-#' @export
 make_parser <- function(aliases) {
   if (inherits(aliases, "plumber_parsed_parsers")) {
     return(aliases)

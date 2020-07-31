@@ -52,7 +52,7 @@ Functions signature should include \code{value}, \code{...} and
 possibly \code{content_type}, \code{filename}. Other parameters may be provided
 if you want to use the headers from \code{\link[webutils:parse_multipart]{webutils::parse_multipart()}}.
 
-Parser function structure is something like below.\if{html}{\out{<div class="r">}}\preformatted{parser <- (parser_arguments_here) \{
+Parser function structure is something like below.\if{html}{\out{<div class="r">}}\preformatted{parser <- function(parser_arguments_here) \{
   # return a function to parse a raw value
   function(value, ...) \{
     # do something with raw value

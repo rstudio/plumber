@@ -596,7 +596,31 @@ Sets the default serializer of the router.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{parsers}}{A value to be parsed by \code{\link[=make_parser]{make_parser()}}}
+\item{\code{parsers}}{Set default endpoint parsers. Initialized to \code{c("json", "query", "text", "octet", "multi")}
+
+Can be one of:
+\itemize{
+\item A \code{NULL} value
+\item A character vector of parser names
+\item A named \code{list()} whose keys are parser names names and values are arguments to be applied with \code{\link[=do.call]{do.call()}}
+\item A \code{TRUE} value, which will default to combining all parsers. This is great for seeing what is possible, but not great for security purposes
+}
+
+If the parser name \code{"all"} is found in any character value or list name, all remaining parsers will be added.
+When using a list, parser information already defined will maintain their existing argument values.  All remaining parsers will use their default arguments.
+
+Example:\preformatted{# provide a character string
+parsers = "json"
+
+# provide a named list with no arguments
+parsers = list(json = list())
+
+# provide a named list with arguments; include `rds`
+parsers = list(json = list(simplifyVector = FALSE), rds = list())
+
+# default plumber parsers
+parsers = c("json", "query", "text", "octet", "multi")
+}}
 }
 \if{html}{\out{</div>}}
 }
