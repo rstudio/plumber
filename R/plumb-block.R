@@ -19,6 +19,7 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
   image <- NULL
   imageArgs<- NULL
   serializer <- NULL
+  parsers <- NULL
   assets <- NULL
   params <- NULL
   comments <- ""
@@ -101,8 +102,8 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
         stopOnLine(lineNum, line, "Multiple @serializers specified for one function.")
       }
 
-      if (!s %in% names(.globals$serializers)){
-        stop("No such @serializer registered: ", s)
+      if (!(s %in% registered_serializers())){
+        stopOnLine(lineNum, line, paste0("No such @serializer registered: ", s))
       }
 
       ser <- .globals$serializers[[s]]
@@ -133,8 +134,8 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
         stopOnLine(lineNum, line, "Multiple @serializers specified for one function (shorthand serializers like @json count, too).")
       }
 
-      if (!is.na(s) && !s %in% names(.globals$serializers)){
-        stop("No such @serializer registered: ", s)
+      if (!is.na(s) && !(s %in% registered_serializers())){
+        stopOnLine(lineNum, line, paste0("No such @serializer registered: ", s))
       }
       shortSerAttr <- trimws(shortSerMat[1,3])
       if(!identical(shortSerAttr, "") && !grepl("^\\(.*\\)$", shortSerAttr)){
@@ -156,6 +157,34 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
       }, error = function(e) {
         stopOnLine(lineNum, line, paste0("Error creating serializer: ", s, "\n", e))
       })
+
+    }
+
+    parsersMat <- stri_match(line, regex="^#['\\*]\\s*@parser(\\s+([^\\s]+)\\s*(.*)\\s*$)?")
+    if (!is.na(parsersMat[1,1])){
+      parser_alias <- stri_trim_both(parsersMat[1,3])
+      if (is.na(parser_alias) || parser_alias == ""){
+        stopOnLine(lineNum, line, "No @parser specified")
+      }
+
+      if (!parser_alias %in% registered_parsers()){
+        stopOnLine(lineNum, line, paste0("No such @parser registered: ", parser_alias))
+      }
+
+      if (!is.na(parsersMat[1, 4]) && parsersMat[1,4] != ""){
+        # We have an arg to pass in to the parser
+        arg_list <- tryCatch({
+          eval(parse(text=parsersMat[1,4]), envir)
+        }, error = function(e) {
+          stopOnLine(lineNum, line, e)
+        })
+      } else {
+        arg_list <- list()
+      }
+      if (is.null(parsers)) {
+        parsers <- list()
+      }
+      parsers[[parser_alias]] <- arg_list
 
     }
 
@@ -241,6 +270,7 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
     image = image,
     imageArgs = imageArgs,
     serializer = serializer,
+    parsers = parsers,
     assets = assets,
     params = rev(params),
     comments = comments,
@@ -265,7 +295,19 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr)
   # ALL if statements possibilities must eventually call eval(expr, envir)
   if (!is.null(block$paths)){
     lapply(block$paths, function(p){
-      ep <- PlumberEndpoint$new(p$verb, p$path, expr, envir, block$serializer, srcref, block$params, block$comments, block$responses, block$tags)
+      ep <- PlumberEndpoint$new(
+        verbs = p$verb,
+        path = p$path,
+        expr = expr,
+        envir = envir,
+        serializer = block$serializer,
+        parsers = block$parsers,
+        lines = srcref,
+        params = block$params,
+        comments = block$comments,
+        responses = block$responses,
+        tags = block$tags
+      )
 
       if (!is.null(block$image)){
         if (block$image == "png"){

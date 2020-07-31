@@ -160,6 +160,40 @@ test_that("@html parameters produce an error", {
   expect_block_error("#' @html (key = \"val\")", "unused argument")
 })
 
+test_that("@parser parameters produce an error or not", {
+  # due to covr changing some code, the return answer is very strange
+  testthat::skip_on_covr()
+
+  expect_block_parser <- function(lines, fn) {
+    b <- plumbBlock(length(lines), lines)
+    expect_equal(b$parsers, fn)
+  }
+  expect_block_error <- function(lines, ...) {
+    expect_error({
+      plumbBlock(length(lines), lines)
+    }, ...)
+  }
+
+
+  expected <- list(octet = list())
+  expect_block_parser("#' @parser octet",  expected)
+
+  expect_block_parser("#' @parser octet list()", expected)
+  expect_block_parser("#' @parser octet list(         )", expected)
+  expect_block_parser("#' @parser octet list     (         )     ", expected)
+
+  expect_error({
+    evaluateBlock(
+      srcref = 3, # which evaluates to line 2
+      file = c("#' @get /test", "#' @parser octet list(key = \"val\")"),
+      expr = substitute(identity),
+      envir = new.env(),
+      addEndpoint = function(a, b, ...) { stop("should not reach here")},
+      addFilter = as.null,
+      pr = plumber$new()
+    )
+  }, "unused argument (key = \"val\")", fixed = TRUE)
+})
 test_that("Plumbing block use the right environment", {
   expect_silent(plumb(test_path("files/plumb-envir.R")))
 })

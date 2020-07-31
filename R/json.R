@@ -1,5 +1,5 @@
 #' @importFrom jsonlite parse_json
 #' @noRd
-safeFromJSON <- function(txt) {
-  parse_json(txt, simplifyVector = TRUE)
+safeFromJSON <- function(txt, simplifyVector = TRUE, ...) {
+  parse_json(txt, simplifyVector = simplifyVector, ...)
 }

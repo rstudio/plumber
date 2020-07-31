@@ -2,11 +2,7 @@ postBodyFilter <- function(req){
   handled <- req$.internal$postBodyHandled
   if (is.null(handled) || handled != TRUE) {
     # This will return raw bytes
-    body <- req$rook.input$read()
-    type <- req$HTTP_CONTENT_TYPE
-    args <- parseBody(body, type)
-    req$args <- c(req$args, args)
-    req$postBodyRaw <- body
+    req$postBodyRaw <- req$rook.input$read()
     if (isTRUE(getOption("plumber.postBody", TRUE))) {
       req$rook.input$rewind()
       req$postBody <- paste0(req$rook.input$read_lines(), collapse = "\n")
@@ -16,230 +12,484 @@ postBodyFilter <- function(req){
   forward()
 }
 
-parseBody <- function(body, content_type = NULL) {
+postbody_parser <- function(req, parsers = NULL) {
+  if (length(parsers) == 0) {return(list())}
+  type <- req$HTTP_CONTENT_TYPE
+  body <- req$postBodyRaw
+  if (is.null(body)) {return(list())}
+  parse_body(body, type, parsers)
+}
+
+parse_body <- function(body, content_type = NULL, parsers = NULL) {
   if (!is.raw(body)) {body <- charToRaw(body)}
-  toparse <- list(value = body, content_type = content_type)
-  parseRaw(toparse)
+  toparse <- list(value = body, content_type = content_type, parsers = parsers)
+  parse_raw(toparse)
 }
 
-parseRaw <- function(toparse) {
+parse_raw <- function(toparse) {
   if (length(toparse$value) == 0L) return(list())
-  parser <- parserPicker(toparse$content_type, toparse$value[1], toparse$filename)
-  do.call(parser(), toparse)
+  parser <- parser_picker(
+    # Lower case content_type for parser matching
+    tolower(toparse$content_type),
+    toparse$value[1],
+    toparse$filename,
+    toparse$parsers
+  )
+  if (is.null(parser)) {
+    message("No suitable parser found to handle request body type ", toparse$content_type, ".")
+    return(list())
+  }
+  do.call(parser, toparse)
 }
 
-parserPicker <- function(content_type, first_byte, filename = NULL) {
-  #fast default to json when first byte is 7b (ascii {)
-  if (first_byte == as.raw(123L)) {
-    return(.globals$parsers$func[["json"]])
-  }
-  if (is.null(content_type)) {
-    return(.globals$parsers$func[["query"]])
-  }
-  # else try to find a match
-  patterns <- .globals$parsers$pattern
-  parser <- .globals$parsers$func[stri_startswith_fixed(content_type, patterns)]
-  # Should we warn when multiple parsers match?
-  # warning("Multiple body parsers matches for content-type : ", toparse$content_type, ". Parser ", names(parser)[1L], " used.")
-  if (length(parser) == 0L) {
-    if (is.null(filename)) {
-      return(.globals$parsers$func[["query"]])
-    } else {
-      return(.globals$parsers$func[["octet"]])
+parser_picker <- function(content_type, first_byte, filename = NULL, parsers = NULL) {
+
+  # parse as a query string
+  if (length(content_type) == 0) {
+    # fast default to json when first byte is 7b (ascii {)
+    if (first_byte == as.raw(123L)) {
+      return(parsers$alias$json)
     }
-  } else {
-    return(parser[[1L]])
+
+    return(parsers$alias$query)
   }
+
+  # remove trailing content type information
+  # "application/json; charset=UTF-8"
+  # to
+  # "application/json"
+  if (stri_detect_fixed(content_type, ";")) {
+    content_type <- stri_split_fixed(content_type, ";")[[1]][1]
+  }
+
+  parser <- parsers$fixed[[content_type]]
+
+  # return known parser (exact match)
+  if (!is.null(parser)) {
+    return(parser)
+  }
+
+  fpm <- stri_detect_regex(
+    content_type,
+    names(parsers$regex),
+    max_count = 1
+  )
+
+  # return known parser (first regex pattern match)
+  if (any(fpm)) {
+    return(parsers$regex[[which(fpm)[1]]])
+  }
+
+  # query string
+  if (is.null(filename)) {
+    return(parsers$alias$query)
+  }
+
+  # octet
+  parsers$alias$octet
 }
 
 
-
-#' Plumber Parsers
-#'
-#' Parsers are used in Plumber to transform the raw body content received
-#' by a request to the API.
-#' @name parsers
-#' @rdname parsers
-NULL
-
-#' Add a Parsers
+#' Manage parsers
 #'
 #' A parser is responsible for decoding the raw body content of a request into
 #' a list of arguments that can be mapped to endpoint function arguments.
-#' For instance, the \code{parser_json} parser content-type `application/json`.
-#' The list of available parsers in plumber is global.
+#' For instance, [parser_json()] parse content-type `application/json`.
 #'
-#' @param name The name of the parser (character string)
-#' @param parser The parser to be added.
-#' @param pattern A pattern to match against the content-type of each part of
-#' the request body.
+#' @param alias An alias to map parser from the `@parser` plumber tag to the global parsers list.
+#' @param parser The parser function to be added. This build the parser function. See Details for more information.
+#' @param fixed A character vector of fixed string to be matched against a request `content-type` to use `parser`.
+#' @param regex A character vector of [regex] string to be matched against a request `content-type` to use `parser`.
+#' @param verbose Logical value which determines if a warning should be
+#' displayed when alias in map are overwritten.
 #'
-#' @details For instance, the \code{parser_json} pattern is `application/json`.
-#' If `pattern` is not provided, will be set to `application/{name}`.
-#' Detection is done assuming content-type starts with pattern and is
-#' case sensitive.
+#' @details
+#' When `parser` is evaluated, it should return a parser function.
+#' Parser matching is done first by `content-type` header matching on `fixed` then by using a
+#' regular expressions on `regex`. Note that plumber strip the header from `; charset*` to
+#' perform matching.
 #'
-#' Parser function structure is something like below. Available parameters
-#' to build parser are `value`, `content_type` and `filename` (only available
-#' in `multipart-form` body).
+#' There is a special case when no `content-type` header is
+#' provided that will use a [parser_json()] when it detects a `json` string.
+#'
+#' Functions signature should include `value`, `...` and
+#' possibly `content_type`, `filename`. Other parameters may be provided
+#' if you want to use the headers from [webutils::parse_multipart()].
+#'
+#' Parser function structure is something like below.
 #' ```r
-#' parser <- function() {
-#'   function(value, content_type = "ct", filename, ...) {
+#' parser <- function(parser_arguments_here) {
+#'   # return a function to parse a raw value
+#'   function(value, ...) {
 #'     # do something with raw value
 #'   }
 #' }
 #' ```
 #'
-#' It should return a named list if you want values to map to
-#' plumber endpoint function args.
-#'
 #' @examples
-#' parser_json <- function() {
-#'   function(value, content_type = "application/json", ...) {
+#' # `content-type` header is mostly used to look up charset and adjust encoding
+#' parser_dcf <- function(...) {
+#'   function(value, content_type = "text/x-dcf", ...) {
 #'     charset <- getCharacterSet(content_type)
 #'     value <- rawToChar(value)
 #'     Encoding(value) <- charset
-#'     jsonlite::parse_json(value, simplifyVector = TRUE)
+#'     read.dcf(value, ...)
 #'   }
 #' }
-#' @md
+#'
+#' # Could also leverage existing parsers
+#' parser_dcf <- function(...) {
+#'   parser_read_file(function(tmpfile) {
+#'     read.dcf(tmpfile, ...)
+#'   })
+#' }
+#'
+#' # Register the newly created parser
+#' \dontrun{register_parser("dcf", parser_dcf, fixed = "text/x-dcf")}
 #' @export
-addParser <- function(name, parser, pattern = NULL) {
-  if (is.null(.globals$parsers)) {
-    .globals$parsers <- list()
+register_parser <- function(
+  alias,
+  parser,
+  fixed = NULL,
+  regex = NULL,
+  verbose = TRUE
+) {
+
+  if (!is.null(.globals$parsers[[alias]])) {
+    if (isTRUE(verbose)) {
+      warning("Overwriting parser: ", alias)
+    }
   }
-  if (!is.null(.globals$parsers$func[[name]])) {
-    stop("Already have a parser by the name of ", name)
+
+  stopifnot(is.function(parser))
+
+  if (length(c(fixed, regex)) == 0) {
+    stop("At least one value of `fixed` and `regex` is required to register a parser")
   }
-  if (is.null(pattern)) {
-    pattern <- paste0("application/", name)
+
+  # Init the parser function with outside arguments
+  init_parser_func <- function(...) {
+    parser_function <- do.call(parser, list(...))
+
+    parser_formals <- formals(parser_function)
+    if (!("..." %in% names(parser_formals))) {
+      stop("For parser '", alias, "', please add a `...` argument to the returned function for possible future parameter expansion")
+    }
+
+    create_list <- function(names) {
+      stats::setNames(
+        replicate(
+          length(names),
+          parser_function),
+        names
+      )
+    }
+
+    parser_info <- list(
+      alias = create_list(alias)
+    )
+    if (length(fixed) > 0) {
+      parser_info$fixed <- create_list(fixed)
+    }
+    if (length(regex) > 0) {
+      parser_info$regex <- create_list(regex)
+    }
+
+    return(parser_info)
   }
-  .globals$parsers$func[[name]] <- parser
-  .globals$parsers$pattern[[name]] <- pattern
+
+  .globals$parsers[[alias]] <- init_parser_func
+  invisible(.globals$parsers)
 }
 
-
-
-#' JSON
-#' @rdname parsers
+#' @describeIn register_parser Return all registered parsers
 #' @export
-parser_json <- function() {
-  function(value, content_type = NULL, ...) {
-    charset <- getCharacterSet(content_type)
-    value <- rawToChar(value)
-    Encoding(value) <- charset
-    safeFromJSON(value)
-  }
+registered_parsers <- function() {
+  sort(names(.globals$parsers))
 }
 
+# ' @describeIn register_parser Select from global parsers and create a combined parser list for programmatic use.
+# ' @param aliases Can be one of:
+# '   * A character vector of `alias` names.
+# '   * A named `list()` whose keys are `alias` names and values are arguments to be applied with [do.call()]
+# '   * A `TRUE` value, which will default to combining all parsers. This is great for seeing what is possible, but not great for security purposes.
+# '   * Already combined parsers. (Will be returned immediately.)
+# '
+# ' If `"all"` is found in any `alias` character value or list name, all remaining parsers will be added.  When using a list, aliases already defined will maintain their existing argument values.  All other parser aliases will use their default arguments.
+# ' @examples
+# ' # provide a character string
+# ' make_parser("json")
+# '
+# ' # provide a named list with no arguments
+# ' make_parser(list(json = list()))
+# '
+# ' # provide a named list with arguments; include `rds`
+# ' make_parser(list(json = list(simplifyVector = FALSE), rds = list()))
+# '
+# ' # default plumber parsers
+# ' make_parser(c("json", "query", "text", "octet", "multi"))
+make_parser <- function(aliases) {
+  if (inherits(aliases, "plumber_parsed_parsers")) {
+    return(aliases)
+  }
+  if (isTRUE(aliases)) {
+    # use all parsers
+    aliases <- "all"
+  }
+  if (is.character(aliases)) {
+    if (any(is.na(aliases))) {
+      stop("aliases can not be `NA` values")
+    }
+    if ("all" %in% aliases) {
+      # use all available parsers expect `all` and `none`
+      aliases <- setdiff(registered_parsers(), c("all", "none"))
+    }
+    # turn aliases into a named list with empty values
+    aliases <- stats::setNames(
+      replicate(length(aliases), {list()}),
+      aliases
+    )
+  }
 
+  stopifnot(is.list(aliases))
+  if (is.null(names(aliases))) {
+    stop("aliases must be able to convert to a named list")
+  }
 
+  local({
+    aliases_not_found <- !(names(aliases) %in% registered_parsers())
+    if (any(aliases_not_found)) {
+      missing_aliases <- names(aliases)[aliases_not_found]
+      stop("Aliases not available: ", paste0(missing_aliases, collapse = ", "), ". See: registered_parsers()")
+    }
+  })
 
-#' QUERY STRING
-#' @rdname parsers
+  # if "all" is found, remove "all" and add all remaining registered parsers (except 'none') to the `aliases` list
+  if ("all" %in% names(aliases)) {
+    all_parser_names <- setdiff(registered_parsers(), c("all", "none"))
+    # remove to avoid infinite recursion
+    aliases$all <- NULL
+    names_to_add <- setdiff(all_parser_names, names(aliases))
+    if (length(names_to_add)) {
+      aliases[names_to_add] <- replicate(length(names_to_add), list())
+    }
+  }
+
+  # convert parser functions into initialized information
+  parser_infos <-
+    lapply(
+      names(aliases),
+      function(alias) {
+        # get init function
+        init_parser_func <- .globals$parsers[[alias]]
+        # call outer parser function to init the params for inner function
+        do.call(init_parser_func, aliases[[alias]])
+      }
+    )
+
+  # combine information into a single list
+  combined_parser_info <-
+    Reduce(
+      function(cur_parser_info, parser_info) {
+        utils::modifyList(cur_parser_info, parser_info)
+      },
+      parser_infos,
+      init = list()
+    )
+
+  class(combined_parser_info) <- c("plumber_parsed_parsers", class(combined_parser_info))
+  combined_parser_info
+}
+
+#' Plumber Parsers
+#'
+#' Parsers are used in Plumber to transform the raw body content received
+#' by a request to the API. Extra parameters may be provided to parser
+#' functions when adding the parser to plumber. This will allow for
+#' non-default behavior.
+#'
+#' Parsers are optional. When unspecified, only the [parser_json()],
+#' [parser_octet()], [parser_query()] and [parser_text()] are available.
+#' You can use `@parser parser` tag to activate parsers per endpoint.
+#' Multiple parsers can be activated for the same endpoint using multiple `@parser parser` tags.
+#'
+#' User should be aware that `rds` parsing should only be done from a
+#' trusted source. Do not accept `rds` files blindly.
+#'
+#' See [registered_parsers()] for a list of registered parsers.
+#'
+#' @param ... parameters supplied to the appropriate internal function
+#' @describeIn parsers Query string parser
+#' @examples
+#' \dontrun{
+#' # Overwrite `text/json` parsing behavior to not allow JSON vectors to be simplified
+#' #* @parser json simplifyVector = FALSE
+#' # Activate `rds` parser in a multipart request
+#' #* @parser multi
+#' #* @parser rds
+#' pr <- plumber$new()
+#' pr$handle("GET", "/upload", function(rds) {rds}, parsers = c("multi", "rds"))
+#' }
 #' @export
 parser_query <- function() {
+  parser_text(parseQS)
+}
+
+
+#' @describeIn parsers JSON parser
+#' @export
+parser_json <- function(...) {
+  parser_text(function(txt_value) {
+    safeFromJSON(txt_value, ...)
+  })
+}
+
+
+#' @describeIn parsers Helper parser to parse plain text
+#' @param parse_fn function to further decode a text string into an object
+#' @export
+parser_text <- function(parse_fn = identity) {
+  stopifnot(is.function(parse_fn))
   function(value, content_type = NULL, ...) {
     charset <- getCharacterSet(content_type)
-    value <- rawToChar(value)
-    Encoding(value) <- charset
-    parseQS(value)
+    txt_value <- rawToChar(value)
+    Encoding(txt_value) <- charset
+    parse_fn(txt_value)
   }
 }
 
 
-
-
-#' TEXT
-#' @rdname parsers
+#' @describeIn parsers YAML parser
 #' @export
-parser_text <- function() {
-  function(value, content_type = NULL, ...) {
-    charset <- getCharacterSet(content_type)
-    value <- rawToChar(value)
-    Encoding(value) <- charset
+parser_yaml <- function(...) {
+  parser_text(function(val) {
+    if (!requireNamespace("yaml", quietly = TRUE)) {
+      stop("yaml must be installed for the yaml parser to work")
+    }
+    yaml::yaml.load(val, ..., eval.expr = FALSE)
+  })
+}
+
+#' @describeIn parsers CSV parser
+#' @export
+parser_csv <- function(...) {
+  parse_fn <- function(raw_val) {
+    if (!requireNamespace("readr", quietly = TRUE)) {
+      stop("`readr` must be installed for `parser_csv` to work")
+    }
+    readr::read_csv(raw_val, ...)
+  }
+  function(value, ...) {
+    parse_fn(value)
+  }
+}
+
+
+#' @describeIn parsers TSV parser
+#' @export
+parser_tsv <- function(...) {
+  parse_fn <- function(raw_val) {
+    if (!requireNamespace("readr", quietly = TRUE)) {
+      stop("`readr` must be installed for `parser_tsv` to work")
+    }
+    readr::read_tsv(raw_val, ...)
+  }
+  function(value, ...) {
+    parse_fn(value)
+  }
+}
+
+
+#' @describeIn parsers Helper parser that writes the binary post body to a file and reads it back again using `read_fn`.
+#'   This parser should be used when reading from a file is required.
+#' @param read_fn function used to read a the content of a file. Ex: [readRDS()]
+#' @export
+parser_read_file <- function(read_fn = readLines) {
+  stopifnot(is.function(read_fn))
+  function(value, filename = "", ...) {
+    tmp <- tempfile("plumb", fileext = paste0("_", basename(filename)))
+    on.exit({
+      if (file.exists(tmp)) {
+        file.remove(tmp)
+      }
+    }, add = TRUE)
+    writeBin(value, tmp)
+    read_fn(tmp)
+  }
+}
+
+
+#' @describeIn parsers RDS parser
+#' @export
+parser_rds <- function(...) {
+  parser_read_file(function(tmpfile) {
+    # `readRDS()` does not work with `rawConnection()`
+    readRDS(tmpfile, ...)
+  })
+}
+
+
+#' @describeIn parsers Octet stream parser. Will add a filename attribute if the filename exists
+#' @export
+parser_octet <- function() {
+  function(value, filename = NULL, ...) {
+    attr(value, "filename") <- filename
     value
   }
 }
 
 
-
-
-#" RDS
-#' @rdname parsers
-#' @export
-parser_rds <- function() {
-  function(value, filename, ...) {
-    tmp <- tempfile("plumb", fileext = paste0("_", basename(filename)))
-    on.exit(file.remove(tmp), add = TRUE)
-    writeBin(value, tmp)
-    readRDS(tmp)
-  }
-}
-
-
-
-
-#" MULTI
-#' @rdname parsers
+#' @describeIn parsers Multi part parser. This parser will then parse each individual body with its respective parser
 #' @export
 #' @importFrom webutils parse_multipart
 parser_multi <- function() {
-  function(value, content_type, ...) {
+  function(value, content_type, parsers, ...) {
     if (!stri_detect_fixed(content_type, "boundary=", case_insensitive = TRUE))
       stop("No boundary found in multipart content-type header: ", content_type)
     boundary <- stri_match_first_regex(content_type, "boundary=([^; ]{2,})", case_insensitive = TRUE)[,2]
     toparse <- parse_multipart(value, boundary)
     # content-type detection
     lapply(toparse, function(x) {
-      if (!is.null(x$filename)) {
-        x$content_type <- getContentType(tools::file_ext(x$filename))
+      if (
+        is.null(x$content_type) ||
+        # allows for files to be shipped as octect, but parsed using the matching value in `knownContentTypes`
+        # (Ex: `.rds` files -> `application/rds` which has a proper RDS parser)
+        isTRUE(stri_detect_fixed(x$content_type, "application/octet-stream"))
+      ) {
+        if (!is.null(x$filename)) {
+          # Guess content-type from file extension
+          x$content_type <- getContentType(tools::file_ext(x$filename))
+        }
       }
-      parseRaw(x)
+      x$parsers <- parsers
+      parse_raw(x)
     })
   }
 }
 
-
-
-
-#' OCTET
-#' @rdname parsers
+#' @describeIn parsers No parser. Will not process the postBody.
 #' @export
-parser_octet <- function() {
-  function(value, filename = NULL, ...) {
-    attr(value, "filename") <- filename
-    return(value)
+parser_none <- function() {
+  function(value, ...) {
+    value
   }
 }
 
+register_parsers_onLoad <- function() {
+  # parser alias names for plumbing
+  register_parser("csv", parser_csv, fixed = c("application/csv", "application/x-csv", "text/csv", "text/x-csv"))
+  register_parser("json", parser_json, fixed = c("application/json", "text/json"))
+  register_parser("multi", parser_multi, fixed = "multipart/form-data")
+  register_parser("octet", parser_octet, fixed = "application/octet-stream")
+  register_parser("query", parser_query, fixed = "application/x-www-form-urlencoded")
+  register_parser("rds", parser_rds, fixed = "application/rds")
+  register_parser("text", parser_text, fixed = "text/plain", regex = "^text/")
+  register_parser("tsv", parser_tsv, fixed = c("application/tab-separated-values", "text/tab-separated-values"))
+  register_parser("yaml", parser_yaml, fixed = c("application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"))
+  register_parser("none", parser_none, regex = "*")
 
-
-
-#' YAML
-#' @rdname parsers
-#' @export
-parser_yaml <- function() {
-  if (!requireNamespace("yaml", quietly = TRUE)) {
-    stop("yaml must be installed for the yaml parser to work")
+  parser_all <- function() {
+    stop("This function should never be called. It should be handled by `make_parser('all')`")
   }
-  function(value, content_type = NULL, ...) {
-    charset <- getCharacterSet(content_type)
-    value <- rawToChar(value)
-    Encoding(value) <- charset
-    yaml::yaml.load(value)
-  }
-}
-
-
-
-
-addParsers_onLoad <- function() {
-  addParser("json", parser_json, "application/json")
-  addParser("query", parser_query, "application/x-www-form-urlencoded")
-  addParser("text", parser_text, "text/")
-  addParser("rds", parser_rds, "application/rds")
-  addParser("multi", parser_multi, "multipart/form-data")
-  addParser("octet", parser_octet, "application/octet")
-  addParser("yaml", parser_yaml, "application/x-yaml")
+  register_parser("all", parser_all, regex = "*")
 }

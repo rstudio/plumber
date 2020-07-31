@@ -158,6 +158,8 @@ PlumberEndpoint <- R6Class(
     params = NA,
     #' @field tags endpoint tags
     tags = NA,
+    #' @field parsers step allowed parsers
+    parsers = NULL,
     #' @description ability to serve request
     #' @param req a request object
     #' @return a logical. `TRUE` when endpoint can serve request.
@@ -171,20 +173,42 @@ PlumberEndpoint <- R6Class(
       !is.na(stri_match_first_regex(path, private$regex$regex)[1,1])
     },
     #' @description Create a new `PlumberEndpoint` object
-    #' @param verbs endpoint verb
-    #' @param path endpoint path
-    #' @param expr endpoint expr
-    #' @param envir endpoint environment
-    #' @param serializer endpoint serializer
-    #' @param lines endpoint block
-    #' @param params endpoint params
-    #' @param comments endpoint comments
-    #' @param responses endpoint responses
-    #' @param tags endpoint tags
+    #' @param verbs Endpoint verb Ex: `"GET"`, `"POST"`
+    #' @param path Endpoint path. Ex: `"/index.html"`, `"/foo/bar/baz"`
+    #' @param expr Endpoint expression or function.
+    #' @param envir Endpoint environment
+    #' @param serializer Endpoint serializer
+    #' @param parsers Endpoint parsers.
+    #'   Can be one of:
+    #'   * A `NULL` value
+    #'   * A character vector of parser names
+    #'   * A named `list()` whose keys are parser names names and values are arguments to be applied with [do.call()]
+    #'   * A `TRUE` value, which will default to combining all parsers. This is great for seeing what is possible, but not great for security purposes
+    #'
+    #'   If the parser name `"all"` is found in any character value or list name, all remaining parsers will be added.
+    #'   When using a list, parser information already defined will maintain their existing argument values.  All remaining parsers will use their default arguments.
+    #'
+    #' Example:
+    #' ```
+    #' # provide a character string
+    #' parsers = "json"
+    #'
+    #' # provide a named list with no arguments
+    #' parsers = list(json = list())
+    #'
+    #' # provide a named list with arguments; include `rds`
+    #' parsers = list(json = list(simplifyVector = FALSE), rds = list())
+    #'
+    #' # default plumber parsers
+    #' parsers = c("json", "query", "text", "octet", "multi")
+    #' ```
+    #' @param lines Endpoint block
+    #' @param params Endpoint params
+    #' @param comments,responses,tags Values to be used within the OpenAPI Spec
     #' @details Parameters values are obtained from parsing blocks of lines in a plumber file.
     #' They can also be provided manually for historical reasons.
     #' @return A new `PlumberEndpoint` object
-    initialize = function(verbs, path, expr, envir, serializer, lines, params, comments, responses, tags){
+    initialize = function(verbs, path, expr, envir, serializer, parsers, lines, params, comments, responses, tags){
       self$verbs <- verbs
       self$path <- path
 
@@ -200,6 +224,9 @@ PlumberEndpoint <- R6Class(
 
       if (!missing(serializer) && !is.null(serializer)){
         self$serializer <- serializer
+      }
+      if (!missing(parsers) && !is.null(parsers)) {
+        self$parsers <- make_parser(parsers)
       }
       if (!missing(lines)){
         self$lines <- lines

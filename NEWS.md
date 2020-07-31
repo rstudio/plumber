@@ -62,6 +62,8 @@ plumber 1.0.0
 
 * Added yaml support, serializer and parser. (@meztez, #556)
 
+* Added parsers: `parser_csv()`, `parser_json()`, `parser_multi()`, `parser_octet()`, `parser_query()`, `parser_rds()`, `parser_text()`, `parser_tsv()`, `parser_yaml()`, `parser_none()`, and pseudo `"all"` (#584)
+
 * Added `serializer_csv()` (@pachamaltese, #520)
 
 * Added svg image serializer (@pachamaltese, #398)

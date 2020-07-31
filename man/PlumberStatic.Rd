@@ -44,6 +44,7 @@ Creates a router that is backed by a directory of files on disk.
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="serve">}\href{../../plumber/html/plumber.html#method-serve}{\code{plumber::plumber$serve()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="set404Handler">}\href{../../plumber/html/plumber.html#method-set404Handler}{\code{plumber::plumber$set404Handler()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="setErrorHandler">}\href{../../plumber/html/plumber.html#method-setErrorHandler}{\code{plumber::plumber$setErrorHandler()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="setParsers">}\href{../../plumber/html/plumber.html#method-setParsers}{\code{plumber::plumber$setParsers()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="setSerializer">}\href{../../plumber/html/plumber.html#method-setSerializer}{\code{plumber::plumber$setSerializer()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="swaggerFile">}\href{../../plumber/html/plumber.html#method-swaggerFile}{\code{plumber::plumber$swaggerFile()}}\out{</span>}
 }

@@ -8,6 +8,7 @@ hookable
 
 hookable
 }
+\keyword{internal}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
