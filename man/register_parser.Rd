@@ -3,14 +3,11 @@
 \name{register_parser}
 \alias{register_parser}
 \alias{registered_parsers}
-\alias{make_parser}
 \title{Manage parsers}
 \usage{
 register_parser(alias, parser, fixed = NULL, regex = NULL, verbose = TRUE)
 
 registered_parsers()
-
-make_parser(aliases)
 }
 \arguments{
 \item{alias}{An alias to map parser from the \verb{@parser} plumber tag to the global parsers list.}
@@ -23,16 +20,6 @@ make_parser(aliases)
 
 \item{verbose}{Logical value which determines if a warning should be
 displayed when alias in map are overwritten.}
-
-\item{aliases}{Can be one of:
-\itemize{
-\item A character vector of \code{alias} names.
-\item A named \code{list()} whose keys are \code{alias} names and values are arguments to be applied with \code{\link[=do.call]{do.call()}}
-\item A \code{TRUE} value, which will default to combining all parsers. This is great for seeing what is possible, but not great for security purposes.
-\item Already combined parsers. (Will be returned immediately.)
-}
-
-If \code{"all"} is found in any \code{alias} character value or list name, all remaining parsers will be added.  When using a list, aliases already defined will maintain their existing argument values.  All other parser aliases will use their default arguments.}
 }
 \description{
 A parser is responsible for decoding the raw body content of a request into
@@ -63,8 +50,6 @@ Parser function structure is something like below.\if{html}{\out{<div class="r">
 \section{Functions}{
 \itemize{
 \item \code{registered_parsers}: Return all registered parsers
-
-\item \code{make_parser}: Select from global parsers and create a combined parser list for programmatic use.
 }}
 
 \examples{
@@ -87,15 +72,4 @@ parser_dcf <- function(...) {
 
 # Register the newly created parser
 \dontrun{register_parser("dcf", parser_dcf, fixed = "text/x-dcf")}
-# provide a character string
-make_parser("json")
-
-# provide a named list with no arguments
-make_parser(list(json = list()))
-
-# provide a named list with arguments; include `rds`
-make_parser(list(json = list(simplifyVector = FALSE), rds = list()))
-
-# default plumber parsers
-make_parser(c("json", "query", "text", "octet", "multi"))
 }

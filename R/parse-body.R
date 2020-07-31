@@ -208,26 +208,26 @@ registered_parsers <- function() {
   sort(names(.globals$parsers))
 }
 
-#' @describeIn register_parser Select from global parsers and create a combined parser list for programmatic use.
-#' @param aliases Can be one of:
-#'   * A character vector of `alias` names.
-#'   * A named `list()` whose keys are `alias` names and values are arguments to be applied with [do.call()]
-#'   * A `TRUE` value, which will default to combining all parsers. This is great for seeing what is possible, but not great for security purposes.
-#'   * Already combined parsers. (Will be returned immediately.)
-#'
-#' If `"all"` is found in any `alias` character value or list name, all remaining parsers will be added.  When using a list, aliases already defined will maintain their existing argument values.  All other parser aliases will use their default arguments.
-#' @examples
-#' # provide a character string
-#' make_parser("json")
-#'
-#' # provide a named list with no arguments
-#' make_parser(list(json = list()))
-#'
-#' # provide a named list with arguments; include `rds`
-#' make_parser(list(json = list(simplifyVector = FALSE), rds = list()))
-#'
-#' # default plumber parsers
-#' make_parser(c("json", "query", "text", "octet", "multi"))
+# ' @describeIn register_parser Select from global parsers and create a combined parser list for programmatic use.
+# ' @param aliases Can be one of:
+# '   * A character vector of `alias` names.
+# '   * A named `list()` whose keys are `alias` names and values are arguments to be applied with [do.call()]
+# '   * A `TRUE` value, which will default to combining all parsers. This is great for seeing what is possible, but not great for security purposes.
+# '   * Already combined parsers. (Will be returned immediately.)
+# '
+# ' If `"all"` is found in any `alias` character value or list name, all remaining parsers will be added.  When using a list, aliases already defined will maintain their existing argument values.  All other parser aliases will use their default arguments.
+# ' @examples
+# ' # provide a character string
+# ' make_parser("json")
+# '
+# ' # provide a named list with no arguments
+# ' make_parser(list(json = list()))
+# '
+# ' # provide a named list with arguments; include `rds`
+# ' make_parser(list(json = list(simplifyVector = FALSE), rds = list()))
+# '
+# ' # default plumber parsers
+# ' make_parser(c("json", "query", "text", "octet", "multi"))
 make_parser <- function(aliases) {
   if (inherits(aliases, "plumber_parsed_parsers")) {
     return(aliases)
