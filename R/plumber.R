@@ -218,23 +218,21 @@ plumber <- R6Class(
       }
 
       # Initialize
-      private$serializer <- serializer_json()
+      private$maxSize <- getOption('plumber.maxRequestSize', 0) #0  Unlimited
+      self$setSerializer(serializer_json())
       # Default parsers to maintain legacy features
-      private$default_parsers <- make_parser(c("json", "query", "text", "octet", "multi"))
-      private$errorHandler <- defaultErrorHandler()
-      private$notFoundHandler <- default404Handler
-      private$maxSize <- getOption('plumber.maxRequestSize', 0) #0 Unlimited
-
-      # initialize with defaults of each function
+      self$set_parsers(c("json", "query", "text", "octet", "multi"))
+      self$setErrorHandler(defaultErrorHandler())
+      self$set404Handler(default404Handler)
       self$set_ui()
-      private$ui_info$init <- TRUE # set to know if `$set_ui()` has been called before `$run()`
+      private$ui_info$has_not_been_set <- TRUE # set to know if `$set_ui()` has been called before `$run()`
       self$set_ui_callback()
       self$set_debug()
       self$set_api_spec()
 
       # Add in the initial filters
       for (fn in names(filters)){
-        fil <- PlumberFilter$new(fn, filters[[fn]], private$envir, private$serializer, NULL)
+        fil <- PlumberFilter$new(fn, filters[[fn]], private$envir, private$default_serializer, NULL)
         private$filts <- c(private$filts, fil)
       }
 
@@ -298,7 +296,7 @@ plumber <- R6Class(
           self$set_api_spec(swagger)
           # spec is now enabled by default. Do not alter
         } else {
-          if (isTRUE(private$ui_info$init)) {
+          if (isTRUE(private$ui_info$has_not_been_set)) {
             # <= v0.4.6
             message("`$run(swagger)` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$set_ui(ui)`")
             self$set_ui(swagger)
@@ -483,7 +481,7 @@ plumber <- R6Class(
 
       if (epdef) {
         if (missing(serializer)) {
-          serializer <- private$serializer
+          serializer <- private$default_serializer
         }
         if (missing(parsers)) {
           parsers <- private$parsers
@@ -847,7 +845,7 @@ plumber <- R6Class(
       req$pr <- self
       req$.internal <- new.env()
 
-      res <- PlumberResponse$new(private$serializer)
+      res <- PlumberResponse$new(private$default_serializer)
 
       # maybe return a promise object
       self$serve(req, res)
@@ -892,7 +890,7 @@ plumber <- R6Class(
     #' pr$setSerializer(serializer_unboxed_json())
     #' }
     setSerializer = function(serializer) {
-      private$serializer <- serializer
+      private$default_serializer <- serializer
     },
     #' @description Sets the default parsers of the router.
     #' @param parsers Set default endpoint parsers. Initialized to `c("json", "query", "text", "octet", "multi")`
@@ -920,7 +918,7 @@ plumber <- R6Class(
     #' # default plumber parsers
     #' parsers = c("json", "query", "text", "octet", "multi")
     #' ```
-    setParsers = function(parsers) {
+    set_parsers = function(parsers) {
       private$default_parsers <- make_parser(parsers)
     },
     #' @description Sets the handler that gets called if an
@@ -1002,7 +1000,6 @@ plumber <- R6Class(
     #'
     #' See also: [pr_set_debug()]
     #' @param debug `TRUE` provides more insight into your API errors.
-    #' @
     set_debug = function(debug = interactive()) {
       stopifnot(length(debug) == 1)
       private$debug <- isTRUE(debug)
@@ -1193,7 +1190,7 @@ plumber <- R6Class(
       paths
     }
   ), private = list(
-    serializer = NULL, # The default serializer for the router
+    default_serializer = NULL, # The default serializer for the router
     default_parsers = NULL, # The default parsers for the router
 
     ends = list(), # List of endpoints indexed by their pre-empted filter.
