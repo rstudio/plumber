@@ -999,17 +999,20 @@ plumber <- R6Class(
       private$ui_callback <- callback
     },
     #' @description Set debug value to include error messages
+    #'
+    #' See also: [pr_set_debug()]
     #' @param debug `TRUE` provides more insight into your API errors.
-    #' @seealso [pr_set_debug()]
+    #' @
     set_debug = function(debug = interactive()) {
       stopifnot(length(debug) == 1)
       private$debug <- isTRUE(debug)
     },
     #' @description Add a filter to plumber router
+    #'
+    #' See also: [pr_filter()]
     #' @param name a character string. Name of filter
     #' @param expr an expr that resolve to a filter function or a filter function
     #' @param serializer a serializer function
-    #' @seealso [pr_filter()]
     filter = function(name, expr, serializer){
       filter <- PlumberFilter$new(name, expr, private$envir, serializer)
       private$addFilterInternal(filter)

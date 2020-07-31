@@ -110,11 +110,6 @@ pr$setErrorHandler(function(req, res, err) {
 })
 }
 }
-\seealso{
-\code{\link[=pr_set_debug]{pr_set_debug()}}
-
-\code{\link[=pr_filter]{pr_filter()}}
-}
 \section{Super class}{
 \code{\link[plumber:hookable]{plumber::hookable}} -> \code{plumber}
 }
@@ -776,6 +771,8 @@ See also: \code{\link[=pr_set_ui_callback]{pr_set_ui_callback()}}
 \if{latex}{\out{\hypertarget{method-set_debug}{}}}
 \subsection{Method \code{set_debug()}}{
 Set debug value to include error messages
+
+See also: \code{\link[=pr_set_debug]{pr_set_debug()}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$set_debug(debug = interactive())}\if{html}{\out{</div>}}
 }
@@ -793,6 +790,8 @@ Set debug value to include error messages
 \if{latex}{\out{\hypertarget{method-filter}{}}}
 \subsection{Method \code{filter()}}{
 Add a filter to plumber router
+
+See also: \code{\link[=pr_filter]{pr_filter()}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$filter(name, expr, serializer)}\if{html}{\out{</div>}}
 }
