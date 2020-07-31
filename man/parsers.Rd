@@ -5,9 +5,9 @@
 \alias{parser_json}
 \alias{parser_text}
 \alias{parser_yaml}
-\alias{parser_read_file}
 \alias{parser_csv}
 \alias{parser_tsv}
+\alias{parser_read_file}
 \alias{parser_rds}
 \alias{parser_octet}
 \alias{parser_multi}
@@ -22,11 +22,11 @@ parser_text(parse_fn = identity)
 
 parser_yaml(...)
 
-parser_read_file(read_fn = readLines)
-
 parser_csv(...)
 
 parser_tsv(...)
+
+parser_read_file(read_fn = readLines)
 
 parser_rds(...)
 
@@ -70,12 +70,12 @@ See \code{\link[=registered_parsers]{registered_parsers()}} for a list of regist
 
 \item \code{parser_yaml}: YAML parser
 
-\item \code{parser_read_file}: Helper parser that writes the binary post body to a file and reads it back again using \code{read_fn}.
-This parser should be used when reading from a file is required.
-
 \item \code{parser_csv}: CSV parser
 
 \item \code{parser_tsv}: TSV parser
+
+\item \code{parser_read_file}: Helper parser that writes the binary post body to a file and reads it back again using \code{read_fn}.
+This parser should be used when reading from a file is required.
 
 \item \code{parser_rds}: RDS parser
 
@@ -94,6 +94,6 @@ This parser should be used when reading from a file is required.
 #* @parser multi
 #* @parser rds
 pr <- plumber$new()
-pr$handle("GET", "/upload", function(rds) {rds}, parsers = c(parser_multi(), parser_rds()))
+pr$handle("GET", "/upload", function(rds) {rds}, parsers = c("multi", "rds"))
 }
 }

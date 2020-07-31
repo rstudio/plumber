@@ -374,24 +374,24 @@ parser_yaml <- function(...) {
 #' @describeIn parsers CSV parser
 #' @export
 parser_csv <- function(...) {
-  parser_read_file(function(tmpfile) {
+  function(value, ...) {
     if (!requireNamespace("readr", quietly = TRUE)) {
       stop("`readr` must be installed for `parser_csv` to work")
     }
-    readr::read_csv(tmpfile, ...)
-  })
+    readr::read_csv(value, ...)
+  }
 }
 
 
 #' @describeIn parsers TSV parser
 #' @export
 parser_tsv <- function(...) {
-  parser_read_file(function(tmpfile) {
+  function(value, ...) {
     if (!requireNamespace("readr", quietly = TRUE)) {
       stop("`readr` must be installed for `parser_tsv` to work")
     }
-    readr::read_tsv(tmpfile, ...)
-  })
+    readr::read_tsv(value, ...)
+  }
 }
 
 
