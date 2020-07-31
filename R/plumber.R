@@ -993,6 +993,9 @@ plumber <- R6Class(
       if (!length(callback) || !is.function(callback)) {
         callback <- function(...) { NULL }
       }
+      if (length(formals(callback)) == 0) {
+        stop("`callback` must accept at least 1 argument. (`api_url`)")
+      }
       private$ui_callback <- callback
     },
     #' @description Set debug value to include error messages
