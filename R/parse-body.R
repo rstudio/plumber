@@ -410,7 +410,9 @@ parser_read_file <- function(read_fn = readLines) {
   function(value, filename = "", ...) {
     tmp <- tempfile("plumb", fileext = paste0("_", basename(filename)))
     on.exit({
-      file.remove(tmp)
+      if (file.exists(tmp)) {
+        file.remove(tmp)
+      }
     }, add = TRUE)
     writeBin(value, tmp)
     read_fn(tmp)

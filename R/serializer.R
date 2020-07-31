@@ -278,7 +278,9 @@ serializer_htmlwidget <- function(...) {
     file <- tempfile(fileext = ".html")
     on.exit({
       # Delete the temp file
-      file.remove(file)
+      if (file.exists(file)) {
+        file.remove(file)
+      }
     })
 
     # Write the widget out to a file (doesn't currently support in-memory connections - pandoc)
