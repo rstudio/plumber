@@ -13,9 +13,6 @@
     <loc>https://www.rplumber.io/reference/PlumberStep.html</loc>
   </url>
   <url>
-    <loc>https://www.rplumber.io/reference/addParser.html</loc>
-  </url>
-  <url>
     <loc>https://www.rplumber.io/reference/addSerializer.html</loc>
   </url>
   <url>
@@ -95,6 +92,12 @@
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/randomCookieKey.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/reference/register_parser.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/reference/register_serializer.html</loc>
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/serializers.html</loc>

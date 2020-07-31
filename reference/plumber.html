@@ -239,6 +239,7 @@ details on the methods available on this object.</p>
 <li><p><a href='#method-onHeaders'><code>plumber$onHeaders()</code></a></p></li>
 <li><p><a href='#method-onWSOpen'><code>plumber$onWSOpen()</code></a></p></li>
 <li><p><a href='#method-setSerializer'><code>plumber$setSerializer()</code></a></p></li>
+<li><p><a href='#method-setParsers'><code>plumber$setParsers()</code></a></p></li>
 <li><p><a href='#method-set404Handler'><code>plumber$set404Handler()</code></a></p></li>
 <li><p><a href='#method-setErrorHandler'><code>plumber$setErrorHandler()</code></a></p></li>
 <li><p><a href='#method-filter'><code>plumber$filter()</code></a></p></li>
@@ -422,7 +423,16 @@ pr$handle("GET", "/", function(){ 123 })
 <p><hr>
 <a id="method-handle"></a></p><h3>Method <code>handle()</code></h3>
 <p>Define endpoints</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>handle</span>(<span class='kw'>methods</span>, <span class='kw'>path</span>, <span class='kw'>handler</span>, <span class='kw'>preempt</span>, <span class='kw'>serializer</span>, <span class='kw'>endpoint</span>, <span class='kw'>...</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>handle</span>(
+  <span class='kw'>methods</span>,
+  <span class='kw'>path</span>,
+  <span class='kw'>handler</span>,
+  <span class='kw'>preempt</span>,
+  <span class='kw'>serializer</span>,
+  <span class='kw'>parsers</span>,
+  <span class='kw'>endpoint</span>,
+  <span class='kw'>...</span>
+)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -435,6 +445,8 @@ pr$handle("GET", "/", function(){ 123 })
 <dt><code>preempt</code></dt><dd><p>a preempt function.</p></dd>
 
 <dt><code>serializer</code></dt><dd><p>a serializer function.</p></dd>
+
+<dt><code>parsers</code></dt><dd><p>a named list of parsers.</p></dd>
 
 <dt><code>endpoint</code></dt><dd><p>a <code>PlumberEndpoint</code> object.</p></dd>
 
@@ -551,6 +563,31 @@ router, set to <code>TRUE</code>.</p></dd>
 </dl><p></div></p>
 <h3>Details</h3>
 <p>Sets the default serializer of the router.</p>
+
+<p><hr>
+<a id="method-setParsers"></a></p><h3>Method <code>setParsers()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>setParsers</span>(<span class='kw'>parsers</span>)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl>
+<dt><code>parsers</code></dt><dd><p>Set default endpoint parsers. Initialized to <code><a href='https://rdrr.io/r/base/c.html'>c("json", "query", "text", "octet", "multi")</a></code>Can be one of:
+<ul>
+<li><p>A <code>NULL</code> value</p></li>
+<li><p>A character vector of parser names</p></li>
+<li><p>A named <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code> whose keys are parser names names and values are arguments to be applied with <code><a href='https://rdrr.io/r/base/do.call.html'>do.call()</a></code></p></li>
+<li><p>A <code>TRUE</code> value, which will default to combining all parsers. This is great for seeing what is possible, but not great for security purposes</p></li>
+</ul>If the parser name <code>"all"</code> is found in any character value or list name, all remaining parsers will be added.
+When using a list, parser information already defined will maintain their existing argument values.  All remaining parsers will use their default arguments.Example:<pre><span class='co'># provide a character string</span>
+<span class='kw'>parsers</span> <span class='op'>=</span> <span class='st'>"json"</span><span class='co'># provide a named list with no arguments</span>
+<span class='kw'>parsers</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(json = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())<span class='co'># provide a named list with arguments; include `rds`</span>
+<span class='kw'>parsers</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(json = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(simplifyVector = <span class='fl'>FALSE</span>), rds = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())<span class='co'># default plumber parsers</span>
+<span class='kw'>parsers</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"json"</span>, <span class='st'>"query"</span>, <span class='st'>"text"</span>, <span class='st'>"octet"</span>, <span class='st'>"multi"</span>)</pre></p></dd>
+
+</dl><p></div></p>
+<h3>Details</h3>
+<p>Sets the default parsers of the router.</p>
 
 <p><hr>
 <a id="method-set404Handler"></a></p><h3>Method <code>set404Handler()</code></h3>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plumber Parsers — parser_query • plumber</title>
+<title>Manage parsers — register_parser • plumber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,11 +52,10 @@
 
 
 
-<meta property="og:title" content="Plumber Parsers — parser_query" />
-<meta property="og:description" content="Parsers are used in Plumber to transform the raw body content received
-by a request to the API. Extra parameters may be provided to parser
-functions when adding the parser to plumber. This will allow for
-non-default behavior." />
+<meta property="og:title" content="Manage parsers — register_parser" />
+<meta property="og:description" content="A parser is responsible for decoding the raw body content of a request into
+a list of arguments that can be mapped to endpoint function arguments.
+For instance, parser_json() parse content-type application/json." />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
 
 
@@ -173,94 +172,91 @@ non-default behavior." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plumber Parsers</h1>
+    <h1>Manage parsers</h1>
     <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/parse-body.R'><code>R/parse-body.R</code></a></small>
-    <div class="hidden name"><code>parsers.Rd</code></div>
+    <div class="hidden name"><code>register_parser.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Parsers are used in Plumber to transform the raw body content received
-by a request to the API. Extra parameters may be provided to parser
-functions when adding the parser to plumber. This will allow for
-non-default behavior.</p>
+    <p>A parser is responsible for decoding the raw body content of a request into
+a list of arguments that can be mapped to endpoint function arguments.
+For instance, <code><a href='parser_query.html'>parser_json()</a></code> parse content-type <code>application/json</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>parser_query</span>()
+    <pre class="usage"><span class='fu'>register_parser</span>(<span class='kw'>alias</span>, <span class='kw'>parser</span>, fixed = <span class='kw'>NULL</span>, regex = <span class='kw'>NULL</span>, verbose = <span class='fl'>TRUE</span>)
 
-<span class='fu'>parser_json</span>(<span class='kw'>...</span>)
-
-<span class='fu'>parser_text</span>(parse_fn = <span class='kw'>identity</span>)
-
-<span class='fu'>parser_yaml</span>(<span class='kw'>...</span>)
-
-<span class='fu'>parser_csv</span>(<span class='kw'>...</span>)
-
-<span class='fu'>parser_tsv</span>(<span class='kw'>...</span>)
-
-<span class='fu'>parser_read_file</span>(read_fn = <span class='kw'>readLines</span>)
-
-<span class='fu'>parser_rds</span>(<span class='kw'>...</span>)
-
-<span class='fu'>parser_octet</span>()
-
-<span class='fu'>parser_multi</span>()
-
-<span class='fu'>parser_none</span>()</pre>
+<span class='fu'>registered_parsers</span>()</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>...</th>
-      <td><p>parameters supplied to the appropriate internal function</p></td>
+      <th>alias</th>
+      <td><p>An alias to map parser from the <code>@parser</code> plumber tag to the global parsers list.</p></td>
     </tr>
     <tr>
-      <th>parse_fn</th>
-      <td><p>function to further decode a text string into an object</p></td>
+      <th>parser</th>
+      <td><p>The parser function to be added. This build the parser function. See Details for more information.</p></td>
     </tr>
     <tr>
-      <th>read_fn</th>
-      <td><p>function used to read a the content of a file. Ex: <code><a href='https://rdrr.io/r/base/readRDS.html'>readRDS()</a></code></p></td>
+      <th>fixed</th>
+      <td><p>A character vector of fixed string to be matched against a request <code>content-type</code> to use <code>parser</code>.</p></td>
+    </tr>
+    <tr>
+      <th>regex</th>
+      <td><p>A character vector of <a href='https://rdrr.io/r/base/regex.html'>regex</a> string to be matched against a request <code>content-type</code> to use <code>parser</code>.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Logical value which determines if a warning should be
+displayed when alias in map are overwritten.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Parsers are optional. When unspecified, only the <code>parser_json()</code>,
-<code>parser_octet()</code>, <code>parser_query()</code> and <code>parser_text()</code> are available.
-You can use <code>@parser parser</code> tag to activate parsers per endpoint.
-Multiple parsers can be activated for the same endpoint using multiple <code>@parser parser</code> tags.</p>
-<p>User should be aware that <code>rds</code> parsing should only be done from a
-trusted source. Do not accept <code>rds</code> files blindly.</p>
-<p>See <code><a href='register_parser.html'>registered_parsers()</a></code> for a list of registered parsers.</p>
+    <p>When <code>parser</code> is evaluated, it should return a parser function.
+Parser matching is done first by <code>content-type</code> header matching on <code>fixed</code> then by using a
+regular expressions on <code>regex</code>. Note that plumber strip the header from <code>; charset*</code> to
+perform matching.</p>
+<p>There is a special case when no <code>content-type</code> header is
+provided that will use a <code><a href='parser_query.html'>parser_json()</a></code> when it detects a <code>json</code> string.</p>
+<p>Functions signature should include <code>value</code>, <code>...</code> and
+possibly <code>content_type</code>, <code>filename</code>. Other parameters may be provided
+if you want to use the headers from <code><a href='https://rdrr.io/pkg/webutils/man/parse_multipart.html'>webutils::parse_multipart()</a></code>.</p>
+<p>Parser function structure is something like below.<div class="r"></p><pre><span class='kw'>parser</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>parser_arguments_here</span>) {
+  <span class='co'># return a function to parse a raw value</span>
+  <span class='fu'>function</span>(<span class='kw'>value</span>, <span class='kw'>...</span>) {
+    <span class='co'># do something with raw value</span>
+  }
+}</pre><p></div></p>
     <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
 
     
 <ul>
-<li><p><code>parser_query</code>: Query string parser</p></li>
-<li><p><code>parser_json</code>: JSON parser</p></li>
-<li><p><code>parser_text</code>: Helper parser to parse plain text</p></li>
-<li><p><code>parser_yaml</code>: YAML parser</p></li>
-<li><p><code>parser_csv</code>: CSV parser</p></li>
-<li><p><code>parser_tsv</code>: TSV parser</p></li>
-<li><p><code>parser_read_file</code>: Helper parser that writes the binary post body to a file and reads it back again using <code>read_fn</code>.
-This parser should be used when reading from a file is required.</p></li>
-<li><p><code>parser_rds</code>: RDS parser</p></li>
-<li><p><code>parser_octet</code>: Octet stream parser. Will add a filename attribute if the filename exists</p></li>
-<li><p><code>parser_multi</code>: Multi part parser. This parser will then parse each individual body with its respective parser</p></li>
-<li><p><code>parser_none</code>: No parser. Will not process the postBody.</p></li>
+<li><p><code>registered_parsers</code>: Return all registered parsers</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='co'># Overwrite `text/json` parsing behavior to not allow JSON vectors to be simplified</span>
-<span class='co'>#* @parser json simplifyVector = FALSE</span>
-<span class='co'># Activate `rds` parser in a multipart request</span>
-<span class='co'>#* @parser multi</span>
-<span class='co'>#* @parser rds</span>
-<span class='kw'>pr</span> <span class='op'>&lt;-</span> <span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>new</span>()
-<span class='kw'>pr</span><span class='op'>$</span><span class='fu'>handle</span>(<span class='st'>"GET"</span>, <span class='st'>"/upload"</span>, <span class='fu'>function</span>(<span class='kw'>rds</span>) {<span class='kw'>rds</span>}, parsers = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"multi"</span>, <span class='st'>"rds"</span>))
-}</div></pre>
+    <pre class="examples"><div class='input'><span class='co'># `content-type` header is mostly used to look up charset and adjust encoding</span>
+<span class='kw'>parser_dcf</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>...</span>) {
+  <span class='fu'>function</span>(<span class='kw'>value</span>, <span class='kw'>content_type</span> = <span class='st'>"text/x-dcf"</span>, <span class='kw'>...</span>) {
+    <span class='kw'>charset</span> <span class='op'>&lt;-</span> <span class='fu'><a href='getCharacterSet.html'>getCharacterSet</a></span>(<span class='kw'>content_type</span>)
+    <span class='kw'>value</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rawConversion.html'>rawToChar</a></span>(<span class='kw'>value</span>)
+    <span class='fu'><a href='https://rdrr.io/r/base/Encoding.html'>Encoding</a></span>(<span class='kw'>value</span>) <span class='op'>&lt;-</span> <span class='kw'>charset</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/dcf.html'>read.dcf</a></span>(<span class='kw'>value</span>, <span class='kw'>...</span>)
+  }
+}
+
+<span class='co'># Could also leverage existing parsers</span>
+<span class='kw'>parser_dcf</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>...</span>) {
+  <span class='fu'><a href='parser_query.html'>parser_read_file</a></span>(<span class='fu'>function</span>(<span class='kw'>tmpfile</span>) {
+    <span class='fu'><a href='https://rdrr.io/r/base/dcf.html'>read.dcf</a></span>(<span class='kw'>tmpfile</span>, <span class='kw'>...</span>)
+  })
+}
+
+<span class='co'># Register the newly created parser</span>
+<span class='co'>if</span> (<span class='fl'>FALSE</span>) <span class='fu'>register_parser</span>(<span class='st'>"dcf"</span>, <span class='kw'>parser_dcf</span>, fixed = <span class='st'>"text/x-dcf"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

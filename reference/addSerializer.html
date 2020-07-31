@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add a Serializer — addSerializer • plumber</title>
+<title>Register a Serializer — addSerializer • plumber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,11 +52,8 @@
 
 
 
-<meta property="og:title" content="Add a Serializer — addSerializer" />
-<meta property="og:description" content="A serializer is responsible for translating a generated R value into output
-that a remote user can understand. For instance, the serializer_json
-serializes R objects into JSON before returning them to the user. The list of
-available serializers in plumber is global." />
+<meta property="og:title" content="Register a Serializer — addSerializer" />
+<meta property="og:description" content="Use register_serializer() in favor of addSerializer" />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
 
 
@@ -173,36 +170,17 @@ available serializers in plumber is global." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add a Serializer</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/serializer.R'><code>R/serializer.R</code></a></small>
+    <h1>Register a Serializer</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/deprecated.R'><code>R/deprecated.R</code></a></small>
     <div class="hidden name"><code>addSerializer.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A serializer is responsible for translating a generated R value into output
-that a remote user can understand. For instance, the <code>serializer_json</code>
-serializes R objects into JSON before returning them to the user. The list of
-available serializers in plumber is global.</p>
+    <p>Use <code><a href='register_serializer.html'>register_serializer()</a></code> in favor of addSerializer</p>
     </div>
 
     <pre class="usage"><span class='fu'>addSerializer</span>(<span class='kw'>name</span>, <span class='kw'>serializer</span>, verbose = <span class='fl'>TRUE</span>)</pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>name</th>
-      <td><p>The name of the serializer (character string)</p></td>
-    </tr>
-    <tr>
-      <th>serializer</th>
-      <td><p>The serializer to be added.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>Logical value which determines if a message should be printed when overwriting serializers</p></td>
-    </tr>
-    </table>
 
 
   </div>
