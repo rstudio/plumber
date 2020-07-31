@@ -118,7 +118,7 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
 #'
 #' Parser function structure is something like below.
 #' ```r
-#' parser <- (parser_arguments_here) {
+#' parser <- function(parser_arguments_here) {
 #'   # return a function to parse a raw value
 #'   function(value, ...) {
 #'     # do something with raw value
