@@ -29,36 +29,36 @@ test_that("plumbBlock images", {
   lines <- c("#'@png")
   b <- plumbBlock(length(lines), lines)
   expect_equal(b$image, "png")
-  expect_equal(b$imageAttr, "")
+  expect_equal(b$imageArgs, NULL)
 
   lines <- c("#'@jpeg")
   b <- plumbBlock(length(lines), lines)
   expect_equal(b$image, "jpeg")
-  expect_equal(b$imageAttr, "")
+  expect_equal(b$imageArgs, NULL)
 
   # Whitespace is fine
   lines <- c("#' @jpeg    \t ")
   b <- plumbBlock(length(lines), lines)
   expect_equal(b$image, "jpeg")
-  expect_equal(b$imageAttr, "")
+  expect_equal(b$imageArgs, NULL)
 
   # No whitespace is fine
   lines <- c("#' @jpeg(w=1)")
   b <- plumbBlock(length(lines), lines)
   expect_equal(b$image, "jpeg")
-  expect_equal(b$imageAttr, "(w=1)")
+  expect_equal(b$imageArgs, list(w = 1))
 
   # Additional chars after name don't count as image tags
   lines <- c("#' @jpegs")
   b <- plumbBlock(length(lines), lines)
   expect_null(b$image)
-  expect_null(b$imageAttr)
+  expect_null(b$imageArgs)
 
   # Properly formatted arguments work
   lines <- c("#'@jpeg (width=100)")
   b <- plumbBlock(length(lines), lines)
   expect_equal(b$image, "jpeg")
-  expect_equal(b$imageAttr, "(width=100)")
+  expect_equal(b$imageArgs, list(width = 100))
 
   # Ill-formatted arguments return a meaningful error
   lines <- c("#'@jpeg width=100")
@@ -158,6 +158,10 @@ test_that("@html parameters produce an error", {
   expect_block_error("#' @html (key = \"val\")", "unused argument")
 
   expect_block_error("#' @html (key = \"val\")", "unused argument")
+})
+
+test_that("Plumbing block use the right environment", {
+  expect_silent(plumb(test_path("files/plumb-envir.R")))
 })
 
 # TODO: more testing around filter, assets, endpoint, etc.
