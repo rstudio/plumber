@@ -329,7 +329,7 @@ make_parser <- function(aliases) {
 #' #* @parser multi
 #' #* @parser rds
 #' pr <- plumber$new()
-#' pr$handle("GET", "/upload", function(rds) {rds}, parsers = c(parser_multi(), parser_rds()))
+#' pr$handle("GET", "/upload", function(rds) {rds}, parsers = c("multi", "rds"))
 #' }
 #' @export
 parser_query <- function() {
