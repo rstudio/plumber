@@ -489,17 +489,17 @@ parser_none <- function() {
 
 register_parsers_onLoad <- function() {
   # parser alias names for plumbing
-  register_parser("csv", parser_csv, fixed = c("application/csv", "application/x-csv", "text/csv", "text/x-csv"))
-  register_parser("json", parser_json, fixed = c("application/json", "text/json"))
-  register_parser("multi", parser_multi, fixed = "multipart/form-data")
-  register_parser("octet", parser_octet, fixed = "application/octet-stream")
-  register_parser("query", parser_query, fixed = "application/x-www-form-urlencoded")
-  register_parser("rds", parser_rds, fixed = "application/rds")
+  register_parser("csv",     parser_csv,     fixed = c("application/csv", "application/x-csv", "text/csv", "text/x-csv"))
+  register_parser("json",    parser_json,    fixed = c("application/json", "text/json"))
+  register_parser("multi",   parser_multi,   fixed = "multipart/form-data")
+  register_parser("octet",   parser_octet,   fixed = "application/octet-stream")
+  register_parser("query",   parser_query,   fixed = "application/x-www-form-urlencoded")
+  register_parser("rds",     parser_rds,     fixed = "application/rds")
   register_parser("feather", parser_feather, fixed = "application/feather")
-  register_parser("text", parser_text, fixed = "text/plain", regex = "^text/")
-  register_parser("tsv", parser_tsv, fixed = c("application/tab-separated-values", "text/tab-separated-values"))
-  register_parser("yaml", parser_yaml, fixed = c("application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"))
-  register_parser("none", parser_none, regex = "*")
+  register_parser("text",    parser_text,    fixed = "text/plain", regex = "^text/")
+  register_parser("tsv",     parser_tsv,     fixed = c("application/tab-separated-values", "text/tab-separated-values"))
+  register_parser("yaml",    parser_yaml,    fixed = c("application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"))
+  register_parser("none",    parser_none,    regex = "*")
 
   parser_all <- function() {
     stop("This function should never be called. It should be handled by `make_parser('all')`")
