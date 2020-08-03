@@ -128,17 +128,50 @@ unmount_openapi <- function(pr) {
 }
 
 #' Add UI for plumber to use
-#' @param ui A list of that plumber can use to mount
-#' a UI.
-#' @details [register_ui()] is used by other packages like `swagger`.
+#'
+#' [register_ui()] is used by other packages like `swagger`.
 #' When you load these packages, it calls [register_ui()] to provide a user
 #' interface that can interpret your plumber OpenAPI Specifications.
 #'
 #' @param name Name of the UI
 #' @param index A function that returns the HTML content of the landing page of the UI.
+#'   Parameters (besides `req` and `res`) will be supplied as if it is a regular `GET` route.
+#'   Default parameter values may be used when setting the ui.
+#'   Be sure to see the example below.
 #' @param static A function that returns the path to the static assets (images, javascript, css, fonts) the UI will use.
 #'
 #' @export
+#' @examples
+#' \dontrun{
+#' # Example from the `swagger` R package
+#' register_ui(
+#'   name = "swagger",
+#'   index = function(version = "3", ...) {
+#'     swagger::swagger_spec(
+#'       api_path = paste0(
+#'         "window.location.origin + ",
+#'         "window.location.pathname.replace(",
+#'           "/\\(__swagger__\\\\/|__swagger__\\\\/index.html\\)$/, \"\"",
+#'         ") + ",
+#'         "\"openapi.json\""
+#'       ),
+#'       version = version
+#'     )
+#'   },
+#'   static = function(version = "3", ...) {
+#'     swagger::swagger_path(version)
+#'   }
+#' )
+#'
+#' # When setting the UI, `index` and `static` function arguments can be supplied
+#' # * via `pr_set_ui()`
+#' # * or through URL query string variables
+#' pr() %>%
+#'   # Set default argument `version = 3` for the swagger `index` and `static` functions
+#'   pr_set_ui("swagger", version = 3) %>%
+#'   pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) %>%
+#'   pr_run()
+#' }
 #' @rdname register_ui
 register_ui <- function(name, index, static = NULL) {
 
