@@ -41,3 +41,28 @@ function(req, res){
 ```
 
 If you run this API locally and then visit the API in a web browser, you'll see your R session switch into debug mode when the request arrives, allowing you to look at the objects contained inside your `req` and `res` objects.
+
+
+### Plumber Server
+
+## Port Range
+
+You can use [httpuv::randomPort()] to define a range of port for Plumber to pick from when running an API.
+
+```r
+# plumber.R
+options("plumber.port" = httpuv::randomPort(min = 4000, max = 7000, n = 100))
+
+### define the rest of your plumber router...
+```
+
+or more programmatically
+
+```r
+# Using Plumber methods
+pr <- plumber$new()
+pr$run(port = httpuv::randomPort(min = 4000, max = 7000, n = 100))
+
+# Using forward-pipe functions
+pr() %>% pr_run(port = httpuv::randomPort(min = 4000, max = 7000, n = 100))
+```
