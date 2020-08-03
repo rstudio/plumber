@@ -8,6 +8,7 @@
 \alias{serializer_json}
 \alias{serializer_unboxed_json}
 \alias{serializer_rds}
+\alias{serializer_feather}
 \alias{serializer_yaml}
 \alias{serializer_text}
 \alias{serializer_format}
@@ -29,6 +30,8 @@ serializer_json(...)
 serializer_unboxed_json(auto_unbox = TRUE, ...)
 
 serializer_rds(version = "2", ascii = FALSE, ...)
+
+serializer_feather()
 
 serializer_yaml(...)
 
@@ -83,6 +86,8 @@ more details on Plumber serializers and how to customize their behavior.
 \item \code{serializer_unboxed_json}: JSON serializer with \code{auto_unbox} defaulting to \code{TRUE}. See \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}} for more details.
 
 \item \code{serializer_rds}: RDS serializer. See \code{\link[=serialize]{serialize()}} for more details.
+
+\item \code{serializer_feather}: feather serializer. See \link[feather:read_feather]{feather::write_feather} for more details.
 
 \item \code{serializer_yaml}: YAML serializer. See \code{\link[yaml:as.yaml]{yaml::as.yaml()}} for more details.
 

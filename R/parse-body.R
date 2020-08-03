@@ -336,7 +336,7 @@ parser_query <- function() {
 }
 
 
-#' @describeIn parsers JSON parser
+#' @describeIn parsers JSON parser. See [jsonlite::parse_json()] for more details. (Defaults to using `simplifyVectors = TRUE`)
 #' @export
 parser_json <- function(...) {
   parser_text(function(txt_value) {
@@ -359,7 +359,7 @@ parser_text <- function(parse_fn = identity) {
 }
 
 
-#' @describeIn parsers YAML parser
+#' @describeIn parsers YAML parser. See [yaml::yaml.load()] for more details.
 #' @export
 parser_yaml <- function(...) {
   parser_text(function(val) {
@@ -370,7 +370,7 @@ parser_yaml <- function(...) {
   })
 }
 
-#' @describeIn parsers CSV parser
+#' @describeIn parsers CSV parser. See [readr::read_csv()] for more details.
 #' @export
 parser_csv <- function(...) {
   parse_fn <- function(raw_val) {
@@ -385,7 +385,7 @@ parser_csv <- function(...) {
 }
 
 
-#' @describeIn parsers TSV parser
+#' @describeIn parsers TSV parser. See [readr::read_tsv()] for more details.
 #' @export
 parser_tsv <- function(...) {
   parse_fn <- function(raw_val) {
@@ -419,7 +419,7 @@ parser_read_file <- function(read_fn = readLines) {
 }
 
 
-#' @describeIn parsers RDS parser
+#' @describeIn parsers RDS parser. See [readRDS()] for more details.
 #' @export
 parser_rds <- function(...) {
   parser_read_file(function(tmpfile) {
@@ -427,6 +427,18 @@ parser_rds <- function(...) {
     readRDS(tmpfile, ...)
   })
 }
+
+#' @describeIn parsers feather parser. See [feather::read_feather()] for more details.
+#' @export
+parser_feather <- function(...) {
+  parser_read_file(function(tmpfile) {
+    if (!requireNamespace("feather", quietly = TRUE)) {
+      stop("`feather` must be installed for `parser_feather` to work")
+    }
+    feather::read_feather(tmpfile, ...)
+  })
+}
+
 
 
 #' @describeIn parsers Octet stream parser. Will add a filename attribute if the filename exists
@@ -477,16 +489,17 @@ parser_none <- function() {
 
 register_parsers_onLoad <- function() {
   # parser alias names for plumbing
-  register_parser("csv",   parser_csv,   fixed = c("application/csv", "application/x-csv", "text/csv", "text/x-csv"))
-  register_parser("json",  parser_json,  fixed = c("application/json", "text/json"))
-  register_parser("multi", parser_multi, fixed = "multipart/form-data")
-  register_parser("octet", parser_octet, fixed = "application/octet-stream")
-  register_parser("query", parser_query, fixed = "application/x-www-form-urlencoded")
-  register_parser("rds",   parser_rds,   fixed = "application/rds")
-  register_parser("text",  parser_text,  fixed = "text/plain", regex = "^text/")
-  register_parser("tsv",   parser_tsv,   fixed = c("application/tab-separated-values", "text/tab-separated-values"))
-  register_parser("yaml",  parser_yaml,  fixed = c("application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"))
-  register_parser("none",  parser_none,  regex = "*")
+  register_parser("csv",     parser_csv,     fixed = c("application/csv", "application/x-csv", "text/csv", "text/x-csv"))
+  register_parser("json",    parser_json,    fixed = c("application/json", "text/json"))
+  register_parser("multi",   parser_multi,   fixed = "multipart/form-data")
+  register_parser("octet",   parser_octet,   fixed = "application/octet-stream")
+  register_parser("query",   parser_query,   fixed = "application/x-www-form-urlencoded")
+  register_parser("rds",     parser_rds,     fixed = "application/rds")
+  register_parser("feather", parser_feather, fixed = "application/feather")
+  register_parser("text",    parser_text,    fixed = "text/plain", regex = "^text/")
+  register_parser("tsv",     parser_tsv,     fixed = c("application/tab-separated-values", "text/tab-separated-values"))
+  register_parser("yaml",    parser_yaml,    fixed = c("application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"))
+  register_parser("none",    parser_none,    regex = "*")
 
   parser_all <- function() {
     stop("This function should never be called. It should be handled by `make_parser('all')`")

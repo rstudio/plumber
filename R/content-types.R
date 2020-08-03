@@ -42,6 +42,7 @@ knownContentTypes <- list(
   dotx='application/vnd.openxmlformats-officedocument.wordprocessingml.template',
   xlam='application/vnd.ms-excel.addin.macroEnabled.12',
   xlsb='application/vnd.ms-excel.sheet.binary.macroEnabled.12',
+  feather='application/feather',
   rds='application/rds',
   tsv="text/tab-separated-values",
   csv="text/csv")
