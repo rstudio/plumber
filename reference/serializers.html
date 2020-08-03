@@ -199,6 +199,8 @@ more details on Plumber serializers and how to customize their behavior.</p>
 
 <span class='fu'>serializer_rds</span>(version = <span class='st'>"2"</span>, ascii = <span class='fl'>FALSE</span>, <span class='kw'>...</span>)
 
+<span class='fu'>serializer_feather</span>()
+
 <span class='fu'>serializer_yaml</span>(<span class='kw'>...</span>)
 
 <span class='fu'>serializer_text</span>(<span class='kw'>...</span>, serialize_fn = <span class='kw'>as.character</span>)
@@ -260,6 +262,7 @@ An exception is that objects of class <code>AsIs</code> (i.e. wrapped in <code><
 <li><p><code>serializer_json</code>: JSON serializer. See <code><a href='https://jeroen.cran.dev/jsonlite/reference/fromJSON.html'>jsonlite::toJSON()</a></code> for more details.</p></li>
 <li><p><code>serializer_unboxed_json</code>: JSON serializer with <code>auto_unbox</code> defaulting to <code>TRUE</code>. See <code><a href='https://jeroen.cran.dev/jsonlite/reference/fromJSON.html'>jsonlite::toJSON()</a></code> for more details.</p></li>
 <li><p><code>serializer_rds</code>: RDS serializer. See <code><a href='https://rdrr.io/r/base/serialize.html'>serialize()</a></code> for more details.</p></li>
+<li><p><code>serializer_feather</code>: feather serializer. See <a href='https://rdrr.io/pkg/feather/man/read_feather.html'>feather::write_feather</a> for more details.</p></li>
 <li><p><code>serializer_yaml</code>: YAML serializer. See <code><a href='https://rdrr.io/pkg/yaml/man/as.yaml.html'>yaml::as.yaml()</a></code> for more details.</p></li>
 <li><p><code>serializer_text</code>: Text serializer. See <code><a href='https://rdrr.io/r/base/character.html'>as.character()</a></code> for more details.</p></li>
 <li><p><code>serializer_format</code>: Text serializer. See <code><a href='https://rdrr.io/r/base/format.html'>format()</a></code> for more details.</p></li>
