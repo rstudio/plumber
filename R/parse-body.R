@@ -340,7 +340,7 @@ parser_query <- function() {
 #' @export
 parser_json <- function(...) {
   parser_text(function(txt_value) {
-    args <- safeFromJSON(txt_value, ...)
+    safeFromJSON(txt_value, ...)
   })
 }
 
