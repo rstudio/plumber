@@ -5,11 +5,17 @@
 \alias{registered_uis}
 \title{Add UI for plumber to use}
 \usage{
-register_ui(ui)
+register_ui(name, index, static)
 
 registered_uis()
 }
 \arguments{
+\item{name}{Name of the UI}
+
+\item{index}{A function that returns the HTML content of the landing page of the UI.}
+
+\item{static}{A function that returns the path to the static assets (images, javascript, css, fonts) the UI will use.}
+
 \item{ui}{A list of that plumber can use to mount
 a UI.}
 }
@@ -20,11 +26,4 @@ Add UI for plumber to use
 \code{\link[=register_ui]{register_ui()}} is used by other packages like \code{swagger}.
 When you load these packages, it calls \code{\link[=register_ui]{register_ui()}} to provide a user
 interface that can interpret your plumber OpenAPI Specifications.
-
-\code{ui} list expects the following values
-\describe{
-\item{name}{Name of the UI.}
-\item{index}{A function that returns the HTML content of the landing page of the UI.}
-\item{static}{A function that returns the path to the static assets (images, javascript, css, fonts) the UI will use.}
-}
 }
