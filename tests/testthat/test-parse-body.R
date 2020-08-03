@@ -112,9 +112,9 @@ test_that("Test multipart respect content-type", {
 test_that("Test an array of files upload", {
   bin_file <- test_path("files/multipart-files-array.bin")
   body <- readBin(bin_file, what = "raw", n = file.info(bin_file)$size)
-  parsed_body <- parseBody(body,
-                           "multipart/form-data; boundary=---------------------------286326291134907228894146459692",
-                           make_parser("all"))
+  parsed_body <- parse_body(body,
+                            "multipart/form-data; boundary=---------------------------286326291134907228894146459692",
+                            make_parser("all"))
   expect_equal(names(parsed_body), c("files", "dt"))
   expect_length(parsed_body[["files"]], 4)
   expect_equal(names(parsed_body[["files"]])[2], "text1.bin")

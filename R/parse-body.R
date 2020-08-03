@@ -341,7 +341,6 @@ parser_query <- function() {
 parser_json <- function(...) {
   parser_text(function(txt_value) {
     args <- safeFromJSON(txt_value, ...)
-    combine_keys(args, FALSE)
   })
 }
 
@@ -466,7 +465,8 @@ parser_multi <- function() {
       x$parsers <- parsers
       parse_raw(x)
     })
-    # combine together args that share the same name
+    # combine together args that share the same name for
+    # multifiles support so they get properly matched by do.call
     combine_keys(args, FALSE)
   }
 }
