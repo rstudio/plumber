@@ -140,7 +140,7 @@ unmount_openapi <- function(pr) {
 #'
 #' @export
 #' @rdname register_ui
-register_ui <- function(name, index, static) {
+register_ui <- function(name, index, static = NULL) {
 
   stopifnot(is.character(name) && length(name) == 1L)
   stopifnot(grepl("^[a-zA-Z0-9_]+$", name))
