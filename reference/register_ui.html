@@ -53,7 +53,9 @@
 
 
 <meta property="og:title" content="Add UI for plumber to use — register_ui" />
-<meta property="og:description" content="Add UI for plumber to use" />
+<meta property="og:description" content="register_ui() is used by other packages like swagger.
+When you load these packages, it calls register_ui() to provide a user
+interface that can interpret your plumber OpenAPI Specifications." />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
 
 
@@ -176,10 +178,12 @@
     </div>
 
     <div class="ref-description">
-    <p>Add UI for plumber to use</p>
+    <p><code>register_ui()</code> is used by other packages like <code>swagger</code>.
+When you load these packages, it calls <code>register_ui()</code> to provide a user
+interface that can interpret your plumber OpenAPI Specifications.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>register_ui</span>(<span class='kw'>ui</span>)
+    <pre class="usage"><span class='fu'>register_ui</span>(<span class='kw'>name</span>, <span class='kw'>index</span>, static = <span class='kw'>NULL</span>)
 
 <span class='fu'>registered_uis</span>()</pre>
 
@@ -187,25 +191,54 @@
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>ui</th>
-      <td><p>A list of that plumber can use to mount
-a UI.</p></td>
+      <th>name</th>
+      <td><p>Name of the UI</p></td>
+    </tr>
+    <tr>
+      <th>index</th>
+      <td><p>A function that returns the HTML content of the landing page of the UI.
+Parameters (besides <code>req</code> and <code>res</code>) will be supplied as if it is a regular <code>GET</code> route.
+Default parameter values may be used when setting the ui.
+Be sure to see the example below.</p></td>
+    </tr>
+    <tr>
+      <th>static</th>
+      <td><p>A function that returns the path to the static assets (images, javascript, css, fonts) the UI will use.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>register_ui()</code> is used by other packages like <code>swagger</code>.
-When you load these packages, it calls <code>register_ui()</code> to provide a user
-interface that can interpret your plumber OpenAPI Specifications.</p>
-<p><code>ui</code> list expects the following values</p><dl>
-<dt>name</dt><dd><p>Name of the UI.</p></dd>
-<dt>index</dt><dd><p>A function that returns the HTML content of the landing page of the UI.</p></dd>
-<dt>static</dt><dd><p>A function that returns the path to the static assets (images, javascript, css, fonts) the UI will use.</p></dd>
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='co'># Example from the `swagger` R package</span>
+<span class='fu'>register_ui</span>(
+  name = <span class='st'>"swagger"</span>,
+  index = <span class='fu'>function</span>(<span class='kw'>version</span> = <span class='st'>"3"</span>, <span class='kw'>...</span>) {
+    <span class='kw'>swagger</span>::<span class='fu'><a href='https://rdrr.io/pkg/swagger/man/swagger_spec.html'>swagger_spec</a></span>(
+      api_path = <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(
+        <span class='st'>"window.location.origin + "</span>,
+        <span class='st'>"window.location.pathname.replace("</span>,
+          <span class='st'>"/\\(__swagger__\\\\/|__swagger__\\\\/index.html\\)$/, \"\""</span>,
+        <span class='st'>") + "</span>,
+        <span class='st'>"\"openapi.json\""</span>
+      ),
+      version = <span class='kw'>version</span>
+    )
+  },
+  static = <span class='fu'>function</span>(<span class='kw'>version</span> = <span class='st'>"3"</span>, <span class='kw'>...</span>) {
+    <span class='kw'>swagger</span>::<span class='fu'><a href='https://rdrr.io/pkg/swagger/man/swagger_path.html'>swagger_path</a></span>(<span class='kw'>version</span>)
+  }
+)
 
-</dl>
-
-
+<span class='co'># When setting the UI, `index` and `static` function arguments can be supplied</span>
+<span class='co'># * via `pr_set_ui()`</span>
+<span class='co'># * or through URL query string variables</span>
+<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
+  <span class='co'># Set default argument `version = 3` for the swagger `index` and `static` functions</span>
+  <span class='fu'><a href='pr_set_ui.html'>pr_set_ui</a></span>(<span class='st'>"swagger"</span>, version = <span class='fl'>3</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_handle.html'>pr_get</a></span>(<span class='st'>"/plus/&lt;a:int&gt;/&lt;b:int&gt;"</span>, <span class='fu'>function</span>(<span class='kw'>a</span>, <span class='kw'>b</span>) { <span class='kw'>a</span> <span class='op'>+</span> <span class='kw'>b</span> }) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
