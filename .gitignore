@@ -11,3 +11,4 @@ yarn.lock
 node_modules
 inst/doc
 docs
+rsconnect
