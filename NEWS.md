@@ -34,6 +34,8 @@ plumber 1.0.0
 
 ### New features
 
+* Serializers can now return both `hooks` and a `serialzer` function by using `hooks_and_serializer()` when returning from a serializer function.  This allows for any image serializer to turn on their corresponding device and turn off the device before the serialization occurs. (#630)
+
 * Generalize user interface integration. Plumber can now use other OpenAPI compatible user interfaces like `RapiDoc` (https://github.com/mrin9/RapiDoc) and `Redoc` (https://github.com/Redocly/redoc). Pending CRAN approbations, R packages for
 both UIs integration are available from https://github.com/meztez/rapidoc/ and https://github.com/meztez/redoc/. (@meztez, #562)
 
