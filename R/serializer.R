@@ -178,6 +178,18 @@ serializer_csv <- function(...) {
   })
 }
 
+#' @describeIn serializers TSV serializer. See also: \code{\link[readr:format_delim]{readr::format_tsv()}}
+#' @export
+serializer_tsv <- function(...) {
+  if (!requireNamespace("readr", quietly = TRUE)) {
+    stop("`readr` must be installed for `serializer_tsv` to work")
+  }
+
+  serializer_content_type("text/tab-separated-values; charset=UTF-8", function(val) {
+    readr::format_tsv(val, ...)
+  })
+}
+
 
 
 #' @describeIn serializers HTML serializer
@@ -482,6 +494,7 @@ add_serializers_onLoad <- function() {
   register_serializer("unboxedJSON", serializer_unboxed_json)
   register_serializer("rds",         serializer_rds)
   register_serializer("csv",         serializer_csv)
+  register_serializer("tsv",         serializer_tsv)
   register_serializer("feather",     serializer_feather)
   register_serializer("yaml",        serializer_yaml)
 

@@ -4,6 +4,7 @@
 \alias{serializer_headers}
 \alias{serializer_content_type}
 \alias{serializer_csv}
+\alias{serializer_tsv}
 \alias{serializer_html}
 \alias{serializer_json}
 \alias{serializer_unboxed_json}
@@ -29,6 +30,8 @@ serializer_headers(headers = list(), serialize_fn = identity)
 serializer_content_type(type, serialize_fn = identity)
 
 serializer_csv(...)
+
+serializer_tsv(...)
 
 serializer_html()
 
@@ -105,6 +108,8 @@ more details on Plumber serializers and how to customize their behavior.
 \item \code{serializer_content_type}: Adds a \code{Content-Type} header to the response object
 
 \item \code{serializer_csv}: CSV serializer. See also: \code{\link[readr:format_delim]{readr::format_csv()}}
+
+\item \code{serializer_tsv}: TSV serializer. See also: \code{\link[readr:format_delim]{readr::format_tsv()}}
 
 \item \code{serializer_html}: HTML serializer
 
