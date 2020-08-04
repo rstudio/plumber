@@ -22,7 +22,7 @@ function(msg=""){
 }
 
 #* Plot a histogram
-#* @png
+#* @serializer png
 #* @get /plot
 function(){
   rand <- rnorm(100)
@@ -36,4 +36,3 @@ function(){
 function(a, b){
   as.numeric(a) + as.numeric(b)
 }
-

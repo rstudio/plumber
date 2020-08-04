@@ -40,7 +40,7 @@ function(){
 }
 
 #* @get /short-html
-#* @html
+#* @serializer html
 function(){
   "HTML"
 }

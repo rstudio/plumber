@@ -72,7 +72,7 @@ As you might have guessed, the `spec=setosa` portion of the URL sets the `spec` 
 
 ## Customizing The Output
 
-In the previous example, you saw one endpoint that rendered into JSON and one that produced an image. Unless instructed otherwise, Plumber will attempt to render whatever your endpoint function returns as JSON. However, you can specify alternative "serializers" which instruct Plumber to render the output as some other format such as HTML (`@html`), PNG (`@png`), or JPEG (`@jpeg`).
+In the previous example, you saw one endpoint that rendered into JSON and one that produced an image. Unless instructed otherwise, Plumber will attempt to render whatever your endpoint function returns as JSON. However, you can specify alternative "serializers" which instruct Plumber to render the output as some other format such as HTML (`@serializer html`), PNG (`@serializer png`), or JPEG (`@serializer jpeg`).
 
 ```{r, eval = FALSE, code = readLines("files/apis/01-02-html.R")}
 ```

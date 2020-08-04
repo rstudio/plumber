@@ -33,6 +33,9 @@ test_that("plumbBlock images", {
   lines <- c("#'@jpeg")
   b <- plumbBlock(length(lines), lines)
   expect_equal(b$serializer, serializer_jpeg())
+  lines <- c("#'@png")
+  b <- plumbBlock(length(lines), lines)
+  expect_equal(b$serializer, serializer_png())
 
   # Whitespace is fine
   lines <- c("#' @jpeg    \t ")
