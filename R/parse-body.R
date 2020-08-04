@@ -498,7 +498,8 @@ register_parsers_onLoad <- function() {
   register_parser("feather", parser_feather, fixed = "application/feather")
   register_parser("text",    parser_text,    fixed = "text/plain", regex = "^text/")
   register_parser("tsv",     parser_tsv,     fixed = c("application/tab-separated-values", "text/tab-separated-values"))
-  register_parser("yaml",    parser_yaml,    fixed = c("application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"))
+  # yaml types: https://stackoverflow.com/a/38000954/591574
+  register_parser("yaml",    parser_yaml,    fixed = c("text/vnd.yaml", "application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"))
   register_parser("none",    parser_none,    regex = "*")
 
   parser_all <- function() {
