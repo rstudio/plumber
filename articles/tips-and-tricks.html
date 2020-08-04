@@ -160,6 +160,30 @@
 </pre></div>
 <p>If you run this API locally and then visit the API in a web browser, you’ll see your R session switch into debug mode when the request arrives, allowing you to look at the objects contained inside your <code>req</code> and <code>res</code> objects.</p>
 </div>
+<div id="plumber-server" class="section level3">
+<h3 class="hasAnchor">
+<a href="#plumber-server" class="anchor"></a>Plumber Server</h3>
+</div>
+</div>
+<div id="port-range" class="section level2">
+<h2 class="hasAnchor">
+<a href="#port-range" class="anchor"></a>Port Range</h2>
+<p>You can use [httpuv::randomPort()] to define a range of port for Plumber to pick from when running an API.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="co"># plumber.R</span>
+<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="st">"plumber.port"</span> = <span class="kw">httpuv</span>::<span class="fu"><a href="https://rdrr.io/pkg/httpuv/man/randomPort.html">randomPort</a></span>(min = <span class="fl">4000</span>, max = <span class="fl">7000</span>, n = <span class="fl">100</span>))
+
+<span class="co">### define the rest of your plumber router...</span>
+</pre></div>
+<p>or more programmatically</p>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="co"># Using Plumber methods</span>
+<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">plumber</span><span class="op">$</span><span class="fu">new</span>()
+<span class="kw">pr</span><span class="op">$</span><span class="fu">run</span>(port = <span class="kw">httpuv</span>::<span class="fu"><a href="https://rdrr.io/pkg/httpuv/man/randomPort.html">randomPort</a></span>(min = <span class="fl">4000</span>, max = <span class="fl">7000</span>, n = <span class="fl">100</span>))
+
+<span class="co"># Using forward-pipe functions</span>
+<span class="fu"><a href="../reference/pr.html">pr</a></span>() <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span>(port = <span class="kw">httpuv</span>::<span class="fu"><a href="https://rdrr.io/pkg/httpuv/man/randomPort.html">randomPort</a></span>(min = <span class="fl">4000</span>, max = <span class="fl">7000</span>, n = <span class="fl">100</span>))
+</pre></div>
 </div>
   </div>
 
