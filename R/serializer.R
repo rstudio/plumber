@@ -168,24 +168,24 @@ serializer_content_type <- function(type, serialize_fn = identity) {
 
 #' @describeIn serializers CSV serializer. See also: \code{\link[readr:format_delim]{readr::format_csv()}}
 #' @export
-serializer_csv <- function(...) {
+serializer_csv <- function(..., type = "text/csv; charset=UTF-8") {
   if (!requireNamespace("readr", quietly = TRUE)) {
     stop("`readr` must be installed for `serializer_csv` to work")
   }
 
-  serializer_content_type("text/csv; charset=UTF-8", function(val) {
+  serializer_content_type(type, function(val) {
     readr::format_csv(val, ...)
   })
 }
 
 #' @describeIn serializers TSV serializer. See also: \code{\link[readr:format_delim]{readr::format_tsv()}}
 #' @export
-serializer_tsv <- function(...) {
+serializer_tsv <- function(..., type = "text/tab-separated-values; charset=UTF-8") {
   if (!requireNamespace("readr", quietly = TRUE)) {
     stop("`readr` must be installed for `serializer_tsv` to work")
   }
 
-  serializer_content_type("text/tab-separated-values; charset=UTF-8", function(val) {
+  serializer_content_type(type, function(val) {
     readr::format_tsv(val, ...)
   })
 }
@@ -194,16 +194,16 @@ serializer_tsv <- function(...) {
 
 #' @describeIn serializers HTML serializer
 #' @export
-serializer_html <- function() {
-  serializer_content_type("text/html; charset=UTF-8")
+serializer_html <- function(type = "text/html; charset=UTF-8") {
+  serializer_content_type(type)
 }
 
 
 #' @describeIn serializers JSON serializer. See also: [jsonlite::toJSON()]
 #' @export
 #' @importFrom jsonlite toJSON
-serializer_json <- function(...) {
-  serializer_content_type("application/json; charset=UTF-8", function(val) {
+serializer_json <- function(..., type = "application/json; charset=UTF-8") {
+  serializer_content_type(type, function(val) {
     toJSON(val, ...)
   })
 }
@@ -211,8 +211,8 @@ serializer_json <- function(...) {
 #' @describeIn serializers JSON serializer with `auto_unbox` defaulting to `TRUE`. See also: [jsonlite::toJSON()]
 #' @inheritParams jsonlite::toJSON
 #' @export
-serializer_unboxed_json <- function(auto_unbox = TRUE, ...) {
-  serializer_json(auto_unbox = auto_unbox, ...)
+serializer_unboxed_json <- function(auto_unbox = TRUE, ..., type = "application/json; charset=UTF-8") {
+  serializer_json(auto_unbox = auto_unbox, ..., type = type)
 }
 
 
@@ -221,7 +221,7 @@ serializer_unboxed_json <- function(auto_unbox = TRUE, ...) {
 #' @describeIn serializers RDS serializer. See also: [base::serialize()]
 #' @inheritParams base::serialize
 #' @export
-serializer_rds <- function(version = "2", ascii = FALSE, ...) {
+serializer_rds <- function(version = "2", ascii = FALSE, ..., type = "application/rds") {
   if (identical(version, "3")) {
     if (package_version(R.version) < "3.5") {
       stop(
@@ -230,18 +230,18 @@ serializer_rds <- function(version = "2", ascii = FALSE, ...) {
       )
     }
   }
-  serializer_content_type("application/octet-stream", function(val) {
+  serializer_content_type(type, function(val) {
     base::serialize(val, NULL, ascii = ascii, version = version, ...)
   })
 }
 
 #' @describeIn serializers feather serializer. See also: [feather::write_feather]
 #' @export
-serializer_feather <- function() {
+serializer_feather <- function(type = "application/feather; charset=UTF-8") {
   if (!requireNamespace("feather", quietly = TRUE)) {
     stop("`feather` must be installed for `serializer_feather` to work")
   }
-  serializer_content_type("application/feather; charset=UTF-8", function(val) {
+  serializer_content_type(type, function(val) {
     tmpfile <- tempfile(fileext = ".feather")
     on.exit({
       if (file.exists(tmpfile)) {
@@ -257,19 +257,19 @@ serializer_feather <- function() {
 
 #' @describeIn serializers YAML serializer. See also: [yaml::as.yaml()]
 #' @export
-serializer_yaml <- function(...) {
+serializer_yaml <- function(..., type = "text/x-yaml; charset=UTF-8") {
   if (!requireNamespace("yaml", quietly = TRUE)) {
     stop("yaml must be installed for the yaml serializer to work")
   }
-  serializer_content_type("application/x-yaml; charset=UTF-8", function(val) {
+  serializer_content_type(type, function(val) {
     yaml::as.yaml(val, ...)
   })
 }
 
 #' @describeIn serializers Text serializer. See also: [as.character()]
 #' @export
-serializer_text <- function(..., serialize_fn = as.character) {
-  serializer_content_type("text/plain; charset=UTF-8", function(val) {
+serializer_text <- function(..., serialize_fn = as.character, type = "text/plain; charset=UTF-8") {
+  serializer_content_type(type, function(val) {
     serialize_fn(val, ...)
   })
 }
@@ -278,33 +278,39 @@ serializer_text <- function(..., serialize_fn = as.character) {
 
 #' @describeIn serializers Text serializer. See also: [format()]
 #' @export
-serializer_format <- function(...) {
-  serializer_text(..., serialize_fn = format)
+serializer_format <- function(..., type = "text/plain; charset=UTF-8") {
+  serializer_text(..., serialize_fn = format, type = type)
 }
 
 #' @describeIn serializers Text serializer. Captures the output of [print()]
 #' @export
-serializer_print <- function(...) {
-  serializer_text(serialize_fn = function(x) {
-    paste0(
-      collapse = "\n",
-      utils::capture.output({
-        print(x, ...)
-      })
-    )
-  })
+serializer_print <- function(..., type = "text/plain; charset=UTF-8") {
+  serializer_text(
+    type = type,
+    serialize_fn = function(x) {
+      paste0(
+        collapse = "\n",
+        utils::capture.output({
+          print(x, ...)
+        })
+      )
+    }
+  )
 }
 #' @describeIn serializers Text serializer. Captures the output of [cat()]
 #' @export
-serializer_cat <- function(...) {
-  serializer_text(serialize_fn = function(x) {
-    paste0(
-      collapse = "\n",
-      utils::capture.output({
-        cat(x, ...)
-      })
-    )
-  })
+serializer_cat <- function(..., type = "text/plain; charset=UTF-8") {
+  serializer_text(
+    type = type,
+    serialize_fn = function(x) {
+      paste0(
+        collapse = "\n",
+        utils::capture.output({
+          cat(x, ...)
+        })
+      )
+    }
+  )
 }
 
 
@@ -312,13 +318,13 @@ serializer_cat <- function(...) {
 
 #' @describeIn serializers htmlwidget serializer. See also: [htmlwidgets::saveWidget()]
 #' @export
-serializer_htmlwidget <- function(...) {
+serializer_htmlwidget <- function(..., type = "text/html; charset=UTF-8") {
   if (!requireNamespace("htmlwidgets", quietly = TRUE)) {
     stop("The htmlwidgets package is not available but is required in order to use the htmlwidgets serializer",
           call. = FALSE)
   }
 
-  serializer_content_type("text/html; charset=UTF-8", function(val) {
+  serializer_content_type(type, function(val) {
     # Write out a temp file. htmlwidgets (or pandoc?) seems to require that this
     # file end in .html or the selfcontained=TRUE argument has no effect.
     file <- tempfile(fileext = ".html")
@@ -418,9 +424,9 @@ serializer_device <- function(type, dev_on, dev_off = grDevices::dev.off) {
 
 #' @describeIn serializers JPEG image serializer. See also: [grDevices::png()]
 #' @export
-serializer_jpeg <- function(...) {
+serializer_jpeg <- function(..., type = "image/jpeg") {
   serializer_device(
-    type = "image/jpeg",
+    type = type,
     dev_on = function(filename) {
       grDevices::jpeg(filename, ...)
     }
@@ -428,9 +434,9 @@ serializer_jpeg <- function(...) {
 }
 #' @describeIn serializers PNG image serializer. See also: [grDevices::png()]
 #' @export
-serializer_png <- function(...) {
+serializer_png <- function(..., type = "image/png") {
   serializer_device(
-    type = "image/png",
+    type = type,
     dev_on = function(filename) {
       grDevices::png(filename, ...)
     }
@@ -438,9 +444,9 @@ serializer_png <- function(...) {
 }
 #' @describeIn serializers SVG image serializer. See also: [grDevices::svg()]
 #' @export
-serializer_svg <- function(...) {
+serializer_svg <- function(..., type = "image/svg+xml") {
   serializer_device(
-    type = "image/svg+xml",
+    type = type,
     dev_on = function(filename) {
       grDevices::svg(filename, ...)
     }
@@ -448,9 +454,9 @@ serializer_svg <- function(...) {
 }
 #' @describeIn serializers BMP image serializer. See also: [grDevices::bmp()]
 #' @export
-serializer_bmp <- function(...) {
+serializer_bmp <- function(..., type = "image/bmp") {
   serializer_device(
-    type = "image/bmp",
+    type = type,
     dev_on = function(filename) {
       grDevices::bmp(filename, ...)
     }
@@ -458,9 +464,9 @@ serializer_bmp <- function(...) {
 }
 #' @describeIn serializers TIFF image serializer. See also: [grDevices::tiff()]
 #' @export
-serializer_tiff <- function(...) {
+serializer_tiff <- function(..., type = "image/tiff") {
   serializer_device(
-    type = "image/tiff",
+    type = type,
     dev_on = function(filename) {
       grDevices::tiff(filename, ...)
     }
@@ -468,9 +474,9 @@ serializer_tiff <- function(...) {
 }
 #' @describeIn serializers PDF image serializer. See also: [grDevices::pdf()]
 #' @export
-serializer_pdf <- function(...) {
+serializer_pdf <- function(..., type = "application/pdf") {
   serializer_device(
-    type = "application/pdf",
+    type = type,
     dev_on = function(filename) {
       grDevices::pdf(filename, ...)
     }

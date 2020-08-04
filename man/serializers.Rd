@@ -29,45 +29,53 @@ serializer_headers(headers = list(), serialize_fn = identity)
 
 serializer_content_type(type, serialize_fn = identity)
 
-serializer_csv(...)
+serializer_csv(..., type = "text/csv; charset=UTF-8")
 
-serializer_tsv(...)
+serializer_tsv(..., type = "text/tab-separated-values; charset=UTF-8")
 
-serializer_html()
+serializer_html(type = "text/html; charset=UTF-8")
 
-serializer_json(...)
+serializer_json(..., type = "application/json; charset=UTF-8")
 
-serializer_unboxed_json(auto_unbox = TRUE, ...)
+serializer_unboxed_json(
+  auto_unbox = TRUE,
+  ...,
+  type = "application/json; charset=UTF-8"
+)
 
-serializer_rds(version = "2", ascii = FALSE, ...)
+serializer_rds(version = "2", ascii = FALSE, ..., type = "application/rds")
 
-serializer_feather()
+serializer_feather(type = "application/feather; charset=UTF-8")
 
-serializer_yaml(...)
+serializer_yaml(..., type = "text/x-yaml; charset=UTF-8")
 
-serializer_text(..., serialize_fn = as.character)
+serializer_text(
+  ...,
+  serialize_fn = as.character,
+  type = "text/plain; charset=UTF-8"
+)
 
-serializer_format(...)
+serializer_format(..., type = "text/plain; charset=UTF-8")
 
-serializer_print(...)
+serializer_print(..., type = "text/plain; charset=UTF-8")
 
-serializer_cat(...)
+serializer_cat(..., type = "text/plain; charset=UTF-8")
 
-serializer_htmlwidget(...)
+serializer_htmlwidget(..., type = "text/html; charset=UTF-8")
 
 serializer_device(type, dev_on, dev_off = grDevices::dev.off)
 
-serializer_jpeg(...)
+serializer_jpeg(..., type = "image/jpeg")
 
-serializer_png(...)
+serializer_png(..., type = "image/png")
 
-serializer_svg(...)
+serializer_svg(..., type = "image/svg+xml")
 
-serializer_bmp(...)
+serializer_bmp(..., type = "image/bmp")
 
-serializer_tiff(...)
+serializer_tiff(..., type = "image/tiff")
 
-serializer_pdf(...)
+serializer_pdf(..., type = "application/pdf")
 }
 \arguments{
 \item{headers}{\code{list()} of headers to add to the response object}
