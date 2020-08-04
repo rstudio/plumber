@@ -223,6 +223,26 @@ serializer_rds <- function(version = "2", ascii = FALSE, ...) {
   })
 }
 
+#' @describeIn serializers feather serializer. See also: [feather::write_feather]
+#' @export
+serializer_feather <- function() {
+  if (!requireNamespace("feather", quietly = TRUE)) {
+    stop("`feather` must be installed for `serializer_feather` to work")
+  }
+  serializer_content_type("application/feather; charset=UTF-8", function(val) {
+    tmpfile <- tempfile(fileext = ".feather")
+    on.exit({
+      if (file.exists(tmpfile)) {
+        unlink(tmpfile)
+      }
+    }, add = TRUE)
+
+    feather::write_feather(val, tmpfile)
+    readBin(tmpfile, what = "raw", n = file.info(tmpfile)$size)
+  })
+}
+
+
 #' @describeIn serializers YAML serializer. See also: [yaml::as.yaml()]
 #' @export
 serializer_yaml <- function(...) {
@@ -462,6 +482,7 @@ add_serializers_onLoad <- function() {
   register_serializer("unboxedJSON", serializer_unboxed_json)
   register_serializer("rds",         serializer_rds)
   register_serializer("csv",         serializer_csv)
+  register_serializer("feather",     serializer_feather)
   register_serializer("yaml",        serializer_yaml)
 
   # text

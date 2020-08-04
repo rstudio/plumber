@@ -49,6 +49,8 @@ test_that("Test yaml parser", {
 })
 
 test_that("Test csv parser", {
+  skip_if_not_installed("readr")
+
   tmp <- tempfile()
   on.exit({
     file.remove(tmp)
@@ -67,6 +69,8 @@ test_that("Test csv parser", {
 })
 
 test_that("Test tsv parser", {
+  skip_if_not_installed("readr")
+
   tmp <- tempfile()
   on.exit({
     file.remove(tmp)
@@ -78,6 +82,26 @@ test_that("Test tsv parser", {
 
   parsed <- parse_body(val, "application/tab-separated-values", make_parser("tsv"))
   # convert from readr tibble to data.frame
+  parsed <- as.data.frame(parsed, stringsAsFactors = FALSE)
+  attr(parsed, "spec") <- NULL
+
+  expect_equal(parsed, r_object)
+})
+
+test_that("Test feather parser", {
+  skip_if_not_installed("feather")
+
+  tmp <- tempfile()
+  on.exit({
+    file.remove(tmp)
+  }, add = TRUE)
+
+  r_object <- iris
+  feather::write_feather(r_object, tmp)
+  val <- readBin(tmp, "raw", 10000)
+
+  parsed <- parse_body(val, "application/feather", make_parser("feather"))
+  # convert from feather tibble to data.frame
   parsed <- as.data.frame(parsed, stringsAsFactors = FALSE)
   attr(parsed, "spec") <- NULL
 

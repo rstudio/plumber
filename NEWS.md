@@ -55,6 +55,8 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 ### Minor new features and improvements
 
+* Added `serializer_feather()` and `parser_feather()` (#626)
+
 * When `plumb()`ing a file, arguments supplied to parsers and serializers may be values defined earlier in the file. (@meztez, #620)
 
 * Updated Docker files. New Docker repo is now [`rstudio/plumber`](https://hub.docker.com/r/rstudio/plumber/tags). Updates heavily inspired from @mskyttner (#459). (#589)
