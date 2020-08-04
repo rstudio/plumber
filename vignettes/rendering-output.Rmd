@@ -46,12 +46,33 @@ By default, Plumber serializes objects into JSON via the `jsonlite` R package. H
 
 Annotation | Content Type | Description/References
 ---------- | ------------ | ---------------------
-`@json` | `application/json` | `jsonlite::toJSON()`
-`@html` | `text/html; charset=utf-8` | Passes response through without any additional serialization
-`@jpeg` | `image/jpeg` | `jpeg()`
-`@png` | `image/png` | `png()`
+`@serializer contentType` | (user supplied) | Send response with a particular `Content-Type` header
+`@serializer html` | `text/html; charset=UTF-8` | Passes response through without any additional serialization
+`@serializer json` | `application/json` | Object processed with `jsonlite::toJSON()`
+`@serializer unboxedJSON` | `application/json` | Object processed with `jsonlite::toJSON(auto_unbox=TRUE)`
+`@serializer rds` | `application/rds` | Object processed with `base::serialize()`
+`@serializer csv` | `text/csv` | Object processed with `readr::format_csv()`
+`@serializer tsv` | `text/tab-separated-values` | Object processed with `readr::format_tsv()`
+`@serializer feather` | `application/feather` | Object processed with `feather::write_feather()`
+`@serializer yaml` | `text/x-yaml` | Object processed with `yaml::as_yaml()`
+
 `@serializer htmlwidget` | `text/html; charset=utf-8` | `htmlwidgets::saveWidget()`
-`@serializer unboxedJSON` | `application/json` | `jsonlite::toJSON(auto_unbox=TRUE)`
+
+`@serializer text` | `text/plain` | Text output processed by `as.character()`
+`@serializer format` | `text/plain` | Text output processed by `format()`
+`@serializer print` | `text/plain` | Text output captured from `print()`
+`@serializer cat` | `text/plain` | Text output captured from `cat()`
+
+`@serializer jpeg` | `image/jpeg` | Images created with `jpeg()`
+`@serializer png` | `image/png` | Images created with `png()`
+`@serializer svg` | `image/svg` | Images created with `svg()`
+`@serializer bmp` | `image/bmp` | Images created with `bmp()`
+`@serializer tiff` | `image/tiff` | Images created with `tiff()`
+`@serializer pdf` | `application/pdf` | PDF File created with `pdf()`
+
+
+
+
 
 ### Bypassing Serialization
 
