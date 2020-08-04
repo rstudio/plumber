@@ -14,6 +14,13 @@
 \alias{serializer_print}
 \alias{serializer_cat}
 \alias{serializer_htmlwidget}
+\alias{serializer_device}
+\alias{serializer_jpeg}
+\alias{serializer_png}
+\alias{serializer_svg}
+\alias{serializer_bmp}
+\alias{serializer_tiff}
+\alias{serializer_pdf}
 \title{Plumber Serializers}
 \usage{
 serializer_headers(headers = list(), serialize_fn = identity)
@@ -41,6 +48,20 @@ serializer_print(...)
 serializer_cat(...)
 
 serializer_htmlwidget(...)
+
+serializer_device(type, dev_on, dev_off = grDevices::dev.off)
+
+serializer_jpeg(...)
+
+serializer_png(...)
+
+serializer_svg(...)
+
+serializer_bmp(...)
+
+serializer_tiff(...)
+
+serializer_pdf(...)
 }
 \arguments{
 \item{headers}{\code{list()} of headers to add to the response object}
@@ -61,6 +82,12 @@ An exception is that objects of class \code{AsIs} (i.e. wrapped in \code{I()}) a
 \item{ascii}{a logical.  If \code{TRUE} or \code{NA}, an ASCII
     representation is written; otherwise (default) a binary one.
     See also the comments in the help for \code{\link[base]{save}}.}
+
+\item{dev_on}{Function to turn on the graphics device.
+The graphics device \code{dev_on} function will receive any arguments supplied to the serializer in addition to \code{filename}.
+\code{filename} points to the temporary file name that should be used when saving content.}
+
+\item{dev_off}{Function to turn off the grahpics device. Defaults to \code{\link[grDevices:dev]{grDevices::dev.off()}}}
 }
 \description{
 Serializers are used in Plumber to transform the R object produced by a
@@ -74,26 +101,40 @@ more details on Plumber serializers and how to customize their behavior.
 
 \item \code{serializer_content_type}: Adds a \code{Content-Type} header to the response object
 
-\item \code{serializer_csv}: CSV serializer. See \code{\link[readr:format_delim]{readr::format_csv()}} for more details.
+\item \code{serializer_csv}: CSV serializer. See also: \code{\link[readr:format_delim]{readr::format_csv()}}
 
 \item \code{serializer_html}: HTML serializer
 
-\item \code{serializer_json}: JSON serializer. See \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}} for more details.
+\item \code{serializer_json}: JSON serializer. See also: \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}}
 
-\item \code{serializer_unboxed_json}: JSON serializer with \code{auto_unbox} defaulting to \code{TRUE}. See \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}} for more details.
+\item \code{serializer_unboxed_json}: JSON serializer with \code{auto_unbox} defaulting to \code{TRUE}. See also: \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}}
 
-\item \code{serializer_rds}: RDS serializer. See \code{\link[=serialize]{serialize()}} for more details.
+\item \code{serializer_rds}: RDS serializer. See also: \code{\link[base:serialize]{base::serialize()}}
 
-\item \code{serializer_yaml}: YAML serializer. See \code{\link[yaml:as.yaml]{yaml::as.yaml()}} for more details.
+\item \code{serializer_yaml}: YAML serializer. See also: \code{\link[yaml:as.yaml]{yaml::as.yaml()}}
 
-\item \code{serializer_text}: Text serializer. See \code{\link[=as.character]{as.character()}} for more details.
+\item \code{serializer_text}: Text serializer. See also: \code{\link[=as.character]{as.character()}}
 
-\item \code{serializer_format}: Text serializer. See \code{\link[=format]{format()}} for more details.
+\item \code{serializer_format}: Text serializer. See also: \code{\link[=format]{format()}}
 
 \item \code{serializer_print}: Text serializer. Captures the output of \code{\link[=print]{print()}}
 
 \item \code{serializer_cat}: Text serializer. Captures the output of \code{\link[=cat]{cat()}}
 
-\item \code{serializer_htmlwidget}: htmlwidget serializer. See \code{\link[htmlwidgets:saveWidget]{htmlwidgets::saveWidget()}} for more details.
+\item \code{serializer_htmlwidget}: htmlwidget serializer. See also: \code{\link[htmlwidgets:saveWidget]{htmlwidgets::saveWidget()}}
+
+\item \code{serializer_device}: Helper method to create graphics device serializers, such as \code{\link[=serializer_png]{serializer_png()}}. See also: \code{\link[=hooks_and_serializer]{hooks_and_serializer()}}
+
+\item \code{serializer_jpeg}: JPEG image serializer. See also: \code{\link[grDevices:png]{grDevices::png()}}
+
+\item \code{serializer_png}: PNG image serializer. See also: \code{\link[grDevices:png]{grDevices::png()}}
+
+\item \code{serializer_svg}: SVG image serializer. See also: \code{\link[grDevices:cairo]{grDevices::svg()}}
+
+\item \code{serializer_bmp}: BMP image serializer. See also: \code{\link[grDevices:png]{grDevices::bmp()}}
+
+\item \code{serializer_tiff}: TIFF image serializer. See also: \code{\link[grDevices:png]{grDevices::tiff()}}
+
+\item \code{serializer_pdf}: PDF image serializer. See also: \code{\link[grDevices:pdf]{grDevices::pdf()}}
 }}
 

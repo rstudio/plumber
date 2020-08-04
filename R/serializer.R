@@ -12,7 +12,7 @@
 #' @describeIn register_serializer Register a serializer with a name
 #' @export
 register_serializer <- function(name, serializer, verbose = TRUE) {
-  if (!is.null(.globals$serializers[[name]])) {
+  if (name %in% registered_serializers()) {
     if (isTRUE(verbose)) {
       message("Overwriting serializer: ", name)
     }
@@ -24,6 +24,16 @@ register_serializer <- function(name, serializer, verbose = TRUE) {
 registered_serializers <- function(name) {
   sort(names(.globals$serializers))
 }
+
+get_registered_serializer <- function(name) {
+  serializer <- .globals$serializers[[name]]
+  if (is.null(serializer)) {
+    stop("'", name, "' is not a registered serializer. See `?registered_serializers`")
+  }
+
+  serializer
+}
+
 
 
 # internal function to use directly within this file only. (performance purposes)
@@ -146,13 +156,17 @@ serializer_content_type <- function(type, serialize_fn = identity) {
     stop("You must provide the custom content type to the serializer_content_type")
   }
 
+  stopifnot(length(type) == 1)
+  stopifnot(is.character(type))
+  stopifnot(nchar(type) > 0)
+
   serializer_headers(
     list("Content-Type" = type),
     serialize_fn
   )
 }
 
-#' @describeIn serializers CSV serializer. See \code{\link[readr:format_delim]{readr::format_csv()}} for more details.
+#' @describeIn serializers CSV serializer. See also: \code{\link[readr:format_delim]{readr::format_csv()}}
 #' @export
 serializer_csv <- function(...) {
   if (!requireNamespace("readr", quietly = TRUE)) {
@@ -173,7 +187,7 @@ serializer_html <- function() {
 }
 
 
-#' @describeIn serializers JSON serializer. See [jsonlite::toJSON()] for more details.
+#' @describeIn serializers JSON serializer. See also: [jsonlite::toJSON()]
 #' @export
 #' @importFrom jsonlite toJSON
 serializer_json <- function(...) {
@@ -182,7 +196,7 @@ serializer_json <- function(...) {
   })
 }
 
-#' @describeIn serializers JSON serializer with `auto_unbox` defaulting to `TRUE`. See [jsonlite::toJSON()] for more details.
+#' @describeIn serializers JSON serializer with `auto_unbox` defaulting to `TRUE`. See also: [jsonlite::toJSON()]
 #' @inheritParams jsonlite::toJSON
 #' @export
 serializer_unboxed_json <- function(auto_unbox = TRUE, ...) {
@@ -192,7 +206,7 @@ serializer_unboxed_json <- function(auto_unbox = TRUE, ...) {
 
 
 
-#' @describeIn serializers RDS serializer. See [serialize()] for more details.
+#' @describeIn serializers RDS serializer. See also: [base::serialize()]
 #' @inheritParams base::serialize
 #' @export
 serializer_rds <- function(version = "2", ascii = FALSE, ...) {
@@ -209,7 +223,7 @@ serializer_rds <- function(version = "2", ascii = FALSE, ...) {
   })
 }
 
-#' @describeIn serializers YAML serializer. See [yaml::as.yaml()] for more details.
+#' @describeIn serializers YAML serializer. See also: [yaml::as.yaml()]
 #' @export
 serializer_yaml <- function(...) {
   if (!requireNamespace("yaml", quietly = TRUE)) {
@@ -220,7 +234,7 @@ serializer_yaml <- function(...) {
   })
 }
 
-#' @describeIn serializers Text serializer. See [as.character()] for more details.
+#' @describeIn serializers Text serializer. See also: [as.character()]
 #' @export
 serializer_text <- function(..., serialize_fn = as.character) {
   serializer_content_type("text/plain; charset=UTF-8", function(val) {
@@ -230,7 +244,7 @@ serializer_text <- function(..., serialize_fn = as.character) {
 
 
 
-#' @describeIn serializers Text serializer. See [format()] for more details.
+#' @describeIn serializers Text serializer. See also: [format()]
 #' @export
 serializer_format <- function(...) {
   serializer_text(..., serialize_fn = format)
@@ -264,7 +278,7 @@ serializer_cat <- function(...) {
 
 
 
-#' @describeIn serializers htmlwidget serializer. See [htmlwidgets::saveWidget()] for more details.
+#' @describeIn serializers htmlwidget serializer. See also: [htmlwidgets::saveWidget()]
 #' @export
 serializer_htmlwidget <- function(...) {
   if (!requireNamespace("htmlwidgets", quietly = TRUE)) {
@@ -304,19 +318,171 @@ serializer_xml <- function() {
 
 
 
+#' Hooks and serializer object
+#'
+#' This method allows serializers to return both hooks and a serializer.
+#' This is useful for graphics device serializers which need a `preexec` and `postexec` hook to caputre the graphics output.
+#' @param hooks Hooks to be supplied directly to corresponding [PlumberEndpoint] `$registerHooks()` method
+#' @param serializer Serializer method to be used.  This method should already have it's initialization arugments applied.
+#' @examples
+#' # The definition of `serializer_device` returns
+#' # * `preexec`, `postexec` hooks
+#' # * a `serializer_content_type` serializer
+#' print(serializer_device)
+hooks_and_serializer <- function(hooks, serializer) {
+  structure(
+    list(
+      hooks = hooks,
+      serializer = serializer
+    ),
+    class = "plumber_hooks_and_serializer"
+  )
+}
+
+self_set_serializer <- function(self, serializer) {
+  if (inherits(serializer, "plumber_hooks_and_serializer")) {
+    self$serializer <- serializer$serializer
+    self$registerHooks(serializer$hooks)
+  } else {
+    self$serializer <- serializer
+  }
+  invisible(self)
+}
+
+
+#' @describeIn serializers Helper method to create graphics device serializers, such as [serializer_png()]. See also: [hooks_and_serializer()]
+#' @param dev_on Function to turn on the graphics device.
+#' The graphics device `dev_on` function will receive any arguments supplied to the serializer in addition to `filename`.
+#' `filename` points to the temporary file name that should be used when saving content.
+#' @param dev_off Function to turn off the grahpics device. Defaults to [grDevices::dev.off()]
+#' @export
+serializer_device <- function(type, dev_on, dev_off = grDevices::dev.off) {
+
+  stopifnot(is.function(dev_on))
+  stopifnot(length(formals(dev_on)) > 0)
+  stopifnot(is.function(dev_off))
+
+  hooks_and_serializer(
+    hooks = list(
+      preexec = function(req, res, data) {
+        tmpfile <- tempfile()
+        data$file <- tmpfile
+
+        dev_on(filename = tmpfile)
+      },
+      postexec = function(value, req, res, data) {
+        dev_off()
+
+        on.exit({unlink(data$file)}, add = TRUE)
+        con <- file(data$file, "rb")
+        on.exit({close(con)}, add = TRUE)
+        img <- readBin(con, "raw", file.info(data$file)$size)
+        img
+      }
+    ),
+    serializer = serializer_content_type(type)
+  )
+}
+
+#' @describeIn serializers JPEG image serializer. See also: [grDevices::png()]
+#' @export
+serializer_jpeg <- function(...) {
+  serializer_device(
+    type = "image/jpeg",
+    dev_on = function(filename) {
+      grDevices::jpeg(filename, ...)
+    }
+  )
+}
+#' @describeIn serializers PNG image serializer. See also: [grDevices::png()]
+#' @export
+serializer_png <- function(...) {
+  serializer_device(
+    type = "image/png",
+    dev_on = function(filename) {
+      grDevices::png(filename, ...)
+    }
+  )
+}
+#' @describeIn serializers SVG image serializer. See also: [grDevices::svg()]
+#' @export
+serializer_svg <- function(...) {
+  serializer_device(
+    type = "image/svg+xml",
+    dev_on = function(filename) {
+      grDevices::svg(filename, ...)
+    }
+  )
+}
+#' @describeIn serializers BMP image serializer. See also: [grDevices::bmp()]
+#' @export
+serializer_bmp <- function(...) {
+  serializer_device(
+    type = "image/bmp",
+    dev_on = function(filename) {
+      grDevices::bmp(filename, ...)
+    }
+  )
+}
+#' @describeIn serializers TIFF image serializer. See also: [grDevices::tiff()]
+#' @export
+serializer_tiff <- function(...) {
+  serializer_device(
+    type = "image/tiff",
+    dev_on = function(filename) {
+      grDevices::tiff(filename, ...)
+    }
+  )
+}
+#' @describeIn serializers PDF image serializer. See also: [grDevices::pdf()]
+#' @export
+serializer_pdf <- function(...) {
+  serializer_device(
+    type = "application/pdf",
+    dev_on = function(filename) {
+      grDevices::pdf(filename, ...)
+    }
+  )
+}
+
+
+
+
+
+
 add_serializers_onLoad <- function() {
   register_serializer("null",        serializer_identity)
   register_serializer("contentType", serializer_content_type)
-  register_serializer("html",        serializer_html)
-  register_serializer("csv",         serializer_csv)
+
+  # html
+  register_serializer("html", serializer_html)
+
+  # objects
   register_serializer("json",        serializer_json)
   register_serializer("unboxedJSON", serializer_unboxed_json)
   register_serializer("rds",         serializer_rds)
-  register_serializer("xml",         serializer_xml)
+  register_serializer("csv",         serializer_csv)
   register_serializer("yaml",        serializer_yaml)
-  register_serializer("text",        serializer_text)
-  register_serializer("format",      serializer_format)
-  register_serializer("print",       serializer_print)
-  register_serializer("cat",         serializer_cat)
-  register_serializer("htmlwidget",  serializer_htmlwidget)
+
+  # text
+  register_serializer("text",   serializer_text)
+  register_serializer("format", serializer_format)
+  register_serializer("print",  serializer_print)
+  register_serializer("cat",    serializer_cat)
+
+  # htmlwidget
+  register_serializer("htmlwidget", serializer_htmlwidget)
+
+  # devices
+  register_serializer("device", serializer_device)
+  register_serializer("jpeg",   serializer_jpeg)
+  register_serializer("png",    serializer_png)
+  register_serializer("svg",    serializer_svg)
+  register_serializer("bmp",    serializer_bmp)
+  register_serializer("tiff",   serializer_tiff)
+  register_serializer("pdf",    serializer_pdf)
+
+
+  ## Do not register until implemented
+  # register_serializer("xml", serializer_xml)
 }
