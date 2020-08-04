@@ -298,7 +298,7 @@ test_that("api kitchen sink", {
   }
 
 
-  folders <- dir(system.file("examples/", package = "plumber"), full.names = TRUE)
+  folders <- dir(system.file("plumber/", package = "plumber"), full.names = TRUE)
   for (folder in folders) {
     with_dir(folder, {
       if (file.exists("entrypoint.R")) {
