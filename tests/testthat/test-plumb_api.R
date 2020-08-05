@@ -50,19 +50,40 @@ test_that("available_apis() print method works", {
 
 
 test_that("errors are thrown", {
-  expect_error(plub_api(NULL, NULL))
+  expect_error(plumb_api(NULL, NULL))
 
-  expect_error(plub_api("plumber", NULL))
-  expect_error(plub_api(NULL, "01-append"))
+  expect_error(plumb_api("plumber", NULL))
+  expect_error(plumb_api(NULL, "01-append"))
 
-  expect_error(plub_api(c("plumber", "plumber"), "01-append"))
-  expect_error(plub_api("plumber", c("01-append", "01-append")))
+  expect_error(plumb_api(c("plumber", "plumber"), "01-append"))
+  expect_error(plumb_api("plumber", c("01-append", "01-append")))
 
-  expect_error(plub_api(TRUE, "01-append"))
-  expect_error(plub_api("plumber", TRUE))
+  expect_error(plumb_api(TRUE, "01-append"))
+  expect_error(plumb_api("plumber", TRUE))
 
-  expect_error(plub_api("plumber", "not an api"))
+  expect_error(plumb_api("plumber", "not an api"))
 
   expect_error(available_apis("not a package"), "No package found with name")
   expect_error(available_apis("crayon"), "No Plumber APIs found for package")
+})
+
+
+context("plumb() plumber APIs")
+test_that("all example plumber apis plumb", {
+  apis <- available_apis("plumber")
+
+  lapply(
+    apis$name,
+    function(name) {
+      pr <-
+        if (name == "12-entrypoint") {
+          suppressWarnings({
+            plumb_api("plumber", name)
+          })
+        } else {
+          plumb_api("plumber", name)
+        }
+      expect_true(inherits(pr, "plumber"), paste0("plumb_api(\"", package, "\", \"", name, "\")"))
+    }
+  )
 })

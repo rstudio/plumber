@@ -7,7 +7,7 @@
 \alias{include_rmd}
 \title{Send File Contents as Response}
 \usage{
-include_file(file, res, content_type)
+include_file(file, res, content_type = getContentType(tools::file_ext(file)))
 
 include_html(file, res)
 
@@ -21,7 +21,7 @@ include_rmd(file, res, format = NULL)
 \item{res}{The response object into which we'll write}
 
 \item{content_type}{If provided, the given value will be sent as the
-\code{Content-Type} header in the response.}
+\code{Content-Type} header in the response. Defaults to the contentType of the file extension.}
 
 \item{format}{Passed as the \code{output_format} to \code{rmarkdown::render}}
 }

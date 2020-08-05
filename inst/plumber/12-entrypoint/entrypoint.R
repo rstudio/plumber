@@ -1,5 +1,10 @@
 
-pr <- plumb("myplumberapi.R")
-pr$registerHook("preroute", sessionCookie("secret", "cookieName"))
+library(plumber)
+pr <- pr("myplumberapi.R") %>%
+  pr_cookie(
+    key = "pleasechangeme",
+    name = "cookieName"
+  )
 
+# MUST return a Plumber object when using `entrypoint.R`
 pr
