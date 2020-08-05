@@ -248,8 +248,6 @@ test_that("parametersSpecification works", {
 test_that("api kitchen sink", {
 
   skip_on_cran()
-  skip_on_travis()
-  skip_on_appveyor()
   skip_on_bioc()
   skip_on_os(setdiff(c("windows", "mac", "linux", "solaris"), "mac"))
 
@@ -259,19 +257,11 @@ test_that("api kitchen sink", {
   # brew install yarn
   ## install yarn
   # yarn add swagger-ui
+
+  # yarn install
   swagger_cli_path <- "../../node_modules/.bin/swagger-cli"
   skip_if_not(file.exists(swagger_cli_path))
   swagger_cli_path <- normalizePath(swagger_cli_path)
-
-  with_dir <- function(dir, x) {
-    old_wd <- getwd()
-    on.exit({
-      setwd(old_wd)
-    })
-    setwd(folder)
-
-    force(x)
-  }
 
   validate_spec <- function(pr) {
     spec <- jsonlite::toJSON(pr$get_api_spec(), auto_unbox = TRUE)
@@ -298,25 +288,25 @@ test_that("api kitchen sink", {
   }
 
 
-  folders <- dir(system.file("plumber/", package = "plumber"), full.names = TRUE)
-  for (folder in folders) {
-    with_dir(folder, {
-      if (file.exists("entrypoint.R")) {
-        if (basename(folder) == "12-entrypoint") {
-          # this file has a bad secret on purpose,
-          # don't show the warning
+  lapply(
+    available_apis("plumber")$name,
+    function(name) {
+      pr <-
+        if (name == "12-entrypoint") {
           expect_warning({
-            pr <- sourceUTF8("entrypoint.R")
+            plumb_api("plumber", name)
           }, "Legacy cookie secret")
         } else {
-          pr <- sourceUTF8("entrypoint.R")
+          plumb_api("plumber", name)
         }
-      } else {
-        pr <- plumb(dir = ".")
-      }
+      expect_true(inherits(pr, "plumber"), paste0("plumb_api(\"", package, "\", \"", name, "\")"))
+
+      # str(pr$get_api_spec())
+      # browser()
+
       validate_spec(pr)
-    })
-  }
+    }
+  )
 
   # TODO test more situations
 

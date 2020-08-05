@@ -82,9 +82,9 @@ test_that("all example plumber apis plumb", {
     function(name) {
       pr <-
         if (name == "12-entrypoint") {
-          suppressWarnings({
+          expect_warning({
             plumb_api("plumber", name)
-          })
+          }, "Legacy cookie secret")
         } else {
           plumb_api("plumber", name)
         }
