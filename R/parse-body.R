@@ -55,9 +55,9 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
   }
 
   # remove trailing content type information
-  # "application/json; charset=UTF-8"
+  # "text/yaml; charset=UTF-8"
   # to
-  # "application/json"
+  # "text/yaml"
   if (stri_detect_fixed(content_type, ";")) {
     content_type <- stri_split_fixed(content_type, ";")[[1]][1]
   }

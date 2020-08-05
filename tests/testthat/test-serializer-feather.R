@@ -6,7 +6,7 @@ test_that("feather serializes properly", {
   d <- data.frame(a=1, b=2, c="hi")
   val <- serializer_feather()(d, data.frame(), PlumberResponse$new(), stop)
   expect_equal(val$status, 200L)
-  expect_equal(val$headers$`Content-Type`, "application/feather; charset=UTF-8")
+  expect_equal(val$headers$`Content-Type`, "application/feather")
 
   # can test  by doing a full round trip if we believe the parser works via `test-parse-body.R`
   parsed <- parse_body(val$body, "application/feather", make_parser("feather"))

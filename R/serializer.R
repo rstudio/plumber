@@ -7,14 +7,14 @@
 #' available serializers in plumber is global.
 #'
 #' There are three main building-block serializers:
-#' * `serializer_headers`: the base building-block serializer that is required to have [as_attachement()] work
+#' * `serializer_headers`: the base building-block serializer that is required to have [as_attachment()] work
 #' * `serializer_content_type()`: for setting the content type. (Calls `serializer_headers()`)
 #' * `serializer_device()`: add endpoint hooks to turn a graphics device on and off in addition to setting the content type. (Uses `serializer_content_type()`)
 #'
 #' @param name The name of the serializer (character string)
 #' @param serializer The serializer function to be added.
 #' This function should accept arguments that can be supplied when [plumb()]ing a file.
-#' This function should return a function that accepts four arguments: `value`, `req`, `res`, and `error_handler`.
+#' This function should return a function that accepts four arguments: `value`, `req`, `res`, and `errorHandler`.
 #' See `print(serializer_json)` for an example.
 #'
 #' @param verbose Logical value which determines if a message should be printed when overwriting serializers
@@ -52,12 +52,12 @@ get_registered_serializer <- function(name) {
 
 # internal function to use directly within this file only. (performance purposes)
 # Other files should use `serializer_identity()` to avoid confusion
-serializer_identity_ <- function(val, req, res, error_handler) {
+serializer_identity_ <- function(val, req, res, errorHandler) {
   tryCatch({
     res$body <- val
     res$toResponse()
   }, error = function(err) {
-    error_handler(req, res, err)
+    errorHandler(req, res, err)
   })
 }
 serializer_identity <- function(){
@@ -114,7 +114,7 @@ serializer_headers <- function(headers = list(), serialize_fn = identity) {
   stopifnot(is.function(serialize_fn))
   stopifnot(is.list(headers))
 
-  function(val, req, res, error_handler) {
+  function(val, req, res, errorHandler) {
     tryCatch({
 
       # handle `as_attachment()` before serializing
@@ -152,9 +152,9 @@ serializer_headers <- function(headers = list(), serialize_fn = identity) {
       val <- serialize_fn(val)
 
       # return value
-      serializer_identity_(val, req, res, error_handler)
+      serializer_identity_(val, req, res, errorHandler)
     }, error = function(err) {
-      error_handler(req, res, err)
+      errorHandler(req, res, err)
     })
   }
 }
@@ -379,7 +379,8 @@ serializer_xml <- function() {
 #' These hooks are specific to a single [PlumberEndpoint]'s route calculation.
 #'
 #' @param serializer Serializer method to be used.  This method should already have its initialization arguments applied.
-#' @param preexec_hook Function to be run directly before a [PlumberEndpoint] calls it's handle method.
+#' @param preexec_hook Function to be run directly before a [PlumberEndpoint] calls its route method.
+#' @param postexec_hook Function to be run directly after a [PlumberEndpoint] calls its route method.
 #'
 #' @examples
 #' # The definition of `serializer_device` returns
@@ -434,24 +435,22 @@ serializer_device <- function(type, dev_on, dev_off = grDevices::dev.off) {
   stopifnot(is.function(dev_off))
 
   endpoint_serializer(
-    hooks = list(
-      preexec = function(req, res, data) {
-        tmpfile <- tempfile()
-        data$file <- tmpfile
+    serializer = serializer_content_type(type),
+    preexec_hook = function(req, res, data) {
+      tmpfile <- tempfile()
+      data$file <- tmpfile
 
-        dev_on(filename = tmpfile)
-      },
-      postexec = function(value, req, res, data) {
-        dev_off()
+      dev_on(filename = tmpfile)
+    },
+    postexec_hook = function(value, req, res, data) {
+      dev_off()
 
-        on.exit({unlink(data$file)}, add = TRUE)
-        con <- file(data$file, "rb")
-        on.exit({close(con)}, add = TRUE)
-        img <- readBin(con, "raw", file.info(data$file)$size)
-        img
-      }
-    ),
-    serializer = serializer_content_type(type)
+      on.exit({unlink(data$file)}, add = TRUE)
+      con <- file(data$file, "rb")
+      on.exit({close(con)}, add = TRUE)
+      img <- readBin(con, "raw", file.info(data$file)$size)
+      img
+    }
   )
 }
 

@@ -239,8 +239,8 @@ test_that("device serializers produce a structure", {
     serializer_info <- serializer_fn()
     expect_equal(block$serializer$serializer, serializer_info$serializer)
     expect_true(is.function(block$serializer$serializer))
-    expect_equal(block$serializer$hooks, serializer_info$hooks)
-    expect_true(all(c("preexec", "postexec") %in% names(block$serializer$hooks)))
+    expect_equal(block$serializer$preexec_hook, serializer_info$preexec_hook)
+    expect_equal(block$serializer$postexec_hook, serializer_info$postexec_hook)
   }
 
   expect_s3_block("#' @serializer jpeg", serializer_jpeg)

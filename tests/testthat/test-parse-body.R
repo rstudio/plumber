@@ -15,7 +15,7 @@ test_that("Query strings on post are handled correctly", {
 })
 
 test_that("Able to handle UTF-8", {
-  expect_equal(parse_body('{"text":"Ã©lise"}', content_type = "application/json; charset=UTF-8", parsers = make_parser("json"))$text, "Ã©lise")
+  expect_equal(parse_body('{"text":"Ã©lise"}', content_type = "application/json", parsers = make_parser("json"))$text, "Ã©lise")
 })
 
 #charset moved to part parsing

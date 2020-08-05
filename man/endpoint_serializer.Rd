@@ -9,7 +9,9 @@ endpoint_serializer(serializer, preexec_hook = NULL, postexec_hook = NULL)
 \arguments{
 \item{serializer}{Serializer method to be used.  This method should already have its initialization arguments applied.}
 
-\item{preexec_hook}{Function to be run directly before a \link{PlumberEndpoint} calls it's handle method.}
+\item{preexec_hook}{Function to be run directly before a \link{PlumberEndpoint} calls its route method.}
+
+\item{postexec_hook}{Function to be run directly after a \link{PlumberEndpoint} calls its route method.}
 }
 \description{
 This method allows serializers to return both \code{preexec} and \code{postexec} hooks in addition to a serializer.

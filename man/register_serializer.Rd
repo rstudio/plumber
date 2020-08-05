@@ -14,7 +14,7 @@ registered_serializers()
 
 \item{serializer}{The serializer function to be added.
 This function should accept arguments that can be supplied when \code{\link[=plumb]{plumb()}}ing a file.
-This function should return a function that accepts four arguments: \code{value}, \code{req}, \code{res}, and \code{error_handler}.
+This function should return a function that accepts four arguments: \code{value}, \code{req}, \code{res}, and \code{errorHandler}.
 See \code{print(serializer_json)} for an example.}
 
 \item{verbose}{Logical value which determines if a message should be printed when overwriting serializers}
@@ -28,7 +28,7 @@ available serializers in plumber is global.
 \details{
 There are three main building-block serializers:
 \itemize{
-\item \code{serializer_headers}: the base building-block serializer that is required to have \code{\link[=as_attachement]{as_attachement()}} work
+\item \code{serializer_headers}: the base building-block serializer that is required to have \code{\link[=as_attachment]{as_attachment()}} work
 \item \code{serializer_content_type()}: for setting the content type. (Calls \code{serializer_headers()})
 \item \code{serializer_device()}: add endpoint hooks to turn a graphics device on and off in addition to setting the content type. (Uses \code{serializer_content_type()})
 }
