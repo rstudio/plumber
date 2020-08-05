@@ -21,7 +21,8 @@ include_rmd(file, res, format = NULL)
 \item{res}{The response object into which we'll write}
 
 \item{content_type}{If provided, the given value will be sent as the
-\code{Content-Type} header in the response. Defaults to the contentType of the file extension.}
+\code{Content-Type} header in the response. Defaults to the contentType of the file extension.
+To disable the \code{Content-Type} header, set \code{content_type = NULL}.}
 
 \item{format}{Passed as the \code{output_format} to \code{rmarkdown::render}}
 }

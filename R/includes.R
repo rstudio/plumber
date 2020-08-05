@@ -17,7 +17,8 @@ requireRmd <- function(fun_name){
 #' @param file The path to the file to return
 #' @param res The response object into which we'll write
 #' @param content_type If provided, the given value will be sent as the
-#'  \code{Content-Type} header in the response. Defaults to the contentType of the file extension.
+#'  `Content-Type` header in the response. Defaults to the contentType of the file extension.
+#' To disable the `Content-Type` header, set `content_type = NULL`.
 #' @export
 include_file <- function(file, res, content_type = getContentType(tools::file_ext(file))){
   # TODO stream this directly to the request w/o loading in memory
