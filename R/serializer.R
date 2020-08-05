@@ -21,7 +21,7 @@ register_serializer <- function(name, serializer, verbose = TRUE) {
 }
 #' @describeIn register_serializer Return a list of all registered serializers
 #' @export
-registered_serializers <- function(name) {
+registered_serializers <- function() {
   sort(names(.globals$serializers))
 }
 
