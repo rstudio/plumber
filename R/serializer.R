@@ -166,7 +166,7 @@ serializer_content_type <- function(type, serialize_fn = identity) {
   )
 }
 
-#' @describeIn serializers CSV serializer. See also: \code{\link[readr:format_delim]{readr::format_csv()}}
+#' @describeIn serializers CSV serializer. See also: [readr::format_csv()]
 #' @export
 serializer_csv <- function(..., type = "text/csv; charset=UTF-8") {
   if (!requireNamespace("readr", quietly = TRUE)) {
@@ -178,7 +178,7 @@ serializer_csv <- function(..., type = "text/csv; charset=UTF-8") {
   })
 }
 
-#' @describeIn serializers TSV serializer. See also: \code{\link[readr:format_delim]{readr::format_tsv()}}
+#' @describeIn serializers TSV serializer. See also: [readr::format_tsv()]
 #' @export
 serializer_tsv <- function(..., type = "text/tab-separated-values; charset=UTF-8") {
   if (!requireNamespace("readr", quietly = TRUE)) {
@@ -235,7 +235,7 @@ serializer_rds <- function(version = "2", ascii = FALSE, ..., type = "applicatio
   })
 }
 
-#' @describeIn serializers feather serializer. See also: [feather::write_feather]
+#' @describeIn serializers feather serializer. See also: [feather::write_feather()]
 #' @export
 serializer_feather <- function(type = "application/feather; charset=UTF-8") {
   if (!requireNamespace("feather", quietly = TRUE)) {
@@ -361,7 +361,7 @@ serializer_xml <- function() {
 #' This method allows serializers to return both hooks and a serializer.
 #' This is useful for graphics device serializers which need a `preexec` and `postexec` hook to capture the graphics output.
 #' @param hooks Hooks to be supplied directly to corresponding [PlumberEndpoint] `$registerHooks()` method
-#' @param serializer Serializer method to be used.  This method should already have it's initialization arugments applied.
+#' @param serializer Serializer method to be used.  This method should already have its initialization arguments applied.
 #' @examples
 #' # The definition of `serializer_device` returns
 #' # * `preexec`, `postexec` hooks
