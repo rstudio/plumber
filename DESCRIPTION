@@ -42,7 +42,8 @@ Suggests:
     later,
     readr,
     yaml,
-    feather
+    feather,
+    future
 Remotes:
     rstudio/swagger
 RoxygenNote: 7.1.1
