@@ -202,7 +202,7 @@ serializer_html <- function(type = "text/html; charset=UTF-8") {
 #' @describeIn serializers JSON serializer. See also: [jsonlite::toJSON()]
 #' @export
 #' @importFrom jsonlite toJSON
-serializer_json <- function(..., type = "application/json; charset=UTF-8") {
+serializer_json <- function(..., type = "application/json") {
   serializer_content_type(type, function(val) {
     toJSON(val, ...)
   })
@@ -211,7 +211,7 @@ serializer_json <- function(..., type = "application/json; charset=UTF-8") {
 #' @describeIn serializers JSON serializer with `auto_unbox` defaulting to `TRUE`. See also: [jsonlite::toJSON()]
 #' @inheritParams jsonlite::toJSON
 #' @export
-serializer_unboxed_json <- function(auto_unbox = TRUE, ..., type = "application/json; charset=UTF-8") {
+serializer_unboxed_json <- function(auto_unbox = TRUE, ..., type = "application/json") {
   serializer_json(auto_unbox = auto_unbox, ..., type = type)
 }
 
@@ -237,7 +237,7 @@ serializer_rds <- function(version = "2", ascii = FALSE, ..., type = "applicatio
 
 #' @describeIn serializers feather serializer. See also: [feather::write_feather()]
 #' @export
-serializer_feather <- function(type = "application/feather; charset=UTF-8") {
+serializer_feather <- function(type = "application/feather") {
   if (!requireNamespace("feather", quietly = TRUE)) {
     stop("`feather` must be installed for `serializer_feather` to work")
   }
