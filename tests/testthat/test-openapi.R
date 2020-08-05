@@ -249,7 +249,7 @@ test_that("api kitchen sink", {
 
   skip_on_cran()
   skip_on_bioc()
-  skip_on_os(setdiff(c("windows", "mac", "linux", "solaris"), "mac"))
+  skip_on_os(setdiff(c("windows", "mac", "linux", "solaris"), c("mac", "linux")))
 
   ## install brew - https://brew.sh/
   # /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
