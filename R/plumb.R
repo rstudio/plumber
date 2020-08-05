@@ -75,7 +75,7 @@ plumb <- function(file = NULL, dir = ".") {
   }
 
   # Plumber file found
-  plumber$new(basename(file))
+  plumber$new(file)
 }
 
 

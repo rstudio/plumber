@@ -1113,6 +1113,7 @@ plumber <- R6Class(
     mnts = list(),
 
     envir = NULL, # The environment in which all API execution will be conducted
+    filename = NULL, # The file which was plumbed
     lines = NULL, # The lines constituting the API
     parsed = NULL, # The parsed representation of the API
     globalSettings = list(info=list()), # Global settings for this API. Primarily used for OpenAPI Specification.
