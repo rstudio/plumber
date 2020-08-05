@@ -34,7 +34,7 @@ function(req, res){
 }
 
 #* @get /short-json
-#* @json
+#* @serializer json
 function(){
   "JSON"
 }

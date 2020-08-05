@@ -127,6 +127,10 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
     shortSerMat <- stri_match(line, regex="^#['\\*]\\s*@(json|html|jpeg|png|svg)(.*)$")
     if (!is.na(shortSerMat[1,2])) {
       s <- stri_trim_both(shortSerMat[1,2])
+      .Deprecated(msg = paste0(
+        "Plumber tag `#' @", s, "` is deprecated.\n",
+        "Use `#' @serializer ", s, "` instead."
+      ))
       if (!is.null(serializer)){
         # Must have already assigned.
         stopOnLine(lineNum, line, "Multiple @serializers specified for one function (shorthand serializers like @json count, too).")
