@@ -359,7 +359,7 @@ serializer_xml <- function() {
 #' Hooks and serializer object
 #'
 #' This method allows serializers to return both hooks and a serializer.
-#' This is useful for graphics device serializers which need a `preexec` and `postexec` hook to caputre the graphics output.
+#' This is useful for graphics device serializers which need a `preexec` and `postexec` hook to capture the graphics output.
 #' @param hooks Hooks to be supplied directly to corresponding [PlumberEndpoint] `$registerHooks()` method
 #' @param serializer Serializer method to be used.  This method should already have it's initialization arugments applied.
 #' @examples
@@ -389,7 +389,7 @@ self_set_serializer <- function(self, serializer) {
 
 
 #' @describeIn serializers Helper method to create graphics device serializers, such as [serializer_png()]. See also: [hooks_and_serializer()]
-#' @param dev_on Function to turn on the graphics device.
+#' @param dev_on Function to turn on a graphics device.
 #' The graphics device `dev_on` function will receive any arguments supplied to the serializer in addition to `filename`.
 #' `filename` points to the temporary file name that should be used when saving content.
 #' @param dev_off Function to turn off the grahpics device. Defaults to [grDevices::dev.off()]
@@ -422,7 +422,7 @@ serializer_device <- function(type, dev_on, dev_off = grDevices::dev.off) {
   )
 }
 
-#' @describeIn serializers JPEG image serializer. See also: [grDevices::png()]
+#' @describeIn serializers JPEG image serializer. See also: [grDevices::jpeg()]
 #' @export
 serializer_jpeg <- function(..., type = "image/jpeg") {
   serializer_device(
