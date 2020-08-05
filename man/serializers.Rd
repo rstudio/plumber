@@ -97,7 +97,7 @@ An exception is that objects of class \code{AsIs} (i.e. wrapped in \code{I()}) a
     representation is written; otherwise (default) a binary one.
     See also the comments in the help for \code{\link[base]{save}}.}
 
-\item{dev_on}{Function to turn on the graphics device.
+\item{dev_on}{Function to turn on a graphics device.
 The graphics device \code{dev_on} function will receive any arguments supplied to the serializer in addition to \code{filename}.
 \code{filename} points to the temporary file name that should be used when saving content.}
 
@@ -143,7 +143,7 @@ more details on Plumber serializers and how to customize their behavior.
 
 \item \code{serializer_device}: Helper method to create graphics device serializers, such as \code{\link[=serializer_png]{serializer_png()}}. See also: \code{\link[=hooks_and_serializer]{hooks_and_serializer()}}
 
-\item \code{serializer_jpeg}: JPEG image serializer. See also: \code{\link[grDevices:png]{grDevices::png()}}
+\item \code{serializer_jpeg}: JPEG image serializer. See also: \code{\link[grDevices:png]{grDevices::jpeg()}}
 
 \item \code{serializer_png}: PNG image serializer. See also: \code{\link[grDevices:png]{grDevices::png()}}
 

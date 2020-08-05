@@ -13,7 +13,7 @@ hooks_and_serializer(hooks, serializer)
 }
 \description{
 This method allows serializers to return both hooks and a serializer.
-This is useful for graphics device serializers which need a \code{preexec} and \code{postexec} hook to caputre the graphics output.
+This is useful for graphics device serializers which need a \code{preexec} and \code{postexec} hook to capture the graphics output.
 }
 \examples{
 # The definition of `serializer_device` returns
