@@ -55,7 +55,7 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 * Added a Tidy API for easier programmatic usage (@blairj09, #590)
 
-* Added functions `plumb_api()` and `available_apis()` . These methods should be used to have a consistent pattern when distributing multiple Plumber APIs from within a package. To view the available Plumber APIs, call `available_apis()`. To retrieve a package's available API, call `plumb_api(pkg, name)` (#631)
+* Added `plumb_api()` for standardizing where to locate (`inst/plumber`) and how to run (`plumb_api(package, name)`) plumber apis inside an R package. To view the available Plumber APIs, call `available_apis()`. (#631)
 
 
 ### Minor new features and improvements

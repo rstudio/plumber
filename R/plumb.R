@@ -153,16 +153,14 @@ available_apis_for_package <- function(package) {
     )
   }
 
-  if (!file.exists(
-    system.file(package = package)
-  )) {
+  if (!nzchar(system.file(package = package))) {
     return(an_error(
       "No package found with name: \"", package, "\""
     ))
   }
 
   apis_dir <- system.file("plumber", package = package)
-  if (!file.exists(apis_dir)) {
+  if (!nzchar(apis_dir)) {
     return(an_error(
       "No Plumber APIs found for package: \"", package, "\""
     ))
