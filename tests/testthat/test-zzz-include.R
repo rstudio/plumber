@@ -6,12 +6,12 @@ test_that("Includes work", {
   # When running, we setwd to the file's dir. Simulate that here.
   cwd <- getwd()
   on.exit( { setwd(cwd) } )
-  setwd("files")
+  setwd(test_path("files"))
 
   res <- PlumberResponse$new()
   val <- r$route(make_req("GET", "/"), res)
   expect_equal(val$body, "test.txt content")
-  expect_equal(val$headers$`Content-Type`, NULL)
+  expect_equal(val$headers$`Content-Type`, "text/plain")
 
   res <- PlumberResponse$new()
   val <- r$route(make_req("GET", "/html"), res)

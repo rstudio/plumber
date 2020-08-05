@@ -60,6 +60,8 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 ### Minor new features and improvements
 
+* When calling `include_file()`, the `content_type` is automatically inferred from the file extension if `content_type` is not provided. (#631)
+
 * Added `serializer_feather()` and `parser_feather()` (#626)
 
 * When `plumb()`ing a file, arguments supplied to parsers and serializers may be values defined earlier in the file. (@meztez, #620)
