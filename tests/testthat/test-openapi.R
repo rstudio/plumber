@@ -287,26 +287,7 @@ test_that("api kitchen sink", {
     expect_equal(sub(tmpfile, "", output, fixed = TRUE), " is valid")
   }
 
-
-  lapply(
-    available_apis("plumber")$name,
-    function(name) {
-      pr <-
-        if (name == "12-entrypoint") {
-          expect_warning({
-            plumb_api("plumber", name)
-          }, "Legacy cookie secret")
-        } else {
-          plumb_api("plumber", name)
-        }
-      expect_true(inherits(pr, "plumber"), paste0("plumb_api(\"", package, "\", \"", name, "\")"))
-
-      # str(pr$get_api_spec())
-      # browser()
-
-      validate_spec(pr)
-    }
-  )
+  for_each_plumber_api(validate_spec)
 
   # TODO test more situations
 

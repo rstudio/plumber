@@ -75,20 +75,6 @@ test_that("errors are thrown", {
 
 context("plumb() plumber APIs")
 test_that("all example plumber apis plumb", {
-  apis <- available_apis("plumber")
-
-  lapply(
-    apis$name,
-    function(name) {
-      pr <-
-        if (name == "12-entrypoint") {
-          expect_warning({
-            plumb_api("plumber", name)
-          }, "Legacy cookie secret")
-        } else {
-          plumb_api("plumber", name)
-        }
-      expect_true(inherits(pr, "plumber"), paste0("plumb_api(\"", package, "\", \"", name, "\")"))
-    }
-  )
+  # plumb each api and validate they return a plumber object
+  for_each_plumber_api(identity)
 })
