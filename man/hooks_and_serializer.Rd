@@ -9,7 +9,7 @@ hooks_and_serializer(hooks, serializer)
 \arguments{
 \item{hooks}{Hooks to be supplied directly to corresponding \link{PlumberEndpoint} \verb{$registerHooks()} method}
 
-\item{serializer}{Serializer method to be used.  This method should already have it's initialization arugments applied.}
+\item{serializer}{Serializer method to be used.  This method should already have its initialization arguments applied.}
 }
 \description{
 This method allows serializers to return both hooks and a serializer.

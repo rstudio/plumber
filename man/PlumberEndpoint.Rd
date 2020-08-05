@@ -48,7 +48,6 @@ each separate verb/path into its own endpoint, so we just do that.}
 \item \href{#method-getPathParams}{\code{PlumberEndpoint$getPathParams()}}
 \item \href{#method-getFuncParams}{\code{PlumberEndpoint$getFuncParams()}}
 \item \href{#method-getEndpointParams}{\code{PlumberEndpoint$getEndpointParams()}}
-\item \href{#method-set_device}{\code{PlumberEndpoint$set_device()}}
 \item \href{#method-clone}{\code{PlumberEndpoint$clone()}}
 }
 }
@@ -217,25 +216,6 @@ retrieve endpoint defined parameters
 \if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$getEndpointParams()}\if{html}{\out{</div>}}
 }
 
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_device"></a>}}
-\if{latex}{\out{\hypertarget{method-set_device}{}}}
-\subsection{Method \code{set_device()}}{
-Adds a device to watch for any graphics produced during the route.  Will serialize the result with the corresponding Content-Type
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$set_device(name, args)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{name}}{Grahpics device name}
-
-\item{\code{args}}{A list of supplemental arguments to be passed into the device's \code{dev_on()} method}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

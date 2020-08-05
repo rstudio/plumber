@@ -7,7 +7,7 @@
 \usage{
 register_serializer(name, serializer, verbose = TRUE)
 
-registered_serializers(name)
+registered_serializers()
 }
 \arguments{
 \item{name}{The name of the serializer (character string)}
