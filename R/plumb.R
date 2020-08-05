@@ -234,13 +234,14 @@ all_available_apis <- function() {
 #' @export
 format.plumber_available_apis <- function(x, ...) {
   apis <- x
+  split_apis <- split(apis, apis$package)
 
   pkg_apis <- vapply(
-    unique(apis$package),
-    function(pkg) {
+    split_apis,
+    function(apis_sub) {
       paste0(
-        "* ", pkg, "\n",
-        paste0("  - ", apis$name[apis$package == pkg], collapse = "\n")
+        "* ", apis_sub$package[1], "\n",
+        paste0("  - ", apis$name, collapse = "\n")
       )
     },
     character(1)
