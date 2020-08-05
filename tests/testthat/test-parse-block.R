@@ -235,7 +235,7 @@ test_that("device serializers produce a structure", {
 
   expect_s3_block <- function(lines, serializer_fn) {
     block <- plumbBlock(length(lines), lines)
-    expect_s3_class(block$serializer, "plumber_hooks_and_serializer")
+    expect_s3_class(block$serializer, "plumber_endpoint_serializer")
     serializer_info <- serializer_fn()
     expect_equal(block$serializer$serializer, serializer_info$serializer)
     expect_true(is.function(block$serializer$serializer))

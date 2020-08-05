@@ -202,7 +202,7 @@ serializer_html <- function(type = "text/html; charset=UTF-8") {
 #' @describeIn serializers JSON serializer. See also: [jsonlite::toJSON()]
 #' @export
 #' @importFrom jsonlite toJSON
-serializer_json <- function(..., type = "application/json; charset=UTF-8") {
+serializer_json <- function(..., type = "application/json") {
   serializer_content_type(type, function(val) {
     toJSON(val, ...)
   })
@@ -211,7 +211,7 @@ serializer_json <- function(..., type = "application/json; charset=UTF-8") {
 #' @describeIn serializers JSON serializer with `auto_unbox` defaulting to `TRUE`. See also: [jsonlite::toJSON()]
 #' @inheritParams jsonlite::toJSON
 #' @export
-serializer_unboxed_json <- function(auto_unbox = TRUE, ..., type = "application/json; charset=UTF-8") {
+serializer_unboxed_json <- function(auto_unbox = TRUE, ..., type = "application/json") {
   serializer_json(auto_unbox = auto_unbox, ..., type = type)
 }
 
@@ -237,7 +237,7 @@ serializer_rds <- function(version = "2", ascii = FALSE, ..., type = "applicatio
 
 #' @describeIn serializers feather serializer. See also: [feather::write_feather()]
 #' @export
-serializer_feather <- function(type = "application/feather; charset=UTF-8") {
+serializer_feather <- function(type = "application/feather") {
   if (!requireNamespace("feather", quietly = TRUE)) {
     stop("`feather` must be installed for `serializer_feather` to work")
   }
@@ -356,31 +356,43 @@ serializer_xml <- function() {
 
 
 
-#' Hooks and serializer object
+#' Endpoint Serializer with Hooks
 #'
-#' This method allows serializers to return both hooks and a serializer.
+#' This method allows serializers to return both `preexec` and `postexec` hooks in addition to a serializer.
 #' This is useful for graphics device serializers which need a `preexec` and `postexec` hook to capture the graphics output.
-#' @param hooks Hooks to be supplied directly to corresponding [PlumberEndpoint] `$registerHooks()` method
+#'
+#' `preexec` and `postexec` hooks happend directly before and after a route is executed.
+#' These hooks are specific to a single [PlumberEndpoint]'s route calculation.
+#'
 #' @param serializer Serializer method to be used.  This method should already have its initialization arguments applied.
+#' @param preexec_hook Function to be run directly before a [PlumberEndpoint] calls it's handle method.
+#'
 #' @examples
 #' # The definition of `serializer_device` returns
 #' # * `preexec`, `postexec` hooks
 #' # * a `serializer_content_type` serializer
 #' print(serializer_device)
-hooks_and_serializer <- function(hooks, serializer) {
+endpoint_serializer <- function(serializer, preexec_hook = NULL, postexec_hook = NULL) {
+  stopifnot(is.function(serializer))
   structure(
     list(
-      hooks = hooks,
-      serializer = serializer
+      serializer = serializer,
+      preexec_hook = preexec_hook,
+      postexec_hook = postexec_hook
     ),
-    class = "plumber_hooks_and_serializer"
+    class = "plumber_endpoint_serializer"
   )
 }
 
 self_set_serializer <- function(self, serializer) {
-  if (inherits(serializer, "plumber_hooks_and_serializer")) {
+  if (inherits(serializer, "plumber_endpoint_serializer")) {
     self$serializer <- serializer$serializer
-    self$registerHooks(serializer$hooks)
+    if (!is.null(serializer$preexec_hook)) {
+      self$registerHook("preexec", serializer$preexec_hook)
+    }
+    if (!is.null(serializer$postexec_hook)) {
+      self$registerHook("postexec", serializer$postexec_hook)
+    }
   } else {
     self$serializer <- serializer
   }
@@ -388,7 +400,7 @@ self_set_serializer <- function(self, serializer) {
 }
 
 
-#' @describeIn serializers Helper method to create graphics device serializers, such as [serializer_png()]. See also: [hooks_and_serializer()]
+#' @describeIn serializers Helper method to create graphics device serializers, such as [serializer_png()]. See also: [endpoint_serializer()]
 #' @param dev_on Function to turn on a graphics device.
 #' The graphics device `dev_on` function will receive any arguments supplied to the serializer in addition to `filename`.
 #' `filename` points to the temporary file name that should be used when saving content.
@@ -396,11 +408,18 @@ self_set_serializer <- function(self, serializer) {
 #' @export
 serializer_device <- function(type, dev_on, dev_off = grDevices::dev.off) {
 
+  stopifnot(!missing(type))
+
+  stopifnot(!missing(dev_on))
   stopifnot(is.function(dev_on))
   stopifnot(length(formals(dev_on)) > 0)
+  if (!any(c("filename", "...") %in% names(formals(dev_on)))) {
+    stop("`dev_on` must contain an arugment called `filename` or have `...`")
+  }
+
   stopifnot(is.function(dev_off))
 
-  hooks_and_serializer(
+  endpoint_serializer(
     hooks = list(
       preexec = function(req, res, data) {
         tmpfile <- tempfile()

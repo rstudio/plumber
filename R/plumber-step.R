@@ -148,11 +148,13 @@ PlumberEndpoint <- R6Class(
     #' @field responses endpoint responses
     responses = NA,
     #' @description retrieve endpoint typed parameters
-    getTypedParams = function(){
-      data.frame(name = private$regex$names,
-                 type = private$regex$types,
-                 isArray = private$regex$areArrays,
-                 stringsAsFactors = FALSE)
+    getTypedParams = function() {
+      data.frame(
+        name = private$regex$names,
+        type = private$regex$types,
+        isArray = private$regex$areArrays,
+        stringsAsFactors = FALSE
+      )
     },
     #' @field params endpoint parameters
     params = NA,
@@ -163,7 +165,7 @@ PlumberEndpoint <- R6Class(
     #' @description ability to serve request
     #' @param req a request object
     #' @return a logical. `TRUE` when endpoint can serve request.
-    canServe = function(req){
+    canServe = function(req) {
       req$REQUEST_METHOD %in% self$verbs && self$matchesPath(req$PATH_INFO)
     },
     #' @description determines if route matches requested path
@@ -175,7 +177,7 @@ PlumberEndpoint <- R6Class(
     #' @description Create a new `PlumberEndpoint` object
     #' @param verbs Endpoint verb Ex: `"GET"`, `"POST"`
     #' @param path Endpoint path. Ex: `"/index.html"`, `"/foo/bar/baz"`
-    #' @param expr Endpoint expression or function.
+    #' @param expr Endpoint function or expression that evaluates to a function.
     #' @param envir Endpoint environment
     #' @param serializer Endpoint serializer. Ex: [serializer_json()]
     #' @template pr_set_parsers__parsers
@@ -185,7 +187,7 @@ PlumberEndpoint <- R6Class(
     #' @details Parameters values are obtained from parsing blocks of lines in a plumber file.
     #' They can also be provided manually for historical reasons.
     #' @return A new `PlumberEndpoint` object
-    initialize = function(verbs, path, expr, envir, serializer, parsers, lines, params, comments, responses, tags){
+    initialize = function(verbs, path, expr, envir, serializer, parsers, lines, params, comments, responses, tags) {
       self$verbs <- verbs
       self$path <- path
 
