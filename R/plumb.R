@@ -45,9 +45,9 @@ plumb <- function(file = NULL, dir = ".") {
       on.exit(setwd(old_wd), add = TRUE)
 
       # Expect that entrypoint will provide us with the router
-      #   Do not 'poison' the global env. Using a local environment
+      #   Do not 'poison' the global env. Using a local environment that points to global env.
       #   sourceUTF8 returns the (visible) value object. No need to call source()$value()
-      pr <- sourceUTF8(entrypoint, environment())
+      pr <- sourceUTF8(entrypoint, new.env(parent = globalenv()))
 
       if (!inherits(pr, "plumber")){
         stop("'", entrypoint, "' must return a runnable Plumber router.")
