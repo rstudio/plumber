@@ -243,39 +243,6 @@ PlumberEndpoint <- R6Class(
         return(list())
       }
       self$params
-    },
-    #' @description Adds a device to watch for any graphics produced during the route.  Will serialize the result with the corresponding Content-Type
-    #' @param name Grahpics device name
-    #' @param args A list of supplemental arguments to be passed into the device's `dev_on()` method
-    set_device = function(name, args) {
-
-      device_info <- get_registered_device(name)
-
-      dev_on <- device_info$dev_on
-      dev_off <- device_info$dev_off
-      dev_content_type <- device_info$content_type
-
-      hooks <- list(
-        preexec = function(req, res, data) {
-          t <- tempfile()
-          data$file <- t
-
-          finalArgs <- c(list(filename=t), args)
-          do.call(dev_on, finalArgs)
-        },
-        postexec = function(value, req, res, data){
-          dev_off()
-
-          on.exit({unlink(data$file)}, add = TRUE)
-          con <- file(data$file, "rb")
-          on.exit({close(con)}, add = TRUE)
-          img <- readBin(con, "raw", file.info(data$file)$size)
-          img
-        }
-      )
-
-
-      invisible(self)
     }
   ),
   private = list(

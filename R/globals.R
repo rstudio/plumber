@@ -1,5 +1,4 @@
 .globals <- new.env()
-.globals$devices <- list()
 .globals$parsers <- list()
 .globals$serializers <- list()
 .globals$UIs <- list()
