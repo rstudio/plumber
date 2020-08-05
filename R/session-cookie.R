@@ -56,7 +56,7 @@
 #'
 #'
 #' # Load a plumber API
-#' pr <- plumb_pkg("plumber", "01-append")
+#' pr <- plumb_api("plumber", "01-append")
 #'
 #' # Add cookie support and retrieve secret key using `keyring`
 #' pr$registerHooks(
@@ -78,7 +78,7 @@
 #'
 #'
 #' # Load a plumber API
-#' pr <- plumb_pkg("plumber", "01-append")
+#' pr <- plumb_api("plumber", "01-append")
 #'
 #' # Add cookie support and retrieve secret key from file
 #' pr$registerHooks(

@@ -33,7 +33,7 @@ test_that("custom OpenAPI Specification update function works", {
 
 test_that("host doesn't change for messages, but does for RStudio IDE", {
 
-  pr <- plumb_pkg("plumber", "01-append")
+  pr <- plumb_api("plumber", "01-append")
 
   pr$run(
     "0.0.0.0", port = 1234

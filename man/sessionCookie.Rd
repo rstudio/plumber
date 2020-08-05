@@ -70,7 +70,7 @@ keyring::key_set_with_value("plumber_api", plumber::randomCookieKey())
 
 
 # Load a plumber API
-pr <- plumb_pkg("plumber", "01-append")
+pr <- plumb_api("plumber", "01-append")
 
 # Add cookie support and retrieve secret key using `keyring`
 pr$registerHooks(
@@ -92,7 +92,7 @@ Sys.chmod(pswd_file, mode = "0600")
 
 
 # Load a plumber API
-pr <- plumb_pkg("plumber", "01-append")
+pr <- plumb_api("plumber", "01-append")
 
 # Add cookie support and retrieve secret key from file
 pr$registerHooks(

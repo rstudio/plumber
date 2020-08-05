@@ -4,8 +4,6 @@ ARG R_VERSION=latest
 FROM rocker/r-ver:${R_VERSION}
 LABEL maintainer="barret@rstudio.com"
 
-ARG PLUMBER_REF=master
-
 # BEGIN rstudio/plumber layers
 RUN apt-get update -qq && apt-get install -y --no-install-recommends \
   git-core \
@@ -21,13 +19,17 @@ RUN install2.r remotes
 ## https://stackoverflow.com/a/55621942/591574
 #ADD https://github.com/rstudio/plumber/commits/ _docker_cache
 
+ARG PLUMBER_REF=master
 RUN Rscript -e "remotes::install_github('rstudio/plumber@${PLUMBER_REF}')"
 
 EXPOSE 8000
-
 ENTRYPOINT ["R", "-e", "pr <- plumber::plumb(rev(commandArgs())[1]); pr$run(host='0.0.0.0', port=8000, swagger=TRUE)"]
 
-CMD ["/usr/local/lib/R/site-library/plumber/examples/04-mean-sum/plumber.R"]
+# Copy installed example to default file at ~/plumber.R
+ARG ENTRYPOINT_FILE=/usr/local/lib/R/site-library/plumber/plumber/04-mean-sum/plumber.R
+RUN cp ${ENTRYPOINT_FILE} ~/plumber.R
+
+CMD ["~/plumber.R"]
 
 # EOF rstudio/plumber layers
 
@@ -43,7 +45,7 @@ CMD ["/usr/local/lib/R/site-library/plumber/examples/04-mean-sum/plumber.R"]
 #   firefox http://localhost:8000/__swagger__/ &
 
 # to run with your own api - mount your plumber.R file into the container like so:
-#   docker run -it  -p 8000:8000 --rm -v ~/R/x86_64-pc-linux-gnu-library/4.0/plumber/examples/10-welcome/plumber.R:/api/plumber.R:ro --name myapi rstudio/plumber:latest /api/plumber.R
+#   docker run -it  -p 8000:8000 --rm -v ~/R/x86_64-pc-linux-gnu-library/4.0/plumber/plumber/10-welcome/plumber.R:/api/plumber.R:ro --name myapi rstudio/plumber:latest /api/plumber.R
 # then browse with
 #   curl http://localhost:8000/
 

@@ -7,7 +7,7 @@
 pr_run(pr, host = "127.0.0.1", port = getOption("plumber.port", NULL))
 }
 \arguments{
-\item{pr}{A Plumber router. Note: The supplied Plumber router will also be updated in place as well as returned by the function.}
+\item{pr}{A Plumber API. Note: The supplied Plumber API object will also be updated in place as well as returned by the function.}
 
 \item{host}{A string that is a valid IPv4 or IPv6 address that is owned by
 this server, which the application will listen on. "0.0.0.0" represents

@@ -1,5 +1,5 @@
 # Instructions:
-# 1. `plumb` API - `plumb_pkg("plumber", "14-future")$run(port = 1234)`
+# 1. `plumb` API - `plumb_api("plumber", "14-future")$run(port = 1234)`
 # 2. In separate R session, source the test file - `source(system.file("plumber/14-future/test-future.R", package = "plumber"))`
 
 local(withAutoprint({ # print when sourced

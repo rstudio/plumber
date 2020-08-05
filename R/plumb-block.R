@@ -289,7 +289,7 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr)
   block <- plumbBlock(lineNum, file, envir)
 
   if (sum(!is.null(block$filter), !is.null(block$paths), !is.null(block$assets), !is.null(block$routerModifier)) > 1){
-    stopOnLine(lineNum, file[lineNum], "A single function can only be a filter, an API endpoint, an asset or a router modifier (@filter AND @get, @post, @assets, @plumber, etc.)")
+    stopOnLine(lineNum, file[lineNum], "A single function can only be a filter, an API endpoint, an asset or a Plumber object modifier (@filter AND @get, @post, @assets, @plumber, etc.)")
   }
 
   # ALL if statements possibilities must eventually call eval(expr, envir)
