@@ -32,6 +32,12 @@ plumber 1.0.0
 
 * R repository modified to `focal-cran40` using Ubuntu 20.04 LTS for digital ocean provisioning (@meztez, #529)
 
+### Deprecations
+
+* Shorthand serializers are now deprecated. `@html`, `@json`, `@png`, `@jpeg`, `@svg` should be replaced with the `@serializer` syntax. Ex: `@serializer html` or `@serializer jpeg` (#630)
+
+* `addSerializer()` has been deprecated in favor of `register_serializer()` (#584)
+
 ### New features
 
 * Serializers can now return both `hooks` and a `serialzer` function by using `hooks_and_serializer()` when returning from a serializer function.  This allows for any image serializer to turn on their corresponding device and turn off the device before the serialization occurs. (#630)
