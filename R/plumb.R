@@ -92,14 +92,15 @@ plumb <- function(file = NULL, dir = ".") {
 #' @param package Package to inspect
 #' @param name Name of the package folder to [plumb()].
 #' @describeIn plumb_api [plumb()]s a package's Plumber API. Returns a [`plumber`] router object
+#' @return A [`plumber`] object. If either `package` or `name` is null, the appropriate [available_apis()] will be returned.
 #' @export
 plumb_api <- function(package = NULL, name = NULL) {
 
   if (is.null(package)) {
-    stop("`package` is require for `plumb_api()`")
+    return(available_apis(package = NULL))
   }
   if (is.null(name)) {
-    stop("`name` is require for `plumb_api()`")
+    return(available_apis(package = package))
   }
 
   stopifnot(length(package) == 1)

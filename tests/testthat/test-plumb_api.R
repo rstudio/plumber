@@ -48,12 +48,17 @@ test_that("available_apis() print method works", {
   )
 })
 
+test_that("missing args are handled", {
+  expect_equal(plumb_api("plumber", NULL), available_apis("plumber"))
+
+  skip_on_cran()
+  all_apis <- available_apis()
+  expect_equal(plumb_api(NULL, "01-append"), all_apis)
+  expect_equal(plumb_api(NULL, NULL), all_apis)
+})
 
 test_that("errors are thrown", {
-  expect_error(plumb_api(NULL, NULL))
 
-  expect_error(plumb_api("plumber", NULL))
-  expect_error(plumb_api(NULL, "01-append"))
 
   expect_error(plumb_api(c("plumber", "plumber"), "01-append"))
   expect_error(plumb_api("plumber", c("01-append", "01-append")))
