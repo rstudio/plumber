@@ -20,11 +20,12 @@ in the \code{inst} subfolder \code{plumber} (\code{./inst/plumber/API_1/plumber.
 }
 \details{
 To view all available Plumber APIs across all packages, please call \code{available_apis()}.
+A \code{package} value may be provided to only display a particular package's Plumber APIs.
 }
 \section{Functions}{
 \itemize{
-\item \code{plumb_api}: \code{\link[=plumb]{plumb()}}s package's Plumber APIs
+\item \code{plumb_api}: \code{\link[=plumb]{plumb()}}s a package's Plumber API. Returns a \code{\link{plumber}} router object
 
-\item \code{available_apis}: Displays all available package Plumber APIs
+\item \code{available_apis}: Displays all available package Plumber APIs. Returns a \code{data.frame} of \code{package} and \code{name} information.
 }}
 

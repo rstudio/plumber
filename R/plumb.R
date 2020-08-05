@@ -87,9 +87,11 @@ plumb <- function(file = NULL, dir = ".") {
 #' in the `inst` subfolder `plumber` (`./inst/plumber/API_1/plumber.R`).
 #'
 #' To view all available Plumber APIs across all packages, please call `available_apis()`.
+#' A `package` value may be provided to only display a particular package's Plumber APIs.
+#'
 #' @param package Package to inspect
 #' @param name Name of the package folder to [plumb()].
-#' @describeIn plumb_api [plumb()]s package's Plumber APIs
+#' @describeIn plumb_api [plumb()]s a package's Plumber API. Returns a [`plumber`] router object
 #' @export
 plumb_api <- function(package = NULL, name = NULL) {
 
@@ -120,7 +122,7 @@ plumb_api <- function(package = NULL, name = NULL) {
 }
 
 
-#' @describeIn plumb_api Displays all available package Plumber APIs
+#' @describeIn plumb_api Displays all available package Plumber APIs. Returns a `data.frame` of `package` and `name` information.
 #' @export
 available_apis <- function(package = NULL) {
   info <-

@@ -39,7 +39,7 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 * Added support for promises in endpoints, filters, and hooks. (#248)
 
-* Add support for `#' @plumber` tag to gain programmatic access to the `plumber` router via `function(pr) {....}`. (@meztez and @blairj09, #568)
+* Added support for `#' @plumber` tag to gain programmatic access to the `plumber` router via `function(pr) {....}`. (@meztez and @blairj09, #568)
 
 * Added OpenAPI support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez, #532)
 
@@ -50,7 +50,9 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 * Documentation is presented using pkgdown (#570)
 
-* Tidy API for easier programmatic usage (@blairj09, #590)
+* Added a Tidy API for easier programmatic usage (@blairj09, #590)
+
+* Added functions `plumb_api()` and `available_apis()` . These methods should be used to have a consistent pattern when distributing multiple Plumber APIs from within a package. To view the available Plumber APIs, call `available_apis()`. To retrieve a package's available API, call `plumb_api(pkg, name)` (#631)
 
 
 ### Minor new features and improvements
