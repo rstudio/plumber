@@ -165,7 +165,14 @@ plumber <- R6Class(
         private$filts <- c(private$filts, fil)
       }
 
-      if (!is.null(file)){
+      if (!is.null(file)) {
+        # plumb() the file in the working directory
+        # The directory is also set when running the plumber object
+        private$filename <- file
+        old_wd <- setwd(dirname(file))
+        on.exit({setwd(old_wd)}, add = TRUE)
+        file <- basename(file)
+
         private$lines <- readUTF8(file)
         private$parsed <- parseUTF8(file)
         private$disable_run <- TRUE
@@ -255,10 +262,9 @@ plumber <- R6Class(
       options("plumber.debug" = private$debug)
 
       # Set and restore the wd to make it appear that the proc is running local to the file's definition.
-      if (!is.null(private$filename)){
-        cwd <- getwd()
-        on.exit({ setwd(cwd) }, add = TRUE)
-        setwd(dirname(private$filename))
+      if (!is.null(private$filename)) {
+        old_wd <- setwd(dirname(private$file))
+        on.exit({setwd(old_wd)}, add = TRUE)
       }
 
       if (isTRUE(private$ui_info$enabled)) {

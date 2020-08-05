@@ -74,11 +74,6 @@ plumb <- function(file = NULL, dir = ".") {
     stop("File does not exist: ", file)
   }
 
-  # plumb() the file in the working directory
-  # The directory is also set when running the plumber object
-  old_wd <- setwd(dirname(file))
-  on.exit(setwd(old_wd), add = TRUE)
-
   # Plumber file found
   plumber$new(basename(file))
 }
