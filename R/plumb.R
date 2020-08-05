@@ -41,8 +41,8 @@ plumb <- function(file = NULL, dir = ".") {
       }
 
       # set working directory to dir before sourcing
-      old <- setwd(dir)
-      on.exit(setwd(old), add = TRUE)
+      old_wd <- setwd(dir)
+      on.exit(setwd(old_wd), add = TRUE)
 
       # Expect that entrypoint will provide us with the router
       #   Do not 'poison' the global env. Using a local environment
@@ -73,6 +73,11 @@ plumb <- function(file = NULL, dir = ".") {
     # Couldn't find the Plumber file nor an entrypoint
     stop("File does not exist: ", file)
   }
+
+  # plumb() the file in the working directory
+  # The directory is also set when running the plumber object
+  old_wd <- setwd(dirname(file))
+  on.exit(setwd(old_wd), add = TRUE)
 
   # Plumber file found
   plumber$new(file)
