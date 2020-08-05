@@ -12,7 +12,10 @@ registered_serializers()
 \arguments{
 \item{name}{The name of the serializer (character string)}
 
-\item{serializer}{The serializer to be added.}
+\item{serializer}{The serializer function to be added.
+This function should accept arguments that can be supplied when \code{\link[=plumb]{plumb()}}ing a file.
+This function should return a function that accepts four arguments: \code{value}, \code{req}, \code{res}, and \code{error_handler}.
+See \code{print(serializer_json)} for an example.}
 
 \item{verbose}{Logical value which determines if a message should be printed when overwriting serializers}
 }
@@ -22,6 +25,14 @@ that a remote user can understand. For instance, the \code{serializer_json}
 serializes R objects into JSON before returning them to the user. The list of
 available serializers in plumber is global.
 }
+\details{
+There are three main building-block serializers:
+\itemize{
+\item \code{serializer_headers}: the base building-block serializer that is required to have \code{\link[=as_attachement]{as_attachement()}} work
+\item \code{serializer_content_type()}: for setting the content type. (Calls \code{serializer_headers()})
+\item \code{serializer_device()}: add endpoint hooks to turn a graphics device on and off in addition to setting the content type. (Uses \code{serializer_content_type()})
+}
+}
 \section{Functions}{
 \itemize{
 \item \code{register_serializer}: Register a serializer with a name
@@ -29,3 +40,9 @@ available serializers in plumber is global.
 \item \code{registered_serializers}: Return a list of all registered serializers
 }}
 
+\examples{
+# `serializer_json()` calls `serializer_content_type()` and supplies a serialization function
+print(serializer_json)
+# serializer_content_type() calls `serializer_headers()` and supplies a serialization function
+print(serializer_content_type)
+}

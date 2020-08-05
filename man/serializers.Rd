@@ -35,17 +35,13 @@ serializer_tsv(..., type = "text/tab-separated-values; charset=UTF-8")
 
 serializer_html(type = "text/html; charset=UTF-8")
 
-serializer_json(..., type = "application/json; charset=UTF-8")
+serializer_json(..., type = "application/json")
 
-serializer_unboxed_json(
-  auto_unbox = TRUE,
-  ...,
-  type = "application/json; charset=UTF-8"
-)
+serializer_unboxed_json(auto_unbox = TRUE, ..., type = "application/json")
 
 serializer_rds(version = "2", ascii = FALSE, ..., type = "application/rds")
 
-serializer_feather(type = "application/feather; charset=UTF-8")
+serializer_feather(type = "application/feather")
 
 serializer_yaml(..., type = "text/x-yaml; charset=UTF-8")
 
@@ -141,7 +137,7 @@ more details on Plumber serializers and how to customize their behavior.
 
 \item \code{serializer_htmlwidget}: htmlwidget serializer. See also: \code{\link[htmlwidgets:saveWidget]{htmlwidgets::saveWidget()}}
 
-\item \code{serializer_device}: Helper method to create graphics device serializers, such as \code{\link[=serializer_png]{serializer_png()}}. See also: \code{\link[=hooks_and_serializer]{hooks_and_serializer()}}
+\item \code{serializer_device}: Helper method to create graphics device serializers, such as \code{\link[=serializer_png]{serializer_png()}}. See also: \code{\link[=endpoint_serializer]{endpoint_serializer()}}
 
 \item \code{serializer_jpeg}: JPEG image serializer. See also: \code{\link[grDevices:png]{grDevices::jpeg()}}
 

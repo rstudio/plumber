@@ -6,11 +6,25 @@
 #' serializes R objects into JSON before returning them to the user. The list of
 #' available serializers in plumber is global.
 #'
+#' There are three main building-block serializers:
+#' * `serializer_headers`: the base building-block serializer that is required to have [as_attachement()] work
+#' * `serializer_content_type()`: for setting the content type. (Calls `serializer_headers()`)
+#' * `serializer_device()`: add endpoint hooks to turn a graphics device on and off in addition to setting the content type. (Uses `serializer_content_type()`)
+#'
 #' @param name The name of the serializer (character string)
-#' @param serializer The serializer to be added.
+#' @param serializer The serializer function to be added.
+#' This function should accept arguments that can be supplied when [plumb()]ing a file.
+#' This function should return a function that accepts four arguments: `value`, `req`, `res`, and `error_handler`.
+#' See `print(serializer_json)` for an example.
+#'
 #' @param verbose Logical value which determines if a message should be printed when overwriting serializers
 #' @describeIn register_serializer Register a serializer with a name
 #' @export
+#' @examples
+#' # `serializer_json()` calls `serializer_content_type()` and supplies a serialization function
+#' print(serializer_json)
+#' # serializer_content_type() calls `serializer_headers()` and supplies a serialization function
+#' print(serializer_content_type)
 register_serializer <- function(name, serializer, verbose = TRUE) {
   if (name %in% registered_serializers()) {
     if (isTRUE(verbose)) {
@@ -38,12 +52,12 @@ get_registered_serializer <- function(name) {
 
 # internal function to use directly within this file only. (performance purposes)
 # Other files should use `serializer_identity()` to avoid confusion
-serializer_identity_ <- function(val, req, res, errorHandler) {
+serializer_identity_ <- function(val, req, res, error_handler) {
   tryCatch({
     res$body <- val
     res$toResponse()
   }, error = function(err) {
-    errorHandler(req, res, err)
+    error_handler(req, res, err)
   })
 }
 serializer_identity <- function(){
@@ -100,7 +114,7 @@ serializer_headers <- function(headers = list(), serialize_fn = identity) {
   stopifnot(is.function(serialize_fn))
   stopifnot(is.list(headers))
 
-  function(val, req, res, errorHandler) {
+  function(val, req, res, error_handler) {
     tryCatch({
 
       # handle `as_attachment()` before serializing
@@ -138,9 +152,9 @@ serializer_headers <- function(headers = list(), serialize_fn = identity) {
       val <- serialize_fn(val)
 
       # return value
-      serializer_identity_(val, req, res, errorHandler)
+      serializer_identity_(val, req, res, error_handler)
     }, error = function(err) {
-      errorHandler(req, res, err)
+      error_handler(req, res, err)
     })
   }
 }

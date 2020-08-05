@@ -138,7 +138,7 @@ Create a new \code{PlumberEndpoint} object
 
 \item{\code{path}}{Endpoint path. Ex: \code{"/index.html"}, \code{"/foo/bar/baz"}}
 
-\item{\code{expr}}{Endpoint expression or function.}
+\item{\code{expr}}{Endpoint function or expression that evaluates to a function.}
 
 \item{\code{envir}}{Endpoint environment}
 
