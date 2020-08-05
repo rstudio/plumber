@@ -56,7 +56,7 @@ test_that("plumb gives a good error when passing in a dir instead of a file", {
     # Appveyor does not work with "files/", but does trigger the proper error with "files\\"
     expect_error(plumb(test_path("files\\")), "File does not exist:")
   } else {
-    expect_error(plumb(test_path("files/")), "Expecting a file but found a directory: 'files/'")
+    expect_error(plumb(test_path("files/")), "Expecting a file but found a directory: 'files'")
   }
 
 })

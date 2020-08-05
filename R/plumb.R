@@ -80,7 +80,7 @@ plumb <- function(file = NULL, dir = ".") {
   on.exit(setwd(old_wd), add = TRUE)
 
   # Plumber file found
-  plumber$new(file)
+  plumber$new(basename(file))
 }
 
 
