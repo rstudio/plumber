@@ -148,7 +148,7 @@
 <span class="co">#' Plot out data from the iris dataset</span>
 <span class="co">#' @param spec If provided, filter the data to only this species (e.g. 'setosa')</span>
 <span class="co">#' @get /plot</span>
-<span class="co">#' @png</span>
+<span class="co">#' @serializer png</span>
 <span class="fu">function</span>(<span class="kw">spec</span>){
   <span class="kw">myData</span> <span class="op">&lt;-</span> <span class="kw">iris</span>
   <span class="kw">title</span> <span class="op">&lt;-</span> <span class="st">"All Species"</span>
@@ -193,10 +193,10 @@
 <div id="customizing-the-output" class="section level2">
 <h2 class="hasAnchor">
 <a href="#customizing-the-output" class="anchor"></a>Customizing The Output</h2>
-<p>In the previous example, you saw one endpoint that rendered into JSON and one that produced an image. Unless instructed otherwise, Plumber will attempt to render whatever your endpoint function returns as JSON. However, you can specify alternative “serializers” which instruct Plumber to render the output as some other format such as HTML (<code>@html</code>), PNG (<code>@png</code>), or JPEG (<code>@jpeg</code>).</p>
+<p>In the previous example, you saw one endpoint that rendered into JSON and one that produced an image. Unless instructed otherwise, Plumber will attempt to render whatever your endpoint function returns as JSON. However, you can specify alternative “serializers” which instruct Plumber to render the output as some other format such as HTML (<code>@serializer html</code>), PNG (<code>@serializer png</code>), or JPEG (<code>@serializer jpeg</code>).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="co">#' @get /hello</span>
-<span class="co">#' @html</span>
+<span class="co">#' @serializer html</span>
 <span class="fu">function</span>(){
   <span class="st">"&lt;html&gt;&lt;h1&gt;hello world&lt;/h1&gt;&lt;/html&gt;"</span>
 }

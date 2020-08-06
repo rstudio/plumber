@@ -189,29 +189,49 @@ more details on Plumber serializers and how to customize their behavior.</p>
 
 <span class='fu'>serializer_content_type</span>(<span class='kw'>type</span>, serialize_fn = <span class='kw'>identity</span>)
 
-<span class='fu'>serializer_csv</span>(<span class='kw'>...</span>)
+<span class='fu'>serializer_csv</span>(<span class='kw'>...</span>, type = <span class='st'>"text/csv; charset=UTF-8"</span>)
 
-<span class='fu'>serializer_html</span>()
+<span class='fu'>serializer_tsv</span>(<span class='kw'>...</span>, type = <span class='st'>"text/tab-separated-values; charset=UTF-8"</span>)
 
-<span class='fu'>serializer_json</span>(<span class='kw'>...</span>)
+<span class='fu'>serializer_html</span>(type = <span class='st'>"text/html; charset=UTF-8"</span>)
 
-<span class='fu'>serializer_unboxed_json</span>(auto_unbox = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)
+<span class='fu'>serializer_json</span>(<span class='kw'>...</span>, type = <span class='st'>"application/json"</span>)
 
-<span class='fu'>serializer_rds</span>(version = <span class='st'>"2"</span>, ascii = <span class='fl'>FALSE</span>, <span class='kw'>...</span>)
+<span class='fu'>serializer_unboxed_json</span>(auto_unbox = <span class='fl'>TRUE</span>, <span class='kw'>...</span>, type = <span class='st'>"application/json"</span>)
 
-<span class='fu'>serializer_feather</span>()
+<span class='fu'>serializer_rds</span>(version = <span class='st'>"2"</span>, ascii = <span class='fl'>FALSE</span>, <span class='kw'>...</span>, type = <span class='st'>"application/rds"</span>)
 
-<span class='fu'>serializer_yaml</span>(<span class='kw'>...</span>)
+<span class='fu'>serializer_feather</span>(type = <span class='st'>"application/feather"</span>)
 
-<span class='fu'>serializer_text</span>(<span class='kw'>...</span>, serialize_fn = <span class='kw'>as.character</span>)
+<span class='fu'>serializer_yaml</span>(<span class='kw'>...</span>, type = <span class='st'>"text/x-yaml; charset=UTF-8"</span>)
 
-<span class='fu'>serializer_format</span>(<span class='kw'>...</span>)
+<span class='fu'>serializer_text</span>(
+  <span class='kw'>...</span>,
+  serialize_fn = <span class='kw'>as.character</span>,
+  type = <span class='st'>"text/plain; charset=UTF-8"</span>
+)
 
-<span class='fu'>serializer_print</span>(<span class='kw'>...</span>)
+<span class='fu'>serializer_format</span>(<span class='kw'>...</span>, type = <span class='st'>"text/plain; charset=UTF-8"</span>)
 
-<span class='fu'>serializer_cat</span>(<span class='kw'>...</span>)
+<span class='fu'>serializer_print</span>(<span class='kw'>...</span>, type = <span class='st'>"text/plain; charset=UTF-8"</span>)
 
-<span class='fu'>serializer_htmlwidget</span>(<span class='kw'>...</span>)</pre>
+<span class='fu'>serializer_cat</span>(<span class='kw'>...</span>, type = <span class='st'>"text/plain; charset=UTF-8"</span>)
+
+<span class='fu'>serializer_htmlwidget</span>(<span class='kw'>...</span>, type = <span class='st'>"text/html; charset=UTF-8"</span>)
+
+<span class='fu'>serializer_device</span>(<span class='kw'>type</span>, <span class='kw'>dev_on</span>, dev_off = <span class='kw'>grDevices</span>::<span class='kw'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>)
+
+<span class='fu'>serializer_jpeg</span>(<span class='kw'>...</span>, type = <span class='st'>"image/jpeg"</span>)
+
+<span class='fu'>serializer_png</span>(<span class='kw'>...</span>, type = <span class='st'>"image/png"</span>)
+
+<span class='fu'>serializer_svg</span>(<span class='kw'>...</span>, type = <span class='st'>"image/svg+xml"</span>)
+
+<span class='fu'>serializer_bmp</span>(<span class='kw'>...</span>, type = <span class='st'>"image/bmp"</span>)
+
+<span class='fu'>serializer_tiff</span>(<span class='kw'>...</span>, type = <span class='st'>"image/tiff"</span>)
+
+<span class='fu'>serializer_pdf</span>(<span class='kw'>...</span>, type = <span class='st'>"application/pdf"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -249,6 +269,16 @@ An exception is that objects of class <code>AsIs</code> (i.e. wrapped in <code><
     representation is written; otherwise (default) a binary one.
     See also the comments in the help for <code><a href='https://rdrr.io/r/base/save.html'>save</a></code>.</p></td>
     </tr>
+    <tr>
+      <th>dev_on</th>
+      <td><p>Function to turn on a graphics device.
+The graphics device <code>dev_on</code> function will receive any arguments supplied to the serializer in addition to <code>filename</code>.
+<code>filename</code> points to the temporary file name that should be used when saving content.</p></td>
+    </tr>
+    <tr>
+      <th>dev_off</th>
+      <td><p>Function to turn off the grahpics device. Defaults to <code><a href='https://rdrr.io/r/grDevices/dev.html'>grDevices::dev.off()</a></code></p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
@@ -257,18 +287,26 @@ An exception is that objects of class <code>AsIs</code> (i.e. wrapped in <code><
 <ul>
 <li><p><code>serializer_headers</code>: Add a static list of headers to each return value. Will add <code>Content-Disposition</code> header if a value is the result of <code><a href='as_attachment.html'>as_attachment()</a></code>.</p></li>
 <li><p><code>serializer_content_type</code>: Adds a <code>Content-Type</code> header to the response object</p></li>
-<li><p><code>serializer_csv</code>: CSV serializer. See <code><a href='https://readr.tidyverse.org/reference/format_delim.html'>readr::format_csv()</a></code> for more details.</p></li>
+<li><p><code>serializer_csv</code>: CSV serializer. See also: <code><a href='https://readr.tidyverse.org/reference/format_delim.html'>readr::format_csv()</a></code></p></li>
+<li><p><code>serializer_tsv</code>: TSV serializer. See also: <code><a href='https://readr.tidyverse.org/reference/format_delim.html'>readr::format_tsv()</a></code></p></li>
 <li><p><code>serializer_html</code>: HTML serializer</p></li>
-<li><p><code>serializer_json</code>: JSON serializer. See <code><a href='https://jeroen.cran.dev/jsonlite/reference/fromJSON.html'>jsonlite::toJSON()</a></code> for more details.</p></li>
-<li><p><code>serializer_unboxed_json</code>: JSON serializer with <code>auto_unbox</code> defaulting to <code>TRUE</code>. See <code><a href='https://jeroen.cran.dev/jsonlite/reference/fromJSON.html'>jsonlite::toJSON()</a></code> for more details.</p></li>
-<li><p><code>serializer_rds</code>: RDS serializer. See <code><a href='https://rdrr.io/r/base/serialize.html'>serialize()</a></code> for more details.</p></li>
-<li><p><code>serializer_feather</code>: feather serializer. See <a href='https://rdrr.io/pkg/feather/man/read_feather.html'>feather::write_feather</a> for more details.</p></li>
-<li><p><code>serializer_yaml</code>: YAML serializer. See <code><a href='https://rdrr.io/pkg/yaml/man/as.yaml.html'>yaml::as.yaml()</a></code> for more details.</p></li>
-<li><p><code>serializer_text</code>: Text serializer. See <code><a href='https://rdrr.io/r/base/character.html'>as.character()</a></code> for more details.</p></li>
-<li><p><code>serializer_format</code>: Text serializer. See <code><a href='https://rdrr.io/r/base/format.html'>format()</a></code> for more details.</p></li>
+<li><p><code>serializer_json</code>: JSON serializer. See also: <code><a href='https://jeroen.cran.dev/jsonlite/reference/fromJSON.html'>jsonlite::toJSON()</a></code></p></li>
+<li><p><code>serializer_unboxed_json</code>: JSON serializer with <code>auto_unbox</code> defaulting to <code>TRUE</code>. See also: <code><a href='https://jeroen.cran.dev/jsonlite/reference/fromJSON.html'>jsonlite::toJSON()</a></code></p></li>
+<li><p><code>serializer_rds</code>: RDS serializer. See also: <code><a href='https://rdrr.io/r/base/serialize.html'>base::serialize()</a></code></p></li>
+<li><p><code>serializer_feather</code>: feather serializer. See also: <code><a href='https://rdrr.io/pkg/feather/man/read_feather.html'>feather::write_feather()</a></code></p></li>
+<li><p><code>serializer_yaml</code>: YAML serializer. See also: <code><a href='https://rdrr.io/pkg/yaml/man/as.yaml.html'>yaml::as.yaml()</a></code></p></li>
+<li><p><code>serializer_text</code>: Text serializer. See also: <code><a href='https://rdrr.io/r/base/character.html'>as.character()</a></code></p></li>
+<li><p><code>serializer_format</code>: Text serializer. See also: <code><a href='https://rdrr.io/r/base/format.html'>format()</a></code></p></li>
 <li><p><code>serializer_print</code>: Text serializer. Captures the output of <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></p></li>
 <li><p><code>serializer_cat</code>: Text serializer. Captures the output of <code><a href='https://rdrr.io/r/base/cat.html'>cat()</a></code></p></li>
-<li><p><code>serializer_htmlwidget</code>: htmlwidget serializer. See <code><a href='https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html'>htmlwidgets::saveWidget()</a></code> for more details.</p></li>
+<li><p><code>serializer_htmlwidget</code>: htmlwidget serializer. See also: <code><a href='https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html'>htmlwidgets::saveWidget()</a></code></p></li>
+<li><p><code>serializer_device</code>: Helper method to create graphics device serializers, such as <code>serializer_png()</code>. See also: <code><a href='endpoint_serializer.html'>endpoint_serializer()</a></code></p></li>
+<li><p><code>serializer_jpeg</code>: JPEG image serializer. See also: <code><a href='https://rdrr.io/r/grDevices/png.html'>grDevices::jpeg()</a></code></p></li>
+<li><p><code>serializer_png</code>: PNG image serializer. See also: <code><a href='https://rdrr.io/r/grDevices/png.html'>grDevices::png()</a></code></p></li>
+<li><p><code>serializer_svg</code>: SVG image serializer. See also: <code><a href='https://rdrr.io/r/grDevices/cairo.html'>grDevices::svg()</a></code></p></li>
+<li><p><code>serializer_bmp</code>: BMP image serializer. See also: <code><a href='https://rdrr.io/r/grDevices/png.html'>grDevices::bmp()</a></code></p></li>
+<li><p><code>serializer_tiff</code>: TIFF image serializer. See also: <code><a href='https://rdrr.io/r/grDevices/png.html'>grDevices::tiff()</a></code></p></li>
+<li><p><code>serializer_pdf</code>: PDF image serializer. See also: <code><a href='https://rdrr.io/r/grDevices/pdf.html'>grDevices::pdf()</a></code></p></li>
 </ul>
 
   </div>
