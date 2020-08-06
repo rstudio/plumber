@@ -6,13 +6,27 @@
 #' serializes R objects into JSON before returning them to the user. The list of
 #' available serializers in plumber is global.
 #'
+#' There are three main building-block serializers:
+#' * `serializer_headers`: the base building-block serializer that is required to have [as_attachment()] work
+#' * `serializer_content_type()`: for setting the content type. (Calls `serializer_headers()`)
+#' * `serializer_device()`: add endpoint hooks to turn a graphics device on and off in addition to setting the content type. (Uses `serializer_content_type()`)
+#'
 #' @param name The name of the serializer (character string)
-#' @param serializer The serializer to be added.
+#' @param serializer The serializer function to be added.
+#' This function should accept arguments that can be supplied when [plumb()]ing a file.
+#' This function should return a function that accepts four arguments: `value`, `req`, `res`, and `errorHandler`.
+#' See `print(serializer_json)` for an example.
+#'
 #' @param verbose Logical value which determines if a message should be printed when overwriting serializers
 #' @describeIn register_serializer Register a serializer with a name
 #' @export
+#' @examples
+#' # `serializer_json()` calls `serializer_content_type()` and supplies a serialization function
+#' print(serializer_json)
+#' # serializer_content_type() calls `serializer_headers()` and supplies a serialization function
+#' print(serializer_content_type)
 register_serializer <- function(name, serializer, verbose = TRUE) {
-  if (!is.null(.globals$serializers[[name]])) {
+  if (name %in% registered_serializers()) {
     if (isTRUE(verbose)) {
       message("Overwriting serializer: ", name)
     }
@@ -21,9 +35,19 @@ register_serializer <- function(name, serializer, verbose = TRUE) {
 }
 #' @describeIn register_serializer Return a list of all registered serializers
 #' @export
-registered_serializers <- function(name) {
+registered_serializers <- function() {
   sort(names(.globals$serializers))
 }
+
+get_registered_serializer <- function(name) {
+  serializer <- .globals$serializers[[name]]
+  if (is.null(serializer)) {
+    stop("'", name, "' is not a registered serializer. See `?registered_serializers`")
+  }
+
+  serializer
+}
+
 
 
 # internal function to use directly within this file only. (performance purposes)
@@ -146,21 +170,37 @@ serializer_content_type <- function(type, serialize_fn = identity) {
     stop("You must provide the custom content type to the serializer_content_type")
   }
 
+  stopifnot(length(type) == 1)
+  stopifnot(is.character(type))
+  stopifnot(nchar(type) > 0)
+
   serializer_headers(
     list("Content-Type" = type),
     serialize_fn
   )
 }
 
-#' @describeIn serializers CSV serializer. See \code{\link[readr:format_delim]{readr::format_csv()}} for more details.
+#' @describeIn serializers CSV serializer. See also: [readr::format_csv()]
 #' @export
-serializer_csv <- function(...) {
+serializer_csv <- function(..., type = "text/csv; charset=UTF-8") {
   if (!requireNamespace("readr", quietly = TRUE)) {
     stop("`readr` must be installed for `serializer_csv` to work")
   }
 
-  serializer_content_type("text/csv; charset=UTF-8", function(val) {
+  serializer_content_type(type, function(val) {
     readr::format_csv(val, ...)
+  })
+}
+
+#' @describeIn serializers TSV serializer. See also: [readr::format_tsv()]
+#' @export
+serializer_tsv <- function(..., type = "text/tab-separated-values; charset=UTF-8") {
+  if (!requireNamespace("readr", quietly = TRUE)) {
+    stop("`readr` must be installed for `serializer_tsv` to work")
+  }
+
+  serializer_content_type(type, function(val) {
+    readr::format_tsv(val, ...)
   })
 }
 
@@ -168,34 +208,34 @@ serializer_csv <- function(...) {
 
 #' @describeIn serializers HTML serializer
 #' @export
-serializer_html <- function() {
-  serializer_content_type("text/html; charset=UTF-8")
+serializer_html <- function(type = "text/html; charset=UTF-8") {
+  serializer_content_type(type)
 }
 
 
-#' @describeIn serializers JSON serializer. See [jsonlite::toJSON()] for more details.
+#' @describeIn serializers JSON serializer. See also: [jsonlite::toJSON()]
 #' @export
 #' @importFrom jsonlite toJSON
-serializer_json <- function(...) {
-  serializer_content_type("application/json; charset=UTF-8", function(val) {
+serializer_json <- function(..., type = "application/json") {
+  serializer_content_type(type, function(val) {
     toJSON(val, ...)
   })
 }
 
-#' @describeIn serializers JSON serializer with `auto_unbox` defaulting to `TRUE`. See [jsonlite::toJSON()] for more details.
+#' @describeIn serializers JSON serializer with `auto_unbox` defaulting to `TRUE`. See also: [jsonlite::toJSON()]
 #' @inheritParams jsonlite::toJSON
 #' @export
-serializer_unboxed_json <- function(auto_unbox = TRUE, ...) {
-  serializer_json(auto_unbox = auto_unbox, ...)
+serializer_unboxed_json <- function(auto_unbox = TRUE, ..., type = "application/json") {
+  serializer_json(auto_unbox = auto_unbox, ..., type = type)
 }
 
 
 
 
-#' @describeIn serializers RDS serializer. See [serialize()] for more details.
+#' @describeIn serializers RDS serializer. See also: [base::serialize()]
 #' @inheritParams base::serialize
 #' @export
-serializer_rds <- function(version = "2", ascii = FALSE, ...) {
+serializer_rds <- function(version = "2", ascii = FALSE, ..., type = "application/rds") {
   if (identical(version, "3")) {
     if (package_version(R.version) < "3.5") {
       stop(
@@ -204,18 +244,18 @@ serializer_rds <- function(version = "2", ascii = FALSE, ...) {
       )
     }
   }
-  serializer_content_type("application/octet-stream", function(val) {
+  serializer_content_type(type, function(val) {
     base::serialize(val, NULL, ascii = ascii, version = version, ...)
   })
 }
 
-#' @describeIn serializers feather serializer. See [feather::write_feather] for more details.
+#' @describeIn serializers feather serializer. See also: [feather::write_feather()]
 #' @export
-serializer_feather <- function() {
+serializer_feather <- function(type = "application/feather") {
   if (!requireNamespace("feather", quietly = TRUE)) {
     stop("`feather` must be installed for `serializer_feather` to work")
   }
-  serializer_content_type("application/feather; charset=UTF-8", function(val) {
+  serializer_content_type(type, function(val) {
     tmpfile <- tempfile(fileext = ".feather")
     on.exit({
       if (file.exists(tmpfile)) {
@@ -229,70 +269,76 @@ serializer_feather <- function() {
 }
 
 
-#' @describeIn serializers YAML serializer. See [yaml::as.yaml()] for more details.
+#' @describeIn serializers YAML serializer. See also: [yaml::as.yaml()]
 #' @export
-serializer_yaml <- function(...) {
+serializer_yaml <- function(..., type = "text/x-yaml; charset=UTF-8") {
   if (!requireNamespace("yaml", quietly = TRUE)) {
     stop("yaml must be installed for the yaml serializer to work")
   }
-  serializer_content_type("application/x-yaml; charset=UTF-8", function(val) {
+  serializer_content_type(type, function(val) {
     yaml::as.yaml(val, ...)
   })
 }
 
-#' @describeIn serializers Text serializer. See [as.character()] for more details.
+#' @describeIn serializers Text serializer. See also: [as.character()]
 #' @export
-serializer_text <- function(..., serialize_fn = as.character) {
-  serializer_content_type("text/plain; charset=UTF-8", function(val) {
+serializer_text <- function(..., serialize_fn = as.character, type = "text/plain; charset=UTF-8") {
+  serializer_content_type(type, function(val) {
     serialize_fn(val, ...)
   })
 }
 
 
 
-#' @describeIn serializers Text serializer. See [format()] for more details.
+#' @describeIn serializers Text serializer. See also: [format()]
 #' @export
-serializer_format <- function(...) {
-  serializer_text(..., serialize_fn = format)
+serializer_format <- function(..., type = "text/plain; charset=UTF-8") {
+  serializer_text(..., serialize_fn = format, type = type)
 }
 
 #' @describeIn serializers Text serializer. Captures the output of [print()]
 #' @export
-serializer_print <- function(...) {
-  serializer_text(serialize_fn = function(x) {
-    paste0(
-      collapse = "\n",
-      utils::capture.output({
-        print(x, ...)
-      })
-    )
-  })
+serializer_print <- function(..., type = "text/plain; charset=UTF-8") {
+  serializer_text(
+    type = type,
+    serialize_fn = function(x) {
+      paste0(
+        collapse = "\n",
+        utils::capture.output({
+          print(x, ...)
+        })
+      )
+    }
+  )
 }
 #' @describeIn serializers Text serializer. Captures the output of [cat()]
 #' @export
-serializer_cat <- function(...) {
-  serializer_text(serialize_fn = function(x) {
-    paste0(
-      collapse = "\n",
-      utils::capture.output({
-        cat(x, ...)
-      })
-    )
-  })
+serializer_cat <- function(..., type = "text/plain; charset=UTF-8") {
+  serializer_text(
+    type = type,
+    serialize_fn = function(x) {
+      paste0(
+        collapse = "\n",
+        utils::capture.output({
+          cat(x, ...)
+        })
+      )
+    }
+  )
 }
 
 
 
 
-#' @describeIn serializers htmlwidget serializer. See [htmlwidgets::saveWidget()] for more details.
+#' @describeIn serializers htmlwidget serializer. See also: [htmlwidgets::saveWidget()]
 #' @export
-serializer_htmlwidget <- function(...) {
+serializer_htmlwidget <- function(..., type = "text/html; charset=UTF-8") {
   if (!requireNamespace("htmlwidgets", quietly = TRUE)) {
     stop("The htmlwidgets package is not available but is required in order to use the htmlwidgets serializer",
           call. = FALSE)
   }
 
-  serializer_content_type("text/html; charset=UTF-8", function(val) {
+  serializer_content_type(type, function(val) {
     # Write out a temp file. htmlwidgets (or pandoc?) seems to require that this
     # file end in .html or the selfcontained=TRUE argument has no effect.
     file <- tempfile(fileext = ".html")
@@ -324,20 +370,191 @@ serializer_xml <- function() {
 
 
 
+#' Endpoint Serializer with Hooks
+#'
+#' This method allows serializers to return both `preexec` and `postexec` hooks in addition to a serializer.
+#' This is useful for graphics device serializers which need a `preexec` and `postexec` hook to capture the graphics output.
+#'
+#' `preexec` and `postexec` hooks happend directly before and after a route is executed.
+#' These hooks are specific to a single [PlumberEndpoint]'s route calculation.
+#'
+#' @param serializer Serializer method to be used.  This method should already have its initialization arguments applied.
+#' @param preexec_hook Function to be run directly before a [PlumberEndpoint] calls its route method.
+#' @param postexec_hook Function to be run directly after a [PlumberEndpoint] calls its route method.
+#'
+#' @examples
+#' # The definition of `serializer_device` returns
+#' # * `preexec`, `postexec` hooks
+#' # * a `serializer_content_type` serializer
+#' print(serializer_device)
+endpoint_serializer <- function(serializer, preexec_hook = NULL, postexec_hook = NULL) {
+  stopifnot(is.function(serializer))
+  structure(
+    list(
+      serializer = serializer,
+      preexec_hook = preexec_hook,
+      postexec_hook = postexec_hook
+    ),
+    class = "plumber_endpoint_serializer"
+  )
+}
+
+self_set_serializer <- function(self, serializer) {
+  if (inherits(serializer, "plumber_endpoint_serializer")) {
+    self$serializer <- serializer$serializer
+    if (!is.null(serializer$preexec_hook)) {
+      self$registerHook("preexec", serializer$preexec_hook)
+    }
+    if (!is.null(serializer$postexec_hook)) {
+      self$registerHook("postexec", serializer$postexec_hook)
+    }
+  } else {
+    self$serializer <- serializer
+  }
+  invisible(self)
+}
+
+
+#' @describeIn serializers Helper method to create graphics device serializers, such as [serializer_png()]. See also: [endpoint_serializer()]
+#' @param dev_on Function to turn on a graphics device.
+#' The graphics device `dev_on` function will receive any arguments supplied to the serializer in addition to `filename`.
+#' `filename` points to the temporary file name that should be used when saving content.
+#' @param dev_off Function to turn off the grahpics device. Defaults to [grDevices::dev.off()]
+#' @export
+serializer_device <- function(type, dev_on, dev_off = grDevices::dev.off) {
+
+  stopifnot(!missing(type))
+
+  stopifnot(!missing(dev_on))
+  stopifnot(is.function(dev_on))
+  stopifnot(length(formals(dev_on)) > 0)
+  if (!any(c("filename", "...") %in% names(formals(dev_on)))) {
+    stop("`dev_on` must contain an arugment called `filename` or have `...`")
+  }
+
+  stopifnot(is.function(dev_off))
+
+  endpoint_serializer(
+    serializer = serializer_content_type(type),
+    preexec_hook = function(req, res, data) {
+      tmpfile <- tempfile()
+      data$file <- tmpfile
+
+      dev_on(filename = tmpfile)
+    },
+    postexec_hook = function(value, req, res, data) {
+      dev_off()
+
+      on.exit({unlink(data$file)}, add = TRUE)
+      con <- file(data$file, "rb")
+      on.exit({close(con)}, add = TRUE)
+      img <- readBin(con, "raw", file.info(data$file)$size)
+      img
+    }
+  )
+}
+
+#' @describeIn serializers JPEG image serializer. See also: [grDevices::jpeg()]
+#' @export
+serializer_jpeg <- function(..., type = "image/jpeg") {
+  serializer_device(
+    type = type,
+    dev_on = function(filename) {
+      grDevices::jpeg(filename, ...)
+    }
+  )
+}
+#' @describeIn serializers PNG image serializer. See also: [grDevices::png()]
+#' @export
+serializer_png <- function(..., type = "image/png") {
+  serializer_device(
+    type = type,
+    dev_on = function(filename) {
+      grDevices::png(filename, ...)
+    }
+  )
+}
+#' @describeIn serializers SVG image serializer. See also: [grDevices::svg()]
+#' @export
+serializer_svg <- function(..., type = "image/svg+xml") {
+  serializer_device(
+    type = type,
+    dev_on = function(filename) {
+      grDevices::svg(filename, ...)
+    }
+  )
+}
+#' @describeIn serializers BMP image serializer. See also: [grDevices::bmp()]
+#' @export
+serializer_bmp <- function(..., type = "image/bmp") {
+  serializer_device(
+    type = type,
+    dev_on = function(filename) {
+      grDevices::bmp(filename, ...)
+    }
+  )
+}
+#' @describeIn serializers TIFF image serializer. See also: [grDevices::tiff()]
+#' @export
+serializer_tiff <- function(..., type = "image/tiff") {
+  serializer_device(
+    type = type,
+    dev_on = function(filename) {
+      grDevices::tiff(filename, ...)
+    }
+  )
+}
+#' @describeIn serializers PDF image serializer. See also: [grDevices::pdf()]
+#' @export
+serializer_pdf <- function(..., type = "application/pdf") {
+  serializer_device(
+    type = type,
+    dev_on = function(filename) {
+      grDevices::pdf(filename, ...)
+    }
+  )
+}
+
+
+
+
+
+
 add_serializers_onLoad <- function() {
   register_serializer("null",        serializer_identity)
   register_serializer("contentType", serializer_content_type)
-  register_serializer("html",        serializer_html)
-  register_serializer("csv",         serializer_csv)
+
+  # html
+  register_serializer("html", serializer_html)
+
+  # objects
   register_serializer("json",        serializer_json)
   register_serializer("unboxedJSON", serializer_unboxed_json)
   register_serializer("rds",         serializer_rds)
+  register_serializer("csv",         serializer_csv)
+  register_serializer("tsv",         serializer_tsv)
   register_serializer("feather",     serializer_feather)
-  register_serializer("xml",         serializer_xml)
   register_serializer("yaml",        serializer_yaml)
-  register_serializer("text",        serializer_text)
-  register_serializer("format",      serializer_format)
-  register_serializer("print",       serializer_print)
-  register_serializer("cat",         serializer_cat)
-  register_serializer("htmlwidget",  serializer_htmlwidget)
+
+  # text
+  register_serializer("text",   serializer_text)
+  register_serializer("format", serializer_format)
+  register_serializer("print",  serializer_print)
+  register_serializer("cat",    serializer_cat)
+
+  # htmlwidget
+  register_serializer("htmlwidget", serializer_htmlwidget)
+
+  # devices
+  register_serializer("device", serializer_device)
+  register_serializer("jpeg",   serializer_jpeg)
+  register_serializer("png",    serializer_png)
+  register_serializer("svg",    serializer_svg)
+  register_serializer("bmp",    serializer_bmp)
+  register_serializer("tiff",   serializer_tiff)
+  register_serializer("pdf",    serializer_pdf)
+
+
+  ## Do not register until implemented
+  # register_serializer("xml", serializer_xml)
 }

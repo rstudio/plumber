@@ -16,8 +16,6 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
   paths <- NULL
   preempt <- NULL
   filter <- NULL
-  image <- NULL
-  imageArgs<- NULL
   serializer <- NULL
   parsers <- NULL
   assets <- NULL
@@ -106,7 +104,7 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
         stopOnLine(lineNum, line, paste0("No such @serializer registered: ", s))
       }
 
-      ser <- .globals$serializers[[s]]
+      ser <- get_registered_serializer(s)
 
       if (!is.na(serMat[1, 4]) && serMat[1,4] != ""){
         # We have an arg to pass in to the serializer
@@ -126,9 +124,13 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
 
     }
 
-    shortSerMat <- stri_match(line, regex="^#['\\*]\\s*@(json|html)(.*)$")
+    shortSerMat <- stri_match(line, regex="^#['\\*]\\s*@(json|html|jpeg|png|svg)(.*)$")
     if (!is.na(shortSerMat[1,2])) {
       s <- stri_trim_both(shortSerMat[1,2])
+      .Deprecated(msg = paste0(
+        "Plumber tag `#* @", s, "` is deprecated.\n",
+        "Use `#* @serializer ", s, "` instead."
+      ))
       if (!is.null(serializer)){
         # Must have already assigned.
         stopOnLine(lineNum, line, "Multiple @serializers specified for one function (shorthand serializers like @json count, too).")
@@ -153,11 +155,10 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
         argList <- list()
       }
       tryCatch({
-        serializer <- do.call(.globals$serializers[[s]], argList)
+        serializer <- do.call(get_registered_serializer(s), argList)
       }, error = function(e) {
         stopOnLine(lineNum, line, paste0("Error creating serializer: ", s, "\n", e))
       })
-
     }
 
     parsersMat <- stri_match(line, regex="^#['\\*]\\s*@parser(\\s+([^\\s]+)\\s*(.*)\\s*$)?")
@@ -185,34 +186,6 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
         parsers <- list()
       }
       parsers[[parser_alias]] <- arg_list
-
-    }
-
-    imageMat <- stri_match(line, regex="^#['\\*]\\s*@(jpeg|png|svg)([\\s\\(].*)?\\s*$")
-    if (!is.na(imageMat[1,1])){
-      if (!is.null(image)){
-        # Must have already assigned.
-        stopOnLine(lineNum, line, "Multiple image annotations on one function.")
-      }
-      image <- imageMat[1,2]
-
-      imageAttr <- trimws(imageMat[1,3])
-      if (is.na(imageAttr)){
-        imageAttr <- ""
-      }
-      if(!identical(imageAttr, "") && !grepl("^\\(.*\\)$", imageAttr, perl=TRUE)){
-        stopOnLine(lineNum, line, "Supplemental arguments to the image serializer must be surrounded by parentheses, as in `#' @png (width=200)`")
-      }
-      # Arguments to pass in to the image serializer
-      imageArgs <- NULL
-      if (!identical(imageAttr, "")){
-        call <- paste("list", imageAttr)
-        imageArgs <- tryCatch({
-          eval(parse(text=call), envir)
-        }, error = function(e) {
-          stopOnLine(lineNum, line, e)
-        })
-      }
     }
 
     responseMat <- stri_match(line, regex="^#['\\*]\\s*@response\\s+(\\w+)\\s+(\\S.+)\\s*$")
@@ -267,8 +240,6 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
     paths = paths,
     preempt = preempt,
     filter = filter,
-    image = image,
-    imageArgs = imageArgs,
     serializer = serializer,
     parsers = parsers,
     assets = assets,
@@ -281,7 +252,6 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
 }
 
 #' Evaluate and activate a "block" of code found in a plumber API file.
-#' @include images.R
 #' @noRd
 evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr) {
   lineNum <- srcref[1] - 1
@@ -294,7 +264,7 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr)
 
   # ALL if statements possibilities must eventually call eval(expr, envir)
   if (!is.null(block$paths)){
-    lapply(block$paths, function(p){
+    lapply(block$paths, function(p) {
       ep <- PlumberEndpoint$new(
         verbs = p$verb,
         path = p$path,
@@ -308,21 +278,6 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr)
         responses = block$responses,
         tags = block$tags
       )
-
-      if (!is.null(block$image)){
-        if (block$image == "png"){
-          ep$registerHooks(render_png(block$imageArgs))
-          ep$serializer <- serializer_content_type("image/png")
-        } else if (block$image == "jpeg"){
-          ep$registerHooks(render_jpeg(block$imageArgs))
-          ep$serializer <- serializer_content_type("image/jpeg")
-        } else if (block$image == "svg"){
-          ep$registerHooks(render_svg(block$imageArgs))
-          ep$serializer <- serializer_content_type("image/svg+xml")
-        } else {
-          stop("Image format not found: ", block$image)
-        }
-      }
 
       addEndpoint(ep, block$preempt)
     })

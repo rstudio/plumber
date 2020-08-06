@@ -26,7 +26,7 @@ function(msg=""){
 #' Plot out data from the iris dataset
 #' @param spec If provided, filter the data to only this species (e.g. 'setosa')
 #' @get /plot
-#' @png
+#' @serializer png
 function(spec){
   myData <- iris
   title <- "All Species"

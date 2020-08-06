@@ -94,6 +94,7 @@ reference:
   - 'as_attachment'
   - 'register_serializer'
   - 'serializer_json'
+  - 'endpoint_serializer'
   - 'include_file'
 
 - title: Cookies and Filters

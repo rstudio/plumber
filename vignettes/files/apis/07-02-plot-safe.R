@@ -1,7 +1,7 @@
 #' This is an example of an safe endpoint which
 #' checks user input to avoid a DOS attack
 #' @get /
-#' @png
+#' @serializer png
 function(pts=10) {
   if (pts > 1000){
     stop("pts must be < 1,000")

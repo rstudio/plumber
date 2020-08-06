@@ -32,7 +32,19 @@ plumber 1.0.0
 
 * R repository modified to `focal-cran40` using Ubuntu 20.04 LTS for digital ocean provisioning (@meztez, #529)
 
+### Deprecations
+
+* Shorthand serializers are now deprecated. `@html`, `@json`, `@png`, `@jpeg`, `@svg` should be replaced with the `@serializer` syntax. Ex: `@serializer html` or `@serializer jpeg` (#630)
+
+* `addSerializer()` has been deprecated in favor of `register_serializer()` (#584)
+
 ### New features
+
+* Serializer functions can now return `PlumberEndpoint` `preexec` and `postexec` hooks in addition to a `serializer` function by using `endpoint_serializer()`.  This allows for image serializers to turn on their corresponding graphics device before the route executes and turn the graphics device off after the route executes. (#630)
+
+* PNG, JPEG, and SVG image serializers have been exported in methods `serializer_png()`, `serializer_jpeg()`, and `serializer_svg()` respectively.  In addition to these methods, `serializer_tiff()`, `serializer_bmp()`, and `serializer_pdf()` have been added. Each graphics device serializer wraps around `serializer_device()`, which should be used when making more graphics device serializers. (#630)
+
+* Added `serializer_tsv()` (#630)
 
 * Generalize user interface integration. Plumber can now use other OpenAPI compatible user interfaces like `RapiDoc` (https://github.com/mrin9/RapiDoc) and `Redoc` (https://github.com/Redocly/redoc). Pending CRAN approbations, R packages for
 both UIs integration are available from https://github.com/meztez/rapidoc/ and https://github.com/meztez/redoc/. (@meztez, #562)

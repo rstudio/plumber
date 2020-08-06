@@ -6,19 +6,19 @@ test_that("YAML serializes properly", {
   l <- list(a=1, b=2, c="hi")
   val <- serializer_yaml()(l, list(), PlumberResponse$new(), stop)
   expect_equal(val$status, 200L)
-  expect_equal(val$headers$`Content-Type`, "application/x-yaml; charset=UTF-8")
+  expect_equal(val$headers$`Content-Type`, "text/x-yaml; charset=UTF-8")
   expect_equal(val$body, yaml::as.yaml(l))
 
   l <- list(a=1, b=2, c="hi", na=NA)
   val <- serializer_yaml()(l, list(), PlumberResponse$new(), stop)
   expect_equal(val$status, 200L)
-  expect_equal(val$headers$`Content-Type`, "application/x-yaml; charset=UTF-8")
+  expect_equal(val$headers$`Content-Type`, "text/x-yaml; charset=UTF-8")
   expect_equal(val$body, yaml::as.yaml(l))
 
   l <- list(a=1, b=2, c="hi", na=NA)
   val <- serializer_yaml(indent = 4)(l, list(), PlumberResponse$new(), stop)
   expect_equal(val$status, 200L)
-  expect_equal(val$headers$`Content-Type`, "application/x-yaml; charset=UTF-8")
+  expect_equal(val$headers$`Content-Type`, "text/x-yaml; charset=UTF-8")
   expect_equal(val$body, yaml::as.yaml(l, indent = 4))
 })
 
