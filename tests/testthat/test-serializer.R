@@ -13,7 +13,7 @@ test_that("JSON is the default serializer", {
   res <- PlumberResponse$new()
 
   r <- plumber$new(test_path("files/router.R"))
-  expect_equal(r$serve(make_req("GET", "/"), res)$headers$`Content-Type`, "application/json; charset=UTF-8")
+  expect_equal(r$serve(make_req("GET", "/"), res)$headers$`Content-Type`, "application/json")
 })
 
 test_that("Overridden serializers apply on filters and endpoints", {

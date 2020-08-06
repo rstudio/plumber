@@ -46,28 +46,34 @@ By default, Plumber serializes objects into JSON via the `jsonlite` R package. H
 
 Annotation | Content Type | Description/References
 ---------- | ------------ | ---------------------
-`@json` | `application/json` | `jsonlite::toJSON()`
-`@html` | `text/html; charset=utf-8` | Passes response through without any additional serialization
-`@jpeg` | `image/jpeg` | `jpeg()`
-`@png` | `image/png` | `png()`
+`@serializer contentType` | (user supplied) | Send response with a particular `Content-Type` header
+`@serializer html` | `text/html; charset=UTF-8` | Passes response through without any additional serialization
+`@serializer json` | `application/json` | Object processed with `jsonlite::toJSON()`
+`@serializer unboxedJSON` | `application/json` | Object processed with `jsonlite::toJSON(auto_unbox=TRUE)`
+`@serializer rds` | `application/rds` | Object processed with `base::serialize()`
+`@serializer csv` | `text/csv` | Object processed with `readr::format_csv()`
+`@serializer tsv` | `text/tab-separated-values` | Object processed with `readr::format_tsv()`
+`@serializer feather` | `application/feather` | Object processed with `feather::write_feather()`
+`@serializer yaml` | `text/x-yaml` | Object processed with `yaml::as_yaml()`
+
 `@serializer htmlwidget` | `text/html; charset=utf-8` | `htmlwidgets::saveWidget()`
-`@serializer unboxedJSON` | `application/json` | `jsonlite::toJSON(auto_unbox=TRUE)`
 
-### Bypassing Serialization
+`@serializer text` | `text/plain` | Text output processed by `as.character()`
+`@serializer format` | `text/plain` | Text output processed by `format()`
+`@serializer print` | `text/plain` | Text output captured from `print()`
+`@serializer cat` | `text/plain` | Text output captured from `cat()`
 
-In some instances it may be desirable to return a value directly from R without serialization. You can bypass serialization by returning the [response object](#response-object) from an endpoint. For example, consider the following API.
+`@serializer jpeg` | `image/jpeg` | Images created with `jpeg()`
+`@serializer png` | `image/png` | Images created with `png()`
+`@serializer svg` | `image/svg` | Images created with `svg()`
+`@serializer bmp` | `image/bmp` | Images created with `bmp()`
+`@serializer tiff` | `image/tiff` | Images created with `tiff()`
+`@serializer pdf` | `application/pdf` | PDF File created with `pdf()`
 
-```{r, eval = FALSE, code = readLines("files/apis/04-01-response.R")}
-```
 
-The response that is returned from this endpoint would contain the body `Literal text here!` with no `Content-Type` header and without any additional serialization.
 
-Similarly, you can leverage the `@serializer contentType` annotation which does no serialization of the response but specifies the contentType header. You can use this annotation when you want more control over the response that you send.
 
-```{r, eval = FALSE, code = readLines("files/apis/04-02-contenttype.R")}
-```
 
-Running this API and visiting http://localhost:8000/pdf will download the PDF generated from R (or display the PDF natively, if your client supports it).
 
 ### Boxed vs Unboxed JSON
 
@@ -119,16 +125,32 @@ There are a couple of functions to be aware of around this feature set. If using
 
 ### Customizing Image Serializers
 
-The `@jpeg` and `@png` annotations cause the graphical output of an endpoint to be written to a file then returned to the client using the `jpeg()` or `png()` functions, respectively. These functions both accept a variety of additional options that customize the output including `width`, `height`, and `bg` among others.
+The `@serializer jpeg` and `@serializer png` annotations cause the graphical output of an endpoint to be written to a file then returned to the client using the `jpeg()` or `png()` functions, respectively. These functions both accept a variety of additional options that customize the output including `width`, `height`, and `bg` among others.
 
 As of version 0.4.3 of plumber, these annotations now accept additional arguments that will be passed into these functions. This enables the creation of endpoints like:
 
 ```{r, eval = FALSE, code = readLines("files/apis/04-04-image.R")}
 ```
 
-At a lower level, the arguments inside the parentheses will be used as the arguments to a `list()` call. Meaning that any R code that can be prefixed by `list` to form a valid R expression can be used. For example, `#' @png (width=2^10 + 1)` would be a valid annotation. This code is evaluated once when your API is `plumb()`d.
+At a lower level, the arguments inside the parentheses will be used as the arguments to a `list()` call. Meaning that any R code that can be prefixed by `list` to form a valid R expression can be used. For example, `#' @serializer png (width=2^10 + 1)` would be a valid annotation. This code is evaluated once when your API is `plumb()`d.
 
 While this approach can be used to statically define the size of an image, it will not work for dynamic sizing of an image. If you wish to dynamically size images, you will need render and capture the graphical output yourself and return the contents with the appropriate `Content-Type` header. See the existing image renderers as a model of how to do this.
+
+### Bypassing Serialization
+
+In some instances it may be desirable to return a value directly from R without serialization. You can bypass serialization by returning the [response object](#response-object) from an endpoint. For example, consider the following API.
+
+```{r, eval = FALSE, code = readLines("files/apis/04-01-response.R")}
+```
+
+The response that is returned from this endpoint would contain the body `Literal text here!` with no `Content-Type` header and without any additional serialization.
+
+Similarly, you can leverage the `@serializer contentType` annotation which does no serialization of the response but specifies the contentType header. You can use this annotation when you want more control over the response that you send.
+
+```{r, eval = FALSE, code = readLines("files/apis/04-02-contenttype.R")}
+```
+
+Running this API and visiting http://localhost:8000/pdf will download the PDF generated from R (or display the PDF natively, if your client supports it).
 
 ## Error Handling
 
