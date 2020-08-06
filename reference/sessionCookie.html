@@ -268,7 +268,7 @@ to prevent others from reading it.</p></li>
 
 
 <span class='co'># Load a plumber API</span>
-<span class='kw'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='plumb.html'>plumb</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='st'>"examples"</span>, <span class='st'>"01-append"</span>, <span class='st'>"plumber.R"</span>), package = <span class='st'>"plumber"</span>))
+<span class='kw'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='plumb_api.html'>plumb_api</a></span>(<span class='st'>"plumber"</span>, <span class='st'>"01-append"</span>)
 
 <span class='co'># Add cookie support and retrieve secret key using `keyring`</span>
 <span class='kw'>pr</span><span class='op'>$</span><span class='fu'>registerHooks</span>(
@@ -290,7 +290,7 @@ to prevent others from reading it.</p></li>
 
 
 <span class='co'># Load a plumber API</span>
-<span class='kw'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='plumb.html'>plumb</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='st'>"examples"</span>, <span class='st'>"01-append"</span>, <span class='st'>"plumber.R"</span>), package = <span class='st'>"plumber"</span>))
+<span class='kw'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='plumb_api.html'>plumb_api</a></span>(<span class='st'>"plumber"</span>, <span class='st'>"01-append"</span>)
 
 <span class='co'># Add cookie support and retrieve secret key from file</span>
 <span class='kw'>pr</span><span class='op'>$</span><span class='fu'>registerHooks</span>(

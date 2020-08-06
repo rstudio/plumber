@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Start a server using plumber object — pr_run • plumber</title>
+<title>Process a Plumber API — plumb • plumber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +52,8 @@
 
 
 
-<meta property="og:title" content="Start a server using plumber object — pr_run" />
-<meta property="og:description" content="port does not need to be explicitly assigned." />
+<meta property="og:title" content="Process a Plumber API — plumb" />
+<meta property="og:description" content="Process a Plumber API" />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
 
 
@@ -170,48 +170,41 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Start a server using <code>plumber</code> object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/pr.R'><code>R/pr.R</code></a></small>
-    <div class="hidden name"><code>pr_run.Rd</code></div>
+    <h1>Process a Plumber API</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/plumb.R'><code>R/plumb.R</code></a></small>
+    <div class="hidden name"><code>plumb.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>port</code> does not need to be explicitly assigned.</p>
+    <p>Process a Plumber API</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pr_run</span>(<span class='kw'>pr</span>, host = <span class='st'>"127.0.0.1"</span>, port = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.port"</span>, <span class='kw'>NULL</span>))</pre>
+    <pre class="usage"><span class='fu'>plumb</span>(file = <span class='kw'>NULL</span>, dir = <span class='st'>"."</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>pr</th>
-      <td><p>A Plumber API. Note: The supplied Plumber API object will also be updated in place as well as returned by the function.</p></td>
+      <th>file</th>
+      <td><p>The file to parse as the plumber router definition.</p></td>
     </tr>
     <tr>
-      <th>host</th>
-      <td><p>A string that is a valid IPv4 or IPv6 address that is owned by
-this server, which the application will listen on. "0.0.0.0" represents
-all IPv4 addresses and "::/0" represents all IPv6 addresses.</p></td>
-    </tr>
-    <tr>
-      <th>port</th>
-      <td><p>A number or integer that indicates the server port that should
-be listened on. Note that on most Unix-like systems including Linux and
-Mac OS X, port numbers smaller than 1025 require root privileges.</p></td>
+      <th>dir</th>
+      <td><p>The directory containing the <code>plumber.R</code> file to parse as the
+plumber router definition. Alternatively, if an <code>entrypoint.R</code> file is
+found, it will take precedence and be responsible for returning a runnable
+router.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'>pr_run</span>()
+    <p>API routers are the core request handler in plumber. A router is responsible for
+taking an incoming request, submitting it through the appropriate filters and
+eventually to a corresponding endpoint, if one is found.</p>
+<p>See <a href='http://www.rplumber.io/articles/programmatic-usage.html'>http://www.rplumber.io/articles/programmatic-usage.html</a> for additional
+details on the methods available on this object.</p>
 
-<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'>pr_run</span>(port = <span class='fl'>5762</span>, debug = <span class='fl'>TRUE</span>)
-}
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

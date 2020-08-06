@@ -187,7 +187,7 @@
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">docker</span> run --rm -p 8000:8000 rstudio/plumber</span></code></pre></div>
 <p>which is the same as:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">docker</span> run --rm -p 8000:8000 rstudio/plumber \</span>
-<span id="cb3-2"><a href="#cb3-2"></a>  /usr/local/lib/R/site-library/plumber/examples/04-mean-sum/plumber.R</span></code></pre></div>
+<span id="cb3-2"><a href="#cb3-2"></a>  /usr/local/lib/R/site-library/plumber/plumber/04-mean-sum/plumber.R</span></code></pre></div>
 <ul>
 <li>
 <code>docker run</code> tells Docker to run a new container</li>
@@ -198,7 +198,7 @@
 <li>
 <code>rstudio/plumber</code> is the name of the image we want to run</li>
 <li>
-<code>/usr/local/lib/R/site-library/plumber/examples/03-mean-sum/plumber.R</code> is the path <strong>inside of the Docker container</strong> to the Plumber file you want to host. You’ll note that you do not need plumber installed on your host machine for this to work, nor does the path <code>/usr/local/...</code> need to exist on your host machine. This references the path inside of the docker container where the R file you want to <code><a href="../reference/plumb.html">plumb()</a></code> can be found. This <code>mean-sum</code> path is the default path that the image uses if you don’t specify one yourself.</li>
+<code>/usr/local/lib/R/site-library/plumber/plumber/03-mean-sum/plumber.R</code> is the path <strong>inside of the Docker container</strong> to the Plumber file you want to host. You’ll note that you do not need plumber installed on your host machine for this to work, nor does the path <code>/usr/local/...</code> need to exist on your host machine. This references the path inside of the docker container where the R file you want to <code><a href="../reference/plumb.html">plumb()</a></code> can be found. This <code>mean-sum</code> path is the default path that the image uses if you don’t specify one yourself.</li>
 </ul>
 <p>This will ask Plumber to <code>plumb</code> and <code>run</code> the file you specified on port 8000 of that new container. Because you used the <code>-p</code> argument, port 8000 of your local machine will be forwarded into your container. You can test this by running this on the machine where Docker is running: <code>curl localhost:8000/mean</code>, or if you know the IP address of the machine where Docker is running, you could visit it in a web browser. The <code>/mean</code> path is one that’s defined in the plumber file we just specified – you should get an single number in an array back (<code>[-0.1993]</code>).</p>
 <p>If that works, you can try using one of your own plumber files in this arrangement. Keep in mind that the file you want to run <strong>must</strong> be available inside of the container and you must specify the path to that file as it exists inside of the container. Keep it simple for now – use a plumber file that doesn’t require any additional R packages or depend on any other files outside of the plumber definition.</p>

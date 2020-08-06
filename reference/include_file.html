@@ -179,7 +179,7 @@
     <p>Returns the file at the given path as the response.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>include_file</span>(<span class='kw'>file</span>, <span class='kw'>res</span>, <span class='kw'>content_type</span>)
+    <pre class="usage"><span class='fu'>include_file</span>(<span class='kw'>file</span>, <span class='kw'>res</span>, content_type = <span class='fu'>getContentType</span>(<span class='kw'>tools</span>::<span class='fu'><a href='https://rdrr.io/r/tools/fileutils.html'>file_ext</a></span>(<span class='kw'>file</span>)))
 
 <span class='fu'>include_html</span>(<span class='kw'>file</span>, <span class='kw'>res</span>)
 
@@ -201,7 +201,8 @@
     <tr>
       <th>content_type</th>
       <td><p>If provided, the given value will be sent as the
-<code>Content-Type</code> header in the response.</p></td>
+<code>Content-Type</code> header in the response. Defaults to the contentType of the file extension.
+To disable the <code>Content-Type</code> header, set <code>content_type = NULL</code>.</p></td>
     </tr>
     <tr>
       <th>format</th>
