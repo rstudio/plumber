@@ -11,85 +11,7 @@ enumerateVerbs <- function(v) {
   toupper(v)
 }
 
-#' Plumber Router
-#' @details Routers are the core request handler in plumber. A router is responsible for
-#' taking an incoming request, submitting it through the appropriate filters and
-#' eventually to a corresponding endpoint, if one is found.
-#'
-#' See \url{http://www.rplumber.io/articles/programmatic-usage.html} for additional
-#' details on the methods available on this object.
-#' @rdname plumber
-#' @param file The file to parse as the plumber router definition.
-#' @param dir The directory containing the `plumber.R` file to parse as the
-#'   plumber router definition. Alternatively, if an `entrypoint.R` file is
-#'   found, it will take precedence and be responsible for returning a runnable
-#'   router.
-#' @export
-plumb <- function(file = NULL, dir = ".") {
 
-  if (!is.null(file) && !identical(dir, ".")) {
-    # both were explicitly set.
-    # assume it is a file in that dir and continue like normal
-    file <- file.path(
-      # removing trailing slash in dir
-      normalize_dir_path(dir),
-      file
-    )
-  }
-
-  if (is.null(file)) {
-    if (identical(dir, "")) {
-      # dir and file are both empty. Error
-      stop("You must specify either a file or directory parameter")
-    }
-
-    dir <- normalize_dir_path(dir)
-
-    # if the entrypoint file exists...
-    entrypoint <- list.files(dir, "^entrypoint\\.r$", ignore.case = TRUE)
-    if (length(entrypoint) >= 1) {
-      if (length(entrypoint) > 1) {
-        entrypoint <- entrypoint[1]
-        warning("Found multiple files named 'entrypoint.R'. Using: '", entrypoint, "'")
-      }
-
-      # set working directory to dir before sourcing
-      old <- setwd(dir)
-      on.exit(setwd(old), add = TRUE)
-
-      # Expect that entrypoint will provide us with the router
-      #   Do not 'poison' the global env. Using a local environment
-      #   sourceUTF8 returns the (visible) value object. No need to call source()$value()
-      pr <- sourceUTF8(entrypoint, environment())
-
-      if (!inherits(pr, "plumber")){
-        stop("'", entrypoint, "' must return a runnable Plumber router.")
-      }
-
-      # return plumber object
-      return(pr)
-    }
-
-    # Find plumber.R in the directory case-insensitive
-    file <- list.files(dir, "^plumber\\.r$", ignore.case = TRUE, full.names = TRUE)
-    if (length(file) == 0) {
-      stop("No plumber.R file found in the specified directory: ", dir)
-    }
-    if (length(file) > 1) {
-      file <- file[1]
-      warning("Found multiple files named 'plumber.R' in directory: '", dir, "'.\nUsing: '", file, "'")
-    }
-    # continue as if a file has been provided...
-  }
-
-  if (!file.exists(file)) {
-    # Couldn't find the Plumber file nor an entrypoint
-    stop("File does not exist: ", file)
-  }
-
-  # Plumber file found
-  plumber$new(file)
-}
 
 
 #' @include parse-query.R
@@ -100,7 +22,8 @@ defaultPlumberFilters <- list(
   queryString = queryStringFilter,
   postBody = postBodyFilter,
   cookieParser = cookieFilter,
-  sharedSecret = sharedSecretFilter)
+  sharedSecret = sharedSecretFilter
+)
 
 #' @keywords internal
 #' @title hookable
@@ -181,8 +104,14 @@ hookable <- R6Class(
 )
 
 
+#' Package Plumber Router
+# ' @details Routers are the core request handler in plumber. A router is responsible for
+# ' taking an incoming request, submitting it through the appropriate filters and
+# ' eventually to a corresponding endpoint, if one is found.
+# '
+# ' See \url{http://www.rplumber.io/articles/programmatic-usage.html} for additional
+# ' details on the methods available on this object.
 #' @export
-#' @import crayon
 plumber <- R6Class(
   "plumber",
   inherit = hookable,
@@ -236,7 +165,14 @@ plumber <- R6Class(
         private$filts <- c(private$filts, fil)
       }
 
-      if (!is.null(file)){
+      if (!is.null(file)) {
+        # plumb() the file in the working directory
+        # The directory is also set when running the plumber object
+        private$filename <- file
+        old_wd <- setwd(dirname(file))
+        on.exit({setwd(old_wd)}, add = TRUE)
+        file <- basename(file)
+
         private$lines <- readUTF8(file)
         private$parsed <- parseUTF8(file)
         private$disable_run <- TRUE
@@ -326,10 +262,9 @@ plumber <- R6Class(
       options("plumber.debug" = private$debug)
 
       # Set and restore the wd to make it appear that the proc is running local to the file's definition.
-      if (!is.null(private$filename)){
-        cwd <- getwd()
-        on.exit({ setwd(cwd) }, add = TRUE)
-        setwd(dirname(private$filename))
+      if (!is.null(private$filename)) {
+        old_wd <- setwd(dirname(private$file))
+        on.exit({setwd(old_wd)}, add = TRUE)
       }
 
       if (isTRUE(private$ui_info$enabled)) {
@@ -1178,6 +1113,7 @@ plumber <- R6Class(
     mnts = list(),
 
     envir = NULL, # The environment in which all API execution will be conducted
+    filename = NULL, # The file which was plumbed
     lines = NULL, # The lines constituting the API
     parsed = NULL, # The parsed representation of the API
     globalSettings = list(info=list()), # Global settings for this API. Primarily used for OpenAPI Specification.

@@ -52,7 +52,7 @@ function(req){
 #* The test path below has been updated to include expected and unexpected output
 #* @get /test
 #* @preempt auth
-#* @html
+#* @serializer html
 function(){
   '<html>
     <head>

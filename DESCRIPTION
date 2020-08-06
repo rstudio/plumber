@@ -42,7 +42,8 @@ Suggests:
     later,
     readr,
     yaml,
-    feather
+    feather,
+    future
 Remotes:
     rstudio/swagger
 RoxygenNote: 7.1.1
@@ -54,7 +55,6 @@ Collate:
     'digital-ocean.R'
     'find-port.R'
     'globals.R'
-    'images.R'
     'includes.R'
     'json.R'
     'new-rstudio-project.R'
@@ -66,6 +66,7 @@ Collate:
     'paths.R'
     'plumb-block.R'
     'plumb-globals.R'
+    'plumb.R'
     'plumber-options.R'
     'plumber-response.R'
     'shared-secret-filter.R'

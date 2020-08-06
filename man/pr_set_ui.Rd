@@ -7,7 +7,7 @@
 pr_set_ui(pr, ui = getOption("plumber.ui", TRUE), ...)
 }
 \arguments{
-\item{pr}{A Plumber router. Note: The supplied Plumber router will also be updated in place as well as returned by the function.}
+\item{pr}{A Plumber API. Note: The supplied Plumber API object will also be updated in place as well as returned by the function.}
 
 \item{ui}{a character value or a logical value.
 If using \code{\link[=options_plumber]{options_plumber()}}, the value must be set before initializing your Plumber router.}

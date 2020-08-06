@@ -14,7 +14,7 @@ pr_cookie(
 )
 }
 \arguments{
-\item{pr}{A Plumber router. Note: The supplied Plumber router will also be updated in place as well as returned by the function.}
+\item{pr}{A Plumber API. Note: The supplied Plumber API object will also be updated in place as well as returned by the function.}
 
 \item{key}{The secret key to use. This must be consistent across all R sessions
 where you want to save/restore encrypted cookies. It should be produced using

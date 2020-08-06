@@ -7,7 +7,7 @@
 pr_set_debug(pr, debug = interactive())
 }
 \arguments{
-\item{pr}{A Plumber router. Note: The supplied Plumber router will also be updated in place as well as returned by the function.}
+\item{pr}{A Plumber API. Note: The supplied Plumber API object will also be updated in place as well as returned by the function.}
 
 \item{debug}{\code{TRUE} provides more insight into your API errors.}
 }

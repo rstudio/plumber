@@ -32,7 +32,7 @@ function(n="10", res){
 }
 
 #* Get a graph of the values
-#* @png
+#* @serializer png
 #* @get /graph
 function(){
   plot(values, type="b", ylim=c(1,100), main="Recent Values")

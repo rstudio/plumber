@@ -34,13 +34,13 @@ function(req, res){
 }
 
 #* @get /short-json
-#* @json
+#* @serializer json
 function(){
   "JSON"
 }
 
 #* @get /short-html
-#* @html
+#* @serializer html
 function(){
   "HTML"
 }

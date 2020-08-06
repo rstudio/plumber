@@ -75,14 +75,14 @@ which is the same as:
 
 ```bash
 docker run --rm -p 8000:8000 rstudio/plumber \
-  /usr/local/lib/R/site-library/plumber/examples/04-mean-sum/plumber.R
+  /usr/local/lib/R/site-library/plumber/plumber/04-mean-sum/plumber.R
 ```
 
  - `docker run` tells Docker to run a new container
  - `--rm` tells Docker to clean-up after the container when it's done
  - `-p 8000:8000` says to map port 8000 from the plumber container (which is where we'll run the server) to port 8000 of your local machine
  - `rstudio/plumber` is the name of the image we want to run
- - `/usr/local/lib/R/site-library/plumber/examples/03-mean-sum/plumber.R` is the path **inside of the Docker container** to the Plumber file you want to host. You'll note that you do not need plumber installed on your host machine for this to work, nor does the path `/usr/local/...` need to exist on your host machine. This references the path inside of the docker container where the R file you want to `plumb()` can be found. This `mean-sum` path is the default path that the image uses if you don't specify one yourself.
+ - `/usr/local/lib/R/site-library/plumber/plumber/03-mean-sum/plumber.R` is the path **inside of the Docker container** to the Plumber file you want to host. You'll note that you do not need plumber installed on your host machine for this to work, nor does the path `/usr/local/...` need to exist on your host machine. This references the path inside of the docker container where the R file you want to `plumb()` can be found. This `mean-sum` path is the default path that the image uses if you don't specify one yourself.
 
 This will ask Plumber to `plumb` and `run` the file you specified on port 8000 of that new container. Because you used the `-p` argument, port 8000 of your local machine will be forwarded into your container. You can test this by running this on the machine where Docker is running: `curl localhost:8000/mean`, or if you know the IP address of the machine where Docker is running, you could visit it in a web browser. The `/mean` path is one that's defined in the plumber file we just specified -- you should get an single number in an array back (`[-0.1993]`).
 
