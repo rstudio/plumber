@@ -43,6 +43,8 @@ reference:
 - title: Router
   contents:
   - 'plumb'
+  - 'plumb_api'
+  - 'plumber'
   - 'pr'
   - 'pr_run'
   - 'options_plumber'

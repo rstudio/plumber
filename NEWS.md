@@ -20,6 +20,8 @@ plumber 1.0.0
 
 ### Breaking changes
 
+* When `plumb()`ing a file (or `plumber$new(file)`), the working directory is set to the file's directory before parsing the file. When running the Plumber API, the working directory will be set to file's directory before running.(#631)
+
 * Plumber's OpenAPI Specification is now defined using
   [OpenAPI 3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md),
   upgrading from Swagger Specification. (#365)
@@ -51,7 +53,7 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 * Added support for promises in endpoints, filters, and hooks. (#248)
 
-* Add support for `#' @plumber` tag to gain programmatic access to the `plumber` router via `function(pr) {....}`. (@meztez and @blairj09, #568)
+* Added support for `#' @plumber` tag to gain programmatic access to the `plumber` router via `function(pr) {....}`. (@meztez and @blairj09, #568)
 
 * Added OpenAPI support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez, #532)
 
@@ -62,10 +64,14 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 * Documentation is presented using pkgdown (#570)
 
-* Tidy API for easier programmatic usage (@blairj09, #590)
+* Added a Tidy API for easier programmatic usage (@blairj09, #590)
+
+* Added `plumb_api()` for standardizing where to locate (`inst/plumber`) and how to run (`plumb_api(package, name)`) plumber apis inside an R package. To view the available Plumber APIs, call `available_apis()`. (#631)
 
 
 ### Minor new features and improvements
+
+* When calling `include_file()`, the `content_type` is automatically inferred from the file extension if `content_type` is not provided. (#631)
 
 * Added `serializer_feather()` and `parser_feather()` (#626)
 

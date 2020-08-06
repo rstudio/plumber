@@ -79,7 +79,7 @@ do_provision <- function(droplet, unstable=FALSE, example=TRUE, ...){
   install_firewall(droplet)
 
   if (example){
-    do_deploy_api(droplet, "hello", system.file("examples", "10-welcome", package="plumber"), port=8000, forward=TRUE)
+    do_deploy_api(droplet, "hello", system.file("plumber", "10-welcome", package="plumber"), port=8000, forward=TRUE)
   }
 
   invisible(droplet)
@@ -121,7 +121,7 @@ droplet_capture <- function(droplet, command){
 
 install_api <- function(droplet){
   analogsea::droplet_ssh(droplet, "mkdir -p /var/plumber")
-  example_plumber_file <- system.file("examples", "10-welcome", "plumber.R", package="plumber")
+  example_plumber_file <- system.file("plumber", "10-welcome", "plumber.R", package="plumber")
   if (nchar(example_plumber_file) < 1) {
     stop("Could not find example 10-welcome plumber file", call. = FALSE)
   }

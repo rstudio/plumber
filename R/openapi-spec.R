@@ -1,6 +1,6 @@
 
 
-#' Convert the endpoints as they exist on the router to a list which can
+#' Convert the endpoints as they exist on the Plumber object to a list which can
 #' be converted into a OpenAPI Specification for these endpoints
 #' @noRd
 endpointSpecification <- function(routerEndpointEntry, path = routerEndpointEntry$path) {

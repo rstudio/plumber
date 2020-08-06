@@ -15,10 +15,15 @@ openapi_func <- function(spec) {
   spec
 }
 
-handler <- function(num) { sum(as.integer(num)) }
+handler <- function(num) {
+  sum(as.integer(num))
+}
 
 pr$handle("GET", "/sum", handler, serializer = serializer_json())
 
 pr$set_api_spec(api = openapi_func)
 
 pr$get_api_spec()
+
+# return Plumber object
+pr
