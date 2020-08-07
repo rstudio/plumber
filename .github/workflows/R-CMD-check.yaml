@@ -49,14 +49,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install Node.js
-        if: matrix.config.os == 'macOS-latest'
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
-      - name: Install yarn
-        if: matrix.config.os == 'macOS-latest'
-        run: |
-          yarn install
 
       - uses: r-lib/actions/setup-r@master
         with:

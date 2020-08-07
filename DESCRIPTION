@@ -80,4 +80,5 @@ Collate:
     'ui.R'
     'utf8.R'
     'utils-pipe.R'
+    'validate_api.R'
     'zzz.R'
