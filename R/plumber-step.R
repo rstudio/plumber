@@ -120,6 +120,11 @@ getRelevantArgs <- function(args, plumberExpression) {
   # Extract the names of the arguments this function supports.
   fargs <- names(formals(eval(plumberExpression)))
 
+  if (length(fargs) == 0) {
+    # no matches
+    return(list())
+  }
+
   if (!"..." %in% fargs) {
     # Use the named arguments that match, drop the rest.
     args <- args[names(args) %in% fargs]
