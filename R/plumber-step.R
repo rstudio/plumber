@@ -154,7 +154,7 @@ getRelevantArgs <- function(args, plumberExpression) {
   if (any(duplicated_matched_arg_names)) {
     stop(
       "Can't call a Plumber function with duplicated matching formal arguments: ",
-      paste0(matched_arg_names[duplicated_matched_arg_names], collapse = ", "),
+      paste0(unique(matched_arg_names[duplicated_matched_arg_names]), collapse = ", "),
       "\nPlumber recommends that",
       "\nthe route be shaped like `function(req, res, ...)`",
       "\nor access `req$args`, `req$argsPath`, `req$argsPostBody`, or `req$argsQuery` directly (rather than by parameter name) using a function shape like `function(req, res)`."
