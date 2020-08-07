@@ -53,7 +53,24 @@ test_that("Ellipses allow any named args through", {
       expect_error(r$exec(a="aa1", a="aa2", b = "ba"), "duplicated matching formal arguments")
     }
   )
+})
 
+test_that("If only req and res are defined, duplicated arguments do not throw an error", {
+  foo <- parse(text="function(req){ req }")
+  r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
+  expect_equal(r$exec(req = 1, req = 2, res = 3, res = 4), 1)
+
+  foo <- parse(text="function(res){ res }")
+  r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
+  expect_equal(r$exec(req = 1, req = 2, res = 3, res = 4), 3)
+
+  foo <- parse(text="function(req, res){ list(req, res) }")
+  r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
+  expect_equal(r$exec(req = 1, req = 2, res = 3, res = 4), list(1,3))
+
+  foo <- parse(text="function(req, res, ...){ -1 }")
+  r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
+  expect_error(r$exec(req = 1, req = 2, res = 3, res = 4), "duplicated matching formal arguments")
 })
 
 test_that("Programmatic endpoints work", {

@@ -125,6 +125,22 @@ getRelevantArgs <- function(args, plumberExpression) {
     return(list())
   }
 
+  # If only req and res are found in function definition...
+  # Only call using the first matches of req and res.
+  #   This allows for post body content to have `req` and `res` named arguments and not duplicated values cause issues.
+  if (all(fargs %in% c("req", "res"))) {
+    ret <- list()
+    # using `$` will retrieve the 1st occurance of req,res
+    # args$req <- req is used within `plumber$route()`
+    if ("req" %in% fargs) {
+      ret$req <- args$req
+    }
+    if ("res" %in% fargs) {
+      ret$res <- args$res
+    }
+    return(ret)
+  }
+
   if (!"..." %in% fargs) {
     # Use the named arguments that match, drop the rest.
     args <- args[names(args) %in% fargs]
