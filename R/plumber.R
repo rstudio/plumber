@@ -263,7 +263,7 @@ plumber <- R6Class(
 
       # Set and restore the wd to make it appear that the proc is running local to the file's definition.
       if (!is.null(private$filename)) {
-        old_wd <- setwd(dirname(private$file))
+        old_wd <- setwd(dirname(private$filename))
         on.exit({setwd(old_wd)}, add = TRUE)
       }
 

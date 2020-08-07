@@ -84,7 +84,8 @@ This parser should be used when reading from a file is required.
 
 \item \code{parser_feather}: feather parser. See \code{\link[feather:read_feather]{feather::read_feather()}} for more details.
 
-\item \code{parser_octet}: Octet stream parser. Will add a filename attribute if the filename exists
+\item \code{parser_octet}: Octet stream parser. Will add a filename attribute if the filename exists.
+Returns a single item list where the value is the raw content and the key is the filename (if applicable).
 
 \item \code{parser_multi}: Multi part parser. This parser will then parse each individual body with its respective parser
 

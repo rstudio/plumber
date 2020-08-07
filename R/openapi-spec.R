@@ -60,7 +60,7 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
 
   params <- list(
     parameters = list(),
-    requestBody = list()
+    requestBody = NULL
   )
   inBody <- filterApiTypes("requestBody", "location")
   inRaw <- filterApiTypes("binary", "format")

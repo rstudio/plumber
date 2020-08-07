@@ -42,12 +42,19 @@ parse_raw <- function(toparse) {
   do.call(parser, toparse)
 }
 
+looks_like_json <- local({
+  square_brace <- as.raw(91L)
+  curly_brace <- as.raw(123L)
+  function(first_byte) {
+    first_byte == square_brace || first_byte == curly_brace
+  }
+})
 parser_picker <- function(content_type, first_byte, filename = NULL, parsers = NULL) {
 
   # parse as json or a form
   if (length(content_type) == 0) {
     # fast default to json when first byte is 7b (ascii {)
-    if (first_byte == as.raw(123L)) {
+    if (looks_like_json(first_byte)) {
       return(parsers$alias$json)
     }
 
@@ -441,12 +448,14 @@ parser_feather <- function(...) {
 
 
 
-#' @describeIn parsers Octet stream parser. Will add a filename attribute if the filename exists
+#' @describeIn parsers Octet stream parser. Will add a filename attribute if the filename exists.
+#'   Returns a single item list where the value is the raw content and the key is the filename (if applicable).
 #' @export
 parser_octet <- function() {
   function(value, filename = NULL, ...) {
-    attr(value, "filename") <- filename
-    value
+    arg <- list(value)
+    names(arg) <- filename
+    return(arg)
   }
 }
 
