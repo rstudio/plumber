@@ -52,13 +52,14 @@ validate_api_spec__install_node_modules <- function() {
 #' This function is VERY experimental and may be altered, changed, or removed in the future.
 #'
 #' @param pr A Plumber API
+#' @param verbose Logical that determines if a "is valid" statement is displayed. Defaults to `TRUE`
 #' @export
 #' @examples
 #' \dontrun{
 #' pr <- plumb_api("plumber", "01-append")
 #' validate_api_spec(pr)
 #' }
-validate_api_spec <- function(pr) {
+validate_api_spec <- function(pr, verbose = TRUE) {
 
   validate_api_spec__install_node_modules()
 
@@ -93,5 +94,9 @@ validate_api_spec <- function(pr) {
     stop("Plumber OpenAPI Spec is not valid")
   }
 
-  "Plumber OAS is valid!"
+  if (isTRUE(verbose)) {
+    cat(crayon::green("\u2714"), crayon::silver(": Plumber OpenAPI Spec is valid"), "\n", sep = "")
+  }
+
+  invisible(TRUE)
 }

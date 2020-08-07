@@ -4,10 +4,12 @@
 \alias{validate_api_spec}
 \title{Validate OpenAPI Spec}
 \usage{
-validate_api_spec(pr)
+validate_api_spec(pr, verbose = TRUE)
 }
 \arguments{
 \item{pr}{A Plumber API}
+
+\item{verbose}{Logical that determines if a "is valid" statement is displayed. Defaults to \code{TRUE}}
 }
 \description{
 Validate an OpenAPI Spec using \href{https://github.com/APIDevTools/swagger-cli}{Swagger CLI} which calls \href{https://github.com/APIDevTools/swagger-parser}{Swagger Parser}.
