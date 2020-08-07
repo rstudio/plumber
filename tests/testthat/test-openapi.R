@@ -259,39 +259,13 @@ test_that("api kitchen sink", {
   # yarn add swagger-ui
 
   # yarn install
-  swagger_cli_path <- "../../node_modules/.bin/swagger-cli"
-  skip_if_not(file.exists(swagger_cli_path))
-  swagger_cli_path <- normalizePath(swagger_cli_path)
 
-  validate_spec <- function(pr) {
-    spec <- jsonlite::toJSON(pr$get_api_spec(), auto_unbox = TRUE)
-    tmpfile <- tempfile(fileext = ".json")
-    on.exit({
-      unlink(tmpfile)
-    })
-    cat(spec, file = tmpfile)
+  skip_if_not(nzchar(Sys.which("node")), "node not installed")
+  skip_if_not(nzchar(Sys.which("npm")), "`npm` system dep not installed")
 
-    output <- system2(
-      swagger_cli_path,
-      c(
-        "validate",
-        tmpfile
-      ),
-      stdout = TRUE,
-      stderr = TRUE
-    )
-
-    output <- paste0(output, collapse = "\n")
-
-    # using expect_equal vs a regex test to have a better error message
-    expect_equal(sub(tmpfile, "", output, fixed = TRUE), " is valid")
-  }
-
-  for_each_plumber_api(validate_spec)
+  for_each_plumber_api(validate_api_spec, verbose = FALSE)
 
   # TODO test more situations
-
-
 })
 
 test_that("multiple variations in function extract correct metadata", {

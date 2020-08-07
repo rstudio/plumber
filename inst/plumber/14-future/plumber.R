@@ -12,7 +12,7 @@ future::plan("multiprocess") # use all available cores
 # /future will not block /sync from being able to be loaded.
 
 
-#' @json(auto_unbox = TRUE)
+#' @serializer json list(auto_unbox = TRUE)
 #' @get /sync
 function() {
   # print route, time, and worker pid
@@ -20,7 +20,7 @@ function() {
 }
 
 #' @contentType list(type = "text/html")
-#' @json(auto_unbox = TRUE)
+#' @serializer json list(auto_unbox = TRUE)
 #' @get /future
 function() {
 
@@ -39,7 +39,7 @@ function() {
 
 # Originally by @antoine-sachet from https://github.com/rstudio/plumber/issues/389
 #' @get /divide
-#' @json(auto_unbox = TRUE)
+#' @serializer json list(auto_unbox = TRUE)
 #' @param a number
 #' @param b number
 function(a = NA, b = NA) {
@@ -55,7 +55,7 @@ function(a = NA, b = NA) {
 }
 
 #' @get /divide-catch
-#' @json(auto_unbox = TRUE)
+#' @serializer json list(auto_unbox = TRUE)
 #' @param a number
 #' @param b number
 function(a = NA, b = NA) {

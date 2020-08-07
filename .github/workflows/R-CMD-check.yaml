@@ -48,6 +48,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
       - uses: r-lib/actions/setup-r@master
         with:
           r-version: ${{ matrix.config.r }}

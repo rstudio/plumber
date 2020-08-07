@@ -68,6 +68,8 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 * Added `plumb_api()` for standardizing where to locate (`inst/plumber`) and how to run (`plumb_api(package, name)`) plumber apis inside an R package. To view the available Plumber APIs, call `available_apis()`. (#631)
 
+* Added `validate_api_spec()` to validate a Plumber API produces a valid OpenAPI Specification. (Experimental!) (#633)
+
 
 ### Minor new features and improvements
 

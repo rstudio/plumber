@@ -1,4 +1,4 @@
-for_each_plumber_api <- function(fn) {
+for_each_plumber_api <- function(fn, ...) {
   lapply(
     available_apis("plumber")$name,
     function(name) {
@@ -19,7 +19,7 @@ for_each_plumber_api <- function(fn) {
       expect_true(inherits(pr, "plumber"), paste0("plumb_api(\"", package, "\", \"", name, "\")"))
 
 
-      fn(pr)
+      fn(pr, ...)
     }
   )
 }

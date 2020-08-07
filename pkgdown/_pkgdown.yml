@@ -82,8 +82,7 @@ reference:
   - 'pr_set_api_spec'
   - 'pr_set_ui'
   - 'register_ui'
-- title: All functions
-  # desc: description here
+  - 'validate_api_spec'
 
 - title: POST Body and Query String Parsers
   contents:
