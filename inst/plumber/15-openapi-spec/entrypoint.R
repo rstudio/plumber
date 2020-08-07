@@ -5,7 +5,6 @@ openapi_func <- function(spec) {
   spec$paths[["/sum"]]$get$summary <- "Sum numbers"
   spec$paths[["/sum"]]$get$parameters <- list(list(
     "description" = "numbers",
-    # "required" = "true",
     "required" = TRUE,
     "in" = "query",
     "name" = "num",
