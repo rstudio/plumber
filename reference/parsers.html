@@ -249,7 +249,8 @@ trusted source. Do not accept <code>rds</code> files blindly.</p>
 This parser should be used when reading from a file is required.</p></li>
 <li><p><code>parser_rds</code>: RDS parser. See <code><a href='https://rdrr.io/r/base/readRDS.html'>readRDS()</a></code> for more details.</p></li>
 <li><p><code>parser_feather</code>: feather parser. See <code><a href='https://rdrr.io/pkg/feather/man/read_feather.html'>feather::read_feather()</a></code> for more details.</p></li>
-<li><p><code>parser_octet</code>: Octet stream parser. Will add a filename attribute if the filename exists</p></li>
+<li><p><code>parser_octet</code>: Octet stream parser. Will add a filename attribute if the filename exists.
+Returns a single item list where the value is the raw content and the key is the filename (if applicable).</p></li>
 <li><p><code>parser_multi</code>: Multi part parser. This parser will then parse each individual body with its respective parser</p></li>
 <li><p><code>parser_none</code>: No parser. Will not process the postBody.</p></li>
 </ul>

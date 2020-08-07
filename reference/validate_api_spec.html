@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return an attachment response — as_attachment • plumber</title>
+<title>Validate OpenAPI Spec — validate_api_spec • plumber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,9 +52,8 @@
 
 
 
-<meta property="og:title" content="Return an attachment response — as_attachment" />
-<meta property="og:description" content="This will set the appropriate fields in the Content-Disposition header value.
-To make sure the attachement is used, be sure your serializer eventually calls serializer_headers" />
+<meta property="og:title" content="Validate OpenAPI Spec — validate_api_spec" />
+<meta property="og:description" content="Validate an OpenAPI Spec using Swagger CLI which calls Swagger Parser." />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
 
 
@@ -171,49 +170,40 @@ To make sure the attachement is used, be sure your serializer eventually calls s
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return an attachment response</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/serializer.R'><code>R/serializer.R</code></a></small>
-    <div class="hidden name"><code>as_attachment.Rd</code></div>
+    <h1>Validate OpenAPI Spec</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/validate_api_spec.R'><code>R/validate_api_spec.R</code></a></small>
+    <div class="hidden name"><code>validate_api_spec.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This will set the appropriate fields in the <code>Content-Disposition</code> header value.
-To make sure the attachement is used, be sure your serializer eventually calls <code>serializer_headers</code></p>
+    <p>Validate an OpenAPI Spec using <a href='https://github.com/APIDevTools/swagger-cli'>Swagger CLI</a> which calls <a href='https://github.com/APIDevTools/swagger-parser'>Swagger Parser</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_attachment</span>(<span class='kw'>value</span>, filename = <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>validate_api_spec</span>(<span class='kw'>pr</span>, verbose = <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>value</th>
-      <td><p>Response value to be saved</p></td>
+      <th>pr</th>
+      <td><p>A Plumber API</p></td>
     </tr>
     <tr>
-      <th>filename</th>
-      <td><p>File name to use when saving the attachment.
-If no <code>filename</code> is provided, the <code>value</code> will be treated as a regular attachment</p></td>
+      <th>verbose</th>
+      <td><p>Logical that determines if a "is valid" statement is displayed. Defaults to <code>TRUE</code></p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Object with class <code>"plumber_attachment"</code></p>
+    <p>If the api is deemed invalid, an error will be thrown.</p>
+<p>This function is VERY experimental and may be altered, changed, or removed in the future.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># plumber.R</span>
-
-<span class='co'>#' @get /data</span>
-<span class='co'>#' @serializer csv</span>
-<span class='fu'>function</span>() {
-  <span class='co'># will cause the file to be saved as `iris.csv`, not `data` or `data.csv`</span>
-  <span class='fu'>as_attachment</span>(<span class='kw'>iris</span>, <span class='st'>"iris.csv"</span>)
-}</div><div class='output co'>#&gt; function() {
-#&gt;   # will cause the file to be saved as `iris.csv`, not `data` or `data.csv`
-#&gt;   as_attachment(iris, "iris.csv")
-#&gt; }
-#&gt; &lt;environment: 0x7fd6261a0be8&gt;</div></pre>
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='kw'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='plumb_api.html'>plumb_api</a></span>(<span class='st'>"plumber"</span>, <span class='st'>"01-append"</span>)
+<span class='fu'>validate_api_spec</span>(<span class='kw'>pr</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
