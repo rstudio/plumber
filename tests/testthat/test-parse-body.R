@@ -2,6 +2,7 @@ context("POST body")
 
 test_that("JSON is consumed on POST", {
   expect_equal(parse_body('{"a":"1"}', content_type = NULL, parsers = make_parser("json")), list(a = "1"))
+  expect_equal(parse_body('[1,2,3]', content_type = NULL, parsers = make_parser("json")), 1:3)
 })
 
 test_that("ending in `==` does not produce a unexpected key", {
