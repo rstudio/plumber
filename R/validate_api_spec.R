@@ -36,7 +36,7 @@ validate_api_spec__install_node_modules <- function() {
   if (status != 0) {
       # delete the folder if it didn't work
       unlink(validate_api_spec_folder(), recursive = TRUE)
-      stop("Could not install npm dependencies to validate OAS api")
+      stop("Could not install npm dependencies required for plumber::validate_api_spec()")
   }
 
   invisible(TRUE)
@@ -90,7 +90,7 @@ validate_api_spec <- function(pr) {
   is_equal <- sub(tmpfile, "", output, fixed = TRUE) == " is valid"
   if (!isTRUE(is_equal)) {
     cat("Plumber Spec: \n", as.character(spec), "\nOutput:\n", output)
-    stop("Plumber OAS is not valid")
+    stop("Plumber OpenAPI Spec is not valid")
   }
 
   "Plumber OAS is valid!"
