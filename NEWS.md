@@ -87,7 +87,7 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 * Added yaml support, serializer and parser. (@meztez, #556)
 
-* Added parsers: `parser_csv()`, `parser_json()`, `parser_multi()`, `parser_octet()`, `parser_query()`, `parser_rds()`, `parser_text()`, `parser_tsv()`, `parser_yaml()`, `parser_none()`, and pseudo `"all"` (#584)
+* Added parsers: `parser_csv()`, `parser_json()`, `parser_multi()`, `parser_octet()`, `parser_form()`, `parser_rds()`, `parser_text()`, `parser_tsv()`, `parser_yaml()`, `parser_none()`, and pseudo `"all"` (#584)
 
 * Added `serializer_csv()` (@pachamaltese, #520)
 
@@ -144,6 +144,8 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 * Bumped version of httpuv to >= 1.4.5.9000 to address an unexpected segfault (@shapenaji, #289)
 
 * Date response header is now supplied by httpuv and not plumber. Fixes non standard date response header issues when using different locales. (@shrektan, #319, #380)
+
+* An error will be thrown if multiple arguments are matched to an Plumber Endpoint route definition.  Users should define their route to only use `req`, `res`, and/or `...` to avoid multiple matchings. (#637)
 
 
 plumber 0.4.6
