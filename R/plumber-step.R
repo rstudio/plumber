@@ -101,16 +101,16 @@ PlumberStep <- R6Class(
 )
 
 # @param positional list with names where they were provided.
-getRelevantArgs <- function(args, plumberExpression){
-  if (length(args) == 0){
+getRelevantArgs <- function(args, plumberExpression) {
+  if (length(args) == 0) {
     unnamedArgs <- NULL
-  } else if (is.null(names(args))){
+  } else if (is.null(names(args))) {
     unnamedArgs <- 1:length(args)
   } else {
     unnamedArgs <- which(names(args) == "")
   }
 
-  if (length(unnamedArgs) > 0 ){
+  if (length(unnamedArgs) > 0 ) {
     stop("Can't call a Plumber function with unnammed arguments. Missing names for argument(s) #",
          paste0(unnamedArgs, collapse=", "),
          ". Names of argument list was: \"",
@@ -120,9 +120,24 @@ getRelevantArgs <- function(args, plumberExpression){
   # Extract the names of the arguments this function supports.
   fargs <- names(formals(eval(plumberExpression)))
 
-  if (!"..." %in% fargs){
+  if (!"..." %in% fargs) {
     # Use the named arguments that match, drop the rest.
     args <- args[names(args) %in% fargs]
+  }
+
+  # for all args, check if they are duplicated
+  arg_names <- names(args)
+  matched_arg_names <- arg_names[arg_names %in% fargs]
+  duplicated_matched_arg_names <- duplicated(matched_arg_names, fromLast = TRUE)
+
+  if (any(duplicated_matched_arg_names)) {
+    stop(
+      "Can't call a Plumber function with duplicated matching formal arguments: ",
+      paste0(matched_arg_names[duplicated_matched_arg_names], collapse = ", "),
+      "\nPlumber recommends that",
+      "\nthe route be shaped like `function(req, res, ...)`",
+      "\nor access `req$args` directly, rather than by name, using a function shape like `function(req, res)`."
+    )
   }
 
   args
