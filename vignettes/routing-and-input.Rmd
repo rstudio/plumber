@@ -231,20 +231,21 @@ Name | Example | Description
 `cookies` | `list(cook="abc")` | A list of the cookies as described in [Cookies](#read-cookies)
 `httpuv.version` | `"1.3.3"` | The version of the underlying [`httpuv` package](https://github.com/rstudio/httpuv)
 `PATH_INFO` | `"/"` | The path of the incoming HTTP request
-`postBody` | `"a=1&b=2"` | The contents of the body of the request. Despite the name, it is available for any HTTP method.
-`postBodyRaw` | `charToRaw("a=1&b=2")` | The `raw()`, unparsed contents of the body of the request.
+`postBody` | `"a=1&b=2"` | The text contents of the body of the request. Despite the name, it is available for any HTTP method. To disable this parsing, see `?options_plumber`.
+`postBodyRaw` | `charToRaw("a=1&b=2")` | The `raw()`, unparsed contents of the body of the request
+`postBodyParsed` | `list(a=1,b=2)` | The parsed form of `postBodyRaw`
 `QUERY_STRING` | `"?a=123&b=abc"` | The query-string portion of the HTTP request
 `REMOTE_ADDR` | `"1.2.3.4"` | The IP address of the client making the request
 `REMOTE_PORT` | `"62108"` | The client port from which the request originated
 `REQUEST_METHOD` | `"GET"` | The method used for this HTTP request
 `rook.errors` | N/A | See [Rook docs]( https://github.com/jeffreyhorner/Rook/blob/a5e45f751/README.md#the-input-stream)
 `rook.input` | N/A | See [Rook docs]( https://github.com/jeffreyhorner/Rook/blob/a5e45f751/README.md#the-error-stream)
-`rook.url_scheme` | `"http"` | The "scheme" (typically `http` or `https`).
+`rook.url_scheme` | `"http"` | The "scheme" (typically `http` or `https`)
 `rook.version` | `"1.1-0"` | The version of the rook specification which this environment satisfies
 `SCRIPT_NAME` | `""` | Unused
 `SERVER_NAME` | `"127.0.0.1"` | The host portion of the incoming request. You may favor `HTTP_HOST`, if available.
 `SERVER_PORT` | `"8000"` | The target port for the request
-`HTTP_*` | `"HTTP_USER_AGENT"` | Entries for all of the HTTP headers sent with this request.
+`HTTP_*` | `"HTTP_USER_AGENT"` | Entries for all of the HTTP headers sent with this request
 
 ### Query Strings {#query-strings}
 
@@ -302,7 +303,7 @@ Alternatively, `curl --data '{"id":123, "name": "Jennifer"}' "http://localhost:8
 
 As demonstrated above, the raw request body is made available as `req$postBody` and `req$postBodyRaw`.
 
-If multiple parameters are matched to the endpoint formals, an error will be thrown. Due to the nature of how multiple values can be matched to the same argument, it is recommended that `POST` enpoints have a function definition that only accepts the formals `req`, `res`, and `...`. If the endpoing arguments are to be processed like a list, they are available at `req$args`, they will  are to be The endpoint should then determine how to handle the
+If multiple parameters are matched to the endpoint formals, an error will be thrown. Due to the nature of how multiple values can be matched to the same argument, it is recommended that `POST` enpoints have a function definition that only accepts the formals `req`, `res`, and `...`. If the endpoing arguments are to be processed like a list, they are available at `req$postBodyParsed`, with all arguments at `req$args`. Do try to avoid using `req` and `res` as path or query string names as Plumber's `req` and `res` will overwrite any values present in `req$args`.
 
 ### Cookies {#read-cookies}
 

@@ -141,7 +141,7 @@ getRelevantArgs <- function(args, plumberExpression) {
       paste0(matched_arg_names[duplicated_matched_arg_names], collapse = ", "),
       "\nPlumber recommends that",
       "\nthe route be shaped like `function(req, res, ...)`",
-      "\nor access `req$args` directly, rather than by name, using a function shape like `function(req, res)`."
+      "\nor access `req$args` or `req$postBodyArgs` directly, rather than by name, using a function shape like `function(req, res)`."
     )
   }
 

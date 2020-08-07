@@ -651,6 +651,7 @@ plumber <- R6Class(
       if (!is.null(req$args)) {
         args <- req$args
       }
+      # using `$` will override the 1st occurance of req,res
       args$res <- res
       args$req <- req
 
@@ -673,10 +674,11 @@ plumber <- R6Class(
             } else {
               private$default_parsers
             }
+          req$postBodyParsed <- postbody_parser(req, parsers)
           req$args <- c(
             h$getPathParams(path),
             req$args,
-            postbody_parser(req, parsers)
+            req$postBodyParsed
           )
           return(do.call(h$exec, req$args))
         }
