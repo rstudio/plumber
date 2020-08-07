@@ -14,7 +14,7 @@ return_inputs
 return_inputs
 
 #* @post /mixed
-#* @parser query
+#* @parser form
 #* @parser json
 return_inputs
 

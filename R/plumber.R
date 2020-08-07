@@ -150,7 +150,7 @@ plumber <- R6Class(
       private$maxSize <- getOption('plumber.maxRequestSize', 0) #0  Unlimited
       self$setSerializer(serializer_json())
       # Default parsers to maintain legacy features
-      self$set_parsers(c("json", "query", "text", "octet", "multi"))
+      self$set_parsers(c("json", "form", "text", "octet", "multi"))
       self$setErrorHandler(defaultErrorHandler())
       self$set404Handler(default404Handler)
       self$set_ui()
@@ -828,7 +828,7 @@ plumber <- R6Class(
       private$default_serializer <- serializer
     },
     #' @description Sets the default parsers of the router.
-    #' @details Initialized to `c("json", "query", "text", "octet", "multi")`
+    #' @details Initialized to `c("json", "form", "text", "octet", "multi")`
     #' @template pr_set_parsers__parsers
     set_parsers = function(parsers) {
       private$default_parsers <- make_parser(parsers)
