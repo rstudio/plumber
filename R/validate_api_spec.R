@@ -1,9 +1,9 @@
 
 #' @include globals.R
-.globals$validate_api_folder <- file.path(tempdir(), "plumber_validate")
+.globals$validate_api_spec_folder <- file.path(tempdir(), "plumber_validate")
 
 
-validate_api__install_node_modules <- function() {
+validate_api_spec__install_node_modules <- function() {
 
   if (!nzchar(Sys.which("node"))) {
     stop("node not installed")
@@ -12,19 +12,19 @@ validate_api__install_node_modules <- function() {
     stop("npm not installed")
   }
 
-  if (dir.exists(.globals$validate_api_folder)) {
+  if (dir.exists(.globals$validate_api_spec_folder)) {
     # assume npm install has completed
     return(invisible(TRUE))
   }
 
-  dir.create(.globals$validate_api_folder, recursive = TRUE, showWarnings = FALSE)
+  dir.create(.globals$validate_api_spec_folder, recursive = TRUE, showWarnings = FALSE)
 
   file.copy(
-    system.file(file.path("validate_api", "package.json"), package = "plumber"),
-    file.path(.globals$validate_api_folder, "package.json")
+    system.file(file.path("validate_api_spec", "package.json"), package = "plumber"),
+    file.path(.globals$validate_api_spec_folder, "package.json")
   )
 
-  old_wd <- setwd(.globals$validate_api_folder)
+  old_wd <- setwd(.globals$validate_api_spec_folder)
   on.exit({
     setwd(old_wd)
   }, add = TRUE)
@@ -33,7 +33,7 @@ validate_api__install_node_modules <- function() {
   status <- system2("npm", c("install", "--loglevel", "warn"), stdout = FALSE)
   if (status != 0) {
       # delete the folder if it didn't work
-      unlink(.globals$validate_api_folder, recursive = TRUE)
+      unlink(.globals$validate_api_spec_folder, recursive = TRUE)
       stop("Could not install npm dependencies to validate OAS api")
   }
 
@@ -54,14 +54,14 @@ validate_api__install_node_modules <- function() {
 #' @examples
 #' \dontrun{
 #' pr <- plumb_api("plumber", "01-append")
-#' validate_api(pr)
+#' validate_api_spec(pr)
 #' }
-validate_api <- function(pr) {
+validate_api_spec <- function(pr) {
 
-  validate_api__install_node_modules()
+  validate_api_spec__install_node_modules()
 
   spec <- jsonlite::toJSON(pr$get_api_spec(), auto_unbox = TRUE, pretty = TRUE)
-  old_wd <- setwd(.globals$validate_api_folder)
+  old_wd <- setwd(.globals$validate_api_spec_folder)
   on.exit({
     setwd(old_wd)
   }, add = TRUE)

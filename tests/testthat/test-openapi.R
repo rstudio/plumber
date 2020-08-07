@@ -263,7 +263,7 @@ test_that("api kitchen sink", {
   skip_if_not(nzchar(Sys.which("node")), "node not installed")
   skip_if_not(nzchar(Sys.which("yarn")), "`yarn` system dep not installed")
 
-  for_each_plumber_api(validate_api)
+  for_each_plumber_api(validate_api_spec)
 
   # TODO test more situations
 })
