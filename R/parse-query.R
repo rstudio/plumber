@@ -3,6 +3,7 @@ queryStringFilter <- function(req){
   if (is.null(handled) || handled != TRUE) {
     qs <- req$QUERY_STRING
     args <- parseQS(qs)
+    req$argsQuery <- args
     req$args <- c(req$args, args)
     req$.internal$queryStringHandled <- TRUE
   }

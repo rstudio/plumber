@@ -233,7 +233,10 @@ Name | Example | Description
 `PATH_INFO` | `"/"` | The path of the incoming HTTP request
 `postBody` | `"a=1&b=2"` | The text contents of the body of the request. Despite the name, it is available for any HTTP method. To disable this parsing, see `?options_plumber`.
 `postBodyRaw` | `charToRaw("a=1&b=2")` | The `raw()`, unparsed contents of the body of the request
-`postBodyParsed` | `list(a=1,b=2)` | The parsed form of `postBodyRaw`
+`args` | `list(a=1,b=2)` | In a route, the combined arguments of `list(req = req, res = res)`, `argsPath`, `argsPostBody`, and `argsQuery`. In a filter, only contains `argsQuery`.
+`argsPath` | `list(a=1,b=2)` | The values of the path arguments.
+`argsQuery` | `list(a=1,b=2)` | The parsed query string output.
+`argsPostBody` | `list(a=1,b=2)` | The parsed post boy output.
 `QUERY_STRING` | `"?a=123&b=abc"` | The query-string portion of the HTTP request
 `REMOTE_ADDR` | `"1.2.3.4"` | The IP address of the client making the request
 `REMOTE_PORT` | `"62108"` | The client port from which the request originated
@@ -303,7 +306,7 @@ Alternatively, `curl --data '{"id":123, "name": "Jennifer"}' "http://localhost:8
 
 As demonstrated above, the raw request body is made available as `req$postBody` and `req$postBodyRaw`.
 
-If multiple parameters are matched to the endpoint formals, an error will be thrown. Due to the nature of how multiple values can be matched to the same argument, it is recommended that `POST` enpoints have a function definition that only accepts the formals `req`, `res`, and `...`. If the endpoing arguments are to be processed like a list, they are available at `req$postBodyParsed`, with all arguments at `req$args`. Do try to avoid using `req` and `res` as path or query string names as Plumber's `req` and `res` will overwrite any values present in `req$args`.
+If multiple parameters are matched to the endpoint formals, an error will be thrown. Due to the nature of how multiple values can be matched to the same argument, it is recommended that `POST` enpoints have a function definition that only accepts the formals `req`, `res`, and `...`. If the endpoint arguments are to be processed like a list, they are available at `req$argsPostBody`, with all arguments at `req$args`. `req$args` is a combination of `list(req = req, res = res)`, `req$argsPath`, `req$argsPostBody`, and `req$argsQuery`.
 
 ### Cookies {#read-cookies}
 
