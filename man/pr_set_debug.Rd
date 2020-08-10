@@ -18,6 +18,9 @@ The Plumber router with the new debug setting.
 To hide any error messages in production, set the debug value to \code{FALSE}.
 The \code{debug} value is enabled by default for \code{\link[=interactive]{interactive()}} sessions.
 }
+\details{
+Plumber sets the value to \code{options("plumber.debug")} while \code{\link[=pr_run]{pr_run()}}ing the Plumber router
+}
 \examples{
 \dontrun{
 # Will contain the original error message

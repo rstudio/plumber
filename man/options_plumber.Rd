@@ -10,7 +10,6 @@ options_plumber(
   apiPort = getOption("plumber.apiPort"),
   apiPath = getOption("plumber.apiPath"),
   apiURL = getOption("plumber.apiURL"),
-  debug = getOption("plumber.debug"),
   maxRequestSize = getOption("plumber.maxRequestSize"),
   postBody = getOption("plumber.postBody"),
   port = getOption("plumber.port"),
@@ -20,29 +19,7 @@ options_plumber(
 )
 }
 \arguments{
-\item{apiScheme}{see details}
-
-\item{apiHost}{see details}
-
-\item{apiPort}{see details}
-
-\item{apiPath}{see details}
-
-\item{apiURL}{see details}
-
-\item{debug}{see details}
-
-\item{maxRequestSize}{see details}
-
-\item{postBody}{see details}
-
-\item{port}{see details}
-
-\item{sharedSecret}{see details}
-
-\item{ui}{see details}
-
-\item{ui.callback}{see details}
+\item{apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, postBody, port, sharedSecret, ui, ui.callback}{See details}
 }
 \value{
 The complete, prior set of \code{\link[=options]{options()}} values.
@@ -69,8 +46,6 @@ OpenAPI Specification. Defaults to \code{port} defined by \code{run} method, or 
 when used outside a running router}
 \item{\code{plumber.apiPath}}{Path used to build UI url and server url for
 OpenAPI Specification. Defaults to an empty string}
-\item{\code{plumber.debug}}{Provides more insight into your API errors. Alternatively,
-use parameter \code{debug} of plumber router \code{run} method. Defaults to \code{FALSE}}
 \item{\code{plumber.maxRequestSize}}{Maximum length in bytes of request body. Body larger
 than maximum are rejected with http error 413. \code{0} means unlimited size. Defaults to \code{0}}
 \item{\code{plumber.postBody}}{Copy post body content to \code{req$postBody} using system encoding.

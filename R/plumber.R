@@ -913,6 +913,8 @@ plumber <- R6Class(
     },
     #' @description Set debug value to include error messages
     #'
+    #' Sets the value to `options("plumber.debug")` while `$run()`ing the Plumber router
+    #'
     #' See also: [pr_set_debug()]
     #' @param debug `TRUE` provides more insight into your API errors.
     set_debug = function(debug = interactive()) {

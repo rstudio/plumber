@@ -759,6 +759,8 @@ See also: \code{\link[=pr_set_ui_callback]{pr_set_ui_callback()}}
 \subsection{Method \code{set_debug()}}{
 Set debug value to include error messages
 
+Sets the value to \code{options("plumber.debug")} while \verb{$run()}ing the Plumber router
+
 See also: \code{\link[=pr_set_debug]{pr_set_debug()}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$set_debug(debug = interactive())}\if{html}{\out{</div>}}
