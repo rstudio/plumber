@@ -40,6 +40,11 @@
 #'   Defaults to \code{TRUE}.
 #' @param secure Boolean that adds the \code{Secure} cookie flag.  This should be set
 #'   when the route is eventually delivered over \href{https://en.wikipedia.org/wiki/HTTPS}{HTTPS}.
+#' @param sameSite A character specifying the SameSite policy to attach to the cookie.
+#'   If specified, one of the following values should be given: "Strict", "Lax", or "None".
+#'   If "None" is specified, then the \code{secure} flag MUST also be set for the modern browsers to
+#'   accept the cookie.
+#'   If not specified or a non-character is given, no SameSite policy is attached to the cookie.
 #' @export
 #' @seealso \itemize{
 #' \item \href{https://github.com/jeroen/sodium}{'sodium'}: R bindings to 'libsodium'
@@ -95,7 +100,8 @@ sessionCookie <- function(
   name = "plumber",
   expiration = FALSE,
   http = TRUE,
-  secure = FALSE
+  secure = FALSE,
+  sameSite = FALSE
 ) {
 
   if (missing(key)) {
@@ -129,13 +135,13 @@ sessionCookie <- function(
       session <- req$session
       # save session in a cookie
       if (!is.null(session)) {
-        res$setCookie(name, encodeCookie(session, key), expiration = expiration, http = http, secure = secure)
+        res$setCookie(name, encodeCookie(session, key), expiration = expiration, http = http, secure = secure, sameSite = sameSite)
       } else {
         # session is null
         if (!is.null(req$cookies[[name]])) {
           # no session to save, but had session to parse
           # remove cookie session cookie
-          res$removeCookie(name, "", expiration = expiration, http = http, secure = secure)
+          res$removeCookie(name, "", expiration = expiration, http = http, secure = secure, sameSite = sameSite)
         }
       }
 
