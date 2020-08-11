@@ -38,7 +38,7 @@ when the route is eventually delivered over \href{https://en.wikipedia.org/wiki/
 \item{sameSite}{A character specifying the SameSite policy to attach to the cookie.
 If specified, one of the following values should be given: "Strict", "Lax", or "None".
 If "None" is specified, then the \code{secure} flag MUST also be set for the modern browsers to
-accept the cookie.
+accept the cookie. An error will be returned if \code{sameSite = "None"} and \code{secure = FALSE}.
 If not specified or a non-character is given, no SameSite policy is attached to the cookie.}
 }
 \description{
