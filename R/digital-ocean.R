@@ -11,6 +11,7 @@ checkAnalogSea <- function() {
 
   suggests <- read.dcf(system.file("DESCRIPTION", package = "plumber"))[1, "Suggests"]
   pkgs <- strsplit(suggests, ",")[[1]]
+  pkgs <- trimws(pkgs)
   analogsea_version <- gsub("[^.0-9]", "", pkgs[grepl("^analogsea ", pkgs)])
   if (utils::packageVersion("analogsea") < package_version(analogsea_version)) {
     stop("The analogsea package is not high enough. Please update `analogsea`.",
