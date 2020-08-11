@@ -115,10 +115,12 @@ sessionCookie <- function(
   # sanity check the sameSite and secure arguments
   if (is.character(sameSite)) {
     sameSite <- match.arg(sameSite, c("Strict", "Lax", "None"))
+  } else {
+    sameSite <- FALSE
   }
   if (identical(sameSite, "None")) {
     if (!secure) {
-      stop("You must set secure = TRUE when sameSite is set to 'None'. See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie")
+      stop("You must set `secure = TRUE` when `sameSite = \"None\"`. See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie")
     }
   }
 
