@@ -25,8 +25,7 @@ test_that("support files with multibytes", {
 
       r <- plumber$new(test_path("files/multibytes.R"))
       req <- make_req("GET", "/echo")
-      res <- PlumberResponse$new()
-      out <- r$serve(req, res)$body
+      out <- r$call(req)$body
 
       # ?Quotes
       # `Unicode escapes can be used to enter Unicode characters not in the current locale's

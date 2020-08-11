@@ -99,8 +99,6 @@ pr_set_error <- function(pr, fun) {
 #' To hide any error messages in production, set the debug value to `FALSE`.
 #' The `debug` value is enabled by default for [interactive()] sessions.
 #'
-#' Plumber sets the value to `options("plumber.debug")` while [pr_run()]ing the Plumber router
-#'
 #' @template param_pr
 #' @param debug `TRUE` provides more insight into your API errors.
 #' @return The Plumber router with the new debug setting.

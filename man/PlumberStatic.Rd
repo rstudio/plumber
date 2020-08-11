@@ -33,6 +33,7 @@ Creates a router that is backed by a directory of files on disk.
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="call">}\href{../../plumber/html/plumber.html#method-call}{\code{plumber::plumber$call()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="filter">}\href{../../plumber/html/plumber.html#method-filter}{\code{plumber::plumber$filter()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="get_api_spec">}\href{../../plumber/html/plumber.html#method-get_api_spec}{\code{plumber::plumber$get_api_spec()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="get_debug">}\href{../../plumber/html/plumber.html#method-get_debug}{\code{plumber::plumber$get_debug()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="handle">}\href{../../plumber/html/plumber.html#method-handle}{\code{plumber::plumber$handle()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="mount">}\href{../../plumber/html/plumber.html#method-mount}{\code{plumber::plumber$mount()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="onHeaders">}\href{../../plumber/html/plumber.html#method-onHeaders}{\code{plumber::plumber$onHeaders()}}\out{</span>}

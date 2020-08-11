@@ -133,6 +133,7 @@ pr$setErrorHandler(function(req, res, err) {
 \item \href{#method-set_ui}{\code{plumber$set_ui()}}
 \item \href{#method-set_ui_callback}{\code{plumber$set_ui_callback()}}
 \item \href{#method-set_debug}{\code{plumber$set_debug()}}
+\item \href{#method-get_debug}{\code{plumber$get_debug()}}
 \item \href{#method-filter}{\code{plumber$filter()}}
 \item \href{#method-set_api_spec}{\code{plumber$set_api_spec()}}
 \item \href{#method-get_api_spec}{\code{plumber$get_api_spec()}}
@@ -759,9 +760,7 @@ See also: \code{\link[=pr_set_ui_callback]{pr_set_ui_callback()}}
 \subsection{Method \code{set_debug()}}{
 Set debug value to include error messages
 
-Sets the value to \code{options("plumber.debug")} while \verb{$run()}ing the Plumber router
-
-See also: \code{\link[=pr_set_debug]{pr_set_debug()}}
+See also: \verb{$get_debug()} and \code{\link[=pr_set_debug]{pr_set_debug()}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{plumber$set_debug(debug = interactive())}\if{html}{\out{</div>}}
 }
@@ -773,6 +772,18 @@ See also: \code{\link[=pr_set_debug]{pr_set_debug()}}
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_debug"></a>}}
+\if{latex}{\out{\hypertarget{method-get_debug}{}}}
+\subsection{Method \code{get_debug()}}{
+Retrieve the \code{debug} value.
+
+See also: \verb{$get_debug()} and \code{\link[=pr_set_debug]{pr_set_debug()}}
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{plumber$get_debug()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-filter"></a>}}

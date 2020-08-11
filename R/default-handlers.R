@@ -27,7 +27,7 @@ defaultErrorHandler <- function(){
 
 
     # Don't overly leak data unless they opt-in
-    if (getOption("plumber.debug", FALSE)) {
+    if (is.function(req$pr$get_debug) && isTRUE(req$pr$get_debug())) {
       li["message"] <- as.character(err)
     }
 

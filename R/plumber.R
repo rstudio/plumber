@@ -257,10 +257,6 @@ plumber <- R6Class(
 
       message("Running plumber API at ", urlHost(host = host, port = port, changeHostLocation = FALSE))
 
-      priorDebug <- getOption("plumber.debug")
-      on.exit({ options("plumber.debug" = priorDebug) })
-      options("plumber.debug" = private$debug)
-
       # Set and restore the wd to make it appear that the proc is running local to the file's definition.
       if (!is.null(private$filename)) {
         old_wd <- setwd(dirname(private$filename))
@@ -913,13 +909,17 @@ plumber <- R6Class(
     },
     #' @description Set debug value to include error messages
     #'
-    #' Sets the value to `options("plumber.debug")` while `$run()`ing the Plumber router
-    #'
-    #' See also: [pr_set_debug()]
+    #' See also: `$get_debug()` and [pr_set_debug()]
     #' @param debug `TRUE` provides more insight into your API errors.
     set_debug = function(debug = interactive()) {
       stopifnot(length(debug) == 1)
       private$debug <- isTRUE(debug)
+    },
+    #' @description Retrieve the `debug` value.
+    #'
+    #' See also: `$get_debug()` and [pr_set_debug()]
+    get_debug = function() {
+      private$debug
     },
     #' @description Add a filter to plumber router
     #'
