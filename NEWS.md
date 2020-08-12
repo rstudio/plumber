@@ -34,6 +34,8 @@ plumber 1.0.0
 
 * R repository modified to `focal-cran40` using Ubuntu 20.04 LTS for digital ocean provisioning (@meztez, #529)
 
+* `options(plumber.debug)` is not set anymore when running the plumber application. Instead retrieve the debug value using `$get_debug()` on the Plumber router directly. Ex: `function(req, res) { req$pr$get_debug() }`. (#639)
+
 ### Deprecations
 
 * Shorthand serializers are now deprecated. `@html`, `@json`, `@png`, `@jpeg`, `@svg` should be replaced with the `@serializer` syntax. Ex: `@serializer html` or `@serializer jpeg` (#630)
@@ -72,6 +74,8 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 
 ### Minor new features and improvements
+
+* Added support for the `SameSite` Cookie attribute. (@chris-dudley, #640)
 
 * When calling `include_file()`, the `content_type` is automatically inferred from the file extension if `content_type` is not provided. (#631)
 

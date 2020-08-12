@@ -18,8 +18,6 @@
 #' when used outside a running router}
 #' \item{`plumber.apiPath`}{Path used to build UI url and server url for
 #' OpenAPI Specification. Defaults to an empty string}
-#' \item{`plumber.debug`}{Provides more insight into your API errors. Alternatively,
-#' use parameter `debug` of plumber router `run` method. Defaults to `FALSE`}
 #' \item{`plumber.maxRequestSize`}{Maximum length in bytes of request body. Body larger
 #' than maximum are rejected with http error 413. `0` means unlimited size. Defaults to `0`}
 #' \item{`plumber.postBody`}{Copy post body content to `req$postBody` using system encoding.
@@ -36,18 +34,7 @@
 #' by RStudio to open UI when API is ran for the editor. Defaults to option `plumber.swagger.url`}
 #' }
 #'
-#' @param apiScheme see details
-#' @param apiHost see details
-#' @param apiPort see details
-#' @param apiPath see details
-#' @param apiURL see details
-#' @param debug see details
-#' @param maxRequestSize see details
-#' @param postBody see details
-#' @param port see details
-#' @param sharedSecret see details
-#' @param ui see details
-#' @param ui.callback see details
+#' @param apiScheme,apiHost,apiPort,apiPath,apiURL,maxRequestSize,postBody,port,sharedSecret,ui,ui.callback See details
 #' @return
 #' The complete, prior set of [options()] values.
 #' If a particular parameter is not supplied, it will return the current value.
@@ -59,7 +46,6 @@ options_plumber <- function(
   apiPort              = getOption("plumber.apiPort"),
   apiPath              = getOption("plumber.apiPath"),
   apiURL               = getOption("plumber.apiURL"),
-  debug                = getOption("plumber.debug"),
   maxRequestSize       = getOption("plumber.maxRequestSize"),
   postBody             = getOption("plumber.postBody"),
   port                 = getOption("plumber.port"),
@@ -73,7 +59,6 @@ options_plumber <- function(
     plumber.apiPort = apiPort,
     plumber.apiPath = apiPath,
     plumber.apiURL = apiURL,
-    plumber.debug = debug,
     plumber.maxRequestSize = maxRequestSize,
     plumber.postBody = postBody,
     plumber.port = port,

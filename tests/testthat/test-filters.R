@@ -10,10 +10,7 @@ test_that("Filters work", {
 
 test_that("Filters can update req$args", {
   r <- plumber$new(test_path("files/filters.R"))
-
-  req <- make_req("GET", "/")
-  res <- PlumberResponse$new()
-  expect_equal(r$serve(req, res)$body, jsonlite::toJSON(23))
+  expect_equal(r$call(make_req("GET", "/"))$body, jsonlite::toJSON(23))
 })
 
 test_that("Redundant filters fail", {
@@ -33,9 +30,8 @@ test_that("Filter and assets fails", {
 })
 
 test_that("Terminal filters indeed terminate", {
-  res <- PlumberResponse$new()
   r <- plumber$new(test_path("files/terminal-filter.R"))
-  expect_equal(r$route(make_req("GET", "/"), res), 1)
+  expect_equal(r$call(make_req("GET", "/"))$body, jsonlite::toJSON(1))
 })
 
 test_that("complete addFilter works", {

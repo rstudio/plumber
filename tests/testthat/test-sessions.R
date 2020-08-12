@@ -145,3 +145,37 @@ test_that("invalid cookies/JSON are handled", {
   })
   expect_equal(res$body, jsonlite::toJSON("no session"))
 })
+
+test_that("cookie attributes are set", {
+  skip_if_no_cookie_support()
+
+  r <- plumber$new()
+  expr <- expression(function(req, res){ req$session <- list(abc = 1234); TRUE })
+
+  r$handle("GET", "/", expr)
+
+  key <- randomCookieKey()
+  sc <- sessionCookie(
+    key,
+    name = "plcook",
+    expiration = 10,
+    http = TRUE,
+    secure = TRUE,
+    sameSite = "None"
+  )
+
+  r$registerHooks(sc)
+
+  res <- PlumberResponse$new()
+  r$serve(make_req_cookie("GET", "/"), res)
+
+  cook <- res$headers[["Set-Cookie"]]
+  expect_match(cook, "^plcook")
+  expect_match(cook, "Expires=[^;]+(?:;|$)")
+  expect_match(cook, "Max-Age=\\s*\\d+(?:;|$)")
+  expect_match(cook, "HttpOnly(?:;|$)")
+  expect_match(cook, "Secure(?:;|$)")
+  expect_match(cook, "SameSite=None(?:;|$)")
+  cook <- parseCookies(cook)$plcook
+  expect_equal(decodeCookie(cook, asCookieKey(key)), list(abc = 1234))
+})
