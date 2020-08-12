@@ -237,7 +237,7 @@ test_that("hooks can be registered", {
   pr$registerHook("preserialize", function(){ events <<- c(events, "preserialize") })
   pr$registerHook("postserialize", function(){ events <<- c(events, "postserialize") })
 
-  pr$serve(make_req("GET", "/"), PlumberResponse$new())
+  pr$call(make_req("GET", "/"))
   expect_equal(events, c("preroute", "exec", "postroute", "preserialize", "postserialize"))
 })
 
@@ -251,7 +251,7 @@ test_that("preroute hook gets the right data", {
     expect_equal(rqst, req)
     expect_true(is.environment(data))
   })
-  pr$serve(rqst, PlumberResponse$new())
+  pr$call(rqst)
 })
 
 test_that("postroute hook gets the right data and can modify", {
@@ -265,7 +265,7 @@ test_that("postroute hook gets the right data and can modify", {
     expect_equal(value, 123)
     "new val"
   })
-  res <- pr$serve(make_req("GET", "/abc"), PlumberResponse$new())
+  res <- pr$call(make_req("GET", "/abc"))
   expect_equal(as.character(res$body), '["new val"]')
 })
 
@@ -280,7 +280,7 @@ test_that("preserialize hook gets the right data and can modify", {
     expect_equal(value, 123)
     "new val"
   })
-  res <- pr$serve(make_req("GET", "/abc"), PlumberResponse$new())
+  res <- pr$call(make_req("GET", "/abc"))
   expect_equal(as.character(res$body), '["new val"]')
 })
 
@@ -296,7 +296,7 @@ test_that("postserialize hook gets the right data and can modify", {
     value$body <- "new val"
     value
   })
-  res <- pr$serve(make_req("GET", "/abc"), PlumberResponse$new())
+  res <- pr$call(make_req("GET", "/abc"))
   expect_equal(as.character(res$body), 'new val')
 })
 
@@ -310,16 +310,14 @@ test_that("handle invokes correctly", {
   pr$handle("GET", "/trailslash", function(){ "getter" })
   pr$handle("POST", "/trailslashp/", function(){ "poster" })
 
-  expect_equal(pr$route(make_req("GET", "/trailslash"), PlumberResponse$new()), "getter")
-  res <- PlumberResponse$new()
-  pr$route(make_req("GET", "/trailslash/"), res) # With trailing slash
+  expect_equal(pr$call(make_req("GET", "/trailslash"))$body, jsonlite::toJSON("getter"))
+  res <- pr$call(make_req("GET", "/trailslash/")) # With trailing slash
   expect_equal(res$status, 404)
   res <- pr$call(make_req("POST", "/trailslash")) # Wrong verb
   expect_equal(res$status, 405)
 
-  expect_equal(pr$route(make_req("POST", "/trailslashp/"), PlumberResponse$new()), "poster")
-  res <- PlumberResponse$new()
-  pr$route(make_req("POST", "/trailslashp"), res) # w/o trailing slash
+  expect_equal(pr$call(make_req("POST", "/trailslashp/"))$body, jsonlite::toJSON("poster"))
+  res <- pr$call(make_req("POST", "/trailslashp")) # w/o trailing slash
   expect_equal(res$status, 404)
   res <- pr$call(make_req("GET", "/trailslashp/")) # Wrong verb
   expect_equal(res$status, 405)
