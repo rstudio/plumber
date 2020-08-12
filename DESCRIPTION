@@ -39,7 +39,6 @@ Suggests:
     base64enc,
     htmlwidgets,
     visNetwork,
-    analogsea (>= 0.7.0),
     later,
     readr,
     yaml,
