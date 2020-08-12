@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - "master"
+      - "docker/**"
   schedule:
     - cron:  '0 0 1 * *' # first of every month
 
@@ -25,7 +26,7 @@ jobs:
           # always overwrite the latest version with the CRAN version
           tags: "v0.4.6,latest"
           ref: "v0.4.6"
-          extra_buildargs: ",ENTRYPOINT_FILE='/usr/local/lib/R/site-library/plumber/examples/04-mean-sum/plumber.R'"
+          extra_buildargs: ",ENTRYPOINT_FILE=/usr/local/lib/R/site-library/plumber/examples/04-mean-sum/plumber.R"
 
         - name: GitHub
           # 'next' tag signifies the _next_ release
