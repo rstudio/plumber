@@ -227,22 +227,28 @@ HTTP requests in Plumber are stored as environments and satisfy the [Rook interf
 
 Name | Example | Description
 ---- | ------- | -----------------------
+`pr` | `plumber::pr()` | The Plumber router that is processing the request
 `cookies` | `list(cook="abc")` | A list of the cookies as described in [Cookies](#read-cookies)
 `httpuv.version` | `"1.3.3"` | The version of the underlying [`httpuv` package](https://github.com/rstudio/httpuv)
 `PATH_INFO` | `"/"` | The path of the incoming HTTP request
-`postBody` | `"a=1&b=2"` | The contents of the body of the request. Despite the name, it is available for any HTTP method.
+`postBody` | `"a=1&b=2"` | The text contents of the body of the request. Despite the name, it is available for any HTTP method. To disable this parsing, see `?options_plumber`.
+`postBodyRaw` | `charToRaw("a=1&b=2")` | The `raw()`, unparsed contents of the body of the request
+`args` | `list(a=1,b=2)` | In a route, the combined arguments of `list(req = req, res = res)`, `argsPath`, `argsPostBody`, and `argsQuery`. In a filter, only contains `argsQuery`.
+`argsPath` | `list(a=1,b=2)` | The values of the path arguments.
+`argsQuery` | `list(a=1,b=2)` | The parsed query string output.
+`argsPostBody` | `list(a=1,b=2)` | The parsed post boy output.
 `QUERY_STRING` | `"?a=123&b=abc"` | The query-string portion of the HTTP request
 `REMOTE_ADDR` | `"1.2.3.4"` | The IP address of the client making the request
 `REMOTE_PORT` | `"62108"` | The client port from which the request originated
 `REQUEST_METHOD` | `"GET"` | The method used for this HTTP request
 `rook.errors` | N/A | See [Rook docs]( https://github.com/jeffreyhorner/Rook/blob/a5e45f751/README.md#the-input-stream)
 `rook.input` | N/A | See [Rook docs]( https://github.com/jeffreyhorner/Rook/blob/a5e45f751/README.md#the-error-stream)
-`rook.url_scheme` | `"http"` | The "scheme" (typically `http` or `https`).
+`rook.url_scheme` | `"http"` | The "scheme" (typically `http` or `https`)
 `rook.version` | `"1.1-0"` | The version of the rook specification which this environment satisfies
 `SCRIPT_NAME` | `""` | Unused
 `SERVER_NAME` | `"127.0.0.1"` | The host portion of the incoming request. You may favor `HTTP_HOST`, if available.
 `SERVER_PORT` | `"8000"` | The target port for the request
-`HTTP_*` | `"HTTP_USER_AGENT"` | Entries for all of the HTTP headers sent with this request.
+`HTTP_*` | `"HTTP_USER_AGENT"` | Entries for all of the HTTP headers sent with this request
 
 ### Query Strings {#query-strings}
 
@@ -298,7 +304,9 @@ code_chunk(json_serialize(e$exec(req=list(postBody="id=123&name=Jennifer"), id=1
 
 Alternatively, `curl --data '{"id":123, "name": "Jennifer"}' "http://localhost:8000/user"` (formatting the body as JSON) will have the same effect.
 
-As demonstrated above, the raw request body is made available as `req$postBody`.
+As demonstrated above, the raw request body is made available as `req$postBody` and `req$postBodyRaw`.
+
+If multiple parameters are matched to the endpoint formals, an error will be thrown. Due to the nature of how multiple values can be matched to the same argument, it is recommended that `POST` enpoints have a function definition that only accepts the formals `req`, `res`, and `...`. If the endpoint arguments are to be processed like a list, they are available at `req$argsPostBody`, with all arguments at `req$args`. `req$args` is a combination of `list(req = req, res = res)`, `req$argsPath`, `req$argsPostBody`, and `req$argsQuery`.
 
 ### Cookies {#read-cookies}
 

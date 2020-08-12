@@ -30,7 +30,7 @@ parsers = list(json = list())
 parsers = list(json = list(simplifyVector = FALSE), rds = list())
 
 # default plumber parsers
-parsers = c("json", "query", "text", "octet", "multi")
+parsers = c("json", "form", "text", "octet", "multi")
 }}
 }
 \value{

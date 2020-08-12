@@ -150,7 +150,7 @@ plumber <- R6Class(
       private$maxSize <- getOption('plumber.maxRequestSize', 0) #0  Unlimited
       self$setSerializer(serializer_json())
       # Default parsers to maintain legacy features
-      self$set_parsers(c("json", "query", "text", "octet", "multi"))
+      self$set_parsers(c("json", "form", "text", "octet", "multi"))
       self$setErrorHandler(defaultErrorHandler())
       self$set404Handler(default404Handler)
       self$set_ui()
@@ -642,17 +642,20 @@ plumber <- R6Class(
         return(NULL)
       }
 
-      # Get args out of the query string, + req/res
-      args <- list()
-      if (!is.null(req$args)) {
-        args <- req$args
+      # These situations should NOT happen as req,res are set in self$call()
+      # For testing purposes, these checks are added
+      if (is.null(req$args)) {
+        req$args <- list(req = req, res = res)
+      } else {
+        if (is.null(req$args$req)) {
+          req$args$req <- req
+        }
+        if (is.null(req$args$res)) {
+          req$args$res <- res
+        }
       }
-      args$res <- res
-      args$req <- req
 
-      req$args <- args
       path <- req$PATH_INFO
-
       makeHandleStep <- function(name) {
         function(...) {
           resetForward()
@@ -669,11 +672,21 @@ plumber <- R6Class(
             } else {
               private$default_parsers
             }
+          req$argsPath <- h$getPathParams(path)
+          req$argsPostBody <- postbody_parser(req, parsers)
+
           req$args <- c(
-            h$getPathParams(path),
+            # req, res
+            # query string params and any other `req$args`
+            ## Query string params have been added to `req$args`.
+            ## At this point, can not include both `req,res` and `req$argsQuery`. So using `req$args`
             req$args,
-            postbody_parser(req, parsers)
+            # path params
+            req$argsPath,
+            # post body params
+            req$argsPostBody
           )
+
           return(do.call(h$exec, req$args))
         }
       }
@@ -772,11 +785,11 @@ plumber <- R6Class(
     #' @details required for httpuv interface
     call = function(req) {
       # Set the arguments to an empty list
-      req$args <- list()
       req$pr <- self
       req$.internal <- new.env()
 
       res <- PlumberResponse$new(private$default_serializer)
+      req$args <- list(req = req, res = res)
 
       # maybe return a promise object
       self$serve(req, res)
@@ -824,7 +837,7 @@ plumber <- R6Class(
       private$default_serializer <- serializer
     },
     #' @description Sets the default parsers of the router.
-    #' @details Initialized to `c("json", "query", "text", "octet", "multi")`
+    #' @details Initialized to `c("json", "form", "text", "octet", "multi")`
     #' @template pr_set_parsers__parsers
     set_parsers = function(parsers) {
       private$default_parsers <- make_parser(parsers)

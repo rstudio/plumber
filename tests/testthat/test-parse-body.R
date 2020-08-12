@@ -7,12 +7,12 @@ test_that("JSON is consumed on POST", {
 
 test_that("ending in `==` does not produce a unexpected key", {
   # See https://github.com/rstudio/plumber/issues/463
-  expect_equal(parse_body("randomcharshere==", content_type = NULL, parsers = make_parser("query")), list())
+  expect_equal(parse_body("randomcharshere==", content_type = NULL, parsers = make_parser("form")), list())
 })
 
-test_that("Query strings on post are handled correctly", {
-  expect_equivalent(parse_body("a=", parsers = make_parser("query")), list()) # It's technically a named list()
-  expect_equal(parse_body("a=1&b=&c&d=1", content_type = NULL, make_parser("query")), list(a="1", d="1"))
+test_that("Form query strings on post are handled correctly", {
+  expect_equivalent(parse_body("a=", parsers = make_parser("form")), list()) # It's technically a named list()
+  expect_equal(parse_body("a=1&b=&c&d=1", content_type = NULL, make_parser("form")), list(a="1", d="1"))
 })
 
 test_that("Able to handle UTF-8", {

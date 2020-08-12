@@ -87,7 +87,7 @@ reference:
 - title: POST Body and Query String Parsers
   contents:
   - 'register_parser'
-  - 'parser_query'
+  - 'parser_form'
   - 'getCharacterSet'
 
 - title: Response
