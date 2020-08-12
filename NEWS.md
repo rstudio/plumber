@@ -73,7 +73,7 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 ### Minor new features and improvements
 
-* Added support for the `SameSite` Cookie attribute. (#640)
+* Added support for the `SameSite` Cookie attribute. (@chris-dudley, #640)
 
 * When calling `include_file()`, the `content_type` is automatically inferred from the file extension if `content_type` is not provided. (#631)
 
