@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - "master"
+      - "docker/**"
   schedule:
     - cron:  '0 0 1 * *' # first of every month
 
