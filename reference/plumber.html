@@ -572,11 +572,11 @@ When using a list, parser information already defined will maintain their existi
 <span class='kw'>parsers</span> <span class='op'>=</span> <span class='st'>"json"</span><span class='co'># provide a named list with no arguments</span>
 <span class='kw'>parsers</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(json = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())<span class='co'># provide a named list with arguments; include `rds`</span>
 <span class='kw'>parsers</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(json = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(simplifyVector = <span class='fl'>FALSE</span>), rds = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())<span class='co'># default plumber parsers</span>
-<span class='kw'>parsers</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"json"</span>, <span class='st'>"query"</span>, <span class='st'>"text"</span>, <span class='st'>"octet"</span>, <span class='st'>"multi"</span>)</pre></p></dd>
+<span class='kw'>parsers</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"json"</span>, <span class='st'>"form"</span>, <span class='st'>"text"</span>, <span class='st'>"octet"</span>, <span class='st'>"multi"</span>)</pre></p></dd>
 
 </dl><p></div></p>
 <h3>Details</h3>
-<p>Initialized to <code><a href='https://rdrr.io/r/base/c.html'>c("json", "query", "text", "octet", "multi")</a></code></p>
+<p>Initialized to <code><a href='https://rdrr.io/r/base/c.html'>c("json", "form", "text", "octet", "multi")</a></code></p>
 
 <p><hr>
 <a id="method-set404Handler"></a></p><h3>Method <code>set404Handler()</code></h3>

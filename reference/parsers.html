@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plumber Parsers — parser_query • plumber</title>
+<title>Plumber Parsers — parser_form • plumber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,7 +52,7 @@
 
 
 
-<meta property="og:title" content="Plumber Parsers — parser_query" />
+<meta property="og:title" content="Plumber Parsers — parser_form" />
 <meta property="og:description" content="Parsers are used in Plumber to transform the raw body content received
 by a request to the API. Extra parameters may be provided to parser
 functions when adding the parser to plumber. This will allow for
@@ -185,7 +185,7 @@ functions when adding the parser to plumber. This will allow for
 non-default behavior.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>parser_query</span>()
+    <pre class="usage"><span class='fu'>parser_form</span>()
 
 <span class='fu'>parser_json</span>(<span class='kw'>...</span>)
 
@@ -229,7 +229,7 @@ non-default behavior.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Parsers are optional. When unspecified, only the <code>parser_json()</code>,
-<code>parser_octet()</code>, <code>parser_query()</code> and <code>parser_text()</code> are available.
+<code>parser_octet()</code>, <code>parser_form()</code> and <code>parser_text()</code> are available.
 You can use <code>@parser parser</code> tag to activate parsers per endpoint.
 Multiple parsers can be activated for the same endpoint using multiple <code>@parser parser</code> tags.</p>
 <p>User should be aware that <code>rds</code> parsing should only be done from a
@@ -239,7 +239,7 @@ trusted source. Do not accept <code>rds</code> files blindly.</p>
 
     
 <ul>
-<li><p><code>parser_query</code>: Query string parser</p></li>
+<li><p><code>parser_form</code>: Form query string parser</p></li>
 <li><p><code>parser_json</code>: JSON parser. See <code><a href='https://jeroen.cran.dev/jsonlite/reference/read_json.html'>jsonlite::parse_json()</a></code> for more details. (Defaults to using <code>simplifyVectors = TRUE</code>)</p></li>
 <li><p><code>parser_text</code>: Helper parser to parse plain text</p></li>
 <li><p><code>parser_yaml</code>: YAML parser. See <code><a href='https://rdrr.io/pkg/yaml/man/yaml.load.html'>yaml::yaml.load()</a></code> for more details.</p></li>

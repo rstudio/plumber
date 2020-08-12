@@ -180,7 +180,7 @@ For instance, parser_json() parse content-type application/json." />
     <div class="ref-description">
     <p>A parser is responsible for decoding the raw body content of a request into
 a list of arguments that can be mapped to endpoint function arguments.
-For instance, <code><a href='parser_query.html'>parser_json()</a></code> parse content-type <code>application/json</code>.</p>
+For instance, <code><a href='parser_form.html'>parser_json()</a></code> parse content-type <code>application/json</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>register_parser</span>(<span class='kw'>alias</span>, <span class='kw'>parser</span>, fixed = <span class='kw'>NULL</span>, regex = <span class='kw'>NULL</span>, verbose = <span class='fl'>TRUE</span>)
@@ -220,7 +220,7 @@ Parser matching is done first by <code>content-type</code> header matching on <c
 regular expressions on <code>regex</code>. Note that plumber strip the header from <code>; charset*</code> to
 perform matching.</p>
 <p>There is a special case when no <code>content-type</code> header is
-provided that will use a <code><a href='parser_query.html'>parser_json()</a></code> when it detects a <code>json</code> string.</p>
+provided that will use a <code><a href='parser_form.html'>parser_json()</a></code> when it detects a <code>json</code> string.</p>
 <p>Functions signature should include <code>value</code>, <code>...</code> and
 possibly <code>content_type</code>, <code>filename</code>. Other parameters may be provided
 if you want to use the headers from <code><a href='https://rdrr.io/pkg/webutils/man/parse_multipart.html'>webutils::parse_multipart()</a></code>.</p>
@@ -250,7 +250,7 @@ if you want to use the headers from <code><a href='https://rdrr.io/pkg/webutils/
 
 <span class='co'># Could also leverage existing parsers</span>
 <span class='kw'>parser_dcf</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>...</span>) {
-  <span class='fu'><a href='parser_query.html'>parser_read_file</a></span>(<span class='fu'>function</span>(<span class='kw'>tmpfile</span>) {
+  <span class='fu'><a href='parser_form.html'>parser_read_file</a></span>(<span class='fu'>function</span>(<span class='kw'>tmpfile</span>) {
     <span class='fu'><a href='https://rdrr.io/r/base/dcf.html'>read.dcf</a></span>(<span class='kw'>tmpfile</span>, <span class='kw'>...</span>)
   })
 }
