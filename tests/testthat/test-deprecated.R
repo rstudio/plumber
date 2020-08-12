@@ -30,3 +30,17 @@ test_that("addAssets continues to work", {
   val <- pr$route(make_req("GET", "/public/test.txt"), res)
   expect_true(inherits(val, "PlumberResponse"))
 })
+
+
+
+
+test_that("Digital Ocean functions throw errors", {
+  skip_on_cran()
+
+  expect_error(do_provision(), class = "lifecycle_error_deprecated")
+  expect_error(do_configure_https(), class = "lifecycle_error_deprecated")
+  expect_error(do_deploy_api(), class = "lifecycle_error_deprecated")
+  expect_error(do_forward(), class = "lifecycle_error_deprecated")
+  expect_error(do_remove_api(), class = "lifecycle_error_deprecated")
+  expect_error(do_remove_forward(), class = "lifecycle_error_deprecated")
+})
