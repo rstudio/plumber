@@ -147,7 +147,11 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 * Date response header is now supplied by httpuv and not plumber. Fixes non standard date response header issues when using different locales. (@shrektan, #319, #380)
 
-* An error will be thrown if multiple arguments are matched to an Plumber Endpoint route definition.  Users should define their route to only use `req`, `res`, and/or `...` to avoid multiple matchings. (#637)
+* An error will be thrown if multiple arguments are matched to an Plumber Endpoint route definition.
+  While it is not required, it is safer to define routes to only use `req` and `res` when there is a possiblity to have multiple arguments match a single parameter name.
+  Use `req$argsPath`, `req$argsQuery`, and `req$argsPostBody` to access path, query, and postBody parameters respectively.
+  See `system.file("plumber/17-arguments/plumber.R", package = "plumber")` to view an example with expected output and `plumb_api("plumber", "17-arguments")` to retrieve the api.
+  (#637)
 
 
 plumber 0.4.6
