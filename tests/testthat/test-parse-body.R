@@ -145,12 +145,11 @@ test_that("Test an array of files upload", {
     make_parser(c("multi", "octet", "json"))
   )
 
-  str(parsed_body)
   expect_equal(names(parsed_body), c("files", "dt"))
   expect_length(parsed_body[["files"]], 4)
   expect_equal(names(parsed_body[["files"]])[2], "text1.bin")
   expect_equal(rawToChar(parsed_body[["files"]][[2]]), "a")
   expect_equal(rawToChar(parsed_body[["files"]][[3]]), "b")
   expect_equal(rawToChar(parsed_body[["files"]][[4]]), "c")
-  expect_equal(parsed_body$dt, setNames(list(), character(0)))
+  expect_equal(parsed_body$dt, jsonlite::parse_json("{}"))
 })
