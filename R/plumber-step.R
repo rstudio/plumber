@@ -101,16 +101,16 @@ PlumberStep <- R6Class(
 )
 
 # @param positional list with names where they were provided.
-getRelevantArgs <- function(args, plumberExpression){
-  if (length(args) == 0){
+getRelevantArgs <- function(args, plumberExpression) {
+  if (length(args) == 0) {
     unnamedArgs <- NULL
-  } else if (is.null(names(args))){
+  } else if (is.null(names(args))) {
     unnamedArgs <- 1:length(args)
   } else {
     unnamedArgs <- which(names(args) == "")
   }
 
-  if (length(unnamedArgs) > 0 ){
+  if (length(unnamedArgs) > 0 ) {
     stop("Can't call a Plumber function with unnammed arguments. Missing names for argument(s) #",
          paste0(unnamedArgs, collapse=", "),
          ". Names of argument list was: \"",
@@ -120,9 +120,44 @@ getRelevantArgs <- function(args, plumberExpression){
   # Extract the names of the arguments this function supports.
   fargs <- names(formals(eval(plumberExpression)))
 
-  if (!"..." %in% fargs){
+  if (length(fargs) == 0) {
+    # no matches
+    return(list())
+  }
+
+  # If only req and res are found in function definition...
+  # Only call using the first matches of req and res.
+  #   This allows for post body content to have `req` and `res` named arguments and not duplicated values cause issues.
+  if (all(fargs %in% c("req", "res"))) {
+    ret <- list()
+    # using `$` will retrieve the 1st occurance of req,res
+    # args$req <- req is used within `plumber$route()`
+    if ("req" %in% fargs) {
+      ret$req <- args$req
+    }
+    if ("res" %in% fargs) {
+      ret$res <- args$res
+    }
+    return(ret)
+  }
+
+  if (!"..." %in% fargs) {
     # Use the named arguments that match, drop the rest.
     args <- args[names(args) %in% fargs]
+  }
+
+  # for all args, check if they are duplicated
+  arg_names <- names(args)
+  matched_arg_names <- arg_names[arg_names %in% fargs]
+  duplicated_matched_arg_names <- duplicated(matched_arg_names, fromLast = TRUE)
+
+  if (any(duplicated_matched_arg_names)) {
+    stop(
+      "Can't call a Plumber function with duplicated matching formal arguments: ",
+      paste0(unique(matched_arg_names[duplicated_matched_arg_names]), collapse = ", "),
+      "\nPlumber recommends that the route's function signature be `function(req, res)`",
+      "\nand to access arguments via `req$args`, `req$argsPath`, `req$argsPostBody`, or `req$argsQuery`."
+    )
   }
 
   args

@@ -93,7 +93,7 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 * Added yaml support, serializer and parser. (@meztez, #556)
 
-* Added parsers: `parser_csv()`, `parser_json()`, `parser_multi()`, `parser_octet()`, `parser_query()`, `parser_rds()`, `parser_text()`, `parser_tsv()`, `parser_yaml()`, `parser_none()`, and pseudo `"all"` (#584)
+* Added parsers: `parser_csv()`, `parser_json()`, `parser_multi()`, `parser_octet()`, `parser_form()`, `parser_rds()`, `parser_text()`, `parser_tsv()`, `parser_yaml()`, `parser_none()`, and pseudo `"all"` (#584)
 
 * Added `serializer_csv()` (@pachamaltese, #520)
 
@@ -150,6 +150,12 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 * Bumped version of httpuv to >= 1.4.5.9000 to address an unexpected segfault (@shapenaji, #289)
 
 * Date response header is now supplied by httpuv and not plumber. Fixes non standard date response header issues when using different locales. (@shrektan, #319, #380)
+
+* An error will be thrown if multiple arguments are matched to an Plumber Endpoint route definition.
+  While it is not required, it is safer to define routes to only use `req` and `res` when there is a possiblity to have multiple arguments match a single parameter name.
+  Use `req$argsPath`, `req$argsQuery`, and `req$argsPostBody` to access path, query, and postBody parameters respectively.
+  See `system.file("plumber/17-arguments/plumber.R", package = "plumber")` to view an example with expected output and `plumb_api("plumber", "17-arguments")` to retrieve the api.
+  (#637)
 
 
 plumber 0.4.6

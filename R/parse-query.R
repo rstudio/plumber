@@ -3,6 +3,7 @@ queryStringFilter <- function(req){
   if (is.null(handled) || handled != TRUE) {
     qs <- req$QUERY_STRING
     args <- parseQS(qs)
+    req$argsQuery <- args
     req$args <- c(req$args, args)
     req$.internal$queryStringHandled <- TRUE
   }
@@ -17,8 +18,8 @@ parseQS <- function(qs){
   }
 
   # Looked into using webutils::parse_query()
-  # Currently not pursuing `parse_query` as it does not handle Encoding issues handled below
-  # (Combining keys are also not handled by `parse_query`)
+  # Currently not pursuing `webutils::parse_query` as it does not handle Encoding issues handled below
+  # (Combining keys are also not handled by `webutils::parse_query`)
 
   qs <- stri_replace_first_regex(qs, "^[?]", "")
   qs <- chartr("+", " ", qs)

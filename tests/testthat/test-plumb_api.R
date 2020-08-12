@@ -24,22 +24,7 @@ test_that("available_apis() print method works", {
   expected_apis_output <- c(
     "Available Plumber APIs:",
     "* plumber",
-    "  - 01-append",
-    "  - 02-filters",
-    "  - 03-github",
-    "  - 04-mean-sum",
-    "  - 05-static",
-    "  - 06-sessions",
-    "  - 07-mailgun",
-    "  - 08-identity",
-    "  - 09-content-type",
-    "  - 10-welcome",
-    "  - 11-car-inventory",
-    "  - 12-entrypoint",
-    "  - 13-promises",
-    "  - 14-future",
-    "  - 15-openapi-spec",
-    "  - 16-attachment"
+    paste0("  - ", dir(system.file("plumber", package = "plumber")))
   )
 
   expect_equal(

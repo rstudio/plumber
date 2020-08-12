@@ -51,14 +51,14 @@ looks_like_json <- local({
 })
 parser_picker <- function(content_type, first_byte, filename = NULL, parsers = NULL) {
 
-  # parse as a query string
+  # parse as json or a form
   if (length(content_type) == 0) {
     # fast default to json when first byte is 7b (ascii {)
     if (looks_like_json(first_byte)) {
       return(parsers$alias$json)
     }
 
-    return(parsers$alias$query)
+    return(parsers$alias$form)
   }
 
   # remove trailing content type information
@@ -87,9 +87,9 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
     return(parsers$regex[[which(fpm)[1]]])
   }
 
-  # query string
+  # parse as a form submission
   if (is.null(filename)) {
-    return(parsers$alias$query)
+    return(parsers$alias$form)
   }
 
   # octet
@@ -234,7 +234,7 @@ registered_parsers <- function() {
 # ' make_parser(list(json = list(simplifyVector = FALSE), rds = list()))
 # '
 # ' # default plumber parsers
-# ' make_parser(c("json", "query", "text", "octet", "multi"))
+# ' make_parser(c("json", "form", "text", "octet", "multi"))
 make_parser <- function(aliases) {
   if (inherits(aliases, "plumber_parsed_parsers")) {
     return(aliases)
@@ -316,7 +316,7 @@ make_parser <- function(aliases) {
 #' non-default behavior.
 #'
 #' Parsers are optional. When unspecified, only the [parser_json()],
-#' [parser_octet()], [parser_query()] and [parser_text()] are available.
+#' [parser_octet()], [parser_form()] and [parser_text()] are available.
 #' You can use `@parser parser` tag to activate parsers per endpoint.
 #' Multiple parsers can be activated for the same endpoint using multiple `@parser parser` tags.
 #'
@@ -326,7 +326,7 @@ make_parser <- function(aliases) {
 #' See [registered_parsers()] for a list of registered parsers.
 #'
 #' @param ... parameters supplied to the appropriate internal function
-#' @describeIn parsers Query string parser
+#' @describeIn parsers Form query string parser
 #' @examples
 #' \dontrun{
 #' # Overwrite `text/json` parsing behavior to not allow JSON vectors to be simplified
@@ -338,7 +338,7 @@ make_parser <- function(aliases) {
 #' pr$handle("GET", "/upload", function(rds) {rds}, parsers = c("multi", "rds"))
 #' }
 #' @export
-parser_query <- function() {
+parser_form <- function() {
   parser_text(parseQS)
 }
 
@@ -502,7 +502,7 @@ register_parsers_onLoad <- function() {
   register_parser("json",    parser_json,    fixed = c("application/json", "text/json"))
   register_parser("multi",   parser_multi,   fixed = "multipart/form-data")
   register_parser("octet",   parser_octet,   fixed = "application/octet-stream")
-  register_parser("query",   parser_query,   fixed = "application/x-www-form-urlencoded")
+  register_parser("form",    parser_form,   fixed = "application/x-www-form-urlencoded")
   register_parser("rds",     parser_rds,     fixed = "application/rds")
   register_parser("feather", parser_feather, fixed = "application/feather")
   register_parser("text",    parser_text,    fixed = "text/plain", regex = "^text/")

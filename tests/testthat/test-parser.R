@@ -13,7 +13,7 @@ test_that("parsers can be combined", {
 
   expect_parsers("json", "json")
 
-  expect_parsers(c("query", "json"), c("query", "json"), sort_items = FALSE)
+  expect_parsers(c("form", "json"), c("form", "json"), sort_items = FALSE)
 
   expect_parsers("all", setdiff(registered_parsers(), c("all", "none")))
   expect_parsers(list(all = list()), setdiff(registered_parsers(), c("all", "none")))
@@ -77,6 +77,6 @@ test_that("parsers work", {
   expect_equal(r$routes$all$parsers, make_parser("all"))
   expect_equal(r$routes$default$parsers, NULL)
   expect_equal(r$routes$json$parsers, make_parser("json"))
-  expect_equal(r$routes$mixed$parsers, make_parser(c("json", "query")))
+  expect_equal(r$routes$mixed$parsers, make_parser(c("json", "form")))
   expect_equal(r$routes$repeated$parsers, make_parser("json"))
 })
