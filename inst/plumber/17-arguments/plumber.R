@@ -1,6 +1,6 @@
 #* Works with query string aruguments
 #* @serializer print
-#* @post /named/<a>/<b>
+#* @post /bad-practice/<a>/<b>
 function(a, b) {
   list(a = a, b = b)
 }
@@ -9,7 +9,7 @@ function(a, b) {
 
 #* Can have conflicting path, query, and post body arugments
 #* @serializer print
-#* @post /args/<a>/<b>
+#* @post /good-practice/<a>/<b>
 function(req, res) {
   list(
     all = req$args,
@@ -18,14 +18,6 @@ function(req, res) {
     postBody = req$argsPostBody
   )
 }
-
-if (FALSE) {
-  # Example of failure to call a function with multiple named arguments
-  do.call(function(a, ...) {list(a, ...)}, list(a = 1, b = 2, a = 3))
-  #> Error in (function (a, ...)  :
-  #> formal argument "a" matched by multiple actual arguments
-}
-
 
 
 # Test this api...
@@ -38,38 +30,31 @@ if (FALSE) {
 ### In a terminal...
 ### Curl API
 
-## Works
-# curl --data '' '127.0.0.1:1234/named/1/2'
-#> $a
-#> [1] "1"
-#>
-#> $b
-#> [1] "2"
-
-## Works (but missing variable `d`)
-# curl --data '' '127.0.0.1:1234/named/1/2?d=3'
-#> $a
-#> [1] "1"
-#>
-#> $b
-#> [1] "2"
-
-## Works (but missing variable `d`)
-# curl --data 'd=3' '127.0.0.1:1234/named/1/2'
-#> $a
-#> [1] "1"
-#>
-#> $b
-#> [1] "2"
-
 ## Fails (conflicting variable `a`)
-# curl --data '' '127.0.0.1:1234/named/1/2?a=3'
-# curl --data 'a=3' '127.0.0.1:1234/named/1/2'
-# curl --data 'a=4' '127.0.0.1:1234/named/1/2?a=3'
+# curl --data '' '127.0.0.1:1234/bad-practice/1/2?a=3'
+# curl --data 'a=3' '127.0.0.1:1234/bad-practice/1/2'
+# curl --data 'a=4' '127.0.0.1:1234/bad-practice/1/2?a=3'
+
+## Works (but missing variable `d`)
+# curl --data '' '127.0.0.1:1234/bad-practice/1/2?d=3'
+#> $a
+#> [1] "1"
+#>
+#> $b
+#> [1] "2"
+
+## Works (but missing variable `d`)
+# curl --data 'd=3' '127.0.0.1:1234/bad-practice/1/2'
+#> $a
+#> [1] "1"
+#>
+#> $b
+#> [1] "2"
+
 
 
 ## Safe endpoint setup
-# curl --data 'a=5&b=6' '127.0.0.1:1234/args/3/4?a=1&b=2&d=10'
+# curl --data 'a=5&b=6' '127.0.0.1:1234/good-practice/3/4?a=1&b=2&d=10'
 #> $all
 #> $all$req
 #> <environment>
