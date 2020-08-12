@@ -197,6 +197,7 @@
 <p><a href='https://github.com/rstudio/plumber/issues/328'>#328</a>).</p>
 </li>
 <li><p>R repository modified to <code>focal-cran40</code> using Ubuntu 20.04 LTS for digital ocean provisioning (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/529'>#529</a>)</p></li>
+<li><p><code><a href="https://rdrr.io/r/base/options.html">options(plumber.debug)</a></code> is not set anymore when running the plumber application. Instead retrieve the debug value using <code>$get_debug()</code> on the Plumber router directly. Ex: <code>function(req, res) { req$pr$get_debug() }</code>. (<a href='https://github.com/rstudio/plumber/issues/639'>#639</a>)</p></li>
 </ul>
 </div>
 <div id="deprecations" class="section level3">

@@ -189,7 +189,6 @@ be set globally with <code><a href='https://rdrr.io/r/base/options.html'>options
   apiPort = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.apiPort"</span>),
   apiPath = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.apiPath"</span>),
   apiURL = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.apiURL"</span>),
-  debug = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.debug"</span>),
   maxRequestSize = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.maxRequestSize"</span>),
   postBody = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.postBody"</span>),
   port = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.port"</span>),
@@ -202,52 +201,8 @@ be set globally with <code><a href='https://rdrr.io/r/base/options.html'>options
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>apiScheme</th>
-      <td><p>see details</p></td>
-    </tr>
-    <tr>
-      <th>apiHost</th>
-      <td><p>see details</p></td>
-    </tr>
-    <tr>
-      <th>apiPort</th>
-      <td><p>see details</p></td>
-    </tr>
-    <tr>
-      <th>apiPath</th>
-      <td><p>see details</p></td>
-    </tr>
-    <tr>
-      <th>apiURL</th>
-      <td><p>see details</p></td>
-    </tr>
-    <tr>
-      <th>debug</th>
-      <td><p>see details</p></td>
-    </tr>
-    <tr>
-      <th>maxRequestSize</th>
-      <td><p>see details</p></td>
-    </tr>
-    <tr>
-      <th>postBody</th>
-      <td><p>see details</p></td>
-    </tr>
-    <tr>
-      <th>port</th>
-      <td><p>see details</p></td>
-    </tr>
-    <tr>
-      <th>sharedSecret</th>
-      <td><p>see details</p></td>
-    </tr>
-    <tr>
-      <th>ui</th>
-      <td><p>see details</p></td>
-    </tr>
-    <tr>
-      <th>ui.callback</th>
-      <td><p>see details</p></td>
+      <th>apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, postBody, port, sharedSecret, ui, ui.callback</th>
+      <td><p>See details</p></td>
     </tr>
     </table>
 
@@ -273,8 +228,6 @@ OpenAPI Specification. Defaults to <code>port</code> defined by <code>run</code>
 when used outside a running router</p></dd>
 <dt><code>plumber.apiPath</code></dt><dd><p>Path used to build UI url and server url for
 OpenAPI Specification. Defaults to an empty string</p></dd>
-<dt><code>plumber.debug</code></dt><dd><p>Provides more insight into your API errors. Alternatively,
-use parameter <code>debug</code> of plumber router <code>run</code> method. Defaults to <code>FALSE</code></p></dd>
 <dt><code>plumber.maxRequestSize</code></dt><dd><p>Maximum length in bytes of request body. Body larger
 than maximum are rejected with http error 413. <code>0</code> means unlimited size. Defaults to <code>0</code></p></dd>
 <dt><code>plumber.postBody</code></dt><dd><p>Copy post body content to <code>req$postBody</code> using system encoding.

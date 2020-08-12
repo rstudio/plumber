@@ -226,6 +226,7 @@ Package Plumber Router" />
 <li><p><a href='#method-set_ui'><code>plumber$set_ui()</code></a></p></li>
 <li><p><a href='#method-set_ui_callback'><code>plumber$set_ui_callback()</code></a></p></li>
 <li><p><a href='#method-set_debug'><code>plumber$set_debug()</code></a></p></li>
+<li><p><a href='#method-get_debug'><code>plumber$get_debug()</code></a></p></li>
 <li><p><a href='#method-filter'><code>plumber$filter()</code></a></p></li>
 <li><p><a href='#method-set_api_spec'><code>plumber$set_api_spec()</code></a></p></li>
 <li><p><a href='#method-get_api_spec'><code>plumber$get_api_spec()</code></a></p></li>
@@ -652,7 +653,7 @@ Plumber router <code><a href='pr_run.html'>pr_run()</a></code> method is execute
 <p><hr>
 <a id="method-set_debug"></a></p><h3>Method <code>set_debug()</code></h3>
 <p>Set debug value to include error messages</p>
-<p>See also: <code><a href='pr_set_debug.html'>pr_set_debug()</a></code></p><h3>Usage</h3>
+<p>See also: <code>$get_debug()</code> and <code><a href='pr_set_debug.html'>pr_set_debug()</a></code></p><h3>Usage</h3>
 <p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>set_debug</span>(debug = <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>())</pre><p></div></p>
 
 <h3>Arguments</h3>
@@ -660,6 +661,12 @@ Plumber router <code><a href='pr_run.html'>pr_run()</a></code> method is execute
 <dt><code>debug</code></dt><dd><p><code>TRUE</code> provides more insight into your API errors.</p></dd>
 
 </dl><p></div></p>
+<p><hr>
+<a id="method-get_debug"></a></p><h3>Method <code>get_debug()</code></h3>
+<p>Retrieve the <code>debug</code> value.</p>
+<p>See also: <code>$get_debug()</code> and <code><a href='pr_set_debug.html'>pr_set_debug()</a></code></p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>get_debug</span>()</pre><p></div></p>
+
 <p><hr>
 <a id="method-filter"></a></p><h3>Method <code><a href='https://rdrr.io/r/stats/filter.html'>filter()</a></code></h3>
 <p>Add a filter to plumber router</p>
