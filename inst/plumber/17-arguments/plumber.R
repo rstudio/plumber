@@ -1,4 +1,4 @@
-#* Works with query string aruguments
+#* Works with query string arguments
 #* @serializer print
 #* @post /bad-practice/<a>/<b>
 function(a, b) {
@@ -7,7 +7,7 @@ function(a, b) {
 
 
 
-#* Can have conflicting path, query, and post body arugments
+#* Can have conflicting path, query, and post body arguments
 #* @serializer print
 #* @post /good-practice/<a>/<b>
 function(req, res) {
