@@ -34,16 +34,16 @@ PlumberResponse <- R6Class(
       )
     },
     # TODO if name and value are a vector of same length, call set cookie many times
-    setCookie = function(name, value, path, expiration = FALSE, http = FALSE, secure = FALSE) {
-      self$setHeader("Set-Cookie", cookieToStr(name, value, path, expiration, http, secure))
+    setCookie = function(name, value, path, expiration = FALSE, http = FALSE, secure = FALSE, sameSite=FALSE) {
+      self$setHeader("Set-Cookie", cookieToStr(name, value, path, expiration, http, secure, sameSite))
     },
-    removeCookie = function(name, path, http = FALSE, secure = FALSE, ...) {
-      self$setHeader("Set-Cookie", removeCookieStr(name, path, http, secure))
+    removeCookie = function(name, path, http = FALSE, secure = FALSE, sameSite = FALSE, ...) {
+      self$setHeader("Set-Cookie", removeCookieStr(name, path, http, secure, sameSite))
     }
   )
 )
 
-removeCookieStr <- function(name, path, http = FALSE, secure = FALSE) {
+removeCookieStr <- function(name, path, http = FALSE, secure = FALSE, sameSite = FALSE) {
   str <- paste0(name, "=; ")
   if (!missing(path)){
     str <- paste0(str, "Path=", path, "; ")
@@ -54,6 +54,11 @@ removeCookieStr <- function(name, path, http = FALSE, secure = FALSE) {
   if (!missing(secure) && secure){
     str <- paste0(str, "Secure; ")
   }
+
+  if (!missing(sameSite) && is.character(sameSite)) {
+    str <- paste0(str, "SameSite=", sameSite, "; ")
+  }
+
   str <- paste0(str, "Expires=Thu, 01 Jan 1970 00:00:00 GMT")
   str
 }
@@ -66,6 +71,7 @@ cookieToStr <- function(
   expiration = FALSE,
   http = FALSE,
   secure = FALSE,
+  sameSite = FALSE,
   now = Sys.time() # used for testing. Should not be used in regular code.
 ){
   val <- httpuv::encodeURIComponent(as.character(value))
@@ -81,6 +87,10 @@ cookieToStr <- function(
 
   if (!missing(secure) && secure){
     str <- paste0(str, "Secure; ")
+  }
+
+  if (!missing(sameSite) && is.character(sameSite)) {
+    str <- paste0(str, "SameSite=", sameSite, "; ")
   }
 
   if (!missing(expiration)){
