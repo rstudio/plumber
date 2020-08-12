@@ -42,6 +42,9 @@ plumber 1.0.0
 
 * `addSerializer()` has been deprecated in favor of `register_serializer()` (#584)
 
+* DigitalOcean helper functions are now defunct. The funtionality and documentation on how to deploy to DigitalOcean has been moved to [`plumberDeploy`](https://github.com/meztez/plumberDeploy) (by @meztez) (#649)
+
+
 ### New features
 
 * Serializer functions can now return `PlumberEndpoint` `preexec` and `postexec` hooks in addition to a `serializer` function by using `endpoint_serializer()`.  This allows for image serializers to turn on their corresponding graphics device before the route executes and turn the graphics device off after the route executes. (#630)
