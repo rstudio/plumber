@@ -1,4 +1,4 @@
-#* Works with query string arguments
+#* Plumber allows for things like URI paths to be accessed via named R function arguments, but this is generally considered bad practice (see the examples below)
 #* @serializer print
 #* @post /bad-practice/<a>/<b>
 function(a, b) {
@@ -7,7 +7,7 @@ function(a, b) {
 
 
 
-#* Can have conflicting path, query, and post body arguments
+#* Since URI paths, query params, and post body arguments can have conflicting names, it's better practice to access arguments via the request object
 #* @serializer print
 #* @post /good-practice/<a>/<b>
 function(req, res) {
