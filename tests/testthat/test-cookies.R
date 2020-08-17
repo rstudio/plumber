@@ -176,7 +176,7 @@ test_that("cookie encryption works", {
 
   # check that you can't encode a NULL value
   expect_equal(encodeCookie(NULL, NULL), "")
-  expect_equal(encodeCookie(NULL, asCookieKey(randomCookieKey())), "")
+  expect_equal(encodeCookie(NULL, asCookieKey(random_cookie_key())), "")
 
   xVals <- list(
     list(),
@@ -186,8 +186,8 @@ test_that("cookie encryption works", {
   )
   keys <- list(
     NULL, # no key
-    asCookieKey(randomCookieKey()), # random key
-    asCookieKey(randomCookieKey()) # different random key
+    asCookieKey(random_cookie_key()), # random key
+    asCookieKey(random_cookie_key()) # different random key
   )
 
   for (key in keys) {
@@ -220,25 +220,25 @@ test_that("cookie encyption fails smoothly", {
   }) # error from jsonlite::parse_json()
   # garbage in, key
   expect_error({
-    decodeCookie(garbage, asCookieKey(randomCookieKey()))
+    decodeCookie(garbage, asCookieKey(random_cookie_key()))
   }, "Could not separate")
 
   infoList <- list(
     # different cookies
     list(
-      a = asCookieKey(randomCookieKey()),
-      b = asCookieKey(randomCookieKey()),
+      a = asCookieKey(random_cookie_key()),
+      b = asCookieKey(random_cookie_key()),
       error = "Failed to decrypt"
     ),
     # not encrypted, try to decrypt
     list(
       a = NULL,
-      b = asCookieKey(randomCookieKey()),
+      b = asCookieKey(random_cookie_key()),
       error = "Could not separate"
     ),
     # encrypted, no decryption
     list(
-      a = asCookieKey(randomCookieKey()),
+      a = asCookieKey(random_cookie_key()),
       b = NULL
       # error from jsonlite::parse_json()
     )

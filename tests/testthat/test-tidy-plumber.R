@@ -84,7 +84,7 @@ test_that("pr_hooks registers hooks", {
 test_that("pr_cookie adds cookie", {
   p <- pr() %>%
     pr_cookie(
-      randomCookieKey(),
+      random_cookie_key(),
       name = "counter"
     ) %>%
     pr_get("/sessionCounter", function(req) {

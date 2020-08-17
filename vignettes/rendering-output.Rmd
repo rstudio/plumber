@@ -239,14 +239,14 @@ In addition to storing plain-text cookies, Plumber also supports handling cookie
 To use this feature, you must explicitly add it to your router after constructing it. For example, you could run the following sequence of commands to create a router that supports encrypted session cookies.
 
 ```r
-pr <- plumb("myfile.R")
-pr$registerHooks(sessionCookie("mySecretHere", "cookieName"))
-pr$run()
+plumb("myfile.R") %>%
+  pr_cookie("mySecretHere", "cookieName") %>%
+  pr_run()
 ```
 
-You'll notice the above example is using the `sessionCookie` hooks that come with Plumber. By adding registering these hooks on your router, you'll ensure that the `req$session` object is made available on incoming requests and is persisted to the cookie named `cookieName` when the response is ready to be sent to the user. In this example, the key used to encrypt the data is `"mySecretHere"`, which is obviously a very weak secret key.
+You'll notice the above example is using the `session_cookie` hooks that come with Plumber. By adding registering these hooks on your router, you'll ensure that the `req$session` object is made available on incoming requests and is persisted to the cookie named `cookieName` when the response is ready to be sent to the user. In this example, the key used to encrypt the data is `"mySecretHere"`, which is obviously a very weak secret key.
 
-Unlike `res$setHeader()`, the values attached to `req$session` *are* serialized via `jsonlite`; so you're free to use more complex data structures like lists in your session. Also unlike `res$setHeaders()`, `req$session` encrypts the data using the secret key you provide as the first argument to the `sessionCookie()` function.
+Unlike `res$setHeader()`, the values attached to `req$session` *are* serialized via `jsonlite`; so you're free to use more complex data structures like lists in your session. Also unlike `res$setHeaders()`, `req$session` encrypts the data using the secret key you provide as the first argument to the `session_cookie()` function.
 
 As an example, we'll store an encrypted cookie that counts how many times this client has visited a particular endpoint:
 
@@ -262,6 +262,6 @@ function(req){
 }
 ```
 
-Again, you would need to register the `sessionCookie()` hooks on your router before this code would work.
+Again, you would need to register the `session_cookie()` hooks on your router before this code would work.
 
 If you inspect the cookie being set in your browser, you'll find that its value is encrypted by the time it gets to the client. But by the time it arrives in Plumber, your cookie is available as a regular R list and can be read or modified.

@@ -29,7 +29,7 @@
 #'
 #' @param key The secret key to use. This must be consistent across all R sessions
 #'   where you want to save/restore encrypted cookies. It should be produced using
-#'   \code{\link{randomCookieKey}}. Please see the "Storing secure keys" section for more details
+#'   \code{\link{random_cookie_key}}. Please see the "Storing secure keys" section for more details
 #'   complex character string to bolster security.
 #' @param name The name of the cookie in the user's browser.
 #' @param expiration A number representing the number of seconds into the future
@@ -57,19 +57,16 @@
 #' \dontrun{
 #'
 #' ## Set secret key using `keyring` (preferred method)
-#' keyring::key_set_with_value("plumber_api", plumber::randomCookieKey())
+#' keyring::key_set_with_value("plumber_api", plumber::random_cookie_key())
 #'
 #'
 #' # Load a plumber API
-#' pr <- plumb_api("plumber", "01-append")
-#'
-#' # Add cookie support and retrieve secret key using `keyring`
-#' pr$registerHooks(
-#'   sessionCookie(
+#' plumb_api("plumber", "01-append") %>%
+#'   # Add cookie support via `keyring`
+#'   pr_cookie(
 #'     keyring::key_get("plumber_api")
-#'   )
-#' )
-#' pr$run()
+#'   ) %>%
+#'   pr_run()
 #'
 #'
 #' #### -------------------------------- ###
@@ -77,25 +74,20 @@
 #'
 #' ## Save key to a local file
 #' pswd_file <- "normal_file.txt"
-#' cat(plumber::randomCookieKey(), file = pswd_file)
+#' cat(plumber::random_cookie_key(), file = pswd_file)
 #' # Make file read-only
 #' Sys.chmod(pswd_file, mode = "0600")
 #'
 #'
 #' # Load a plumber API
-#' pr <- plumb_api("plumber", "01-append")
-#'
-#' # Add cookie support and retrieve secret key from file
-#' pr$registerHooks(
-#'   sessionCookie(
+#' plumb_api("plumber", "01-append") %>%
+#'   # Add cookie support and retrieve secret key from file
+#'   pr_cookie(
 #'     readLines(pswd_file, warn = FALSE)
-#'   )
-#' )
-#' pr$run()
-#'
+#'   ) %>%
+#'   pr_run()
 #' }
-
-sessionCookie <- function(
+session_cookie <- function(
   key,
   name = "plumber",
   expiration = FALSE,
@@ -105,7 +97,7 @@ sessionCookie <- function(
 ) {
 
   if (missing(key)) {
-    stop("You must define an encryption key. Please see `?sessionCookie` for more details")
+    stop("You must define an encryption key. Please see `?session_cookie` for more details")
   }
   key <- asCookieKey(key)
 
@@ -166,12 +158,12 @@ sessionCookie <- function(
 #'
 #' Uses a cryptographically secure pseudorandom number generator from [sodium::helpers()] to generate a 64 digit hexadecimal string.  \href{https://github.com/jeroen/sodium}{'sodium'} wraps around \href{https://download.libsodium.org/doc/}{'libsodium'}.
 #'
-#' Please see \code{\link{sessionCookie}} for more information on how to save the generated key.
+#' Please see \code{\link{session_cookie}} for more information on how to save the generated key.
 #'
 #' @return A 64 digit hexadecimal string to be used as a key for cookie encryption.
 #' @export
-#' @seealso \code{\link{sessionCookie}}
-randomCookieKey <- function() {
+#' @seealso \code{\link{session_cookie}}
+random_cookie_key <- function() {
   sodium::bin2hex(
     sodium::random(32)
   )
@@ -184,7 +176,7 @@ asCookieKey <- function(key) {
       "\n",
       "\n\t!! Cookie secret 'key' is `NULL`. Cookies will not be encrypted.      !!",
       "\n\t!! Support for unencrypted cookies is deprecated and will be removed. !!",
-      "\n\t!! Please see `?sessionCookie` for details.                           !!",
+      "\n\t!! Please see `?session_cookie` for details.                           !!",
       "\n"
     )
     return(NULL)
@@ -193,7 +185,7 @@ asCookieKey <- function(key) {
   if (!is.character(key)) {
     stop(
       "Illegal cookie secret 'key' detected.",
-      "\nPlease see `?sessionCookie` for details."
+      "\nPlease see `?session_cookie` for details."
     )
   }
 
@@ -208,7 +200,7 @@ asCookieKey <- function(key) {
       "\n",
       "\n\t!! Legacy cookie secret 'key' detected!                                         !!",
       "\n\t!! Support for legacy cookie secret 'key' is deprecated and will be removed.    !!",
-      "\n\t!! Please follow the instructions in `?sessionCookie` for creating a new secret key. !!",
+      "\n\t!! Please follow the instructions in `?session_cookie` for creating a new secret key. !!",
       "\n"
     )
 

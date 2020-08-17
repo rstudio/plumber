@@ -19,7 +19,7 @@ pr_cookie(
 
 \item{key}{The secret key to use. This must be consistent across all R sessions
 where you want to save/restore encrypted cookies. It should be produced using
-\code{\link{randomCookieKey}}. Please see the "Storing secure keys" section for more details
+\code{\link{random_cookie_key}}. Please see the "Storing secure keys" section for more details
 complex character string to bolster security.}
 
 \item{name}{The name of the cookie in the user's browser.}
@@ -76,7 +76,7 @@ to prevent others from reading it.
 \dontrun{
 
 ## Set secret key using `keyring` (preferred method)
-keyring::key_set_with_value("plumber_api", password = plumber::randomCookieKey())
+keyring::key_set_with_value("plumber_api", password = plumber::random_cookie_key())
 
 
 pr() \%>\%
@@ -100,7 +100,7 @@ pr() \%>\%
 
 ## Save key to a local file
 pswd_file <- "normal_file.txt"
-cat(plumber::randomCookieKey(), file = pswd_file)
+cat(plumber::random_cookie_key(), file = pswd_file)
 # Make file read-only
 Sys.chmod(pswd_file, mode = "0600")
 

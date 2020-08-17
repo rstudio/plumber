@@ -19,9 +19,9 @@ make_req_cookie <- function(verb, path, cookie) {
   req
 }
 
-test_that("sessionCookie throws missing key", {
+test_that("session_cookie throws missing key", {
   expect_error(
-    sessionCookie(),
+    session_cookie(),
     "You must define an encryption key"
   )
 })
@@ -34,8 +34,8 @@ test_that("cookies are set", {
 
   r$handle("GET", "/", expr)
 
-  key <- randomCookieKey()
-  sc <- sessionCookie(
+  key <- random_cookie_key()
+  sc <- session_cookie(
     key,
     name = "plcook"
   )
@@ -59,8 +59,8 @@ test_that("cookies are unset", {
 
   r$handle("GET", "/", exprRemoveSession)
 
-  key <- randomCookieKey()
-  sc <- sessionCookie(
+  key <- random_cookie_key()
+  sc <- session_cookie(
     key,
     name = "plcook"
   )
@@ -91,8 +91,8 @@ test_that("cookies are read", {
 
   r$handle("GET", "/", expr)
 
-  key <- randomCookieKey()
-  sc <- sessionCookie(
+  key <- random_cookie_key()
+  sc <- session_cookie(
     key,
     name = "plcook"
   )
@@ -122,8 +122,8 @@ test_that("invalid cookies/JSON are handled", {
 
   r$handle("GET", "/", expr)
 
-  key <- randomCookieKey()
-  sc <- sessionCookie(
+  key <- random_cookie_key()
+  sc <- session_cookie(
     key,
     name = "plcook"
   )
@@ -131,7 +131,7 @@ test_that("invalid cookies/JSON are handled", {
 
   res <- PlumberResponse$new()
 
-  badKey <- randomCookieKey()
+  badKey <- random_cookie_key()
   x <- list(abc = 1234)
   encodedX <- encodeCookie(x, asCookieKey(badKey))
   expect_silent({
@@ -154,8 +154,8 @@ test_that("cookie attributes are set", {
 
   r$handle("GET", "/", expr)
 
-  key <- randomCookieKey()
-  sc <- sessionCookie(
+  key <- random_cookie_key()
+  sc <- session_cookie(
     key,
     name = "plcook",
     expiration = 10,

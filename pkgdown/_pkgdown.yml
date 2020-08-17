@@ -101,8 +101,8 @@ reference:
 - title: Cookies and Filters
   contents:
   - 'pr_cookie'
-  - 'randomCookieKey'
-  - 'sessionCookie'
+  - 'random_cookie_key'
+  - 'session_cookie'
   - 'forward'
 
 - title: R6 Constructors
