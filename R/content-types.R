@@ -56,7 +56,7 @@ getContentType <- function(ext, defaultType='application/octet-stream') {
 }
 
 #' Request character set
-#' @param contentType Request Content-Type header
+#' @param content_type Request Content-Type header
 #' @return Default to `UTF-8`. Otherwise return `charset` defined in request header.
 #' @export
 get_character_set <- function(content_type = NULL) {

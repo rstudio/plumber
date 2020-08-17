@@ -1,7 +1,6 @@
-#' Register a Serializer
+#' Deprecated functions
 #'
-#' Use [register_serializer()] in favor of addSerializer
-#'
+#' @describeIn deprecated See [register_serializer()]
 #' @export
 #' @keywords internal
 addSerializer <- function(name, serializer, verbose = TRUE) {
@@ -10,16 +9,16 @@ addSerializer <- function(name, serializer, verbose = TRUE) {
   register_serializer(name = name, serializer = serializer, verbose = verbose)
 }
 
+#' @describeIn deprecated See [get_character_set()]
 #' @export
-#' @keywords internal
 getCharacterSet <- function(contentType = NULL) {
   lifecycle::deprecate_soft("1.0.0", "getCharacterSet()", "get_character_set()")
   get_character_set(content_type = contentType)
 }
 
 
+#' @describeIn deprecated See [session_cookie()]
 #' @export
-#' @keywords internal
 sessionCookie <- function(
   key,
   name = "plumber",

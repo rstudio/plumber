@@ -7,7 +7,7 @@
 get_character_set(content_type = NULL)
 }
 \arguments{
-\item{contentType}{Request Content-Type header}
+\item{content_type}{Request Content-Type header}
 }
 \value{
 Default to \code{UTF-8}. Otherwise return \code{charset} defined in request header.
