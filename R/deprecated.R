@@ -5,6 +5,8 @@
 #' @export
 #' @keywords internal
 addSerializer <- function(name, serializer, verbose = TRUE) {
+  lifecycle::deprecate_soft("1.0.0", "addSerializer()", "register_serializer()")
+
   register_serializer(name = name, serializer = serializer, verbose = verbose)
 }
 
