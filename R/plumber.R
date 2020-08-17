@@ -207,12 +207,13 @@ plumber <- R6Class(
     #' @param debug Deprecated. See `$set_debug()`
     #' @param swagger Deprecated. See `$set_ui(ui)` or `$set_api_spec()`
     #' @param swaggerCallback Deprecated. See `$set_ui_callback()`
+    #' @importFrom lifecycle deprecated
     run = function(
       host = '127.0.0.1',
       port = getOption('plumber.port', NULL),
-      swagger = stop("deprecated"),
-      debug = stop("deprecated"),
-      swaggerCallback = stop("deprecated")
+      swagger = deprecated(),
+      debug = deprecated(),
+      swaggerCallback = deprecated()
     ) {
 
       if (isTRUE(private$disable_run)) {
@@ -221,35 +222,31 @@ plumber <- R6Class(
 
       # Legacy support for RStudio pro products.
       # Checks must be kept for >= 2 yrs after plumber v1.0.0 release date
-      if (!missing(debug)) {
-        message("`$run(debug)` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$set_debug(debug)`")
+      if (lifecycle::is_present(debug)) {
+        lifecycle::deprecate_warn("1.0.0", "run(debug = )", "set_debug(debug = )")
         self$set_debug(debug)
       }
-      if (!missing(swagger)) {
+      if (lifecycle::is_present(swagger)) {
         if (is.function(swagger)) {
           # between v0.4.6 and v1.0.0
-          message("`$run(swagger)` has been deprecated in v1.0.0 and will be removed in a coming release. To alter the swagger spec, please use `$set_api_spec(api)`")
+          lifecycle::deprecate_warn("1.0.0", "run(swagger = )", "set_api_spec(api = )")
           self$set_api_spec(swagger)
           # spec is now enabled by default. Do not alter
         } else {
           if (isTRUE(private$ui_info$has_not_been_set)) {
             # <= v0.4.6
-            message("`$run(swagger)` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$set_ui(ui)`")
+            lifecycle::deprecate_warn("1.0.0", "run(swagger = )", "set_ui(ui = )")
             self$set_ui(swagger)
           } else {
             # $set_ui() has been called (other than during initialization).
             # Believe that it is the correct behavior
             # Warn about updating the run method
-            message(
-              "`$run(swagger)` has been deprecated in v1.0.0 and will be removed in a coming release.\n",
-              "The plumber UI has already been set. Ignoring `swagger` parameter.\n",
-              "Please update your `$run()` method."
-            )
+            lifecycle::deprecate_warn("1.0.0", "run(swagger = )", details = "The plumber UI has already been set. Ignoring `swagger` parameter.")
           }
         }
       }
-      if (!missing(swaggerCallback)) {
-        message("`$run(swaggerCallback)` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$set_ui_callback(callback)`")
+      if (lifecycle::is_present(swaggerCallback)) {
+        .Deprecated(msg = "`$run(swaggerCallback)` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$set_ui_callback(callback)`")
         self$set_ui_callback(swaggerCallback)
       }
 
