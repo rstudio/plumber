@@ -34,7 +34,7 @@ test_that("addAssets continues to work", {
 test_that("getCharacterSet continues to work", {
   expect_equal(
     lifecycle::expect_deprecated(getCharacterSet(contentType = "foo")),
-    "UTF8"
+    "UTF-8"
   )
 })
 
