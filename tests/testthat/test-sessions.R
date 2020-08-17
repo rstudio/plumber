@@ -161,7 +161,7 @@ test_that("cookie attributes are set", {
     expiration = 10,
     http = TRUE,
     secure = TRUE,
-    sameSite = "None"
+    same_site = "None"
   )
 
   r$registerHooks(sc)

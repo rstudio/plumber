@@ -51,7 +51,7 @@ test_that("cookies can convert to string", {
   expect_equal(cookieToStr("complex2", "forbidden:,%/"), "complex2=forbidden%3A%2C%25%2F")
   expect_equal(cookieToStr("abc", 123, path="/somepath"), "abc=123; Path=/somepath")
   expect_equal(cookieToStr("abc", 123, http=TRUE, secure=TRUE), "abc=123; HttpOnly; Secure")
-  expect_equal(cookieToStr("abc", 123, http=TRUE, secure=TRUE, sameSite="None"), "abc=123; HttpOnly; Secure; SameSite=None")
+  expect_equal(cookieToStr("abc", 123, http=TRUE, secure=TRUE, same_site="None"), "abc=123; HttpOnly; Secure; SameSite=None")
 
   now <- force(Sys.time())
   cookieToStr_ <- function(expiration, ...) {
@@ -103,7 +103,7 @@ test_that("remove cookie string works", {
     "asdf=; Path=/; HttpOnly; Secure; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
   )
   expect_equal(
-    removeCookieStr("asdf", path = "/", http = TRUE, secure = TRUE, sameSite = "None"),
+    removeCookieStr("asdf", path = "/", http = TRUE, secure = TRUE, same_site = "None"),
     "asdf=; Path=/; HttpOnly; Secure; SameSite=None; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
   )
 })
