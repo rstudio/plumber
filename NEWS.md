@@ -128,6 +128,7 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 * Added support for swagger for mounted routers (@bradleyhd, #274).
 
+* Updated security vignette: Prevent large plots with more than 1000 points.
 
 ### Bug fixes
 
