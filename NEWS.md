@@ -5,11 +5,11 @@ plumber 1.0.0
 
 * Secret session cookies are now encrypted using `sodium`.
   All prior `req$session` information will be lost.
-  Please see `?sessionCookie` for more information.
+  Please see `?session_cookie` for more information.
   (#404)
 
 * Session cookies set the `HttpOnly` flag by default to mitigate cross-site scripting (XSS).
-  Please see `?sessionCookie` for more information.
+  Please see `?session_cookie` for more information.
   (#404)
 
 * Wrap `jsonlite::fromJSON` to ensure that `jsonlite` never reads
@@ -41,6 +41,10 @@ plumber 1.0.0
 * Shorthand serializers are now deprecated. `@html`, `@json`, `@png`, `@jpeg`, `@svg` should be replaced with the `@serializer` syntax. Ex: `@serializer html` or `@serializer jpeg` (#630)
 
 * `addSerializer()` has been deprecated in favor of `register_serializer()` (#584)
+
+* `getCharacterSet()` has been deprecated in favor of `get_character_set()`.
+* `randomCookieKey()` has been deprecated in favor of `random_cookie_key()`.
+* `sessionCookie()` has been deprecated in favor of `session_cookie()`.
 
 ### New features
 
