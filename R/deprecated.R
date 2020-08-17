@@ -7,6 +7,15 @@
 addSerializer <- function(name, serializer, verbose = TRUE) {
   register_serializer(name = name, serializer = serializer, verbose = verbose)
 }
+
+#' @export
+#' @keywords internal
+getCharacterSet <- function(contentType = NULL) {
+  lifecycle::deprecate_soft("1.0.0", "getCharacterSet()", "get_character_set()")
+  get_character_set(content_type = contentType)
+}
+
+
 #' @export
 #' @keywords internal
 sessionCookie <- function(

@@ -88,7 +88,7 @@ reference:
   contents:
   - 'register_parser'
   - 'parser_form'
-  - 'getCharacterSet'
+  - 'get_character_set'
 
 - title: Response
   contents:

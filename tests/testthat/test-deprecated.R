@@ -31,6 +31,13 @@ test_that("addAssets continues to work", {
   expect_true(inherits(val, "PlumberResponse"))
 })
 
+test_that("getCharacterSet continues to work", {
+  expect_equal(
+    lifecycle::expect_deprecated(getCharacterSet(contentType = "foo")),
+    "UTF8"
+  )
+})
+
 
 test_that("sessionCookie continues to work", {
   key <- random_cookie_key()

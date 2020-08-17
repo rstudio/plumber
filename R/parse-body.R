@@ -137,7 +137,7 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
 #' # `content-type` header is mostly used to look up charset and adjust encoding
 #' parser_dcf <- function(...) {
 #'   function(value, content_type = "text/x-dcf", ...) {
-#'     charset <- getCharacterSet(content_type)
+#'     charset <- get_character_set(content_type)
 #'     value <- rawToChar(value)
 #'     Encoding(value) <- charset
 #'     read.dcf(value, ...)
@@ -358,7 +358,7 @@ parser_json <- function(...) {
 parser_text <- function(parse_fn = identity) {
   stopifnot(is.function(parse_fn))
   function(value, content_type = NULL, ...) {
-    charset <- getCharacterSet(content_type)
+    charset <- get_character_set(content_type)
     txt_value <- rawToChar(value)
     Encoding(txt_value) <- charset
     parse_fn(txt_value)

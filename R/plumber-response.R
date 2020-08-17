@@ -22,7 +22,7 @@ PlumberResponse <- R6Class(
         body <- ""
       }
 
-      charset <- getCharacterSet(h$HTTP_CONTENT_TYPE)
+      charset <- get_character_set(h$HTTP_CONTENT_TYPE)
       if (is.character(body)) {
         Encoding(body) <- charset
       }
