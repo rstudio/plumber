@@ -128,7 +128,7 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
     if (!is.na(shortSerMat[1,2])) {
       s <- stri_trim_both(shortSerMat[1,2])
       .Deprecated(msg = paste0(
-        "Plumber tag `#* @", s, "` is deprecated.\n",
+        "Plumber tag `#* @", s, "` is soft deprecated.\n",
         "Use `#* @serializer ", s, "` instead."
       ))
       if (!is.null(serializer)){
