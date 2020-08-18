@@ -180,8 +180,8 @@
 <h3 class="hasAnchor">
 <a href="#security" class="anchor"></a>Security</h3>
 <ul>
-<li><p>Secret session cookies are now encrypted using <code>sodium</code>. All prior <code>req$session</code> information will be lost. Please see <code><a href="../reference/sessionCookie.html">?sessionCookie</a></code> for more information. (<a href='https://github.com/rstudio/plumber/issues/404'>#404</a>)</p></li>
-<li><p>Session cookies set the <code>HttpOnly</code> flag by default to mitigate cross-site scripting (XSS). Please see <code><a href="../reference/sessionCookie.html">?sessionCookie</a></code> for more information. (<a href='https://github.com/rstudio/plumber/issues/404'>#404</a>)</p></li>
+<li><p>Secret session cookies are now encrypted using <code>sodium</code>. All prior <code>req$session</code> information will be lost. Please see <code><a href="../reference/session_cookie.html">?session_cookie</a></code> for more information. (<a href='https://github.com/rstudio/plumber/issues/404'>#404</a>)</p></li>
+<li><p>Session cookies set the <code>HttpOnly</code> flag by default to mitigate cross-site scripting (XSS). Please see <code><a href="../reference/session_cookie.html">?session_cookie</a></code> for more information. (<a href='https://github.com/rstudio/plumber/issues/404'>#404</a>)</p></li>
 <li><p>Wrap <code><a href="https://jeroen.cran.dev/jsonlite/reference/fromJSON.html">jsonlite::fromJSON</a></code> to ensure that <code>jsonlite</code> never reads input as a remote address (such as a file path or URL) and attempts to parse that. The only known way to exploit this behavior in plumber unless an API were using encrypted cookies and an attacker knew the encryption key in order to craft arbitrary cookies. (<a href='https://github.com/rstudio/plumber/issues/325'>#325</a>)</p></li>
 </ul>
 </div>
@@ -206,6 +206,9 @@
 <ul>
 <li><p>Shorthand serializers are now deprecated. <code>@html</code>, <code>@json</code>, <code>@png</code>, <code>@jpeg</code>, <code>@svg</code> should be replaced with the <code>@serializer</code> syntax. Ex: <code>@serializer html</code> or <code>@serializer jpeg</code> (<a href='https://github.com/rstudio/plumber/issues/630'>#630</a>)</p></li>
 <li><p><code><a href="../reference/addSerializer.html">addSerializer()</a></code> has been deprecated in favor of <code><a href="../reference/register_serializer.html">register_serializer()</a></code> (<a href='https://github.com/rstudio/plumber/issues/584'>#584</a>)</p></li>
+<li><p><code><a href="../reference/addSerializer.html">getCharacterSet()</a></code> has been deprecated in favor of <code><a href="../reference/get_character_set.html">get_character_set()</a></code>.</p></li>
+<li><p><code>randomCookieKey()</code> has been deprecated in favor of <code><a href="../reference/random_cookie_key.html">random_cookie_key()</a></code>.</p></li>
+<li><p><code><a href="../reference/addSerializer.html">sessionCookie()</a></code> has been deprecated in favor of <code><a href="../reference/session_cookie.html">session_cookie()</a></code>.</p></li>
 </ul>
 </div>
 <div id="new-features" class="section level3">

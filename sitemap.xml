@@ -13,10 +13,10 @@
     <loc>https://www.rplumber.io/reference/PlumberStep.html</loc>
   </url>
   <url>
-    <loc>https://www.rplumber.io/reference/addSerializer.html</loc>
+    <loc>https://www.rplumber.io/reference/as_attachment.html</loc>
   </url>
   <url>
-    <loc>https://www.rplumber.io/reference/as_attachment.html</loc>
+    <loc>https://www.rplumber.io/reference/deprecated.html</loc>
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/do_configure_https.html</loc>
@@ -43,7 +43,7 @@
     <loc>https://www.rplumber.io/reference/forward.html</loc>
   </url>
   <url>
-    <loc>https://www.rplumber.io/reference/getCharacterSet.html</loc>
+    <loc>https://www.rplumber.io/reference/get_character_set.html</loc>
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/hookable.html</loc>
@@ -115,7 +115,7 @@
     <loc>https://www.rplumber.io/reference/pr_set_ui_callback.html</loc>
   </url>
   <url>
-    <loc>https://www.rplumber.io/reference/randomCookieKey.html</loc>
+    <loc>https://www.rplumber.io/reference/random_cookie_key.html</loc>
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/register_parser.html</loc>
@@ -130,7 +130,7 @@
     <loc>https://www.rplumber.io/reference/serializers.html</loc>
   </url>
   <url>
-    <loc>https://www.rplumber.io/reference/sessionCookie.html</loc>
+    <loc>https://www.rplumber.io/reference/session_cookie.html</loc>
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/validate_api_spec.html</loc>

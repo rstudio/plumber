@@ -454,7 +454,7 @@
 </pre></div>
 <p>Since this API is using a <code>PUT</code> request to test this API, we’ll use <code>curl</code> on the command line to test it. (There’s nothing about cookies that necessitates <code>PUT</code> requests; you could just as easily modify this API to use a <code>GET</code> request.) We can start by visiting the <code>/letter</code> endpoint and we’ll see that the API defaults to a lower-case alphabet. <code>curl http://localhost:8000/letter</code></p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">{</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a>  <span class="dt">"letter"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"w"</span><span class="ot">]</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>  <span class="dt">"letter"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"u"</span><span class="ot">]</span></span>
 <span id="cb15-3"><a href="#cb15-3"></a><span class="fu">}</span></span></code></pre></div>
 <p>If we send a <code>PUT</code> request and specify the <code>capital</code> parameter, a cookie will be set on the client which will allow the server to accommodate our preference in future requests. In <code>curl</code>, you need to specify a file in which you want to save these cookies using the <code>-c</code> option. This is a good reminder that clients handle cookies differently – some won’t support them at all – so be sure that the clients you intend to support with your API play nicely with cookies if you want to use them.</p>
 <p>To send a <code>PUT</code> request, setting the parameter <code>capital</code> to <code>1</code>, we could invoke: <code>curl -c cookies.txt -X PUT --data 'capital=1' "http://localhost:8000/preferences"</code>. If you print out the <code>cookies.txt</code> file, you should now see that it contains a single cookie called <code>capitalize</code> with a value of <code>1</code>.</p>
@@ -469,12 +469,12 @@
 <p>In addition to storing plain-text cookies, Plumber also supports handling cookies that are encrypted. Encrypted cookies prevent your users from seeing what is stored inside of them and also sign their contents so that users can’t modify what is stored.</p>
 <p>To use this feature, you must explicitly add it to your router after constructing it. For example, you could run the following sequence of commands to create a router that supports encrypted session cookies.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit">
-<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plumb.html">plumb</a></span>(<span class="st">"myfile.R"</span>)
-<span class="kw">pr</span><span class="op">$</span><span class="fu">registerHooks</span>(<span class="fu"><a href="../reference/sessionCookie.html">sessionCookie</a></span>(<span class="st">"mySecretHere"</span>, <span class="st">"cookieName"</span>))
-<span class="kw">pr</span><span class="op">$</span><span class="fu">run</span>()
+<span class="fu"><a href="../reference/plumb.html">plumb</a></span>(<span class="st">"myfile.R"</span>) <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_cookie.html">pr_cookie</a></span>(<span class="st">"mySecretHere"</span>, <span class="st">"cookieName"</span>) <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span>()
 </pre></div>
-<p>You’ll notice the above example is using the <code>sessionCookie</code> hooks that come with Plumber. By adding registering these hooks on your router, you’ll ensure that the <code>req$session</code> object is made available on incoming requests and is persisted to the cookie named <code>cookieName</code> when the response is ready to be sent to the user. In this example, the key used to encrypt the data is <code>"mySecretHere"</code>, which is obviously a very weak secret key.</p>
-<p>Unlike <code>res$setHeader()</code>, the values attached to <code>req$session</code> <em>are</em> serialized via <code>jsonlite</code>; so you’re free to use more complex data structures like lists in your session. Also unlike <code>res$setHeaders()</code>, <code>req$session</code> encrypts the data using the secret key you provide as the first argument to the <code><a href="../reference/sessionCookie.html">sessionCookie()</a></code> function.</p>
+<p>You’ll notice the above example is using the <code>session_cookie</code> hooks that come with Plumber. By adding registering these hooks on your router, you’ll ensure that the <code>req$session</code> object is made available on incoming requests and is persisted to the cookie named <code>cookieName</code> when the response is ready to be sent to the user. In this example, the key used to encrypt the data is <code>"mySecretHere"</code>, which is obviously a very weak secret key.</p>
+<p>Unlike <code>res$setHeader()</code>, the values attached to <code>req$session</code> <em>are</em> serialized via <code>jsonlite</code>; so you’re free to use more complex data structures like lists in your session. Also unlike <code>res$setHeaders()</code>, <code>req$session</code> encrypts the data using the secret key you provide as the first argument to the <code><a href="../reference/session_cookie.html">session_cookie()</a></code> function.</p>
 <p>As an example, we’ll store an encrypted cookie that counts how many times this client has visited a particular endpoint:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit">
 <span class="co">#* @get /sessionCounter</span>
@@ -487,7 +487,7 @@
   <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"This is visit #"</span>, <span class="kw">count</span>))
 }
 </pre></div>
-<p>Again, you would need to register the <code><a href="../reference/sessionCookie.html">sessionCookie()</a></code> hooks on your router before this code would work.</p>
+<p>Again, you would need to register the <code><a href="../reference/session_cookie.html">session_cookie()</a></code> hooks on your router before this code would work.</p>
 <p>If you inspect the cookie being set in your browser, you’ll find that its value is encrypted by the time it gets to the client. But by the time it arrives in Plumber, your cookie is available as a regular R list and can be read or modified.</p>
 </div>
 </div>

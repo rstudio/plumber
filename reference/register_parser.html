@@ -241,7 +241,7 @@ if you want to use the headers from <code><a href='https://rdrr.io/pkg/webutils/
     <pre class="examples"><div class='input'><span class='co'># `content-type` header is mostly used to look up charset and adjust encoding</span>
 <span class='kw'>parser_dcf</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>...</span>) {
   <span class='fu'>function</span>(<span class='kw'>value</span>, <span class='kw'>content_type</span> = <span class='st'>"text/x-dcf"</span>, <span class='kw'>...</span>) {
-    <span class='kw'>charset</span> <span class='op'>&lt;-</span> <span class='fu'><a href='getCharacterSet.html'>getCharacterSet</a></span>(<span class='kw'>content_type</span>)
+    <span class='kw'>charset</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_character_set.html'>get_character_set</a></span>(<span class='kw'>content_type</span>)
     <span class='kw'>value</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rawConversion.html'>rawToChar</a></span>(<span class='kw'>value</span>)
     <span class='fu'><a href='https://rdrr.io/r/base/Encoding.html'>Encoding</a></span>(<span class='kw'>value</span>) <span class='op'>&lt;-</span> <span class='kw'>charset</span>
     <span class='fu'><a href='https://rdrr.io/r/base/dcf.html'>read.dcf</a></span>(<span class='kw'>value</span>, <span class='kw'>...</span>)

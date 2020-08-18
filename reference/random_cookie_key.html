@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Endpoint Serializer with Hooks — endpoint_serializer • plumber</title>
+<title>Random cookie key generator — random_cookie_key • plumber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,9 +52,8 @@
 
 
 
-<meta property="og:title" content="Endpoint Serializer with Hooks — endpoint_serializer" />
-<meta property="og:description" content="This method allows serializers to return both preexec and postexec hooks in addition to a serializer.
-This is useful for graphics device serializers which need a preexec and postexec hook to capture the graphics output." />
+<meta property="og:title" content="Random cookie key generator — random_cookie_key" />
+<meta property="og:description" content="Uses a cryptographically secure pseudorandom number generator from sodium::helpers() to generate a 64 digit hexadecimal string.  'sodium' wraps around 'libsodium'." />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
 
 
@@ -171,74 +170,28 @@ This is useful for graphics device serializers which need a preexec and postexec
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Endpoint Serializer with Hooks</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/serializer.R'><code>R/serializer.R</code></a></small>
-    <div class="hidden name"><code>endpoint_serializer.Rd</code></div>
+    <h1>Random cookie key generator</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/session-cookie.R'><code>R/session-cookie.R</code></a></small>
+    <div class="hidden name"><code>random_cookie_key.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This method allows serializers to return both <code>preexec</code> and <code>postexec</code> hooks in addition to a serializer.
-This is useful for graphics device serializers which need a <code>preexec</code> and <code>postexec</code> hook to capture the graphics output.</p>
+    <p>Uses a cryptographically secure pseudorandom number generator from <code><a href='https://rdrr.io/pkg/sodium/man/helpers.html'>sodium::helpers()</a></code> to generate a 64 digit hexadecimal string.  <a href='https://github.com/jeroen/sodium'>'sodium'</a> wraps around <a href='https://download.libsodium.org/doc/'>'libsodium'</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>endpoint_serializer</span>(<span class='kw'>serializer</span>, preexec_hook = <span class='kw'>NULL</span>, postexec_hook = <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>random_cookie_key</span>()</pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>serializer</th>
-      <td><p>Serializer method to be used.  This method should already have its initialization arguments applied.</p></td>
-    </tr>
-    <tr>
-      <th>preexec_hook</th>
-      <td><p>Function to be run directly before a <a href='PlumberEndpoint.html'>PlumberEndpoint</a> calls its route method.</p></td>
-    </tr>
-    <tr>
-      <th>postexec_hook</th>
-      <td><p>Function to be run directly after a <a href='PlumberEndpoint.html'>PlumberEndpoint</a> calls its route method.</p></td>
-    </tr>
-    </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A 64 digit hexadecimal string to be used as a key for cookie encryption.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>preexec</code> and <code>postexec</code> hooks happend directly before and after a route is executed.
-These hooks are specific to a single <a href='PlumberEndpoint.html'>PlumberEndpoint</a>'s route calculation.</p>
+    <p>Please see <code><a href='session_cookie.html'>session_cookie</a></code> for more information on how to save the generated key.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># The definition of `serializer_device` returns</span>
-<span class='co'># * `preexec`, `postexec` hooks</span>
-<span class='co'># * a `serializer_content_type` serializer</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>serializer_device</span>)</div><div class='output co'>#&gt; function (type, dev_on, dev_off = grDevices::dev.off) 
-#&gt; {
-#&gt;     stopifnot(!missing(type))
-#&gt;     stopifnot(!missing(dev_on))
-#&gt;     stopifnot(is.function(dev_on))
-#&gt;     stopifnot(length(formals(dev_on)) &gt; 0)
-#&gt;     if (!any(c("filename", "...") %in% names(formals(dev_on)))) {
-#&gt;         stop("`dev_on` must contain an arugment called `filename` or have `...`")
-#&gt;     }
-#&gt;     stopifnot(is.function(dev_off))
-#&gt;     endpoint_serializer(serializer = serializer_content_type(type), 
-#&gt;         preexec_hook = function(req, res, data) {
-#&gt;             tmpfile &lt;- tempfile()
-#&gt;             data$file &lt;- tmpfile
-#&gt;             dev_on(filename = tmpfile)
-#&gt;         }, postexec_hook = function(value, req, res, data) {
-#&gt;             dev_off()
-#&gt;             on.exit({
-#&gt;                 unlink(data$file)
-#&gt;             }, add = TRUE)
-#&gt;             con &lt;- file(data$file, "rb")
-#&gt;             on.exit({
-#&gt;                 close(con)
-#&gt;             }, add = TRUE)
-#&gt;             img &lt;- readBin(con, "raw", file.info(data$file)$size)
-#&gt;             img
-#&gt;         })
-#&gt; }
-#&gt; &lt;bytecode: 0x7fac7641d2b0&gt;
-#&gt; &lt;environment: namespace:plumber&gt;</div></pre>
+    <div class='dont-index'><p><code><a href='session_cookie.html'>session_cookie</a></code></p></div>
+
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
