@@ -215,7 +215,7 @@ PlumberEndpoint <- R6Class(
     #' @param expr Endpoint function or expression that evaluates to a function.
     #' @param envir Endpoint environment
     #' @param serializer Endpoint serializer. Ex: [serializer_json()]
-    #' @template pr_set_parsers__parsers
+    #' @template pr_setParsers__parsers
     #' @param lines Endpoint block
     #' @param params Endpoint params
     #' @param comments,responses,tags Values to be used within the OpenAPI Spec

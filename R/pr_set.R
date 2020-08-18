@@ -23,14 +23,14 @@ pr_set_serializer <- function(pr, serializer) {
 #' Note: The default set of parsers will be completely replaced if any value is supplied. Be sure to include all of your parsers that you would like to include.
 #'
 #' @template param_pr
-#' @template pr_set_parsers__parsers
+#' @template pr_setParsers__parsers
 #'
 #' @return The Plumber router with the new default [PlumberEndpoint] parsers
 #'
 #' @export
 pr_set_parsers <- function(pr, parsers) {
   validate_pr(pr)
-  pr$set_parsers(parsers)
+  pr$setParsers(parsers)
   invisible(pr)
 }
 

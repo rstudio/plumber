@@ -127,7 +127,7 @@ pr$setErrorHandler(function(req, res, err) {
 \item \href{#method-onHeaders}{\code{Plumber$onHeaders()}}
 \item \href{#method-onWSOpen}{\code{Plumber$onWSOpen()}}
 \item \href{#method-setSerializer}{\code{Plumber$setSerializer()}}
-\item \href{#method-set_parsers}{\code{Plumber$set_parsers()}}
+\item \href{#method-setParsers}{\code{Plumber$setParsers()}}
 \item \href{#method-set404Handler}{\code{Plumber$set404Handler()}}
 \item \href{#method-setErrorHandler}{\code{Plumber$setErrorHandler()}}
 \item \href{#method-set_ui}{\code{Plumber$set_ui()}}
@@ -598,12 +598,12 @@ pr$setSerializer(serializer_unboxed_json())
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_parsers"></a>}}
-\if{latex}{\out{\hypertarget{method-set_parsers}{}}}
-\subsection{Method \code{set_parsers()}}{
+\if{html}{\out{<a id="method-setParsers"></a>}}
+\if{latex}{\out{\hypertarget{method-setParsers}{}}}
+\subsection{Method \code{setParsers()}}{
 Sets the default parsers of the router.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Plumber$set_parsers(parsers)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$setParsers(parsers)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

@@ -46,10 +46,10 @@ Creates a router that is backed by a directory of files on disk.
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="serve">}\href{../../plumber/html/Plumber.html#method-serve}{\code{plumber::Plumber$serve()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set404Handler">}\href{../../plumber/html/Plumber.html#method-set404Handler}{\code{plumber::Plumber$set404Handler()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setErrorHandler">}\href{../../plumber/html/Plumber.html#method-setErrorHandler}{\code{plumber::Plumber$setErrorHandler()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setParsers">}\href{../../plumber/html/Plumber.html#method-setParsers}{\code{plumber::Plumber$setParsers()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setSerializer">}\href{../../plumber/html/Plumber.html#method-setSerializer}{\code{plumber::Plumber$setSerializer()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set_api_spec">}\href{../../plumber/html/Plumber.html#method-set_api_spec}{\code{plumber::Plumber$set_api_spec()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set_debug">}\href{../../plumber/html/Plumber.html#method-set_debug}{\code{plumber::Plumber$set_debug()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set_parsers">}\href{../../plumber/html/Plumber.html#method-set_parsers}{\code{plumber::Plumber$set_parsers()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set_ui">}\href{../../plumber/html/Plumber.html#method-set_ui}{\code{plumber::Plumber$set_ui()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set_ui_callback">}\href{../../plumber/html/Plumber.html#method-set_ui_callback}{\code{plumber::Plumber$set_ui_callback()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="swaggerFile">}\href{../../plumber/html/Plumber.html#method-swaggerFile}{\code{plumber::Plumber$swaggerFile()}}\out{</span>}
