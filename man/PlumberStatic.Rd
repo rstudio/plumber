@@ -32,8 +32,8 @@ Creates a router that is backed by a directory of files on disk.
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="addGlobalProcessor">}\href{../../plumber/html/Plumber.html#method-addGlobalProcessor}{\code{plumber::Plumber$addGlobalProcessor()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="call">}\href{../../plumber/html/Plumber.html#method-call}{\code{plumber::Plumber$call()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="filter">}\href{../../plumber/html/Plumber.html#method-filter}{\code{plumber::Plumber$filter()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="getApiSpec">}\href{../../plumber/html/Plumber.html#method-getApiSpec}{\code{plumber::Plumber$getApiSpec()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="getDebug">}\href{../../plumber/html/Plumber.html#method-getDebug}{\code{plumber::Plumber$getDebug()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="get_api_spec">}\href{../../plumber/html/Plumber.html#method-get_api_spec}{\code{plumber::Plumber$get_api_spec()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="handle">}\href{../../plumber/html/Plumber.html#method-handle}{\code{plumber::Plumber$handle()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="mount">}\href{../../plumber/html/Plumber.html#method-mount}{\code{plumber::Plumber$mount()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="onHeaders">}\href{../../plumber/html/Plumber.html#method-onHeaders}{\code{plumber::Plumber$onHeaders()}}\out{</span>}
@@ -45,13 +45,13 @@ Creates a router that is backed by a directory of files on disk.
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="run">}\href{../../plumber/html/Plumber.html#method-run}{\code{plumber::Plumber$run()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="serve">}\href{../../plumber/html/Plumber.html#method-serve}{\code{plumber::Plumber$serve()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set404Handler">}\href{../../plumber/html/Plumber.html#method-set404Handler}{\code{plumber::Plumber$set404Handler()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setApiSpec">}\href{../../plumber/html/Plumber.html#method-setApiSpec}{\code{plumber::Plumber$setApiSpec()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setDebug">}\href{../../plumber/html/Plumber.html#method-setDebug}{\code{plumber::Plumber$setDebug()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setErrorHandler">}\href{../../plumber/html/Plumber.html#method-setErrorHandler}{\code{plumber::Plumber$setErrorHandler()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setParsers">}\href{../../plumber/html/Plumber.html#method-setParsers}{\code{plumber::Plumber$setParsers()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setSerializer">}\href{../../plumber/html/Plumber.html#method-setSerializer}{\code{plumber::Plumber$setSerializer()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setUi">}\href{../../plumber/html/Plumber.html#method-setUi}{\code{plumber::Plumber$setUi()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setUiCallback">}\href{../../plumber/html/Plumber.html#method-setUiCallback}{\code{plumber::Plumber$setUiCallback()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set_api_spec">}\href{../../plumber/html/Plumber.html#method-set_api_spec}{\code{plumber::Plumber$set_api_spec()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="swaggerFile">}\href{../../plumber/html/Plumber.html#method-swaggerFile}{\code{plumber::Plumber$swaggerFile()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="unmount">}\href{../../plumber/html/Plumber.html#method-unmount}{\code{plumber::Plumber$unmount()}}\out{</span>}
 }

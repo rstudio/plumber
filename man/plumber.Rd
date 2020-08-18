@@ -135,8 +135,8 @@ pr$setErrorHandler(function(req, res, err) {
 \item \href{#method-setDebug}{\code{Plumber$setDebug()}}
 \item \href{#method-getDebug}{\code{Plumber$getDebug()}}
 \item \href{#method-filter}{\code{Plumber$filter()}}
-\item \href{#method-set_api_spec}{\code{Plumber$set_api_spec()}}
-\item \href{#method-get_api_spec}{\code{Plumber$get_api_spec()}}
+\item \href{#method-setApiSpec}{\code{Plumber$setApiSpec()}}
+\item \href{#method-getApiSpec}{\code{Plumber$getApiSpec()}}
 \item \href{#method-addEndpoint}{\code{Plumber$addEndpoint()}}
 \item \href{#method-addAssets}{\code{Plumber$addAssets()}}
 \item \href{#method-addFilter}{\code{Plumber$addFilter()}}
@@ -209,7 +209,7 @@ Mac OS X, port numbers smaller than 1025 require root privileges.
 
 This value does not need to be explicitly assigned. To explicity set it, see \code{\link[=options_plumber]{options_plumber()}}.}
 
-\item{\code{swagger}}{Deprecated. See \verb{$setUi(ui)} or \verb{$set_api_spec()}}
+\item{\code{swagger}}{Deprecated. See \verb{$setUi(ui)} or \verb{$setApiSpec()}}
 
 \item{\code{debug}}{Deprecated. See \verb{$setDebug()}}
 
@@ -741,9 +741,7 @@ If using \code{\link[=options_plumber]{options_plumber()}}, the value must be se
 
 See also: \code{\link[=pr_set_ui_callback]{pr_set_ui_callback()}}
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Plumber$setUiCallback(
-  callback = getOption("plumber.ui.callback", getOption("plumber.swagger.url", NULL))
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$setUiCallback(callback = getOption("plumber.ui.callback", NULL))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -809,17 +807,17 @@ See also: \code{\link[=pr_filter]{pr_filter()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_api_spec"></a>}}
-\if{latex}{\out{\hypertarget{method-set_api_spec}{}}}
-\subsection{Method \code{set_api_spec()}}{
-Add a function to customize what is returned in \verb{$get_api_spec()}.
+\if{html}{\out{<a id="method-setApiSpec"></a>}}
+\if{latex}{\out{\hypertarget{method-setApiSpec}{}}}
+\subsection{Method \code{setApiSpec()}}{
+Add a function to customize what is returned in \verb{$getApiSpec()}.
 
 Note, the returned value will be sent through \code{\link[=serializer_unboxed_json]{serializer_unboxed_json()}} which will turn all length 1 vectors into atomic values.
 To force a vector to serialize to an array of size 1, be sure to call \code{\link[=as.list]{as.list()}} on your value. \code{list()} objects are always serialized to an array value.
 
 See also: \code{\link[=pr_set_api_spec]{pr_set_api_spec()}}
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Plumber$set_api_spec(api = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$setApiSpec(api = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -837,12 +835,12 @@ The value returned will not be validated for OAS compatibility.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_api_spec"></a>}}
-\if{latex}{\out{\hypertarget{method-get_api_spec}{}}}
-\subsection{Method \code{get_api_spec()}}{
+\if{html}{\out{<a id="method-getApiSpec"></a>}}
+\if{latex}{\out{\hypertarget{method-getApiSpec}{}}}
+\subsection{Method \code{getApiSpec()}}{
 Retrieve openAPI file
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Plumber$get_api_spec()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$getApiSpec()}\if{html}{\out{</div>}}
 }
 
 }
