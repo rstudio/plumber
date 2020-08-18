@@ -169,7 +169,6 @@ combine_keys <- function(obj, type) {
   extra_args <- NULL
   if (type == "multi") {
     # handle unnamed args by removing them from being merged and adding them back again at the end
-    browser()
     no_name_positions <- (keys == "")
     if (any(no_name_positions)) {
       extra_args <- vals[no_name_positions]
