@@ -82,3 +82,4 @@ Collate:
     'utils-pipe.R'
     'validate_api_spec.R'
     'zzz.R'
+RdMacros: lifecycle

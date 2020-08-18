@@ -56,7 +56,7 @@ Parser function structure is something like below.\if{html}{\out{<div class="r">
 # `content-type` header is mostly used to look up charset and adjust encoding
 parser_dcf <- function(...) {
   function(value, content_type = "text/x-dcf", ...) {
-    charset <- getCharacterSet(content_type)
+    charset <- get_character_set(content_type)
     value <- rawToChar(value)
     Encoding(value) <- charset
     read.dcf(value, ...)

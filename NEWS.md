@@ -5,11 +5,11 @@ plumber 1.0.0
 
 * Secret session cookies are now encrypted using `sodium`.
   All prior `req$session` information will be lost.
-  Please see `?sessionCookie` for more information.
+  Please see `?session_cookie` for more information.
   (#404)
 
 * Session cookies set the `HttpOnly` flag by default to mitigate cross-site scripting (XSS).
-  Please see `?sessionCookie` for more information.
+  Please see `?session_cookie` for more information.
   (#404)
 
 * Wrap `jsonlite::fromJSON` to ensure that `jsonlite` never reads
@@ -42,8 +42,11 @@ plumber 1.0.0
 
 * `addSerializer()` has been deprecated in favor of `register_serializer()` (#584)
 
-* DigitalOcean helper functions are now defunct. The funtionality and documentation on how to deploy to DigitalOcean has been moved to [`plumberDeploy`](https://github.com/meztez/plumberDeploy) (by @meztez) (#649)
+* DigitalOcean helper functions are now defunct (`do_*()`). The funtionality and documentation on how to deploy to DigitalOcean has been moved to [`plumberDeploy`](https://github.com/meztez/plumberDeploy) (by @meztez) (#649)
 
+* `getCharacterSet()` has been deprecated in favor of `get_character_set()` (#651)
+* `randomCookieKey()` has been deprecated in favor of `random_cookie_key()` (#651)
+* `sessionCookie()` has been deprecated in favor of `session_cookie()` (#651)
 
 ### New features
 
@@ -131,6 +134,7 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 * Added support for swagger for mounted routers (@bradleyhd, #274).
 
+* Updated security vignette: Prevent large plots with more than 1000 points.
 
 ### Bug fixes
 

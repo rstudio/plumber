@@ -3,8 +3,8 @@
 #' @get /
 #' @serializer png
 function(pts=10) {
-  if (pts > 1000){
-    stop("pts must be < 1,000")
+  if (pts > 1000 & pts > 0){
+    stop("pts must be between 1 and 1,000")
   }
 
   plot(1:pts)

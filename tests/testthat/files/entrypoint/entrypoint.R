@@ -1,4 +1,4 @@
-plumber::addSerializer("fake", function(){
+plumber::register_serializer("fake", function(){
   function(val, req, res, errorHandler){
     tryCatch({
       json <- jsonlite::toJSON(val)

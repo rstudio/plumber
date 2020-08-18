@@ -331,7 +331,7 @@ pr_hooks <- function(pr,
 #' @template param_pr
 #' @param key The secret key to use. This must be consistent across all R sessions
 #'   where you want to save/restore encrypted cookies. It should be produced using
-#'   \code{\link{randomCookieKey}}. Please see the "Storing secure keys" section for more details
+#'   \code{\link{random_cookie_key}}. Please see the "Storing secure keys" section for more details
 #'   complex character string to bolster security.
 #' @param name The name of the cookie in the user's browser.
 #' @param expiration A number representing the number of seconds into the future
@@ -342,10 +342,10 @@ pr_hooks <- function(pr,
 #'   Defaults to \code{TRUE}.
 #' @param secure Boolean that adds the \code{Secure} cookie flag.  This should be set
 #'   when the route is eventually delivered over \href{https://en.wikipedia.org/wiki/HTTPS}{HTTPS}.
-#' @param sameSite A character specifying the SameSite policy to attach to the cookie.
+#' @param same_site A character specifying the SameSite policy to attach to the cookie.
 #'   If specified, one of the following values should be given: "Strict", "Lax", or "None".
 #'   If "None" is specified, then the \code{secure} flag MUST also be set for the modern browsers to
-#'   accept the cookie. An error will be returned if \code{sameSite = "None"} and \code{secure = FALSE}.
+#'   accept the cookie. An error will be returned if \code{same_site = "None"} and \code{secure = FALSE}.
 #'   If not specified or a non-character is given, no SameSite policy is attached to the cookie.
 #' @seealso \itemize{
 #' \item \href{https://github.com/jeroen/sodium}{'sodium'}: R bindings to 'libsodium'
@@ -358,7 +358,7 @@ pr_hooks <- function(pr,
 #' \dontrun{
 #'
 #' ## Set secret key using `keyring` (preferred method)
-#' keyring::key_set_with_value("plumber_api", password = plumber::randomCookieKey())
+#' keyring::key_set_with_value("plumber_api", password = plumber::random_cookie_key())
 #'
 #'
 #' pr() %>%
@@ -382,7 +382,7 @@ pr_hooks <- function(pr,
 #'
 #' ## Save key to a local file
 #' pswd_file <- "normal_file.txt"
-#' cat(plumber::randomCookieKey(), file = pswd_file)
+#' cat(plumber::random_cookie_key(), file = pswd_file)
 #' # Make file read-only
 #' Sys.chmod(pswd_file, mode = "0600")
 #'
@@ -408,10 +408,10 @@ pr_cookie <- function(pr,
                       expiration = FALSE,
                       http = TRUE,
                       secure = FALSE,
-                      sameSite = FALSE) {
+                      same_site = FALSE) {
   validate_pr(pr)
   pr$registerHooks(
-    sessionCookie(key = key, name = name, expiration = expiration, http = http, secure = secure, sameSite = sameSite)
+    session_cookie(key = key, name = name, expiration = expiration, http = http, secure = secure, same_site = same_site)
   )
   invisible(pr)
 }
