@@ -17,7 +17,7 @@ for_each_plumber_api <- function(fn, ...) {
         } else {
           plumb_api(package, name)
         }
-      expect_true(is_pr(pr), paste0("plumb_api(\"", package, "\", \"", name, "\")"))
+      expect_true(is_plumber(pr), paste0("plumb_api(\"", package, "\", \"", name, "\")"))
 
 
       fn(pr, ...)

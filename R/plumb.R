@@ -49,7 +49,7 @@ plumb <- function(file = NULL, dir = ".") {
       #   sourceUTF8 returns the (visible) value object. No need to call source()$value()
       pr <- sourceUTF8(entrypoint, new.env(parent = globalenv()))
 
-      if (!is_pr(pr)) {
+      if (!is_plumber(pr)) {
         stop("'", entrypoint, "' must return a runnable Plumber router.")
       }
 

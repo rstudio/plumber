@@ -405,7 +405,7 @@ Plumber <- R6Class(
           # base case
           printEndpoints(prefix, name, node, isLast)
 
-        } else if (is_pr(node)){
+        } else if (is_plumber(node)){
           # base case
           cat(prefix, "\u251c\u2500\u2500/", name, "\n", sep="") # "+--"
           # It's a router, let it print itself

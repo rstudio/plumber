@@ -1,9 +1,16 @@
-is_pr <- function(pr) {
+#' Determine if Plumber object
+#'
+#' @param pr Hopefully a [`Plumber`] object
+#' @return Logical value if `pr` inherits from [`Plumber`]
+#' @examples
+#' is_plumber(Plumber$new()) # TRUE
+#' is_plumber(PlumberEndpoint$new()) # FALSE
+is_plumber <- function(pr) {
   inherits(pr, "Plumber")
 }
 
 validate_pr <- function(pr) {
-  if (!is_pr(pr)) {
+  if (!is_plumber(pr)) {
     stop("`pr` must be an object of class `Plumber`.")
   }
   invisible(TRUE)
