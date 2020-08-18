@@ -77,11 +77,11 @@ Plumber <- R6Class(
       self$setParsers(c("json", "form", "text", "octet", "multi"))
       self$setErrorHandler(defaultErrorHandler())
       self$set404Handler(default404Handler)
-      self$setUi()
+      self$setUi(TRUE)
       private$ui_info$has_not_been_set <- TRUE # set to know if `$setUi()` has been called before `$run()`
-      self$setUiCallback()
-      self$setDebug()
-      self$set_api_spec()
+      self$setUiCallback(getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL)))
+      self$setDebug(TRUE)
+      self$setApiSpec(NULL)
 
       # Add in the initial filters
       for (fn in names(filters)){
@@ -830,7 +830,7 @@ Plumber <- R6Class(
     #' See also: [pr_set_ui_callback()]
     #' @param callback a callback function for taking action on UI url. (Also accepts `NULL` values to disable the `callback`.)
     setUiCallback = function(
-      callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL))
+      callback = getOption('plumber.ui.callback', NULL)
     ) {
       # Use callback when defined
       if (!length(callback) || !is.function(callback)) {
