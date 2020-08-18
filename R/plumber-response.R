@@ -22,7 +22,7 @@ PlumberResponse <- R6Class(
         body <- ""
       }
 
-      charset <- getCharacterSet(h$HTTP_CONTENT_TYPE)
+      charset <- get_character_set(h$HTTP_CONTENT_TYPE)
       if (is.character(body)) {
         Encoding(body) <- charset
       }
@@ -34,16 +34,30 @@ PlumberResponse <- R6Class(
       )
     },
     # TODO if name and value are a vector of same length, call set cookie many times
-    setCookie = function(name, value, path, expiration = FALSE, http = FALSE, secure = FALSE, sameSite=FALSE) {
-      self$setHeader("Set-Cookie", cookieToStr(name, value, path, expiration, http, secure, sameSite))
+    setCookie = function(name, value, path, expiration = FALSE, http = FALSE, secure = FALSE, same_site = FALSE) {
+      self$setHeader("Set-Cookie", cookieToStr(
+        name = name,
+        value = value,
+        path = path,
+        expiration = expiration,
+        http = http,
+        secure = secure,
+        same_site = same_site
+      ))
     },
-    removeCookie = function(name, path, http = FALSE, secure = FALSE, sameSite = FALSE, ...) {
-      self$setHeader("Set-Cookie", removeCookieStr(name, path, http, secure, sameSite))
+    removeCookie = function(name, path, http = FALSE, secure = FALSE, same_site = FALSE, ...) {
+      self$setHeader("Set-Cookie", removeCookieStr(
+        name = name,
+        path = path,
+        http = http,
+        secure = secure,
+        same_site = same_site
+      ))
     }
   )
 )
 
-removeCookieStr <- function(name, path, http = FALSE, secure = FALSE, sameSite = FALSE) {
+removeCookieStr <- function(name, path, http = FALSE, secure = FALSE, same_site = FALSE) {
   str <- paste0(name, "=; ")
   if (!missing(path)){
     str <- paste0(str, "Path=", path, "; ")
@@ -55,8 +69,8 @@ removeCookieStr <- function(name, path, http = FALSE, secure = FALSE, sameSite =
     str <- paste0(str, "Secure; ")
   }
 
-  if (!missing(sameSite) && is.character(sameSite)) {
-    str <- paste0(str, "SameSite=", sameSite, "; ")
+  if (!missing(same_site) && is.character(same_site)) {
+    str <- paste0(str, "SameSite=", same_site, "; ")
   }
 
   str <- paste0(str, "Expires=Thu, 01 Jan 1970 00:00:00 GMT")
@@ -71,7 +85,7 @@ cookieToStr <- function(
   expiration = FALSE,
   http = FALSE,
   secure = FALSE,
-  sameSite = FALSE,
+  same_site = FALSE,
   now = Sys.time() # used for testing. Should not be used in regular code.
 ){
   val <- httpuv::encodeURIComponent(as.character(value))
@@ -89,8 +103,8 @@ cookieToStr <- function(
     str <- paste0(str, "Secure; ")
   }
 
-  if (!missing(sameSite) && is.character(sameSite)) {
-    str <- paste0(str, "SameSite=", sameSite, "; ")
+  if (!missing(same_site) && is.character(same_site)) {
+    str <- paste0(str, "SameSite=", same_site, "; ")
   }
 
   if (!missing(expiration)){

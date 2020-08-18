@@ -29,7 +29,8 @@ Imports:
     promises (>= 1.1.0),
     sodium,
     swagger (> 3.20.3),
-    magrittr
+    magrittr,
+    lifecycle
 LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
@@ -82,3 +83,4 @@ Collate:
     'utils-pipe.R'
     'validate_api_spec.R'
     'zzz.R'
+RdMacros: lifecycle

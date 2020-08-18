@@ -20,7 +20,7 @@ test_that("addFilter continues to work", {
 
 test_that("addGlobalProcessor continues to work", {
   pr <- plumber$new()
-  expect_warning(pr$addGlobalProcessor(sessionCookie("secret", "cookieName")))
+  expect_warning(pr$addGlobalProcessor(session_cookie("secret", "cookieName")))
 })
 
 test_that("addAssets continues to work", {
@@ -29,4 +29,20 @@ test_that("addAssets continues to work", {
   res <- PlumberResponse$new()
   val <- pr$route(make_req("GET", "/public/test.txt"), res)
   expect_true(inherits(val, "PlumberResponse"))
+})
+
+test_that("getCharacterSet continues to work", {
+  expect_equal(
+    lifecycle::expect_deprecated(getCharacterSet(contentType = "foo")),
+    "UTF-8"
+  )
+})
+
+
+test_that("sessionCookie continues to work", {
+  key <- random_cookie_key()
+  cookie_hooks_old <- lifecycle::expect_deprecated(sessionCookie(key))
+  cookie_hooks_new <- expect_silent(session_cookie(key))
+
+  expect_equal(names(cookie_hooks_old), names(cookie_hooks_new))
 })

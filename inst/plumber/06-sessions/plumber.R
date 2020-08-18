@@ -10,9 +10,9 @@ function(req, res) {
   return(paste0("This is visit #", count))
 }
 
-#* Example using req$session. Requires adding "sessionCookie()" support to your API in order
+#* Example using req$session. Requires adding "session_cookie()" support to your API in order
 #* to work:
-#* `pr <- plumb("file.R"); pr$registerHooks(sessionCookie("secret", "cookieName")); pr$run()`
+#* `pr <- plumb("file.R"); pr$registerHooks(session_cookie("secret", "cookieName")); pr$run()`
 #* @get /sessionCounter
 function(req){
   count <- 0

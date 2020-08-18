@@ -51,7 +51,7 @@ test_that("cookies can convert to string", {
   expect_equal(cookieToStr("complex2", "forbidden:,%/"), "complex2=forbidden%3A%2C%25%2F")
   expect_equal(cookieToStr("abc", 123, path="/somepath"), "abc=123; Path=/somepath")
   expect_equal(cookieToStr("abc", 123, http=TRUE, secure=TRUE), "abc=123; HttpOnly; Secure")
-  expect_equal(cookieToStr("abc", 123, http=TRUE, secure=TRUE, sameSite="None"), "abc=123; HttpOnly; Secure; SameSite=None")
+  expect_equal(cookieToStr("abc", 123, http=TRUE, secure=TRUE, same_site="None"), "abc=123; HttpOnly; Secure; SameSite=None")
 
   now <- force(Sys.time())
   cookieToStr_ <- function(expiration, ...) {
@@ -103,7 +103,7 @@ test_that("remove cookie string works", {
     "asdf=; Path=/; HttpOnly; Secure; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
   )
   expect_equal(
-    removeCookieStr("asdf", path = "/", http = TRUE, secure = TRUE, sameSite = "None"),
+    removeCookieStr("asdf", path = "/", http = TRUE, secure = TRUE, same_site = "None"),
     "asdf=; Path=/; HttpOnly; Secure; SameSite=None; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
   )
 })
@@ -176,7 +176,7 @@ test_that("cookie encryption works", {
 
   # check that you can't encode a NULL value
   expect_equal(encodeCookie(NULL, NULL), "")
-  expect_equal(encodeCookie(NULL, asCookieKey(randomCookieKey())), "")
+  expect_equal(encodeCookie(NULL, asCookieKey(random_cookie_key())), "")
 
   xVals <- list(
     list(),
@@ -186,8 +186,8 @@ test_that("cookie encryption works", {
   )
   keys <- list(
     NULL, # no key
-    asCookieKey(randomCookieKey()), # random key
-    asCookieKey(randomCookieKey()) # different random key
+    asCookieKey(random_cookie_key()), # random key
+    asCookieKey(random_cookie_key()) # different random key
   )
 
   for (key in keys) {
@@ -220,25 +220,25 @@ test_that("cookie encyption fails smoothly", {
   }) # error from jsonlite::parse_json()
   # garbage in, key
   expect_error({
-    decodeCookie(garbage, asCookieKey(randomCookieKey()))
+    decodeCookie(garbage, asCookieKey(random_cookie_key()))
   }, "Could not separate")
 
   infoList <- list(
     # different cookies
     list(
-      a = asCookieKey(randomCookieKey()),
-      b = asCookieKey(randomCookieKey()),
+      a = asCookieKey(random_cookie_key()),
+      b = asCookieKey(random_cookie_key()),
       error = "Failed to decrypt"
     ),
     # not encrypted, try to decrypt
     list(
       a = NULL,
-      b = asCookieKey(randomCookieKey()),
+      b = asCookieKey(random_cookie_key()),
       error = "Could not separate"
     ),
     # encrypted, no decryption
     list(
-      a = asCookieKey(randomCookieKey()),
+      a = asCookieKey(random_cookie_key()),
       b = NULL
       # error from jsonlite::parse_json()
     )

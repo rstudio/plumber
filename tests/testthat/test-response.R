@@ -40,7 +40,7 @@ test_that("can set multiple same-named headers", {
 
 test_that("response properly sets cookies with multiple options", {
   res <- PlumberResponse$new()
-  res$setCookie("abc", "two words", http=TRUE, secure=TRUE, sameSite="None")
+  res$setCookie("abc", "two words", http=TRUE, secure=TRUE, same_site="None")
   head <- res$toResponse()$headers
   expect_equal(head[["Set-Cookie"]], "abc=two%20words; HttpOnly; Secure; SameSite=None")
 })

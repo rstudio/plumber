@@ -190,9 +190,9 @@ See also: \code{\link[=pr_run]{pr_run()}}
 \if{html}{\out{<div class="r">}}\preformatted{plumber$run(
   host = "127.0.0.1",
   port = getOption("plumber.port", NULL),
-  swagger = stop("deprecated"),
-  debug = stop("deprecated"),
-  swaggerCallback = stop("deprecated")
+  swagger = deprecated(),
+  debug = deprecated(),
+  swaggerCallback = deprecated()
 )}\if{html}{\out{</div>}}
 }
 
