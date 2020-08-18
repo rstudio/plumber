@@ -81,7 +81,7 @@ unmount_ui <- function(pr, ui_info) {
 #' @noRd
 mount_openapi <- function(pr, api_url) {
 
-  spec <- pr$get_api_spec()
+  spec <- pr$getApiSpec()
 
   # Create a function that's hardcoded to return the OpenAPI specification -- regardless of env.
   openapi_fun <- function(req) {
@@ -109,7 +109,7 @@ mount_openapi <- function(pr, api_url) {
   # "It is RECOMMENDED that the root OpenAPI document be named: openapi.json"
   for (ep in pr$endpoints[["__no-preempt__"]]) {
     if (ep$path == "/openapi.json") {
-      message("Overwritting existing `/openapi.json` route. Use `$set_api_spec()` to define your OpenAPI Spec")
+      message("Overwritting existing `/openapi.json` route. Use `$setApiSpec()` to define your OpenAPI Spec")
       break
     }
   }

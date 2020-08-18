@@ -60,7 +60,7 @@ test_that("params are parsed", {
 #test_that("endpointSpecification works", {
 #})
 
-test_that("get_api_spec works with mounted routers", {
+test_that("getApiSpec works with mounted routers", {
   # parameter in path
   pr1 <- pr()
   pr1$handle("GET", "/nested/:path/here", function(){})
@@ -110,7 +110,7 @@ test_that("get_api_spec works with mounted routers", {
   pr1$mount("/sub4", pr4)
   pr4$mount("/", pr5)
 
-  paths <- names(pr1$get_api_spec()$paths)
+  paths <- names(pr1$getApiSpec()$paths)
   expect_length(paths, 7)
   expect_equal(paths, c("/nested/:path/here", "/sub2/something",
     "/sub2/", "/sub2/sub3/else", "/sub2/sub3/", "/sub4/completely",
@@ -313,8 +313,8 @@ test_that("custom spec works", {
     custom <- list(info = list(description = "My Custom Spec", title = "This is only a test"))
     return(utils::modifyList(spec, custom))
   }
-  pr$set_api_spec(customSpec)
-  spec <- pr$get_api_spec()
+  pr$setApiSpec(customSpec)
+  spec <- pr$getApiSpec()
   expect_equal(spec$info$description, "My Custom Spec")
   expect_equal(spec$info$title, "This is only a test")
   expect_equal(class(spec$openapi), "character")
@@ -324,6 +324,6 @@ test_that("no params plumber router still produces spec when there is a func par
   pr <- pr()
   handler <- function(num) { sum(as.integer(num)) }
   pr$handle("GET", "/sum", handler, serializer = serializer_json())
-  spec <- pr$get_api_spec()
+  spec <- pr$getApiSpec()
   expect_equal(spec$paths$`/sum`$get$parameters[[1]]$name, "num")
 })

@@ -967,13 +967,13 @@ Plumber <- R6Class(
     },
     #' @description Deprecated. Retrieve openAPI file
     openAPIFile = function() {
-      warning("`$openAPIFile()` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$get_api_spec()`.")
+      warning("`$openAPIFile()` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$getApiSpec()`.")
       self$get_api_spec()
     },
     #' @description Deprecated. Retrieve openAPI file
     swaggerFile = function() {
-      warning("`$swaggerFile()` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$get_api_spec()`.")
-      self$get_api_spec()
+      warning("`$swaggerFile()` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$getApiSpec()`.")
+      self$getApiSpec()
     }
   ), active = list(
     #' @field endpoints plumber router endpoints read-only

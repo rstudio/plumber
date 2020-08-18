@@ -228,7 +228,7 @@ pr_set_ui_callback <- function(
 #' Plumber router [pr_run()] method is executed using default `plumber.ui.callback` option.
 #'
 #' @template param_pr
-#' @template pr_set_api_spec__api
+#' @template pr_setApiSpec__api
 #' @return The Plumber router with the new OpenAPI Specification object or function.
 #' @export
 #' @examples
@@ -253,6 +253,6 @@ pr_set_api_spec <- function(
   api
 ) {
   validate_pr(pr)
-  pr$set_api_spec(api = api)
+  pr$setApiSpec(api = api)
   invisible(pr)
 }

@@ -63,7 +63,7 @@ validate_api_spec <- function(pr, verbose = TRUE) {
 
   validate_api_spec__install_node_modules()
 
-  spec <- jsonlite::toJSON(pr$get_api_spec(), auto_unbox = TRUE, pretty = TRUE)
+  spec <- jsonlite::toJSON(pr$getApiSpec(), auto_unbox = TRUE, pretty = TRUE)
   old_wd <- setwd(validate_api_spec_folder())
   on.exit({
     setwd(old_wd)
