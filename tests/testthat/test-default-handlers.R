@@ -58,7 +58,7 @@ test_that("error handler only includes message in debug mode.", {
   res <- PlumberResponse$new()
   capture.output({
     val <- defaultErrorHandler()(
-      req = list(pr = list(get_debug = function() { TRUE })),
+      req = list(pr = list(getDebug = function() { TRUE })),
       res,
       "I'm an error!"
     )

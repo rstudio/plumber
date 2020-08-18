@@ -132,8 +132,8 @@ pr$setErrorHandler(function(req, res, err) {
 \item \href{#method-setErrorHandler}{\code{Plumber$setErrorHandler()}}
 \item \href{#method-setUi}{\code{Plumber$setUi()}}
 \item \href{#method-setUiCallback}{\code{Plumber$setUiCallback()}}
-\item \href{#method-set_debug}{\code{Plumber$set_debug()}}
-\item \href{#method-get_debug}{\code{Plumber$get_debug()}}
+\item \href{#method-setDebug}{\code{Plumber$setDebug()}}
+\item \href{#method-getDebug}{\code{Plumber$getDebug()}}
 \item \href{#method-filter}{\code{Plumber$filter()}}
 \item \href{#method-set_api_spec}{\code{Plumber$set_api_spec()}}
 \item \href{#method-get_api_spec}{\code{Plumber$get_api_spec()}}
@@ -211,7 +211,7 @@ This value does not need to be explicitly assigned. To explicity set it, see \co
 
 \item{\code{swagger}}{Deprecated. See \verb{$setUi(ui)} or \verb{$set_api_spec()}}
 
-\item{\code{debug}}{Deprecated. See \verb{$set_debug()}}
+\item{\code{debug}}{Deprecated. See \verb{$setDebug()}}
 
 \item{\code{swaggerCallback}}{Deprecated. See \verb{$setUiCallback()}}
 }
@@ -755,14 +755,14 @@ See also: \code{\link[=pr_set_ui_callback]{pr_set_ui_callback()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_debug"></a>}}
-\if{latex}{\out{\hypertarget{method-set_debug}{}}}
-\subsection{Method \code{set_debug()}}{
+\if{html}{\out{<a id="method-setDebug"></a>}}
+\if{latex}{\out{\hypertarget{method-setDebug}{}}}
+\subsection{Method \code{setDebug()}}{
 Set debug value to include error messages
 
-See also: \verb{$get_debug()} and \code{\link[=pr_set_debug]{pr_set_debug()}}
+See also: \verb{$getDebug()} and \code{\link[=pr_set_debug]{pr_set_debug()}}
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Plumber$set_debug(debug = interactive())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$setDebug(debug = interactive())}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -774,14 +774,14 @@ See also: \verb{$get_debug()} and \code{\link[=pr_set_debug]{pr_set_debug()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_debug"></a>}}
-\if{latex}{\out{\hypertarget{method-get_debug}{}}}
-\subsection{Method \code{get_debug()}}{
+\if{html}{\out{<a id="method-getDebug"></a>}}
+\if{latex}{\out{\hypertarget{method-getDebug}{}}}
+\subsection{Method \code{getDebug()}}{
 Retrieve the \code{debug} value.
 
-See also: \verb{$get_debug()} and \code{\link[=pr_set_debug]{pr_set_debug()}}
+See also: \verb{$getDebug()} and \code{\link[=pr_set_debug]{pr_set_debug()}}
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Plumber$get_debug()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$getDebug()}\if{html}{\out{</div>}}
 }
 
 }

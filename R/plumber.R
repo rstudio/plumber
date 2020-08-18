@@ -80,7 +80,7 @@ Plumber <- R6Class(
       self$setUi()
       private$ui_info$has_not_been_set <- TRUE # set to know if `$setUi()` has been called before `$run()`
       self$setUiCallback()
-      self$set_debug()
+      self$setDebug()
       self$set_api_spec()
 
       # Add in the initial filters
@@ -128,7 +128,7 @@ Plumber <- R6Class(
     #' Mac OS X, port numbers smaller than 1025 require root privileges.
     #'
     #' This value does not need to be explicitly assigned. To explicity set it, see [options_plumber()].
-    #' @param debug Deprecated. See `$set_debug()`
+    #' @param debug Deprecated. See `$setDebug()`
     #' @param swagger Deprecated. See `$setUi(ui)` or `$set_api_spec()`
     #' @param swaggerCallback Deprecated. See `$setUiCallback()`
     #' @importFrom lifecycle deprecated
@@ -147,8 +147,8 @@ Plumber <- R6Class(
       # Legacy support for RStudio pro products.
       # Checks must be kept for >= 2 yrs after plumber v1.0.0 release date
       if (lifecycle::is_present(debug)) {
-        lifecycle::deprecate_warn("1.0.0", "run(debug = )", "set_debug(debug = )")
-        self$set_debug(debug)
+        lifecycle::deprecate_warn("1.0.0", "run(debug = )", "setDebug(debug = )")
+        self$setDebug(debug)
       }
       if (lifecycle::is_present(swagger)) {
         if (is.function(swagger)) {
@@ -843,16 +843,16 @@ Plumber <- R6Class(
     },
     #' @description Set debug value to include error messages
     #'
-    #' See also: `$get_debug()` and [pr_set_debug()]
+    #' See also: `$getDebug()` and [pr_set_debug()]
     #' @param debug `TRUE` provides more insight into your API errors.
-    set_debug = function(debug = interactive()) {
+    setDebug = function(debug = interactive()) {
       stopifnot(length(debug) == 1)
       private$debug <- isTRUE(debug)
     },
     #' @description Retrieve the `debug` value.
     #'
-    #' See also: `$get_debug()` and [pr_set_debug()]
-    get_debug = function() {
+    #' See also: `$getDebug()` and [pr_set_debug()]
+    getDebug = function() {
       private$debug
     },
     #' @description Add a filter to plumber router

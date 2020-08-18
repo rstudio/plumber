@@ -119,7 +119,7 @@ pr_set_error <- function(pr, fun) {
 #' }
 pr_set_debug <- function(pr, debug = interactive()) {
   validate_pr(pr)
-  pr$set_debug(debug = debug)
+  pr$setDebug(debug = debug)
   invisible(pr)
 }
 
