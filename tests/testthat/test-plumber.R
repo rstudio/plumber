@@ -89,21 +89,26 @@ test_that("plumb accepts a directory with a `plumber.R` file", {
 test_that("plumb() a dir leverages `entrypoint.R`", {
 
   with_tmp_serializers({
-    expect_null(.globals$serializers$fake, "This just that your Plumber environment is dirty. Restart your R session.")
+    expect_false(
+      "fake" %in% registered_serializers(),
+      "This just that your Plumber environment is dirty. Restart your R session."
+    )
 
     r <- plumb(dir = test_path("files/entrypoint/"))
     expect_equal(length(r$endpoints), 1)
     expect_equal(length(r$endpoints[[1]]), 1)
 
     # A global serializer was added by entrypoint.R before parsing
-    expect_true(!is.null(.globals$serializers$fake))
-
-    # Clean up after ourselves
-    gl <- .globals
-
+    expect_true(
+      "fake" %in% registered_serializers(),
+      "This just that your Plumber environment is dirty. Restart your R session."
+    )
   })
 
-  expect_null(.globals$serializers$fake, "This just that your Plumber environment is dirty. This should not happen. Restart your R session.")
+  expect_false(
+    "fake" %in% registered_serializers(),
+    "This just that your Plumber environment is dirty. Restart your R session."
+  )
 })
 
 test_that("bad `entrypoint.R`s throw", {
