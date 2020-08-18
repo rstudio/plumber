@@ -77,9 +77,9 @@ Plumber <- R6Class(
       self$setParsers(c("json", "form", "text", "octet", "multi"))
       self$setErrorHandler(defaultErrorHandler())
       self$set404Handler(default404Handler)
-      self$set_ui()
-      private$ui_info$has_not_been_set <- TRUE # set to know if `$set_ui()` has been called before `$run()`
-      self$set_ui_callback()
+      self$setUi()
+      private$ui_info$has_not_been_set <- TRUE # set to know if `$setUi()` has been called before `$run()`
+      self$setUiCallback()
       self$set_debug()
       self$set_api_spec()
 
@@ -129,8 +129,8 @@ Plumber <- R6Class(
     #'
     #' This value does not need to be explicitly assigned. To explicity set it, see [options_plumber()].
     #' @param debug Deprecated. See `$set_debug()`
-    #' @param swagger Deprecated. See `$set_ui(ui)` or `$set_api_spec()`
-    #' @param swaggerCallback Deprecated. See `$set_ui_callback()`
+    #' @param swagger Deprecated. See `$setUi(ui)` or `$set_api_spec()`
+    #' @param swaggerCallback Deprecated. See `$setUiCallback()`
     #' @importFrom lifecycle deprecated
     run = function(
       host = '127.0.0.1',
@@ -159,10 +159,10 @@ Plumber <- R6Class(
         } else {
           if (isTRUE(private$ui_info$has_not_been_set)) {
             # <= v0.4.6
-            lifecycle::deprecate_warn("1.0.0", "run(swagger = )", "set_ui(ui = )")
-            self$set_ui(swagger)
+            lifecycle::deprecate_warn("1.0.0", "run(swagger = )", "setUi(ui = )")
+            self$setUi(swagger)
           } else {
-            # $set_ui() has been called (other than during initialization).
+            # $setUi() has been called (other than during initialization).
             # Believe that it is the correct behavior
             # Warn about updating the run method
             lifecycle::deprecate_warn("1.0.0", "run(swagger = )", details = "The plumber UI has already been set. Ignoring `swagger` parameter.")
@@ -170,8 +170,8 @@ Plumber <- R6Class(
         }
       }
       if (lifecycle::is_present(swaggerCallback)) {
-        lifecycle::deprecate_warn("1.0.0", "run(swaggerCallback = )", "set_ui_callback(callback = )")
-        self$set_ui_callback(swaggerCallback)
+        lifecycle::deprecate_warn("1.0.0", "run(swaggerCallback = )", "setUiCallback(callback = )")
+        self$setUiCallback(swaggerCallback)
       }
 
       port <- findPort(port)
@@ -798,7 +798,7 @@ Plumber <- R6Class(
     #' @param ui a character value or a logical value. Defaults to `options("plumber.ui"). See [pr_set_ui()] for examples.
     #'  If using [options_plumber()], the value must be set before initializing your Plumber router.
     #' @param ... Other params to be passed to `ui` functions.
-    set_ui = function(
+    setUi = function(
       ui = getOption("plumber.ui", TRUE),
       ...
     ) {
@@ -829,7 +829,7 @@ Plumber <- R6Class(
     #'
     #' See also: [pr_set_ui_callback()]
     #' @param callback a callback function for taking action on UI url. (Also accepts `NULL` values to disable the `callback`.)
-    set_ui_callback = function(
+    setUiCallback = function(
       callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL))
     ) {
       # Use callback when defined

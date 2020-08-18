@@ -187,7 +187,7 @@ pr_set_ui <- function(
   ...
 ) {
   validate_pr(pr)
-  pr$set_ui(ui = ui, ...)
+  pr$setUi(ui = ui, ...)
   invisible(pr)
 }
 
@@ -216,7 +216,7 @@ pr_set_ui_callback <- function(
   callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL))
 ) {
   validate_pr(pr)
-  pr$set_ui_callback(callback = callback)
+  pr$setUiCallback(callback = callback)
   invisible(pr)
 }
 

@@ -15,15 +15,15 @@ test_that("custom OpenAPI Specification update function works", {
     spec$info$title <- Sys.time()
     spec
   })
-  pr$set_ui(ui = "wribbit")
+  pr$setUi(ui = "wribbit")
   # Should get a message that wribbit is unknown if library is not loaded
   pr$run(port = 1234)
 
   # validate that http://127.0.0.1:1234/__swagger__/ displays the system time as the api title
   # http://127.0.0.1:1234/__swagger__/
-  pr$set_ui(ui = TRUE)
+  pr$setUi(ui = TRUE)
   pr$run(port = 1234)
-  pr$set_ui(ui = "swagger")
+  pr$setUi(ui = "swagger")
   pr$run(port = 1234)
 
 })

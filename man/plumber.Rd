@@ -130,8 +130,8 @@ pr$setErrorHandler(function(req, res, err) {
 \item \href{#method-setParsers}{\code{Plumber$setParsers()}}
 \item \href{#method-set404Handler}{\code{Plumber$set404Handler()}}
 \item \href{#method-setErrorHandler}{\code{Plumber$setErrorHandler()}}
-\item \href{#method-set_ui}{\code{Plumber$set_ui()}}
-\item \href{#method-set_ui_callback}{\code{Plumber$set_ui_callback()}}
+\item \href{#method-setUi}{\code{Plumber$setUi()}}
+\item \href{#method-setUiCallback}{\code{Plumber$setUiCallback()}}
 \item \href{#method-set_debug}{\code{Plumber$set_debug()}}
 \item \href{#method-get_debug}{\code{Plumber$get_debug()}}
 \item \href{#method-filter}{\code{Plumber$filter()}}
@@ -209,11 +209,11 @@ Mac OS X, port numbers smaller than 1025 require root privileges.
 
 This value does not need to be explicitly assigned. To explicity set it, see \code{\link[=options_plumber]{options_plumber()}}.}
 
-\item{\code{swagger}}{Deprecated. See \verb{$set_ui(ui)} or \verb{$set_api_spec()}}
+\item{\code{swagger}}{Deprecated. See \verb{$setUi(ui)} or \verb{$set_api_spec()}}
 
 \item{\code{debug}}{Deprecated. See \verb{$set_debug()}}
 
-\item{\code{swaggerCallback}}{Deprecated. See \verb{$set_ui_callback()}}
+\item{\code{swaggerCallback}}{Deprecated. See \verb{$setUiCallback()}}
 }
 \if{html}{\out{</div>}}
 }
@@ -706,14 +706,14 @@ pr$setErrorHandler(function(req, res, err) {
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_ui"></a>}}
-\if{latex}{\out{\hypertarget{method-set_ui}{}}}
-\subsection{Method \code{set_ui()}}{
+\if{html}{\out{<a id="method-setUi"></a>}}
+\if{latex}{\out{\hypertarget{method-setUi}{}}}
+\subsection{Method \code{setUi()}}{
 Set UI to use for API
 
 See also: \code{\link[=pr_set_ui]{pr_set_ui()}}, \code{\link[=register_ui]{register_ui()}}, \code{\link[=registered_uis]{registered_uis()}}
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Plumber$set_ui(ui = getOption("plumber.ui", TRUE), ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$setUi(ui = getOption("plumber.ui", TRUE), ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -728,9 +728,9 @@ If using \code{\link[=options_plumber]{options_plumber()}}, the value must be se
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_ui_callback"></a>}}
-\if{latex}{\out{\hypertarget{method-set_ui_callback}{}}}
-\subsection{Method \code{set_ui_callback()}}{
+\if{html}{\out{<a id="method-setUiCallback"></a>}}
+\if{latex}{\out{\hypertarget{method-setUiCallback}{}}}
+\subsection{Method \code{setUiCallback()}}{
 Set UI callback to notify where the API is located.
 
 When set, it will be called with a character string corresponding
@@ -741,7 +741,7 @@ If using \code{\link[=options_plumber]{options_plumber()}}, the value must be se
 
 See also: \code{\link[=pr_set_ui_callback]{pr_set_ui_callback()}}
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Plumber$set_ui_callback(
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$setUiCallback(
   callback = getOption("plumber.ui.callback", getOption("plumber.swagger.url", NULL))
 )}\if{html}{\out{</div>}}
 }

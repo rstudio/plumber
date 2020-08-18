@@ -104,10 +104,10 @@ The objects of this class are cloneable with this method.
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setErrorHandler">}\href{../../plumber/html/Plumber.html#method-setErrorHandler}{\code{plumber::Plumber$setErrorHandler()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setParsers">}\href{../../plumber/html/Plumber.html#method-setParsers}{\code{plumber::Plumber$setParsers()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setSerializer">}\href{../../plumber/html/Plumber.html#method-setSerializer}{\code{plumber::Plumber$setSerializer()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setUi">}\href{../../plumber/html/Plumber.html#method-setUi}{\code{plumber::Plumber$setUi()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setUiCallback">}\href{../../plumber/html/Plumber.html#method-setUiCallback}{\code{plumber::Plumber$setUiCallback()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set_api_spec">}\href{../../plumber/html/Plumber.html#method-set_api_spec}{\code{plumber::Plumber$set_api_spec()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set_debug">}\href{../../plumber/html/Plumber.html#method-set_debug}{\code{plumber::Plumber$set_debug()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set_ui">}\href{../../plumber/html/Plumber.html#method-set_ui}{\code{plumber::Plumber$set_ui()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set_ui_callback">}\href{../../plumber/html/Plumber.html#method-set_ui_callback}{\code{plumber::Plumber$set_ui_callback()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="swaggerFile">}\href{../../plumber/html/Plumber.html#method-swaggerFile}{\code{plumber::Plumber$swaggerFile()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="unmount">}\href{../../plumber/html/Plumber.html#method-unmount}{\code{plumber::Plumber$unmount()}}\out{</span>}
 }
