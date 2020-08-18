@@ -12,7 +12,7 @@ Static file router
 Creates a router that is backed by a directory of files on disk.
 }
 \section{Super classes}{
-\code{\link[plumber:Hookable]{plumber::Hookable}} -> \code{\link[plumber:Plumber]{plumber::Plumber}} -> \code{plumberstatic}
+\code{\link[plumber:Hookable]{plumber::Hookable}} -> \code{\link[plumber:Plumber]{plumber::Plumber}} -> \code{PlumberStatic}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -61,7 +61,7 @@ Creates a router that is backed by a directory of files on disk.
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new \code{plumberstatic} router
+Create a new \code{PlumberStatic} router
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PlumberStatic$new(direc, options)}\if{html}{\out{</div>}}
 }
@@ -71,12 +71,12 @@ Create a new \code{plumberstatic} router
 \describe{
 \item{\code{direc}}{a path to an asset directory.}
 
-\item{\code{options}}{options to be evaluated in the plumberstatic router environment}
+\item{\code{options}}{options to be evaluated in the \code{PlumberStatic} router environment}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new \code{plumberstatic} router
+A new \code{PlumberStatic} router
 }
 }
 \if{html}{\out{<hr>}}

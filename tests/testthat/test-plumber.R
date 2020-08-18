@@ -150,7 +150,7 @@ test_that("routes can be constructed correctly", {
   pr$mount("/static", stat)
 
   expect_length(pr$routes, 3)
-  expect_s3_class(pr$routes[["static"]], "plumberstatic")
+  expect_s3_class(pr$routes[["static"]], "PlumberStatic")
   expect_s3_class(pr$routes[["mysubpath"]], "Plumber")
 
   # 2 endpoints at the same location (different verbs)
@@ -175,11 +175,11 @@ test_that("mounts can be read correctly", {
   pr$mount("/extra-slash//", stat)
 
   expect_length(pr$routes, 7)
-  expect_s3_class(pr$mounts[["/static/"]], "plumberstatic")
-  expect_s3_class(pr$mounts[["/missing-slashes/"]], "plumberstatic")
-  expect_s3_class(pr$mounts[["/both-slashes/"]], "plumberstatic")
-  expect_s3_class(pr$mounts[["/trailing-slash/"]], "plumberstatic")
-  expect_s3_class(pr$mounts[["/extra-slash//"]], "plumberstatic")
+  expect_s3_class(pr$mounts[["/static/"]], "PlumberStatic")
+  expect_s3_class(pr$mounts[["/missing-slashes/"]], "PlumberStatic")
+  expect_s3_class(pr$mounts[["/both-slashes/"]], "PlumberStatic")
+  expect_s3_class(pr$mounts[["/trailing-slash/"]], "PlumberStatic")
+  expect_s3_class(pr$mounts[["/extra-slash//"]], "PlumberStatic")
   expect_s3_class(pr$mounts[["/mysubpath/"]], "Plumber")
 })
 

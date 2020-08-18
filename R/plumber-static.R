@@ -5,13 +5,13 @@
 #' @include plumber.R
 #' @export
 PlumberStatic <- R6Class(
-  "plumberstatic",
+  "PlumberStatic",
   inherit = Plumber,
   public = list(
-    #' @description Create a new `plumberstatic` router
+    #' @description Create a new `PlumberStatic` router
     #' @param direc a path to an asset directory.
-    #' @param options options to be evaluated in the plumberstatic router environment
-    #' @return A new `plumberstatic` router
+    #' @param options options to be evaluated in the `PlumberStatic` router environment
+    #' @return A new `PlumberStatic` router
     initialize = function(direc, options){
       super$initialize(filters=NULL)
 
