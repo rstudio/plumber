@@ -4,7 +4,7 @@
 #' @export
 #' @keywords internal
 addSerializer <- function(name, serializer, verbose = TRUE) {
-  lifecycle::deprecate_soft("1.0.0", "addSerializer()", "register_serializer()")
+  lifecycle::deprecate_warn("1.0.0", "addSerializer()", "register_serializer()")
 
   register_serializer(name = name, serializer = serializer, verbose = verbose)
 }
@@ -12,7 +12,7 @@ addSerializer <- function(name, serializer, verbose = TRUE) {
 #' @describeIn deprecated See [get_character_set()]
 #' @export
 getCharacterSet <- function(contentType = NULL) {
-  lifecycle::deprecate_soft("1.0.0", "getCharacterSet()", "get_character_set()")
+  lifecycle::deprecate_warn("1.0.0", "getCharacterSet()", "get_character_set()")
   get_character_set(content_type = contentType)
 }
 
@@ -27,7 +27,7 @@ sessionCookie <- function(
   secure = FALSE,
   sameSite = FALSE
 ) {
-  lifecycle::deprecate_soft("1.0.0", "sessionCookie()", "session_cookie()")
+  lifecycle::deprecate_warn("1.0.0", "sessionCookie()", "session_cookie()")
   session_cookie(
     key = key,
     name = name,
