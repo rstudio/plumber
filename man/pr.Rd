@@ -18,7 +18,7 @@ pr(
 \item{envir}{An environment to be used as the enclosure for the routers execution}
 }
 \value{
-A new \code{plumber} router
+A new \code{\link{Plumber}} router
 }
 \description{
 Create a new Plumber router

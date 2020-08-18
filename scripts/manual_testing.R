@@ -8,7 +8,7 @@ library(plumber)
 
 
 test_that("custom OpenAPI Specification update function works", {
-  pr <- plumber$new()
+  pr <- Plumber$new()
   pr$handle("GET", "/:path/here", function(){})
   pr$handle("POST", "/:path/there", function(){})
   pr$set_api_spec(function(spec) {

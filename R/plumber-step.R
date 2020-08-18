@@ -131,7 +131,7 @@ getRelevantArgs <- function(args, plumberExpression) {
   if (all(fargs %in% c("req", "res"))) {
     ret <- list()
     # using `$` will retrieve the 1st occurance of req,res
-    # args$req <- req is used within `plumber$route()`
+    # args$req <- req is used within `Plumber$route()`
     if ("req" %in% fargs) {
       ret$req <- args$req
     }

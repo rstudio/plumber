@@ -20,7 +20,7 @@ The Plumber router with the new UI settings.
 \description{
 \code{ui} should be either a logical or a character value matching a registered ui.
 When \code{TRUE} or a
-function, multiple handles will be added to \code{plumber} object. OpenAPI json
+function, multiple handles will be added to \code{\link{Plumber}} object. OpenAPI json
 file will be served on paths \verb{/openapi.json} and \verb{/swagger.json}. Swagger UI
 will be served on paths \verb{/__swagger__/index.html} and \verb{/__swagger__/}. When
 using a function, it will receive the Plumber router as the first parameter

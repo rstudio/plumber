@@ -220,7 +220,7 @@ test_that("@parser parameters produce an error or not", {
       envir = new.env(),
       addEndpoint = function(a, b, ...) { stop("should not reach here")},
       addFilter = as.null,
-      pr = plumber$new()
+      pr = pr()
     )
   }, "unused argument (key = \"val\")", fixed = TRUE)
 })

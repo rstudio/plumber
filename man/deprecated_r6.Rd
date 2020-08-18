@@ -2,8 +2,13 @@
 % Please edit documentation in R/deprecated-R6.R
 \name{hookable}
 \alias{hookable}
+\alias{plumber}
 \title{Deprecated R6 functions}
 \description{
+Deprecated R6 functions
+
+Deprecated R6 functions
+
 Deprecated R6 functions
 
 Deprecated R6 functions
@@ -11,6 +16,8 @@ Deprecated R6 functions
 \section{Functions}{
 \itemize{
 \item \code{hookable}: See \code{\link[=Hookable]{Hookable()}}
+
+\item \code{plumber}: See \code{\link[=Plumber]{Plumber()}}
 }}
 
 \keyword{internal}
@@ -49,6 +56,87 @@ Initialize a new \code{hookable}. Throws deprecated warning prompting user to us
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hookable$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}
+\section{Super classes}{
+\code{\link[plumber:Hookable]{plumber::Hookable}} -> \code{\link[plumber:Plumber]{plumber::Plumber}} -> \code{plumber}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{plumber$new()}}
+\item \href{#method-clone}{\code{plumber$clone()}}
+}
+}
+\if{html}{
+\out{<details ><summary>Inherited methods</summary>}
+\itemize{
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks">}\href{../../plumber/html/Hookable.html#method-registerHooks}{\code{plumber::Hookable$registerHooks()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="addAssets">}\href{../../plumber/html/Plumber.html#method-addAssets}{\code{plumber::Plumber$addAssets()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="addEndpoint">}\href{../../plumber/html/Plumber.html#method-addEndpoint}{\code{plumber::Plumber$addEndpoint()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="addFilter">}\href{../../plumber/html/Plumber.html#method-addFilter}{\code{plumber::Plumber$addFilter()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="addGlobalProcessor">}\href{../../plumber/html/Plumber.html#method-addGlobalProcessor}{\code{plumber::Plumber$addGlobalProcessor()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="call">}\href{../../plumber/html/Plumber.html#method-call}{\code{plumber::Plumber$call()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="filter">}\href{../../plumber/html/Plumber.html#method-filter}{\code{plumber::Plumber$filter()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="get_api_spec">}\href{../../plumber/html/Plumber.html#method-get_api_spec}{\code{plumber::Plumber$get_api_spec()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="get_debug">}\href{../../plumber/html/Plumber.html#method-get_debug}{\code{plumber::Plumber$get_debug()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="handle">}\href{../../plumber/html/Plumber.html#method-handle}{\code{plumber::Plumber$handle()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="mount">}\href{../../plumber/html/Plumber.html#method-mount}{\code{plumber::Plumber$mount()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="onHeaders">}\href{../../plumber/html/Plumber.html#method-onHeaders}{\code{plumber::Plumber$onHeaders()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="onWSOpen">}\href{../../plumber/html/Plumber.html#method-onWSOpen}{\code{plumber::Plumber$onWSOpen()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="openAPIFile">}\href{../../plumber/html/Plumber.html#method-openAPIFile}{\code{plumber::Plumber$openAPIFile()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="print">}\href{../../plumber/html/Plumber.html#method-print}{\code{plumber::Plumber$print()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="registerHook">}\href{../../plumber/html/Plumber.html#method-registerHook}{\code{plumber::Plumber$registerHook()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="remove_handle">}\href{../../plumber/html/Plumber.html#method-remove_handle}{\code{plumber::Plumber$remove_handle()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="route">}\href{../../plumber/html/Plumber.html#method-route}{\code{plumber::Plumber$route()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="run">}\href{../../plumber/html/Plumber.html#method-run}{\code{plumber::Plumber$run()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="serve">}\href{../../plumber/html/Plumber.html#method-serve}{\code{plumber::Plumber$serve()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set404Handler">}\href{../../plumber/html/Plumber.html#method-set404Handler}{\code{plumber::Plumber$set404Handler()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setErrorHandler">}\href{../../plumber/html/Plumber.html#method-setErrorHandler}{\code{plumber::Plumber$setErrorHandler()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setSerializer">}\href{../../plumber/html/Plumber.html#method-setSerializer}{\code{plumber::Plumber$setSerializer()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set_api_spec">}\href{../../plumber/html/Plumber.html#method-set_api_spec}{\code{plumber::Plumber$set_api_spec()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set_debug">}\href{../../plumber/html/Plumber.html#method-set_debug}{\code{plumber::Plumber$set_debug()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set_parsers">}\href{../../plumber/html/Plumber.html#method-set_parsers}{\code{plumber::Plumber$set_parsers()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set_ui">}\href{../../plumber/html/Plumber.html#method-set_ui}{\code{plumber::Plumber$set_ui()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set_ui_callback">}\href{../../plumber/html/Plumber.html#method-set_ui_callback}{\code{plumber::Plumber$set_ui_callback()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="swaggerFile">}\href{../../plumber/html/Plumber.html#method-swaggerFile}{\code{plumber::Plumber$swaggerFile()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="unmount">}\href{../../plumber/html/Plumber.html#method-unmount}{\code{plumber::Plumber$unmount()}}\out{</span>}
+}
+\out{</details>}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Initialize a new \code{plumber}. Throws deprecated warning prompting user to use \code{\link{Plumber}}
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{plumber$new(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{params passed in to \code{Plumber$new()}}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{plumber$clone(deep = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

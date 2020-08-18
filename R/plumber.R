@@ -36,17 +36,17 @@ defaultPlumberFilters <- list(
 # ' See \url{http://www.rplumber.io/articles/programmatic-usage.html} for additional
 # ' details on the methods available on this object.
 #' @export
-plumber <- R6Class(
-  "plumber",
+Plumber <- R6Class(
+  "Plumber",
   inherit = Hookable,
   public = list(
-    #' @description Create a new `plumber` router
+    #' @description Create a new `Plumber` router
     #'
     #' See also [plumb()], [pr()]
-    #' @param filters a list of plumber filters
+    #' @param filters a list of Plumber filters
     #' @param file path to file to plumb
     #' @param envir an environment to be used as the enclosure for the routers execution
-    #' @return A new `plumber` router
+    #' @return A new `Plumber` router
     initialize = function(file = NULL, filters = defaultPlumberFilters, envir) {
 
       if (!is.null(file)){
@@ -199,7 +199,7 @@ plumber <- R6Class(
 
       httpuv::runServer(host, port, self)
     },
-    #' @description Mount a plumber router
+    #' @description Mount a Plumber router
     #'
     #' Plumber routers can be “nested” by mounting one into another
     #' using the `mount()` method. This allows you to compartmentalize your API
@@ -207,15 +207,15 @@ plumber <- R6Class(
     #'
     #' See also: [pr_mount()]
     #' @param path a character string. Where to mount router.
-    #' @param router a plumber router. Router to be mounted.
+    #' @param router a Plumber router. Router to be mounted.
     #' @examples
     #' \dontrun{
     #' root <- pr()
     #'
-    #' users <- plumber$new("users.R")
+    #' users <- Plumber$new("users.R")
     #' root$mount("/users", users)
     #'
-    #' products <- plumber$new("products.R")
+    #' products <- Plumber$new("products.R")
     #' root$mount("/products", products)
     #' }
     mount = function(path, router) {
@@ -229,7 +229,7 @@ plumber <- R6Class(
 
       private$mnts[[path]] <- router
     },
-    #' @description Unmount a plumber router
+    #' @description Unmount a Plumber router
     #' @param path a character string. Where to unmount router.
     unmount = function(path) {
       # Ensure that the path has both a leading and trailing slash.
@@ -405,7 +405,7 @@ plumber <- R6Class(
           # base case
           printEndpoints(prefix, name, node, isLast)
 
-        } else if (inherits(node, "plumber")){
+        } else if (is_pr(node)){
           # base case
           cat(prefix, "\u251c\u2500\u2500/", name, "\n", sep="") # "+--"
           # It's a router, let it print itself

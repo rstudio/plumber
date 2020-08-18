@@ -128,7 +128,7 @@ pr_set_debug <- function(pr, debug = interactive()) {
 #'
 #' `ui` should be either a logical or a character value matching a registered ui.
 #' When `TRUE` or a
-#' function, multiple handles will be added to `plumber` object. OpenAPI json
+#' function, multiple handles will be added to [`Plumber`] object. OpenAPI json
 #' file will be served on paths `/openapi.json` and `/swagger.json`. Swagger UI
 #' will be served on paths `/__swagger__/index.html` and `/__swagger__/`. When
 #' using a function, it will receive the Plumber router as the first parameter

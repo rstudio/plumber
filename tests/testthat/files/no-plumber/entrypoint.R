@@ -1,1 +1,1 @@
-plumber$new("./not-plumber.R")
+pr("./not-plumber.R")

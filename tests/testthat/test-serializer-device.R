@@ -62,7 +62,7 @@ test_that("pdf produces an image", {
 context("plumb() device serializer")
 
 test_device <- local({
-    r <- plumber$new(test_path("files/device.R"))
+    r <- pr(test_path("files/device.R"))
 
   function(name, content_type, capability_type = name, test_little = TRUE) {
     if (!capabilities(capability_type)) {

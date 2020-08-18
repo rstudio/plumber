@@ -3,7 +3,7 @@ context("Plumber Environment")
 test_that(
   "Variables are populated in local environment, even if created after functions that use them",
   {
-    r <- plumber$new(test_path("files/source_values.R"))
+    r <- pr(test_path("files/source_values.R"))
 
     errors <- 0
     notFounds <- 0

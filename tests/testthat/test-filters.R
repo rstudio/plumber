@@ -1,7 +1,7 @@
 context("filters")
 
 test_that("Filters work", {
-  r <- plumber$new(test_path("files/filters.R"))
+  r <- pr(test_path("files/filters.R"))
   expect_equal(length(r$filters), 4+2) #4 for post, query string, cookie, and shared secret filters
 
   expect_equal(r$filters[[5]]$name, "something")
@@ -9,33 +9,33 @@ test_that("Filters work", {
 })
 
 test_that("Filters can update req$args", {
-  r <- plumber$new(test_path("files/filters.R"))
+  r <- pr(test_path("files/filters.R"))
   expect_equal(r$call(make_req("GET", "/"))$body, jsonlite::toJSON(23))
 })
 
 test_that("Redundant filters fail", {
-  expect_error(plumber$new(test_path("files/filter-redundant.R")), regexp="Multiple @filters")
+  expect_error(pr(test_path("files/filter-redundant.R")), regexp="Multiple @filters")
 })
 
 test_that("Empty filters fail", {
-  expect_error(plumber$new(test_path("files/filter-empty.R")), regexp="No @filter name specified")
+  expect_error(pr(test_path("files/filter-empty.R")), regexp="No @filter name specified")
 })
 
 test_that("Filter and path fails", {
-  expect_error(plumber$new(test_path("files/filterpath.R")), regexp="can only be")
+  expect_error(pr(test_path("files/filterpath.R")), regexp="can only be")
 })
 
 test_that("Filter and assets fails", {
-  expect_error(plumber$new(test_path("files/filterasset.R")), regexp="can only be")
+  expect_error(pr(test_path("files/filterasset.R")), regexp="can only be")
 })
 
 test_that("Terminal filters indeed terminate", {
-  r <- plumber$new(test_path("files/terminal-filter.R"))
+  r <- pr(test_path("files/terminal-filter.R"))
   expect_equal(r$call(make_req("GET", "/"))$body, jsonlite::toJSON(1))
 })
 
 test_that("complete addFilter works", {
-  r <- plumber$new()
+  r <- pr()
 
   serializer <- "ser"
 
@@ -61,7 +61,7 @@ test_that("complete addFilter works", {
 
 # No processors or serializer
 test_that("sparse addFilter works", {
-  r <- plumber$new()
+  r <- pr()
 
   name <- "sparseFilter"
   expr <- expression(function(req, res){res$setHeader("expr", TRUE)})
@@ -83,7 +83,7 @@ test_that("sparse addFilter works", {
 })
 
 test_that("sparse addFilter with a function works", {
-  r <- plumber$new()
+  r <- pr()
 
   name <- "sparseFilter"
   expr <- function(req, res){res$setHeader("expr", TRUE)}

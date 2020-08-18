@@ -1,5 +1,5 @@
 #Defining an array parameter
-pr <- plumber$new()
+pr <- Plumber$new()
 
 openapi_func <- function(spec) {
   spec$paths[["/sum"]]$get$summary <- "Sum numbers"

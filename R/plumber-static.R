@@ -6,7 +6,7 @@
 #' @export
 PlumberStatic <- R6Class(
   "plumberstatic",
-  inherit = plumber,
+  inherit = Plumber,
   public = list(
     #' @description Create a new `plumberstatic` router
     #' @param direc a path to an asset directory.

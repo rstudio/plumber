@@ -62,32 +62,32 @@ test_that("params are parsed", {
 
 test_that("get_api_spec works with mounted routers", {
   # parameter in path
-  pr <- plumber$new()
-  pr$handle("GET", "/nested/:path/here", function(){})
-  pr$handle("POST", "/nested/:path/here", function(){})
+  pr1 <- pr()
+  pr1$handle("GET", "/nested/:path/here", function(){})
+  pr1$handle("POST", "/nested/:path/here", function(){})
 
     # static file handler
   stat <- PlumberStatic$new(".")
 
   # multiple entries
-  pr2 <- plumber$new()
+  pr2 <- pr()
   pr2$handle("GET", "/something", function(){})
   pr2$handle("POST", "/something", function(){})
   pr2$handle("GET", "/", function(){})
 
   # test with a filter
-  pr3 <- plumber$new()
+  pr3 <- pr()
   pr3$filter("filter1", function(){})
   pr3$handle("POST", "/else", function(){}, "filter1")
   pr3$handle("PUT", "/else", function(){})
   pr3$handle("GET", "/", function(){})
 
   # nested mount
-  pr4 <- plumber$new()
+  pr4 <- pr()
   pr4$handle("GET", "/completely", function(){})
 
   # trailing slash in route
-  pr5 <- plumber$new()
+  pr5 <- pr()
   pr5$handle("GET", "/trailing_slash/", function(){})
 
   # ├──/nested
@@ -104,20 +104,18 @@ test_that("get_api_spec works with mounted routers", {
   # │  ├──/completely (GET)
   # │  ├──/
   # │  │  └──/trailing_slash (GET)
-  pr$mount("/static", stat)
+  pr1$mount("/static", stat)
   pr2$mount("/sub3", pr3)
-  pr$mount("/sub2", pr2)
-  pr$mount("/sub4", pr4)
+  pr1$mount("/sub2", pr2)
+  pr1$mount("/sub4", pr4)
   pr4$mount("/", pr5)
 
-  paths <- names(pr$get_api_spec()$paths)
+  paths <- names(pr1$get_api_spec()$paths)
   expect_length(paths, 7)
   expect_equal(paths, c("/nested/:path/here", "/sub2/something",
     "/sub2/", "/sub2/sub3/else", "/sub2/sub3/", "/sub4/completely",
     "/sub4/trailing_slash/"
   ))
-
-  pr <<- pr
 })
 
 test_that("responsesSpecification works", {
@@ -307,7 +305,7 @@ test_that("priorize works as expected", {
 })
 
 test_that("custom spec works", {
-  pr <- plumber$new()
+  pr <- pr()
   pr$handle("POST", "/func1", function(){})
   pr$handle("GET", "/func2", function(){})
   pr$handle("GET", "/func3", function(){})
@@ -323,7 +321,7 @@ test_that("custom spec works", {
 })
 
 test_that("no params plumber router still produces spec when there is a func params", {
-  pr <- plumber$new()
+  pr <- pr()
   handler <- function(num) { sum(as.integer(num)) }
   pr$handle("GET", "/sum", handler, serializer = serializer_json())
   spec <- pr$get_api_spec()

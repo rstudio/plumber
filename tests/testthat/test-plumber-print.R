@@ -3,19 +3,19 @@ test_that("prints correctly", {
   testthat::skip_on_os("windows") # has issues comparing text values
 
 
-  pr <- plumber$new()
-  pr$handle("GET", "/nested/path/here", function(){})
-  pr$handle("POST", "/nested/path/here", function(){})
+  pr1 <- pr()
+  pr1$handle("GET", "/nested/path/here", function(){})
+  pr1$handle("POST", "/nested/path/here", function(){})
 
-  pr2 <- plumber$new()
+  pr2 <- pr()
   pr2$handle("POST", "/something", function(){})
   pr2$handle("GET", "/", function(){})
-  pr$mount("/mysubpath", pr2)
+  pr1$mount("/mysubpath", pr2)
 
   stat <- PlumberStatic$new(".")
-  pr$mount("/static", stat)
+  pr1$mount("/static", stat)
 
-  printed <- capture.output(print(pr))
+  printed <- capture.output(print(pr1))
 
   expected_output <- c(
     "# Plumber router with 2 endpoints, 4 filters, and 2 sub-routers.",
@@ -46,17 +46,17 @@ test_that("prints correctly", {
   testthat::skip_on_cran()
   testthat::skip_on_os("windows") # has issues comparing text values
 
-  pr <- plumber$new()
-  sub <- plumber$new()
+  pr1 <- pr()
+  sub <- pr()
   sub$handle("GET", "/", force)
   sub$handle("POST", "/something", force)
   sub$handle("GET", "/nested/path", force)
   sub$handle("POST", "/", force)
   sub$handle("POST", "/nested/path", force)
 
-  pr$mount("/", sub)
+  pr1$mount("/", sub)
 
-  printed <- capture.output(print(pr))
+  printed <- capture.output(print(pr1))
 
   expected_output <- c(
     "# Plumber router with 0 endpoints, 4 filters, and 1 sub-router.",

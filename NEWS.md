@@ -20,7 +20,7 @@ plumber 1.0.0
 
 ### Breaking changes
 
-* When `plumb()`ing a file (or `plumber$new(file)`), the working directory is set to the file's directory before parsing the file. When running the Plumber API, the working directory will be set to file's directory before running.(#631)
+* When `plumb()`ing a file (or `Plumber$new(file)`), the working directory is set to the file's directory before parsing the file. When running the Plumber API, the working directory will be set to file's directory before running.(#631)
 
 * Plumber's OpenAPI Specification is now defined using
   [OpenAPI 3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md),

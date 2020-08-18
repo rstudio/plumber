@@ -196,7 +196,7 @@ register_ui <- function(name, index, static = NULL) {
       do.call(index, args)
     }
 
-    ui_router <- plumber$new()
+    ui_router <- Plumber$new()
     for (path in ui_paths) {
       ui_router$handle("GET", path, ui_index, serializer = serializer_html())
     }

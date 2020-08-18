@@ -74,7 +74,7 @@ test_that("If only req and res are defined, duplicated arguments do not throw an
 })
 
 test_that("Programmatic endpoints work", {
-  r <- plumber$new()
+  r <- Plumber$new()
 
   serializer <- "ser"
   expr <- expression(function(req, res){res$setHeader("expr", TRUE)})
@@ -97,7 +97,7 @@ test_that("Programmatic endpoints work", {
 })
 
 test_that("Programmatic endpoints with functions work", {
-  r <- plumber$new()
+  r <- Plumber$new()
 
   expr <- function(req, res){res$setHeader("expr", TRUE)}
 

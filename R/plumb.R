@@ -49,7 +49,7 @@ plumb <- function(file = NULL, dir = ".") {
       #   sourceUTF8 returns the (visible) value object. No need to call source()$value()
       pr <- sourceUTF8(entrypoint, new.env(parent = globalenv()))
 
-      if (!inherits(pr, "plumber")){
+      if (!is_pr(pr)) {
         stop("'", entrypoint, "' must return a runnable Plumber router.")
       }
 
@@ -75,7 +75,7 @@ plumb <- function(file = NULL, dir = ".") {
   }
 
   # Plumber file found
-  plumber$new(file)
+  Plumber$new(file)
 }
 
 
@@ -91,8 +91,8 @@ plumb <- function(file = NULL, dir = ".") {
 #'
 #' @param package Package to inspect
 #' @param name Name of the package folder to [plumb()].
-#' @describeIn plumb_api [plumb()]s a package's Plumber API. Returns a [`plumber`] router object
-#' @return A [`plumber`] object. If either `package` or `name` is null, the appropriate [available_apis()] will be returned.
+#' @describeIn plumb_api [plumb()]s a package's Plumber API. Returns a [`Plumber`] router object
+#' @return A [`Plumber`] object. If either `package` or `name` is null, the appropriate [available_apis()] will be returned.
 #' @export
 plumb_api <- function(package = NULL, name = NULL) {
 

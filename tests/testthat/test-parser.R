@@ -35,7 +35,7 @@ test_that("parsers can be combined", {
 })
 
 test_that("parsers work", {
-  r <- plumber$new(test_path("files/parsers.R"))
+  r <- pr(test_path("files/parsers.R"))
   res <- PlumberResponse$new()
 
   expect_identical(r$route(make_req("POST", "/default", body='{"a":1}'), res), structure(list(1L), names = "a"))
