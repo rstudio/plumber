@@ -246,7 +246,7 @@ plumber <- R6Class(
         }
       }
       if (lifecycle::is_present(swaggerCallback)) {
-        .Deprecated(msg = "`$run(swaggerCallback)` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$set_ui_callback(callback)`")
+        lifecycle::deprecate_warn("1.0.0", "run(swaggerCallback = )", "set_ui_callback(callback = )")
         self$set_ui_callback(swaggerCallback)
       }
 
