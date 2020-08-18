@@ -122,7 +122,7 @@ mount_openapi <- function(pr, api_url) {
 #' @noRd
 unmount_openapi <- function(pr) {
 
-  pr$remove_handle("GET", "/openapi.json")
+  pr$removeHandle("GET", "/openapi.json")
   invisible()
 
 }

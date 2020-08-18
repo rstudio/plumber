@@ -119,7 +119,7 @@ pr$setErrorHandler(function(req, res, err) {
 \item \href{#method-unmount}{\code{Plumber$unmount()}}
 \item \href{#method-registerHook}{\code{Plumber$registerHook()}}
 \item \href{#method-handle}{\code{Plumber$handle()}}
-\item \href{#method-remove_handle}{\code{Plumber$remove_handle()}}
+\item \href{#method-removeHandle}{\code{Plumber$removeHandle()}}
 \item \href{#method-print}{\code{Plumber$print()}}
 \item \href{#method-serve}{\code{Plumber$serve()}}
 \item \href{#method-route}{\code{Plumber$route()}}
@@ -421,12 +421,12 @@ pr$handle("GET", "/", function(){
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-remove_handle"></a>}}
-\if{latex}{\out{\hypertarget{method-remove_handle}{}}}
-\subsection{Method \code{remove_handle()}}{
+\if{html}{\out{<a id="method-removeHandle"></a>}}
+\if{latex}{\out{\hypertarget{method-removeHandle}{}}}
+\subsection{Method \code{removeHandle()}}{
 Remove endpoints
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Plumber$remove_handle(methods, path, preempt = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$removeHandle(methods, path, preempt = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

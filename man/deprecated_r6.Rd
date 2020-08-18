@@ -96,7 +96,7 @@ The objects of this class are cloneable with this method.
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="openAPIFile">}\href{../../plumber/html/Plumber.html#method-openAPIFile}{\code{plumber::Plumber$openAPIFile()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="print">}\href{../../plumber/html/Plumber.html#method-print}{\code{plumber::Plumber$print()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="registerHook">}\href{../../plumber/html/Plumber.html#method-registerHook}{\code{plumber::Plumber$registerHook()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="remove_handle">}\href{../../plumber/html/Plumber.html#method-remove_handle}{\code{plumber::Plumber$remove_handle()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="removeHandle">}\href{../../plumber/html/Plumber.html#method-removeHandle}{\code{plumber::Plumber$removeHandle()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="route">}\href{../../plumber/html/Plumber.html#method-route}{\code{plumber::Plumber$route()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="run">}\href{../../plumber/html/Plumber.html#method-run}{\code{plumber::Plumber$run()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="serve">}\href{../../plumber/html/Plumber.html#method-serve}{\code{plumber::Plumber$serve()}}\out{</span>}
