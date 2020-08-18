@@ -2,7 +2,7 @@ context("Tidy Plumber API")
 
 test_that("pr creates new router", {
   p <- pr()
-  expect_equal(class(p), c("plumber", "hookable", "R6"))
+  expect_equal(class(p), c("plumber", "Hookable", "R6"))
 })
 
 test_that("pr_handle functions add routes", {

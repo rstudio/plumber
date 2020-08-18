@@ -25,7 +25,7 @@ resetForward <- function() {
 #' of a request by a plumber router.
 PlumberStep <- R6Class(
   "PlumberStep",
-  inherit=hookable,
+  inherit=Hookable,
   public = list(
     #' @field lines lines from step block
     lines = NA,

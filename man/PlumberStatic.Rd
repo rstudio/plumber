@@ -12,7 +12,7 @@ Static file router
 Creates a router that is backed by a directory of files on disk.
 }
 \section{Super classes}{
-\code{\link[plumber:hookable]{plumber::hookable}} -> \code{\link[plumber:plumber]{plumber::plumber}} -> \code{plumberstatic}
+\code{\link[plumber:Hookable]{plumber::Hookable}} -> \code{\link[plumber:plumber]{plumber::plumber}} -> \code{plumberstatic}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -25,7 +25,7 @@ Creates a router that is backed by a directory of files on disk.
 \if{html}{
 \out{<details ><summary>Inherited methods</summary>}
 \itemize{
-\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="hookable" data-id="registerHooks">}\href{../../plumber/html/hookable.html#method-registerHooks}{\code{plumber::hookable$registerHooks()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks">}\href{../../plumber/html/Hookable.html#method-registerHooks}{\code{plumber::Hookable$registerHooks()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="addAssets">}\href{../../plumber/html/plumber.html#method-addAssets}{\code{plumber::plumber$addAssets()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="addEndpoint">}\href{../../plumber/html/plumber.html#method-addEndpoint}{\code{plumber::plumber$addEndpoint()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="addFilter">}\href{../../plumber/html/plumber.html#method-addFilter}{\code{plumber::plumber$addFilter()}}\out{</span>}

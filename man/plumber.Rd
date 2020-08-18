@@ -93,7 +93,7 @@ pr$setErrorHandler(function(req, res, err) {
 }
 }
 \section{Super class}{
-\code{\link[plumber:hookable]{plumber::hookable}} -> \code{plumber}
+\code{\link[plumber:Hookable]{plumber::Hookable}} -> \code{plumber}
 }
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
@@ -149,7 +149,7 @@ pr$setErrorHandler(function(req, res, err) {
 \if{html}{
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
-\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="hookable" data-id="registerHooks">}\href{../../plumber/html/hookable.html#method-registerHooks}{\code{plumber::hookable$registerHooks()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks">}\href{../../plumber/html/Hookable.html#method-registerHooks}{\code{plumber::Hookable$registerHooks()}}\out{</span>}
 }
 \out{</details>}
 }

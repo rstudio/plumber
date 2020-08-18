@@ -46,3 +46,7 @@ test_that("sessionCookie continues to work", {
 
   expect_equal(names(cookie_hooks_old), names(cookie_hooks_new))
 })
+
+test_that("hookable throws deprecated warning", {
+  expect_warning(hookable$new(), "Hookable")
+})

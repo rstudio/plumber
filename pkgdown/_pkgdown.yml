@@ -110,7 +110,7 @@ reference:
   - 'PlumberEndpoint'
   - 'PlumberStatic'
   - 'PlumberStep'
-  - 'hookable'
+  - 'Hookable'
 
 - title: Digital Ocean
   desc: TO BE REMOVED FROM PLUMBER!!!
