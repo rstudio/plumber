@@ -29,12 +29,26 @@ defaultPlumberFilters <- list(
 
 
 #' Package Plumber Router
-# ' @details Routers are the core request handler in plumber. A router is responsible for
-# ' taking an incoming request, submitting it through the appropriate filters and
-# ' eventually to a corresponding endpoint, if one is found.
-# '
-# ' See \url{http://www.rplumber.io/articles/programmatic-usage.html} for additional
-# ' details on the methods available on this object.
+#'
+#' Routers are the core request handler in plumber. A router is responsible for
+#' taking an incoming request, submitting it through the appropriate filters and
+#' eventually to a corresponding endpoint, if one is found.
+#'
+#' See \url{http://www.rplumber.io/articles/programmatic-usage.html} for additional
+#' details on the methods available on this object.
+#' @seealso
+#'  [pr()],
+#'  [pr_run()],
+#'  [pr_get()], [pr_post()],
+#'  [pr_mount()],
+#'  [pr_hook()], [pr_hooks()], [pr_cookie()],
+#'  [pr_filter()],
+#'  [pr_set_api_spec()], [pr_set_ui()],
+#'  [pr_set_serializer()], [pr_set_parsers()],
+#'  [pr_set_404()], [pr_set_error()],
+#'  [pr_set_debug()],
+#'  [pr_set_ui_callback()]
+#' @include hookable.R
 #' @export
 Plumber <- R6Class(
   "Plumber",
@@ -241,12 +255,11 @@ Plumber <- R6Class(
       }
       private$mnts[[path]] <- NULL
     },
-    #' @description Register a hook
-    #'
-    #' See also: [pr_hook()], [pr_hooks()]
     #' @param stage a character string. Point in the lifecycle of a request.
     #' @param handler a hook function.
-    #' @details Plumber routers support the notion of "hooks" that can be registered
+    #' @description Register a hook
+    #'
+    #' Plumber routers support the notion of "hooks" that can be registered
     #' to execute some code at a particular point in the lifecycle of a request.
     #' Plumber routers currently support four hooks:
     #' \enumerate{
@@ -272,6 +285,8 @@ Plumber <- R6Class(
     #' hooks at once using the `registerHooks` method which takes a name list in
     #' which the names are the names of the hooks, and the values are the
     #' handlers themselves.
+    #'
+    #' See also: [pr_hook()], [pr_hooks()]
     #' @examples
     #' \dontrun{
     #' pr <- pr()
@@ -701,9 +716,8 @@ Plumber <- R6Class(
         })
       })
     },
-    #' @description httpuv interface call function
+    #' @description \pkg{httpuv} interface call function. (Required for \pkg{httpuv})
     #' @param req request object
-    #' @details required for httpuv interface
     call = function(req) {
       # Set the arguments to an empty list
       req$pr <- self
@@ -715,9 +729,8 @@ Plumber <- R6Class(
       # maybe return a promise object
       self$serve(req, res)
     },
-    #' @description httpuv interface onHeaders function
+    #' @description httpuv interface onHeaders function. (Required for \pkg{httpuv})
     #' @param req request object
-    #' @details required for httpuv interface
     onHeaders = function(req) {
       maxSize <- private$maxSize
       if (isTRUE(maxSize <= 0))
@@ -739,9 +752,8 @@ Plumber <- R6Class(
         return(NULL)
       }
     },
-    #' @description httpuv interface onWSOpen function
+    #' @description httpuv interface onWSOpen function. (Required for \pkg{httpuv})
     #' @param ws WebSocket object
-    #' @details required for httpuv interface
     onWSOpen = function(ws){
       warning("WebSockets not supported.")
     },
@@ -757,8 +769,7 @@ Plumber <- R6Class(
     setSerializer = function(serializer) {
       private$default_serializer <- serializer
     },
-    #' @description Sets the default parsers of the router.
-    #' @details Initialized to `c("json", "form", "text", "octet", "multi")`
+    #' @description Sets the default parsers of the router. Initialized to `c("json", "form", "text", "octet", "multi")`
     #' @template pr_setParsers__parsers
     setParsers = function(parsers) {
       private$default_parsers <- make_parser(parsers)
@@ -945,7 +956,7 @@ Plumber <- R6Class(
       stat <- PlumberStatic$new(dir, options)
       self$mount(path, stat)
     },
-    #' @details addFilter has been deprecated in v0.4.0 and will be removed in a coming release. Please use `filter` instead.
+    #' @description `$addFilter()` has been deprecated in v0.4.0 and will be removed in a coming release. Please use `$filter()` instead.
     #' @param name name
     #' @param expr expr
     #' @param serializer serializer
@@ -959,7 +970,7 @@ Plumber <- R6Class(
       filter <- PlumberFilter$new(name, expr, private$envir, serializer)
       private$addFilterInternal(filter)
     },
-    #' @details addGlobalProcessor has been deprecated in v0.4.0 and will be removed in a coming release. Please use `registerHook`(s) instead.
+    #' @description `$addGlobalProcessor()` has been deprecated in v0.4.0 and will be removed in a coming release. Please use `$registerHook`(s) instead.
     #' @param proc proc
     addGlobalProcessor = function(proc){
       warning("addGlobalProcessor has been deprecated in v0.4.0 and will be removed in a coming release. Please use `registerHook`(s) instead.")

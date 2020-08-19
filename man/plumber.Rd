@@ -8,6 +8,14 @@ Package Plumber Router
 
 Package Plumber Router
 }
+\details{
+Routers are the core request handler in plumber. A router is responsible for
+taking an incoming request, submitting it through the appropriate filters and
+eventually to a corresponding endpoint, if one is found.
+
+See \url{http://www.rplumber.io/articles/programmatic-usage.html} for additional
+details on the methods available on this object.
+}
 \examples{
 
 ## ------------------------------------------------
@@ -91,6 +99,19 @@ pr$setErrorHandler(function(req, res, err) {
   str(err)
 })
 }
+}
+\seealso{
+\code{\link[=pr]{pr()}},
+\code{\link[=pr_run]{pr_run()}},
+\code{\link[=pr_get]{pr_get()}}, \code{\link[=pr_post]{pr_post()}},
+\code{\link[=pr_mount]{pr_mount()}},
+\code{\link[=pr_hook]{pr_hook()}}, \code{\link[=pr_hooks]{pr_hooks()}}, \code{\link[=pr_cookie]{pr_cookie()}},
+\code{\link[=pr_filter]{pr_filter()}},
+\code{\link[=pr_set_api_spec]{pr_set_api_spec()}}, \code{\link[=pr_set_ui]{pr_set_ui()}},
+\code{\link[=pr_set_serializer]{pr_set_serializer()}}, \code{\link[=pr_set_parsers]{pr_set_parsers()}},
+\code{\link[=pr_set_404]{pr_set_404()}}, \code{\link[=pr_set_error]{pr_set_error()}},
+\code{\link[=pr_set_debug]{pr_set_debug()}},
+\code{\link[=pr_set_ui_callback]{pr_set_ui_callback()}}
 }
 \section{Super class}{
 \code{\link[plumber:Hookable]{plumber::Hookable}} -> \code{Plumber}
@@ -282,24 +303,6 @@ Unmount a Plumber router
 \subsection{Method \code{registerHook()}}{
 Register a hook
 
-See also: \code{\link[=pr_hook]{pr_hook()}}, \code{\link[=pr_hooks]{pr_hooks()}}
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Plumber$registerHook(
-  stage = c("preroute", "postroute", "preserialize", "postserialize", "exit"),
-  handler
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{stage}}{a character string. Point in the lifecycle of a request.}
-
-\item{\code{handler}}{a hook function.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
 Plumber routers support the notion of "hooks" that can be registered
 to execute some code at a particular point in the lifecycle of a request.
 Plumber routers currently support four hooks:
@@ -326,8 +329,24 @@ You can add hooks using the \code{registerHook} method, or you can add multiple
 hooks at once using the \code{registerHooks} method which takes a name list in
 which the names are the names of the hooks, and the values are the
 handlers themselves.
+
+See also: \code{\link[=pr_hook]{pr_hook()}}, \code{\link[=pr_hooks]{pr_hooks()}}
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$registerHook(
+  stage = c("preroute", "postroute", "preserialize", "postserialize", "exit"),
+  handler
+)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{stage}}{a character string. Point in the lifecycle of a request.}
+
+\item{\code{handler}}{a hook function.}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{\dontrun{
@@ -508,7 +527,7 @@ Route a request
 \if{html}{\out{<a id="method-call"></a>}}
 \if{latex}{\out{\hypertarget{method-call}{}}}
 \subsection{Method \code{call()}}{
-httpuv interface call function
+\pkg{httpuv} interface call function. (Required for \pkg{httpuv})
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Plumber$call(req)}\if{html}{\out{</div>}}
 }
@@ -520,16 +539,12 @@ httpuv interface call function
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Details}{
-required for httpuv interface
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-onHeaders"></a>}}
 \if{latex}{\out{\hypertarget{method-onHeaders}{}}}
 \subsection{Method \code{onHeaders()}}{
-httpuv interface onHeaders function
+httpuv interface onHeaders function. (Required for \pkg{httpuv})
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Plumber$onHeaders(req)}\if{html}{\out{</div>}}
 }
@@ -541,16 +556,12 @@ httpuv interface onHeaders function
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Details}{
-required for httpuv interface
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-onWSOpen"></a>}}
 \if{latex}{\out{\hypertarget{method-onWSOpen}{}}}
 \subsection{Method \code{onWSOpen()}}{
-httpuv interface onWSOpen function
+httpuv interface onWSOpen function. (Required for \pkg{httpuv})
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Plumber$onWSOpen(ws)}\if{html}{\out{</div>}}
 }
@@ -562,10 +573,6 @@ httpuv interface onWSOpen function
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Details}{
-required for httpuv interface
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-setSerializer"></a>}}
@@ -601,7 +608,7 @@ pr$setSerializer(serializer_unboxed_json())
 \if{html}{\out{<a id="method-setParsers"></a>}}
 \if{latex}{\out{\hypertarget{method-setParsers}{}}}
 \subsection{Method \code{setParsers()}}{
-Sets the default parsers of the router.
+Sets the default parsers of the router. Initialized to \code{c("json", "form", "text", "octet", "multi")}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Plumber$setParsers(parsers)}\if{html}{\out{</div>}}
 }
@@ -635,10 +642,6 @@ parsers = c("json", "form", "text", "octet", "multi")
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Details}{
-Initialized to \code{c("json", "form", "text", "octet", "multi")}
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set404Handler"></a>}}
@@ -909,6 +912,7 @@ addAssets has been deprecated in v0.4.0 and will be removed in a coming release.
 \if{html}{\out{<a id="method-addFilter"></a>}}
 \if{latex}{\out{\hypertarget{method-addFilter}{}}}
 \subsection{Method \code{addFilter()}}{
+\verb{$addFilter()} has been deprecated in v0.4.0 and will be removed in a coming release. Please use \verb{$filter()} instead.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Plumber$addFilter(name, expr, serializer, processors)}\if{html}{\out{</div>}}
 }
@@ -926,15 +930,12 @@ addAssets has been deprecated in v0.4.0 and will be removed in a coming release.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Details}{
-addFilter has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{filter} instead.
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-addGlobalProcessor"></a>}}
 \if{latex}{\out{\hypertarget{method-addGlobalProcessor}{}}}
 \subsection{Method \code{addGlobalProcessor()}}{
+\verb{$addGlobalProcessor()} has been deprecated in v0.4.0 and will be removed in a coming release. Please use \verb{$registerHook}(s) instead.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Plumber$addGlobalProcessor(proc)}\if{html}{\out{</div>}}
 }
@@ -946,10 +947,6 @@ addFilter has been deprecated in v0.4.0 and will be removed in a coming release.
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Details}{
-addGlobalProcessor has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{registerHook}(s) instead.
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-openAPIFile"></a>}}
