@@ -1,5 +1,5 @@
 #Defining an array parameter
-pr <- plumber$new()
+pr <- Plumber$new()
 
 openapi_func <- function(spec) {
   spec$paths[["/sum"]]$get$summary <- "Sum numbers"
@@ -21,9 +21,9 @@ handler <- function(num) {
 
 pr$handle("GET", "/sum", handler, serializer = serializer_json())
 
-pr$set_api_spec(api = openapi_func)
+pr$setApiSpec(api = openapi_func)
 
-pr$get_api_spec()
+pr$getApiSpec()
 
 # return Plumber object
 pr

@@ -99,7 +99,7 @@ Returns a single item list where the value is the raw content and the key is the
 # Activate `rds` parser in a multipart request
 #* @parser multi
 #* @parser rds
-pr <- plumber$new()
+pr <- Plumber$new()
 pr$handle("GET", "/upload", function(rds) {rds}, parsers = c("multi", "rds"))
 }
 }

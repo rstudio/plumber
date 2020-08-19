@@ -1,6 +1,7 @@
 for_each_plumber_api <- function(fn, ...) {
+  package <- "plumber"
   lapply(
-    available_apis("plumber")$name,
+    available_apis(package)$name,
     function(name) {
       if (name == "14-future") {
         if (!require("future", character.only = TRUE, quietly = TRUE)) {
@@ -11,12 +12,12 @@ for_each_plumber_api <- function(fn, ...) {
       pr <-
         if (name == "12-entrypoint") {
           expect_warning({
-            plumb_api("plumber", name)
+            plumb_api(package, name)
           }, "Legacy cookie secret")
         } else {
-          plumb_api("plumber", name)
+          plumb_api(package, name)
         }
-      expect_true(inherits(pr, "plumber"), paste0("plumb_api(\"", package, "\", \"", name, "\")"))
+      expect_true(is_plumber(pr), paste0("plumb_api(\"", package, "\", \"", name, "\")"))
 
 
       fn(pr, ...)

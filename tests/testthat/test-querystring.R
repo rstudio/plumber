@@ -7,7 +7,7 @@ test_that("query strings are properly parsed", {
 })
 
 test_that("path parameters do not convert + to space", {
-  r <- plumber$new(test_path("files/path-params.R"))
+  r <- pr(test_path("files/path-params.R"))
   expect_equal(r$route(make_req("GET", "/car/a+b"), PlumberResponse$new()), "a+b")
 })
 

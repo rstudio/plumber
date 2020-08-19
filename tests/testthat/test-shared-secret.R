@@ -3,7 +3,7 @@ context("shared secret")
 test_that("requests with shared secrets pass, w/o fail", {
   options(`plumber.sharedSecret`="abcdefg")
 
-  pr <- plumber$new()
+  pr <- pr()
   pr$handle("GET", "/", function(){ 123 })
 
   # No shared secret

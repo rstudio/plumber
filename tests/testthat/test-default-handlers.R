@@ -9,8 +9,8 @@ test_that("404 handler sets 404", {
 })
 
 test_that("405 handling is ok, get the right verbs", {
-  pr <- plumber$new()
-  sub <- plumber$new()
+  pr <- pr()
+  sub <- pr()
   sub$handle("GET", "/test", force)
   pr$mount("/barret", sub)
 
@@ -23,8 +23,8 @@ test_that("405 handling is ok, get the right verbs", {
   expect_true(is_405(pr, path_to_find = "/barret/test", "POST"))
   expect_false(is_405(pr, path_to_find = "/subroute/not_found"))
 
-  pr <- plumber$new()
-  sub <- plumber$new()
+  pr <- pr()
+  sub <- pr()
   sub$handle("GET", "/test", force)
   pr$mount("/", sub)
 
@@ -58,7 +58,7 @@ test_that("error handler only includes message in debug mode.", {
   res <- PlumberResponse$new()
   capture.output({
     val <- defaultErrorHandler()(
-      req = list(pr = list(get_debug = function() { TRUE })),
+      req = list(pr = list(getDebug = function() { TRUE })),
       res,
       "I'm an error!"
     )

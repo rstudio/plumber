@@ -44,10 +44,10 @@ reference:
   contents:
   - 'plumb'
   - 'plumb_api'
-  - 'plumber'
   - 'pr'
   - 'pr_run'
   - 'options_plumber'
+  - 'is_plumber'
 
 - title: Router Methods
   contents:
@@ -107,10 +107,11 @@ reference:
 
 - title: R6 Constructors
   contents:
+  - 'Plumber'
   - 'PlumberEndpoint'
   - 'PlumberStatic'
   - 'PlumberStep'
-  - 'hookable'
+  - 'Hookable'
 
 - title: Digital Ocean
   desc: TO BE REMOVED FROM PLUMBER!!!

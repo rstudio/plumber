@@ -1,7 +1,7 @@
 context("Includes")
 
 test_that("Includes work", {
-  r <- plumber$new(test_path("files/includes.R"))
+  r <- pr(test_path("files/includes.R"))
 
   # When running, we setwd to the file's dir. Simulate that here.
   cwd <- getwd()

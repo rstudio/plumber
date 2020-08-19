@@ -25,7 +25,7 @@ resetForward <- function() {
 #' of a request by a plumber router.
 PlumberStep <- R6Class(
   "PlumberStep",
-  inherit=hookable,
+  inherit=Hookable,
   public = list(
     #' @field lines lines from step block
     lines = NA,
@@ -131,7 +131,7 @@ getRelevantArgs <- function(args, plumberExpression) {
   if (all(fargs %in% c("req", "res"))) {
     ret <- list()
     # using `$` will retrieve the 1st occurance of req,res
-    # args$req <- req is used within `plumber$route()`
+    # args$req <- req is used within `Plumber$route()`
     if ("req" %in% fargs) {
       ret$req <- args$req
     }
@@ -215,7 +215,7 @@ PlumberEndpoint <- R6Class(
     #' @param expr Endpoint function or expression that evaluates to a function.
     #' @param envir Endpoint environment
     #' @param serializer Endpoint serializer. Ex: [serializer_json()]
-    #' @template pr_set_parsers__parsers
+    #' @template pr_setParsers__parsers
     #' @param lines Endpoint block
     #' @param params Endpoint params
     #' @param comments,responses,tags Values to be used within the OpenAPI Spec

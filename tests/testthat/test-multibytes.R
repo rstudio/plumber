@@ -23,7 +23,7 @@ test_that("support files with multibytes", {
   with_locale("LC_CTYPE", "C", {
     with_locale("LC_COLLATE", "C", {
 
-      r <- plumber$new(test_path("files/multibytes.R"))
+      r <- pr(test_path("files/multibytes.R"))
       req <- make_req("GET", "/echo")
       out <- r$call(req)$body
 

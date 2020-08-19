@@ -175,7 +175,7 @@ code_chunk(json_serialize(e$exec(res=list(status=1))), "json")
 A custom error handler can be set using the `setErrorHandler()` method:
 
 ```{r, eval = FALSE}
-pr <- plumber$new()
+pr <- Plumber$new()
 pr$handle("GET", "/simple", function() stop("I'm an error!"))
 pr$setErrorHandler(function(req, res, err){
   res$status <- 500
@@ -187,7 +187,7 @@ pr$run()
 If you run this API and visit http://localhost:8000/simple, you'll notice that the custom error message provided in the error handler is included in the browser. Since we didn't do anything with the actual error message, nothing is printed to the console. If we wanted to include the error in the console, we could do the following:
 
 ```{r, eval = FALSE}
-pr <- plumber$new()
+pr <- Plumber$new()
 pr$handle("GET", "/simple", function() stop("I'm an error!"))
 pr$setErrorHandler(function(req, res, err){
   print(err)

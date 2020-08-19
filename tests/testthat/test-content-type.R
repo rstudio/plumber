@@ -14,7 +14,7 @@ test_that("empty contentType errors", {
 
 test_that("contentType works in files", {
 
-  r <- plumber$new(test_path("files/content-type.R"))
+  r <- pr(test_path("files/content-type.R"))
   val <- r$call(make_req("GET", "/"))
   expect_equal(val$headers$`Content-Type`, "text/plain")
 })

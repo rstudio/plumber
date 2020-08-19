@@ -29,7 +29,7 @@ test_that("session_cookie throws missing key", {
 test_that("cookies are set", {
   skip_if_no_cookie_support()
 
-  r <- plumber$new()
+  r <- pr()
   expr <- expression(function(req, res){ req$session <- list(abc = 1234); TRUE })
 
   r$handle("GET", "/", expr)
@@ -54,7 +54,7 @@ test_that("cookies are set", {
 test_that("cookies are unset", {
   skip_if_no_cookie_support()
 
-  r <- plumber$new()
+  r <- pr()
   exprRemoveSession <- expression(function(req, res){ req$session <- NULL; TRUE })
 
   r$handle("GET", "/", exprRemoveSession)
@@ -85,7 +85,7 @@ test_that("cookies are unset", {
 test_that("cookies are read", {
   skip_if_no_cookie_support()
 
-  r <- plumber$new()
+  r <- pr()
 
   expr <- expression(function(req, res){ req$session$abc })
 
@@ -116,7 +116,7 @@ test_that("cookies are read", {
 test_that("invalid cookies/JSON are handled", {
   skip_if_no_cookie_support()
 
-  r <- plumber$new()
+  r <- pr()
 
   expr <- expression(function(req, res){ ifelse(is.null(req$session), "no session", req$session) })
 
@@ -149,7 +149,7 @@ test_that("invalid cookies/JSON are handled", {
 test_that("cookie attributes are set", {
   skip_if_no_cookie_support()
 
-  r <- plumber$new()
+  r <- pr()
   expr <- expression(function(req, res){ req$session <- list(abc = 1234); TRUE })
 
   r$handle("GET", "/", expr)
