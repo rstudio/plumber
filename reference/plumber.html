@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Package Plumber Router — plumber • plumber</title>
+<title>Package Plumber Router — Plumber • plumber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,7 +52,7 @@
 
 
 
-<meta property="og:title" content="Package Plumber Router — plumber" />
+<meta property="og:title" content="Package Plumber Router — Plumber" />
 <meta property="og:description" content="Package Plumber Router
 Package Plumber Router" />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
@@ -183,9 +183,29 @@ Package Plumber Router" />
 
 
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Routers are the core request handler in plumber. A router is responsible for
+taking an incoming request, submitting it through the appropriate filters and
+eventually to a corresponding endpoint, if one is found.</p>
+<p>See <a href='http://www.rplumber.io/articles/programmatic-usage.html'>http://www.rplumber.io/articles/programmatic-usage.html</a> for additional
+details on the methods available on this object.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='pr.html'>pr()</a></code>,
+<code><a href='pr_run.html'>pr_run()</a></code>,
+<code><a href='pr_handle.html'>pr_get()</a></code>, <code><a href='pr_handle.html'>pr_post()</a></code>,
+<code><a href='pr_mount.html'>pr_mount()</a></code>,
+<code><a href='pr_hook.html'>pr_hook()</a></code>, <code><a href='pr_hook.html'>pr_hooks()</a></code>, <code><a href='pr_cookie.html'>pr_cookie()</a></code>,
+<code><a href='pr_filter.html'>pr_filter()</a></code>,
+<code><a href='pr_set_api_spec.html'>pr_set_api_spec()</a></code>, <code><a href='pr_set_ui.html'>pr_set_ui()</a></code>,
+<code><a href='pr_set_serializer.html'>pr_set_serializer()</a></code>, <code><a href='pr_set_parsers.html'>pr_set_parsers()</a></code>,
+<code><a href='pr_set_404.html'>pr_set_404()</a></code>, <code><a href='pr_set_error.html'>pr_set_error()</a></code>,
+<code><a href='pr_set_debug.html'>pr_set_debug()</a></code>,
+<code><a href='pr_set_ui_callback.html'>pr_set_ui_callback()</a></code></p></div>
     <h2 class="hasAnchor" id="super-class"><a class="anchor" href="#super-class"></a>Super class</h2>
 
-    <p><code><a href='hookable.html'>plumber::hookable</a></code> -&gt; <code>plumber</code></p>
+    <p><code><a href='Hookable.html'>plumber::Hookable</a></code> -&gt; <code>Plumber</code></p>
     <h2 class="hasAnchor" id="active-bindings"><a class="anchor" href="#active-bindings"></a>Active bindings</h2>
 
     <p><div class="r6-active-bindings"></p><dl>
@@ -206,66 +226,66 @@ Package Plumber Router" />
 <h3>Public methods</h3>
 
 <ul>
-<li><p><a href='#method-new'><code>plumber$new()</code></a></p></li>
-<li><p><a href='#method-run'><code>plumber$run()</code></a></p></li>
-<li><p><a href='#method-mount'><code>plumber$mount()</code></a></p></li>
-<li><p><a href='#method-unmount'><code>plumber$unmount()</code></a></p></li>
-<li><p><a href='#method-registerHook'><code>plumber$registerHook()</code></a></p></li>
-<li><p><a href='#method-handle'><code>plumber$handle()</code></a></p></li>
-<li><p><a href='#method-remove_handle'><code>plumber$remove_handle()</code></a></p></li>
-<li><p><a href='#method-print'><code>plumber$print()</code></a></p></li>
-<li><p><a href='#method-serve'><code>plumber$serve()</code></a></p></li>
-<li><p><a href='#method-route'><code>plumber$route()</code></a></p></li>
-<li><p><a href='#method-call'><code>plumber$call()</code></a></p></li>
-<li><p><a href='#method-onHeaders'><code>plumber$onHeaders()</code></a></p></li>
-<li><p><a href='#method-onWSOpen'><code>plumber$onWSOpen()</code></a></p></li>
-<li><p><a href='#method-setSerializer'><code>plumber$setSerializer()</code></a></p></li>
-<li><p><a href='#method-set_parsers'><code>plumber$set_parsers()</code></a></p></li>
-<li><p><a href='#method-set404Handler'><code>plumber$set404Handler()</code></a></p></li>
-<li><p><a href='#method-setErrorHandler'><code>plumber$setErrorHandler()</code></a></p></li>
-<li><p><a href='#method-set_ui'><code>plumber$set_ui()</code></a></p></li>
-<li><p><a href='#method-set_ui_callback'><code>plumber$set_ui_callback()</code></a></p></li>
-<li><p><a href='#method-set_debug'><code>plumber$set_debug()</code></a></p></li>
-<li><p><a href='#method-get_debug'><code>plumber$get_debug()</code></a></p></li>
-<li><p><a href='#method-filter'><code>plumber$filter()</code></a></p></li>
-<li><p><a href='#method-set_api_spec'><code>plumber$set_api_spec()</code></a></p></li>
-<li><p><a href='#method-get_api_spec'><code>plumber$get_api_spec()</code></a></p></li>
-<li><p><a href='#method-addEndpoint'><code>plumber$addEndpoint()</code></a></p></li>
-<li><p><a href='#method-addAssets'><code>plumber$addAssets()</code></a></p></li>
-<li><p><a href='#method-addFilter'><code>plumber$addFilter()</code></a></p></li>
-<li><p><a href='#method-addGlobalProcessor'><code>plumber$addGlobalProcessor()</code></a></p></li>
-<li><p><a href='#method-openAPIFile'><code>plumber$openAPIFile()</code></a></p></li>
-<li><p><a href='#method-swaggerFile'><code>plumber$swaggerFile()</code></a></p></li>
-<li><p><a href='#method-clone'><code>plumber$clone()</code></a></p></li>
+<li><p><a href='#method-new'><code>Plumber$new()</code></a></p></li>
+<li><p><a href='#method-run'><code>Plumber$run()</code></a></p></li>
+<li><p><a href='#method-mount'><code>Plumber$mount()</code></a></p></li>
+<li><p><a href='#method-unmount'><code>Plumber$unmount()</code></a></p></li>
+<li><p><a href='#method-registerHook'><code>Plumber$registerHook()</code></a></p></li>
+<li><p><a href='#method-handle'><code>Plumber$handle()</code></a></p></li>
+<li><p><a href='#method-removeHandle'><code>Plumber$removeHandle()</code></a></p></li>
+<li><p><a href='#method-print'><code>Plumber$print()</code></a></p></li>
+<li><p><a href='#method-serve'><code>Plumber$serve()</code></a></p></li>
+<li><p><a href='#method-route'><code>Plumber$route()</code></a></p></li>
+<li><p><a href='#method-call'><code>Plumber$call()</code></a></p></li>
+<li><p><a href='#method-onHeaders'><code>Plumber$onHeaders()</code></a></p></li>
+<li><p><a href='#method-onWSOpen'><code>Plumber$onWSOpen()</code></a></p></li>
+<li><p><a href='#method-setSerializer'><code>Plumber$setSerializer()</code></a></p></li>
+<li><p><a href='#method-setParsers'><code>Plumber$setParsers()</code></a></p></li>
+<li><p><a href='#method-set404Handler'><code>Plumber$set404Handler()</code></a></p></li>
+<li><p><a href='#method-setErrorHandler'><code>Plumber$setErrorHandler()</code></a></p></li>
+<li><p><a href='#method-setUi'><code>Plumber$setUi()</code></a></p></li>
+<li><p><a href='#method-setUiCallback'><code>Plumber$setUiCallback()</code></a></p></li>
+<li><p><a href='#method-setDebug'><code>Plumber$setDebug()</code></a></p></li>
+<li><p><a href='#method-getDebug'><code>Plumber$getDebug()</code></a></p></li>
+<li><p><a href='#method-filter'><code>Plumber$filter()</code></a></p></li>
+<li><p><a href='#method-setApiSpec'><code>Plumber$setApiSpec()</code></a></p></li>
+<li><p><a href='#method-getApiSpec'><code>Plumber$getApiSpec()</code></a></p></li>
+<li><p><a href='#method-addEndpoint'><code>Plumber$addEndpoint()</code></a></p></li>
+<li><p><a href='#method-addAssets'><code>Plumber$addAssets()</code></a></p></li>
+<li><p><a href='#method-addFilter'><code>Plumber$addFilter()</code></a></p></li>
+<li><p><a href='#method-addGlobalProcessor'><code>Plumber$addGlobalProcessor()</code></a></p></li>
+<li><p><a href='#method-openAPIFile'><code>Plumber$openAPIFile()</code></a></p></li>
+<li><p><a href='#method-swaggerFile'><code>Plumber$swaggerFile()</code></a></p></li>
+<li><p><a href='#method-clone'><code>Plumber$clone()</code></a></p></li>
 </ul>
 <p><details open ><summary>Inherited methods</summary>
 <ul>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="hookable" data-id="registerHooks"><a href='../../plumber/html/hookable.html#method-registerHooks'><code>plumber::hookable$registerHooks()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks"><a href='../../plumber/html/Hookable.html#method-registerHooks'><code>plumber::Hookable$registerHooks()</code></a></span></p></li>
 </ul>
 </details>
 
 <hr>
 <a id="method-new"></a></p><h3>Method <code>new()</code></h3>
-<p>Create a new <code>plumber</code> router</p>
+<p>Create a new <code>Plumber</code> router</p>
 <p>See also <code><a href='plumb.html'>plumb()</a></code>, <code><a href='pr.html'>pr()</a></code></p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>new</span>(file = <span class='kw'>NULL</span>, filters = <span class='kw'>defaultPlumberFilters</span>, <span class='kw'>envir</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>new</span>(file = <span class='kw'>NULL</span>, filters = <span class='kw'>defaultPlumberFilters</span>, <span class='kw'>envir</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
 <dt><code>file</code></dt><dd><p>path to file to plumb</p></dd>
 
-<dt><code>filters</code></dt><dd><p>a list of plumber filters</p></dd>
+<dt><code>filters</code></dt><dd><p>a list of Plumber filters</p></dd>
 
 <dt><code>envir</code></dt><dd><p>an environment to be used as the enclosure for the routers execution</p></dd>
 
 </dl><p></div></p>
 <h3>Returns</h3>
-<p>A new <code>plumber</code> router</p>
+<p>A new <code>Plumber</code> router</p>
 <p><hr>
 <a id="method-run"></a></p><h3>Method <code>run()</code></h3>
 <p>Start a server using <code>plumber</code> object.</p>
 <p>See also: <code><a href='pr_run.html'>pr_run()</a></code></p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>run</span>(
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>run</span>(
   host = <span class='st'>"127.0.0.1"</span>,
   port = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.port"</span>, <span class='kw'>NULL</span>),
   swagger = <span class='fu'><a href='https://rdrr.io/r/base/Deprecated.html'>deprecated</a></span>(),
@@ -283,45 +303,45 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.</p></dd>
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.This value does not need to be explicitly assigned. To explicity set it, see <code><a href='options_plumber.html'>options_plumber()</a></code>.</p></dd>
 
-<dt><code>swagger</code></dt><dd><p>Deprecated. See <code>$set_ui(ui)</code> or <code>$set_api_spec()</code></p></dd>
+<dt><code>swagger</code></dt><dd><p>Deprecated. See <code>$setUi(ui)</code> or <code>$setApiSpec()</code></p></dd>
 
-<dt><code>debug</code></dt><dd><p>Deprecated. See <code>$set_debug()</code></p></dd>
+<dt><code>debug</code></dt><dd><p>Deprecated. See <code>$setDebug()</code></p></dd>
 
-<dt><code>swaggerCallback</code></dt><dd><p>Deprecated. See <code>$set_ui_callback()</code></p></dd>
+<dt><code>swaggerCallback</code></dt><dd><p>Deprecated. See <code>$setUiCallback()</code></p></dd>
 
 </dl><p></div></p>
 <p><hr>
 <a id="method-mount"></a></p><h3>Method <code>mount()</code></h3>
-<p>Mount a plumber router</p>
+<p>Mount a Plumber router</p>
 <p>Plumber routers can be “nested” by mounting one into another
 using the <code>mount()</code> method. This allows you to compartmentalize your API
 by paths which is a great technique for decomposing large APIs into smaller files.</p>
 <p>See also: <code><a href='pr_mount.html'>pr_mount()</a></code></p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>mount</span>(<span class='kw'>path</span>, <span class='kw'>router</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>mount</span>(<span class='kw'>path</span>, <span class='kw'>router</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
 <dt><code>path</code></dt><dd><p>a character string. Where to mount router.</p></dd>
 
-<dt><code>router</code></dt><dd><p>a plumber router. Router to be mounted.</p></dd>
+<dt><code>router</code></dt><dd><p>a Plumber router. Router to be mounted.</p></dd>
 
 </dl><p></div></p>
 <h3>Examples</h3>
 <p><div class="r example copy"></p><pre>\dontrun{
 root &lt;- pr()
 
-users &lt;- plumber$new("users.R")
+users &lt;- Plumber$new("users.R")
 root$mount("/users", users)
 
-products &lt;- plumber$new("products.R")
+products &lt;- Plumber$new("products.R")
 root$mount("/products", products)
 }
 </pre><p></div></p>
 
 <p><hr>
 <a id="method-unmount"></a></p><h3>Method <code>unmount()</code></h3>
-<p>Unmount a plumber router</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>unmount</span>(<span class='kw'>path</span>)</pre><p></div></p>
+<p>Unmount a Plumber router</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>unmount</span>(<span class='kw'>path</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -331,20 +351,6 @@ root$mount("/products", products)
 <p><hr>
 <a id="method-registerHook"></a></p><h3>Method <code>registerHook()</code></h3>
 <p>Register a hook</p>
-<p>See also: <code><a href='pr_hook.html'>pr_hook()</a></code>, <code><a href='pr_hook.html'>pr_hooks()</a></code></p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>registerHook</span>(
-  stage = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"preroute"</span>, <span class='st'>"postroute"</span>, <span class='st'>"preserialize"</span>, <span class='st'>"postserialize"</span>, <span class='st'>"exit"</span>),
-  <span class='kw'>handler</span>
-)</pre><p></div></p>
-
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl>
-<dt><code>stage</code></dt><dd><p>a character string. Point in the lifecycle of a request.</p></dd>
-
-<dt><code>handler</code></dt><dd><p>a hook function.</p></dd>
-
-</dl><p></div></p>
-<h3>Details</h3>
 <p>Plumber routers support the notion of "hooks" that can be registered
 to execute some code at a particular point in the lifecycle of a request.
 Plumber routers currently support four hooks:</p><ol>
@@ -367,7 +373,19 @@ for the response.</p>
 hooks at once using the <code>registerHooks</code> method which takes a name list in
 which the names are the names of the hooks, and the values are the
 handlers themselves.</p>
+<p>See also: <code><a href='pr_hook.html'>pr_hook()</a></code>, <code><a href='pr_hook.html'>pr_hooks()</a></code></p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>registerHook</span>(
+  stage = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"preroute"</span>, <span class='st'>"postroute"</span>, <span class='st'>"preserialize"</span>, <span class='st'>"postserialize"</span>, <span class='st'>"exit"</span>),
+  <span class='kw'>handler</span>
+)</pre><p></div></p>
 
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl>
+<dt><code>stage</code></dt><dd><p>a character string. Point in the lifecycle of a request.</p></dd>
+
+<dt><code>handler</code></dt><dd><p>a hook function.</p></dd>
+
+</dl><p></div></p>
 <h3>Examples</h3>
 <p><div class="r example copy"></p><pre>\dontrun{
 pr &lt;- pr()
@@ -403,7 +421,7 @@ takes additional arguments that allow you to control nuanced behavior
 of the endpoint like which filter it might preempt or which serializer
 it should use.</p>
 <p>See also: <code><a href='pr_handle.html'>pr_handle()</a></code>, <code><a href='pr_handle.html'>pr_get()</a></code>, <code><a href='pr_handle.html'>pr_post()</a></code>, <code><a href='pr_handle.html'>pr_put()</a></code>, <code><a href='pr_handle.html'>pr_delete()</a></code></p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>handle</span>(
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>handle</span>(
   <span class='kw'>methods</span>,
   <span class='kw'>path</span>,
   <span class='kw'>handler</span>,
@@ -443,9 +461,9 @@ pr$handle("GET", "/", function(){
 </pre><p></div></p>
 
 <p><hr>
-<a id="method-remove_handle"></a></p><h3>Method <code>remove_handle()</code></h3>
+<a id="method-removeHandle"></a></p><h3>Method <code>removeHandle()</code></h3>
 <p>Remove endpoints</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>remove_handle</span>(<span class='kw'>methods</span>, <span class='kw'>path</span>, preempt = <span class='kw'>NULL</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>removeHandle</span>(<span class='kw'>methods</span>, <span class='kw'>path</span>, preempt = <span class='kw'>NULL</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -459,7 +477,7 @@ pr$handle("GET", "/", function(){
 <p><hr>
 <a id="method-print"></a></p><h3>Method <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></h3>
 <p>Print representation of plumber router.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(prefix = <span class='st'>""</span>, topLevel = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(prefix = <span class='st'>""</span>, topLevel = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -476,7 +494,7 @@ router, set to <code>TRUE</code>.</p></dd>
 <p><hr>
 <a id="method-serve"></a></p><h3>Method <code>serve()</code></h3>
 <p>Serve a request</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>serve</span>(<span class='kw'>req</span>, <span class='kw'>res</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>serve</span>(<span class='kw'>req</span>, <span class='kw'>res</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -488,7 +506,7 @@ router, set to <code>TRUE</code>.</p></dd>
 <p><hr>
 <a id="method-route"></a></p><h3>Method <code>route()</code></h3>
 <p>Route a request</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>route</span>(<span class='kw'>req</span>, <span class='kw'>res</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>route</span>(<span class='kw'>req</span>, <span class='kw'>res</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -499,48 +517,39 @@ router, set to <code>TRUE</code>.</p></dd>
 </dl><p></div></p>
 <p><hr>
 <a id="method-call"></a></p><h3>Method <code><a href='https://rdrr.io/r/base/call.html'>call()</a></code></h3>
-<p>httpuv interface call function</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/base/call.html'>call</a></span>(<span class='kw'>req</span>)</pre><p></div></p>
+<p><span class="pkg">httpuv</span> interface call function. (Required for <span class="pkg">httpuv</span>)</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/base/call.html'>call</a></span>(<span class='kw'>req</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
 <dt><code>req</code></dt><dd><p>request object</p></dd>
 
 </dl><p></div></p>
-<h3>Details</h3>
-<p>required for httpuv interface</p>
-
 <p><hr>
 <a id="method-onHeaders"></a></p><h3>Method <code>onHeaders()</code></h3>
-<p>httpuv interface onHeaders function</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>onHeaders</span>(<span class='kw'>req</span>)</pre><p></div></p>
+<p>httpuv interface onHeaders function. (Required for <span class="pkg">httpuv</span>)</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>onHeaders</span>(<span class='kw'>req</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
 <dt><code>req</code></dt><dd><p>request object</p></dd>
 
 </dl><p></div></p>
-<h3>Details</h3>
-<p>required for httpuv interface</p>
-
 <p><hr>
 <a id="method-onWSOpen"></a></p><h3>Method <code>onWSOpen()</code></h3>
-<p>httpuv interface onWSOpen function</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>onWSOpen</span>(<span class='kw'>ws</span>)</pre><p></div></p>
+<p>httpuv interface onWSOpen function. (Required for <span class="pkg">httpuv</span>)</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>onWSOpen</span>(<span class='kw'>ws</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
 <dt><code>ws</code></dt><dd><p>WebSocket object</p></dd>
 
 </dl><p></div></p>
-<h3>Details</h3>
-<p>required for httpuv interface</p>
-
 <p><hr>
 <a id="method-setSerializer"></a></p><h3>Method <code>setSerializer()</code></h3>
 <p>Sets the default serializer of the router.</p>
 <p>See also: <code><a href='pr_set_serializer.html'>pr_set_serializer()</a></code></p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>setSerializer</span>(<span class='kw'>serializer</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>setSerializer</span>(<span class='kw'>serializer</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -555,9 +564,9 @@ pr$setSerializer(serializer_unboxed_json())
 </pre><p></div></p>
 
 <p><hr>
-<a id="method-set_parsers"></a></p><h3>Method <code>set_parsers()</code></h3>
-<p>Sets the default parsers of the router.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>set_parsers</span>(<span class='kw'>parsers</span>)</pre><p></div></p>
+<a id="method-setParsers"></a></p><h3>Method <code>setParsers()</code></h3>
+<p>Sets the default parsers of the router. Initialized to <code><a href='https://rdrr.io/r/base/c.html'>c("json", "form", "text", "octet", "multi")</a></code></p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>setParsers</span>(<span class='kw'>parsers</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -575,15 +584,12 @@ When using a list, parser information already defined will maintain their existi
 <span class='kw'>parsers</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"json"</span>, <span class='st'>"form"</span>, <span class='st'>"text"</span>, <span class='st'>"octet"</span>, <span class='st'>"multi"</span>)</pre></p></dd>
 
 </dl><p></div></p>
-<h3>Details</h3>
-<p>Initialized to <code><a href='https://rdrr.io/r/base/c.html'>c("json", "form", "text", "octet", "multi")</a></code></p>
-
 <p><hr>
 <a id="method-set404Handler"></a></p><h3>Method <code>set404Handler()</code></h3>
 <p>Sets the handler that gets called if an
 incoming request can’t be served by any filter, endpoint, or sub-router.</p>
 <p>See also: <code><a href='pr_set_404.html'>pr_set_404()</a></code></p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>set404Handler</span>(<span class='kw'>fun</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>set404Handler</span>(<span class='kw'>fun</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -602,7 +608,7 @@ pr$set404Handler(function(req, res) {cat(req$PATH_INFO)})
 <p>Sets the error handler which gets invoked if any filter or
 endpoint generates an error.</p>
 <p>See also: <code><a href='pr_set_404.html'>pr_set_404()</a></code></p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>setErrorHandler</span>(<span class='kw'>fun</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>setErrorHandler</span>(<span class='kw'>fun</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -620,10 +626,10 @@ pr$setErrorHandler(function(req, res, err) {
 </pre><p></div></p>
 
 <p><hr>
-<a id="method-set_ui"></a></p><h3>Method <code>set_ui()</code></h3>
+<a id="method-setUi"></a></p><h3>Method <code>setUi()</code></h3>
 <p>Set UI to use for API</p>
 <p>See also: <code><a href='pr_set_ui.html'>pr_set_ui()</a></code>, <code><a href='register_ui.html'>register_ui()</a></code>, <code><a href='register_ui.html'>registered_uis()</a></code></p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>set_ui</span>(ui = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.ui"</span>, <span class='fl'>TRUE</span>), <span class='kw'>...</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>setUi</span>(ui = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.ui"</span>, <span class='fl'>TRUE</span>), <span class='kw'>...</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -634,16 +640,14 @@ If using <code><a href='options_plumber.html'>options_plumber()</a></code>, the 
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-set_ui_callback"></a></p><h3>Method <code>set_ui_callback()</code></h3>
+<a id="method-setUiCallback"></a></p><h3>Method <code>setUiCallback()</code></h3>
 <p>Set UI callback to notify where the API is located.</p>
 <p>When set, it will be called with a character string corresponding
 to the API UI url. This allows RStudio to open <code>swagger</code> UI when a
 Plumber router <code><a href='pr_run.html'>pr_run()</a></code> method is executed.</p>
 <p>If using <code><a href='options_plumber.html'>options_plumber()</a></code>, the value must be set before initializing your Plumber router.</p>
 <p>See also: <code><a href='pr_set_ui_callback.html'>pr_set_ui_callback()</a></code></p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>set_ui_callback</span>(
-  callback = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.ui.callback"</span>, <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.swagger.url"</span>, <span class='kw'>NULL</span>))
-)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>setUiCallback</span>(callback = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.ui.callback"</span>, <span class='kw'>NULL</span>))</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -651,10 +655,10 @@ Plumber router <code><a href='pr_run.html'>pr_run()</a></code> method is execute
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-set_debug"></a></p><h3>Method <code>set_debug()</code></h3>
+<a id="method-setDebug"></a></p><h3>Method <code>setDebug()</code></h3>
 <p>Set debug value to include error messages</p>
-<p>See also: <code>$get_debug()</code> and <code><a href='pr_set_debug.html'>pr_set_debug()</a></code></p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>set_debug</span>(debug = <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>())</pre><p></div></p>
+<p>See also: <code>$getDebug()</code> and <code><a href='pr_set_debug.html'>pr_set_debug()</a></code></p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>setDebug</span>(debug = <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>())</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -662,16 +666,16 @@ Plumber router <code><a href='pr_run.html'>pr_run()</a></code> method is execute
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-get_debug"></a></p><h3>Method <code>get_debug()</code></h3>
+<a id="method-getDebug"></a></p><h3>Method <code>getDebug()</code></h3>
 <p>Retrieve the <code>debug</code> value.</p>
-<p>See also: <code>$get_debug()</code> and <code><a href='pr_set_debug.html'>pr_set_debug()</a></code></p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>get_debug</span>()</pre><p></div></p>
+<p>See also: <code>$getDebug()</code> and <code><a href='pr_set_debug.html'>pr_set_debug()</a></code></p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>getDebug</span>()</pre><p></div></p>
 
 <p><hr>
 <a id="method-filter"></a></p><h3>Method <code><a href='https://rdrr.io/r/stats/filter.html'>filter()</a></code></h3>
 <p>Add a filter to plumber router</p>
 <p>See also: <code><a href='pr_filter.html'>pr_filter()</a></code></p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span>(<span class='kw'>name</span>, <span class='kw'>expr</span>, <span class='kw'>serializer</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span>(<span class='kw'>name</span>, <span class='kw'>expr</span>, <span class='kw'>serializer</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -683,12 +687,12 @@ Plumber router <code><a href='pr_run.html'>pr_run()</a></code> method is execute
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-set_api_spec"></a></p><h3>Method <code>set_api_spec()</code></h3>
-<p>Add a function to customize what is returned in <code>$get_api_spec()</code>.</p>
+<a id="method-setApiSpec"></a></p><h3>Method <code>setApiSpec()</code></h3>
+<p>Add a function to customize what is returned in <code>$getApiSpec()</code>.</p>
 <p>Note, the returned value will be sent through <code><a href='serializer_headers.html'>serializer_unboxed_json()</a></code> which will turn all length 1 vectors into atomic values.
 To force a vector to serialize to an array of size 1, be sure to call <code><a href='https://rdrr.io/r/base/list.html'>as.list()</a></code> on your value. <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code> objects are always serialized to an array value.</p>
 <p>See also: <code><a href='pr_set_api_spec.html'>pr_set_api_spec()</a></code></p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>set_api_spec</span>(api = <span class='kw'>NULL</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>setApiSpec</span>(api = <span class='kw'>NULL</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -700,14 +704,14 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-get_api_spec"></a></p><h3>Method <code>get_api_spec()</code></h3>
+<a id="method-getApiSpec"></a></p><h3>Method <code>getApiSpec()</code></h3>
 <p>Retrieve openAPI file</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>get_api_spec</span>()</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>getApiSpec</span>()</pre><p></div></p>
 
 <p><hr>
 <a id="method-addEndpoint"></a></p><h3>Method <code>addEndpoint()</code></h3>
 <p>addEndpoint has been deprecated in v0.4.0 and will be removed in a coming release. Please use <code>handle()</code> instead.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>addEndpoint</span>(
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>addEndpoint</span>(
   <span class='kw'>verbs</span>,
   <span class='kw'>path</span>,
   <span class='kw'>expr</span>,
@@ -740,7 +744,7 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 <p><hr>
 <a id="method-addAssets"></a></p><h3>Method <code>addAssets()</code></h3>
 <p>addAssets has been deprecated in v0.4.0 and will be removed in a coming release. Please use <code>mount</code> and <code>PlumberStatic$new()</code> instead.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>addAssets</span>(<span class='kw'>dir</span>, path = <span class='st'>"/public"</span>, options = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>addAssets</span>(<span class='kw'>dir</span>, path = <span class='st'>"/public"</span>, options = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -753,9 +757,8 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 </dl><p></div></p>
 <p><hr>
 <a id="method-addFilter"></a></p><h3>Method <code>addFilter()</code></h3>
-
-<h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>addFilter</span>(<span class='kw'>name</span>, <span class='kw'>expr</span>, <span class='kw'>serializer</span>, <span class='kw'>processors</span>)</pre><p></div></p>
+<p><code>$addFilter()</code> has been deprecated in v0.4.0 and will be removed in a coming release. Please use <code>$filter()</code> instead.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>addFilter</span>(<span class='kw'>name</span>, <span class='kw'>expr</span>, <span class='kw'>serializer</span>, <span class='kw'>processors</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -768,37 +771,30 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 <dt><code>processors</code></dt><dd><p>processors</p></dd>
 
 </dl><p></div></p>
-<h3>Details</h3>
-<p>addFilter has been deprecated in v0.4.0 and will be removed in a coming release. Please use <code>filter</code> instead.</p>
-
 <p><hr>
 <a id="method-addGlobalProcessor"></a></p><h3>Method <code>addGlobalProcessor()</code></h3>
-
-<h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>addGlobalProcessor</span>(<span class='kw'>proc</span>)</pre><p></div></p>
+<p><code>$addGlobalProcessor()</code> has been deprecated in v0.4.0 and will be removed in a coming release. Please use <code>$registerHook</code>(s) instead.</p><h3>Usage</h3>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>addGlobalProcessor</span>(<span class='kw'>proc</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
 <dt><code>proc</code></dt><dd><p>proc</p></dd>
 
 </dl><p></div></p>
-<h3>Details</h3>
-<p>addGlobalProcessor has been deprecated in v0.4.0 and will be removed in a coming release. Please use <code>registerHook</code>(s) instead.</p>
-
 <p><hr>
 <a id="method-openAPIFile"></a></p><h3>Method <code>openAPIFile()</code></h3>
 <p>Deprecated. Retrieve openAPI file</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>openAPIFile</span>()</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>openAPIFile</span>()</pre><p></div></p>
 
 <p><hr>
 <a id="method-swaggerFile"></a></p><h3>Method <code>swaggerFile()</code></h3>
 <p>Deprecated. Retrieve openAPI file</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>swaggerFile</span>()</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>swaggerFile</span>()</pre><p></div></p>
 
 <p><hr>
 <a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
 <p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>clone</span>(deep = <span class='fl'>FALSE</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>clone</span>(deep = <span class='fl'>FALSE</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -811,21 +807,21 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'>## ------------------------------------------------</span>
-<span class='co'>## Method `plumber$mount`</span>
+<span class='co'>## Method `Plumber$mount`</span>
 <span class='co'>## ------------------------------------------------</span>
 
 <span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='kw'>root</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pr.html'>pr</a></span>()
 
-<span class='kw'>users</span> <span class='op'>&lt;-</span> <span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>new</span>(<span class='st'>"users.R"</span>)
+<span class='kw'>users</span> <span class='op'>&lt;-</span> <span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>new</span>(<span class='st'>"users.R"</span>)
 <span class='kw'>root</span><span class='op'>$</span><span class='fu'>mount</span>(<span class='st'>"/users"</span>, <span class='kw'>users</span>)
 
-<span class='kw'>products</span> <span class='op'>&lt;-</span> <span class='kw'>plumber</span><span class='op'>$</span><span class='fu'>new</span>(<span class='st'>"products.R"</span>)
+<span class='kw'>products</span> <span class='op'>&lt;-</span> <span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>new</span>(<span class='st'>"products.R"</span>)
 <span class='kw'>root</span><span class='op'>$</span><span class='fu'>mount</span>(<span class='st'>"/products"</span>, <span class='kw'>products</span>)
 }
 
 <span class='co'>## ------------------------------------------------</span>
-<span class='co'>## Method `plumber$registerHook`</span>
+<span class='co'>## Method `Plumber$registerHook`</span>
 <span class='co'>## ------------------------------------------------</span>
 
 <span class='co'>if</span> (<span class='fl'>FALSE</span>) {
@@ -852,7 +848,7 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 }
 
 <span class='co'>## ------------------------------------------------</span>
-<span class='co'>## Method `plumber$handle`</span>
+<span class='co'>## Method `Plumber$handle`</span>
 <span class='co'>## ------------------------------------------------</span>
 
 <span class='co'>if</span> (<span class='fl'>FALSE</span>) {
@@ -863,7 +859,7 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 }
 
 <span class='co'>## ------------------------------------------------</span>
-<span class='co'>## Method `plumber$setSerializer`</span>
+<span class='co'>## Method `Plumber$setSerializer`</span>
 <span class='co'>## ------------------------------------------------</span>
 
 <span class='co'>if</span> (<span class='fl'>FALSE</span>) {
@@ -872,7 +868,7 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 }
 
 <span class='co'>## ------------------------------------------------</span>
-<span class='co'>## Method `plumber$set404Handler`</span>
+<span class='co'>## Method `Plumber$set404Handler`</span>
 <span class='co'>## ------------------------------------------------</span>
 
 <span class='co'>if</span> (<span class='fl'>FALSE</span>) {
@@ -881,7 +877,7 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 }
 
 <span class='co'>## ------------------------------------------------</span>
-<span class='co'>## Method `plumber$setErrorHandler`</span>
+<span class='co'>## Method `Plumber$setErrorHandler`</span>
 <span class='co'>## ------------------------------------------------</span>
 
 <span class='co'>if</span> (<span class='fl'>FALSE</span>) {

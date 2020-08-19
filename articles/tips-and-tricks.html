@@ -178,7 +178,7 @@
 <p>or more programmatically</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="co"># Using Plumber methods</span>
-<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">plumber</span><span class="op">$</span><span class="fu">new</span>()
+<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">Plumber</span><span class="op">$</span><span class="fu">new</span>()
 <span class="kw">pr</span><span class="op">$</span><span class="fu">run</span>(port = <span class="kw">httpuv</span>::<span class="fu"><a href="https://rdrr.io/pkg/httpuv/man/randomPort.html">randomPort</a></span>(min = <span class="fl">4000</span>, max = <span class="fl">7000</span>, n = <span class="fl">100</span>))
 
 <span class="co"># Using forward-pipe functions</span>

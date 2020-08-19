@@ -139,7 +139,7 @@
 <h2 class="hasAnchor">
 <a href="#creating-and-controlling-a-router" class="anchor"></a>Creating and Controlling a Router</h2>
 <p>The centerpiece of Plumber is the router. Plumber routers are responsible for coordinating incoming requests from httpuv, dispatching the requests to the appropriate filters/endpoints, serializing the response, and handling errors that might pop up along the way. If you’ve been using annotations to define Plumber APIs, then you’ve already worked with Plumber routers as that’s what the <code><a href="../reference/plumb.html">plumb()</a></code> command produces.</p>
-<p>To instantiate a new Plumber router programmatically, you can call <code>plumber$new()</code>. This will return a blank Plumber router with no endpoints. You could call <code>run()</code> on the returned object to start the API, but it doesn’t know how to respond to any requests so any incoming traffic would get a <code>404</code> response. We’ll see momentarily how to add endpoints and filters onto this empty router. Alternatively, you can pass a file that contains your annotation-based Plumber API as the first parameter to create a router much like you do with <code><a href="../reference/plumb.html">plumb()</a></code>.</p>
+<p>To instantiate a new Plumber router programmatically, you can call <code>Plumber$new()</code>. This will return a blank Plumber router with no endpoints. You could call <code>run()</code> on the returned object to start the API, but it doesn’t know how to respond to any requests so any incoming traffic would get a <code>404</code> response. We’ll see momentarily how to add endpoints and filters onto this empty router. Alternatively, you can pass a file that contains your annotation-based Plumber API as the first parameter to create a router much like you do with <code><a href="../reference/plumb.html">plumb()</a></code>.</p>
 <p>Be aware that Plumber routers do come with a handful of filters pre-configured. These built-in filters are used to do things like process properties of the incoming request like its cookies, <code>POST</code> body, or query string. You can specify which filters you want in your new router by overriding the <code>filters</code> parameter when creating your new router.</p>
 </div>
 <div id="defining-endpoints" class="section level2">
@@ -147,7 +147,7 @@
 <a href="#defining-endpoints" class="anchor"></a>Defining Endpoints</h2>
 <p>You can define endpoints on your router by using the <code>handle()</code> method. For instance, to define a Plumber API that response to <code>GET</code> requests on <code><a href="https://rdrr.io/r/base/Arithmetic.html">/</a></code> and <code>POST</code> requests on <code>/submit</code>, you could use the following code:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">plumber</span><span class="op">$</span><span class="fu">new</span>()
+<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">Plumber</span><span class="op">$</span><span class="fu">new</span>()
 <span class="kw">pr</span><span class="op">$</span><span class="fu">handle</span>(<span class="st">"GET"</span>, <span class="st">"/"</span>, <span class="fu">function</span>(<span class="kw">req</span>, <span class="kw">res</span>){
   <span class="co"># ...</span>
 })
@@ -159,7 +159,7 @@
 <p>The “handler” functions that you define in these <code>handle</code> calls are identical to the code you would have defined in your <code>plumber.R</code> file if you were using annotations to define your API.</p>
 <p>The <code>handle()</code> method takes additional arguments that allow you to control nuanced behavior of the endpoint like which filter it might preempt or which serializer it should use. For instance, the following endpoint would use Plumber’s HTML serializer.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">plumber</span><span class="op">$</span><span class="fu">new</span>()
+<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">Plumber</span><span class="op">$</span><span class="fu">new</span>()
 <span class="kw">pr</span><span class="op">$</span><span class="fu">handle</span>(<span class="st">"GET"</span>, <span class="st">"/"</span>, <span class="fu">function</span>(){
   <span class="st">"&lt;html&gt;&lt;h1&gt;Programmatic Plumber!&lt;/h1&gt;&lt;/html&gt;"</span>
 }, serializer=<span class="kw">plumber</span>::<span class="fu"><a href="../reference/serializer_headers.html">serializer_html</a></span>())
@@ -170,7 +170,7 @@
 <a href="#defining-filters" class="anchor"></a>Defining Filters</h2>
 <p>Use the <code><a href="https://rdrr.io/r/stats/filter.html">filter()</a></code> method of a Plumber router to define a new filter:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">plumber</span><span class="op">$</span><span class="fu">new</span>()
+<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">Plumber</span><span class="op">$</span><span class="fu">new</span>()
 
 <span class="kw">pr</span><span class="op">$</span><span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="st">"myFilter"</span>, <span class="fu">function</span>(<span class="kw">req</span>){
   <span class="kw">req</span><span class="op">$</span><span class="kw">filtered</span> <span class="op">&lt;-</span> <span class="fl">TRUE</span>
@@ -197,7 +197,7 @@
 <p>One feature when defining hooks in Plumber routers is the ability to modify the returned value. The convention for such hooks is: any function that accepts a parameter named <code>value</code> is expected to return the new value. This could be an unmodified version of the value that was passed in, or it could be a mutated value. But in either case, if your hook accepts a parameter named <code>value</code>, whatever your hook returns will be used as the new value for the response.</p>
 <p>You can add hooks using the <code>registerHook</code> method, or you can add multiple hooks at once using the <code>registerHooks</code> method which takes a name list in which the names are the names of the hooks, and the values are the handlers themselves.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">plumber</span><span class="op">$</span><span class="fu">new</span>()
+<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">Plumber</span><span class="op">$</span><span class="fu">new</span>()
 <span class="kw">pr</span><span class="op">$</span><span class="fu">registerHook</span>(<span class="st">"preroute"</span>, <span class="fu">function</span>(<span class="kw">req</span>){
   <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="st">"Routing a request for"</span>, <span class="kw">req</span><span class="op">$</span><span class="kw">PATH_INFO</span>, <span class="st">"...\n"</span>)
 })
@@ -224,16 +224,18 @@
 <h2 class="hasAnchor">
 <a href="#mount-static" class="anchor"></a>Mounting &amp; Static File Routers</h2>
 <p>Plumber routers can be “nested” by mounting one into another using the <code>mount()</code> method. This allows you to compartmentalize your API by paths which is a great technique for decomposing large APIs into smaller files.</p>
-<pre><code>root &lt;- plumber$new()
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="kw">root</span> <span class="op">&lt;-</span> <span class="kw">Plumber</span><span class="op">$</span><span class="fu">new</span>()
 
-users &lt;- plumber$new("users.R")
-root$mount("/users", users)
+<span class="kw">users</span> <span class="op">&lt;-</span> <span class="kw">Plumber</span><span class="op">$</span><span class="fu">new</span>(<span class="st">"users.R"</span>)
+<span class="kw">root</span><span class="op">$</span><span class="fu">mount</span>(<span class="st">"/users"</span>, <span class="kw">users</span>)
 
-products &lt;- plumber$new("products.R")
-root$mount("/products", products)</code></pre>
+<span class="kw">products</span> <span class="op">&lt;-</span> <span class="kw">Plumber</span><span class="op">$</span><span class="fu">new</span>(<span class="st">"products.R"</span>)
+<span class="kw">root</span><span class="op">$</span><span class="fu">mount</span>(<span class="st">"/products"</span>, <span class="kw">products</span>)
+</pre></div>
 <p>This is the same approach used for defining routers that serve a directory of static files. Static file routers are just a special case of Plumber routers created using <code>PlumberStatic$new()</code>. For example</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">plumber</span><span class="op">$</span><span class="fu">new</span>()
+<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">Plumber</span><span class="op">$</span><span class="fu">new</span>()
 
 <span class="kw">stat</span> <span class="op">&lt;-</span> <span class="kw">PlumberStatic</span><span class="op">$</span><span class="fu">new</span>(<span class="st">"./myfiles"</span>)
 

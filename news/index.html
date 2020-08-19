@@ -189,7 +189,9 @@
 <h3 class="hasAnchor">
 <a href="#breaking-changes" class="anchor"></a>Breaking changes</h3>
 <ul>
-<li><p>When <code><a href="../reference/plumb.html">plumb()</a></code>ing a file (or <code>plumber$new(file)</code>), the working directory is set to the file’s directory before parsing the file. When running the Plumber API, the working directory will be set to file’s directory before running.(<a href='https://github.com/rstudio/plumber/issues/631'>#631</a>)</p></li>
+<li><p><code><a href="../reference/plumb.html">plumb()</a></code> now returns an object of class <code>"Plumber"</code> (previously <code>"plumber"</code>). To check if an object is a Plumber router, use new method <code><a href="../reference/is_plumber.html">is_plumber()</a></code>. (<a href='https://github.com/rstudio/plumber/issues/653'>#653</a>)</p></li>
+<li><p><code>PlumberStatic</code> objects now have a class of <code>"PlumberStatic"</code> (previously <code>"plumberstatic"</code>). (<a href='https://github.com/rstudio/plumber/issues/653'>#653</a>)</p></li>
+<li><p>When <code><a href="../reference/plumb.html">plumb()</a></code>ing a file (or <code>Plumber$new(file)</code>), the working directory is set to the file’s directory before parsing the file. When running the Plumber API, the working directory will be set to file’s directory before running.(<a href='https://github.com/rstudio/plumber/issues/631'>#631</a>)</p></li>
 <li><p>Plumber’s OpenAPI Specification is now defined using <a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md">OpenAPI 3</a>, upgrading from Swagger Specification. (<a href='https://github.com/rstudio/plumber/issues/365'>#365</a>)</p></li>
 <li><p>Plumber router <code>$run()</code> method arguments <code>swagger</code>, <code>swaggerCallback</code> and <code>debug</code> are now deprecated. User interface and url callback are now enabled by default and managed through Plumber router <code>$set_ui()</code>, <code>$set_ui_callback()</code>, and <code>$set_debug()</code> methods and options <code>plumber.ui</code> and <code>plumber.ui.callback</code>. (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/562'>#562</a>)</p></li>
 <li>
@@ -197,7 +199,7 @@
 <p><a href='https://github.com/rstudio/plumber/issues/328'>#328</a>).</p>
 </li>
 <li><p>R repository modified to <code>focal-cran40</code> using Ubuntu 20.04 LTS for digital ocean provisioning (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/529'>#529</a>)</p></li>
-<li><p><code><a href="https://rdrr.io/r/base/options.html">options(plumber.debug)</a></code> is not set anymore when running the plumber application. Instead retrieve the debug value using <code>$get_debug()</code> on the Plumber router directly. Ex: <code>function(req, res) { req$pr$get_debug() }</code>. (<a href='https://github.com/rstudio/plumber/issues/639'>#639</a>)</p></li>
+<li><p><code><a href="https://rdrr.io/r/base/options.html">options(plumber.debug)</a></code> is not set anymore when running the plumber application. Instead retrieve the debug value using <code>$getDebug()</code> on the Plumber router directly. Ex: <code>function(req, res) { req$pr$getDebug() }</code>. (<a href='https://github.com/rstudio/plumber/issues/639'>#639</a>)</p></li>
 </ul>
 </div>
 <div id="deprecations" class="section level3">
@@ -205,6 +207,8 @@
 <a href="#deprecations" class="anchor"></a>Deprecations</h3>
 <ul>
 <li><p>Shorthand serializers are now deprecated. <code>@html</code>, <code>@json</code>, <code>@png</code>, <code>@jpeg</code>, <code>@svg</code> should be replaced with the <code>@serializer</code> syntax. Ex: <code>@serializer html</code> or <code>@serializer jpeg</code> (<a href='https://github.com/rstudio/plumber/issues/630'>#630</a>)</p></li>
+<li><p><code>plumber</code> R6 object has been deprecated and renamed to <code>Plumber</code>. <code>PlumberStatic</code>’s <code>inherit</code>ed class has been updated to <code>Plumber</code>. (<a href='https://github.com/rstudio/plumber/issues/653'>#653</a>)</p></li>
+<li><p><code>hookable</code> R6 object has been deprecated and renamed to <code>Hookable</code>. <code>Plumber</code> and <code>PlumberStep</code>’s <code>inherit</code>ed class has been updated to <code>Hookable</code>. (<a href='https://github.com/rstudio/plumber/issues/653'>#653</a>)</p></li>
 <li><p><code><a href="../reference/addSerializer.html">addSerializer()</a></code> has been deprecated in favor of <code><a href="../reference/register_serializer.html">register_serializer()</a></code> (<a href='https://github.com/rstudio/plumber/issues/584'>#584</a>)</p></li>
 <li><p><code><a href="../reference/addSerializer.html">getCharacterSet()</a></code> has been deprecated in favor of <code><a href="../reference/get_character_set.html">get_character_set()</a></code>.</p></li>
 <li><p><code>randomCookieKey()</code> has been deprecated in favor of <code><a href="../reference/random_cookie_key.html">random_cookie_key()</a></code>.</p></li>
@@ -234,6 +238,7 @@
 <h3 class="hasAnchor">
 <a href="#minor-new-features-and-improvements" class="anchor"></a>Minor new features and improvements</h3>
 <ul>
+<li><p>Added helper method <code><a href="../reference/is_plumber.html">is_plumber(pr)</a></code> to determine if an object is a Plumber router. (<a href='https://github.com/rstudio/plumber/issues/653'>#653</a>)</p></li>
 <li><p>Added support for the <code>SameSite</code> Cookie attribute. (<a href='https://github.com/chris-dudley'>@chris-dudley</a>, <a href='https://github.com/rstudio/plumber/issues/640'>#640</a>)</p></li>
 <li><p>When calling <code><a href="../reference/include_file.html">include_file()</a></code>, the <code>content_type</code> is automatically inferred from the file extension if <code>content_type</code> is not provided. (<a href='https://github.com/rstudio/plumber/issues/631'>#631</a>)</p></li>
 <li><p>Added <code><a href="../reference/serializer_headers.html">serializer_feather()</a></code> and <code><a href="../reference/parser_form.html">parser_feather()</a></code> (<a href='https://github.com/rstudio/plumber/issues/626'>#626</a>)</p></li>

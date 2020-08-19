@@ -19,6 +19,9 @@
     <loc>https://www.rplumber.io/reference/deprecated.html</loc>
   </url>
   <url>
+    <loc>https://www.rplumber.io/reference/deprecated_r6.html</loc>
+  </url>
+  <url>
     <loc>https://www.rplumber.io/reference/do_configure_https.html</loc>
   </url>
   <url>
@@ -50,6 +53,9 @@
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/include_file.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/reference/is_plumber.html</loc>
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/options_plumber.html</loc>
