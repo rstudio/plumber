@@ -11,33 +11,25 @@ add_api_info_onLoad <- function() {
                          regex = NULL, converter = NULL,
                          format = NULL,
                          location = NULL,
-                         realType = NULL,
-                         arraySupport = FALSE) {
+                         realType = NULL) {
     apiTypesInfo[[apiType]] <<-
       list(
         regex = regex,
         converter = converter,
         format = format,
         location = location,
-        arraySupport = arraySupport,
-        realType = realType
+        realType = realType,
+        # Q: Do we need to safe guard against special characters, such as `,`?
+        # https://github.com/rstudio/plumber/pull/532#discussion_r439584727
+        # A: https://swagger.io/docs/specification/serialization/
+        # > Additionally, the allowReserved keyword specifies whether the reserved
+        # > characters :/?#[]@!$&'()*+,;= in parameter values are allowed to be sent as they are,
+        # > or should be percent-encoded. By default, allowReserved is false, and reserved characters
+        # > are percent-encoded. For example, / is encoded as %2F (or %2f), so that the parameter
+        # > value quotes/h2g2.txt will be sent as quotes%2Fh2g2.txt
+        regexArray = paste0("(?:(?:", regex, "),?)+"),
+        converterArray = function(x) {converter(stri_split_fixed(x, ",")[[1]])}
       )
-
-    if (arraySupport == TRUE) {
-      apiTypesInfo[[apiType]] <<- utils::modifyList(
-        apiTypesInfo[[apiType]],
-        list(regexArray = paste0("(?:(?:", regex, "),?)+"),
-             # Q: Do we need to safe guard against special characters, such as `,`?
-             # https://github.com/rstudio/plumber/pull/532#discussion_r439584727
-             # A: https://swagger.io/docs/specification/serialization/
-             # > Additionally, the allowReserved keyword specifies whether the reserved
-             # > characters :/?#[]@!$&'()*+,;= in parameter values are allowed to be sent as they are,
-             # > or should be percent-encoded. By default, allowReserved is false, and reserved characters
-             # > are percent-encoded. For example, / is encoded as %2F (or %2f), so that the parameter
-             # > value quotes/h2g2.txt will be sent as quotes%2Fh2g2.txt
-             converterArray = function(x) {converter(stri_split_fixed(x, ",")[[1]])})
-      )
-    }
 
     for (plumberType in plumberTypes) {
       plumberToApiTypeMap[[plumberType]] <<- apiType
@@ -53,8 +45,7 @@ add_api_info_onLoad <- function() {
     c("bool", "boolean", "logical"),
     "[01tfTF]|true|false|TRUE|FALSE",
     as.logical,
-    location = c("query", "path"),
-    arraySupport = TRUE
+    location = c("query", "path")
   )
   addApiInfo(
     "number",
@@ -62,8 +53,7 @@ add_api_info_onLoad <- function() {
     "-?\\\\d*\\\\.?\\\\d+",
     as.numeric,
     format = "double",
-    location = c("query", "path"),
-    arraySupport = TRUE
+    location = c("query", "path")
   )
   addApiInfo(
     "integer",
@@ -71,16 +61,14 @@ add_api_info_onLoad <- function() {
     "-?\\\\d+",
     as.integer,
     format = "int64",
-    location = c("query", "path"),
-    arraySupport = TRUE
+    location = c("query", "path")
   )
   addApiInfo(
     "string",
     c("chr", "str", "character", "string"),
     "[^/]+",
     as.character,
-    location = c("query", "path"),
-    arraySupport = TRUE
+    location = c("query", "path")
   )
   addApiInfo(
     "object",
