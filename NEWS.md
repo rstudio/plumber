@@ -20,6 +20,10 @@ plumber 1.0.0
 
 ### Breaking changes
 
+* `plumb()` now returns an object of class `"Plumber"` (previously `"plumber"`). To check is the return value is a Plumber router, use new method `is_plumber()`. (#653)
+
+* `PlumberStatic` objects now have a class of `"PlumberStatic"` (previously `"plumberstatic"`). (#653)
+
 * When `plumb()`ing a file (or `Plumber$new(file)`), the working directory is set to the file's directory before parsing the file. When running the Plumber API, the working directory will be set to file's directory before running.(#631)
 
 * Plumber's OpenAPI Specification is now defined using
@@ -39,6 +43,9 @@ plumber 1.0.0
 ### Deprecations
 
 * Shorthand serializers are now deprecated. `@html`, `@json`, `@png`, `@jpeg`, `@svg` should be replaced with the `@serializer` syntax. Ex: `@serializer html` or `@serializer jpeg` (#630)
+
+* `plumber` R6 object has been deprecated and renamed to `Plumber`. `PlumberStatic`'s `inherit`ed class has been updated to `Plumber`. (#653)
+* `hookable` R6 object has been deprecated and renamed to `Hookable`.  `Plumber` and `PlumberStep`'s `inherit`ed class has been updated to `Hookable`. (#653)
 
 * `addSerializer()` has been deprecated in favor of `register_serializer()` (#584)
 
@@ -78,6 +85,8 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 
 ### Minor new features and improvements
+
+* Added helper method `is_plumber(pr)` to determine if an object is a Plumber router. (#653)
 
 * Added support for the `SameSite` Cookie attribute. (@chris-dudley, #640)
 
