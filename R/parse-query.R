@@ -192,7 +192,7 @@ combine_keys <- function(obj, type) {
         } else {
           # return list of internal named items
           # aka... unlist the top layer only. Maintain the inner layer names
-          as.list(unlist(x, recursive = FALSE))
+          as.list(unlist(unname(x), recursive = FALSE))
         }
       }
   )
