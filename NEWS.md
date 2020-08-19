@@ -20,7 +20,7 @@ plumber 1.0.0
 
 ### Breaking changes
 
-* `plumb()` now returns an object of class `"Plumber"` (previously `"plumber"`). To check is the return value is a Plumber router, use new method `is_plumber()`. (#653)
+* `plumb()` now returns an object of class `"Plumber"` (previously `"plumber"`). To check if an object is a Plumber router, use new method `is_plumber()`. (#653)
 
 * `PlumberStatic` objects now have a class of `"PlumberStatic"` (previously `"plumberstatic"`). (#653)
 
