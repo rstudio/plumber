@@ -55,7 +55,7 @@ test_that("PUTs error", {
 })
 
 test_that("files are parsed properly", {
-  p <- plumber$new(test_path("files/static.R"))
+  p <- pr(test_path("files/static.R"))
   expect_length(p$mounts, 2)
 
   res <- PlumberResponse$new()
@@ -74,11 +74,11 @@ test_that("files are parsed properly", {
 })
 
 test_that("no directory throws error", {
-  expect_error(plumber$new(test_path("files/static-nodir.R")), "No directory specified")
+  expect_error(pr(test_path("files/static-nodir.R")), "No directory specified")
 })
 
 test_that("expressions work as options", {
-  pr <- plumber$new()
+  pr <- pr()
   stat <- PlumberStatic$new(test_path("files/static"), {list()})
   pr$mount("/public", stat)
 

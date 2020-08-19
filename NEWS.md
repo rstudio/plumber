@@ -20,7 +20,11 @@ plumber 1.0.0
 
 ### Breaking changes
 
-* When `plumb()`ing a file (or `plumber$new(file)`), the working directory is set to the file's directory before parsing the file. When running the Plumber API, the working directory will be set to file's directory before running.(#631)
+* `plumb()` now returns an object of class `"Plumber"` (previously `"plumber"`). To check if an object is a Plumber router, use new method `is_plumber()`. (#653)
+
+* `PlumberStatic` objects now have a class of `"PlumberStatic"` (previously `"plumberstatic"`). (#653)
+
+* When `plumb()`ing a file (or `Plumber$new(file)`), the working directory is set to the file's directory before parsing the file. When running the Plumber API, the working directory will be set to file's directory before running.(#631)
 
 * Plumber's OpenAPI Specification is now defined using
   [OpenAPI 3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md),
@@ -34,11 +38,14 @@ plumber 1.0.0
 
 * R repository modified to `focal-cran40` using Ubuntu 20.04 LTS for digital ocean provisioning (@meztez, #529)
 
-* `options(plumber.debug)` is not set anymore when running the plumber application. Instead retrieve the debug value using `$get_debug()` on the Plumber router directly. Ex: `function(req, res) { req$pr$get_debug() }`. (#639)
+* `options(plumber.debug)` is not set anymore when running the plumber application. Instead retrieve the debug value using `$getDebug()` on the Plumber router directly. Ex: `function(req, res) { req$pr$getDebug() }`. (#639)
 
 ### Deprecations
 
 * Shorthand serializers are now deprecated. `@html`, `@json`, `@png`, `@jpeg`, `@svg` should be replaced with the `@serializer` syntax. Ex: `@serializer html` or `@serializer jpeg` (#630)
+
+* `plumber` R6 object has been deprecated and renamed to `Plumber`. `PlumberStatic`'s `inherit`ed class has been updated to `Plumber`. (#653)
+* `hookable` R6 object has been deprecated and renamed to `Hookable`.  `Plumber` and `PlumberStep`'s `inherit`ed class has been updated to `Hookable`. (#653)
 
 * `addSerializer()` has been deprecated in favor of `register_serializer()` (#584)
 
@@ -80,6 +87,8 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 
 ### Minor new features and improvements
+
+* Added helper method `is_plumber(pr)` to determine if an object is a Plumber router. (#653)
 
 * Added support for the `SameSite` Cookie attribute. (@chris-dudley, #640)
 

@@ -1,7 +1,7 @@
 context("Plumber")
 
 test_that("Endpoints are properly identified", {
-  r <- plumber$new(test_path("files/endpoints.R"))
+  r <- pr(test_path("files/endpoints.R"))
   expect_equal(length(r$endpoints), 1)
   expect_equal(length(r$endpoints[[1]]), 5)
   expect_equal(r$endpoints[[1]][[1]]$exec(), 5)
@@ -12,19 +12,19 @@ test_that("Endpoints are properly identified", {
 })
 
 test_that("Empty file is OK", {
-  r <- plumber$new()
+  r <- pr()
   expect_equal(length(r$endpoints), 0)
 })
 
 test_that("The file is sourced in the envir", {
-  r <- plumber$new(test_path("files/in-env.R"))
+  r <- pr(test_path("files/in-env.R"))
   expect_equal(length(r$endpoints), 1)
   expect_equal(length(r$endpoints[[1]]), 2)
   expect_equal(r$endpoints[[1]][[1]]$exec(), 15)
 })
 
 test_that("Verbs translate correctly", {
-  r <- plumber$new(test_path("files/verbs.R"))
+  r <- pr(test_path("files/verbs.R"))
   expect_equal(length(r$endpoints), 1)
   expect_equal(length(r$endpoints[[1]]), 10)
   expect_equal(r$endpoints[[1]][[1]]$verbs, c("GET", "PUT", "POST", "DELETE", "HEAD", "OPTIONS", "PATCH"))
@@ -40,7 +40,7 @@ test_that("Verbs translate correctly", {
 })
 
 test_that("Invalid file fails gracefully", {
-  expect_error(plumber$new("asdfsadf"), regexp="File does not exist.*asdfsadf")
+  expect_error(pr("asdfsadf"), regexp="File does not exist.*asdfsadf")
 })
 
 test_that("plumb accepts a file", {
@@ -122,11 +122,11 @@ test_that("plumb() a dir works with `entrypoint.R` and without `plumber.R`", {
 })
 
 test_that("Empty endpoints error", {
-  expect_error(plumber$new(test_path("files/endpoints-empty.R")), regexp="No path specified")
+  expect_error(pr(test_path("files/endpoints-empty.R")), regexp="No path specified")
 })
 
 test_that("The old roxygen-style comments work", {
-  r <- plumber$new(test_path("files/endpoints-old.R"))
+  r <- pr(test_path("files/endpoints-old.R"))
   expect_equal(length(r$endpoints), 1)
   expect_equal(length(r$endpoints[[1]]), 5)
   expect_equal(r$endpoints[[1]][[1]]$exec(), 5)
@@ -137,11 +137,11 @@ test_that("The old roxygen-style comments work", {
 })
 
 test_that("routes can be constructed correctly", {
-  pr <- plumber$new()
+  pr <- pr()
   pr$handle("GET", "/nested/path/here", function(){})
   pr$handle("POST", "/nested/path/here", function(){})
 
-  pr2 <- plumber$new()
+  pr2 <- pr()
   pr2$handle("POST", "/something", function(){})
   pr2$handle("GET", "/", function(){})
   pr$mount("/mysubpath", pr2)
@@ -150,19 +150,19 @@ test_that("routes can be constructed correctly", {
   pr$mount("/static", stat)
 
   expect_length(pr$routes, 3)
-  expect_s3_class(pr$routes[["static"]], "plumberstatic")
-  expect_s3_class(pr$routes[["mysubpath"]], "plumber")
+  expect_s3_class(pr$routes[["static"]], "PlumberStatic")
+  expect_s3_class(pr$routes[["mysubpath"]], "Plumber")
 
   # 2 endpoints at the same location (different verbs)
   expect_length(pr$routes$nested$path$here, 2)
 })
 
 test_that("mounts can be read correctly", {
-  pr <- plumber$new()
+  pr <- pr()
   pr$handle("GET", "/nested/path/here", function(){})
   pr$handle("POST", "/nested/path/here", function(){})
 
-  pr2 <- plumber$new()
+  pr2 <- pr()
   pr2$handle("POST", "/something", function(){})
   pr2$handle("GET", "/", function(){})
   pr$mount("/mysubpath", pr2)
@@ -175,19 +175,19 @@ test_that("mounts can be read correctly", {
   pr$mount("/extra-slash//", stat)
 
   expect_length(pr$routes, 7)
-  expect_s3_class(pr$mounts[["/static/"]], "plumberstatic")
-  expect_s3_class(pr$mounts[["/missing-slashes/"]], "plumberstatic")
-  expect_s3_class(pr$mounts[["/both-slashes/"]], "plumberstatic")
-  expect_s3_class(pr$mounts[["/trailing-slash/"]], "plumberstatic")
-  expect_s3_class(pr$mounts[["/extra-slash//"]], "plumberstatic")
-  expect_s3_class(pr$mounts[["/mysubpath/"]], "plumber")
+  expect_s3_class(pr$mounts[["/static/"]], "PlumberStatic")
+  expect_s3_class(pr$mounts[["/missing-slashes/"]], "PlumberStatic")
+  expect_s3_class(pr$mounts[["/both-slashes/"]], "PlumberStatic")
+  expect_s3_class(pr$mounts[["/trailing-slash/"]], "PlumberStatic")
+  expect_s3_class(pr$mounts[["/extra-slash//"]], "PlumberStatic")
+  expect_s3_class(pr$mounts[["/mysubpath/"]], "Plumber")
 })
 
 
 
 test_that("mounts work", {
-  pr <- plumber$new()
-  sub <- plumber$new()
+  pr <- pr()
+  sub <- pr()
   sub$handle("GET", "/", function(){ 1 })
   sub$handle("GET", "/nested/path", function(a){ a })
 
@@ -208,8 +208,8 @@ test_that("mounts work", {
 })
 
 test_that("mounting at root path works", {
-  pr <- plumber$new()
-  sub <- plumber$new()
+  pr <- pr()
+  sub <- pr()
   sub$handle("GET", "/", function(){ 1 })
   sub$handle("GET", "/nested/path", function(){ 2 })
 
@@ -223,9 +223,9 @@ test_that("mounting at root path works", {
 })
 
 test_that("conflicting mounts behave consistently", {
-  pr <- plumber$new()
+  pr <- pr()
 
-  sub <- plumber$new()
+  sub <- pr()
   sub$handle("GET", "/", function(){ 1 })
   pr$mount("/subpath", sub)
 
@@ -239,7 +239,7 @@ test_that("conflicting mounts behave consistently", {
 })
 
 test_that("hooks can be registered", {
-  pr <- plumber$new()
+  pr <- pr()
   events <- NULL
   pr$handle("GET", "/", function(){ events <<- c(events, "exec") })
   pr$registerHook("preroute", function(){ events <<- c(events, "preroute") })
@@ -252,7 +252,7 @@ test_that("hooks can be registered", {
 })
 
 test_that("preroute hook gets the right data", {
-  pr <- plumber$new()
+  pr <- pr()
   pr$handle("GET", "/", function(){ })
   rqst <- make_req("GET", "/")
 
@@ -265,7 +265,7 @@ test_that("preroute hook gets the right data", {
 })
 
 test_that("postroute hook gets the right data and can modify", {
-  pr <- plumber$new()
+  pr <- pr()
   pr$handle("GET", "/abc", function(){ 123 })
 
   pr$registerHook("postroute", function(data, req, res, value){
@@ -280,7 +280,7 @@ test_that("postroute hook gets the right data and can modify", {
 })
 
 test_that("preserialize hook gets the right data and can modify", {
-  pr <- plumber$new()
+  pr <- pr()
   pr$handle("GET", "/abc", function(){ 123 })
 
   pr$registerHook("preserialize", function(data, req, res, value){
@@ -295,7 +295,7 @@ test_that("preserialize hook gets the right data and can modify", {
 })
 
 test_that("postserialize hook gets the right data and can modify", {
-  pr <- plumber$new()
+  pr <- pr()
   pr$handle("GET", "/abc", function(){ 123 })
 
   pr$registerHook("postserialize", function(data, req, res, value){
@@ -311,12 +311,12 @@ test_that("postserialize hook gets the right data and can modify", {
 })
 
 test_that("invalid hooks err", {
-  pr <- plumber$new()
+  pr <- pr()
   expect_error(pr$registerHook("flargdarg"))
 })
 
 test_that("handle invokes correctly", {
-  pr <- plumber$new()
+  pr <- pr()
   pr$handle("GET", "/trailslash", function(){ "getter" })
   pr$handle("POST", "/trailslashp/", function(){ "poster" })
 
@@ -337,7 +337,7 @@ test_that("handle invokes correctly", {
 
 test_that("No 405 on same path, different verb", {
 
-  pr <- plumber$new()
+  pr <- pr()
   pr$handle("GET", "/apathow", function(){ "getter" })
   pr$handle("POST", "/apathow", function(){ "poster" })
 
@@ -347,7 +347,7 @@ test_that("No 405 on same path, different verb", {
 })
 
 test_that("handle with an endpoint works", {
-  pr <- plumber$new()
+  pr <- pr()
   ep <- PlumberEndpoint$new("GET", "/", function(){ "manual endpoint" }, pr$environment, serializer_json())
   pr$handle(endpoint=ep)
 
@@ -356,13 +356,13 @@ test_that("handle with an endpoint works", {
 })
 
 test_that("handle with and enpoint and endpoint def fails", {
-  pr <- plumber$new()
+  pr <- pr()
   ep <- PlumberEndpoint$new("GET", "/", function(){ "manual endpoint" }, pr$environment, serializer_json())
   expect_error(pr$handle("GET", "/", endpoint=ep))
 })
 
 test_that("full handle call works", {
-  pr <- plumber$new()
+  pr <- pr()
   pr$filter("f1", function(req){ req$filtered <- TRUE; forward() })
 
   pr$handle("GET", "/preempt", function(req){
@@ -384,7 +384,7 @@ test_that("full handle call works", {
 })
 
 test_that("Expressions and functions both work on handle", {
-  pr <- plumber$new()
+  pr <- pr()
   pr$handle("GET", "/function", function(req){ req[["PATH_INFO"]] })
   pr$handle("GET", "/expression", expression(function(req){ req[["PATH_INFO"]] }))
 
@@ -395,7 +395,7 @@ test_that("Expressions and functions both work on handle", {
 })
 
 test_that("Expressions and functions both work on filter", {
-  pr <- plumber$new()
+  pr <- pr()
   pr$filter("ff", function(req){ req$filteredF <- TRUE; forward() })
   pr$filter("fe", expression(function(req){ req$filteredE <- TRUE; forward() }))
   pr$handle("GET", "/", function(req){
@@ -421,7 +421,7 @@ test_that("filters and endpoint expressions evaluated in the appropriate (possib
   # We provide expressions so that they get closurified in the right environment
   # and will be able to find `y`.
   # This would all fail without an injected environment that contains `y`.
-  pr <- plumber$new(envir=env)
+  pr <- pr(envir=env)
   pr$filter("ff", expression(function(req){ req$ys <- y^2; forward() }))
   pr$handle("GET", "/", expression(function(req){ paste(y, req$ys) }))
 
@@ -442,7 +442,7 @@ test_that("filters and endpoints executed in the appropriate environment", {
 
   env <- new.env(parent=.GlobalEnv)
 
-  pr <- plumber$new(envir=env)
+  pr <- pr(envir=env)
   pr$filter("ff", expression(function(req){ req$filterEnv <- parent.frame(); forward() }))
   pr$handle("GET", "/", expression(function(req){
     expect_identical(req$filterEnv, parent.frame())
@@ -488,8 +488,8 @@ test_that("host is updated properly for printing", {
 })
 
 test_that("unmount works", {
-  pr <- plumber$new()
-  sub <- plumber$new()
+  pr <- pr()
+  sub <- pr()
   sub$handle("GET", "/", function(){ 1 })
   sub$handle("GET", "/nested/path", function(){ 2 })
   pr$mount("/mount", sub)
@@ -500,12 +500,12 @@ test_that("unmount works", {
   expect_equal(names(pr$mounts), "/mount/")
 })
 
-test_that("remove_handle works", {
-  pr <- plumber$new()
+test_that("removeHandle works", {
+  pr <- pr()
   pr$handle("GET", "/path1", function(){ 1 })
   pr$handle("GET", "/path2", function(){ 2 })
   expect_equal(length(pr$endpoints[[1]]), 2L)
-  expect_invisible(pr$remove_handle("GET", "/path1"))
+  expect_invisible(pr$removeHandle("GET", "/path1"))
   expect_equal(length(pr$endpoints[[1]]), 1L)
   expect_equal(pr$endpoints[[1]][[1]]$path, "/path2")
 })

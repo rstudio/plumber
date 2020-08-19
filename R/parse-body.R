@@ -334,7 +334,7 @@ make_parser <- function(aliases) {
 #' # Activate `rds` parser in a multipart request
 #' #* @parser multi
 #' #* @parser rds
-#' pr <- plumber$new()
+#' pr <- Plumber$new()
 #' pr$handle("GET", "/upload", function(rds) {rds}, parsers = c("multi", "rds"))
 #' }
 #' @export
@@ -470,7 +470,7 @@ parser_multi <- function() {
     boundary <- stri_match_first_regex(content_type, "boundary=([^; ]{2,})", case_insensitive = TRUE)[,2]
     toparse <- parse_multipart(value, boundary)
     # content-type detection
-    lapply(toparse, function(x) {
+    parsed_items <- lapply(toparse, function(x) {
       if (
         is.null(x$content_type) ||
         # allows for files to be shipped as octect, but parsed using the matching value in `knownContentTypes`
@@ -485,6 +485,8 @@ parser_multi <- function() {
       x$parsers <- parsers
       parse_raw(x)
     })
+
+    combine_keys(parsed_items, type = "multi")
   }
 }
 

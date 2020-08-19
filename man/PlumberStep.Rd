@@ -8,7 +8,7 @@ an object representing a step in the lifecycle of the treatment
 of a request by a plumber router.
 }
 \section{Super class}{
-\code{\link[plumber:hookable]{plumber::hookable}} -> \code{PlumberStep}
+\code{\link[plumber:Hookable]{plumber::Hookable}} -> \code{PlumberStep}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -31,7 +31,7 @@ of a request by a plumber router.
 \if{html}{
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
-\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="hookable" data-id="registerHooks">}\href{../../plumber/html/hookable.html#method-registerHooks}{\code{plumber::hookable$registerHooks()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks">}\href{../../plumber/html/Hookable.html#method-registerHooks}{\code{plumber::Hookable$registerHooks()}}\out{</span>}
 }
 \out{</details>}
 }

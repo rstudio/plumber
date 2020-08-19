@@ -1,7 +1,20 @@
+#' Determine if Plumber object
+#'
+#' @param pr Hopefully a [`Plumber`] object
+#' @return Logical value if `pr` inherits from [`Plumber`]
+#' @export
+#' @examples
+#' is_plumber(Plumber$new()) # TRUE
+#' is_plumber(list()) # FALSE
+is_plumber <- function(pr) {
+  inherits(pr, "Plumber")
+}
+
 validate_pr <- function(pr) {
-  if (!inherits(pr, "plumber")) {
-    stop("`pr` must be an object of class `plumber`.")
+  if (!is_plumber(pr)) {
+    stop("`pr` must be an object of class `Plumber`.")
   }
+  invisible(TRUE)
 }
 
 
@@ -12,7 +25,7 @@ validate_pr <- function(pr) {
 #' @param file Path to file to plumb
 #' @param envir An environment to be used as the enclosure for the routers execution
 #'
-#' @return A new `plumber` router
+#' @return A new [`Plumber`] router
 #'
 #' @examples
 #' \dontrun{
@@ -24,7 +37,7 @@ validate_pr <- function(pr) {
 pr <- function(file = NULL,
                filters = defaultPlumberFilters,
                envir = new.env(parent = .GlobalEnv)) {
-  plumber$new(file = file, filters = filters, envir = envir)
+  Plumber$new(file = file, filters = filters, envir = envir)
 }
 
 #' Add handler to Plumber router

@@ -27,7 +27,7 @@ defaultErrorHandler <- function(){
 
 
     # Don't overly leak data unless they opt-in
-    if (is.function(req$pr$get_debug) && isTRUE(req$pr$get_debug())) {
+    if (is.function(req$pr$getDebug) && isTRUE(req$pr$getDebug())) {
       li["message"] <- as.character(err)
     }
 

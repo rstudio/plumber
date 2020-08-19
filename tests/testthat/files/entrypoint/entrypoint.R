@@ -13,4 +13,4 @@ plumber::register_serializer("fake", function(){
   }
 })
 
-plumber$new("./plumber.R")
+pr("./plumber.R")

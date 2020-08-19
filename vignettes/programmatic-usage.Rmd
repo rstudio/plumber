@@ -17,7 +17,7 @@ Typically, users define APIs using the "annotations," or special comments in the
 
 The centerpiece of Plumber is the router. Plumber routers are responsible for coordinating incoming requests from httpuv, dispatching the requests to the appropriate filters/endpoints, serializing the response, and handling errors that might pop up along the way. If you've been using annotations to define Plumber APIs, then you've already worked with Plumber routers  as that's what the `plumb()` command produces.
 
-To instantiate a new Plumber router programmatically, you can call `plumber$new()`. This will return a blank Plumber router with no endpoints. You could call `run()` on the returned object to start the API, but it doesn't know how to respond to any requests so any incoming traffic would get a `404` response. We'll see momentarily how to add endpoints and filters onto this empty router. Alternatively, you can pass a file that contains your annotation-based Plumber API as the first parameter to create a router much like you do with `plumb()`.
+To instantiate a new Plumber router programmatically, you can call `Plumber$new()`. This will return a blank Plumber router with no endpoints. You could call `run()` on the returned object to start the API, but it doesn't know how to respond to any requests so any incoming traffic would get a `404` response. We'll see momentarily how to add endpoints and filters onto this empty router. Alternatively, you can pass a file that contains your annotation-based Plumber API as the first parameter to create a router much like you do with `plumb()`.
 
 Be aware that Plumber routers do come with a handful of filters pre-configured. These built-in filters are used to do things like process properties of the incoming request like its cookies, `POST` body, or query string. You can specify which filters you want in your new router by overriding the `filters` parameter when creating your new router.
 
@@ -26,7 +26,7 @@ Be aware that Plumber routers do come with a handful of filters pre-configured. 
 You can define endpoints on your router by using the `handle()` method. For instance, to define a Plumber API that response to `GET` requests on `/` and `POST` requests on `/submit`, you could use the following code:
 
 ```r
-pr <- plumber$new()
+pr <- Plumber$new()
 pr$handle("GET", "/", function(req, res){
   # ...
 })
@@ -41,7 +41,7 @@ The "handler" functions that you define in these `handle` calls are identical to
 The `handle()` method takes additional arguments that allow you to control nuanced behavior of the endpoint like which filter it might preempt or which serializer it should use. For instance, the following endpoint would use Plumber's HTML serializer.
 
 ```r
-pr <- plumber$new()
+pr <- Plumber$new()
 pr$handle("GET", "/", function(){
   "<html><h1>Programmatic Plumber!</h1></html>"
 }, serializer=plumber::serializer_html())
@@ -52,7 +52,7 @@ pr$handle("GET", "/", function(){
 Use the `filter()` method of a Plumber router to define a new filter:
 
 ```r
-pr <- plumber$new()
+pr <- Plumber$new()
 
 pr$filter("myFilter", function(req){
   req$filtered <- TRUE
@@ -82,7 +82,7 @@ One feature when defining hooks in Plumber routers is the ability to modify the 
 You can add hooks using the `registerHook` method, or you can add multiple hooks at once using the `registerHooks` method which takes a name list in which the names are the names of the hooks, and the values are the handlers themselves.
 
 ```r
-pr <- plumber$new()
+pr <- Plumber$new()
 pr$registerHook("preroute", function(req){
   cat("Routing a request for", req$PATH_INFO, "...\n")
 })
@@ -110,20 +110,20 @@ Making a `GET` request to `/` will print out various information from the three 
 
 Plumber routers can be "nested" by mounting one into another using the `mount()` method. This allows you to compartmentalize your API by paths which is a great technique for decomposing large APIs into smaller files.
 
-```
-root <- plumber$new()
+```r
+root <- Plumber$new()
 
-users <- plumber$new("users.R")
+users <- Plumber$new("users.R")
 root$mount("/users", users)
 
-products <- plumber$new("products.R")
+products <- Plumber$new("products.R")
 root$mount("/products", products)
 ```
 
 This is the same approach used for defining routers that serve a directory of static files. Static file routers are just a special case of Plumber routers created using `PlumberStatic$new()`. For example
 
 ```r
-pr <- plumber$new()
+pr <- Plumber$new()
 
 stat <- PlumberStatic$new("./myfiles")
 

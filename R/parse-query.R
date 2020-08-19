@@ -48,37 +48,10 @@ parseQS <- function(qs){
   }
 
   vals <- lapply(kv, `[`, 2)
+  names(vals) <- keys
 
   # If duplicates, combine
-  unique_keys <- unique(keys)
-
-  # equivalent code output, `split` is much faster with larger objects
-  # Testing on personal machine had a breakpoint around 150 letters as query parameters
-  ## n <- 150
-  ## k <- sample(letters, n, replace = TRUE)
-  ## v <- as.list(sample(1L, n, replace = TRUE))
-  ## microbenchmark::microbenchmark(
-  ##   split = {
-  ##     lapply(split(v, k), function(x) unname(unlist(x)))
-  ##   },
-  ##   not_split = {
-  ##     lapply(unique(k), function(x) {
-  ##       unname(unlist(v[k == x]))
-  ##     })
-  ##   }
-  ## )
-  vals <-
-    if (length(unique_keys) > 150) {
-      lapply(split(vals, keys), function(items) unname(unlist(items)))
-    } else {
-      # n < 150
-      lapply(unique_keys, function(key) {
-        unname(unlist(vals[keys == key]))
-      })
-    }
-  names(vals) <- unique_keys
-
-  return(vals)
+  combine_keys(vals, type = "query")
 }
 
 createPathRegex <- function(pathDef, funcParams = NULL){
@@ -119,7 +92,6 @@ createPathRegex <- function(pathDef, funcParams = NULL){
     idx <- (is.na(areArrays) | !areArrays)
     areArrays[idx] <- sapply(funcParams, `[[`, "isArray")[names[idx]]
   }
-  areArrays <- areArrays & apiTypes %in% filterApiTypes(TRUE, "arraySupport")
   areArrays[is.na(areArrays)] <- defaultIsArray
 
   pathRegex <- pathDef
@@ -178,4 +150,90 @@ extractPathParams <- function(def, path){
   }
 
   vals
+}
+
+
+#' combine args that share the same name
+#' @noRd
+combine_keys <- function(obj, type) {
+
+  keys <- names(obj)
+  unique_keys <- unique(keys)
+
+  if (length(unique_keys) == length(keys) || is.null(keys)) {
+    return(obj)
+  }
+
+  vals <- unname(obj)
+
+  extra_args <- NULL
+  if (type == "multi") {
+    # handle unnamed args by removing them from being merged and adding them back again at the end
+    no_name_positions <- (keys == "")
+    if (any(no_name_positions)) {
+      extra_args <- vals[no_name_positions]
+      vals <- vals[!no_name_positions]
+      keys <- keys[!no_name_positions]
+      unique_keys <- setdiff(unique_keys, "")
+    }
+  }
+
+  cleanup_item <- switch(
+    type,
+    "query" =
+      function(x) {
+        unname(unlist(x))
+      },
+    "multi" =
+      function(x) {
+        if (length(x) == 1) {
+          # return first item only
+          return(x[[1]])
+        }
+
+        # return list of internal named items
+        # aka... unlist the top layer only. Maintain the inner layer names
+        x_new <- lapply(unname(x), function(x_item) {
+          if (is.atomic(x_item)) {
+            # handles things like `parse_text` which returns atomic values
+            return(list(x_item))
+          }
+
+          # handles things like `parse_octet` which returns a (possibly) named list
+          x_item
+        })
+        as.list(unlist(x_new, recursive = FALSE))
+      }
+  )
+
+  # equivalent code output, `split` is much faster with larger objects
+  # Testing on personal machine had a breakpoint around 150 letters as query parameters
+  ## n <- 150
+  ## k <- sample(letters, n, replace = TRUE)
+  ## v <- as.list(sample(1L, n, replace = TRUE))
+  ## microbenchmark::microbenchmark(
+  ##   split = {
+  ##     lapply(split(v, k), function(x) unname(unlist(x)))
+  ##   },
+  ##   not_split = {
+  ##     lapply(unique(k), function(x) {
+  ##       unname(unlist(v[k == x]))
+  ##     })
+  ##   }
+  ## )
+  vals <-
+    if (length(unique_keys) > 150) {
+      lapply(split(vals, keys), function(items) {
+        cleanup_item(items)
+      })
+    } else {
+      # n < 150
+      lapply(unique_keys, function(key) {
+        cleanup_item(vals[keys == key])
+      })
+    }
+  names(vals) <- unique_keys
+
+  # append any remaining unnamed arguments (for `type = multi` only)
+  c(vals, extra_args)
 }

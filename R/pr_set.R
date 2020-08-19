@@ -23,14 +23,14 @@ pr_set_serializer <- function(pr, serializer) {
 #' Note: The default set of parsers will be completely replaced if any value is supplied. Be sure to include all of your parsers that you would like to include.
 #'
 #' @template param_pr
-#' @template pr_set_parsers__parsers
+#' @template pr_setParsers__parsers
 #'
 #' @return The Plumber router with the new default [PlumberEndpoint] parsers
 #'
 #' @export
 pr_set_parsers <- function(pr, parsers) {
   validate_pr(pr)
-  pr$set_parsers(parsers)
+  pr$setParsers(parsers)
   invisible(pr)
 }
 
@@ -119,7 +119,7 @@ pr_set_error <- function(pr, fun) {
 #' }
 pr_set_debug <- function(pr, debug = interactive()) {
   validate_pr(pr)
-  pr$set_debug(debug = debug)
+  pr$setDebug(debug = debug)
   invisible(pr)
 }
 
@@ -128,7 +128,7 @@ pr_set_debug <- function(pr, debug = interactive()) {
 #'
 #' `ui` should be either a logical or a character value matching a registered ui.
 #' When `TRUE` or a
-#' function, multiple handles will be added to `plumber` object. OpenAPI json
+#' function, multiple handles will be added to [`Plumber`] object. OpenAPI json
 #' file will be served on paths `/openapi.json` and `/swagger.json`. Swagger UI
 #' will be served on paths `/__swagger__/index.html` and `/__swagger__/`. When
 #' using a function, it will receive the Plumber router as the first parameter
@@ -187,7 +187,7 @@ pr_set_ui <- function(
   ...
 ) {
   validate_pr(pr)
-  pr$set_ui(ui = ui, ...)
+  pr$setUi(ui = ui, ...)
   invisible(pr)
 }
 
@@ -216,7 +216,7 @@ pr_set_ui_callback <- function(
   callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL))
 ) {
   validate_pr(pr)
-  pr$set_ui_callback(callback = callback)
+  pr$setUiCallback(callback = callback)
   invisible(pr)
 }
 
@@ -228,7 +228,7 @@ pr_set_ui_callback <- function(
 #' Plumber router [pr_run()] method is executed using default `plumber.ui.callback` option.
 #'
 #' @template param_pr
-#' @template pr_set_api_spec__api
+#' @template pr_setApiSpec__api
 #' @return The Plumber router with the new OpenAPI Specification object or function.
 #' @export
 #' @examples
@@ -253,6 +253,6 @@ pr_set_api_spec <- function(
   api
 ) {
   validate_pr(pr)
-  pr$set_api_spec(api = api)
+  pr$setApiSpec(api = api)
   invisible(pr)
 }

@@ -57,7 +57,7 @@ expect_route_async <- function(x) {
 async_router <- function() {
   "files/async.R" %>%
     test_path() %>%
-    plumber$new()
+    pr()
 }
 
 serve_route <- function(pr, route) {

@@ -15,7 +15,7 @@ Parameters values are obtained from parsing blocks of lines in a plumber file.
 They can also be provided manually for historical reasons.
 }
 \section{Super classes}{
-\code{\link[plumber:hookable]{plumber::hookable}} -> \code{\link[plumber:PlumberStep]{plumber::PlumberStep}} -> \code{PlumberEndpoint}
+\code{\link[plumber:Hookable]{plumber::Hookable}} -> \code{\link[plumber:PlumberStep]{plumber::PlumberStep}} -> \code{PlumberEndpoint}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -54,7 +54,7 @@ each separate verb/path into its own endpoint, so we just do that.}
 \if{html}{
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
-\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="hookable" data-id="registerHooks">}\href{../../plumber/html/hookable.html#method-registerHooks}{\code{plumber::hookable$registerHooks()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks">}\href{../../plumber/html/Hookable.html#method-registerHooks}{\code{plumber::Hookable$registerHooks()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="PlumberStep" data-id="exec">}\href{../../plumber/html/PlumberStep.html#method-exec}{\code{plumber::PlumberStep$exec()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="PlumberStep" data-id="registerHook">}\href{../../plumber/html/PlumberStep.html#method-registerHook}{\code{plumber::PlumberStep$registerHook()}}\out{</span>}
 }

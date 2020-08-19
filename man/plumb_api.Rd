@@ -15,7 +15,7 @@ available_apis(package = NULL)
 \item{name}{Name of the package folder to \code{\link[=plumb]{plumb()}}.}
 }
 \value{
-A \code{\link{plumber}} object. If either \code{package} or \code{name} is null, the appropriate \code{\link[=available_apis]{available_apis()}} will be returned.
+A \code{\link{Plumber}} object. If either \code{package} or \code{name} is null, the appropriate \code{\link[=available_apis]{available_apis()}} will be returned.
 }
 \description{
 So that packages can ship multiple plumber routers, users should store their Plumber APIs
@@ -27,7 +27,7 @@ A \code{package} value may be provided to only display a particular package's Pl
 }
 \section{Functions}{
 \itemize{
-\item \code{plumb_api}: \code{\link[=plumb]{plumb()}}s a package's Plumber API. Returns a \code{\link{plumber}} router object
+\item \code{plumb_api}: \code{\link[=plumb]{plumb()}}s a package's Plumber API. Returns a \code{\link{Plumber}} router object
 
 \item \code{available_apis}: Displays all available package Plumber APIs. Returns a \code{data.frame} of \code{package} and \code{name} information.
 }}

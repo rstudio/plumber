@@ -87,7 +87,7 @@ test_that("path regex's are created properly", {
 })
 
 test_that("integration of path parsing works", {
-  r <- plumber$new(test_path("files/path-params.R"))
+  r <- pr(test_path("files/path-params.R"))
 
   expect_equal(r$route(make_req("GET", "/car/13"), PlumberResponse$new()), "13")
   expect_equal(r$route(make_req("GET", "/car/int/13"), PlumberResponse$new()), 13)
@@ -136,12 +136,12 @@ test_that("multiple variations in path works nicely with function args detection
                     var4 = NULL,
                     var5 = c(TRUE, FALSE),
                     var6 = list(name = c("luke", "bob"), lastname = c("skywalker", "ross")),
-                    var7 = .GlobalEnv,
-                    var8 = list(a = 2, b = mean, c = .GlobalEnv)) {}
+                    var7 = new.env(parent = .GlobalEnv),
+                    var8 = list(a = 2, b = mean, c = new.env(parent = .GlobalEnv))) {}
   funcParams <- getArgsMetadata(dummy)
   expect_warning(regex <- createPathRegex(pathDef, funcParams), "Unsupported path parameter type")
   expect_equal(regex$types, c("string", "string", "integer", "string", "string", "boolean", "string", "string"))
-  expect_equal(regex$areArrays, c(FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, TRUE))
+  expect_equal(regex$areArrays, c(FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE))
 
   # Throw sand at it
   pathDef <- "/<>/<:chr*>/<:chr>/<henry:[IV]>"

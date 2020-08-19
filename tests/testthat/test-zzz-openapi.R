@@ -60,34 +60,34 @@ test_that("params are parsed", {
 #test_that("endpointSpecification works", {
 #})
 
-test_that("get_api_spec works with mounted routers", {
+test_that("getApiSpec works with mounted routers", {
   # parameter in path
-  pr <- plumber$new()
-  pr$handle("GET", "/nested/:path/here", function(){})
-  pr$handle("POST", "/nested/:path/here", function(){})
+  pr1 <- pr()
+  pr1$handle("GET", "/nested/:path/here", function(){})
+  pr1$handle("POST", "/nested/:path/here", function(){})
 
     # static file handler
   stat <- PlumberStatic$new(".")
 
   # multiple entries
-  pr2 <- plumber$new()
+  pr2 <- pr()
   pr2$handle("GET", "/something", function(){})
   pr2$handle("POST", "/something", function(){})
   pr2$handle("GET", "/", function(){})
 
   # test with a filter
-  pr3 <- plumber$new()
+  pr3 <- pr()
   pr3$filter("filter1", function(){})
   pr3$handle("POST", "/else", function(){}, "filter1")
   pr3$handle("PUT", "/else", function(){})
   pr3$handle("GET", "/", function(){})
 
   # nested mount
-  pr4 <- plumber$new()
+  pr4 <- pr()
   pr4$handle("GET", "/completely", function(){})
 
   # trailing slash in route
-  pr5 <- plumber$new()
+  pr5 <- pr()
   pr5$handle("GET", "/trailing_slash/", function(){})
 
   # ├──/nested
@@ -104,20 +104,18 @@ test_that("get_api_spec works with mounted routers", {
   # │  ├──/completely (GET)
   # │  ├──/
   # │  │  └──/trailing_slash (GET)
-  pr$mount("/static", stat)
+  pr1$mount("/static", stat)
   pr2$mount("/sub3", pr3)
-  pr$mount("/sub2", pr2)
-  pr$mount("/sub4", pr4)
+  pr1$mount("/sub2", pr2)
+  pr1$mount("/sub4", pr4)
   pr4$mount("/", pr5)
 
-  paths <- names(pr$get_api_spec()$paths)
+  paths <- names(pr1$getApiSpec()$paths)
   expect_length(paths, 7)
   expect_equal(paths, c("/nested/:path/here", "/sub2/something",
     "/sub2/", "/sub2/sub3/else", "/sub2/sub3/", "/sub4/completely",
     "/sub4/trailing_slash/"
   ))
-
-  pr <<- pr
 })
 
 test_that("responsesSpecification works", {
@@ -276,8 +274,8 @@ test_that("multiple variations in function extract correct metadata", {
                     var4 = NULL,
                     var5 = FALSE,
                     var6 = list(name = c("luke", "bob"), lastname = c("skywalker", "ross")),
-                    var7 = .GlobalEnv,
-                    var8 = list(a = 2, b = mean, c = .GlobalEnv)) {}
+                    var7 = new.env(parent = .GlobalEnv),
+                    var8 = list(a = 2, b = mean, c = new.env(parent = .GlobalEnv))) {}
   funcParams <- getArgsMetadata(dummy)
   expect_identical(sapply(funcParams, `[[`, "required"),
                    c(var0 = FALSE, var1 = TRUE, var2 = FALSE, var3 = FALSE, var4 = FALSE,
@@ -291,7 +289,7 @@ test_that("multiple variations in function extract correct metadata", {
   expect_identical(lapply(funcParams, `[[`, "isArray"),
                    list(var0 = defaultIsArray, var1 = defaultIsArray, var2 = TRUE,
                         var3 = defaultIsArray, var4 = defaultIsArray,
-                        var5 = defaultIsArray, var6 = defaultIsArray,
+                        var5 = defaultIsArray, var6 = TRUE,
                         var7 = defaultIsArray, var8 = defaultIsArray))
   expect_identical(lapply(funcParams, `[[`, "type"),
                    list(var0 = "number", var1 = defaultApiType, var2 = "integer", var3 = defaultApiType, var4 = defaultApiType,
@@ -307,7 +305,7 @@ test_that("priorize works as expected", {
 })
 
 test_that("custom spec works", {
-  pr <- plumber$new()
+  pr <- pr()
   pr$handle("POST", "/func1", function(){})
   pr$handle("GET", "/func2", function(){})
   pr$handle("GET", "/func3", function(){})
@@ -315,17 +313,17 @@ test_that("custom spec works", {
     custom <- list(info = list(description = "My Custom Spec", title = "This is only a test"))
     return(utils::modifyList(spec, custom))
   }
-  pr$set_api_spec(customSpec)
-  spec <- pr$get_api_spec()
+  pr$setApiSpec(customSpec)
+  spec <- pr$getApiSpec()
   expect_equal(spec$info$description, "My Custom Spec")
   expect_equal(spec$info$title, "This is only a test")
   expect_equal(class(spec$openapi), "character")
 })
 
 test_that("no params plumber router still produces spec when there is a func params", {
-  pr <- plumber$new()
+  pr <- pr()
   handler <- function(num) { sum(as.integer(num)) }
   pr$handle("GET", "/sum", handler, serializer = serializer_json())
-  spec <- pr$get_api_spec()
+  spec <- pr$getApiSpec()
   expect_equal(spec$paths$`/sum`$get$parameters[[1]]$name, "num")
 })
