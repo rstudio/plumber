@@ -47,7 +47,7 @@ plumberDeploy_helper <- function(fn_name, args, new_fn_name = fn_name) {
   new_fn <- paste0("plumberDeploy", "::", new_fn_name, "()")
 
   # check if plumberDeploy is called
-  if (!plumberDeploy_is_installed()) {
+  if (!plumberDeploy_is_available()) {
     # not found
     # throw error
     lifecycle::deprecate_stop("1.0.0", cur_fn, new_fn)
@@ -62,6 +62,6 @@ plumberDeploy_helper <- function(fn_name, args, new_fn_name = fn_name) {
   do.call(fn, args)
 }
 
-plumberDeploy_is_installed <- function() {
-    nzchar(system.file(package = "plumberDeploy"))
+plumberDeploy_is_available <- function() {
+  is_available("plumberDeploy")
 }

@@ -82,6 +82,7 @@ Collate:
     'ui.R'
     'utf8.R'
     'utils-pipe.R'
+    'utils.R'
     'validate_api_spec.R'
     'zzz.R'
 RdMacros: lifecycle

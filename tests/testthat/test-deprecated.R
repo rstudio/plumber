@@ -60,7 +60,7 @@ test_that("Digital Ocean functions throw errors", {
   skip_on_cran()
 
   # Do not test if plumberDeploy is installed, as real functions will executed
-  skip_if(plumberDeploy_is_installed())
+  skip_if(plumberDeploy_is_available())
 
   expect_error(do_provision(), class = "lifecycle_error_deprecated")
   expect_error(do_configure_https(), class = "lifecycle_error_deprecated")
