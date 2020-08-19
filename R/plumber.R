@@ -80,7 +80,7 @@ Plumber <- R6Class(
       self$setUi(TRUE)
       private$ui_info$has_not_been_set <- TRUE # set to know if `$setUi()` has been called before `$run()`
       self$setUiCallback(getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL)))
-      self$setDebug(TRUE)
+      self$setDebug(interactive())
       self$setApiSpec(NULL)
 
       # Add in the initial filters
