@@ -276,8 +276,8 @@ test_that("multiple variations in function extract correct metadata", {
                     var4 = NULL,
                     var5 = FALSE,
                     var6 = list(name = c("luke", "bob"), lastname = c("skywalker", "ross")),
-                    var7 = .GlobalEnv,
-                    var8 = list(a = 2, b = mean, c = .GlobalEnv)) {}
+                    var7 = new.env(parent = .GlobalEnv),
+                    var8 = list(a = 2, b = mean, c = new.env(parent = .GlobalEnv))) {}
   funcParams <- getArgsMetadata(dummy)
   expect_identical(sapply(funcParams, `[[`, "required"),
                    c(var0 = FALSE, var1 = TRUE, var2 = FALSE, var3 = FALSE, var4 = FALSE,
@@ -291,7 +291,7 @@ test_that("multiple variations in function extract correct metadata", {
   expect_identical(lapply(funcParams, `[[`, "isArray"),
                    list(var0 = defaultIsArray, var1 = defaultIsArray, var2 = TRUE,
                         var3 = defaultIsArray, var4 = defaultIsArray,
-                        var5 = defaultIsArray, var6 = defaultIsArray,
+                        var5 = defaultIsArray, var6 = TRUE,
                         var7 = defaultIsArray, var8 = defaultIsArray))
   expect_identical(lapply(funcParams, `[[`, "type"),
                    list(var0 = "number", var1 = defaultApiType, var2 = "integer", var3 = defaultApiType, var4 = defaultApiType,

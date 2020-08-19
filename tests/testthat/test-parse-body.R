@@ -135,3 +135,21 @@ test_that("Test multipart respect content-type", {
                             make_parser(c("multi", "tsv")))
   expect_s3_class(parsed_body$sample_name, "data.frame")
 })
+
+test_that("Test an array of files upload", {
+  bin_file <- test_path("files/multipart-files-array.bin")
+  body <- readBin(bin_file, what = "raw", n = file.info(bin_file)$size)
+  parsed_body <- parse_body(
+    body,
+    "multipart/form-data; boundary=---------------------------286326291134907228894146459692",
+    make_parser(c("multi", "octet", "json"))
+  )
+
+  expect_equal(names(parsed_body), c("files", "dt"))
+  expect_length(parsed_body[["files"]], 4)
+  expect_equal(names(parsed_body[["files"]])[2], "text1.bin")
+  expect_equal(rawToChar(parsed_body[["files"]][[2]]), "a")
+  expect_equal(rawToChar(parsed_body[["files"]][[3]]), "b")
+  expect_equal(rawToChar(parsed_body[["files"]][[4]]), "c")
+  expect_equal(parsed_body$dt, jsonlite::parse_json("{}"))
+})
