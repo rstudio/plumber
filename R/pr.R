@@ -2,6 +2,7 @@
 #'
 #' @param pr Hopefully a [`Plumber`] object
 #' @return Logical value if `pr` inherits from [`Plumber`]
+#' @export
 #' @examples
 #' is_plumber(Plumber$new()) # TRUE
 #' is_plumber(PlumberEndpoint$new()) # FALSE
