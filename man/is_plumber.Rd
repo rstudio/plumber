@@ -17,5 +17,5 @@ Determine if Plumber object
 }
 \examples{
 is_plumber(Plumber$new()) # TRUE
-is_plumber(PlumberEndpoint$new()) # FALSE
+is_plumber(list()) # FALSE
 }
