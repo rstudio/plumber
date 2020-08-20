@@ -7,4 +7,6 @@
 
   add_serializers_onLoad()
 
+  register_swagger_docs_onLoad()
+
 }
