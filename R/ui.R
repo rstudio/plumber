@@ -11,7 +11,7 @@ mount_ui <- function(pr, host, port, ui_info, callback) {
 
   if (isTRUE(ui_info$ui == "swagger")) {
     # force the .onLoad method to occur
-    require(swagger)
+    requireNamespace(swagger)
   }
 
   # Build api url
