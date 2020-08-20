@@ -31,6 +31,7 @@ test_that("addAssets continues to work", {
   expect_true(inherits(val, "PlumberResponse"))
 })
 
+
 test_that("getCharacterSet continues to work", {
   expect_equal(
     lifecycle::expect_deprecated(getCharacterSet(contentType = "foo")),
@@ -52,4 +53,19 @@ test_that("hookable throws deprecated warning", {
 })
 test_that("plumber throws deprecated warning", {
   expect_warning(plumber$new(), "Plumber")
+})
+
+
+test_that("Digital Ocean functions throw errors", {
+  skip_on_cran()
+
+  # Do not test if plumberDeploy is installed, as real functions will executed
+  skip_if(plumberDeploy_is_available())
+
+  expect_error(do_provision(), class = "lifecycle_error_deprecated")
+  expect_error(do_configure_https(), class = "lifecycle_error_deprecated")
+  expect_error(do_deploy_api(), class = "lifecycle_error_deprecated")
+  expect_error(do_forward(), class = "lifecycle_error_deprecated")
+  expect_error(do_remove_api(), class = "lifecycle_error_deprecated")
+  expect_error(do_remove_forward(), class = "lifecycle_error_deprecated")
 })

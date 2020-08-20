@@ -1,4 +1,4 @@
-# plumber <a href='https://rstudio.github.io/plumber'><img src='man/figures/logo.svg' align="right" height="138.5" style="margin:10px;" /></a>
+# `plumber` <a href='https://rstudio.github.io/plumber'><img src='man/figures/logo.svg' align="right" height="138.5" style="margin:10px;" /></a>
 
 <!-- badges: start -->
 [![R build status](https://github.com/rstudio/plumber/workflows/R-CMD-check/badge.svg)](https://github.com/rstudio/plumber/actions)
@@ -38,7 +38,7 @@ function(a, b) {
 }
 ```
 
-These comments allow plumber to make your R functions available as API
+These comments allow `plumber` to make your R functions available as API
 endpoints. You can use either `#*` as the prefix or `#'`, but we recommend the
 former since `#'` will collide with Roxygen.
 
@@ -97,10 +97,10 @@ library(plumber)
 ## Hosting
 
 If you're just getting started with hosting cloud servers, the
-[DigitalOcean](https://www.digitalocean.com) integration included in plumber
+[DigitalOcean](https://www.digitalocean.com) integration included in `plumber`
 will be the best way to get started. You'll be able to get a server hosting your
-custom API in just two R commands. Full documentation is available at
-https://www.rplumber.io/articles/hosting.html#digitalocean-1.
+custom API in just two R commands. To deploy to DigitalOcean, check out the
+`plumber` companion package [`plumberDeploy`](https://github.com/meztez/plumberDeploy).
 
 [RStudio Connect](https://www.rstudio.com/products/connect/) is a commercial
 publishing platform that enables R developers to easily publish a variety of R
@@ -111,7 +111,6 @@ A couple of other approaches to hosting plumber are also made available:
 
  - PM2 - https://www.rplumber.io/articles/hosting.html#pm2-1
  - Docker - https://www.rplumber.io/articles/hosting.html#docker-basic-
-
 ## Related Projects
 
 - [OpenCPU](https://www.opencpu.org/) - A server designed for hosting R APIs

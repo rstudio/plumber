@@ -49,9 +49,11 @@ plumber 1.0.0
 
 * `addSerializer()` has been deprecated in favor of `register_serializer()` (#584)
 
-* `getCharacterSet()` has been deprecated in favor of `get_character_set()`.
-* `randomCookieKey()` has been deprecated in favor of `random_cookie_key()`.
-* `sessionCookie()` has been deprecated in favor of `session_cookie()`.
+* DigitalOcean helper functions are now defunct (`do_*()`). The funtionality and documentation on how to deploy to DigitalOcean has been moved to [`plumberDeploy`](https://github.com/meztez/plumberDeploy) (by @meztez) (#649)
+
+* `getCharacterSet()` has been deprecated in favor of `get_character_set()` (#651)
+* `randomCookieKey()` has been deprecated in favor of `random_cookie_key()` (#651)
+* `sessionCookie()` has been deprecated in favor of `session_cookie()` (#651)
 
 ### New features
 

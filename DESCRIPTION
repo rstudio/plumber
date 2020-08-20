@@ -39,7 +39,6 @@ Suggests:
     base64enc,
     htmlwidgets,
     visNetwork,
-    analogsea (>= 0.7.0),
     later,
     readr,
     yaml,
@@ -83,6 +82,7 @@ Collate:
     'ui.R'
     'utf8.R'
     'utils-pipe.R'
+    'utils.R'
     'validate_api_spec.R'
     'zzz.R'
 RdMacros: lifecycle
