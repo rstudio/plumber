@@ -149,19 +149,7 @@
 <h2 class="hasAnchor">
 <a href="#digitalocean" class="anchor"></a>DigitalOcean</h2>
 <p><a href="https://m.do.co/c/add0b50f54c4">DigitalOcean</a> is an easy-to-use Cloud Computing provider. They offer a simple way to spin up a Linux virtual machine and access it remotely. You can choose what size machine you want to run – with options ranging from small machines with 512MB of RAM for a few dollars a month up to large machines with dozens of GB of RAM – and only pay for it while it’s online.</p>
-<p>Plumber includes helper functions that enable you to automatically provision a Plumber server and deploy your APIs to it. So in order to setup a Plumber server running on DigitalOcean, you’ll follow these steps:</p>
-<ol style="list-style-type: decimal">
-<li>
-<a href="https://m.do.co/c/add0b50f54c4">Create a DigitalOcean account</a>.</li>
-<li>Setup an SSH key and deploy the public portion to DigitalOcean so you’ll be able to login to your server.</li>
-<li>Install the <code>analogsea</code> R package and run a test command like <code><a href="https://rdrr.io/pkg/analogsea/man/droplets.html">analogsea::droplets()</a></code> to confirm that it’s able to connect to your DigitalOcean account.</li>
-<li>Run <code>mydrop &lt;- plumber::do_provision()</code>. This will start a virtual machine (or “droplet”, as DigitalOcean calls them) and install Plumber and all the necessary prerequisite software. Once the provisioning is complete, you should be able to access port <code>8000</code> on your server’s IP and see a response from Plumber.</li>
-<li>Install any R packages on the server that your API requires using <code><a href="https://rdrr.io/pkg/analogsea/man/debian.html">analogsea::install_r_package()</a></code>.</li>
-<li>You can use <code><a href="../reference/do_deploy_api.html">plumber::do_deploy_api()</a></code> to deploy or update your own custom APIs to a particular port on your server.</li>
-<li>(Optional) <a href="http://tres.tl/dns">Setup a domain name</a> for your Plumber server so you can use www.myplumberserver.com instead of the server’s IP address.</li>
-<li>(Optional) Configure SSL</li>
-</ol>
-<p>Getting everything connected the first time can be a bit of work, but once you have <code>analogsea</code> connected to your DigitalOcean account, you’re now able to spin up new Plumber servers in DigitalOcean hosting your APIs with just a couple of R commands. You can even write <a href="https://github.com/rstudio/plumber/blob/d9f4acc163168ae179c55e781cfa43f03551f825/inst/hosted-new.R">scripts that provision an entire Plumber server</a> with multiple APIs associated.</p>
+<p>To deploy your Plumber API to DigitalOcean, please check out the <code>plumber</code> companion package <a href="https://github.com/meztez/plumberDeploy"><code>plumberDeploy</code></a>.</p>
 </div>
 <div id="rstudio-connect" class="section level2">
 <h2 class="hasAnchor">
@@ -169,7 +157,7 @@
 <p><a href="https://www.rstudio.com/products/connect/">RStudio Connect</a> is an enterprise publishing platform from RStudio. It supports push-button publishing from the RStudio IDE of a variety of R content types including Plumber APIs. Unlike all the other options listed here, RStudio Connect automatically manages the dependent packages and files your API has and recreates an environment closely mimicking your local development environment on the server.</p>
 <p>RStudio Connect automatically manages the number of R processes necessary to handle the current load and balances incoming traffic across all available processes. It can also shut down idle processes when they’re not in use. This allows you to run the appropriate number of R processes to scale your capacity to accommodate the current load.</p>
 <blockquote>
-<p>Conflict of interest: the primary author of plumber and this book works for RStudio on RStudio Connect.</p>
+<p>Conflict of interest: the primary authors of <code>plumber</code> work for RStudio.</p>
 </blockquote>
 </div>
 <div id="docker" class="section level2">
@@ -442,7 +430,7 @@ pr$run(port=4000, host="0.0.0.0")
 <p><code>systemd</code> is the service manager used by certain Linux distributions including RedHat/CentOS 7, SUSE 12, and Ubuntu versions 16.04 and later.</p>
 </blockquote>
 <p>If you use a Linux server you can use <code>systemd</code> to run Plumber as a service that can be accessed from your local network or even outside your network depending on your firewall rules. This option is similar to using the <a href="#docker">Docker method</a>. One of the main advantages of using <code>systemd</code> over using Docker is that <code>systemd</code> won’t bypass firewall rules (Docker does!) and avoids the overhead of running a container.</p>
-<p>Compared to <code><a href="../reference/do_provision.html">plumber::do_provision()</a></code> this option won’t create a new droplet if you use <a href="#digitalocean">Digital Ocean</a>; it will run on your existing droplet instead.</p>
+<p>Compared to <code><a href="../reference/do_provision.html">plumber::do_provision()</a></code> this option won’t create a new droplet if you use <a href="#digitalocean">DigitalOcean</a>; it will run on your existing droplet instead.</p>
 <p>To implement this option you’ll complete the following three steps from the terminal:</p>
 <ol style="list-style-type: decimal">
 <li>Verify that you have the <code>plumber</code> package available globally on the server:</li>

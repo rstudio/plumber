@@ -4,6 +4,12 @@
     <loc>https://www.rplumber.io/index.html</loc>
   </url>
   <url>
+    <loc>https://www.rplumber.io/reference/Hookable.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/reference/Plumber.html</loc>
+  </url>
+  <url>
     <loc>https://www.rplumber.io/reference/PlumberEndpoint.html</loc>
   </url>
   <url>
@@ -22,22 +28,7 @@
     <loc>https://www.rplumber.io/reference/deprecated_r6.html</loc>
   </url>
   <url>
-    <loc>https://www.rplumber.io/reference/do_configure_https.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/do_deploy_api.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/do_forward.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/do_provision.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/do_remove_api.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/do_remove_forward.html</loc>
+    <loc>https://www.rplumber.io/reference/digitalocean.html</loc>
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/endpoint_serializer.html</loc>
@@ -47,9 +38,6 @@
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/get_character_set.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/hookable.html</loc>
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/include_file.html</loc>
@@ -71,9 +59,6 @@
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/plumb_api.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/plumber.html</loc>
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/pr.html</loc>

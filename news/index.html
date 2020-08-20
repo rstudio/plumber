@@ -210,9 +210,10 @@
 <li><p><code>plumber</code> R6 object has been deprecated and renamed to <code>Plumber</code>. <code>PlumberStatic</code>’s <code>inherit</code>ed class has been updated to <code>Plumber</code>. (<a href='https://github.com/rstudio/plumber/issues/653'>#653</a>)</p></li>
 <li><p><code>hookable</code> R6 object has been deprecated and renamed to <code>Hookable</code>. <code>Plumber</code> and <code>PlumberStep</code>’s <code>inherit</code>ed class has been updated to <code>Hookable</code>. (<a href='https://github.com/rstudio/plumber/issues/653'>#653</a>)</p></li>
 <li><p><code><a href="../reference/addSerializer.html">addSerializer()</a></code> has been deprecated in favor of <code><a href="../reference/register_serializer.html">register_serializer()</a></code> (<a href='https://github.com/rstudio/plumber/issues/584'>#584</a>)</p></li>
-<li><p><code><a href="../reference/addSerializer.html">getCharacterSet()</a></code> has been deprecated in favor of <code><a href="../reference/get_character_set.html">get_character_set()</a></code>.</p></li>
-<li><p><code>randomCookieKey()</code> has been deprecated in favor of <code><a href="../reference/random_cookie_key.html">random_cookie_key()</a></code>.</p></li>
-<li><p><code><a href="../reference/addSerializer.html">sessionCookie()</a></code> has been deprecated in favor of <code><a href="../reference/session_cookie.html">session_cookie()</a></code>.</p></li>
+<li><p>DigitalOcean helper functions are now defunct (<code>do_*()</code>). The funtionality and documentation on how to deploy to DigitalOcean has been moved to <a href="https://github.com/meztez/plumberDeploy"><code>plumberDeploy</code></a> (by <a href='https://github.com/meztez'>@meztez</a>) (<a href='https://github.com/rstudio/plumber/issues/649'>#649</a>)</p></li>
+<li><p><code><a href="../reference/addSerializer.html">getCharacterSet()</a></code> has been deprecated in favor of <code><a href="../reference/get_character_set.html">get_character_set()</a></code> (<a href='https://github.com/rstudio/plumber/issues/651'>#651</a>)</p></li>
+<li><p><code>randomCookieKey()</code> has been deprecated in favor of <code><a href="../reference/random_cookie_key.html">random_cookie_key()</a></code> (<a href='https://github.com/rstudio/plumber/issues/651'>#651</a>)</p></li>
+<li><p><code><a href="../reference/addSerializer.html">sessionCookie()</a></code> has been deprecated in favor of <code><a href="../reference/session_cookie.html">session_cookie()</a></code> (<a href='https://github.com/rstudio/plumber/issues/651'>#651</a>)</p></li>
 </ul>
 </div>
 <div id="new-features" class="section level3">
@@ -312,7 +313,7 @@
 <li>Case-insensitive matching on <code>plumber.r</code> and <code>entrypoint.r</code> when <code><a href="../reference/plumb.html">plumb()</a></code>ing a directory.</li>
 <li>Support query strings with keys that appear more than once (<a href='https://github.com/rstudio/plumber/issues/165'>#165</a>)</li>
 <li>Fix the validation error warning at the bottom of deployed Swagger files which would have appeared any time your <code>swagger.json</code> file was hosted in such a way that a hosted validator service would not have been able to access it. For now we just suppress validation of swagger.json files. (<a href='https://github.com/rstudio/plumber/issues/149'>#149</a>)</li>
-<li>Support for floating IPs in DNS check that occurs in <code><a href="../reference/do_configure_https.html">do_configure_https()</a></code>
+<li>Support for floating IPs in DNS check that occurs in <code><a href="../reference/do_provision.html">do_configure_https()</a></code>
 </li>
 <li>Make adding swap file idempotent in <code><a href="../reference/do_provision.html">do_provision()</a></code> so you can now call that on a single droplet multiple times.</li>
 <li>Support an <code>exit</code> hook which can define a function that will be evaluated when the API is interrupted. e.g. <code>pr &lt;- plumb("plumber.R"); pr$registerHook("exit", function(){ print("Bye bye!") })</code>
@@ -363,7 +364,7 @@
 <h2 class="hasAnchor">
 <a href="#plumber-032" class="anchor"></a>plumber 0.3.2</h2>
 <ul>
-<li>Introduced the <code><a href="../reference/do_provision.html">do_provision()</a></code>, <code><a href="../reference/do_deploy_api.html">do_deploy_api()</a></code>, <code><a href="../reference/do_remove_api.html">do_remove_api()</a></code> and <code><a href="../reference/do_configure_https.html">do_configure_https()</a></code> functions to provision and manage your APIs on a cloud server running on DigitalOcean.</li>
+<li>Introduced the <code><a href="../reference/do_provision.html">do_provision()</a></code>, <code><a href="../reference/do_provision.html">do_deploy_api()</a></code>, <code><a href="../reference/do_provision.html">do_remove_api()</a></code> and <code><a href="../reference/do_provision.html">do_configure_https()</a></code> functions to provision and manage your APIs on a cloud server running on DigitalOcean.</li>
 <li>
 <code><a href="https://rdrr.io/r/base/source.html">source()</a></code> the referenced R file to plumb inside of a new environment that inherits directly from the GlobalEnv. This provides more explicit control over exactly how this environment should behave.</li>
 <li>Added <code>@serializer htmlwidget</code> to support rendering and returning a self-contained htmlwidget from a plumber endpoint.</li>

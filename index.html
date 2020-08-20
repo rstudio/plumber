@@ -127,7 +127,7 @@
   <div class="contents col-md-9">
 <div id="plumber-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#plumber-" class="anchor"></a>plumber <a href="https://rstudio.github.io/plumber"><img src="reference/figures/logo.svg" align="right" height="138.5" style="margin:10px;"></a>
+<a href="#plumber-" class="anchor"></a><code>plumber</code> <a href="https://rstudio.github.io/plumber"><img src="reference/figures/logo.svg" align="right" height="138.5" style="margin:10px;"></a>
 </h1></div>
 <!-- badges: start -->
 
@@ -158,7 +158,7 @@
   <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="kw">a</span>) <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="kw">b</span>)
 }
 </pre></div>
-<p>These comments allow plumber to make your R functions available as API endpoints. You can use either <code>#*</code> as the prefix or <code>#'</code>, but we recommend the former since <code>#'</code> will collide with Roxygen.</p>
+<p>These comments allow <code>plumber</code> to make your R functions available as API endpoints. You can use either <code>#*</code> as the prefix or <code>#'</code>, but we recommend the former since <code>#'</code> will collide with Roxygen.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://www.rplumber.io">plumber</a></span>)
 <span class="kw">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/plumb.html">plumb</a></span>(<span class="st">"plumber.R"</span>)  <span class="co"># Where 'plumber.R' is the location of the file shown above</span>
@@ -192,24 +192,17 @@ $ curl "http://localhost:8000/echo?msg=hello"
 <div id="hosting" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hosting" class="anchor"></a>Hosting</h2>
-<p>If you’re just getting started with hosting cloud servers, the <a href="https://www.digitalocean.com">DigitalOcean</a> integration included in plumber will be the best way to get started. You’ll be able to get a server hosting your custom API in just two R commands. Full documentation is available at <a href="https://www.rplumber.io/articles/hosting.html#digitalocean-1" class="uri">https://www.rplumber.io/articles/hosting.html#digitalocean-1</a>.</p>
+<p>If you’re just getting started with hosting cloud servers, the <a href="https://www.digitalocean.com">DigitalOcean</a> integration included in <code>plumber</code> will be the best way to get started. You’ll be able to get a server hosting your custom API in just two R commands. To deploy to DigitalOcean, check out the <code>plumber</code> companion package <a href="https://github.com/meztez/plumberDeploy"><code>plumberDeploy</code></a>.</p>
 <p><a href="https://www.rstudio.com/products/connect/">RStudio Connect</a> is a commercial publishing platform that enables R developers to easily publish a variety of R content types, including Plumber APIs. Additional documentation is available at <a href="https://www.rplumber.io/articles/hosting.html#rstudio-connect-1" class="uri">https://www.rplumber.io/articles/hosting.html#rstudio-connect-1</a>.</p>
 <p>A couple of other approaches to hosting plumber are also made available:</p>
 <ul>
-<li>PM2 - <a href="https://www.rplumber.io/articles/hosting.html#pm2-1" class="uri">https://www.rplumber.io/articles/hosting.html#pm2-1</a>
-</li>
-<li>Docker - <a href="https://www.rplumber.io/articles/hosting.html#docker-basic-" class="uri">https://www.rplumber.io/articles/hosting.html#docker-basic-</a>
-</li>
-</ul>
-</div>
-<div id="related-projects" class="section level2">
-<h2 class="hasAnchor">
-<a href="#related-projects" class="anchor"></a>Related Projects</h2>
-<ul>
+<li><p>PM2 - <a href="https://www.rplumber.io/articles/hosting.html#pm2-1" class="uri">https://www.rplumber.io/articles/hosting.html#pm2-1</a></p></li>
 <li>
-<a href="https://www.opencpu.org/">OpenCPU</a> - A server designed for hosting R APIs with an eye towards scientific research.</li>
-<li>
-<a href="http://bart6114.github.io/jug/index.html">jug</a> - <em>(development discontinued)</em> an R package similar to Plumber but uses a more programmatic approach to constructing the API.</li>
+<p>Docker - <a href="https://www.rplumber.io/articles/hosting.html#docker-basic-" class="uri">https://www.rplumber.io/articles/hosting.html#docker-basic-</a></p>
+<h2 id="related-projects">Related Projects</h2>
+</li>
+<li><p><a href="https://www.opencpu.org/">OpenCPU</a> - A server designed for hosting R APIs with an eye towards scientific research.</p></li>
+<li><p><a href="http://bart6114.github.io/jug/index.html">jug</a> - <em>(development discontinued)</em> an R package similar to Plumber but uses a more programmatic approach to constructing the API.</p></li>
 </ul>
 </div>
 </div>
