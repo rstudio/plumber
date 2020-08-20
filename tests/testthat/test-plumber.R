@@ -509,3 +509,12 @@ test_that("removeHandle works", {
   expect_equal(length(pr$endpoints[[1]]), 1L)
   expect_equal(pr$endpoints[[1]][[1]]$path, "/path2")
 })
+
+
+test_that("routes that don't start with a slash are prepended with a slash", {
+  pr <- pr()
+  pr$handle("GET", "nested/path/here", function(){})
+
+  expect_equal(length(pr$endpoints[[1]]), 1L)
+  expect_equal(pr$endpoints[[1]][[1]]$path, "/nested/path/here")
+})

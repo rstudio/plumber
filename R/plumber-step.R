@@ -223,6 +223,11 @@ PlumberEndpoint <- R6Class(
     #' They can also be provided manually for historical reasons.
     #' @return A new `PlumberEndpoint` object
     initialize = function(verbs, path, expr, envir, serializer, parsers, lines, params, comments, responses, tags) {
+
+      if (substr(path, 1,1) != "/") {
+        path <- paste0("/", path)
+      }
+
       self$verbs <- verbs
       self$path <- path
 
