@@ -34,7 +34,7 @@ register_ui(
       api_path = paste0(
         "window.location.origin + ",
         "window.location.pathname.replace(",
-          "/\\\\(__swagger__\\\\\\\\/|__swagger__\\\\\\\\/index.html\\\\)$/, \"\"",
+          "/\\\\(__docs__\\\\\\\\/|__docs__\\\\\\\\/index.html\\\\)$/, \"\"",
         ") + ",
         "\"openapi.json\""
       ),
