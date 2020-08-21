@@ -198,11 +198,11 @@ details on the methods available on this object.</p>
 <code><a href='pr_mount.html'>pr_mount()</a></code>,
 <code><a href='pr_hook.html'>pr_hook()</a></code>, <code><a href='pr_hook.html'>pr_hooks()</a></code>, <code><a href='pr_cookie.html'>pr_cookie()</a></code>,
 <code><a href='pr_filter.html'>pr_filter()</a></code>,
-<code><a href='pr_set_api_spec.html'>pr_set_api_spec()</a></code>, <code><a href='pr_set_ui.html'>pr_set_ui()</a></code>,
+<code><a href='pr_set_api_spec.html'>pr_set_api_spec()</a></code>, <code><a href='pr_set_docs.html'>pr_set_docs()</a></code>,
 <code><a href='pr_set_serializer.html'>pr_set_serializer()</a></code>, <code><a href='pr_set_parsers.html'>pr_set_parsers()</a></code>,
 <code><a href='pr_set_404.html'>pr_set_404()</a></code>, <code><a href='pr_set_error.html'>pr_set_error()</a></code>,
 <code><a href='pr_set_debug.html'>pr_set_debug()</a></code>,
-<code><a href='pr_set_ui_callback.html'>pr_set_ui_callback()</a></code></p></div>
+<code><a href='pr_set_docs_callback.html'>pr_set_docs_callback()</a></code></p></div>
     <h2 class="hasAnchor" id="super-class"><a class="anchor" href="#super-class"></a>Super class</h2>
 
     <p><code><a href='Hookable.html'>plumber::Hookable</a></code> -&gt; <code>Plumber</code></p>
@@ -243,8 +243,8 @@ details on the methods available on this object.</p>
 <li><p><a href='#method-setParsers'><code>Plumber$setParsers()</code></a></p></li>
 <li><p><a href='#method-set404Handler'><code>Plumber$set404Handler()</code></a></p></li>
 <li><p><a href='#method-setErrorHandler'><code>Plumber$setErrorHandler()</code></a></p></li>
-<li><p><a href='#method-setUi'><code>Plumber$setUi()</code></a></p></li>
-<li><p><a href='#method-setUiCallback'><code>Plumber$setUiCallback()</code></a></p></li>
+<li><p><a href='#method-setDocs'><code>Plumber$setDocs()</code></a></p></li>
+<li><p><a href='#method-setDocsCallback'><code>Plumber$setDocsCallback()</code></a></p></li>
 <li><p><a href='#method-setDebug'><code>Plumber$setDebug()</code></a></p></li>
 <li><p><a href='#method-getDebug'><code>Plumber$getDebug()</code></a></p></li>
 <li><p><a href='#method-filter'><code>Plumber$filter()</code></a></p></li>
@@ -303,11 +303,11 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.</p></dd>
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.This value does not need to be explicitly assigned. To explicity set it, see <code><a href='options_plumber.html'>options_plumber()</a></code>.</p></dd>
 
-<dt><code>swagger</code></dt><dd><p>Deprecated. See <code>$setUi(ui)</code> or <code>$setApiSpec()</code></p></dd>
+<dt><code>swagger</code></dt><dd><p>Deprecated. See <code>$setDocs(docs)</code> or <code>$setApiSpec()</code></p></dd>
 
 <dt><code>debug</code></dt><dd><p>Deprecated. See <code>$setDebug()</code></p></dd>
 
-<dt><code>swaggerCallback</code></dt><dd><p>Deprecated. See <code>$setUiCallback()</code></p></dd>
+<dt><code>swaggerCallback</code></dt><dd><p>Deprecated. See <code>$setDocsCallback()</code></p></dd>
 
 </dl><p></div></p>
 <p><hr>
@@ -626,32 +626,32 @@ pr$setErrorHandler(function(req, res, err) {
 </pre><p></div></p>
 
 <p><hr>
-<a id="method-setUi"></a></p><h3>Method <code>setUi()</code></h3>
-<p>Set UI to use for API</p>
-<p>See also: <code><a href='pr_set_ui.html'>pr_set_ui()</a></code>, <code><a href='register_ui.html'>register_ui()</a></code>, <code><a href='register_ui.html'>registered_uis()</a></code></p><h4>Usage</h4>
-<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>setUi</span>(ui = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.ui"</span>, <span class='fl'>TRUE</span>), <span class='kw'>...</span>)</pre><p></div></p>
+<a id="method-setDocs"></a></p><h3>Method <code>setDocs()</code></h3>
+<p>Set visual documentation to use for API</p>
+<p>See also: <code><a href='pr_set_docs.html'>pr_set_docs()</a></code>, <code><a href='register_docs.html'>register_docs()</a></code>, <code><a href='register_docs.html'>registered_docs()</a></code></p><h4>Usage</h4>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>setDocs</span>(docs = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.docs"</span>, <span class='fl'>TRUE</span>), <span class='kw'>...</span>)</pre><p></div></p>
 
 <h4>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>ui</code></dt><dd><p>a character value or a logical value. Defaults to `options("plumber.ui"). See <code><a href='pr_set_ui.html'>pr_set_ui()</a></code> for examples.
+<dt><code>docs</code></dt><dd><p>a character value or a logical value. See <code><a href='pr_set_docs.html'>pr_set_docs()</a></code> for examples.
 If using <code><a href='options_plumber.html'>options_plumber()</a></code>, the value must be set before initializing your Plumber router.</p></dd>
 
-<dt><code>...</code></dt><dd><p>Other params to be passed to <code>ui</code> functions.</p></dd>
+<dt><code>...</code></dt><dd><p>Other params to be passed to <code>docs</code> functions.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-setUiCallback"></a></p><h3>Method <code>setUiCallback()</code></h3>
-<p>Set UI callback to notify where the API is located.</p>
+<a id="method-setDocsCallback"></a></p><h3>Method <code>setDocsCallback()</code></h3>
+<p>Set a callback to notify where the API's visual documentation is located.</p>
 <p>When set, it will be called with a character string corresponding
-to the API UI url. This allows RStudio to open <code>swagger</code> UI when a
+to the API docs url. This allows RStudio to open <code>swagger</code> docs when a
 Plumber router <code><a href='pr_run.html'>pr_run()</a></code> method is executed.</p>
 <p>If using <code><a href='options_plumber.html'>options_plumber()</a></code>, the value must be set before initializing your Plumber router.</p>
-<p>See also: <code><a href='pr_set_ui_callback.html'>pr_set_ui_callback()</a></code></p><h4>Usage</h4>
-<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>setUiCallback</span>(callback = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.ui.callback"</span>, <span class='kw'>NULL</span>))</pre><p></div></p>
+<p>See also: <code><a href='pr_set_docs_callback.html'>pr_set_docs_callback()</a></code></p><h4>Usage</h4>
+<p><div class="r"></p><pre><span class='kw'>Plumber</span><span class='op'>$</span><span class='fu'>setDocsCallback</span>(callback = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.docs.callback"</span>, <span class='kw'>NULL</span>))</pre><p></div></p>
 
 <h4>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>callback</code></dt><dd><p>a callback function for taking action on UI url. (Also accepts <code>NULL</code> values to disable the <code>callback</code>.)</p></dd>
+<dt><code>callback</code></dt><dd><p>a callback function for taking action on the docs url. (Also accepts <code>NULL</code> values to disable the <code>callback</code>.)</p></dd>
 
 </dl><p></div></p>
 <p><hr>

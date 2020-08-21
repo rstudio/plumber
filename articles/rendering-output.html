@@ -396,24 +396,24 @@
 <span id="cb11-3"><a href="#cb11-3"></a><span class="fu">}</span></span></code></pre></div>
 <p>A custom error handler can be set using the <code>setErrorHandler()</code> method:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit">
-<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">Plumber</span><span class="op">$</span><span class="fu">new</span>()
-<span class="kw">pr</span><span class="op">$</span><span class="fu">handle</span>(<span class="st">"GET"</span>, <span class="st">"/simple"</span>, <span class="fu">function</span>() <span class="fu"><a href="https://rdrr.io/r/base/stop.html">stop</a></span>(<span class="st">"I'm an error!"</span>))
-<span class="kw">pr</span><span class="op">$</span><span class="fu">setErrorHandler</span>(<span class="fu">function</span>(<span class="kw">req</span>, <span class="kw">res</span>, <span class="kw">err</span>){
-  <span class="kw">res</span><span class="op">$</span><span class="kw">status</span> <span class="op">&lt;-</span> <span class="fl">500</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(error = <span class="st">"An error occurred. Please contact your administrator."</span>)
-})
-<span class="kw">pr</span><span class="op">$</span><span class="fu">run</span>()
+<span class="fu"><a href="../reference/pr.html">pr</a></span>() <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span>(<span class="st">"/simple"</span>, <span class="fu">function</span>() <span class="fu"><a href="https://rdrr.io/r/base/stop.html">stop</a></span>(<span class="st">"I'm an error!"</span>)) <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_set_error.html">pr_set_error</a></span>(<span class="fu">function</span>(<span class="kw">req</span>, <span class="kw">res</span>, <span class="kw">err</span>){
+    <span class="kw">res</span><span class="op">$</span><span class="kw">status</span> <span class="op">&lt;-</span> <span class="fl">500</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(error = <span class="st">"An error occurred. Please contact your administrator."</span>)
+  }) <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span>()
 </pre></div>
 <p>If you run this API and visit <a href="http://localhost:8000/simple" class="uri">http://localhost:8000/simple</a>, you’ll notice that the custom error message provided in the error handler is included in the browser. Since we didn’t do anything with the actual error message, nothing is printed to the console. If we wanted to include the error in the console, we could do the following:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">Plumber</span><span class="op">$</span><span class="fu">new</span>()
-<span class="kw">pr</span><span class="op">$</span><span class="fu">handle</span>(<span class="st">"GET"</span>, <span class="st">"/simple"</span>, <span class="fu">function</span>() <span class="fu"><a href="https://rdrr.io/r/base/stop.html">stop</a></span>(<span class="st">"I'm an error!"</span>))
-<span class="kw">pr</span><span class="op">$</span><span class="fu">setErrorHandler</span>(<span class="fu">function</span>(<span class="kw">req</span>, <span class="kw">res</span>, <span class="kw">err</span>){
-  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw">err</span>)
-  <span class="kw">res</span><span class="op">$</span><span class="kw">status</span> <span class="op">&lt;-</span> <span class="fl">500</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(error = <span class="st">"An error occurred. Please contact your administrator."</span>)
-})
-<span class="kw">pr</span><span class="op">$</span><span class="fu">run</span>()
+<span class="fu"><a href="../reference/pr.html">pr</a></span>() <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span>(<span class="st">"/simple"</span>, <span class="fu">function</span>() <span class="fu"><a href="https://rdrr.io/r/base/stop.html">stop</a></span>(<span class="st">"I'm an error!"</span>)) <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_set_error.html">pr_set_error</a></span>(<span class="fu">function</span>(<span class="kw">req</span>, <span class="kw">res</span>, <span class="kw">err</span>){
+    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw">err</span>)
+    <span class="kw">res</span><span class="op">$</span><span class="kw">status</span> <span class="op">&lt;-</span> <span class="fl">500</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(error = <span class="st">"An error occurred. Please contact your administrator."</span>)
+  }) <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span>()
 </pre></div>
 <p>The function passed to <code>setErrorHandler</code> will be invoked anytime R execution fails with an error.</p>
 </div>
@@ -469,7 +469,7 @@
 <p>In addition to storing plain-text cookies, Plumber also supports handling cookies that are encrypted. Encrypted cookies prevent your users from seeing what is stored inside of them and also sign their contents so that users can’t modify what is stored.</p>
 <p>To use this feature, you must explicitly add it to your router after constructing it. For example, you could run the following sequence of commands to create a router that supports encrypted session cookies.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit">
-<span class="fu"><a href="../reference/plumb.html">plumb</a></span>(<span class="st">"myfile.R"</span>) <span class="op">%&gt;%</span>
+<span class="fu"><a href="../reference/pr.html">pr</a></span>(<span class="st">"myfile.R"</span>) <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_cookie.html">pr_cookie</a></span>(<span class="st">"mySecretHere"</span>, <span class="st">"cookieName"</span>) <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span>()
 </pre></div>

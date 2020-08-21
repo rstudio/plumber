@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Register a Serializer — register_serializer • plumber</title>
+<title>Add visual documentation for plumber to use — register_docs • plumber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,11 +52,10 @@
 
 
 
-<meta property="og:title" content="Register a Serializer — register_serializer" />
-<meta property="og:description" content="A serializer is responsible for translating a generated R value into output
-that a remote user can understand. For instance, the serializer_json
-serializes R objects into JSON before returning them to the user. The list of
-available serializers in plumber is global." />
+<meta property="og:title" content="Add visual documentation for plumber to use — register_docs" />
+<meta property="og:description" content="register_docs() is used by other packages like swagger, rapidoc, and redoc.
+When you load these packages, it calls register_docs() to provide a user
+interface that can interpret your plumber OpenAPI Specifications." />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
 
 
@@ -173,80 +172,73 @@ available serializers in plumber is global." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Register a Serializer</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/serializer.R'><code>R/serializer.R</code></a></small>
-    <div class="hidden name"><code>register_serializer.Rd</code></div>
+    <h1>Add visual documentation for plumber to use</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/ui.R'><code>R/ui.R</code></a></small>
+    <div class="hidden name"><code>register_docs.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A serializer is responsible for translating a generated R value into output
-that a remote user can understand. For instance, the <code>serializer_json</code>
-serializes R objects into JSON before returning them to the user. The list of
-available serializers in plumber is global.</p>
+    <p><code>register_docs()</code> is used by other packages like <code>swagger</code>, <code>rapidoc</code>, and <code>redoc</code>.
+When you load these packages, it calls <code>register_docs()</code> to provide a user
+interface that can interpret your plumber OpenAPI Specifications.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>register_serializer</span>(<span class='kw'>name</span>, <span class='kw'>serializer</span>, verbose = <span class='fl'>TRUE</span>)
+    <pre class="usage"><span class='fu'>register_docs</span>(<span class='kw'>name</span>, <span class='kw'>index</span>, static = <span class='kw'>NULL</span>)
 
-<span class='fu'>registered_serializers</span>()</pre>
+<span class='fu'>registered_docs</span>()</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>name</th>
-      <td><p>The name of the serializer (character string)</p></td>
+      <td><p>Name of the visual documentation</p></td>
     </tr>
     <tr>
-      <th>serializer</th>
-      <td><p>The serializer function to be added.
-This function should accept arguments that can be supplied when <code><a href='plumb.html'>plumb()</a></code>ing a file.
-This function should return a function that accepts four arguments: <code>value</code>, <code>req</code>, <code>res</code>, and <code>errorHandler</code>.
-See <code><a href='https://rdrr.io/r/base/print.html'>print(serializer_json)</a></code> for an example.</p></td>
+      <th>index</th>
+      <td><p>A function that returns the HTML content of the landing page of the documentation.
+Parameters (besides <code>req</code> and <code>res</code>) will be supplied as if it is a regular <code>GET</code> route.
+Default parameter values may be used when setting the documentation <code>index</code> function.
+See the example below.</p></td>
     </tr>
     <tr>
-      <th>verbose</th>
-      <td><p>Logical value which determines if a message should be printed when overwriting serializers</p></td>
+      <th>static</th>
+      <td><p>A function that returns the path to the static assets (images, javascript, css, fonts) the Docs will use.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>There are three main building-block serializers:</p><ul>
-<li><p><code>serializer_headers</code>: the base building-block serializer that is required to have <code><a href='as_attachment.html'>as_attachment()</a></code> work</p></li>
-<li><p><code><a href='serializer_headers.html'>serializer_content_type()</a></code>: for setting the content type. (Calls <code><a href='serializer_headers.html'>serializer_headers()</a></code>)</p></li>
-<li><p><code><a href='serializer_headers.html'>serializer_device()</a></code>: add endpoint hooks to turn a graphics device on and off in addition to setting the content type. (Uses <code><a href='serializer_headers.html'>serializer_content_type()</a></code>)</p></li>
-</ul>
-
-    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
-
-    
-<ul>
-<li><p><code>register_serializer</code>: Register a serializer with a name</p></li>
-<li><p><code>registered_serializers</code>: Return a list of all registered serializers</p></li>
-</ul>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># `serializer_json()` calls `serializer_content_type()` and supplies a serialization function</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>serializer_json</span>)</div><div class='output co'>#&gt; function (..., type = "application/json") 
-#&gt; {
-#&gt;     serializer_content_type(type, function(val) {
-#&gt;         toJSON(val, ...)
-#&gt;     })
-#&gt; }
-#&gt; &lt;bytecode: 0x7f82a9a1acf8&gt;
-#&gt; &lt;environment: namespace:plumber&gt;</div><div class='input'><span class='co'># serializer_content_type() calls `serializer_headers()` and supplies a serialization function</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>serializer_content_type</span>)</div><div class='output co'>#&gt; function (type, serialize_fn = identity) 
-#&gt; {
-#&gt;     if (missing(type)) {
-#&gt;         stop("You must provide the custom content type to the serializer_content_type")
-#&gt;     }
-#&gt;     stopifnot(length(type) == 1)
-#&gt;     stopifnot(is.character(type))
-#&gt;     stopifnot(nchar(type) &gt; 0)
-#&gt;     serializer_headers(list(`Content-Type` = type), serialize_fn)
-#&gt; }
-#&gt; &lt;bytecode: 0x7f82a9a23890&gt;
-#&gt; &lt;environment: namespace:plumber&gt;</div></pre>
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='co'># Example from the `swagger` R package</span>
+<span class='fu'>register_docs</span>(
+  name = <span class='st'>"swagger"</span>,
+  index = <span class='fu'>function</span>(<span class='kw'>version</span> = <span class='st'>"3"</span>, <span class='kw'>...</span>) {
+    <span class='kw'>swagger</span>::<span class='fu'><a href='https://rdrr.io/pkg/swagger/man/swagger_spec.html'>swagger_spec</a></span>(
+      api_path = <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(
+        <span class='st'>"window.location.origin + "</span>,
+        <span class='st'>"window.location.pathname.replace("</span>,
+          <span class='st'>"/\\(__docs__\\\\/|__docs__\\\\/index.html\\)$/, \"\""</span>,
+        <span class='st'>") + "</span>,
+        <span class='st'>"\"openapi.json\""</span>
+      ),
+      version = <span class='kw'>version</span>
+    )
+  },
+  static = <span class='fu'>function</span>(<span class='kw'>version</span> = <span class='st'>"3"</span>, <span class='kw'>...</span>) {
+    <span class='kw'>swagger</span>::<span class='fu'><a href='https://rdrr.io/pkg/swagger/man/swagger_path.html'>swagger_path</a></span>(<span class='kw'>version</span>)
+  }
+)
+
+<span class='co'># When setting the docs, `index` and `static` function arguments can be supplied</span>
+<span class='co'># * via `pr_set_docs()`</span>
+<span class='co'># * or through URL query string variables</span>
+<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
+  <span class='co'># Set default argument `version = 3` for the swagger `index` and `static` functions</span>
+  <span class='fu'><a href='pr_set_docs.html'>pr_set_docs</a></span>(<span class='st'>"swagger"</span>, version = <span class='fl'>3</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_handle.html'>pr_get</a></span>(<span class='st'>"/plus/&lt;a:int&gt;/&lt;b:int&gt;"</span>, <span class='fu'>function</span>(<span class='kw'>a</span>, <span class='kw'>b</span>) { <span class='kw'>a</span> <span class='op'>+</span> <span class='kw'>b</span> }) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -161,8 +161,9 @@
 <p>These comments allow <code>plumber</code> to make your R functions available as API endpoints. You can use either <code>#*</code> as the prefix or <code>#'</code>, but we recommend the former since <code>#'</code> will collide with Roxygen.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://www.rplumber.io">plumber</a></span>)
-<span class="kw">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/plumb.html">plumb</a></span>(<span class="st">"plumber.R"</span>)  <span class="co"># Where 'plumber.R' is the location of the file shown above</span>
-<span class="kw">r</span><span class="op">$</span><span class="fu">run</span>(port=<span class="fl">8000</span>)
+<span class="co"># 'plumber.R' is the location of the file shown above</span>
+<span class="fu"><a href="reference/pr.html">pr</a></span>(<span class="st">"plumber.R"</span>) <span class="op">%&gt;%</span>
+  <span class="fu"><a href="reference/pr_run.html">pr_run</a></span>(port=<span class="fl">8000</span>)
 </pre></div>
 <p>You can visit this URL using a browser or a terminal to run your R function and get the results. For instance <a href="http://localhost:8000/plot">http://localhost:8000/plot</a> will show you a histogram, and <a href="http://localhost:8000/echo?msg=hello">http://localhost:8000/echo?msg=hello</a> will echo back the ‘hello’ message you provided.</p>
 <p>Here we’re using <code>curl</code> via a Mac/Linux terminal.</p>

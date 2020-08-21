@@ -389,15 +389,14 @@ http {
 <a href="#wrap-your-plumber-file" class="anchor"></a>Wrap Your Plumber File</h3>
 <p>Once you’ve deployed your Plumber files onto the server, you’ll still need to tell the server <em>how</em> to run your server. You’re probably used to running commands like</p>
 <div class="sourceCode" id="cb17"><pre class="downlit">
-<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plumb.html">plumb</a></span>(<span class="st">"myfile.R"</span>)
-<span class="kw">pr</span><span class="op">$</span><span class="fu">run</span>(port=<span class="fl">4500</span>)
+<span class="fu"><a href="../reference/pr.html">pr</a></span>(<span class="st">"myfile.R"</span>) <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span>(port=<span class="fl">4500</span>)
 </pre></div>
 <p>Unfortunately, pm2 doesn’t understand R scripts natively; however, it is possible to specify a custom interpreter. We can use this feature to launch an R-based wrapper for our plumber file using the <code>Rscript</code> scripting front-end that comes with R. The following script will run the two commands listed above.</p>
 <pre><code><a href="https://www.rplumber.io">#!/usr/bin/env Rscript
 
 library(plumber)
-pr &lt;- plumb('myfile.R')
-pr$run(port=4000, host="0.0.0.0")
+pr("myfile.R") %&gt;%
+  pr_run(port=4000, host="0.0.0.0")
 # Setting the host option on a VM instance ensures the application can be accessed externally.
 # (This may be only true for Linux users.)</a></code></pre>
 <p>Save this R script on your server as something like <code>run-myfile.R</code>. You should also make it executable by changing the permissions on the file using a command like <code>chmod 755 run-myfile.R</code>. You should now execute that file to make sure that it runs the service like you expect. You should be able to make requests to your server on the appropriate port and have the plumber service respond. You can kill the process using <code>Ctrl-c</code> when you’re convinced that it’s working. Make sure the shell script is in a permanent location so that it won’t be erased or modified accidentally. You can consider creating a designated directory for all your plumber services in some directory like <code>/usr/local/plumber</code>, then put all services and their associated Rscript-runners in their own subdirectory like <code>/usr/local/plumber/myfile/</code>.</p>
@@ -412,7 +411,7 @@ pr$run(port=4000, host="0.0.0.0")
 <p>Once you’re happy with the pm2 services you have defined, you can use <code>pm2 save</code> to tell pm2 to retain the set of services you have running next time you boot the machine. All of the services you have defined will be automatically restarted for you.</p>
 <p>At this point, you have a persistent pm2 service created for your Plumber application. This means that you can reboot your server, or find and kill the underlying R process that your plumber application is using and pm2 will automatically bring a new process in to replace it. This should help guarantee that you always have a Plumber process running on the port number you specified in the shell script. It is a good idea to reboot the server to ensure that everything comes back the way you expected.</p>
 <p>You can repeat this process with all the plumber applications you want to deploy, as long as you give each a unique port to run on. Remember that you can’t have more than one service running on a single port. And be sure to <code>pm2 save</code> every time you add services that you want to survive a restart.</p>
-<p>Run <code>netstat -tulpn</code> to see how the application is being ran. If you see the application on host <code>127.0.0.0</code> or <code>127.0.0.1</code>, the application cannot be accessed externally. You should change the host parameter to <code>0.0.0.0</code>, for example: `pr$run(host = “0.0.0.0”).</p>
+<p>Run <code>netstat -tulpn</code> to see how the application is being ran. If you see the application on host <code>127.0.0.0</code> or <code>127.0.0.1</code>, the application cannot be accessed externally. You should change the host parameter to <code>0.0.0.0</code>, for example: `pr_run(host = “0.0.0.0”).</p>
 </div>
 <div id="logs-and-management" class="section level3">
 <h3 class="hasAnchor">
@@ -445,7 +444,7 @@ Description=Plumber API
 # (or mariadb, mysql, etc if you use a DB with Plumber, otherwise leave this commented)
 
 [Service]
-ExecStart=/usr/bin/Rscript -e "api &lt;- plumber::plumb('/your-dir/your-api-script.R'); api$run(port=8080, host='0.0.0.0')"
+ExecStart=/usr/bin/Rscript -e "library(plumber); pr('/your-dir/your-api-script.R') %&gt;% pr_run(port=8080, host='0.0.0.0')"
 Restart=on-abnormal
 WorkingDirectory=/your-dir/
 

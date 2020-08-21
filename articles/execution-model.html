@@ -222,11 +222,11 @@
 <a href="#exit-handlers" class="anchor"></a>Exit Handlers</h2>
 <p>It may be useful to define a function that you want to run as your API is closing – for instance, if you have a pool of database connections that need to be cleaned up when your Plumber process is being terminated. You can use the <code>exit</code> hook to define such a handler.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plumb.html">plumb</a></span>(<span class="st">"plumber.R"</span>)
-<span class="kw">pr</span><span class="op">$</span><span class="fu">registerHook</span>(<span class="st">"exit"</span>, <span class="fu">function</span>(){
-  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"Bye bye!"</span>)
-})
-<span class="kw">pr</span><span class="op">$</span><span class="fu">run</span>()
+<span class="fu"><a href="../reference/pr.html">pr</a></span>(<span class="st">"plumber.R"</span>) <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_hook.html">pr_hook</a></span>(<span class="st">"exit"</span>, <span class="fu">function</span>(){
+    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"Bye bye!"</span>)
+  })
+  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span>()
 </pre></div>
 <p>When you interrupt the API (for instance by pressing the <code>Escape</code> key or <code>Ctrl+C</code>) you’ll see <code>Bye bye!</code> printed to the console. You can even register multiple <code>exit</code> hooks and they’ll be run in the order in which they were registered.</p>
 </div>
