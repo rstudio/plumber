@@ -155,8 +155,8 @@ Unless otherwise instructed, all parameters passed into plumber endpoints from q
 Visiting http://localhost:8000/types/14 will return:
 
 ```{r, echo=FALSE, results='asis'}
-pr <- plumber::plumb("files/apis/03-02-types.R")
-e <- pr$endpoints[[1]][[1]]
+r <- plumber::plumb("files/apis/03-02-types.R")
+e <- r$endpoints[[1]][[1]]
 code_chunk(json_serialize(e$exec(id="14")), "json")
 ```
 
@@ -262,8 +262,8 @@ Plumber will automatically forward information from the query string into the fu
 Visiting http://localhost:8000/?q=bread&pretty=1 will print:
 
 ```{r, echo=FALSE, results='asis'}
-pr <- plumber::plumb("files/apis/03-03-search.R")
-e <- pr$endpoints[[1]][[1]]
+r <- plumber::plumb("files/apis/03-03-search.R")
+e <- r$endpoints[[1]][[1]]
 code_chunk(json_serialize(e$exec(q="bread", pretty="1")), "json")
 ```
 
@@ -297,8 +297,8 @@ Unfortunately, crafting a request with a message body requires a bit more work t
 Running `curl --data "id=123&name=Jennifer" "http://localhost:8000/user"` will return:
 
 ```{r, echo=FALSE, results='asis'}
-pr <- plumber::plumb("files/apis/03-04-body.R")
-e <- pr$endpoints[[1]][[1]]
+r <- plumber::plumb("files/apis/03-04-body.R")
+e <- r$endpoints[[1]][[1]]
 code_chunk(json_serialize(e$exec(req=list(postBody="id=123&name=Jennifer"), id=123, name="Jennifer")), "json")
 ```
 

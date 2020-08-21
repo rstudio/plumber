@@ -70,19 +70,19 @@ reference:
 - title: Router Defaults
   contents:
   - 'pr_set_api_spec'
-  - 'pr_set_ui'
+  - 'pr_set_docs'
   - 'pr_set_serializer'
   - 'pr_set_parsers'
   - 'pr_set_404'
   - 'pr_set_error'
   - 'pr_set_debug'
-  - 'pr_set_ui_callback'
+  - 'pr_set_docs_callback'
 
-- title: API Interface
+- title: Visual Documentation Interface
   contents:
   - 'pr_set_api_spec'
-  - 'pr_set_ui'
-  - 'register_ui'
+  - 'pr_set_docs'
+  - 'register_docs'
   - 'validate_api_spec'
 
 - title: POST Body and Query String Parsers

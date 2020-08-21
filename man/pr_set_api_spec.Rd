@@ -22,8 +22,8 @@ The Plumber router with the new OpenAPI Specification object or function.
 }
 \description{
 When set, it will be called with a character string corresponding
-to the API UI url. This allows RStudio to open \code{swagger} UI when a
-Plumber router \code{\link[=pr_run]{pr_run()}} method is executed using default \code{plumber.ui.callback} option.
+to the API visual documentation url. This allows RStudio to open \code{swagger} docs when a
+Plumber router \code{\link[=pr_run]{pr_run()}} method is executed using default \code{plumber.docs.callback} option.
 }
 \examples{
 \dontrun{

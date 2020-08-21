@@ -43,11 +43,11 @@ defaultPlumberFilters <- list(
 #'  [pr_mount()],
 #'  [pr_hook()], [pr_hooks()], [pr_cookie()],
 #'  [pr_filter()],
-#'  [pr_set_api_spec()], [pr_set_ui()],
+#'  [pr_set_api_spec()], [pr_set_docs()],
 #'  [pr_set_serializer()], [pr_set_parsers()],
 #'  [pr_set_404()], [pr_set_error()],
 #'  [pr_set_debug()],
-#'  [pr_set_ui_callback()]
+#'  [pr_set_docs_callback()]
 #' @include hookable.R
 #' @export
 Plumber <- R6Class(
@@ -91,9 +91,9 @@ Plumber <- R6Class(
       self$setParsers(c("json", "form", "text", "octet", "multi"))
       self$setErrorHandler(defaultErrorHandler())
       self$set404Handler(default404Handler)
-      self$setUi(TRUE)
-      private$ui_info$has_not_been_set <- TRUE # set to know if `$setUi()` has been called before `$run()`
-      self$setUiCallback(getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL)))
+      self$setDocs(TRUE)
+      private$docs_info$has_not_been_set <- TRUE # set to know if `$setDocs()` has been called before `$run()`
+      self$setDocsCallback(getOption('plumber.docs.callback', getOption('plumber.swagger.url', NULL)))
       self$setDebug(interactive())
       self$setApiSpec(NULL)
 
@@ -143,8 +143,8 @@ Plumber <- R6Class(
     #'
     #' This value does not need to be explicitly assigned. To explicity set it, see [options_plumber()].
     #' @param debug Deprecated. See `$setDebug()`
-    #' @param swagger Deprecated. See `$setUi(ui)` or `$setApiSpec()`
-    #' @param swaggerCallback Deprecated. See `$setUiCallback()`
+    #' @param swagger Deprecated. See `$setDocs(docs)` or `$setApiSpec()`
+    #' @param swaggerCallback Deprecated. See `$setDocsCallback()`
     #' @importFrom lifecycle deprecated
     run = function(
       host = '127.0.0.1',
@@ -171,21 +171,21 @@ Plumber <- R6Class(
           self$setApiSpec(swagger)
           # spec is now enabled by default. Do not alter
         } else {
-          if (isTRUE(private$ui_info$has_not_been_set)) {
+          if (isTRUE(private$docs_info$has_not_been_set)) {
             # <= v0.4.6
-            lifecycle::deprecate_warn("1.0.0", "run(swagger = )", "setUi(ui = )")
-            self$setUi(swagger)
+            lifecycle::deprecate_warn("1.0.0", "run(swagger = )", "setDocs(docs = )")
+            self$setDocs(swagger)
           } else {
-            # $setUi() has been called (other than during initialization).
+            # $setDocs() has been called (other than during initialization).
             # Believe that it is the correct behavior
             # Warn about updating the run method
-            lifecycle::deprecate_warn("1.0.0", "run(swagger = )", details = "The plumber UI has already been set. Ignoring `swagger` parameter.")
+            lifecycle::deprecate_warn("1.0.0", "run(swagger = )", details = "The plumber docs have already been set. Ignoring `swagger` parameter.")
           }
         }
       }
       if (lifecycle::is_present(swaggerCallback)) {
-        lifecycle::deprecate_warn("1.0.0", "run(swaggerCallback = )", "setUiCallback(callback = )")
-        self$setUiCallback(swaggerCallback)
+        lifecycle::deprecate_warn("1.0.0", "run(swaggerCallback = )", "setDocsCallback(callback = )")
+        self$setDocsCallback(swaggerCallback)
       }
 
       port <- findPort(port)
@@ -198,15 +198,15 @@ Plumber <- R6Class(
         on.exit({setwd(old_wd)}, add = TRUE)
       }
 
-      if (isTRUE(private$ui_info$enabled)) {
-        mount_ui(
+      if (isTRUE(private$docs_info$enabled)) {
+        mount_docs(
           pr = self,
           host = host,
           port = port,
-          ui_info = private$ui_info,
-          callback = private$ui_callback
+          docs_info = private$docs_info,
+          callback = private$docs_callback
         )
-        on.exit(unmount_ui(self, private$ui_info), add = TRUE)
+        on.exit(unmount_docs(self, private$docs_info), add = TRUE)
       }
 
       on.exit(private$runHooks("exit"), add = TRUE)
@@ -803,45 +803,45 @@ Plumber <- R6Class(
     setErrorHandler = function(fun){
       private$errorHandler <- fun
     },
-    #' @description Set UI to use for API
+    #' @description Set visual documentation to use for API
     #'
-    #' See also: [pr_set_ui()], [register_ui()], [registered_uis()]
-    #' @param ui a character value or a logical value. Defaults to `options("plumber.ui"). See [pr_set_ui()] for examples.
+    #' See also: [pr_set_docs()], [register_docs()], [registered_docs()]
+    #' @param docs a character value or a logical value. See [pr_set_docs()] for examples.
     #'  If using [options_plumber()], the value must be set before initializing your Plumber router.
-    #' @param ... Other params to be passed to `ui` functions.
-    setUi = function(
-      ui = getOption("plumber.ui", TRUE),
+    #' @param ... Other params to be passed to `docs` functions.
+    setDocs = function(
+      docs = getOption("plumber.docs", TRUE),
       ...
     ) {
-      stopifnot(length(ui) == 1)
-      stopifnot(is.logical(ui) || is.character(ui))
-      if (isTRUE(ui)) {
-        ui <- "swagger"
+      stopifnot(length(docs) == 1)
+      stopifnot(is.logical(docs) || is.character(docs))
+      if (isTRUE(docs)) {
+        docs <- "swagger"
       }
-      if (is.character(ui) && is_ui_available(ui)) {
+      if (is.character(docs) && is_docs_available(docs)) {
         enabled <- TRUE
       } else {
         enabled <- FALSE
-        ui <- "__not_enabled__"
+        docs <- "__not_enabled__"
       }
-      private$ui_info <- list(
+      private$docs_info <- list(
         enabled = enabled,
-        ui = ui,
+        docs = docs,
         args = list(...)
       )
     },
-    #' @description Set UI callback to notify where the API is located.
+    #' @description Set a callback to notify where the API's visual documentation is located.
     #'
     #' When set, it will be called with a character string corresponding
-    #' to the API UI url. This allows RStudio to open `swagger` UI when a
+    #' to the API docs url. This allows RStudio to open `swagger` docs when a
     #' Plumber router [pr_run()] method is executed.
     #'
     #' If using [options_plumber()], the value must be set before initializing your Plumber router.
     #'
-    #' See also: [pr_set_ui_callback()]
-    #' @param callback a callback function for taking action on UI url. (Also accepts `NULL` values to disable the `callback`.)
-    setUiCallback = function(
-      callback = getOption('plumber.ui.callback', NULL)
+    #' See also: [pr_set_docs_callback()]
+    #' @param callback a callback function for taking action on the docs url. (Also accepts `NULL` values to disable the `callback`.)
+    setDocsCallback = function(
+      callback = getOption('plumber.docs.callback', NULL)
     ) {
       # Use callback when defined
       if (!length(callback) || !is.function(callback)) {
@@ -850,7 +850,7 @@ Plumber <- R6Class(
       if (length(formals(callback)) == 0) {
         stop("`callback` must accept at least 1 argument. (`api_url`)")
       }
-      private$ui_callback <- callback
+      private$docs_callback <- callback
     },
     #' @description Set debug value to include error messages
     #'
@@ -918,7 +918,7 @@ Plumber <- R6Class(
 
       ret <- private$api_spec_handler(ret)
 
-      # remove NA or NULL values, which UI parsers do not like
+      # remove NA or NULL values, which OpenAPI parsers do not like
       ret <- removeNaOrNulls(ret)
 
       ret
@@ -1071,8 +1071,8 @@ Plumber <- R6Class(
     maxSize = NULL, # Max request size in bytes
 
     api_spec_handler = NULL,
-    ui_info = NULL,
-    ui_callback = NULL,
+    docs_info = NULL,
+    docs_callback = NULL,
     debug = NULL,
 
     addFilterInternal = function(filter){

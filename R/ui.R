@@ -1,11 +1,11 @@
 #' @include globals.R
 
-# Mount OpenAPI and UI
+# Mount OpenAPI and Docs
 #' @noRd
-mount_ui <- function(pr, host, port, ui_info, callback) {
+mount_docs <- function(pr, host, port, docs_info, callback) {
 
   # return early if not enabled
-  if (!isTRUE(ui_info$enabled)) {
+  if (!isTRUE(docs_info$enabled)) {
     return()
   }
 
@@ -24,56 +24,56 @@ mount_ui <- function(pr, host, port, ui_info, callback) {
   # Mount openAPI spec paths openapi.json
   mount_openapi(pr, api_url)
 
-  # Mount UIs
-  if (length(registered_uis()) == 0) {
-    message("No UI available in namespace. See help(register_ui).")
+  # Mount Docs
+  if (length(registered_docs()) == 0) {
+    message("No visual documentation options registered. See help(register_docs).")
     return()
   }
 
-  if (is_ui_available(ui_info$ui)) {
-    ui_mount <- .globals$UIs[[ui_info$ui]]$mount
-    ui_url <- do.call(ui_mount, c(list(pr, api_url), ui_info$args))
-    message("Running ", ui_info$ui, " UI at ", ui_url, sep = "")
+  if (is_docs_available(docs_info$docs)) {
+    docs_mount <- .globals$docs[[docs_info$docs]]$mount
+    docs_url <- do.call(docs_mount, c(list(pr, api_url), docs_info$args))
+    message("Running ", docs_info$docs, " Docs at ", docs_url, sep = "")
   } else {
     return()
   }
 
   # Use callback
   if (is.function(callback)) {
-    callback(ui_url)
+    callback(docs_url)
   }
 
   invisible()
 
 }
 
-# Check is UI is available
+# Check is Docs is available
 #' @noRd
-is_ui_available <- function(ui) {
-  if (isTRUE(ui %in% registered_uis())) {
+is_docs_available <- function(docs) {
+  if (isTRUE(docs %in% registered_docs())) {
     return(TRUE)
   } else {
-    message("Unknown user interface \"", ui,"\". Maybe try library(", ui,").")
+    message("Unknown docs \"", docs,"\". Maybe try library(", docs,").")
     return(FALSE)
   }
 }
 
-# Unmount OpenAPI and UI
+# Unmount OpenAPI and Docs
 #' @noRd
-unmount_ui <- function(pr, ui_info) {
+unmount_docs <- function(pr, docs_info) {
 
   # return early if not enabled
-  if (!isTRUE(ui_info$enabled)) {
+  if (!isTRUE(docs_info$enabled)) {
     return()
   }
 
   # Unount openAPI spec paths openapi.json
   unmount_openapi(pr)
 
-  # Mount UIs
-  ui_unmount <- .globals$UIs[[ui_info$ui]]$unmount
-  if (length(ui_unmount) && is.function(ui_unmount)) {
-    ui_unmount(pr = pr)
+  # Mount Docs
+  docs_unmount <- .globals$docs[[docs_info$docs]]$unmount
+  if (length(docs_unmount) && is.function(docs_unmount)) {
+    docs_unmount(pr = pr)
   }
 }
 
@@ -85,7 +85,7 @@ mount_openapi <- function(pr, api_url) {
 
   # Create a function that's hardcoded to return the OpenAPI specification -- regardless of env.
   openapi_fun <- function(req) {
-    # use the HTTP_REFERER so RSC can find the UI location to ask
+    # use the HTTP_REFERER so RSC can find the Docs location to ask
     ## (can't directly ask for 127.0.0.1)
     if (is.null(getOption("plumber.apiURL")) &&
         is.null(getOption("plumber.apiHost"))) {
@@ -98,7 +98,7 @@ mount_openapi <- function(pr, api_url) {
         api_url <- req$HTTP_REFERER
         api_url <- sub("(\\?.*)?$", "", api_url)
         api_url <- sub("index\\.html$", "", api_url)
-        api_url <- sub(paste0("__(", paste0(registered_uis(), collapse = "|"),")__/$"), "", api_url)
+        api_url <- sub("__docs__/$", "", api_url)
       }
     }
 
@@ -127,24 +127,24 @@ unmount_openapi <- function(pr) {
 
 }
 
-#' Add UI for plumber to use
+#' Add visual documentation for plumber to use
 #'
-#' [register_ui()] is used by other packages like `swagger`.
-#' When you load these packages, it calls [register_ui()] to provide a user
+#' [register_docs()] is used by other packages like `swagger`, `rapidoc`, and `redoc`.
+#' When you load these packages, it calls [register_docs()] to provide a user
 #' interface that can interpret your plumber OpenAPI Specifications.
 #'
-#' @param name Name of the UI
-#' @param index A function that returns the HTML content of the landing page of the UI.
+#' @param name Name of the visual documentation
+#' @param index A function that returns the HTML content of the landing page of the documentation.
 #'   Parameters (besides `req` and `res`) will be supplied as if it is a regular `GET` route.
-#'   Default parameter values may be used when setting the ui.
-#'   Be sure to see the example below.
-#' @param static A function that returns the path to the static assets (images, javascript, css, fonts) the UI will use.
+#'   Default parameter values may be used when setting the documentation `index` function.
+#'   See the example below.
+#' @param static A function that returns the path to the static assets (images, javascript, css, fonts) the Docs will use.
 #'
 #' @export
 #' @examples
 #' \dontrun{
 #' # Example from the `swagger` R package
-#' register_ui(
+#' register_docs(
 #'   name = "swagger",
 #'   index = function(version = "3", ...) {
 #'     swagger::swagger_spec(
@@ -163,17 +163,17 @@ unmount_openapi <- function(pr) {
 #'   }
 #' )
 #'
-#' # When setting the UI, `index` and `static` function arguments can be supplied
-#' # * via `pr_set_ui()`
+#' # When setting the docs, `index` and `static` function arguments can be supplied
+#' # * via `pr_set_docs()`
 #' # * or through URL query string variables
 #' pr() %>%
 #'   # Set default argument `version = 3` for the swagger `index` and `static` functions
-#'   pr_set_ui("swagger", version = 3) %>%
+#'   pr_set_docs("swagger", version = 3) %>%
 #'   pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) %>%
 #'   pr_run()
 #' }
-#' @rdname register_ui
-register_ui <- function(name, index, static = NULL) {
+#' @rdname register_docs
+register_docs <- function(name, index, static = NULL) {
 
   stopifnot(is.character(name) && length(name) == 1L)
   stopifnot(grepl("^[a-zA-Z0-9_]+$", name))
@@ -182,15 +182,15 @@ register_ui <- function(name, index, static = NULL) {
 
   is_swagger <- isTRUE(name == "swagger")
 
-  ui_root <- paste0("/__docs__/")
-  ui_paths <- c("/index.html", "/")
+  docs_root <- paste0("/__docs__/")
+  docs_paths <- c("/index.html", "/")
 
-  mount_ui_func <- function(pr, api_url, ...) {
+  mount_docs_func <- function(pr, api_url, ...) {
 
     # Save initial extra argument values
     args_index <- list(...)
 
-    ui_index <- function(...) {
+    docs_index <- function(...) {
       # Override with arguments provided live with URI (i.e. index.html?version=2)
       args <- utils::modifyList(args_index, list(...))
       # Remove default arguments req and res
@@ -198,20 +198,20 @@ register_ui <- function(name, index, static = NULL) {
       do.call(index, args)
     }
 
-    ui_router <- Plumber$new()
-    for (path in ui_paths) {
-      ui_router$handle("GET", path, ui_index, serializer = serializer_html())
+    docs_router <- Plumber$new()
+    for (path in docs_paths) {
+      docs_router$handle("GET", path, docs_index, serializer = serializer_html())
     }
     if (!is.null(static)) {
-      ui_router$mount("/", PlumberStatic$new(static(...)))
+      docs_router$mount("/", PlumberStatic$new(static(...)))
     }
 
-    if (!is.null(pr$mounts[[ui_root]])) {
-      message("Overwritting existing `", ui_root, "` mount")
+    if (!is.null(pr$mounts[[docs_root]])) {
+      message("Overwritting existing `", docs_root, "` mount")
       message("")
     }
 
-    pr$mount(ui_root, ui_router)
+    pr$mount(docs_root, docs_router)
 
     # add legacy swagger redirects
     if (is_swagger) {
@@ -221,11 +221,11 @@ register_ui <- function(name, index, static = NULL) {
       }
     }
 
-    ui_url <- paste0(api_url, ui_root)
-    return(ui_url)
+    docs_url <- paste0(api_url, docs_root)
+    return(docs_url)
   }
-  unmount_ui_func <- function(pr) {
-    pr$unmount(ui_root)
+  unmount_docs_func <- function(pr) {
+    pr$unmount(docs_root)
 
     # remove legacy swagger redirects
     if (is_swagger) {
@@ -237,18 +237,18 @@ register_ui <- function(name, index, static = NULL) {
     invisible()
   }
 
-  if (is.null(.globals$UIs[[name]])) {
-    .globals$UIs[[name]] <- list()
+  if (is.null(.globals$docs[[name]])) {
+    .globals$docs[[name]] <- list()
   }
-  .globals$UIs[[name]]$mount <- mount_ui_func
-  .globals$UIs[[name]]$unmount <- unmount_ui_func
+  .globals$docs[[name]]$mount <- mount_docs_func
+  .globals$docs[[name]]$unmount <- unmount_docs_func
 
   invisible(name)
 }
 #' @export
-#' @rdname register_ui
-registered_uis <- function() {
-  sort(names(.globals$UIs))
+#' @rdname register_docs
+registered_docs <- function() {
+  sort(names(.globals$docs))
 }
 
 
@@ -270,7 +270,7 @@ swagger_redirects <- function() {
 
 register_swagger_docs_onLoad <- function() {
   tryCatch({
-    do.call(register_ui, swagger::plumber_docs())
+    do.call(register_docs, swagger::plumber_docs())
   }, error = function(e) {
     message("Could not register `swagger` docs. ", e)
     NULL

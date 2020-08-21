@@ -12,7 +12,6 @@ function(req, res) {
 
 #* Example using req$session. Requires adding "session_cookie()" support to your API in order
 #* to work:
-#* `pr <- plumb("file.R"); pr$registerHooks(session_cookie("secret", "cookieName")); pr$run()`
 #* @get /sessionCounter
 function(req){
   count <- 0
@@ -25,3 +24,10 @@ function(req){
 
 #* @assets static
 list()
+
+
+#* @plumber
+function(pr) {
+  pr %>%
+    pr_cookie("secret", "cookieName")
+}

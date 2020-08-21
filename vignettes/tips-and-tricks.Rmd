@@ -59,10 +59,6 @@ options("plumber.port" = httpuv::randomPort(min = 4000, max = 7000, n = 100))
 or more programmatically
 
 ```r
-# Using Plumber methods
-pr <- Plumber$new()
-pr$run(port = httpuv::randomPort(min = 4000, max = 7000, n = 100))
-
-# Using forward-pipe functions
-pr() %>% pr_run(port = httpuv::randomPort(min = 4000, max = 7000, n = 100))
+pr() %>%
+  pr_run(port = httpuv::randomPort(min = 4000, max = 7000, n = 100))
 ```
