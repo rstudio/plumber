@@ -495,3 +495,26 @@ pr_run <- function(pr,
   pr$run(host = host,
          port = port)
 }
+
+
+#' Add a static route to the `plumber` object
+#'
+#' @template param_pr
+#' @param path The mounted path location of the static folder
+#' @param direc The local folder to be served statically
+#'
+#' @examples
+#' \dontrun{
+#' pr() %>%
+#'   pr_static("/path", "./my_folder/location") %>%
+#'   pr_run()
+#' }
+#'
+#' @export
+pr_static <- function(
+  pr,
+  path,
+  direc
+) {
+  pr_mount(pr, path, PlumberStatic$new(direc))
+}
