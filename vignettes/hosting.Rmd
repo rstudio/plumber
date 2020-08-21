@@ -338,8 +338,7 @@ In order to get pm2 to startup your services on boot, you should run `sudo pm2 s
 Once you've deployed your Plumber files onto the server, you'll still need to tell the server *how* to run your server. You're probably used to running commands like
 
 ```r
-pr <- plumb("myfile.R")
-pr$run(port=4500)
+pr("myfile.R") %>% pr_run(port=4500)
 ```
 
 Unfortunately, pm2 doesn't understand R scripts natively; however, it is possible to specify a custom interpreter. We can use this feature to launch an R-based wrapper for our plumber file using the `Rscript` scripting front-end that comes with R. The following script will run the two commands listed above.
@@ -348,8 +347,8 @@ Unfortunately, pm2 doesn't understand R scripts natively; however, it is possibl
 #!/usr/bin/env Rscript
 
 library(plumber)
-pr <- plumb('myfile.R')
-pr$run(port=4000, host="0.0.0.0")
+pr("myfile.R") %>%
+  pr_run(port=4000, host="0.0.0.0")
 # Setting the host option on a VM instance ensures the application can be accessed externally.
 # (This may be only true for Linux users.)
 ```
@@ -374,7 +373,7 @@ At this point, you have a persistent pm2 service created for your Plumber applic
 
 You can repeat this process with all the plumber applications you want to deploy, as long as you give each a unique port to run on. Remember that you can't have more than one service running on a single port. And be sure to `pm2 save` every time you add services that you want to survive a restart.
 
-Run `netstat -tulpn` to see how the application is being ran. If you see the application on host `127.0.0.0` or `127.0.0.1`, the application cannot be accessed externally. You should change the host parameter to `0.0.0.0`, for example: `pr$run(host = "0.0.0.0").
+Run `netstat -tulpn` to see how the application is being ran. If you see the application on host `127.0.0.0` or `127.0.0.1`, the application cannot be accessed externally. You should change the host parameter to `0.0.0.0`, for example: `pr_run(host = "0.0.0.0").
 
 ### Logs and Management
 
@@ -411,7 +410,7 @@ Description=Plumber API
 # (or mariadb, mysql, etc if you use a DB with Plumber, otherwise leave this commented)
 
 [Service]
-ExecStart=/usr/bin/Rscript -e "api <- plumber::plumb('/your-dir/your-api-script.R'); api$run(port=8080, host='0.0.0.0')"
+ExecStart=/usr/bin/Rscript -e "library(plumber); pr('/your-dir/your-api-script.R') %>% pr_run(port=8080, host='0.0.0.0')"
 Restart=on-abnormal
 WorkingDirectory=/your-dir/
 

@@ -95,23 +95,23 @@ This is an example of an API that, in some instance, produces a scalar, and in o
 Visiting http://localhost:8000/boxed?letter=U or http://localhost:8000/unboxed?letter=U will return identical responses:
 
 ```{r, echo=FALSE, results='asis'}
-pr <- plumber::plumb("files/apis/04-03-letters.R")
-e <- pr$endpoints[[1]][[1]]
+r <- plumber::plumb("files/apis/04-03-letters.R")
+e <- r$endpoints[[1]][[1]]
 code_chunk(json_serialize(e$exec(letter="U")), "json")
 ```
 
 However, http://localhost:8000/boxed?letter=Y will produce:
 
 ```{r, echo=FALSE, results='asis'}
-pr <- plumber::plumb("files/apis/04-03-letters.R")
-e <- pr$endpoints[[1]][[1]]
+r <- plumber::plumb("files/apis/04-03-letters.R")
+e <- r$endpoints[[1]][[1]]
 code_chunk(jsonlite::toJSON(e$exec(letter="Y"), auto_unbox = FALSE), "json")
 ```
 
 while http://localhost:8000/unboxed?letter=Y will produce:
 
 ```{r, echo=FALSE, results='asis'}
-e <- pr$endpoints[[1]][[2]]
+e <- r$endpoints[[1]][[2]]
 code_chunk(jsonlite::toJSON(e$exec(letter="Y"), auto_unbox = TRUE))
 ```
 
@@ -167,34 +167,34 @@ If you run this API and visit http://localhost:8000/simple, you'll notice two th
 This means that it is possible for you to intentionally `stop()` in an endpoint or a filter as a way to communicate a problem to your user. However, it may be preferable to render errors from your API in a consistent format with more helpful error messages.
 
 ```{r, echo=FALSE, results='asis'}
-pr <- plumber::plumb("files/apis/04-05-error.R")
-e <- pr$endpoints[[1]][[2]]
+r <- plumber::plumb("files/apis/04-05-error.R")
+e <- r$endpoints[[1]][[2]]
 code_chunk(json_serialize(e$exec(res=list(status=1))), "json")
 ```
 
 A custom error handler can be set using the `setErrorHandler()` method:
 
 ```{r, eval = FALSE}
-pr <- Plumber$new()
-pr$handle("GET", "/simple", function() stop("I'm an error!"))
-pr$setErrorHandler(function(req, res, err){
-  res$status <- 500
-  list(error = "An error occurred. Please contact your administrator.")
-})
-pr$run()
+pr() %>%
+  pr_get("/simple", function() stop("I'm an error!")) %>%
+  pr_set_error(function(req, res, err){
+    res$status <- 500
+    list(error = "An error occurred. Please contact your administrator.")
+  }) %>%
+  pr_run()
 ```
 
 If you run this API and visit http://localhost:8000/simple, you'll notice that the custom error message provided in the error handler is included in the browser. Since we didn't do anything with the actual error message, nothing is printed to the console. If we wanted to include the error in the console, we could do the following:
 
 ```{r, eval = FALSE}
-pr <- Plumber$new()
-pr$handle("GET", "/simple", function() stop("I'm an error!"))
-pr$setErrorHandler(function(req, res, err){
-  print(err)
-  res$status <- 500
-  list(error = "An error occurred. Please contact your administrator.")
-})
-pr$run()
+pr() %>%
+  pr_get("/simple", function() stop("I'm an error!")) %>%
+  pr_set_error(function(req, res, err){
+    print(err)
+    res$status <- 500
+    list(error = "An error occurred. Please contact your administrator.")
+  }) %>%
+  pr_run()
 ```
 
 The function passed to `setErrorHandler` will be invoked anytime R execution fails with an error.
@@ -215,8 +215,8 @@ Plumber can both set and receive plaint-text cookies. The API endpoint below wil
 Since this API is using a `PUT` request to test this API, we'll use `curl` on the command line to test it. (There's nothing about cookies that necessitates `PUT` requests; you could just as easily modify this API to use a `GET` request.) We can start by visiting the `/letter` endpoint and we'll see that the API defaults to a lower-case alphabet. `curl http://localhost:8000/letter`
 
 ```{r, echo=FALSE, results='asis'}
-pr <- plumber::plumb("files/apis/06-01-capitalize.R")
-e <- pr$endpoints[[1]][[2]]
+r <- plumber::plumb("files/apis/06-01-capitalize.R")
+e <- r$endpoints[[1]][[2]]
 code_chunk(json_serialize(e$exec(req=list(cookies=list()))), "json")
 ```
 
@@ -239,7 +239,7 @@ In addition to storing plain-text cookies, Plumber also supports handling cookie
 To use this feature, you must explicitly add it to your router after constructing it. For example, you could run the following sequence of commands to create a router that supports encrypted session cookies.
 
 ```r
-plumb("myfile.R") %>%
+pr("myfile.R") %>%
   pr_cookie("mySecretHere", "cookieName") %>%
   pr_run()
 ```

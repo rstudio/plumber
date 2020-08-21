@@ -89,11 +89,11 @@ One important consideration for any of these options is to ensure that they are 
 It may be useful to define a function that you want to run as your API is closing -- for instance, if you have a pool of database connections that need to be cleaned up when your Plumber process is being terminated. You can use the `exit` hook to define such a handler.
 
 ```r
-pr <- plumb("plumber.R")
-pr$registerHook("exit", function(){
-  print("Bye bye!")
-})
-pr$run()
+pr("plumber.R") %>%
+  pr_hook("exit", function(){
+    print("Bye bye!")
+  })
+  pr_run()
 ```
 
 When you interrupt the API (for instance by pressing the `Escape` key or `Ctrl+C`) you'll see `Bye bye!` printed to the console. You can even register multiple `exit` hooks and they'll be run in the order in which they were registered.

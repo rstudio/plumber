@@ -53,8 +53,8 @@ However, there are practices that you should employ when designing your Plumber 
 The expected output here is a harmless plot.
 
 ```{r, echo=FALSE, results='asis'}
-pr <- plumber::plumb("files/apis/07-01-plot-unsafe.R")
-e <- pr$endpoints[[1]][[1]]
+r <- plumber::plumb("files/apis/07-01-plot-unsafe.R")
+e <- r$endpoints[[1]][[1]]
 res <- plumber:::PlumberResponse$new()
 
 # Reach in to the private func and generate the image.
