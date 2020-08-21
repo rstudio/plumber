@@ -19,8 +19,8 @@ test_that("custom OpenAPI Specification update function works", {
   # Should get a message that wribbit is unknown if library is not loaded
   pr$run(port = 1234)
 
-  # validate that http://127.0.0.1:1234/__swagger__/ displays the system time as the api title
-  # http://127.0.0.1:1234/__swagger__/
+  # validate that http://127.0.0.1:1234/__docs__/ displays the system time as the api title
+  # http://127.0.0.1:1234/__docs__/
   pr$setDocs(docs = TRUE)
   pr$run(port = 1234)
   pr$setDocs(docs = "swagger")
@@ -39,17 +39,17 @@ test_that("host doesn't change for messages, but does for RStudio IDE", {
     "0.0.0.0", port = 1234
   )
   #> Running plumber API at http://0.0.0.0:1234
-  #> Running Swagger Docs at http://127.0.0.1:1234/__swagger__/
+  #> Running Swagger Docs at http://127.0.0.1:1234/__docs__/
 
   pr$run(
     "::", port = 1234
   )
   #> Running plumber API at http://[::]:1234
-  #> Running Swagger Docs at http://[::1]:1234/__swagger__/
+  #> Running Swagger Docs at http://[::1]:1234/__docs__/
 
 
   # Verify that the output matches the output above.
-  # if in RStudio IDE, verify that the window opened, opens to http://127.0.0.1:1234/__swagger__/ or http://[::1]:1234/__swagger__/
-  # verify that the swagger route (from messages) works in a web browser http://127.0.0.1:1234/__swagger__/ or http://[::1]:1234/__swagger__/
+  # if in RStudio IDE, verify that the window opened, opens to http://127.0.0.1:1234/__docs__/ or http://[::1]:1234/__docs__/
+  # verify that the swagger route (from messages) works in a web browser http://127.0.0.1:1234/__docs__/ or http://[::1]:1234/__docs__/
   # Verify that http://0.0.0.0/tail or http://[::1]:1234/tail executes
 })

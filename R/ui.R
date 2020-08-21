@@ -151,7 +151,7 @@ unmount_openapi <- function(pr) {
 #'       api_path = paste0(
 #'         "window.location.origin + ",
 #'         "window.location.pathname.replace(",
-#'           "/\\(__swagger__\\\\/|__swagger__\\\\/index.html\\)$/, \"\"",
+#'           "/\\(__docs__\\\\/|__docs__\\\\/index.html\\)$/, \"\"",
 #'         ") + ",
 #'         "\"openapi.json\""
 #'       ),
@@ -180,7 +180,9 @@ register_docs <- function(name, index, static = NULL) {
   stopifnot(is.function(index))
   if (!is.null(static)) stopifnot(is.function(static))
 
-  docs_root <- paste0("/__", name, "__/")
+  is_swagger <- isTRUE(name == "swagger")
+
+  docs_root <- paste0("/__docs__/")
   docs_paths <- c("/index.html", "/")
 
   mount_docs_func <- function(pr, api_url, ...) {
@@ -211,11 +213,27 @@ register_docs <- function(name, index, static = NULL) {
 
     pr$mount(docs_root, docs_router)
 
+    # add legacy swagger redirects
+    if (is_swagger) {
+      redirect_info <- swagger_redirects()
+      for (path in names(redirect_info)) {
+        pr_get(pr, path, redirect_info[[path]])
+      }
+    }
+
     docs_url <- paste0(api_url, docs_root)
     return(docs_url)
   }
   unmount_docs_func <- function(pr) {
     pr$unmount(docs_root)
+
+    # remove legacy swagger redirects
+    if (is_swagger) {
+      redirect_info <- swagger_redirects()
+      for (path in names(redirect_info)) {
+        pr$removeHandle("GET", path)
+      }
+    }
     invisible()
   }
 
@@ -233,21 +251,28 @@ registered_docs <- function() {
   sort(names(.globals$docs))
 }
 
-# TODO: Remove once UI load code moved to respective UI package
-swagger_ui <- list(
-  name = "swagger",
-  index = function(version = "3", ...) {
-    swagger::swagger_spec(
-      api_path = 'window.location.origin + window.location.pathname.replace(/\\(__swagger__\\\\/|__swagger__\\\\/index.html\\)$/, "") + "openapi.json"',
-      version = version
-    )
-  },
-  static = function(version = "3", ...) {
-    swagger::swagger_path(version)
-  }
-)
 
-#' @noRd
-register_uis_onLoad <- function() {
-  register_ui(swagger_ui$name, swagger_ui$index, swagger_ui$static)
+swagger_redirects <- function() {
+  to_route <- function(route) {
+    function(req, res) {
+      res$status <- 301 # redirect permanently
+      res$setHeader("Location", route)
+      res$body <- "redirecting..."
+      res
+    }
+  }
+  list(
+    "/__swagger__/" = to_route("../__docs__/"),
+    "/__swagger__/index.html"  = to_route("../__docs__/index.html")
+  )
+}
+
+
+register_swagger_docs_onLoad <- function() {
+  tryCatch({
+    do.call(register_ui, swagger::plumber_docs())
+  }, error = function(e) {
+    message("Could not register `swagger` docs. ", e)
+    NULL
+  })
 }
