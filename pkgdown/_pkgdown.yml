@@ -58,6 +58,7 @@ reference:
   - 'pr_head'
   - 'pr_handle'
   - 'pr_mount'
+  - 'pr_static'
 
 - title: Router Hooks
   contents:

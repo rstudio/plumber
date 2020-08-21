@@ -55,6 +55,15 @@ test_that("pr_mount mounts router", {
   expect_equal(length(p2$mounts), 1)
 })
 
+test_that("pr_static mounts a static router", {
+  p1 <- pr() %>%
+    pr_static("/ex", system.file("plumber", package = "plumber"))
+
+  expect_equal(length(p1$mounts), 1)
+  expect_equal(names(p1$mounts), "/ex/")
+  expect_s3_class(p1$mounts[[1]], "PlumberStatic")
+})
+
 test_that("pr_hooks registers hooks", {
   p <- pr() %>%
     pr_hook("preroute", function() print("Pre-route hook")) %>%
