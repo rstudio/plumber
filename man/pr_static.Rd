@@ -9,7 +9,7 @@ pr_static(pr, path, direc)
 \arguments{
 \item{pr}{A Plumber API. Note: The supplied Plumber API object will also be updated in place as well as returned by the function.}
 
-\item{path}{The root path location of the static folder}
+\item{path}{The mounted path location of the static folder}
 
 \item{direc}{The local folder to be served statically}
 }
