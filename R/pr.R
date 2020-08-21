@@ -500,7 +500,7 @@ pr_run <- function(pr,
 #' Add a static route to the `plumber` object
 #'
 #' @template param_pr
-#' @param path The root path location of the static folder
+#' @param path The mounted path location of the static folder
 #' @param direc The local folder to be served statically
 #'
 #' @examples
