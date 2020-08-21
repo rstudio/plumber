@@ -806,7 +806,7 @@ Plumber <- R6Class(
     #' @description Set visual documentation to use for API
     #'
     #' See also: [pr_set_docs()], [register_docs()], [registered_docs()]
-    #' @param docs a character value or a logical value. Defaults to `options("plumber.docs"). See [pr_set_docs()] for examples.
+    #' @param docs a character value or a logical value. See [pr_set_docs()] for examples.
     #'  If using [options_plumber()], the value must be set before initializing your Plumber router.
     #' @param ... Other params to be passed to `docs` functions.
     setDocs = function(

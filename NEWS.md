@@ -57,7 +57,7 @@ plumber 1.0.0
 #### Plumber Router
 
 * Added support for promises in endpoints, filters, and hooks. (#248)
-* Added a Tidy API for easier programmatic usage (@blairj09, #590)
+* Added a Tidy API for more natural usage with magrittr's `%>%`. For example, a plumber object can now be initiated and run with `pr() %>% pr_run(port = 8080)`. For more examples, see [here](https://www.rplumber.io/articles/programmatic-usage.html) (@blairj09, #590)
 * Added support for `#' @plumber` tag to gain programmatic access to the `plumber` router via `function(pr) {....}`. (@meztez and @blairj09, #568)
 * Added `plumb_api()` for standardizing where to locate (`inst/plumber`) and how to run (`plumb_api(package, name)`) plumber apis inside an R package. To view the available Plumber APIs, call `available_apis()`. (#631)
 
