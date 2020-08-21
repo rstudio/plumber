@@ -73,8 +73,6 @@ plumber 1.0.0
 
 * Added user provided OpenAPI Specification handler to Plumber router. Use `$set_api_spec()` to provide a function to alter the Plumber generated OpenAPI Specification returned by Plumber router method `$get_api_spec()`. This also affects `/openapi.json` and `/openapi.yaml` (#365)(@meztez, #562)
 
-* Added support to a router's run method to allow the `swagger` parameter to be a function that
-  enhances the existing swagger specification before being returned to `/openapi.json`. (#365)
 
 * Documentation is presented using pkgdown (#570)
 
