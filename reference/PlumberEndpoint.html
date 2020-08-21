@@ -236,36 +236,36 @@ each separate verb/path into its own endpoint, so we just do that.</p></dd>
 
 <hr>
 <a id="method-getTypedParams"></a></p><h3>Method <code>getTypedParams()</code></h3>
-<p>retrieve endpoint typed parameters</p><h3>Usage</h3>
+<p>retrieve endpoint typed parameters</p><h4>Usage</h4>
 <p><div class="r"></p><pre><span class='kw'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>getTypedParams</span>()</pre><p></div></p>
 
 <p><hr>
 <a id="method-canServe"></a></p><h3>Method <code>canServe()</code></h3>
-<p>ability to serve request</p><h3>Usage</h3>
+<p>ability to serve request</p><h4>Usage</h4>
 <p><div class="r"></p><pre><span class='kw'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>canServe</span>(<span class='kw'>req</span>)</pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>req</code></dt><dd><p>a request object</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
+<h4>Returns</h4>
 <p>a logical. <code>TRUE</code> when endpoint can serve request.</p>
 <p><hr>
 <a id="method-matchesPath"></a></p><h3>Method <code>matchesPath()</code></h3>
-<p>determines if route matches requested path</p><h3>Usage</h3>
+<p>determines if route matches requested path</p><h4>Usage</h4>
 <p><div class="r"></p><pre><span class='kw'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>matchesPath</span>(<span class='kw'>path</span>)</pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>path</code></dt><dd><p>a url path</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
+<h4>Returns</h4>
 <p>a logical. <code>TRUE</code> when endpoint matches the requested path.</p>
 <p><hr>
 <a id="method-new"></a></p><h3>Method <code>new()</code></h3>
-<p>Create a new <code>PlumberEndpoint</code> object</p><h3>Usage</h3>
+<p>Create a new <code>PlumberEndpoint</code> object</p><h4>Usage</h4>
 <p><div class="r"></p><pre><span class='kw'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>new</span>(
   <span class='kw'>verbs</span>,
   <span class='kw'>path</span>,
@@ -280,7 +280,7 @@ each separate verb/path into its own endpoint, so we just do that.</p></dd>
   <span class='kw'>tags</span>
 )</pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>verbs</code></dt><dd><p>Endpoint verb Ex: <code>"GET"</code>, <code>"POST"</code></p></dd>
 
@@ -312,34 +312,34 @@ When using a list, parser information already defined will maintain their existi
 <dt><code>comments, responses, tags</code></dt><dd><p>Values to be used within the OpenAPI Spec</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
+<h4>Returns</h4>
 <p>A new <code>PlumberEndpoint</code> object</p>
 <p><hr>
 <a id="method-getPathParams"></a></p><h3>Method <code>getPathParams()</code></h3>
-<p>retrieve endpoint path parameters</p><h3>Usage</h3>
+<p>retrieve endpoint path parameters</p><h4>Usage</h4>
 <p><div class="r"></p><pre><span class='kw'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>getPathParams</span>(<span class='kw'>path</span>)</pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>path</code></dt><dd><p>endpoint path</p></dd>
 
 </dl><p></div></p>
 <p><hr>
 <a id="method-getFuncParams"></a></p><h3>Method <code>getFuncParams()</code></h3>
-<p>retrieve endpoint expression parameters</p><h3>Usage</h3>
+<p>retrieve endpoint expression parameters</p><h4>Usage</h4>
 <p><div class="r"></p><pre><span class='kw'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>getFuncParams</span>()</pre><p></div></p>
 
 <p><hr>
 <a id="method-getEndpointParams"></a></p><h3>Method <code>getEndpointParams()</code></h3>
-<p>retrieve endpoint defined parameters</p><h3>Usage</h3>
+<p>retrieve endpoint defined parameters</p><h4>Usage</h4>
 <p><div class="r"></p><pre><span class='kw'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>getEndpointParams</span>()</pre><p></div></p>
 
 <p><hr>
 <a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
-<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
+<p>The objects of this class are cloneable with this method.</p><h4>Usage</h4>
 <p><div class="r"></p><pre><span class='kw'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>clone</span>(deep = <span class='fl'>FALSE</span>)</pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
 
