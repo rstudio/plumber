@@ -45,7 +45,7 @@ Suggests:
     feather,
     future
 Remotes:
-    rstudio/swagger#13
+    rstudio/swagger
 RoxygenNote: 7.1.1
 Collate:
     'async.R'
