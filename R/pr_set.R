@@ -124,7 +124,7 @@ pr_set_debug <- function(pr, debug = interactive()) {
 }
 
 
-#' Set the API user interface
+#' Set the API visual documentation
 #'
 #' `docs` should be either a logical or a character value matching a registered visual documentation.
 #' When `TRUE` or a
@@ -192,7 +192,7 @@ pr_set_docs <- function(
 }
 
 
-#' Set the `callback` to tell where the API user interface is located
+#' Set the `callback` to tell where the API visual documentation is located
 #'
 #' When set, it will be called with a character string corresponding
 #' to the API visual documentation url. This allows RStudio to open `swagger` docs when a

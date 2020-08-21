@@ -53,7 +53,7 @@ is_docs_available <- function(docs) {
   if (isTRUE(docs %in% registered_docs())) {
     return(TRUE)
   } else {
-    message("Unknown user interface \"", docs,"\". Maybe try library(", docs,").")
+    message("Unknown docs \"", docs,"\". Maybe try library(", docs,").")
     return(FALSE)
   }
 }

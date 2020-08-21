@@ -2,7 +2,7 @@
 % Please edit documentation in R/pr_set.R
 \name{pr_set_docs_callback}
 \alias{pr_set_docs_callback}
-\title{Set the \code{callback} to tell where the API user interface is located}
+\title{Set the \code{callback} to tell where the API visual documentation is located}
 \usage{
 pr_set_docs_callback(pr, callback = getOption("plumber.docs.callback", NULL))
 }

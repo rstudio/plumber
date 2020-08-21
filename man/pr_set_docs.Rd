@@ -2,7 +2,7 @@
 % Please edit documentation in R/pr_set.R
 \name{pr_set_docs}
 \alias{pr_set_docs}
-\title{Set the API user interface}
+\title{Set the API visual documentation}
 \usage{
 pr_set_docs(pr, docs = getOption("plumber.docs", TRUE), ...)
 }
