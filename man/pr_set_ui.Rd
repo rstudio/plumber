@@ -22,7 +22,7 @@ The Plumber router with the new UI settings.
 When \code{TRUE} or a
 function, multiple handles will be added to \code{\link{Plumber}} object. OpenAPI json
 file will be served on paths \verb{/openapi.json} and \verb{/swagger.json}. Swagger UI
-will be served on paths \verb{/__swagger__/index.html} and \verb{/__swagger__/}. When
+will be served on paths \verb{/__docs__/index.html} and \verb{/__docs__/}. When
 using a function, it will receive the Plumber router as the first parameter
 and current OpenAPI Specification as the second. This function should return a
 list containing OpenAPI Specification.

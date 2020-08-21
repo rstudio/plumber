@@ -28,7 +28,7 @@ Imports:
     crayon,
     promises (>= 1.1.0),
     sodium,
-    swagger (> 3.20.3),
+    swagger (>= 3.20.3.99991),
     magrittr,
     lifecycle
 LazyData: TRUE
@@ -45,7 +45,7 @@ Suggests:
     feather,
     future
 Remotes:
-    rstudio/swagger
+    rstudio/swagger#13
 RoxygenNote: 7.1.1
 Collate:
     'async.R'
