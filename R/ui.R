@@ -255,7 +255,7 @@ registered_uis <- function() {
 swagger_redirects <- function() {
   to_route <- function(route) {
     function(req, res) {
-      res$status <- 303 # redirect permanently
+      res$status <- 301 # redirect permanently
       res$setHeader("Location", route)
       res$body <- "redirecting..."
       res
