@@ -147,6 +147,8 @@ both UIs integration are available from https://github.com/meztez/rapidoc/ and h
 
 ### Bug fixes
 
+* Paths that are missing a leading `/` have a `/` prepended to the path location. (#656)
+
 * Handle plus signs in URI as space characters instead of actual plus signs (@meztez, #618)
 
 * Modified images serialization to use content-type serializer. Fixes issue with images pre/postserialize hooks (@meztez, #518).
