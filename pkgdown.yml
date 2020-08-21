@@ -2,7 +2,7 @@ pandoc: 2.7.3
 pkgdown: 1.5.1.9000
 pkgdown_sha: add5b7df498dcc2b6d36313297d657f14b775af3
 articles: []
-last_built: 2020-08-21T17:46Z
+last_built: 2020-08-21T18:36Z
 urls:
   reference: https://www.rplumber.io/reference
   article: https://www.rplumber.io/articles

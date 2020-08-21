@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Register a Serializer — register_serializer • plumber</title>
+<title>Add a static route to the plumber object — pr_static • plumber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,11 +52,8 @@
 
 
 
-<meta property="og:title" content="Register a Serializer — register_serializer" />
-<meta property="og:description" content="A serializer is responsible for translating a generated R value into output
-that a remote user can understand. For instance, the serializer_json
-serializes R objects into JSON before returning them to the user. The list of
-available serializers in plumber is global." />
+<meta property="og:title" content="Add a static route to the plumber object — pr_static" />
+<meta property="og:description" content="Add a static route to the plumber object" />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
 
 
@@ -173,80 +170,42 @@ available serializers in plumber is global." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Register a Serializer</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/serializer.R'><code>R/serializer.R</code></a></small>
-    <div class="hidden name"><code>register_serializer.Rd</code></div>
+    <h1>Add a static route to the <code>plumber</code> object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/pr.R'><code>R/pr.R</code></a></small>
+    <div class="hidden name"><code>pr_static.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A serializer is responsible for translating a generated R value into output
-that a remote user can understand. For instance, the <code>serializer_json</code>
-serializes R objects into JSON before returning them to the user. The list of
-available serializers in plumber is global.</p>
+    <p>Add a static route to the <code>plumber</code> object</p>
     </div>
 
-    <pre class="usage"><span class='fu'>register_serializer</span>(<span class='kw'>name</span>, <span class='kw'>serializer</span>, verbose = <span class='fl'>TRUE</span>)
-
-<span class='fu'>registered_serializers</span>()</pre>
+    <pre class="usage"><span class='fu'>pr_static</span>(<span class='kw'>pr</span>, <span class='kw'>path</span>, <span class='kw'>direc</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>name</th>
-      <td><p>The name of the serializer (character string)</p></td>
+      <th>pr</th>
+      <td><p>A Plumber API. Note: The supplied Plumber API object will also be updated in place as well as returned by the function.</p></td>
     </tr>
     <tr>
-      <th>serializer</th>
-      <td><p>The serializer function to be added.
-This function should accept arguments that can be supplied when <code><a href='plumb.html'>plumb()</a></code>ing a file.
-This function should return a function that accepts four arguments: <code>value</code>, <code>req</code>, <code>res</code>, and <code>errorHandler</code>.
-See <code><a href='https://rdrr.io/r/base/print.html'>print(serializer_json)</a></code> for an example.</p></td>
+      <th>path</th>
+      <td><p>The mounted path location of the static folder</p></td>
     </tr>
     <tr>
-      <th>verbose</th>
-      <td><p>Logical value which determines if a message should be printed when overwriting serializers</p></td>
+      <th>direc</th>
+      <td><p>The local folder to be served statically</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>There are three main building-block serializers:</p><ul>
-<li><p><code>serializer_headers</code>: the base building-block serializer that is required to have <code><a href='as_attachment.html'>as_attachment()</a></code> work</p></li>
-<li><p><code><a href='serializer_headers.html'>serializer_content_type()</a></code>: for setting the content type. (Calls <code><a href='serializer_headers.html'>serializer_headers()</a></code>)</p></li>
-<li><p><code><a href='serializer_headers.html'>serializer_device()</a></code>: add endpoint hooks to turn a graphics device on and off in addition to setting the content type. (Uses <code><a href='serializer_headers.html'>serializer_content_type()</a></code>)</p></li>
-</ul>
-
-    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
-
-    
-<ul>
-<li><p><code>register_serializer</code>: Register a serializer with a name</p></li>
-<li><p><code>registered_serializers</code>: Return a list of all registered serializers</p></li>
-</ul>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># `serializer_json()` calls `serializer_content_type()` and supplies a serialization function</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>serializer_json</span>)</div><div class='output co'>#&gt; function (..., type = "application/json") 
-#&gt; {
-#&gt;     serializer_content_type(type, function(val) {
-#&gt;         toJSON(val, ...)
-#&gt;     })
-#&gt; }
-#&gt; &lt;bytecode: 0x7fbdf5c73030&gt;
-#&gt; &lt;environment: namespace:plumber&gt;</div><div class='input'><span class='co'># serializer_content_type() calls `serializer_headers()` and supplies a serialization function</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>serializer_content_type</span>)</div><div class='output co'>#&gt; function (type, serialize_fn = identity) 
-#&gt; {
-#&gt;     if (missing(type)) {
-#&gt;         stop("You must provide the custom content type to the serializer_content_type")
-#&gt;     }
-#&gt;     stopifnot(length(type) == 1)
-#&gt;     stopifnot(is.character(type))
-#&gt;     stopifnot(nchar(type) &gt; 0)
-#&gt;     serializer_headers(list(`Content-Type` = type), serialize_fn)
-#&gt; }
-#&gt; &lt;bytecode: 0x7fbdf5c7da08&gt;
-#&gt; &lt;environment: namespace:plumber&gt;</div></pre>
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
+  <span class='fu'>pr_static</span>(<span class='st'>"/path"</span>, <span class='st'>"./my_folder/location"</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
