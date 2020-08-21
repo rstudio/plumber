@@ -107,7 +107,7 @@ pr$setErrorHandler(function(req, res, err) {
 \code{\link[=pr_mount]{pr_mount()}},
 \code{\link[=pr_hook]{pr_hook()}}, \code{\link[=pr_hooks]{pr_hooks()}}, \code{\link[=pr_cookie]{pr_cookie()}},
 \code{\link[=pr_filter]{pr_filter()}},
-\code{\link[=pr_set_api_spec]{pr_set_api_spec()}}, \code{\link[=pr_set_ui]{pr_set_ui()}},
+\code{\link[=pr_set_api_spec]{pr_set_api_spec()}}, \code{\link[=pr_set_docs]{pr_set_docs()}},
 \code{\link[=pr_set_serializer]{pr_set_serializer()}}, \code{\link[=pr_set_parsers]{pr_set_parsers()}},
 \code{\link[=pr_set_404]{pr_set_404()}}, \code{\link[=pr_set_error]{pr_set_error()}},
 \code{\link[=pr_set_debug]{pr_set_debug()}},
@@ -151,7 +151,7 @@ pr$setErrorHandler(function(req, res, err) {
 \item \href{#method-setParsers}{\code{Plumber$setParsers()}}
 \item \href{#method-set404Handler}{\code{Plumber$set404Handler()}}
 \item \href{#method-setErrorHandler}{\code{Plumber$setErrorHandler()}}
-\item \href{#method-setUi}{\code{Plumber$setUi()}}
+\item \href{#method-setDocs}{\code{Plumber$setDocs()}}
 \item \href{#method-setDocsCallback}{\code{Plumber$setDocsCallback()}}
 \item \href{#method-setDebug}{\code{Plumber$setDebug()}}
 \item \href{#method-getDebug}{\code{Plumber$getDebug()}}
@@ -230,7 +230,7 @@ Mac OS X, port numbers smaller than 1025 require root privileges.
 
 This value does not need to be explicitly assigned. To explicity set it, see \code{\link[=options_plumber]{options_plumber()}}.}
 
-\item{\code{swagger}}{Deprecated. See \verb{$setUi(ui)} or \verb{$setApiSpec()}}
+\item{\code{swagger}}{Deprecated. See \verb{$setDocs(docs)} or \verb{$setApiSpec()}}
 
 \item{\code{debug}}{Deprecated. See \verb{$setDebug()}}
 
@@ -709,23 +709,23 @@ pr$setErrorHandler(function(req, res, err) {
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setUi"></a>}}
-\if{latex}{\out{\hypertarget{method-setUi}{}}}
-\subsection{Method \code{setUi()}}{
-Set UI to use for API
+\if{html}{\out{<a id="method-setDocs"></a>}}
+\if{latex}{\out{\hypertarget{method-setDocs}{}}}
+\subsection{Method \code{setDocs()}}{
+Set visual documentation to use for API
 
-See also: \code{\link[=pr_set_ui]{pr_set_ui()}}, \code{\link[=register_ui]{register_ui()}}, \code{\link[=registered_uis]{registered_uis()}}
+See also: \code{\link[=pr_set_docs]{pr_set_docs()}}, \code{\link[=register_docs]{register_docs()}}, \code{\link[=registered_docs]{registered_docs()}}
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Plumber$setUi(ui = getOption("plumber.ui", TRUE), ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$setDocs(docs = getOption("plumber.docs", TRUE), ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{ui}}{a character value or a logical value. Defaults to `options("plumber.ui"). See \code{\link[=pr_set_ui]{pr_set_ui()}} for examples.
+\item{\code{docs}}{a character value or a logical value. Defaults to `options("plumber.docs"). See \code{\link[=pr_set_docs]{pr_set_docs()}} for examples.
 If using \code{\link[=options_plumber]{options_plumber()}}, the value must be set before initializing your Plumber router.}
 
-\item{\code{...}}{Other params to be passed to \code{ui} functions.}
+\item{\code{...}}{Other params to be passed to \code{docs} functions.}
 }
 \if{html}{\out{</div>}}
 }
@@ -734,23 +734,23 @@ If using \code{\link[=options_plumber]{options_plumber()}}, the value must be se
 \if{html}{\out{<a id="method-setDocsCallback"></a>}}
 \if{latex}{\out{\hypertarget{method-setDocsCallback}{}}}
 \subsection{Method \code{setDocsCallback()}}{
-Set UI callback to notify where the API is located.
+Set a callback to notify where the API's visual documentation is located.
 
 When set, it will be called with a character string corresponding
-to the API UI url. This allows RStudio to open \code{swagger} UI when a
+to the API docs url. This allows RStudio to open \code{swagger} docs when a
 Plumber router \code{\link[=pr_run]{pr_run()}} method is executed.
 
 If using \code{\link[=options_plumber]{options_plumber()}}, the value must be set before initializing your Plumber router.
 
 See also: \code{\link[=pr_set_docs_callback]{pr_set_docs_callback()}}
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Plumber$setDocsCallback(callback = getOption("plumber.ui.callback", NULL))}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$setDocsCallback(callback = getOption("plumber.docs.callback", NULL))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{callback}}{a callback function for taking action on UI url. (Also accepts \code{NULL} values to disable the \code{callback}.)}
+\item{\code{callback}}{a callback function for taking action on the docs url. (Also accepts \code{NULL} values to disable the \code{callback}.)}
 }
 \if{html}{\out{</div>}}
 }

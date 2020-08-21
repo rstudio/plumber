@@ -4,22 +4,19 @@
 \alias{pr_set_docs_callback}
 \title{Set the \code{callback} to tell where the API user interface is located}
 \usage{
-pr_set_docs_callback(
-  pr,
-  callback = getOption("plumber.ui.callback", getOption("plumber.swagger.url", NULL))
-)
+pr_set_docs_callback(pr, callback = getOption("plumber.docs.callback", NULL))
 }
 \arguments{
 \item{pr}{A Plumber API. Note: The supplied Plumber API object will also be updated in place as well as returned by the function.}
 
-\item{callback}{a callback function for taking action on UI url.}
+\item{callback}{a callback function for taking action on the docs url.}
 }
 \value{
-The Plumber router with the new UI callback setting.
+The Plumber router with the new docs callback setting.
 }
 \description{
 When set, it will be called with a character string corresponding
-to the API UI url. This allows RStudio to open \code{swagger} UI when a
+to the API visual documentation url. This allows RStudio to open \code{swagger} docs when a
 Plumber router \code{\link[=pr_run]{pr_run()}} method.
 }
 \details{

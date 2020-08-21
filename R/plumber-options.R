@@ -43,7 +43,7 @@
 options_plumber <- function(
   port                 = getOption("plumber.port"),
   docs                 = getOption("plumber.docs"),
-  docs.callback        = getOption("plumber.docs.callback")
+  docs.callback        = getOption("plumber.docs.callback"),
   apiURL               = getOption("plumber.apiURL"),
   apiScheme            = getOption("plumber.apiScheme"),
   apiHost              = getOption("plumber.apiHost"),
@@ -51,7 +51,7 @@ options_plumber <- function(
   apiPath              = getOption("plumber.apiPath"),
   maxRequestSize       = getOption("plumber.maxRequestSize"),
   postBody             = getOption("plumber.postBody"),
-  sharedSecret         = getOption("plumber.sharedSecret"),
+  sharedSecret         = getOption("plumber.sharedSecret")
 ) {
   options(
     plumber.apiScheme = apiScheme,

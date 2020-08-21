@@ -270,7 +270,7 @@ swagger_redirects <- function() {
 
 register_swagger_docs_onLoad <- function() {
   tryCatch({
-    do.call(register_ui, swagger::plumber_docs())
+    do.call(register_docs, swagger::plumber_docs())
   }, error = function(e) {
     message("Could not register `swagger` docs. ", e)
     NULL
