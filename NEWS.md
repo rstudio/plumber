@@ -36,8 +36,6 @@ plumber 1.0.0
   non-ASCII characters (@shrektan, #312,
   #328).
 
-* R repository modified to `focal-cran40` using Ubuntu 20.04 LTS for digital ocean provisioning (@meztez, #529)
-
 * `options(plumber.debug)` is not set anymore when running the plumber application. Instead retrieve the debug value using `$getDebug()` on the Plumber router directly. Ex: `function(req, res) { req$pr$getDebug() }`. (#639)
 
 ### Deprecations
