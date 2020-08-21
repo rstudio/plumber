@@ -207,16 +207,16 @@ pr_set_ui <- function(
 #' @examples
 #' \dontrun{
 #' pr() %>%
-#'   pr_set_ui_callback(function(url) { message("API location: ", url) }) %>%
+#'   pr_set_docs_callback(function(url) { message("API location: ", url) }) %>%
 #'   pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) %>%
 #'   pr_run()
 #' }
-pr_set_ui_callback <- function(
+pr_set_docs_callback <- function(
   pr,
   callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL))
 ) {
   validate_pr(pr)
-  pr$setUiCallback(callback = callback)
+  pr$setDocsCallback(callback = callback)
   invisible(pr)
 }
 

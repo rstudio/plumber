@@ -47,7 +47,7 @@ defaultPlumberFilters <- list(
 #'  [pr_set_serializer()], [pr_set_parsers()],
 #'  [pr_set_404()], [pr_set_error()],
 #'  [pr_set_debug()],
-#'  [pr_set_ui_callback()]
+#'  [pr_set_docs_callback()]
 #' @include hookable.R
 #' @export
 Plumber <- R6Class(
@@ -93,7 +93,7 @@ Plumber <- R6Class(
       self$set404Handler(default404Handler)
       self$setUi(TRUE)
       private$ui_info$has_not_been_set <- TRUE # set to know if `$setUi()` has been called before `$run()`
-      self$setUiCallback(getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL)))
+      self$setDocsCallback(getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL)))
       self$setDebug(interactive())
       self$setApiSpec(NULL)
 
@@ -144,7 +144,7 @@ Plumber <- R6Class(
     #' This value does not need to be explicitly assigned. To explicity set it, see [options_plumber()].
     #' @param debug Deprecated. See `$setDebug()`
     #' @param swagger Deprecated. See `$setUi(ui)` or `$setApiSpec()`
-    #' @param swaggerCallback Deprecated. See `$setUiCallback()`
+    #' @param swaggerCallback Deprecated. See `$setDocsCallback()`
     #' @importFrom lifecycle deprecated
     run = function(
       host = '127.0.0.1',
@@ -184,8 +184,8 @@ Plumber <- R6Class(
         }
       }
       if (lifecycle::is_present(swaggerCallback)) {
-        lifecycle::deprecate_warn("1.0.0", "run(swaggerCallback = )", "setUiCallback(callback = )")
-        self$setUiCallback(swaggerCallback)
+        lifecycle::deprecate_warn("1.0.0", "run(swaggerCallback = )", "setDocsCallback(callback = )")
+        self$setDocsCallback(swaggerCallback)
       }
 
       port <- findPort(port)
@@ -838,9 +838,9 @@ Plumber <- R6Class(
     #'
     #' If using [options_plumber()], the value must be set before initializing your Plumber router.
     #'
-    #' See also: [pr_set_ui_callback()]
+    #' See also: [pr_set_docs_callback()]
     #' @param callback a callback function for taking action on UI url. (Also accepts `NULL` values to disable the `callback`.)
-    setUiCallback = function(
+    setDocsCallback = function(
       callback = getOption('plumber.ui.callback', NULL)
     ) {
       # Use callback when defined

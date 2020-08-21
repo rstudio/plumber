@@ -111,7 +111,7 @@ pr$setErrorHandler(function(req, res, err) {
 \code{\link[=pr_set_serializer]{pr_set_serializer()}}, \code{\link[=pr_set_parsers]{pr_set_parsers()}},
 \code{\link[=pr_set_404]{pr_set_404()}}, \code{\link[=pr_set_error]{pr_set_error()}},
 \code{\link[=pr_set_debug]{pr_set_debug()}},
-\code{\link[=pr_set_ui_callback]{pr_set_ui_callback()}}
+\code{\link[=pr_set_docs_callback]{pr_set_docs_callback()}}
 }
 \section{Super class}{
 \code{\link[plumber:Hookable]{plumber::Hookable}} -> \code{Plumber}
@@ -152,7 +152,7 @@ pr$setErrorHandler(function(req, res, err) {
 \item \href{#method-set404Handler}{\code{Plumber$set404Handler()}}
 \item \href{#method-setErrorHandler}{\code{Plumber$setErrorHandler()}}
 \item \href{#method-setUi}{\code{Plumber$setUi()}}
-\item \href{#method-setUiCallback}{\code{Plumber$setUiCallback()}}
+\item \href{#method-setDocsCallback}{\code{Plumber$setDocsCallback()}}
 \item \href{#method-setDebug}{\code{Plumber$setDebug()}}
 \item \href{#method-getDebug}{\code{Plumber$getDebug()}}
 \item \href{#method-filter}{\code{Plumber$filter()}}
@@ -234,7 +234,7 @@ This value does not need to be explicitly assigned. To explicity set it, see \co
 
 \item{\code{debug}}{Deprecated. See \verb{$setDebug()}}
 
-\item{\code{swaggerCallback}}{Deprecated. See \verb{$setUiCallback()}}
+\item{\code{swaggerCallback}}{Deprecated. See \verb{$setDocsCallback()}}
 }
 \if{html}{\out{</div>}}
 }
@@ -731,9 +731,9 @@ If using \code{\link[=options_plumber]{options_plumber()}}, the value must be se
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setUiCallback"></a>}}
-\if{latex}{\out{\hypertarget{method-setUiCallback}{}}}
-\subsection{Method \code{setUiCallback()}}{
+\if{html}{\out{<a id="method-setDocsCallback"></a>}}
+\if{latex}{\out{\hypertarget{method-setDocsCallback}{}}}
+\subsection{Method \code{setDocsCallback()}}{
 Set UI callback to notify where the API is located.
 
 When set, it will be called with a character string corresponding
@@ -742,9 +742,9 @@ Plumber router \code{\link[=pr_run]{pr_run()}} method is executed.
 
 If using \code{\link[=options_plumber]{options_plumber()}}, the value must be set before initializing your Plumber router.
 
-See also: \code{\link[=pr_set_ui_callback]{pr_set_ui_callback()}}
+See also: \code{\link[=pr_set_docs_callback]{pr_set_docs_callback()}}
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Plumber$setUiCallback(callback = getOption("plumber.ui.callback", NULL))}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$setDocsCallback(callback = getOption("plumber.ui.callback", NULL))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
