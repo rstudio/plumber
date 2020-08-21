@@ -15,15 +15,15 @@ test_that("custom OpenAPI Specification update function works", {
     spec$info$title <- Sys.time()
     spec
   })
-  pr$setUi(ui = "wribbit")
+  pr$setDocs(docs = "wribbit")
   # Should get a message that wribbit is unknown if library is not loaded
   pr$run(port = 1234)
 
   # validate that http://127.0.0.1:1234/__swagger__/ displays the system time as the api title
   # http://127.0.0.1:1234/__swagger__/
-  pr$setUi(ui = TRUE)
+  pr$setDocs(docs = TRUE)
   pr$run(port = 1234)
-  pr$setUi(ui = "swagger")
+  pr$setDocs(docs = "swagger")
   pr$run(port = 1234)
 
 })
@@ -39,13 +39,13 @@ test_that("host doesn't change for messages, but does for RStudio IDE", {
     "0.0.0.0", port = 1234
   )
   #> Running plumber API at http://0.0.0.0:1234
-  #> Running Swagger UI  at http://127.0.0.1:1234/__swagger__/
+  #> Running Swagger Docs at http://127.0.0.1:1234/__swagger__/
 
   pr$run(
     "::", port = 1234
   )
   #> Running plumber API at http://[::]:1234
-  #> Running Swagger UI  at http://[::1]:1234/__swagger__/
+  #> Running Swagger Docs at http://[::1]:1234/__swagger__/
 
 
   # Verify that the output matches the output above.

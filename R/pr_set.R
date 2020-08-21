@@ -126,10 +126,10 @@ pr_set_debug <- function(pr, debug = interactive()) {
 
 #' Set the API user interface
 #'
-#' `ui` should be either a logical or a character value matching a registered ui.
+#' `docs` should be either a logical or a character value matching a registered visual documentation.
 #' When `TRUE` or a
 #' function, multiple handles will be added to [`Plumber`] object. OpenAPI json
-#' file will be served on paths `/openapi.json` and `/swagger.json`. Swagger UI
+#' file will be served on paths `/openapi.json` and `/swagger.json`. Swagger docs
 #' will be served on paths `/__swagger__/index.html` and `/__swagger__/`. When
 #' using a function, it will receive the Plumber router as the first parameter
 #' and current OpenAPI Specification as the second. This function should return a
@@ -138,10 +138,10 @@ pr_set_debug <- function(pr, debug = interactive()) {
 #'
 #' @template param_pr
 
-#' @param ui a character value or a logical value.
+#' @param docs a character value or a logical value.
 #' If using [options_plumber()], the value must be set before initializing your Plumber router.
-#' @param ... Other params to be passed to `ui` functions.
-#' @return The Plumber router with the new UI settings.
+#' @param ... Other params to be passed to the `docs` functions.
+#' @return The Plumber router with the new docs settings.
 #' @export
 #' @examples
 #' \dontrun{
@@ -150,7 +150,7 @@ pr_set_debug <- function(pr, debug = interactive()) {
 #' # install.packages("swagger")
 #' if (require(swagger)) {
 #'   pr() %>%
-#'     pr_set_ui("swagger") %>%
+#'     pr_set_docs("swagger") %>%
 #'     pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) %>%
 #'     pr_run()
 #' }
@@ -160,7 +160,7 @@ pr_set_debug <- function(pr, debug = interactive()) {
 #' # remotes::install_github("https://github.com/meztez/redoc/")
 #' if (require(redoc)) {
 #'   pr() %>%
-#'     pr_set_ui("redoc") %>%
+#'     pr_set_docs("redoc") %>%
 #'     pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) %>%
 #'     pr_run()
 #' }
@@ -170,24 +170,24 @@ pr_set_debug <- function(pr, debug = interactive()) {
 #' # remotes::install_github("https://github.com/meztez/rapidoc/")
 #' if (require(rapidoc)) {
 #'   pr() %>%
-#'     pr_set_ui("rapidoc") %>%
+#'     pr_set_docs("rapidoc") %>%
 #'     pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) %>%
 #'     pr_run()
 #' }
 #'
 #' ## Disable the OpenAPI Spec UI
 #' pr() %>%
-#'   pr_set_ui(FALSE) %>%
+#'   pr_set_docs(FALSE) %>%
 #'   pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) %>%
 #'   pr_run()
 #' }
-pr_set_ui <- function(
+pr_set_docs <- function(
   pr,
-  ui = getOption("plumber.ui", TRUE),
+  docs = getOption("plumber.docs", TRUE),
   ...
 ) {
   validate_pr(pr)
-  pr$setUi(ui = ui, ...)
+  pr$setDocs(docs = docs, ...)
   invisible(pr)
 }
 
@@ -195,14 +195,14 @@ pr_set_ui <- function(
 #' Set the `callback` to tell where the API user interface is located
 #'
 #' When set, it will be called with a character string corresponding
-#' to the API UI url. This allows RStudio to open `swagger` UI when a
+#' to the API visual documentation url. This allows RStudio to open `swagger` docs when a
 #' Plumber router [pr_run()] method.
 #'
 #' If using [options_plumber()], the value must be set before initializing your Plumber router.
 #'
 #' @template param_pr
-#' @param callback a callback function for taking action on UI url.
-#' @return The Plumber router with the new UI callback setting.
+#' @param callback a callback function for taking action on the docs url.
+#' @return The Plumber router with the new docs callback setting.
 #' @export
 #' @examples
 #' \dontrun{
@@ -213,7 +213,7 @@ pr_set_ui <- function(
 #' }
 pr_set_docs_callback <- function(
   pr,
-  callback = getOption('plumber.ui.callback', getOption('plumber.swagger.url', NULL))
+  callback = getOption('plumber.docs.callback', NULL)
 ) {
   validate_pr(pr)
   pr$setDocsCallback(callback = callback)
@@ -224,8 +224,8 @@ pr_set_docs_callback <- function(
 #' Set the OpenAPI Specification information
 #'
 #' When set, it will be called with a character string corresponding
-#' to the API UI url. This allows RStudio to open `swagger` UI when a
-#' Plumber router [pr_run()] method is executed using default `plumber.ui.callback` option.
+#' to the API visual documentation url. This allows RStudio to open `swagger` docs when a
+#' Plumber router [pr_run()] method is executed using default `plumber.docs.callback` option.
 #'
 #' @template param_pr
 #' @template pr_setApiSpec__api
