@@ -30,7 +30,7 @@ plumber 1.0.0
   [OpenAPI 3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md),
   upgrading from Swagger Specification. (#365)
 
-* Plumber router `$run()` method arguments `swagger`, `swaggerCallback` and `debug` are now deprecated. User interface and url callback are now enabled by default and managed through Plumber router `$set_ui()`, `$set_ui_callback()`, and `$set_debug()` methods and options `plumber.ui` and `plumber.ui.callback`. (@meztez, #562)
+* Plumber router `$run()` method arguments `swagger`, `swaggerCallback` and `debug` are now deprecated. User interface and url callback are now enabled by default and managed through Plumber router `$set_docs()`, `$set_docs_callback()`, and `$set_debug()` methods and options `plumber.docs` and `plumber.docs.callback`. (@meztez, #562)
 
 * The source files used in plumber **must use** the UTF-8 encoding if they contain
   non-ASCII characters (@shrektan, #312,
@@ -65,8 +65,7 @@ plumber 1.0.0
 
 * Added `serializer_tsv()` (#630)
 
-* Generalize user interface integration. Plumber can now use other OpenAPI compatible user interfaces like `RapiDoc` (https://github.com/mrin9/RapiDoc) and `Redoc` (https://github.com/Redocly/redoc). Pending CRAN approbations, R packages for
-both UIs integration are available from https://github.com/meztez/rapidoc/ and https://github.com/meztez/redoc/. (@meztez, #562)
+* Generalize user interface integration. Plumber can now use other OpenAPI compatible user interfaces like `RapiDoc` (https://github.com/mrin9/RapiDoc) and `Redoc` (https://github.com/Redocly/redoc). Pending CRAN approbations, development R packages are available from https://github.com/meztez/rapidoc/ and https://github.com/meztez/redoc/. (@meztez, #562)
 
 * Added support for promises in endpoints, filters, and hooks. (#248)
 
