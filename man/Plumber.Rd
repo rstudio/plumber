@@ -722,7 +722,7 @@ See also: \code{\link[=pr_set_docs]{pr_set_docs()}}, \code{\link[=register_docs]
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{docs}}{a character value or a logical value. Defaults to `options("plumber.docs"). See \code{\link[=pr_set_docs]{pr_set_docs()}} for examples.
+\item{\code{docs}}{a character value or a logical value. See \code{\link[=pr_set_docs]{pr_set_docs()}} for examples.
 If using \code{\link[=options_plumber]{options_plumber()}}, the value must be set before initializing your Plumber router.}
 
 \item{\code{...}}{Other params to be passed to \code{docs} functions.}

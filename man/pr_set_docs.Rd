@@ -21,7 +21,7 @@ The Plumber router with the new docs settings.
 \code{docs} should be either a logical or a character value matching a registered visual documentation.
 When \code{TRUE} or a
 function, multiple handles will be added to \code{\link{Plumber}} object. OpenAPI json
-file will be served on paths \verb{/openapi.json} and \verb{/swagger.json}. Swagger docs
+file will be served on paths \verb{/openapi.json} and \verb{/swagger.json}. Documentation
 will be served on paths \verb{/__docs__/index.html} and \verb{/__docs__/}. When
 using a function, it will receive the Plumber router as the first parameter
 and current OpenAPI Specification as the second. This function should return a
