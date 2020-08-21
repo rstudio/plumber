@@ -1,7 +1,82 @@
 plumber 1.0.0
 --------------------------------------------------------------------------------
 
-### Security
+### New features
+
+#### Plumber router
+
+* Added support for promises in endpoints, filters, and hooks. (#248)
+* Added a Tidy API for more natural usage with magrittr's `%>%`. For example, a plumber object can now be initiated and run with `pr() %>% pr_run(port = 8080)`. For more examples, see [here](https://www.rplumber.io/articles/programmatic-usage.html) (@blairj09, #590)
+
+* Added support for `#' @plumber` tag to gain programmatic access to the `plumber` router via `function(pr) {....}`. (@meztez and @blairj09, #568)
+
+* An error will be thrown if multiple arguments are matched to an Plumber Endpoint route definition.
+  While it is not required, it is safer to define routes to only use `req` and `res` when there is a possiblity to have multiple arguments match a single parameter name.
+  Use `req$argsPath`, `req$argsQuery`, and `req$argsPostBody` to access path, query, and postBody parameters respectively.
+  See `system.file("plumber/17-arguments/plumber.R", package = "plumber")` to view an example with expected output and `plumb_api("plumber", "17-arguments")` to retrieve the api.
+  (#637)
+
+* Added `plumb_api()` for standardizing where to locate (`inst/plumber`) and how to run (`plumb_api(package, name)`) plumber apis inside an R package. To view the available Plumber APIs, call `available_apis()`. (#631)
+
+
+#### OpenAPI
+
+* API Documentation is now hosted at `/__docs__`. If `swagger` documentation is being used, `/__swagger__` will redirect to `/__docs__`. (#654)
+
+* Added OpenAPI support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez, #532)
+
+* Added user provided OpenAPI Specification handler to Plumber router. Use `$setApiSpec()` to provide a function to alter the Plumber generated OpenAPI Specification returned by Plumber router method `$getApiSpec()`. This also affects `/openapi.json` and `/openapi.yaml` (#365)(@meztez, #562)
+
+* Added `validate_api_spec()` to validate a Plumber API produces a valid OpenAPI Specification. (Experimental!) (#633)
+
+#### Serializers
+
+* Added `as_attachment(value, filename)` method which allows routes to return a file attachment with a custom name. (#585)
+
+* Serializer functions can now return `PlumberEndpoint` `preexec` and `postexec` hooks in addition to a `serializer` function by using `endpoint_serializer()`.  This allows for image serializers to turn on their corresponding graphics device before the route executes and turn the graphics device off after the route executes. (#630)
+
+* PNG, JPEG, and SVG image serializers have been exported in methods `serializer_png()`, `serializer_jpeg()`, and `serializer_svg()` respectively.  In addition to these methods, `serializer_tiff()`, `serializer_bmp()`, and `serializer_pdf()` have been added. Each graphics device serializer wraps around `serializer_device()`, which should be used when making more graphics device serializers. (#630)
+
+* New serializers
+  * `serializer_yaml()`: Return an object serialized by `yaml` (@meztez, #556)
+  * `serializer_csv()`: Return a comma separated value (@pachamaltese, #520)
+  * `serializer_tsv()`: Return a tab separated value (#630)
+  * `serializer_feather()`: Return a object serialized by `feather` (#626)
+  * `serializer_text()`: Return text content (#585)
+  * `serializer_cat()`: Return text content after calling `cat()` (#585)
+  * `serializer_print()`: Return text content after calling `print()` (#585)
+  * `serializer_format()`: Return text content after calling `format()` (#585)
+  * `serializer_svg()`: Return an image saved as an SVG (@pachamaltese, #398)
+  * `serializer_headers(header_list)`: method which sets a list of static headers for each serialized value. Heavily inspired from @ycphs (#455). (#585)
+
+#### POST body parsing
+
+* Added support for POST body parsing (@meztez, #532)
+
+* New POST body parsers
+  * `parser_csv()`: Parse POST body as a commas separated value (#584)
+  * `parser_json()`: Parse POST body as JSON (@meztez, #532)
+  * `parser_multi()`: Parse multi part POST bodies (@meztez, #532)
+  * `parser_octet()`: Parse POST body octet stream (@meztez, #532)
+  * `parser_form()`: Parse POST body as form input (@meztez, #532)
+  * `parser_rds()`: Parse POST body as RDS file input (@meztez, #532)
+  * `parser_text()`: Parse POST body plain text (@meztez, #532)
+  * `parser_tsv()`: Parse POST body a tab separated value (#584)
+  * `parser_yaml()`: Parse POST body as `yaml` (#584)
+  * `parser_none()`: Do not parse the post body (#584)
+  * `parser_yaml()`: Parse POST body (@meztez, #556)
+  * `parser_feather()`: Parse POST body using `feather` (#626)
+  * pseudo parser named `"all"` to allow for using all parsers. (Not recommended in production!) (#584)
+
+#### Visual Documentation
+
+* Generalize user interface integration. Plumber can now use other OpenAPI compatible user interfaces like `RapiDoc` (https://github.com/mrin9/RapiDoc) and `Redoc` (https://github.com/Redocly/redoc). Pending CRAN approbations, development R packages are available from https://github.com/meztez/rapidoc/ and https://github.com/meztez/redoc/. (@meztez, #562)
+
+* Changed Swagger UI to use [swagger](https://github.com/rstudio/swagger) R package to display the swagger page. (#365)
+
+* Added support for swagger for mounted routers (@bradleyhd, #274).
+
+### Security improvements
 
 * Secret session cookies are now encrypted using `sodium`.
   All prior `req$session` information will be lost.
@@ -20,13 +95,13 @@ plumber 1.0.0
 
 ### Breaking changes
 
+* When `plumb()`ing a file (or `Plumber$new(file)`), the working directory is set to the file's directory before parsing the file. When running the Plumber API, the working directory will be set to file's directory before running.(#631)
+
 * Plumber's OpenAPI Specification is now defined using
   [OpenAPI 3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md),
   upgrading from Swagger Specification. (#365)
 
-* Plumber router `$run()` method arguments `swagger`, `swaggerCallback` and `debug` are now deprecated. User interface and url callback are now enabled by default and managed through Plumber router `$set_docs()`, `$set_docs_callback()`, and `$set_debug()` methods and options `plumber.docs` and `plumber.docs.callback`. (@meztez, #562)
-
-* When `plumb()`ing a file (or `Plumber$new(file)`), the working directory is set to the file's directory before parsing the file. When running the Plumber API, the working directory will be set to file's directory before running.(#631)
+* Plumber router `$run()` method arguments `swagger`, `swaggerCallback` and `debug` are now deprecated. User interface and url callback are now enabled by default and managed through Plumber router `$setDocs()`, `$setDocsCallback()`, and `$setDebug()` methods and options `plumber.docs` and `plumber.docs.callback`. (@meztez, #562)
 
 * `plumb()` now returns an object of class `"Plumber"` (previously `"plumber"`). To check if an object is a Plumber router, use new method `is_plumber()`. (#653)
 
@@ -52,76 +127,10 @@ plumber 1.0.0
 
 * DigitalOcean helper functions are now defunct (`do_*()`). The funtionality and documentation on how to deploy to DigitalOcean has been moved to [`plumberDeploy`](https://github.com/meztez/plumberDeploy) (by @meztez) (#649)
 
-### New features
-
-#### Plumber Router
-
-* Added support for promises in endpoints, filters, and hooks. (#248)
-* Added a Tidy API for more natural usage with magrittr's `%>%`. For example, a plumber object can now be initiated and run with `pr() %>% pr_run(port = 8080)`. For more examples, see [here](https://www.rplumber.io/articles/programmatic-usage.html) (@blairj09, #590)
-* Added support for `#' @plumber` tag to gain programmatic access to the `plumber` router via `function(pr) {....}`. (@meztez and @blairj09, #568)
-* Added `plumb_api()` for standardizing where to locate (`inst/plumber`) and how to run (`plumb_api(package, name)`) plumber apis inside an R package. To view the available Plumber APIs, call `available_apis()`. (#631)
-
-
-#### OpenAPI
-
-* API Documentation is now hosted at `__docs__`. If `swagger` documentation is being used, `/__swagger__` will redirect to `/__docs__`. (#654)
-
-* Added OpenAPI support for array parameters using syntax `name:[type]` and new type `list` (synonym df, data.frame). (@meztez, #532)
-
-* Added user provided OpenAPI Specification handler to Plumber router. Use `$set_api_spec()` to provide a function to alter the Plumber generated OpenAPI Specification returned by Plumber router method `$get_api_spec()`. This also affects `/openapi.json` and `/openapi.yaml` (#365)(@meztez, #562)
-
-* Added `validate_api_spec()` to validate a Plumber API produces a valid OpenAPI Specification. (Experimental!) (#633)
-
-#### Serializers
-
-* Added `as_attachment(value, filename)` method which allows routes to return a file attachment with a custom name. (#585)
-
-* Serializer functions can now return `PlumberEndpoint` `preexec` and `postexec` hooks in addition to a `serializer` function by using `endpoint_serializer()`.  This allows for image serializers to turn on their corresponding graphics device before the route executes and turn the graphics device off after the route executes. (#630)
-
-* PNG, JPEG, and SVG image serializers have been exported in methods `serializer_png()`, `serializer_jpeg()`, and `serializer_svg()` respectively.  In addition to these methods, `serializer_tiff()`, `serializer_bmp()`, and `serializer_pdf()` have been added. Each graphics device serializer wraps around `serializer_device()`, which should be used when making more graphics device serializers. (#630)
-
-* New Serializers
-  * `serializer_yaml()`: Return an object serialized by `yaml` (@meztez, #556)
-  * `serializer_csv()`: Return a comma separated value (@pachamaltese, #520)
-  * `serializer_tsv()`: Return a tab separated value (#630)
-  * `serializer_feather()`: Return a object serialized by `feather` (#626)
-  * `serializer_text()`: Return text content (#585)
-  * `serializer_cat()`: Return text content after calling `cat()` (#585)
-  * `serializer_print()`: Return text content after calling `print()` (#585)
-  * `serializer_format()`: Return text content after calling `format()` (#585)
-  * `serializer_svg()`: Return an image saved as an SVG (@pachamaltese, #398)
-  * `serializer_headers(header_list)`: method which sets a list of static headers for each serialized value. Heavily inspired from @ycphs (#455). (#585)
-
-#### POST Body Parsing
-
-* Added support for POST body parsing (@meztez, #532)
-
-* New POST Body Parsers
-  * `parser_csv()`: Parse POST body as a commas separated value (#584)
-  * `parser_json()`: Parse POST body as JSON (@meztez, #532)
-  * `parser_multi()`: Parse multi part POST bodies (@meztez, #532)
-  * `parser_octet()`: Parse POST body octet stream (@meztez, #532)
-  * `parser_form()`: Parse POST body as form input (@meztez, #532)
-  * `parser_rds()`: Parse POST body as RDS file input (@meztez, #532)
-  * `parser_text()`: Parse POST body plain text (@meztez, #532)
-  * `parser_tsv()`: Parse POST body a tab separated value (#584)
-  * `parser_yaml()`: Parse POST body as `yaml` (#584)
-  * `parser_none()`: Do not parse the post body (#584)
-  * `parser_yaml()`: Parse POST body (@meztez, #556)
-  * `parser_feather()`: Parse POST body using `feather` (#626)
-  * pseudo parser named `"all"` to allow for using all parsers. (Not recommended in production!) (#584)
-
-#### Visual Documentation
-
-* Generalize user interface integration. Plumber can now use other OpenAPI compatible user interfaces like `RapiDoc` (https://github.com/mrin9/RapiDoc) and `Redoc` (https://github.com/Redocly/redoc). Pending CRAN approbations, development R packages are available from https://github.com/meztez/rapidoc/ and https://github.com/meztez/redoc/. (@meztez, #562)
-
-* Changed Swagger UI to use [swagger](https://github.com/rstudio/swagger) R package to display the swagger page. (#365)
-
-* Added support for swagger for mounted routers (@bradleyhd, #274).
 
 ### Minor new features and improvements
 
-* Documentation is presented using pkgdown (#570)
+* Documentation is updated and now presented using `pkgdown` (#570)
 
 * Added helper method `is_plumber(pr)` to determine if an object is a Plumber router. (#653)
 
@@ -151,15 +160,7 @@ plumber 1.0.0
 
 * Improve speed of `canServe()` method of the `PlumberEndpoint` class (@atheriel, #484)
 
-* Updated security vignette: Prevent large plots with more than 1000 points.
-
 ### Bug fixes
-
-* An error will be thrown if multiple arguments are matched to an Plumber Endpoint route definition.
-  While it is not required, it is safer to define routes to only use `req` and `res` when there is a possiblity to have multiple arguments match a single parameter name.
-  Use `req$argsPath`, `req$argsQuery`, and `req$argsPostBody` to access path, query, and postBody parameters respectively.
-  See `system.file("plumber/17-arguments/plumber.R", package = "plumber")` to view an example with expected output and `plumb_api("plumber", "17-arguments")` to retrieve the api.
-  (#637)
 
 * Handle plus signs in URI as space characters instead of actual plus signs (@meztez, #618)
 
@@ -171,8 +172,6 @@ plumber 1.0.0
 * Fix bug preventing error handling when a serializer fails (@antoine-sachet, #490)
 
 * Fix URL-decoding of query parameters and URL-encoding/decoding of cookies. Both now use `httpuv::decodeURIComponent` instead of `httpuv::decodeURI`. (@antoine-sachet, #462)
-
-* Fix bugs that prevented `do_provision` from deploying to DigitalOcean and updated to the latest `analogsea`.  (#448)
 
 * Fixed bug where functions defined earlier in the file could not be found when `plumb()`ing a file.  (#416)
 
