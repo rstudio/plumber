@@ -98,7 +98,7 @@ mount_openapi <- function(pr, api_url) {
         api_url <- req$HTTP_REFERER
         api_url <- sub("(\\?.*)?$", "", api_url)
         api_url <- sub("index\\.html$", "", api_url)
-        api_url <- sub(paste0("__(", paste0(registered_docs(), collapse = "|"),")__/$"), "", api_url)
+        api_url <- sub("__docs__/$", "", api_url)
       }
     }
 
