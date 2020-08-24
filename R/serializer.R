@@ -324,6 +324,8 @@ serializer_cat <- function(..., type = "text/plain; charset=UTF-8") {
 }
 
 #' @describeIn serializers Save output to a temp file whose contents are read back as a serialized response. `serializer_tmp_file()` creates (and cleans up) a temp file, calls the serializer (which should save to the temp file), and then reads the contents back as the serialized value.  In this context, `serialize_fn` should save to the temp file provided. `serialize_fn` should have the function signature of `function(value, tmp_file){}`.  If the content type starts with `"text"`, the result will be read back as a character string, otherwise it will be returned as a raw vector.
+#' @inheritParams base::tempfile
+#' @export
 serializer_tmp_file <- function(
   fileext,
   type,

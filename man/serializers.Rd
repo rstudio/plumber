@@ -96,6 +96,8 @@ An exception is that objects of class \code{AsIs} (i.e. wrapped in \code{I()}) a
     representation is written; otherwise (default) a binary one.
     See also the comments in the help for \code{\link[base]{save}}.}
 
+\item{fileext}{a non-empty character vector giving the file extension}
+
 \item{dev_on}{Function to turn on a graphics device.
 The graphics device \code{dev_on} function will receive any arguments supplied to the serializer in addition to \code{filename}.
 \code{filename} points to the temporary file name that should be used when saving content.}
