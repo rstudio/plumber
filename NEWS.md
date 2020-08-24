@@ -8,7 +8,7 @@ plumber 1.0.0
 * Added support for promises in endpoints, filters, and hooks.  This allows for multi-core execution when paired with `future`. See `plumb_api("plumber", "13-promises")` and `plumb_api("plumber", "14-future")` for an example implementation. (#248)
 * Added a Tidy API for more natural usage with magrittr's `%>%`. For example, a plumber object can now be initiated and run with `pr() %>% pr_run(port = 8080)`. For more examples, see [here](https://www.rplumber.io/articles/programmatic-usage.html) (@blairj09, #590)
 
-* Added support for `#' @plumber` tag to gain programmatic access to the `plumber` router via `function(pr) {....}`. (@meztez and @blairj09, #568)
+* Added support for `#' @plumber` tag to gain programmatic access to the `plumber` router via `function(pr) {....}`. See `system.file("plumber/06-sessions/plumber.R", package = "plumber")` and how it adds cookie support from within `plumber.R`. (@meztez and @blairj09, #568)
 
 * An error will be thrown if multiple arguments are matched to an Plumber Endpoint route definition.
   While it is not required, it is safer to define routes to only use `req` and `res` when there is a possiblity to have multiple arguments match a single parameter name.
