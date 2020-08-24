@@ -10,7 +10,7 @@ for_each_plumber_api <- function(fn, ...) {
       }
 
       pr <-
-        if (name == "12-entrypoint") {
+        if (name %in% c("06-sessions", "12-entrypoint")) {
           expect_warning({
             plumb_api(package, name)
           }, "Legacy cookie secret")
