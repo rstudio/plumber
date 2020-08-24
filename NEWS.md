@@ -132,6 +132,8 @@ plumber 1.0.0
 
 * Documentation is updated and now presented using `pkgdown` (#570)
 
+* New hex logo! Thank you @allisonhorst ! (#570)
+
 * Added helper method `is_plumber(pr)` to determine if an object is a Plumber router. (#653)
 
 * Added support for the `SameSite` Cookie attribute. (@chris-dudley, #640)
