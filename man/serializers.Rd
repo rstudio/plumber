@@ -15,6 +15,7 @@
 \alias{serializer_format}
 \alias{serializer_print}
 \alias{serializer_cat}
+\alias{serializer_tmp_file}
 \alias{serializer_htmlwidget}
 \alias{serializer_device}
 \alias{serializer_jpeg}
@@ -56,6 +57,8 @@ serializer_format(..., type = "text/plain; charset=UTF-8")
 serializer_print(..., type = "text/plain; charset=UTF-8")
 
 serializer_cat(..., type = "text/plain; charset=UTF-8")
+
+serializer_tmp_file(fileext, type, serialize_fn)
 
 serializer_htmlwidget(..., type = "text/html; charset=UTF-8")
 
@@ -134,6 +137,8 @@ more details on Plumber serializers and how to customize their behavior.
 \item \code{serializer_print}: Text serializer. Captures the output of \code{\link[=print]{print()}}
 
 \item \code{serializer_cat}: Text serializer. Captures the output of \code{\link[=cat]{cat()}}
+
+\item \code{serializer_tmp_file}: Save output to a temp file whose contents are read back as a serialized response. \code{serializer_tmp_file()} creates (and cleans up) a temp file, calls the serializer (which should save to the temp file), and then reads the contents back as the serialized value.  In this context, \code{serialize_fn} should save to the temp file provided. \code{serialize_fn} should have the function signature of \code{function(value, tmp_file){}}.  If the content type starts with \code{"text"}, the result will be read back as a character string, otherwise it will be returned as a raw vector.
 
 \item \code{serializer_htmlwidget}: htmlwidget serializer. See also: \code{\link[htmlwidgets:saveWidget]{htmlwidgets::saveWidget()}}
 

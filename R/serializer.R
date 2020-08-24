@@ -255,17 +255,13 @@ serializer_feather <- function(type = "application/feather") {
   if (!requireNamespace("feather", quietly = TRUE)) {
     stop("`feather` must be installed for `serializer_feather` to work")
   }
-  serializer_content_type(type, function(val) {
-    tmpfile <- tempfile(fileext = ".feather")
-    on.exit({
-      if (file.exists(tmpfile)) {
-        unlink(tmpfile)
-      }
-    }, add = TRUE)
-
-    feather::write_feather(val, tmpfile)
-    readBin(tmpfile, what = "raw", n = file.info(tmpfile)$size)
-  })
+  serializer_tmp_file(
+    fileext = ".feather",
+    type = type,
+    serialize_fn = function(val, tmpfile) {
+      feather::write_feather(val, tmpfile)
+    }
+  )
 }
 
 
@@ -327,6 +323,29 @@ serializer_cat <- function(..., type = "text/plain; charset=UTF-8") {
   )
 }
 
+#' @describeIn serializers Save output to a temp file whose contents are read back as a serialized response. `serializer_tmp_file()` creates (and cleans up) a temp file, calls the serializer (which should save to the temp file), and then reads the contents back as the serialized value.  In this context, `serialize_fn` should save to the temp file provided. `serialize_fn` should have the function signature of `function(value, tmp_file){}`.  If the content type starts with `"text"`, the result will be read back as a character string, otherwise it will be returned as a raw vector.
+serializer_tmp_file <- function(
+  fileext,
+  type,
+  serialize_fn
+) {
+  serializer_content_type(type, function(val) {
+    tmpfile <- tempfile(fileext = fileext)
+    on.exit({
+      if (file.exists(tmpfile)) {
+        unlink(tmpfile)
+      }
+    }, add = TRUE)
+
+    serialize_fn(val, tmpfile)
+    if (grepl("^text", type)) {
+      paste(readLines(tmpfile), collapse = "\n")
+    } else {
+      readBin(tmpfile, what = "raw", n = file.info(tmpfile)$size)
+    }
+  })
+}
+
 
 
 
@@ -338,25 +357,18 @@ serializer_htmlwidget <- function(..., type = "text/html; charset=UTF-8") {
           call. = FALSE)
   }
 
-  serializer_content_type(type, function(val) {
+  serializer_tmp_file(
     # Write out a temp file. htmlwidgets (or pandoc?) seems to require that this
     # file end in .html or the selfcontained=TRUE argument has no effect.
-    file <- tempfile(fileext = ".html")
-    on.exit({
-      # Delete the temp file
-      if (file.exists(file)) {
-        file.remove(file)
-      }
-    })
-
-    # Write the widget out to a file (doesn't currently support in-memory connections - pandoc)
-    # Must write a self-contained file. We're not serving a directory of assets
-    # in response to this request, just one HTML file.
-    htmlwidgets::saveWidget(val, file, selfcontained = TRUE, ...)
-
-    # Read the file back in as a single string and return.
-    paste(readLines(file), collapse = "\n")
-  })
+    ".html",
+    type = type,
+    serialize_fn = function(val, tmpfile) {
+      # Write the widget out to a file (doesn't currently support in-memory connections - pandoc)
+      # Must write a self-contained file. We're not serving a directory of assets
+      # in response to this request, just one HTML file.
+      htmlwidgets::saveWidget(val, tmpfile, selfcontained = TRUE, ...)
+    }
+  )
 }
 
 
