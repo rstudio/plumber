@@ -10,7 +10,7 @@ random_cookie_key()
 A 64 digit hexadecimal string to be used as a key for cookie encryption.
 }
 \description{
-Uses a cryptographically secure pseudorandom number generator from \code{\link[sodium:helpers]{sodium::helpers()}} to generate a 64 digit hexadecimal string.  \href{https://github.com/jeroen/sodium}{'sodium'} wraps around \href{https://download.libsodium.org/doc/}{'libsodium'}.
+Uses a cryptographically secure pseudorandom number generator from \code{\link[sodium:helpers]{sodium::helpers()}} to generate a 64 digit hexadecimal string.  \href{https://github.com/jeroen/sodium}{'sodium'} wraps around \href{https://doc.libsodium.org/}{'libsodium'}.
 }
 \details{
 Please see \code{\link{session_cookie}} for more information on how to save the generated key.

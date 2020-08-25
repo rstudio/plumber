@@ -48,7 +48,7 @@
 #' @export
 #' @seealso \itemize{
 #' \item \href{https://github.com/jeroen/sodium}{'sodium'}: R bindings to 'libsodium'
-#' \item \href{https://download.libsodium.org/doc/}{'libsodium'}: A Modern and Easy-to-Use Crypto Library
+#' \item \href{https://doc.libsodium.org/}{'libsodium'}: A Modern and Easy-to-Use Crypto Library
 #' \item \href{https://github.com/r-lib/keyring}{'keyring'}: Access the system credential store from R
 #' \item \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#Directives}{Set-Cookie flags}: Descriptions of different flags for \code{Set-Cookie}
 #' \item \href{https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting}{Cross-site scripting}: A security exploit which allows an attacker to inject into a website malicious client-side code
@@ -156,7 +156,7 @@ session_cookie <- function(
 
 #' Random cookie key generator
 #'
-#' Uses a cryptographically secure pseudorandom number generator from [sodium::helpers()] to generate a 64 digit hexadecimal string.  \href{https://github.com/jeroen/sodium}{'sodium'} wraps around \href{https://download.libsodium.org/doc/}{'libsodium'}.
+#' Uses a cryptographically secure pseudorandom number generator from [sodium::helpers()] to generate a 64 digit hexadecimal string.  \href{https://github.com/jeroen/sodium}{'sodium'} wraps around \href{https://doc.libsodium.org/}{'libsodium'}.
 #'
 #' Please see \code{\link{session_cookie}} for more information on how to save the generated key.
 #'

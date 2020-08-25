@@ -34,7 +34,7 @@ defaultPlumberFilters <- list(
 #' taking an incoming request, submitting it through the appropriate filters and
 #' eventually to a corresponding endpoint, if one is found.
 #'
-#' See \url{http://www.rplumber.io/articles/programmatic-usage.html} for additional
+#' See \url{https://www.rplumber.io/articles/programmatic-usage.html} for additional
 #' details on the methods available on this object.
 #' @seealso
 #'  [pr()],
