@@ -45,14 +45,15 @@ knownContentTypes <- list(
   feather='application/feather',
   rds='application/rds',
   tsv="text/tab-separated-values",
-  csv="text/csv")
+  csv="text/csv"
+)
 
-getContentType <- function(ext, defaultType='application/octet-stream') {
-  ct <- knownContentTypes[[tolower(ext)]]
-  if (is.null(ct)){
-    ct <- defaultType
-  }
-  return(ct)
+getContentType <- function(ext, defaultType = 'application/octet-stream') {
+  ext <- tolower(ext)
+
+  knownContentTypes[[ext]] %||%
+    mime::mimemap[[ext]] %||%
+    defaultType
 }
 
 #' Request character set

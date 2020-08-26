@@ -6,3 +6,11 @@ is_available <- function (package, version = NULL) {
   }
   installed && isTRUE(utils::packageVersion(package) >= version)
 }
+
+`%||%` <- function(x, y) {
+  if (is.null(x)) {
+    y
+  } else {
+    x
+  }
+}

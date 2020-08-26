@@ -163,6 +163,8 @@ plumber 1.0.0
 
 * Improve speed of `canServe()` method of the `PlumberEndpoint` class (@atheriel, #484)
 
+* Get more file extension content types using the `mime` package. (#660)
+
 ### Bug fixes
 
 * Handle plus signs in URI as space characters instead of actual plus signs (@meztez, #618)
