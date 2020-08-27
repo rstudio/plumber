@@ -32,3 +32,9 @@ test_that("Defaults charset when not there", {
   charset <- get_character_set(NULL)
   expect_equal(charset, "UTF-8")
 })
+
+
+test_that("File extensions can be found from the content type", {
+  expect_equal(get_fileext("application/json"), "json")
+  expect_equal(get_fileext("not a match"), NULL)
+})
