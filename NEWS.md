@@ -48,7 +48,7 @@ plumber 1.0.0
   * `serializer_format()`: Return text content after calling `format()` (#585)
   * `serializer_svg()`: Return an image saved as an SVG (@pachamaltese, #398)
   * `serializer_headers(header_list)`: Method which sets a list of static headers for each serialized value. Heavily inspired from @ycphs (#455). (#585)
-  * `serializer_tmp_file()`: Method which wraps `serializer_content_type()`, but orchestrates creating, serializing to, reading from, and removing a temp file. (#660)
+  * `serializer_write_file()`: Method which wraps `serializer_content_type()`, but orchestrates creating, writing serialized content to, reading from, and removing a temp file. (#660)
 
 #### POST body parsing
 

@@ -15,7 +15,7 @@
 \alias{serializer_format}
 \alias{serializer_print}
 \alias{serializer_cat}
-\alias{serializer_tmp_file}
+\alias{serializer_write_file}
 \alias{serializer_htmlwidget}
 \alias{serializer_device}
 \alias{serializer_jpeg}
@@ -58,7 +58,7 @@ serializer_print(..., type = "text/plain; charset=UTF-8")
 
 serializer_cat(..., type = "text/plain; charset=UTF-8")
 
-serializer_tmp_file(fileext, type, serialize_fn)
+serializer_write_file(type, write_fn, fileext = NULL)
 
 serializer_htmlwidget(..., type = "text/html; charset=UTF-8")
 
@@ -96,7 +96,9 @@ An exception is that objects of class \code{AsIs} (i.e. wrapped in \code{I()}) a
     representation is written; otherwise (default) a binary one.
     See also the comments in the help for \code{\link[base]{save}}.}
 
-\item{fileext}{a non-empty character vector giving the file extension}
+\item{write_fn}{Function that should write serialized contnet to the temp file provided. \code{write_fn} should have the function signature of \code{function(value, tmp_file){}}.}
+
+\item{fileext}{A non-empty character vector giving the file extension. This value will try to be infered from the content type provided.}
 
 \item{dev_on}{Function to turn on a graphics device.
 The graphics device \code{dev_on} function will receive any arguments supplied to the serializer in addition to \code{filename}.
@@ -140,7 +142,7 @@ more details on Plumber serializers and how to customize their behavior.
 
 \item \code{serializer_cat}: Text serializer. Captures the output of \code{\link[=cat]{cat()}}
 
-\item \code{serializer_tmp_file}: Save output to a temp file whose contents are read back as a serialized response. \code{serializer_tmp_file()} creates (and cleans up) a temp file, calls the serializer (which should save to the temp file), and then reads the contents back as the serialized value.  In this context, \code{serialize_fn} should save to the temp file provided. \code{serialize_fn} should have the function signature of \code{function(value, tmp_file){}}.  If the content type starts with \code{"text"}, the result will be read back as a character string, otherwise it will be returned as a raw vector.
+\item \code{serializer_write_file}: Write output to a temp file whose contents are read back as a serialized response. \code{serializer_write_file()} creates (and cleans up) a temp file, calls the serializer (which should write to the temp file), and then reads the contents back as the serialized value.  If the content \code{type} starts with \code{"text"}, the return result will be read into a character string, otherwise the result will be returned as a raw vector.
 
 \item \code{serializer_htmlwidget}: htmlwidget serializer. See also: \code{\link[htmlwidgets:saveWidget]{htmlwidgets::saveWidget()}}
 
