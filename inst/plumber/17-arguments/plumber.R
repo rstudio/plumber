@@ -7,7 +7,7 @@ function(a, b) {
 
 
 
-#* Since URI paths, query params, and post body arguments can have conflicting names, it's better practice to access arguments via the request object
+#* Since URI paths, query params, and body arguments can have conflicting names, it's better practice to access arguments via the request object
 #* If more information is needed from the body (such as filenames), inspect `req$body` for more information
 #* @serializer print
 #* @post /good-practice/<a>/<b>

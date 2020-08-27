@@ -1,4 +1,4 @@
-context("POST body")
+context("body parsing")
 
 test_that("JSON is consumed on POST", {
   expect_equal(parse_body('{"a":"1"}', content_type = NULL, parsers = make_parser("json")), list(a = "1"))

@@ -427,7 +427,7 @@ parser_tsv <- function(...) {
 }
 
 
-#' @describeIn parsers Helper parser that writes the binary post body to a file and reads it back again using `read_fn`.
+#' @describeIn parsers Helper parser that writes the binary body to a file and reads it back again using `read_fn`.
 #'   This parser should be used when reading from a file is required.
 #' @param read_fn function used to read a the content of a file. Ex: [readRDS()]
 #' @export

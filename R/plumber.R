@@ -620,7 +620,7 @@ Plumber <- R6Class(
             req$args,
             # path params
             req$argsPath,
-            # post body params
+            # body params
             req$argsBody
           )
 

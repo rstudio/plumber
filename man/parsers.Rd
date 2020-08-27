@@ -77,7 +77,7 @@ See \code{\link[=registered_parsers]{registered_parsers()}} for a list of regist
 
 \item \code{parser_tsv}: TSV parser. See \code{\link[readr:read_delim]{readr::read_tsv()}} for more details.
 
-\item \code{parser_read_file}: Helper parser that writes the binary post body to a file and reads it back again using \code{read_fn}.
+\item \code{parser_read_file}: Helper parser that writes the binary body to a file and reads it back again using \code{read_fn}.
 This parser should be used when reading from a file is required.
 
 \item \code{parser_rds}: RDS parser. See \code{\link[=readRDS]{readRDS()}} for more details.

@@ -127,7 +127,7 @@ getRelevantArgs <- function(args, plumberExpression) {
 
   # If only req and res are found in function definition...
   # Only call using the first matches of req and res.
-  #   This allows for post body content to have `req` and `res` named arguments and not duplicated values cause issues.
+  #   This allows for body content to have `req` and `res` named arguments and not duplicated values cause issues.
   if (all(fargs %in% c("req", "res"))) {
     ret <- list()
     # using `$` will retrieve the 1st occurance of req,res
