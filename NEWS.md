@@ -56,7 +56,7 @@ plumber 1.0.0
 * New request body parsers
   * `parser_csv()`: Parse request body as a commas separated value (#584)
   * `parser_json()`: Parse request body as JSON (@meztez, #532)
-  * `parser_multi()`: Parse multi part request bodies (@meztez, #532)
+  * `parser_multi()`: Parse multi part request bodies (@meztez, #532) and (#663)
   * `parser_octet()`: Parse request body octet stream (@meztez, #532)
   * `parser_form()`: Parse request body as form input (@meztez, #532)
   * `parser_rds()`: Parse request body as RDS file input (@meztez, #532)
@@ -66,7 +66,11 @@ plumber 1.0.0
   * `parser_none()`: Do not parse the request body (#584)
   * `parser_yaml()`: Parse request body (@meztez, #556)
   * `parser_feather()`: Parse request body using `feather` (#626)
-  * pseudo parser named `"all"` to allow for using all parsers. (Not recommended in production!) (#584)
+  * Pseudo parser named `"all"` to allow for using all parsers. (Not recommended in production!) (#584)
+
+* All parsed request body values are stored at `req$body`. (#663)
+
+* If `multipart/*` content is parsed, `req$body` will contain named output from `webutils::parse_multipart()` and add the parsed value to each part.  However, `req$argsBody` (which is used for route argument matching) will contain a named list of the part `name` to the part `parsed` value.  Look inside `req$body` to access information such as a part's `filename` or `content_type`. If duplicate name values might be be recieved by Plumber, we recommend using the function signature of `function(req, res) {}` or `function(req, res, ...) {}` and accessing information within `req` as appropriate. (#663)
 
 #### Visual Documentation
 
