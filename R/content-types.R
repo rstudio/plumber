@@ -82,7 +82,7 @@ get_fileext <- function(type) {
 
   type_to_ext <- setNames(names(all_content_types), all_content_types)
 
-  ret <<- type_to_ext[type] %|% NULL
+  ret <- type_to_ext[type] %|% NULL
   ret[[1]]
 }
 

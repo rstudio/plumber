@@ -334,12 +334,7 @@ serializer_write_file <- function(
 ) {
 
   # try to be nice and get the file extension from the
-  if (is.null(fileext)) {
-    fileext <- get_fileext(type)
-  }
-  if (is.null(fileext)) {
-    fileext <- ""
-  }
+  fileext <- fileext %||% get_fileext(type) %||% ""
 
   serializer_content_type(type, function(val) {
     tmpfile <- tempfile(fileext = fileext)
