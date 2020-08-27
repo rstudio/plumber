@@ -217,6 +217,8 @@ more details on Plumber serializers and how to customize their behavior.</p>
 
 <span class='fu'>serializer_cat</span>(<span class='kw'>...</span>, type = <span class='st'>"text/plain; charset=UTF-8"</span>)
 
+<span class='fu'>serializer_write_file</span>(<span class='kw'>type</span>, <span class='kw'>write_fn</span>, fileext = <span class='kw'>NULL</span>)
+
 <span class='fu'>serializer_htmlwidget</span>(<span class='kw'>...</span>, type = <span class='st'>"text/html; charset=UTF-8"</span>)
 
 <span class='fu'>serializer_device</span>(<span class='kw'>type</span>, <span class='kw'>dev_on</span>, dev_off = <span class='kw'>grDevices</span>::<span class='kw'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>)
@@ -270,6 +272,14 @@ An exception is that objects of class <code>AsIs</code> (i.e. wrapped in <code><
     See also the comments in the help for <code><a href='https://rdrr.io/r/base/save.html'>save</a></code>.</p></td>
     </tr>
     <tr>
+      <th>write_fn</th>
+      <td><p>Function that should write serialized contnet to the temp file provided. <code>write_fn</code> should have the function signature of <code>function(value, tmp_file){}</code>.</p></td>
+    </tr>
+    <tr>
+      <th>fileext</th>
+      <td><p>A non-empty character vector giving the file extension. This value will try to be infered from the content type provided.</p></td>
+    </tr>
+    <tr>
       <th>dev_on</th>
       <td><p>Function to turn on a graphics device.
 The graphics device <code>dev_on</code> function will receive any arguments supplied to the serializer in addition to <code>filename</code>.
@@ -299,6 +309,7 @@ The graphics device <code>dev_on</code> function will receive any arguments supp
 <li><p><code>serializer_format</code>: Text serializer. See also: <code><a href='https://rdrr.io/r/base/format.html'>format()</a></code></p></li>
 <li><p><code>serializer_print</code>: Text serializer. Captures the output of <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></p></li>
 <li><p><code>serializer_cat</code>: Text serializer. Captures the output of <code><a href='https://rdrr.io/r/base/cat.html'>cat()</a></code></p></li>
+<li><p><code>serializer_write_file</code>: Write output to a temp file whose contents are read back as a serialized response. <code>serializer_write_file()</code> creates (and cleans up) a temp file, calls the serializer (which should write to the temp file), and then reads the contents back as the serialized value.  If the content <code>type</code> starts with <code>"text"</code>, the return result will be read into a character string, otherwise the result will be returned as a raw vector.</p></li>
 <li><p><code>serializer_htmlwidget</code>: htmlwidget serializer. See also: <code><a href='https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html'>htmlwidgets::saveWidget()</a></code></p></li>
 <li><p><code>serializer_device</code>: Helper method to create graphics device serializers, such as <code>serializer_png()</code>. See also: <code><a href='endpoint_serializer.html'>endpoint_serializer()</a></code></p></li>
 <li><p><code>serializer_jpeg</code>: JPEG image serializer. See also: <code><a href='https://rdrr.io/r/grDevices/png.html'>grDevices::jpeg()</a></code></p></li>

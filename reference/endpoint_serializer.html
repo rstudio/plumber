@@ -209,7 +209,8 @@ These hooks are specific to a single <a href='PlumberEndpoint.html'>PlumberEndpo
     <pre class="examples"><div class='input'><span class='co'># The definition of `serializer_device` returns</span>
 <span class='co'># * `preexec`, `postexec` hooks</span>
 <span class='co'># * a `serializer_content_type` serializer</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>serializer_device</span>)</div><div class='output co'>#&gt; function (type, dev_on, dev_off = grDevices::dev.off) 
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>serializer_device</span>)
+</div><div class='output co'>#&gt; function (type, dev_on, dev_off = grDevices::dev.off) 
 #&gt; {
 #&gt;     stopifnot(!missing(type))
 #&gt;     stopifnot(!missing(dev_on))
@@ -237,7 +238,7 @@ These hooks are specific to a single <a href='PlumberEndpoint.html'>PlumberEndpo
 #&gt;             img
 #&gt;         })
 #&gt; }
-#&gt; &lt;bytecode: 0x7fde25a972c8&gt;
+#&gt; &lt;bytecode: 0x7fd74a331200&gt;
 #&gt; &lt;environment: namespace:plumber&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -183,9 +183,9 @@
 <h4 class="hasAnchor">
 <a href="#plumber-router" class="anchor"></a>Plumber router</h4>
 <ul>
-<li><p>Added support for promises in endpoints, filters, and hooks. (<a href='https://github.com/rstudio/plumber/issues/248'>#248</a>)</p></li>
+<li><p>Added support for promises in endpoints, filters, and hooks. This allows for multi-core execution when paired with <code>future</code>. See <code><a href="../reference/plumb_api.html">plumb_api("plumber", "13-promises")</a></code> and <code><a href="../reference/plumb_api.html">plumb_api("plumber", "14-future")</a></code> for an example implementation. (<a href='https://github.com/rstudio/plumber/issues/248'>#248</a>)</p></li>
 <li><p>Added a Tidy API for more natural usage with magrittr’s <code><a href="../reference/%&gt;%.html">%&gt;%</a></code>. For example, a plumber object can now be initiated and run with <code>pr() %&gt;% pr_run(port = 8080)</code>. For more examples, see <a href="https://www.rplumber.io/articles/programmatic-usage.html">here</a> (<a href='https://github.com/blairj09'>@blairj09</a>, <a href='https://github.com/rstudio/plumber/issues/590'>#590</a>)</p></li>
-<li><p>Added support for <code>#' <a href='https://github.com/plumber'>@plumber</a></code> tag to gain programmatic access to the <code>plumber</code> router via <code>function(pr) {....}</code>. (<a href='https://github.com/meztez'>@meztez</a> and <a href='https://github.com/blairj09'>@blairj09</a>, <a href='https://github.com/rstudio/plumber/issues/568'>#568</a>)</p></li>
+<li><p>Added support for <code>#' <a href='https://github.com/plumber'>@plumber</a></code> tag to gain programmatic access to the <code>plumber</code> router via <code>function(pr) {....}</code>. See <code><a href="https://rdrr.io/r/base/system.file.html">system.file("plumber/06-sessions/plumber.R", package = "plumber")</a></code> and how it adds cookie support from within <code>plumber.R</code>. (<a href='https://github.com/meztez'>@meztez</a> and <a href='https://github.com/blairj09'>@blairj09</a>, <a href='https://github.com/rstudio/plumber/issues/568'>#568</a>)</p></li>
 <li><p>An error will be thrown if multiple arguments are matched to an Plumber Endpoint route definition. While it is not required, it is safer to define routes to only use <code>req</code> and <code>res</code> when there is a possiblity to have multiple arguments match a single parameter name. Use <code>req$argsPath</code>, <code>req$argsQuery</code>, and <code>req$argsPostBody</code> to access path, query, and postBody parameters respectively. See <code><a href="https://rdrr.io/r/base/system.file.html">system.file("plumber/17-arguments/plumber.R", package = "plumber")</a></code> to view an example with expected output and <code><a href="../reference/plumb_api.html">plumb_api("plumber", "17-arguments")</a></code> to retrieve the api. (<a href='https://github.com/rstudio/plumber/issues/637'>#637</a>)</p></li>
 <li><p>Added <code><a href="../reference/plumb_api.html">plumb_api()</a></code> for standardizing where to locate (<code>inst/plumber</code>) and how to run (<code><a href="../reference/plumb_api.html">plumb_api(package, name)</a></code>) plumber apis inside an R package. To view the available Plumber APIs, call <code><a href="../reference/plumb_api.html">available_apis()</a></code>. (<a href='https://github.com/rstudio/plumber/issues/631'>#631</a>)</p></li>
 </ul>
@@ -229,7 +229,9 @@
 <li>
 <code><a href="../reference/serializer_headers.html">serializer_svg()</a></code>: Return an image saved as an SVG (<a href='https://github.com/pachamaltese'>@pachamaltese</a>, <a href='https://github.com/rstudio/plumber/issues/398'>#398</a>)</li>
 <li>
-<code><a href="../reference/serializer_headers.html">serializer_headers(header_list)</a></code>: method which sets a list of static headers for each serialized value. Heavily inspired from <a href='https://github.com/ycphs'>@ycphs</a> (<a href='https://github.com/rstudio/plumber/issues/455'>#455</a>). (<a href='https://github.com/rstudio/plumber/issues/585'>#585</a>)</li>
+<code><a href="../reference/serializer_headers.html">serializer_headers(header_list)</a></code>: Method which sets a list of static headers for each serialized value. Heavily inspired from <a href='https://github.com/ycphs'>@ycphs</a> (<a href='https://github.com/rstudio/plumber/issues/455'>#455</a>). (<a href='https://github.com/rstudio/plumber/issues/585'>#585</a>)</li>
+<li>
+<code><a href="../reference/serializer_headers.html">serializer_write_file()</a></code>: Method which wraps <code><a href="../reference/serializer_headers.html">serializer_content_type()</a></code>, but orchestrates creating, writing serialized content to, reading from, and removing a temp file. (<a href='https://github.com/rstudio/plumber/issues/660'>#660</a>)</li>
 </ul>
 </li>
 </ul>
@@ -325,6 +327,7 @@
 <a href="#minor-new-features-and-improvements" class="anchor"></a>Minor new features and improvements</h3>
 <ul>
 <li><p>Documentation is updated and now presented using <code>pkgdown</code> (<a href='https://github.com/rstudio/plumber/issues/570'>#570</a>)</p></li>
+<li><p>New hex logo! Thank you <a href='https://github.com/allisonhorst'>@allisonhorst</a> ! (<a href='https://github.com/rstudio/plumber/issues/570'>#570</a>)</p></li>
 <li><p>Added helper method <code><a href="../reference/is_plumber.html">is_plumber(pr)</a></code> to determine if an object is a Plumber router. (<a href='https://github.com/rstudio/plumber/issues/653'>#653</a>)</p></li>
 <li><p>Added support for the <code>SameSite</code> Cookie attribute. (<a href='https://github.com/chris-dudley'>@chris-dudley</a>, <a href='https://github.com/rstudio/plumber/issues/640'>#640</a>)</p></li>
 <li><p>When calling <code><a href="../reference/include_file.html">include_file()</a></code>, the <code>content_type</code> is automatically inferred from the file extension if <code>content_type</code> is not provided. (<a href='https://github.com/rstudio/plumber/issues/631'>#631</a>)</p></li>
@@ -339,6 +342,7 @@
 <li><p>Added new shorthand types for url parameters. (<a href='https://github.com/byzheng'>@byzheng</a>, <a href='https://github.com/rstudio/plumber/issues/388'>#388</a>)</p></li>
 <li><p>Plumber files are now only evaluated once. Prior plumber behavior sourced endpoint functions twice and non-endpoint code blocks once. (<a href='https://github.com/rstudio/plumber/issues/328'>#328</a>)</p></li>
 <li><p>Improve speed of <code>canServe()</code> method of the <code>PlumberEndpoint</code> class (<a href='https://github.com/atheriel'>@atheriel</a>, <a href='https://github.com/rstudio/plumber/issues/484'>#484</a>)</p></li>
+<li><p>Get more file extension content types using the <code>mime</code> package. (<a href='https://github.com/rstudio/plumber/issues/660'>#660</a>)</p></li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level3">
