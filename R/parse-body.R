@@ -448,14 +448,11 @@ parser_feather <- function(...) {
 
 
 
-#' @describeIn parsers Octet stream parser. Will add a filename attribute if the filename exists.
-#'   Returns a single item list where the value is the raw content and the key is the filename (if applicable).
+#' @describeIn parsers Octet stream parser. Returns the raw content.
 #' @export
 parser_octet <- function() {
-  function(value, filename = NULL, ...) {
-    arg <- list(value)
-    names(arg) <- filename
-    return(arg)
+  function(value, ...) {
+    return(value)
   }
 }
 
