@@ -460,7 +460,7 @@ parser_octet <- function() {
 }
 
 
-#' @describeIn parsers Multi part parser. This parser will then parse each individual body with its respective parser
+#' @describeIn parsers Multi part parser. This parser will then parse each individual body with its respective parser.  When this parser is used, `req$body` will contain the updated output from [webutils::parse_multipart()] by adding the `parsed` output to each part.  Each part may contain detailed information, such as `name` (required), `content_type`, `content_disposition`, `filename`, (raw, original) `value`, and `parsed` (parsed `value`).  When performing Plumber route argument matching, each multipart part will match its `name` to the `parsed` content.
 #' @export
 #' @importFrom webutils parse_multipart
 parser_multi <- function() {
@@ -469,8 +469,20 @@ parser_multi <- function() {
       stop("No boundary found in multipart content-type header: ", content_type)
     boundary <- stri_match_first_regex(content_type, "boundary=([^; ]{2,})", case_insensitive = TRUE)[,2]
     toparse <- parse_multipart(value, boundary)
+
+    # set the names of the items as the `name` of each item
+    toparse_names <- vapply(toparse, function(x) {
+      name <- x$name
+      # null or character(0)
+      if (length(name) == 0) {
+        return("")
+      }
+      name
+    }, character(1))
+    names(toparse) <- toparse_names
+
     # content-type detection
-    parsed_items <- lapply(toparse, function(x) {
+    ret <- lapply(toparse, function(x) {
       if (
         is.null(x$content_type) ||
         # allows for files to be shipped as octect, but parsed using the matching value in `knownContentTypes`
@@ -482,11 +494,19 @@ parser_multi <- function() {
           x$content_type <- getContentType(tools::file_ext(x$filename))
         }
       }
-      x$parsers <- parsers
-      parse_raw(x)
+      # copy over to allow to return the updated `x` without `parsers`
+      item <- x
+      # add `parsers` to allow `parse_raw` to work
+      item$parsers <- parsers
+      # store the parsed information into `x`
+      x$parsed <- parse_raw(item)
+      # return the updated `webutils::parse_multipart()` output
+      x
     })
 
-    combine_keys(parsed_items, type = "multi")
+    # set a class so `req$argsBody` can be reduced to a named list of values
+    class(ret) <- "plumber_multipart"
+    ret
   }
 }
 
