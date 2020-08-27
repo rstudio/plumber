@@ -609,8 +609,8 @@ Plumber <- R6Class(
               private$default_parsers
             }
           req$argsPath <- h$getPathParams(path)
-          # `body_parser()` will also set `req$body` with the untouched body value
-          req$argsBody <- body_parser(req, parsers)
+          # `req_body_parser()` will also set `req$body` with the untouched body value
+          req$argsBody <- req_body_parser(req, parsers)
 
           req$args <- c(
             # req, res

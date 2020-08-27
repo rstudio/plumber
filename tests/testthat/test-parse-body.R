@@ -30,7 +30,7 @@ test_that("filter passes on content-type", {
       print(content_type)
       body
     },
-    expect_output(body_parser(req, make_parser("text")), "text/html; charset=testset"),
+    expect_output(req_body_parser(req, make_parser("text")), "text/html; charset=testset"),
     .env = "plumber"
   )
 })
@@ -115,7 +115,7 @@ test_that("Test multipart output is reduced for argument matching", {
     body = body,
     HTTP_CONTENT_TYPE = "multipart/form-data; boundary=---------------------------286326291134907228894146459692"
   )
-  parsed_body <- body_parser(req, make_parser(c("multi", "octet", "json")))
+  parsed_body <- req_body_parser(req, make_parser(c("multi", "octet", "json")))
 
   expect_s3_class(req$body, "plumber_multipart")
   expect_equal(names(req$body), c("files", "files", "files", "files", "dt", "namedval", "namedval", "namedval", "namedval"))
@@ -160,7 +160,7 @@ test_that("Test multipart parser", {
     body = body,
     HTTP_CONTENT_TYPE = "multipart/form-data; boundary=----WebKitFormBoundaryMYdShB9nBc32BUhQ"
   )
-  parsed_body <- body_parser(req, make_parser(c("multi", "json", "rds", "octet")))
+  parsed_body <- req_body_parser(req, make_parser(c("multi", "json", "rds", "octet")))
 
   expect_s3_class(req$body, "plumber_multipart")
   expect_equal(names(req$body), c("json", "img1", "img2", "rds"))
@@ -207,7 +207,7 @@ test_that("Test multipart respect content-type", {
     body = body,
     HTTP_CONTENT_TYPE = "multipart/form-data; boundary=---------------------------90908882332870323642673870272"
   )
-  parsed_body <- body_parser(req, make_parser(c("multi", "tsv")))
+  parsed_body <- req_body_parser(req, make_parser(c("multi", "tsv")))
 
   expect_s3_class(req$body, "plumber_multipart")
   expect_equal(length(req$body), 1)
@@ -236,7 +236,7 @@ test_that("Test an array of files upload", {
     body = body,
     HTTP_CONTENT_TYPE = "multipart/form-data; boundary=---------------------------286326291134907228894146459692"
   )
-  parsed_body <- body_parser(req, make_parser(c("multi", "octet", "json")))
+  parsed_body <- req_body_parser(req, make_parser(c("multi", "octet", "json")))
 
   expect_s3_class(req$body, "plumber_multipart")
   expect_equal(names(req$body), c("files", "files", "files", "files", "dt"))

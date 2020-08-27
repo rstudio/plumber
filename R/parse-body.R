@@ -13,7 +13,7 @@ bodyFilter <- function(req){
   forward()
 }
 
-body_parser <- function(req, parsers = NULL) {
+req_body_parser <- function(req, parsers = NULL) {
   if (length(parsers) == 0) {return(list())}
   type <- req$HTTP_CONTENT_TYPE
   bodyRaw <- req$bodyRaw
