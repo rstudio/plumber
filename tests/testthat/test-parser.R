@@ -67,8 +67,7 @@ test_that("parsers work", {
     })
   expect_equal(names(parsed_body), c("json", "img1", "img2", "rds"))
   expect_equal(parsed_body[["rds"]], women)
-  expect_equal(names(parsed_body[["img1"]]), c("avatar2-small.png"))
-  expect_true(is.raw(parsed_body[["img1"]][["avatar2-small.png"]]))
+  expect_true(is.raw(parsed_body[["img1"]]))
   expect_equal(parsed_body[["json"]], list(a=2,b=4,c=list(w=3,t=5)))
 
 
