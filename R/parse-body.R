@@ -519,7 +519,7 @@ register_parsers_onLoad <- function() {
   # parser alias names for plumbing
   register_parser("csv",     parser_csv,     fixed = c("application/csv", "application/x-csv", "text/csv", "text/x-csv"))
   register_parser("json",    parser_json,    fixed = c("application/json", "text/json"))
-  register_parser("multi",   parser_multi,   fixed = "multipart/form-data")
+  register_parser("multi",   parser_multi,   fixed = "multipart/form-data", regex = "^multipart/")
   register_parser("octet",   parser_octet,   fixed = "application/octet-stream")
   register_parser("form",    parser_form,   fixed = "application/x-www-form-urlencoded")
   register_parser("rds",     parser_rds,     fixed = "application/rds")
