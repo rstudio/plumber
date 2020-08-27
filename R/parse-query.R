@@ -184,26 +184,7 @@ combine_keys <- function(obj, type) {
       function(x) {
         unname(unlist(x))
       },
-    "multi" =
-      function(x) {
-        if (length(x) == 1) {
-          # return first item only
-          return(x[[1]])
-        }
-
-        # return list of internal named items
-        # aka... unlist the top layer only. Maintain the inner layer names
-        x_new <- lapply(unname(x), function(x_item) {
-          if (is.atomic(x_item)) {
-            # handles things like `parse_text` which returns atomic values
-            return(list(x_item))
-          }
-
-          # handles things like `parse_octet` which returns a (possibly) named list
-          x_item
-        })
-        as.list(unlist(x_new, recursive = FALSE))
-      }
+    stop("unknown type: ", type)
   )
 
   # equivalent code output, `split` is much faster with larger objects

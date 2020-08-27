@@ -70,3 +70,8 @@ test_that("different lengths of query string return same shape", {
 
   }
 })
+
+test_that("query keys with same name are combined", {
+  a <- list(A = 1, A = 2, B = 3, A = 4, B = 5)
+  expect_equal(combine_keys(a, "query"), list(A = c(1,2,4), B = c(3,5)))
+})
