@@ -44,8 +44,12 @@ knownContentTypes <- list(
   xlsb='application/vnd.ms-excel.sheet.binary.macroEnabled.12',
   feather='application/feather',
   rds='application/rds',
-  tsv="text/tab-separated-values",
-  csv="text/csv")
+  tsv = "application/tab-separated-values",
+  csv = "application/csv",
+  json = "application/json",
+  yml = "application/yaml",
+  yaml = "application/yaml"
+)
 
 getContentType <- function(ext, defaultType='application/octet-stream') {
   ct <- knownContentTypes[[tolower(ext)]]
