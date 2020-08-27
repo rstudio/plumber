@@ -14,3 +14,17 @@ is_available <- function (package, version = NULL) {
     x
   }
 }
+
+`%|%` <- function(x, y) {
+  if (length(x) > 1) {
+    stopifnot(length(y) == 1)
+    x[is.na(x)] <- y
+    return(x)
+  }
+
+  if (is.na(x)) {
+    y
+  } else {
+    x
+  }
+}
