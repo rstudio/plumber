@@ -3,6 +3,7 @@ function(req, id, name){
   list(
     id = id,
     name = name,
-    raw = req$postBody
+    body = req$body
+    raw = req$bodyRaw
   )
 }

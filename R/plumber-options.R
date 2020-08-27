@@ -27,8 +27,9 @@
 #' \item{`plumber.maxRequestSize`}{Maximum length in bytes of request body. Body larger
 #' than maximum are rejected with http error 413. `0` means unlimited size. Defaults to `0`}
 #' \item{`plumber.postBody`}{Copy post body content to `req$postBody` using system encoding.
-#' This should be set to `FALSE` if you do not need it. Default is `TRUE` to preserve compatibility with
-#' previous version behavior. Defaults to `TRUE`}
+#'   It is recommended to set this value to `FALSE`.
+#'   Default is `TRUE` to preserve compatibility with
+#' previous version behavior. }
 #' \item{`plumber.sharedSecret`}{Shared secret used to filter incoming request.
 #' When `NULL`, secret is not validated. Otherwise, Plumber compares secret with http header
 #' `PLUMBER_SHARED_SECRET`. Failure to match results in http error 400. Defaults to `NULL`}

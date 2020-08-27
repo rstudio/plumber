@@ -1,18 +1,19 @@
-postBodyFilter <- function(req){
-  handled <- req$.internal$postBodyHandled
+bodyFilter <- function(req){
+  handled <- req$.internal$bodyHandled
   if (is.null(handled) || handled != TRUE) {
     # This will return raw bytes
-    req$postBodyRaw <- req$rook.input$read()
+    # store raw body into req$bodyRaw
+    req$bodyRaw <- req$rook.input$read()
     if (isTRUE(getOption("plumber.postBody", TRUE))) {
       req$rook.input$rewind()
       req$postBody <- paste0(req$rook.input$read_lines(), collapse = "\n")
     }
-    req$.internal$postBodyHandled <- TRUE
+    req$.internal$bodyHandled <- TRUE
   }
   forward()
 }
 
-postbody_parser <- function(req, parsers = NULL) {
+body_parser <- function(req, parsers = NULL) {
   if (length(parsers) == 0) {return(list())}
   type <- req$HTTP_CONTENT_TYPE
   bodyRaw <- req$bodyRaw

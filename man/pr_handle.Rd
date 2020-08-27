@@ -70,10 +70,9 @@ pr() \%>\%
 pr() \%>\%
   pr_get("/hi", function() "Hello World") \%>\%
   pr_post("/echo", function(req, res) {
-    if (req$postBody == "") return("No input")
-    input <- jsonlite::fromJSON(req$postBody)
+    if (is.null(req$body)) return("No input")
     list(
-      input = input
+      input = req$body
     )
   }) \%>\%
   pr_run()

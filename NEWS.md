@@ -12,7 +12,7 @@ plumber 1.0.0
 
 * An error will be thrown if multiple arguments are matched to an Plumber Endpoint route definition.
   While it is not required, it is safer to define routes to only use `req` and `res` when there is a possiblity to have multiple arguments match a single parameter name.
-  Use `req$argsPath`, `req$argsQuery`, and `req$argsPostBody` to access path, query, and postBody parameters respectively.
+  Use `req$argsPath`, `req$argsQuery`, and `req$argsBody` to access path, query, and postBody parameters respectively.
   See `system.file("plumber/17-arguments/plumber.R", package = "plumber")` to view an example with expected output and `plumb_api("plumber", "17-arguments")` to retrieve the api.
   (#637)
 
