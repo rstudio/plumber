@@ -127,7 +127,7 @@ getRelevantArgs <- function(args, plumberExpression) {
 
   # If only req and res are found in function definition...
   # Only call using the first matches of req and res.
-  #   This allows for body content to have `req` and `res` named arguments and not duplicated values cause issues.
+  #   This allows for body content to have `req` and `res` named arguments and not duplicated values which cause issues.
   if (all(fargs %in% c("req", "res"))) {
     ret <- list()
     # using `$` will retrieve the 1st occurance of req,res
@@ -149,7 +149,7 @@ getRelevantArgs <- function(args, plumberExpression) {
   # for all args, check if they are duplicated
   arg_names <- names(args)
   matched_arg_names <- arg_names[arg_names %in% fargs]
-  duplicated_matched_arg_names <- duplicated(matched_arg_names, fromLast = TRUE)
+  duplicated_matched_arg_names <- duplicated(matched_arg_names)
 
   if (any(duplicated_matched_arg_names)) {
     stop(

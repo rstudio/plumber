@@ -34,7 +34,7 @@ test_that("root requests are routed to index.html", {
 test_that("static binary file is served", {
   res <- PlumberResponse$new()
   pr$route(make_req("GET", "/test.txt.zip"), res)
-  expect_equal(res$headers$`Content-Type`, "application/octet-stream")
+  expect_equal(res$headers$`Content-Type`, "application/zip")
   bod <- res$body
   zipf <- file(test_path("files/static/test.txt.zip"), "rb")
   bin <- readBin(zipf, "raw", n=1000)

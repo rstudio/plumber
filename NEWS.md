@@ -5,10 +5,10 @@ plumber 1.0.0
 
 #### Plumber router
 
-* Added support for promises in endpoints, filters, and hooks. (#248)
+* Added support for promises in endpoints, filters, and hooks.  This allows for multi-core execution when paired with `future`. See `plumb_api("plumber", "13-promises")` and `plumb_api("plumber", "14-future")` for an example implementation. (#248)
 * Added a Tidy API for more natural usage with magrittr's `%>%`. For example, a plumber object can now be initiated and run with `pr() %>% pr_run(port = 8080)`. For more examples, see [here](https://www.rplumber.io/articles/programmatic-usage.html) (@blairj09, #590)
 
-* Added support for `#' @plumber` tag to gain programmatic access to the `plumber` router via `function(pr) {....}`. (@meztez and @blairj09, #568)
+* Added support for `#' @plumber` tag to gain programmatic access to the `plumber` router via `function(pr) {....}`. See `system.file("plumber/06-sessions/plumber.R", package = "plumber")` and how it adds cookie support from within `plumber.R`. (@meztez and @blairj09, #568)
 
 * An error will be thrown if multiple arguments are matched to an Plumber Endpoint route definition.
   While it is not required, it is safer to define routes to only use `req` and `res` when there is a possiblity to have multiple arguments match a single parameter name.
@@ -47,7 +47,8 @@ plumber 1.0.0
   * `serializer_print()`: Return text content after calling `print()` (#585)
   * `serializer_format()`: Return text content after calling `format()` (#585)
   * `serializer_svg()`: Return an image saved as an SVG (@pachamaltese, #398)
-  * `serializer_headers(header_list)`: method which sets a list of static headers for each serialized value. Heavily inspired from @ycphs (#455). (#585)
+  * `serializer_headers(header_list)`: Method which sets a list of static headers for each serialized value. Heavily inspired from @ycphs (#455). (#585)
+  * `serializer_write_file()`: Method which wraps `serializer_content_type()`, but orchestrates creating, writing serialized content to, reading from, and removing a temp file. (#660)
 
 #### Body parsing
 
@@ -136,6 +137,8 @@ plumber 1.0.0
 
 * Documentation is updated and now presented using `pkgdown` (#570)
 
+* New hex logo! Thank you @allisonhorst ! (#570)
+
 * Added helper method `is_plumber(pr)` to determine if an object is a Plumber router. (#653)
 
 * Added support for the `SameSite` Cookie attribute. (@chris-dudley, #640)
@@ -163,6 +166,8 @@ plumber 1.0.0
 * Plumber files are now only evaluated once.  Prior plumber behavior sourced endpoint functions twice and non-endpoint code blocks once. (#328)
 
 * Improve speed of `canServe()` method of the `PlumberEndpoint` class (@atheriel, #484)
+
+* Get more file extension content types using the `mime` package. (#660)
 
 ### Bug fixes
 
