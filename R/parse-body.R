@@ -25,6 +25,17 @@ body_parser <- function(req, parsers = NULL) {
   if (inherits(body, "plumber_multipart")) {
     # pluck the values under the names of the multipart
     body <- lapply(unclass(body), `[[`, "parsed")
+  } else if (!is.null(body)) {
+    # if it's a vector, then we should maybe bundle it as a list
+    # this will allow for req$args to have the single piece of information
+    # but it will deter from trying to formal name match against MANY false positive values
+    if (!is.list(body)) {
+      body_names <- names(body)
+      # if there are no names at all, wrap it in a unnamed list to pass it through
+      if (is.null(body_names) || all(body_names == "")) {
+        body <- list(body)
+      }
+    }
   }
   body
 }
