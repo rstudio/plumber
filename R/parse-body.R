@@ -15,9 +15,17 @@ postBodyFilter <- function(req){
 postbody_parser <- function(req, parsers = NULL) {
   if (length(parsers) == 0) {return(list())}
   type <- req$HTTP_CONTENT_TYPE
-  body <- req$postBodyRaw
-  if (is.null(body)) {return(list())}
-  parse_body(body, type, parsers)
+  bodyRaw <- req$bodyRaw
+  if (is.null(bodyRaw)) {return(list())}
+  body <- parse_body(bodyRaw, type, parsers)
+  # store parsed body into req$body
+  req$body <- body
+
+  if (inherits(body, "plumber_multipart")) {
+    # pluck the values under the names of the multipart
+    body <- lapply(unclass(body), `[[`, "parsed")
+  }
+  body
 }
 
 parse_body <- function(body, content_type = NULL, parsers = NULL) {
@@ -53,7 +61,7 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
 
   # parse as json or a form
   if (length(content_type) == 0) {
-    # fast default to json when first byte is 7b (ascii {)
+    # fast default to json when first byte is 7b (ascii {) or 5b (ascii [)
     if (looks_like_json(first_byte)) {
       return(parsers$alias$json)
     }
