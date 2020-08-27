@@ -1,6 +1,6 @@
 # FROM Shiny
 # @author Shiny package authors
-knownContentTypes <- list(
+knownContentTypes <- c(
   html='text/html; charset=UTF-8',
   htm='text/html; charset=UTF-8',
   js='text/javascript',
@@ -51,9 +51,39 @@ knownContentTypes <- list(
 getContentType <- function(ext, defaultType = 'application/octet-stream') {
   ext <- tolower(ext)
 
-  knownContentTypes[[ext]] %||%
-    mime::mimemap[[ext]] %||%
+  ret <-
+    knownContentTypes[ext] %|%
+    mime::mimemap[ext] %|%
     defaultType
+
+  ret[[1]]
+}
+
+cleanup_content_type <- function(type) {
+  if (length(type) == 0) return(type)
+
+  type <- tolower(type)
+
+  # remove trailing content type information
+  # "text/yaml; charset=UTF-8"
+  # to
+  # "text/yaml"
+  if (stri_detect_fixed(type, ";")) {
+    type <- stri_split_fixed(type, ";")[[1]][1]
+  }
+
+  type
+}
+
+get_fileext <- function(type) {
+  type <- cleanup_content_type(type)
+
+  all_content_types <- c(knownContentTypes, mime::mimemap)
+
+  type_to_ext <- setNames(names(all_content_types), all_content_types)
+
+  ret <<- type_to_ext[type] %|% NULL
+  ret[[1]]
 }
 
 #' Request character set

@@ -29,8 +29,7 @@ parse_body <- function(body, content_type = NULL, parsers = NULL) {
 parse_raw <- function(toparse) {
   if (length(toparse$value) == 0L) return(list())
   parser <- parser_picker(
-    # Lower case content_type for parser matching
-    tolower(toparse$content_type),
+    toparse$content_type,
     toparse$value[1],
     toparse$filename,
     toparse$parsers
@@ -51,6 +50,8 @@ looks_like_json <- local({
 })
 parser_picker <- function(content_type, first_byte, filename = NULL, parsers = NULL) {
 
+  content_type <- cleanup_content_type(content_type)
+
   # parse as json or a form
   if (length(content_type) == 0) {
     # fast default to json when first byte is 7b (ascii {)
@@ -59,14 +60,6 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
     }
 
     return(parsers$alias$form)
-  }
-
-  # remove trailing content type information
-  # "text/yaml; charset=UTF-8"
-  # to
-  # "text/yaml"
-  if (stri_detect_fixed(content_type, ";")) {
-    content_type <- stri_split_fixed(content_type, ";")[[1]][1]
   }
 
   parser <- parsers$fixed[[content_type]]
