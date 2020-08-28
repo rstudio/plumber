@@ -160,7 +160,13 @@ combine_keys <- function(obj, type) {
   keys <- names(obj)
   unique_keys <- unique(keys)
 
-  if (length(unique_keys) == length(keys) && identical(type, "query")) {
+  # If a query string as the same amount of unique keys as keys,
+  # then return it as it
+  # (`"multi"` type objects MUST be processed, regardless if the unique key count is the same)
+  if (
+    length(unique_keys) == length(keys) &&
+    identical(type, "query")
+  ) {
     return(obj)
   }
 
