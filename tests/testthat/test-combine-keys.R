@@ -131,4 +131,12 @@ test_that("raw values are not combined", {
     A = list(name = "A", parsed = 4, filename = "four")
   )
   expect_equal(combine_keys(a, "multi"), list(A = list(x = list(x), y = y, four = 4), B = list(two = 2)))
+
+  a <- list(
+    A = list(name = "A", parsed = list(x), filename = "same"),
+    B = list(name = "B", parsed = 2, filename = "same"),
+    A = list(name = "A", parsed = y, filename = "same"),
+    A = list(name = "A", parsed = 4, filename = "same")
+  )
+  expect_equal(combine_keys(a, "multi"), list(A = list(same = list(x), same = y, same = 4), B = list(same = 2)))
 })
