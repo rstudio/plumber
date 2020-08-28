@@ -139,15 +139,22 @@ test_that("Test multipart output is reduced for argument matching", {
   }
 
   expect_true(!inherits(parsed_body, "plumber_multipart"))
-  expect_equal(names(parsed_body), c("files", "files", "files", "files", "dt", "namedval", "namedval", "namedval", "namedval"))
-  lapply(seq_along(parsed_body), function(i) {
-    parsed <- parsed_body[[i]]
-    if (i %in% c(5, 9)) {
-      expect_equal(parsed, jsonlite::parse_json("{}"))
-    } else {
-      expect_true(is.raw(parsed))
-    }
-  })
+  expect_equal(names(parsed_body), c("files", "dt", "namedval"))
+
+  expect_equal(length(parsed_body$files), 4)
+  expect_equal(names(parsed_body$files), c("avatar2-small.png", "text1.bin", "text2.bin", "text3.bin"))
+  for (parsed in parsed_body$files) {
+    expect_true(is.raw(parsed))
+  }
+
+  expect_equal(parsed_body$dt, jsonlite::parse_json("{}"))
+
+  expect_equal(length(parsed_body$namedval), 4)
+  expect_equal(names(parsed_body$namedval), c("has_name.bin", "", "has_name2.bin", "has_name3.json"))
+  for (parsed in parsed_body$namedval[-4]) {
+    expect_true(is.raw(parsed))
+  }
+  expect_equal(parsed_body$namedval$`has_name3.json`, jsonlite::parse_json("{}"))
 })
 
 
@@ -189,11 +196,11 @@ test_that("Test multipart parser", {
 
   expect_true(!inherits(parsed_body, "plumber_multipart"))
   expect_equal(names(parsed_body), c("json", "img1", "img2", "rds"))
-  expect_equal(parsed_body[["rds"]], women)
-  expect_true(is.raw(parsed_body[["img1"]]))
-  expect_gt(length(parsed_body[["img1"]]), 100)
-  expect_true(is.raw(parsed_body[["img2"]]))
-  expect_gt(length(parsed_body[["img2"]]), 100)
+  expect_equal(parsed_body[["rds"]], list("women.rds" = women))
+  expect_true(is.raw(parsed_body[["img1"]][["avatar2-small.png"]]))
+  expect_gt(length(parsed_body[["img1"]][["avatar2-small.png"]]), 100)
+  expect_true(is.raw(parsed_body[["img2"]][["ragnarok_small.png"]]))
+  expect_gt(length(parsed_body[["img2"]][["ragnarok_small.png"]]), 100)
   expect_equal(parsed_body[["json"]], list(a=2,b=4,c=list(w=3,t=5)))
 })
 
@@ -223,9 +230,9 @@ test_that("Test multipart respect content-type", {
   expect_equal(nrow(req$body$sample_name$parsed), 11)
 
   expect_true(!inherits(parsed_body, "plumber_multipart"))
-  expect_s3_class(parsed_body$sample_name, "data.frame")
-  expect_equal(colnames(parsed_body$sample_name), c("x", "y", "z"))
-  expect_equal(nrow(parsed_body$sample_name), 11)
+  expect_s3_class(parsed_body[["sample_name"]][["sample.tsv"]], "data.frame")
+  expect_equal(colnames(parsed_body[["sample_name"]][["sample.tsv"]]), c("x", "y", "z"))
+  expect_equal(nrow(parsed_body[["sample_name"]][["sample.tsv"]]), 11)
 })
 
 test_that("Test an array of files upload", {
@@ -264,9 +271,10 @@ test_that("Test an array of files upload", {
   }
 
   expect_true(!inherits(parsed_body, "plumber_multipart"))
-  expect_equal(names(parsed_body), c("files", "files", "files", "files", "dt"))
-  expect_equal(rawToChar(parsed_body[[2]]), "a")
-  expect_equal(rawToChar(parsed_body[[3]]), "b")
-  expect_equal(rawToChar(parsed_body[[4]]), "c")
-  expect_equal(parsed_body$dt, jsonlite::parse_json("{}"))
+  expect_equal(names(parsed_body), c("files", "dt"))
+  expect_equal(names(parsed_body$files), c("avatar2-small.png", "text1.bin", "text2.bin", "text3.bin"))
+  expect_equal(rawToChar(parsed_body$files[[2]]), "a")
+  expect_equal(rawToChar(parsed_body$files[[3]]), "b")
+  expect_equal(rawToChar(parsed_body$files[[4]]), "c")
+  expect_equal(parsed_body[["dt"]], jsonlite::parse_json("{}"))
 })
