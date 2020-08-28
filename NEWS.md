@@ -71,7 +71,7 @@ plumber 1.0.0
 
 * The parsed request body values is stored at `req$body`. (#663)
 
-* If `multipart/*` content is parsed, `req$body` will contain named output from `webutils::parse_multipart()` and add the parsed value to each part.  However, `req$argsBody` (which is used for route argument matching) will contain a named list of the part `name` to the part `parsed` value.  Look inside `req$body` to access information such as a part's `filename` or `content_type`. If duplicate name values might be be recieved by Plumber, we recommend using the function signature of `function(req, res) {}` or `function(req, res, ...) {}` and accessing information within `req` as appropriate. (#663)
+* If `multipart/*` content is parsed, `req$body` will contain named output from `webutils::parse_multipart()` and add the parsed value to each part. Look here for access to all provided information (e.g., `name`, `filename`, `content_type`, etc). In addition, `req$argsBody` (which is used for route argument matching) will contain a named reduced form of this information where `parsed` values (and `filename`s) are combined on the same `name`. (#663)
 
 #### Visual Documentation
 

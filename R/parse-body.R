@@ -27,14 +27,7 @@ req_body_parser <- function(req, parsers = NULL) {
   args_body <- body
 
   if (inherits(args_body, "plumber_multipart")) {
-
-    # parsed_bodies <- list()
-
-    # # pluck the values under the names of the multipart
-    # parsed_bodies <- lapply(unclass(body), `[[`, "parsed")
-    # is_octet <-
-
-    args_body <- combine_keys(unclass(args_body), type = "multi")
+    args_body <- combine_keys(args_body, type = "multi")
 
   } else if (!is.null(args_body)) {
     # if it's a vector, then we should maybe bundle it as a list

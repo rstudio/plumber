@@ -248,7 +248,5 @@ combine_keys <- function(obj, type) {
     }
   names(vals) <- unique_keys
 
-  # # append any remaining unnamed arguments (for `type = multi` only)
-  # c(vals, extra_args)
   vals
 }

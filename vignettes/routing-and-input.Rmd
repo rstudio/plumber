@@ -233,7 +233,7 @@ Name | Example | Description
 `PATH_INFO` | `"/"` | The path of the incoming HTTP request
 `postBody` | `"a=1&b=2"` | The text contents of the body of the request. Despite the name, it is available for any HTTP method. It is recommended to disable this parsing, see `?options_plumber`.
 `bodyRaw` | `charToRaw("a=1&b=2")` | The `raw()`, unparsed contents of the body of the request
-`body` | `charToRaw("a=1&b=2")` | This value will typically be the same as `argsBody`.  However, with content type `"multipart/*"`, `req$body` may contain detailed information, such as `name`, `content_type`, `content_disposition`, `filename`, (raw, original) `value`, and `parsed` (parsed `value`).
+`body` | `list(a=1, b=2)` | This value will typically be the same as `argsBody`.  However, with content type `"multipart/*"`, `req$body` may contain detailed information, such as `name`, `content_type`, `content_disposition`, `filename`, `value` (which is a `raw()` vector), and `parsed` (parsed version of `value`).
 `args` | `list(a=1,b=2)` | In a route, the combined arguments of `list(req = req, res = res)`, `argsPath`, `argsBody`, and `argsQuery`. In a filter, only contains `argsQuery`.
 `argsPath` | `list(a=1,b=2)` | The values of the path arguments.
 `argsQuery` | `list(a=1,b=2)` | The parsed query string output.
