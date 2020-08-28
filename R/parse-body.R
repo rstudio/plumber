@@ -1,23 +1,47 @@
-postBodyFilter <- function(req){
-  handled <- req$.internal$postBodyHandled
+bodyFilter <- function(req){
+  handled <- req$.internal$bodyHandled
   if (is.null(handled) || handled != TRUE) {
     # This will return raw bytes
-    req$postBodyRaw <- req$rook.input$read()
+    # store raw body into req$bodyRaw
+    req$bodyRaw <- req$rook.input$read()
     if (isTRUE(getOption("plumber.postBody", TRUE))) {
       req$rook.input$rewind()
       req$postBody <- paste0(req$rook.input$read_lines(), collapse = "\n")
     }
-    req$.internal$postBodyHandled <- TRUE
+    req$.internal$bodyHandled <- TRUE
   }
   forward()
 }
 
-postbody_parser <- function(req, parsers = NULL) {
+req_body_parser <- function(req, parsers = NULL) {
   if (length(parsers) == 0) {return(list())}
   type <- req$HTTP_CONTENT_TYPE
-  body <- req$postBodyRaw
-  if (is.null(body)) {return(list())}
-  parse_body(body, type, parsers)
+  bodyRaw <- req$bodyRaw
+  if (is.null(bodyRaw)) {return(list())}
+  body <- parse_body(bodyRaw, type, parsers)
+  # store parsed body into req$body
+  req$body <- body
+
+  # Copy name over so that it is clearer as to the goal of the code below
+  # The value returned from this function is set to `ret$argsBody`
+  args_body <- body
+
+  if (inherits(args_body, "plumber_multipart")) {
+    args_body <- combine_keys(args_body, type = "multi")
+
+  } else if (!is.null(args_body)) {
+    # if it's a vector, then we should maybe bundle it as a list
+    # this will allow for req$args to have the single piece of information
+    # but it will deter from trying to formal name match against MANY false positive values
+    if (!is.list(args_body)) {
+      args_body_names <- names(args_body)
+      # if there are no names at all, wrap it in a unnamed list to pass it through
+      if (is.null(args_body_names) || all(args_body_names == "")) {
+        args_body <- list(args_body)
+      }
+    }
+  }
+  args_body
 }
 
 parse_body <- function(body, content_type = NULL, parsers = NULL) {
@@ -54,7 +78,7 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
 
   # parse as json or a form
   if (length(content_type) == 0) {
-    # fast default to json when first byte is 7b (ascii {)
+    # fast default to json when first byte is 7b (ascii {) or 5b (ascii [)
     if (looks_like_json(first_byte)) {
       return(parsers$alias$json)
     }
@@ -400,7 +424,7 @@ parser_tsv <- function(...) {
 }
 
 
-#' @describeIn parsers Helper parser that writes the binary post body to a file and reads it back again using `read_fn`.
+#' @describeIn parsers Helper parser that writes the binary body to a file and reads it back again using `read_fn`.
 #'   This parser should be used when reading from a file is required.
 #' @param read_fn function used to read a the content of a file. Ex: [readRDS()]
 #' @export
@@ -441,19 +465,16 @@ parser_feather <- function(...) {
 
 
 
-#' @describeIn parsers Octet stream parser. Will add a filename attribute if the filename exists.
-#'   Returns a single item list where the value is the raw content and the key is the filename (if applicable).
+#' @describeIn parsers Octet stream parser. Returns the raw content.
 #' @export
 parser_octet <- function() {
-  function(value, filename = NULL, ...) {
-    arg <- list(value)
-    names(arg) <- filename
-    return(arg)
+  function(value, ...) {
+    return(value)
   }
 }
 
 
-#' @describeIn parsers Multi part parser. This parser will then parse each individual body with its respective parser
+#' @describeIn parsers Multi part parser. This parser will then parse each individual body with its respective parser.  When this parser is used, `req$body` will contain the updated output from [webutils::parse_multipart()] by adding the `parsed` output to each part.  Each part may contain detailed information, such as `name` (required), `content_type`, `content_disposition`, `filename`, (raw, original) `value`, and `parsed` (parsed `value`).  When performing Plumber route argument matching, each multipart part will match its `name` to the `parsed` content.
 #' @export
 #' @importFrom webutils parse_multipart
 parser_multi <- function() {
@@ -462,8 +483,20 @@ parser_multi <- function() {
       stop("No boundary found in multipart content-type header: ", content_type)
     boundary <- stri_match_first_regex(content_type, "boundary=([^; ]{2,})", case_insensitive = TRUE)[,2]
     toparse <- parse_multipart(value, boundary)
+
+    # set the names of the items as the `name` of each item
+    toparse_names <- vapply(toparse, function(x) {
+      name <- x$name
+      # null or character(0)
+      if (length(name) == 0) {
+        return("")
+      }
+      name
+    }, character(1))
+    names(toparse) <- toparse_names
+
     # content-type detection
-    parsed_items <- lapply(toparse, function(x) {
+    ret <- lapply(toparse, function(x) {
       if (
         is.null(x$content_type) ||
         # allows for files to be shipped as octect, but parsed using the matching value in `knownContentTypes`
@@ -475,11 +508,19 @@ parser_multi <- function() {
           x$content_type <- getContentType(tools::file_ext(x$filename))
         }
       }
-      x$parsers <- parsers
-      parse_raw(x)
+      # copy over to allow to return the updated `x` without `parsers`
+      item <- x
+      # add `parsers` to allow `parse_raw` to work
+      item$parsers <- parsers
+      # store the parsed information into `x`
+      x$parsed <- parse_raw(item)
+      # return the updated `webutils::parse_multipart()` output
+      x
     })
 
-    combine_keys(parsed_items, type = "multi")
+    # set a class so `req$argsBody` can be reduced to a named list of values
+    class(ret) <- "plumber_multipart"
+    ret
   }
 }
 
@@ -495,7 +536,7 @@ register_parsers_onLoad <- function() {
   # parser alias names for plumbing
   register_parser("csv",     parser_csv,     fixed = c("application/csv", "application/x-csv", "text/csv", "text/x-csv"))
   register_parser("json",    parser_json,    fixed = c("application/json", "text/json"))
-  register_parser("multi",   parser_multi,   fixed = "multipart/form-data")
+  register_parser("multi",   parser_multi,   fixed = "multipart/form-data", regex = "^multipart/")
   register_parser("octet",   parser_octet,   fixed = "application/octet-stream")
   register_parser("form",    parser_form,   fixed = "application/x-www-form-urlencoded")
   register_parser("rds",     parser_rds,     fixed = "application/rds")

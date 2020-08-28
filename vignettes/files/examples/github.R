@@ -26,7 +26,7 @@ function(req, res) {
 
   # I stored my secret in a file at ~/.github
   secret <- readLines("~/.github")[1]
-  hm <- digest::hmac(secret, req$postBody, algo="sha1")
+  hm <- digest::hmac(secret, req$body, algo="sha1")
   hm <- paste0("sha1=", hm)
   if (!identical(hm, req$HTTP_X_HUB_SIGNATURE)){
     # Invalid signature

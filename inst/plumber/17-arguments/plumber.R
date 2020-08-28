@@ -7,15 +7,17 @@ function(a, b) {
 
 
 
-#* Since URI paths, query params, and post body arguments can have conflicting names, it's better practice to access arguments via the request object
+#* Since URI paths, query params, and body arguments can have conflicting names, it's better practice to access arguments via the request object
+#* If more information is needed from the body (such as filenames), inspect `req$body` for more information
 #* @serializer print
 #* @post /good-practice/<a>/<b>
 function(req, res) {
   list(
-    all = req$args,
-    query = req$argsQuery,
-    path = req$argsPath,
-    postBody = req$argsPostBody
+    args = req$args,
+    argsQuery = req$argsQuery,
+    argsPath = req$argsPath,
+    argsBody = req$argsBody,
+    body = req$body
   )
 }
 
@@ -55,57 +57,65 @@ function(req, res) {
 
 ## Safe endpoint setup
 # curl --data 'a=5&b=6' '127.0.0.1:1234/good-practice/3/4?a=1&b=2&d=10'
-#> $all
-#> $all$req
+#> $args
+#> $args$req
 #> <environment>
 #>
-#> $all$res
+#> $args$res
 #> <PlumberResponse>
 #>
-#> $all$a
+#> $args$a
 #> [1] "1"
 #>
-#> $all$b
+#> $args$b
 #> [1] "2"
 #>
-#> $all$d
+#> $args$d
 #> [1] "10"
 #>
-#> $all$a
+#> $args$a
 #> [1] "3"
 #>
-#> $all$b
+#> $args$b
 #> [1] "4"
 #>
-#> $all$a
+#> $args$a
 #> [1] "5"
 #>
-#> $all$b
+#> $args$b
 #> [1] "6"
 #>
 #>
-#> $query
-#> $query$a
+#> $argsQuery
+#> $argsQuery$a
 #> [1] "1"
 #>
-#> $query$b
+#> $argsQuery$b
 #> [1] "2"
 #>
-#> $query$d
+#> $argsQuery$d
 #> [1] "10"
 #>
 #>
-#> $path
-#> $path$a
+#> $argsPath
+#> $argsPath$a
 #> [1] "3"
 #>
-#> $path$b
+#> $argsPath$b
 #> [1] "4"
 #>
 #>
-#> $postBody
-#> $postBody$a
+#> $argsBody
+#> $argsBody$a
 #> [1] "5"
 #>
-#> $postBody$b
+#> $argsBody$b
+#> [1] "6"
+#>
+#>
+#> $body
+#> $body$a
+#> [1] "5"
+#>
+#> $body$b
 #> [1] "6"

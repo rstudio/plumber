@@ -160,23 +160,17 @@ combine_keys <- function(obj, type) {
   keys <- names(obj)
   unique_keys <- unique(keys)
 
-  if (length(unique_keys) == length(keys) || is.null(keys)) {
+  # If a query string as the same amount of unique keys as keys,
+  # then return it as it
+  # (`"multi"` type objects MUST be processed, regardless if the unique key count is the same)
+  if (
+    length(unique_keys) == length(keys) &&
+    identical(type, "query")
+  ) {
     return(obj)
   }
 
   vals <- unname(obj)
-
-  extra_args <- NULL
-  if (type == "multi") {
-    # handle unnamed args by removing them from being merged and adding them back again at the end
-    no_name_positions <- (keys == "")
-    if (any(no_name_positions)) {
-      extra_args <- vals[no_name_positions]
-      vals <- vals[!no_name_positions]
-      keys <- keys[!no_name_positions]
-      unique_keys <- setdiff(unique_keys, "")
-    }
-  }
 
   cleanup_item <- switch(
     type,
@@ -187,23 +181,49 @@ combine_keys <- function(obj, type) {
     "multi" =
       function(x) {
         if (length(x) == 1) {
-          # return first item only
-          return(x[[1]])
+          part <- x[[1]]
+          filename <- part$filename
+          parsed <- part$parsed
+
+          if (!is.null(filename)) {
+            # list(
+            #   "myfile.json" = list(
+            #     a = 1, b = 2
+            #   )
+            # )
+            return(
+              setNames(
+                list(parsed),
+                filename
+              )
+            )
+          }
+          # list(
+          #   a = 1, b = 2
+          # )
+          return(parsed)
         }
 
-        # return list of internal named items
-        # aka... unlist the top layer only. Maintain the inner layer names
-        x_new <- lapply(unname(x), function(x_item) {
-          if (is.atomic(x_item)) {
-            # handles things like `parse_text` which returns atomic values
-            return(list(x_item))
-          }
+        # length is > 1
 
-          # handles things like `parse_octet` which returns a (possibly) named list
-          x_item
+        has_a_filename <- FALSE
+        filenames <- lapply(x, function(part) {
+          filename <- part$filename
+          if (is.null(filename)) return("")
+          has_a_filename <<- TRUE
+          filename
         })
-        as.list(unlist(x_new, recursive = FALSE))
-      }
+
+        parsed_items <- lapply(unname(x), `[[`, "parsed")
+
+        if (!has_a_filename) {
+          # return as is
+          return(parsed_items)
+        }
+
+        return(setNames(parsed_items, filenames))
+      },
+    stop("unknown type: ", type)
   )
 
   # equivalent code output, `split` is much faster with larger objects
@@ -234,6 +254,5 @@ combine_keys <- function(obj, type) {
     }
   names(vals) <- unique_keys
 
-  # append any remaining unnamed arguments (for `type = multi` only)
-  c(vals, extra_args)
+  vals
 }

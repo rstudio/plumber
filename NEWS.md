@@ -12,7 +12,7 @@ plumber 1.0.0
 
 * An error will be thrown if multiple arguments are matched to an Plumber Endpoint route definition.
   While it is not required, it is safer to define routes to only use `req` and `res` when there is a possiblity to have multiple arguments match a single parameter name.
-  Use `req$argsPath`, `req$argsQuery`, and `req$argsPostBody` to access path, query, and postBody parameters respectively.
+  Use `req$argsPath`, `req$argsQuery`, and `req$argsBody` to access path, query, and postBody parameters respectively.
   See `system.file("plumber/17-arguments/plumber.R", package = "plumber")` to view an example with expected output and `plumb_api("plumber", "17-arguments")` to retrieve the api.
   (#637)
 
@@ -50,24 +50,28 @@ plumber 1.0.0
   * `serializer_headers(header_list)`: Method which sets a list of static headers for each serialized value. Heavily inspired from @ycphs (#455). (#585)
   * `serializer_write_file()`: Method which wraps `serializer_content_type()`, but orchestrates creating, writing serialized content to, reading from, and removing a temp file. (#660)
 
-#### POST body parsing
+#### Body parsing
 
-* Added support for POST body parsing (@meztez, #532)
+* Added support for request body parsing (@meztez, #532)
 
-* New POST body parsers
-  * `parser_csv()`: Parse POST body as a commas separated value (#584)
-  * `parser_json()`: Parse POST body as JSON (@meztez, #532)
-  * `parser_multi()`: Parse multi part POST bodies (@meztez, #532)
-  * `parser_octet()`: Parse POST body octet stream (@meztez, #532)
-  * `parser_form()`: Parse POST body as form input (@meztez, #532)
-  * `parser_rds()`: Parse POST body as RDS file input (@meztez, #532)
-  * `parser_text()`: Parse POST body plain text (@meztez, #532)
-  * `parser_tsv()`: Parse POST body a tab separated value (#584)
-  * `parser_yaml()`: Parse POST body as `yaml` (#584)
-  * `parser_none()`: Do not parse the post body (#584)
-  * `parser_yaml()`: Parse POST body (@meztez, #556)
-  * `parser_feather()`: Parse POST body using `feather` (#626)
-  * pseudo parser named `"all"` to allow for using all parsers. (Not recommended in production!) (#584)
+* New request body parsers
+  * `parser_csv()`: Parse request body as a commas separated value (#584)
+  * `parser_json()`: Parse request body as JSON (@meztez, #532)
+  * `parser_multi()`: Parse multi part request bodies (@meztez, #532) and (#663)
+  * `parser_octet()`: Parse request body octet stream (@meztez, #532)
+  * `parser_form()`: Parse request body as form input (@meztez, #532)
+  * `parser_rds()`: Parse request body as RDS file input (@meztez, #532)
+  * `parser_text()`: Parse request body plain text (@meztez, #532)
+  * `parser_tsv()`: Parse request body a tab separated value (#584)
+  * `parser_yaml()`: Parse request body as `yaml` (#584)
+  * `parser_none()`: Do not parse the request body (#584)
+  * `parser_yaml()`: Parse request body (@meztez, #556)
+  * `parser_feather()`: Parse request body using `feather` (#626)
+  * Pseudo parser named `"all"` to allow for using all parsers. (Not recommended in production!) (#584)
+
+* The parsed request body values is stored at `req$body`. (#663)
+
+* If `multipart/*` content is parsed, `req$body` will contain named output from `webutils::parse_multipart()` and add the parsed value to each part. Look here for access to all provided information (e.g., `name`, `filename`, `content_type`, etc). In addition, `req$argsBody` (which is used for route argument matching) will contain a named reduced form of this information where `parsed` values (and `filename`s) are combined on the same `name`. (#663)
 
 #### Visual Documentation
 
@@ -180,7 +184,7 @@ plumber 1.0.0
 
 * Fixed bug where functions defined earlier in the file could not be found when `plumb()`ing a file.  (#416)
 
-* A multiline POST body is now collapsed to a single line (@robertdj, #270 #297).
+* A multiline request body is now collapsed to a single line (@robertdj, #270 #297).
 
 * Bumped version of httpuv to >= 1.4.5.9000 to address an unexpected segfault (@shapenaji, #289)
 

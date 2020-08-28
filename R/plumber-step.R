@@ -127,8 +127,7 @@ getRelevantArgs <- function(args, plumberExpression) {
 
   # If only req and res are found in function definition...
   # Only call using the first matches of req and res.
-  #   This allows for post body content to have `req` and `res` named arguments and not duplicated values cause issues.
-
+  #   This allows for body content to have `req` and `res` named arguments and not duplicated values which cause issues.
   if (all(fargs %in% c("req", "res"))) {
     ret <- list()
     # using `$` will retrieve the 1st occurance of req,res
@@ -157,7 +156,7 @@ getRelevantArgs <- function(args, plumberExpression) {
       "Can't call a Plumber function with duplicated matching formal arguments: ",
       paste0(unique(matched_arg_names[duplicated_matched_arg_names]), collapse = ", "),
       "\nPlumber recommends that the route's function signature be `function(req, res)`",
-      "\nand to access arguments via `req$args`, `req$argsPath`, `req$argsPostBody`, or `req$argsQuery`."
+      "\nand to access arguments via `req$args`, `req$argsPath`, `req$argsBody`, or `req$argsQuery`."
     )
   }
 

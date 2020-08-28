@@ -20,7 +20,7 @@ enumerateVerbs <- function(v) {
 #' @include shared-secret-filter.R
 defaultPlumberFilters <- list(
   queryString = queryStringFilter,
-  postBody = postBodyFilter,
+  body = bodyFilter,
   cookieParser = cookieFilter,
   sharedSecret = sharedSecretFilter
 )
@@ -609,7 +609,8 @@ Plumber <- R6Class(
               private$default_parsers
             }
           req$argsPath <- h$getPathParams(path)
-          req$argsPostBody <- postbody_parser(req, parsers)
+          # `req_body_parser()` will also set `req$body` with the untouched body value
+          req$argsBody <- req_body_parser(req, parsers)
 
           req$args <- c(
             # req, res
@@ -619,8 +620,8 @@ Plumber <- R6Class(
             req$args,
             # path params
             req$argsPath,
-            # post body params
-            req$argsPostBody
+            # body params
+            req$argsBody
           )
 
           return(do.call(h$exec, req$args))
