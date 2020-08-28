@@ -387,34 +387,34 @@
 <td>The path of the incoming HTTP request</td>
 </tr>
 <tr class="odd">
-<td><code>postBody</code></td>
-<td><code>"a=1&amp;b=2"</code></td>
-<td>The text contents of the body of the request. Despite the name, it is available for any HTTP method. To disable this parsing, see <code><a href="../reference/options_plumber.html">?options_plumber</a></code>.</td>
-</tr>
-<tr class="even">
-<td><code>postBodyRaw</code></td>
+<td><code>bodyRaw</code></td>
 <td><code><a href="https://rdrr.io/r/base/rawConversion.html">charToRaw("a=1&amp;b=2")</a></code></td>
 <td>The <code><a href="https://rdrr.io/r/base/raw.html">raw()</a></code>, unparsed contents of the body of the request</td>
 </tr>
-<tr class="odd">
-<td><code>args</code></td>
+<tr class="even">
+<td><code>body</code></td>
 <td><code><a href="https://rdrr.io/r/base/list.html">list(a=1,b=2)</a></code></td>
-<td>In a route, the combined arguments of <code><a href="https://rdrr.io/r/base/list.html">list(req = req, res = res)</a></code>, <code>argsPath</code>, <code>argsPostBody</code>, and <code>argsQuery</code>. In a filter, only contains <code>argsQuery</code>.</td>
+<td>This value will typically be the same as <code>argsBody</code>. However, with content type <code>"multipart/*"</code>, <code>req$body</code> may contain detailed information, such as <code>name</code>, <code>content_type</code>, <code>content_disposition</code>, <code>filename</code>, <code>value</code> (which is a <code><a href="https://rdrr.io/r/base/raw.html">raw()</a></code> vector), and <code>parsed</code> (parsed version of <code>value</code>).</td>
+</tr>
+<tr class="odd">
+<td><code>argsBody</code></td>
+<td><code><a href="https://rdrr.io/r/base/list.html">list(a=1,b=2)</a></code></td>
+<td>The parsed body output. Typically this is the same as <code>req$body</code> except when type is <code>"multipart/*"</code>.</td>
 </tr>
 <tr class="even">
 <td><code>argsPath</code></td>
-<td><code><a href="https://rdrr.io/r/base/list.html">list(a=1,b=2)</a></code></td>
+<td><code><a href="https://rdrr.io/r/base/list.html">list(c=3,d=4)</a></code></td>
 <td>The values of the path arguments.</td>
 </tr>
 <tr class="odd">
 <td><code>argsQuery</code></td>
-<td><code><a href="https://rdrr.io/r/base/list.html">list(a=1,b=2)</a></code></td>
+<td><code><a href="https://rdrr.io/r/base/list.html">list(e=5,f=6)</a></code></td>
 <td>The parsed query string output.</td>
 </tr>
 <tr class="even">
-<td><code>argsPostBody</code></td>
-<td><code><a href="https://rdrr.io/r/base/list.html">list(a=1,b=2)</a></code></td>
-<td>The parsed post boy output.</td>
+<td><code>args</code></td>
+<td><code><a href="https://rdrr.io/r/base/list.html">list(req=req,res=res,e=5,f=6,c=3,d=4,a=1,b=2)</a></code></td>
+<td>In a route, the combined arguments of <code><a href="https://rdrr.io/r/base/list.html">list(req = req, res = res)</a></code>, <code>argsQuery</code>, <code>argsPath</code>, and <code>argsBody</code>. In a filter, <code>req$args</code> only contains <code>argsQuery</code> as the route information will not have been processed yet.</td>
 </tr>
 <tr class="odd">
 <td><code>QUERY_STRING</code></td>
@@ -478,6 +478,11 @@
 <td><code>"HTTP_USER_AGENT"</code></td>
 <td>Entries for all of the HTTP headers sent with this request</td>
 </tr>
+<tr class="odd">
+<td><code>postBody</code></td>
+<td><code>"a=1&amp;b=2"</code></td>
+<td>The text contents of the body of the request. Despite the name, it is available for any HTTP method. It is recommended to disable this parsing, see <code><a href="../reference/options_plumber.html">?options_plumber</a></code>.</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -510,11 +515,12 @@
 <p>Unfortunately, crafting a request with a message body requires a bit more work than making a <code>GET</code> request with a query string from your web browser, but you can use tools like <code>curl</code> on the command line or the <a href="https://github.com/hadley/httr/">httr R package</a>. We’ll use <code>curl</code> for the examples below.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit">
 <span class="co">#' @post /user</span>
-<span class="fu">function</span>(<span class="kw">req</span>, <span class="kw">id</span>, <span class="kw">name</span>){
+<span class="fu">function</span>(<span class="kw">req</span>, <span class="kw">id</span>, <span class="kw">name</span>) {
   <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
     id = <span class="kw">id</span>,
     name = <span class="kw">name</span>,
-    raw = <span class="kw">req</span><span class="op">$</span><span class="kw">postBody</span>
+    body = <span class="kw">req</span><span class="op">$</span><span class="kw">body</span>,
+    raw = <span class="kw">req</span><span class="op">$</span><span class="kw">bodyRaw</span>
   )
 }
 </pre></div>
@@ -522,11 +528,15 @@
 <div class="sourceCode" id="cb19"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">{</span></span>
 <span id="cb19-2"><a href="#cb19-2"></a>  <span class="dt">"id"</span><span class="fu">:</span> <span class="ot">[</span><span class="dv">123</span><span class="ot">]</span><span class="fu">,</span></span>
 <span id="cb19-3"><a href="#cb19-3"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"Jennifer"</span><span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb19-4"><a href="#cb19-4"></a>  <span class="dt">"raw"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"id=123&amp;name=Jennifer"</span><span class="ot">]</span></span>
-<span id="cb19-5"><a href="#cb19-5"></a><span class="fu">}</span></span></code></pre></div>
+<span id="cb19-4"><a href="#cb19-4"></a>  <span class="dt">"body"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a>    <span class="dt">"id"</span><span class="fu">:</span> <span class="ot">[</span><span class="dv">123</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a>    <span class="dt">"name"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"Jennifer"</span><span class="ot">]</span></span>
+<span id="cb19-7"><a href="#cb19-7"></a>  <span class="fu">},</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a>  <span class="dt">"raw"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"aWQ9MTIzJm5hbWU9SmVubmlmZXI="</span><span class="ot">]</span></span>
+<span id="cb19-9"><a href="#cb19-9"></a><span class="fu">}</span></span></code></pre></div>
 <p>Alternatively, <code>curl --data '{"id":123, "name": "Jennifer"}' "http://localhost:8000/user"</code> (formatting the body as JSON) will have the same effect.</p>
-<p>As demonstrated above, the raw request body is made available as <code>req$postBody</code> and <code>req$postBodyRaw</code>.</p>
-<p>If multiple parameters are matched to the endpoint formals, an error will be thrown. Due to the nature of how multiple values can be matched to the same argument, it is recommended that <code>POST</code> enpoints have a function definition that only accepts the formals <code>req</code>, <code>res</code>, and <code>...</code>. If the endpoint arguments are to be processed like a list, they are available at <code>req$argsPostBody</code>, with all arguments at <code>req$args</code>. <code>req$args</code> is a combination of <code><a href="https://rdrr.io/r/base/list.html">list(req = req, res = res)</a></code>, <code>req$argsPath</code>, <code>req$argsPostBody</code>, and <code>req$argsQuery</code>.</p>
+<p>As demonstrated above, the raw request body is made available as <code>req$bodyRaw</code> and parsed request body is available as <code>req$body</code>.</p>
+<p>If multiple parameters are matched to the endpoint formals, an error will be thrown. Due to the nature of how multiple values can be matched to the same argument, it is recommended that <code>POST</code> enpoints have a function definition that only accepts the formals <code>req</code>, <code>res</code>, and <code>...</code>. If the endpoint arguments are to be processed like a list, they are available at <code>req$argsBody</code>, with all arguments at <code>req$args</code>. <code>req$args</code> is a combination of <code><a href="https://rdrr.io/r/base/list.html">list(req = req, res = res)</a></code>, <code>req$argsPath</code>, <code>req$argsBody</code>, and <code>req$argsQuery</code>.</p>
 </div>
 <div id="read-cookies" class="section level3">
 <h3 class="hasAnchor">

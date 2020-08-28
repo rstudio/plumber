@@ -236,7 +236,7 @@ when used outside a running router</p></dd>
 OpenAPI Specification. Defaults to an empty string</p></dd>
 <dt><code>plumber.maxRequestSize</code></dt><dd><p>Maximum length in bytes of request body. Body larger
 than maximum are rejected with http error 413. <code>0</code> means unlimited size. Defaults to <code>0</code></p></dd>
-<dt><code>plumber.postBody</code></dt><dd><p>Copy post body content to <code>req$postBody</code> using system encoding.
+<dt><code>plumber.postBody</code></dt><dd><p>Copy body content to <code>req$postBody</code> using system encoding.
 This should be set to <code>FALSE</code> if you do not need it. Default is <code>TRUE</code> to preserve compatibility with
 previous version behavior. Defaults to <code>TRUE</code></p></dd>
 <dt><code>plumber.sharedSecret</code></dt><dd><p>Shared secret used to filter incoming request.
