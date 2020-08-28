@@ -22,22 +22,33 @@ req_body_parser <- function(req, parsers = NULL) {
   # store parsed body into req$body
   req$body <- body
 
-  if (inherits(body, "plumber_multipart")) {
-    # pluck the values under the names of the multipart
-    body <- lapply(unclass(body), `[[`, "parsed")
-  } else if (!is.null(body)) {
+  # Copy name over so that it is clearer as to the goal of the code below
+  # The value returned from this function is set to `ret$argsBody`
+  args_body <- body
+
+  if (inherits(args_body, "plumber_multipart")) {
+
+    # parsed_bodies <- list()
+
+    # # pluck the values under the names of the multipart
+    # parsed_bodies <- lapply(unclass(body), `[[`, "parsed")
+    # is_octet <-
+
+    args_body <- combine_keys(unclass(args_body), type = "multi")
+
+  } else if (!is.null(args_body)) {
     # if it's a vector, then we should maybe bundle it as a list
     # this will allow for req$args to have the single piece of information
     # but it will deter from trying to formal name match against MANY false positive values
-    if (!is.list(body)) {
-      body_names <- names(body)
+    if (!is.list(args_body)) {
+      args_body_names <- names(args_body)
       # if there are no names at all, wrap it in a unnamed list to pass it through
-      if (is.null(body_names) || all(body_names == "")) {
-        body <- list(body)
+      if (is.null(args_body_names) || all(args_body_names == "")) {
+        args_body <- list(args_body)
       }
     }
   }
-  body
+  args_body
 }
 
 parse_body <- function(body, content_type = NULL, parsers = NULL) {
