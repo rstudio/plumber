@@ -1,12 +1,14 @@
 context("Options")
 
 test_that("Options set and get", {
-  option_value <- getOption("plumber.postBody")
-  options_plumber(postBody = FALSE)
-  expect_false(getOption("plumber.postBody"))
-  options_plumber(postBody = NULL)
-  expect_null(getOption("plumber.postBody"))
-  options(plumber.postBody = option_value)
+  option_value <- getOption("plumber.port")
+  on.exit({
+    options(plumber.port = option_value)
+  }, add = TRUE)
+  options_plumber(port = FALSE)
+  expect_false(getOption("plumber.port"))
+  options_plumber(port = NULL)
+  expect_null(getOption("plumber.port"))
 })
 
 test_that("all options used are `options_plumber()` parameters", {

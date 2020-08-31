@@ -1,13 +1,22 @@
 bodyFilter <- function(req){
   handled <- req$.internal$bodyHandled
   if (is.null(handled) || handled != TRUE) {
+
+    rook_input <- req$rook.input
+
     # This will return raw bytes
     # store raw body into req$bodyRaw
-    req$bodyRaw <- req$rook.input$read()
-    if (isTRUE(getOption("plumber.postBody", TRUE))) {
-      req$rook.input$rewind()
-      req$postBody <- paste0(req$rook.input$read_lines(), collapse = "\n")
-    }
+    req$bodyRaw <- rook_input$read()
+
+    delayedAssign(
+      "postBody",
+      {
+        rook_input$rewind()
+        paste0(rook_input$read_lines(), collapse = "\n")
+      },
+      assign.env = req
+    )
+
     req$.internal$bodyHandled <- TRUE
   }
   forward()

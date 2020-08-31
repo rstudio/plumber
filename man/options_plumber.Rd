@@ -14,12 +14,11 @@ options_plumber(
   apiPort = getOption("plumber.apiPort"),
   apiPath = getOption("plumber.apiPath"),
   maxRequestSize = getOption("plumber.maxRequestSize"),
-  postBody = getOption("plumber.postBody"),
   sharedSecret = getOption("plumber.sharedSecret")
 )
 }
 \arguments{
-\item{port, docs, docs.callback, apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, postBody, sharedSecret}{See details}
+\item{port, docs, docs.callback, apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, sharedSecret}{See details}
 }
 \value{
 The complete, prior set of \code{\link[=options]{options()}} values.
@@ -54,9 +53,6 @@ when used outside a running router}
 OpenAPI Specification. Defaults to an empty string}
 \item{\code{plumber.maxRequestSize}}{Maximum length in bytes of request body. Body larger
 than maximum are rejected with http error 413. \code{0} means unlimited size. Defaults to \code{0}}
-\item{\code{plumber.postBody}}{Copy body content to \code{req$postBody} using system encoding.
-This should be set to \code{FALSE} if you do not need it. Default is \code{TRUE} to preserve compatibility with
-previous version behavior. Defaults to \code{TRUE}}
 \item{\code{plumber.sharedSecret}}{Shared secret used to filter incoming request.
 When \code{NULL}, secret is not validated. Otherwise, Plumber compares secret with http header
 \code{PLUMBER_SHARED_SECRET}. Failure to match results in http error 400. Defaults to \code{NULL}}
