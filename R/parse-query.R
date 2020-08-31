@@ -4,7 +4,6 @@ queryStringFilter <- function(req){
     qs <- req$QUERY_STRING
     args <- parseQS(qs)
     req$argsQuery <- args
-    req$args <- c(req$args, args)
     req$.internal$queryStringHandled <- TRUE
   }
   forward()

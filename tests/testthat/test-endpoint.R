@@ -7,7 +7,7 @@ test_that("Endpoints execute in their environment", {
   foo <- parse(text="foo <- function(){ a }")
 
   r <- PlumberEndpoint$new('verb', 'path', foo, env, 1:2)
-  expect_equal(r$exec(), 5)
+  expect_equal(r$exec(req = list(), res = 2), 5)
 })
 
 test_that("Missing lines are ok", {
@@ -19,7 +19,7 @@ test_that("Missing lines are ok", {
 test_that("Endpoints are exec'able with named arguments.", {
   foo <- parse(text="foo <- function(x){ x + 1 }")
   r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
-  expect_equal(r$exec(x=3), 4)
+  expect_equal(r$exec(req = list(args = list(x = 3)), res = 20), 4)
 })
 
 test_that("Unnamed arguments error", {
@@ -29,48 +29,47 @@ test_that("Unnamed arguments error", {
 
   foo <- parse(text="foo <- function(x, ...){ x + 1 }")
   r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
-  expect_error(r$exec(x=1, 3))
+  expect_error(r$exec(req = list(args = list(1)), res = 20), 3)
 })
 
 test_that("Ellipses allow any named args through", {
-  foo <- parse(text="function(...){ sum(unlist(list(...))) }")
+  foo <- parse(text="function(req, res, ...){ sum(unlist(list(...))) }")
   r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
-  expect_equal(r$exec(a=1, b=2, c=3), 6)
+  expect_equal(r$exec(req = list(args = list(a=1, b=2, c=3)), res = 20), 6)
 
-  lapply(
-    c(
+  for ( txt in c(
       "", # with no req or res formals
       "req, res, "
-    ),
-    function(txt) {
-      foo <- parse(text=paste0("function(", txt, "...){ list(...) }"))
-      r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
-      expect_equal(r$exec(a="aa", b="ba"), list(a="aa", b="ba"))
-      expect_equal(r$exec(a="aa1", a="aa2", b = "ba"), list(a="aa1", a="aa2", b = "ba"))
+  )) {
+    foo <- parse(text=paste0("function(", txt, "...){ ret <- list(...); ret[!names(ret) %in% c('req', 'res')] }"))
+    r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
+    expect_equal(r$exec(req = list(args = list(a="aa", b="ba")), res = 2), list(a="aa", b="ba"))
+    expect_equal(r$exec(req = list(args = list(a="aa1", a="aa2", b = "ba")), res = 2), list(a="aa1", a="aa2", b = "ba"))
 
-      foo <- parse(text=paste0("function(", txt, "a, ...){ list(a, ...) }"))
-      r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
-      expect_error(r$exec(a="aa1", a="aa2", b = "ba"), "duplicated matching formal arguments")
-    }
-  )
+    foo <- parse(text=paste0("function(", txt, "a, ...){ ret <- list(a = a, ...); ret[!names(ret) %in% c('req', 'res')] }"))
+    r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
+    expect_equal(r$exec(req = list(args = list(a="aa1", a="aa2", b = "ba")), res = 2), list(a = "aa1", b = "ba"))
+  }
 })
 
 test_that("If only req and res are defined, duplicated arguments do not throw an error", {
+  full_req <- list(args = list(req = 1, req = 2, res = 3, res = 4))
+  full_res <- list(args = list(res = 1, res = 2, res = 3, res = 4))
   foo <- parse(text="function(req){ req }")
   r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
-  expect_equal(r$exec(req = 1, req = 2, res = 3, res = 4), 1)
+  expect_equal(r$exec(req = full_req, res = full_res), full_req)
 
   foo <- parse(text="function(res){ res }")
   r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
-  expect_equal(r$exec(req = 1, req = 2, res = 3, res = 4), 3)
+  expect_equal(r$exec(req = full_req, res = full_res), full_res)
 
   foo <- parse(text="function(req, res){ list(req, res) }")
   r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
-  expect_equal(r$exec(req = 1, req = 2, res = 3, res = 4), list(1,3))
+  expect_equal(r$exec(req = full_req, res = full_res), list(full_req, full_res))
 
-  foo <- parse(text="function(req, res, ...){ -1 }")
+  foo <- parse(text="function(req, res, ...){ list(req, res, ...) }")
   r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
-  expect_error(r$exec(req = 1, req = 2, res = 3, res = 4), "duplicated matching formal arguments")
+  expect_equal(r$exec(req = full_req, res = full_res), list(full_req, full_res))
 })
 
 test_that("Programmatic endpoints work", {

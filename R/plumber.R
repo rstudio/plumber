@@ -578,19 +578,6 @@ Plumber <- R6Class(
         return(NULL)
       }
 
-      # These situations should NOT happen as req,res are set in self$call()
-      # For testing purposes, these checks are added
-      if (is.null(req$args)) {
-        req$args <- list(req = req, res = res)
-      } else {
-        if (is.null(req$args$req)) {
-          req$args$req <- req
-        }
-        if (is.null(req$args$res)) {
-          req$args$res <- res
-        }
-      }
-
       path <- req$PATH_INFO
       makeHandleStep <- function(name) {
         function(...) {
@@ -612,19 +599,10 @@ Plumber <- R6Class(
           # `req_body_parser()` will also set `req$body` with the untouched body value
           req$argsBody <- req_body_parser(req, parsers)
 
-          req$args <- c(
-            # req, res
-            # query string params and any other `req$args`
-            ## Query string params have been added to `req$args`.
-            ## At this point, can not include both `req,res` and `req$argsQuery`. So using `req$args`
-            req$args,
-            # path params
-            req$argsPath,
-            # body params
-            req$argsBody
+          # req$args will be filled inside `h$exec()`
+          return(
+            h$exec(req, res)
           )
-
-          return(do.call(h$exec, req$args))
         }
       }
 
@@ -646,7 +624,7 @@ Plumber <- R6Class(
 
           filterExecStep <- function(...) {
             resetForward()
-            do.call(fi$exec, req$args)
+            fi$exec(req, res)
           }
           postFilterStep <- function(fres, ...) {
             if (hasForwarded()) {
@@ -655,7 +633,7 @@ Plumber <- R6Class(
             }
             # forward() wasn't called, presumably meaning the request was
             # handled inside of this filter.
-            if (!is.null(fi$serializer)){
+            if (!is.null(fi$serializer)) {
               res$serializer <- fi$serializer
             }
             return(fres)
@@ -725,7 +703,7 @@ Plumber <- R6Class(
       req$.internal <- new.env()
 
       res <- PlumberResponse$new(private$default_serializer)
-      req$args <- list(req = req, res = res)
+      req$args <- list()
 
       # maybe return a promise object
       self$serve(req, res)
