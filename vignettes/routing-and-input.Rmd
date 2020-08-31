@@ -236,7 +236,7 @@ Name | Example | Description
 `argsBody` | `list(a=1,b=2)` | The parsed body output. Typically this is the same as `req$body` except when type is `"multipart/*"`.
 `argsPath` | `list(c=3,d=4)` | The values of the path arguments.
 `argsQuery` | `list(e=5,f=6)` | The parsed query string output.
-`args` | `list(req=req,res=res,e=5,f=6,c=3,d=4,a=1,b=2)` | In a route, the combined arguments of `list(req = req, res = res)`, `argsQuery`, `argsPath`, and `argsBody`. In a filter, `req$args` only contains `argsQuery` as the route information will not have been processed yet.
+`args` | `list(req=req,res=res,e=5,f=6,c=3,d=4,a=1,b=2)` | In a route, the combined arguments of `list(req = req, res = res)`, `req$args` (added by filters), `req$argsQuery`, `req$argsPath`, and `req$argsBody`. In a filter, `req$args` is initialized to an empty list, so when processing filters `req$args` will only contain arguments set by previously processed filters as the route information will not have been processed yet.
 `QUERY_STRING` | `"?a=123&b=abc"` | The query-string portion of the HTTP request
 `REMOTE_ADDR` | `"1.2.3.4"` | The IP address of the client making the request
 `REMOTE_PORT` | `"62108"` | The client port from which the request originated
