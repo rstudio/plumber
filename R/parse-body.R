@@ -201,7 +201,7 @@ register_parser <- function(
     }
 
     create_list <- function(names) {
-      stats::setNames(
+      setNames(
         replicate(
           length(names),
           parser_function),
@@ -269,7 +269,7 @@ make_parser <- function(aliases) {
       aliases <- setdiff(registered_parsers(), c("all", "none"))
     }
     # turn aliases into a named list with empty values
-    aliases <- stats::setNames(
+    aliases <- setNames(
       replicate(length(aliases), {list()}),
       aliases
     )

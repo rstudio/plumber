@@ -61,16 +61,9 @@ PlumberStep <- R6Class(
       hookEnv <- new.env()
 
       args <- c(
-        # make sure req, res have priority
+        # add in `req`, `res` as they have been removed from `req$args`
         list(req = req, res = res),
-        # include any other args that users have provided
-        req$args,
-        # path is more important than query
-        req$argsPath,
-        # query is more important than body
-        req$argsQuery,
-        # body is added last
-        req$argsBody
+        req$args
       )
 
       # str(args)

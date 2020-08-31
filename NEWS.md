@@ -12,13 +12,13 @@ plumber 1.0.0
 
 * An error will be thrown if multiple arguments are matched to an Plumber Endpoint route definition.
   While it is not required, it is safer to define routes to only use `req` and `res` when there is a possiblity to have multiple arguments match a single parameter name.
-  Use `req$argsPath`, `req$argsQuery`, and `req$argsBody` to access path, query, and body parameters respectively.
+  Use `req$argsQuery`, `req$argsPath`, and `req$argsBody` to access path, query, and body parameters respectively.
   See `system.file("plumber/17-arguments/plumber.R", package = "plumber")` to view an example with expected output and `plumb_api("plumber", "17-arguments")` to retrieve the api.
   (#637)
 
 * Added `plumb_api()` for standardizing where to locate (`inst/plumber`) and how to run (`plumb_api(package, name)`) plumber apis inside an R package. To view the available Plumber APIs, call `available_apis()`. (#631)
 
-* Named Plumber endpoint arguments are de-duplicated so that the endpoint function does not fail due to too many formal argument matchings.  To be sure you are getting all argument values, use `req$argsPath`, `req$argsQuery`, and `req$argsBody` to access path, query, and body parameters respectively.
+* Named Plumber endpoint arguments are de-duplicated so that the endpoint function does not fail due to too many formal argument matchings.  To be sure you are getting all argument values, use `req$argsQuery`, `req$argsPath`, and `req$argsBody` to access path, query, and body parameters respectively.
 
 #### OpenAPI
 

@@ -599,6 +599,17 @@ Plumber <- R6Class(
           # `req_body_parser()` will also set `req$body` with the untouched body value
           req$argsBody <- req_body_parser(req, parsers)
 
+          req$args <- c(
+            # (does not contain req or res)
+            # will contain all args added in filters
+            # `req$argsQuery` is available, but already absorbed into `req$args`
+            req$args,
+            # path is more important than query
+            req$argsPath,
+            # body is added last
+            req$argsBody
+          )
+
           # req$args will be filled inside `h$exec()`
           return(
             h$exec(req, res)

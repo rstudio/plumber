@@ -3,6 +3,7 @@ queryStringFilter <- function(req){
   if (is.null(handled) || handled != TRUE) {
     qs <- req$QUERY_STRING
     args <- parseQS(qs)
+    req$args <- c(req$args, args)
     req$argsQuery <- args
     req$.internal$queryStringHandled <- TRUE
   }
@@ -154,6 +155,7 @@ extractPathParams <- function(def, path){
 
 #' combine args that share the same name
 #' @noRd
+#' @importFrom stats setNames
 combine_keys <- function(obj, type) {
 
   keys <- names(obj)
