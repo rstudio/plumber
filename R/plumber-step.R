@@ -114,6 +114,7 @@ getRelevantArgs <- function(args, plumberExpression) {
   }
 
   # fast return
+  # also works with unnamed arguments
   if (identical(fargs, "...")) {
     return(args)
   }
@@ -134,21 +135,9 @@ getRelevantArgs <- function(args, plumberExpression) {
     return(ret)
   }
 
-  if (is.null(names(args))) {
-    unnamedArgs <- seq_along(args)
-  } else {
-    unnamedArgs <- which(names(args) == "")
-  }
-
-  if (length(unnamedArgs) > 0 ) {
-    stop(
-      "Can't call a Plumber function with unnammed arguments. Missing names for argument(s) #",
-      paste0(unnamedArgs, collapse = ", "),
-      ". Names of argument list was: \"",
-      paste0(names(args), collapse = ","), "\""
-    )
-  }
-
+  # The remaining code MUST work with unnamed arguments
+  # If there is no `...`, then the unnamed args will not be in `fargs` and will be removed
+  # If there is `...`, then the unnamed args will not be in `fargs` and will be passed through
 
   if (!("..." %in% fargs)) {
     # Use the named arguments that match, drop the rest.

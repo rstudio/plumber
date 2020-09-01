@@ -16,6 +16,7 @@ plumber 1.0.0
   * The value supplied to `req` and `res` arguments in a route definition are now _always_ Plumber request and response objects. In the past, this was not guaranteed. (#666, #637)
   * To assist with conflicts in argument names deriving from different locations, `req$argsQuery`, `req$argsPath`, and `req$argsBody` have been added to access query, path, and `req$body` parameters, respectively. For this reason, we suggest defining routes with only `req` and `res` (i.e., `function(req, res) {}`) and accessing argument(s) under these new fields to avoid naming conflicts. (#637)
   * An error is no longer thrown if multiple arguments are matched to an Plumber Endpoint route definition. Instead, Plumber now retains the first named argument according to the highest priority match (`req$argsQuery` is 1st priority, then `req$argsPath`, then `req$argsBody`). (#666)
+  * Unnamed arguments that are added to `req$args` by filters or creating `req$argsBody` will no longer throw an error. They will only be passed through via `...` (#666)
 
 
 * An error will be thrown if multiple arguments are matched to an Plumber Endpoint route definition.
