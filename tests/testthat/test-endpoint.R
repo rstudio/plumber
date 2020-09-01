@@ -25,7 +25,7 @@ test_that("Endpoints are exec'able with named arguments.", {
 test_that("Unnamed arguments error", {
   foo <- parse(text="foo <- function(){ 1 }")
   r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
-  expect_error(r$exec(3))
+  expect_error(r$exec(req = list(args = list(3))))
 
   foo <- parse(text="foo <- function(x, ...){ x + 1 }")
   r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))

@@ -157,7 +157,7 @@ Visiting http://localhost:8000/types/14 will return:
 ```{r, echo=FALSE, results='asis'}
 r <- plumber::plumb("files/apis/03-02-types.R")
 e <- r$endpoints[[1]][[1]]
-code_chunk(json_serialize(e$exec(id="14")), "json")
+code_chunk(json_serialize(e$exec(req = list(args = list(id = "14")), res = NULL)), "json")
 ```
 
 If you only intend to support a particular data type for a particular parameter in your dynamic route, you can specify the desired type in the route itself.
@@ -265,19 +265,19 @@ Visiting http://localhost:8000/?q=bread&pretty=1 will print:
 ```{r, echo=FALSE, results='asis'}
 r <- plumber::plumb("files/apis/03-03-search.R")
 e <- r$endpoints[[1]][[1]]
-code_chunk(json_serialize(e$exec(q="bread", pretty="1")), "json")
+code_chunk(json_serialize(e$exec(req = list(args = list(q = "bread", pretty = "1")), res = NULL)), "json")
 ```
 
 This is equivalent to calling `search(q="bread", pretty="1")`. If a parameter were not specified in the query string, it would just be omitted from the invocation of the endpoint. For example http://localhost:8000/?q=cereal would be equivalent to `search(q="cereal")`. The function would fall back to the default value of the `pretty` parameter (`0`), since that was defined in the function signature.
 
 ```{r, echo=FALSE, results='asis'}
-code_chunk(json_serialize(e$exec(q="cereal")), "json")
+code_chunk(json_serialize(e$exec(req = list(args = list(q = "cereal")), res = NULL)), "json")
 ```
 
 Including additional query string arguments that do not map to a parameter of the function has no effect. For instance http://localhost:8000/?test=123 will return the same results as calling `search()`.
 
 ```{r, echo=FALSE, results='asis'}
-code_chunk(json_serialize(e$exec()), "json")
+code_chunk(json_serialize(e$exec(req = NULL, res = NULL)), "json")
 ```
 
 (Note that the raw query string is available as `req$QUERY_STRING`.)
@@ -300,7 +300,7 @@ Running `curl --data "id=123&name=Jennifer" "http://localhost:8000/user"` will r
 ```{r, echo=FALSE, results='asis'}
 r <- plumber::plumb("files/apis/03-04-body.R")
 e <- r$endpoints[[1]][[1]]
-code_chunk(json_serialize(e$exec(req=list(bodyRaw = charToRaw("id=123&name=Jennifer"), body=list(id = 123, name = "Jennifer")), id=123, name="Jennifer")), "json")
+code_chunk(json_serialize(e$exec(req=list(bodyRaw = charToRaw("id=123&name=Jennifer"), body=list(id = 123, name = "Jennifer"), args = list(id = 123, name = "Jennifer")), res = NULL)), "json")
 ```
 
 Alternatively, `curl --data '{"id":123, "name": "Jennifer"}' "http://localhost:8000/user"` (formatting the body as JSON) will have the same effect.
