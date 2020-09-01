@@ -20,7 +20,14 @@ req_body_parser <- function(req, parsers = NULL) {
   if (is.null(bodyRaw)) {return(list())}
   body <- parse_body(bodyRaw, type, parsers)
   # store parsed body into req$body
-  req$body <- body
+  body
+}
+req_body_args <- function(req) {
+
+  body <- req$body
+  if (length(body) == 0) {
+    return(list())
+  }
 
   # Copy name over so that it is clearer as to the goal of the code below
   # The value returned from this function is set to `ret$argsBody`
