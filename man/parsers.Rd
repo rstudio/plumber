@@ -77,17 +77,16 @@ See \code{\link[=registered_parsers]{registered_parsers()}} for a list of regist
 
 \item \code{parser_tsv}: TSV parser. See \code{\link[readr:read_delim]{readr::read_tsv()}} for more details.
 
-\item \code{parser_read_file}: Helper parser that writes the binary post body to a file and reads it back again using \code{read_fn}.
+\item \code{parser_read_file}: Helper parser that writes the binary body to a file and reads it back again using \code{read_fn}.
 This parser should be used when reading from a file is required.
 
 \item \code{parser_rds}: RDS parser. See \code{\link[=readRDS]{readRDS()}} for more details.
 
 \item \code{parser_feather}: feather parser. See \code{\link[feather:read_feather]{feather::read_feather()}} for more details.
 
-\item \code{parser_octet}: Octet stream parser. Will add a filename attribute if the filename exists.
-Returns a single item list where the value is the raw content and the key is the filename (if applicable).
+\item \code{parser_octet}: Octet stream parser. Returns the raw content.
 
-\item \code{parser_multi}: Multi part parser. This parser will then parse each individual body with its respective parser
+\item \code{parser_multi}: Multi part parser. This parser will then parse each individual body with its respective parser.  When this parser is used, \code{req$body} will contain the updated output from \code{\link[webutils:parse_multipart]{webutils::parse_multipart()}} by adding the \code{parsed} output to each part.  Each part may contain detailed information, such as \code{name} (required), \code{content_type}, \code{content_disposition}, \code{filename}, (raw, original) \code{value}, and \code{parsed} (parsed \code{value}).  When performing Plumber route argument matching, each multipart part will match its \code{name} to the \code{parsed} content.
 
 \item \code{parser_none}: No parser. Will not process the postBody.
 }}

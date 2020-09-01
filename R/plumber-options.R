@@ -26,7 +26,7 @@
 #' OpenAPI Specification. Defaults to an empty string}
 #' \item{`plumber.maxRequestSize`}{Maximum length in bytes of request body. Body larger
 #' than maximum are rejected with http error 413. `0` means unlimited size. Defaults to `0`}
-#' \item{`plumber.postBody`}{Copy post body content to `req$postBody` using system encoding.
+#' \item{`plumber.postBody`}{Copy body content to `req$postBody` using system encoding.
 #' This should be set to `FALSE` if you do not need it. Default is `TRUE` to preserve compatibility with
 #' previous version behavior. Defaults to `TRUE`}
 #' \item{`plumber.sharedSecret`}{Shared secret used to filter incoming request.

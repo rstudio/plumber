@@ -85,7 +85,7 @@ reference:
   - 'register_docs'
   - 'validate_api_spec'
 
-- title: POST Body and Query String Parsers
+- title: Body Parsers
   contents:
   - 'register_parser'
   - 'parser_form'

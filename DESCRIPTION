@@ -30,6 +30,7 @@ Imports:
     sodium,
     swagger (>= 3.20.3.99991),
     magrittr,
+    mime,
     lifecycle
 LazyData: TRUE
 ByteCompile: TRUE
