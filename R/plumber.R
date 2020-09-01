@@ -597,7 +597,8 @@ Plumber <- R6Class(
             }
           req$argsPath <- h$getPathParams(path)
           # `req_body_parser()` will also set `req$body` with the untouched body value
-          req$argsBody <- req_body_parser(req, parsers)
+          req$body <- req_body_parser(req, parsers)
+          req$argsBody <- req_body_args(req)
 
           req$args <- c(
             # (does not contain req or res)
