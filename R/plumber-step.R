@@ -65,9 +65,6 @@ PlumberStep <- R6Class(
         list(req = req, res = res),
         req$args
       )
-
-      # str(args)
-
       preexecStep <- function(...) {
         private$runHooks("preexec", c(list(data = hookEnv), args))
       }
