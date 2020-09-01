@@ -22,14 +22,14 @@ test_that("Endpoints are exec'able with named arguments.", {
   expect_equal(r$exec(req = list(args = list(x = 3)), res = 20), 4)
 })
 
-test_that("Unnamed arguments error", {
-  foo <- parse(text="foo <- function(){ 1 }")
+test_that("Unnamed arguments do not throw an error", {
+  foo <- parse(text="foo <- function(){ -1 }")
   r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
-  expect_error(r$exec(req = list(args = list(3))))
+  expect_equal(r$exec(req = list(args = list(3)), res = 100), -1)
 
-  foo <- parse(text="foo <- function(x, ...){ x + 1 }")
+  foo <- parse(text="foo <- function(req, res, x, ...){ x + sum(1, ...) }")
   r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
-  expect_error(r$exec(req = list(args = list(1)), res = 20), 3)
+  expect_equal(r$exec(req = list(args = list(x = 3, 1)), res = 100), 5)
 })
 
 test_that("Ellipses allow any named args through", {
