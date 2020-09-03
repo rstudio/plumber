@@ -12,7 +12,7 @@ test_that("Endpoints execute in their environment", {
 
 test_that("Missing lines are ok", {
   expect_silent({
-    PlumberEndpoint$new('verb', 'path', { 1 }, new.env(parent = globalenv()))
+    PlumberEndpoint$new('verb', 'path', { function() { 1 }}, new.env(parent = globalenv()))
   })
 })
 

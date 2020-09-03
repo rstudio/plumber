@@ -6,7 +6,8 @@ Hookable <- R6Class(
     #' @description Register a hook on a router
     #' @param stage a character string.
     #' @param handler a hook function.
-    registerHook = function(stage, handler){
+    registerHook = function(stage, handler) {
+      stopifnot(is.function(handler))
       private$hooks[[stage]] <- c(private$hooks[[stage]], handler)
     },
     #' @description Register hooks on a router
@@ -46,7 +47,7 @@ Hookable <- R6Class(
             stageHookArgs <- list()
             list(
               function(...) {
-                stageHookArgs <<- getRelevantArgs(args, plumberExpression = stageHook)
+                stageHookArgs <<- getRelevantArgs(args, func = stageHook)
               },
               function(...) {
                 do.call(stageHook, stageHookArgs) #TODO: envir=private$envir?

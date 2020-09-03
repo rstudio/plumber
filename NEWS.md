@@ -127,6 +127,8 @@ plumber 1.0.0
 
 * `PlumberEndpoint`'s method `$exec()` now has a shape of `$exec(req, res)` (vs `$exec(...)`).  This allows for fine tune control over the arguments being sent to the endpoint function.
 
+* When creating a `PlumberFilter` or `PlumberEndpoint`, an error will be thrown if `expr` does not evaluate to a function. (#666)
+
 ### Deprecations
 
 * Shorthand serializers are now deprecated. `@html`, `@json`, `@png`, `@jpeg`, `@svg` should be replaced with the `@serializer` syntax. Ex: `@serializer html` or `@serializer jpeg` (#630)

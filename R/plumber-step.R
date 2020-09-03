@@ -44,7 +44,7 @@ PlumberStep <- R6Class(
       } else {
         private$func <- expr
       }
-
+      throw_if_func_is_not_a_function(private$func)
       private$envir <- envir
 
       if (!missing(lines)){
@@ -73,7 +73,7 @@ PlumberStep <- R6Class(
         private$runHooks("preexec", c(list(data = hookEnv), args_for_formal_matching()))
       }
       execStep <- function(...) {
-        relevant_args <- getRelevantArgs(args_for_formal_matching(), plumberExpression=private$func)
+        relevant_args <- getRelevantArgs(args_for_formal_matching(), func = private$func)
         do.call(private$func, relevant_args, envir = private$envir)
       }
       postexecStep <- function(value, ...) {
@@ -108,9 +108,9 @@ PlumberStep <- R6Class(
 )
 
 # @param positional list with names where they were provided.
-getRelevantArgs <- function(args, plumberExpression) {
+getRelevantArgs <- function(args, func) {
   # Extract the names of the arguments this function supports.
-  fargs <- names(formals(eval(plumberExpression)))
+  fargs <- names(formals(func))
 
   if (length(fargs) == 0) {
     # no matches
@@ -230,6 +230,7 @@ PlumberEndpoint <- R6Class(
       } else {
         private$func <- expr
       }
+      throw_if_func_is_not_a_function(private$func)
       private$envir <- envir
 
       private$regex <- createPathRegex(path, self$getFuncParams())
@@ -298,6 +299,7 @@ PlumberFilter <- R6Class(
       } else {
         private$func <- expr
       }
+      throw_if_func_is_not_a_function(private$func)
       private$envir <- envir
 
       if (!missing(serializer)){
@@ -309,3 +311,10 @@ PlumberFilter <- R6Class(
     }
   )
 )
+
+
+throw_if_func_is_not_a_function <- function(func) {
+  if(!is.function(func)) {
+    stop("`expr` did not evaluate to a function")
+  }
+}

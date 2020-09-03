@@ -249,17 +249,16 @@ isJSONserializable <- function(x) {
   )
 }
 
-#' Extract metadata on args of plumberExpression
+#' Extract metadata on args of endpoint_func
 #' @noRd
-getArgsMetadata <- function(plumberExpression){
+getArgsMetadata <- function(endpoint_func) {
   #return same format as getTypedParams or params?
-  if (!is.function(plumberExpression)) plumberExpression <- eval(plumberExpression)
-  args <- formals(plumberExpression)
+  args <- formals(endpoint_func)
   lapply(args[! (names(args) %in% c("req", "res", "..."))], function(arg) {
     required <- identical(arg, formals(function(x){})$x)
     if (is.call(arg) || is.name(arg)) {
       arg <- tryCatch(
-        eval(arg, envir = environment(plumberExpression)),
+        eval(arg, envir = environment(endpoint_func)),
         error = function(cond) {NA})
     }
     # Check that it is possible to transform arg value into
