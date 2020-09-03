@@ -605,7 +605,7 @@ Plumber <- R6Class(
             # will contain all args added in filters
             # `req$argsQuery` is available, but already absorbed into `req$args`
             req$args,
-            # path is more important than query
+            # path is more important than body
             req$argsPath,
             # body is added last
             req$argsBody
