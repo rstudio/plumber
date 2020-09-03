@@ -402,7 +402,7 @@
 <tr class="even">
 <td><code>args</code></td>
 <td><code><a href="https://rdrr.io/r/base/list.html">list(req=req,res=res,e=5,f=6,c=3,d=4,a=1,b=2)</a></code></td>
-<td>In a route, the combined arguments of <code><a href="https://rdrr.io/r/base/list.html">list(req = req, res = res)</a></code>, <code>argsQuery</code>, <code>argsPath</code>, and <code>argsBody</code>. In a filter, <code>req$args</code> only contains <code>argsQuery</code> as the route information will not have been processed yet.</td>
+<td>In a route, the combined arguments of <code><a href="https://rdrr.io/r/base/list.html">list(req = req, res = res)</a></code>, <code>req$args</code> (added by filters), <code>req$argsQuery</code>, <code>req$argsPath</code>, and <code>req$argsBody</code>. In a filter, <code>req$args</code> is initialized to an empty list, so when processing filters <code>req$args</code> will only contain arguments set by previously processed filters as the route information will not have been processed yet.</td>
 </tr>
 <tr class="odd">
 <td><code>QUERY_STRING</code></td>
