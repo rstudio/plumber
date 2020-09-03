@@ -67,13 +67,13 @@ A new \code{PlumberStep} object
 \subsection{Method \code{exec()}}{
 step execution function
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PlumberStep$exec(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PlumberStep$exec(req, res)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{additional arguments for step execution}
+\item{\code{req, res}}{Request and response objects created by a Plumber request}
 }
 \if{html}{\out{</div>}}
 }

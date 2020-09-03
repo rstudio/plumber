@@ -216,7 +216,7 @@ test_that("@parser parameters produce an error or not", {
     evaluateBlock(
       srcref = 3, # which evaluates to line 2
       file = c("#' @get /test", "#' @parser octet list(key = \"val\")"),
-      expr = substitute(identity),
+      expr = as.expression(substitute(identity)),
       envir = new.env(),
       addEndpoint = function(a, b, ...) { stop("should not reach here")},
       addFilter = as.null,

@@ -1,14 +1,19 @@
 context("Plumber")
 
+exec_endpoint <- function(pr, ep_pos, subset = 1) {
+  # This is a poor setup of `req` and `res`. But it works for testing purposes
+  pr$endpoints[[subset]][[ep_pos]]$exec(make_req(), PlumberResponse$new())
+}
+
 test_that("Endpoints are properly identified", {
   r <- pr(test_path("files/endpoints.R"))
   expect_equal(length(r$endpoints), 1)
   expect_equal(length(r$endpoints[[1]]), 5)
-  expect_equal(r$endpoints[[1]][[1]]$exec(), 5)
-  expect_equal(r$endpoints[[1]][[2]]$exec(), 5)
-  expect_equal(r$endpoints[[1]][[3]]$exec(), 10)
-  expect_equal(r$endpoints[[1]][[4]]$exec(), 12)
-  expect_equal(r$endpoints[[1]][[5]]$exec(), 14)
+  expect_equal(exec_endpoint(r, 1), 5)
+  expect_equal(exec_endpoint(r, 2), 5)
+  expect_equal(exec_endpoint(r, 3), 10)
+  expect_equal(exec_endpoint(r, 4), 12)
+  expect_equal(exec_endpoint(r, 5), 14)
 })
 
 test_that("Empty file is OK", {
@@ -20,7 +25,7 @@ test_that("The file is sourced in the envir", {
   r <- pr(test_path("files/in-env.R"))
   expect_equal(length(r$endpoints), 1)
   expect_equal(length(r$endpoints[[1]]), 2)
-  expect_equal(r$endpoints[[1]][[1]]$exec(), 15)
+  expect_equal(exec_endpoint(r, 1), 15)
 })
 
 test_that("Verbs translate correctly", {
@@ -129,11 +134,11 @@ test_that("The old roxygen-style comments work", {
   r <- pr(test_path("files/endpoints-old.R"))
   expect_equal(length(r$endpoints), 1)
   expect_equal(length(r$endpoints[[1]]), 5)
-  expect_equal(r$endpoints[[1]][[1]]$exec(), 5)
-  expect_equal(r$endpoints[[1]][[2]]$exec(), 5)
-  expect_equal(r$endpoints[[1]][[3]]$exec(), 10)
-  expect_equal(r$endpoints[[1]][[4]]$exec(), 12)
-  expect_equal(r$endpoints[[1]][[5]]$exec(), 14)
+  expect_equal(exec_endpoint(r, 1), 5)
+  expect_equal(exec_endpoint(r, 2), 5)
+  expect_equal(exec_endpoint(r, 3), 10)
+  expect_equal(exec_endpoint(r, 4), 12)
+  expect_equal(exec_endpoint(r, 5), 14)
 })
 
 test_that("routes can be constructed correctly", {

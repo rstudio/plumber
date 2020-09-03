@@ -44,7 +44,7 @@ PlumberStep <- R6Class(
       } else {
         private$func <- expr
       }
-
+      throw_if_func_is_not_a_function(private$func)
       private$envir <- envir
 
       if (!missing(lines)){
@@ -56,21 +56,28 @@ PlumberStep <- R6Class(
       }
     },
     #' @description step execution function
-    #' @param ... additional arguments for step execution
-    exec = function(...) {
-      allArgs <- list(...)
-      args <- getRelevantArgs(allArgs, plumberExpression=private$func)
+    #' @param req,res Request and response objects created by a Plumber request
+    exec = function(req, res) {
+      hookEnv <- new.env(parent = emptyenv())
 
-      hookEnv <- new.env()
+      # use a function as items could possibly be added to `req$args` in each step
+      args_for_formal_matching <- function() {
+        args <- c(
+          # add in `req`, `res` as they have been removed from `req$args`
+          list(req = req, res = res),
+          req$args
+        )
+      }
 
       preexecStep <- function(...) {
-        private$runHooks("preexec", c(list(data = hookEnv), allArgs))
+        private$runHooks("preexec", c(list(data = hookEnv), args_for_formal_matching()))
       }
       execStep <- function(...) {
-        do.call(private$func, args, envir = private$envir)
+        relevant_args <- getRelevantArgs(args_for_formal_matching(), func = private$func)
+        do.call(private$func, relevant_args, envir = private$envir)
       }
       postexecStep <- function(value, ...) {
-        private$runHooks("postexec", c(list(data = hookEnv, value = value), allArgs))
+        private$runHooks("postexec", c(list(data = hookEnv, value = value), args_for_formal_matching()))
       }
       runSteps(
         NULL,
@@ -101,33 +108,23 @@ PlumberStep <- R6Class(
 )
 
 # @param positional list with names where they were provided.
-getRelevantArgs <- function(args, plumberExpression) {
-  if (length(args) == 0) {
-    unnamedArgs <- NULL
-  } else if (is.null(names(args))) {
-    unnamedArgs <- 1:length(args)
-  } else {
-    unnamedArgs <- which(names(args) == "")
-  }
-
-  if (length(unnamedArgs) > 0 ) {
-    stop("Can't call a Plumber function with unnammed arguments. Missing names for argument(s) #",
-         paste0(unnamedArgs, collapse=", "),
-         ". Names of argument list was: \"",
-         paste0(names(args), collapse=","), "\"")
-  }
-
+getRelevantArgs <- function(args, func) {
   # Extract the names of the arguments this function supports.
-  fargs <- names(formals(eval(plumberExpression)))
+  fargs <- names(formals(func))
 
   if (length(fargs) == 0) {
     # no matches
     return(list())
   }
 
+  # fast return
+  # also works with unnamed arguments
+  if (identical(fargs, "...")) {
+    return(args)
+  }
+
   # If only req and res are found in function definition...
   # Only call using the first matches of req and res.
-  #   This allows for body content to have `req` and `res` named arguments and not duplicated values which cause issues.
   if (all(fargs %in% c("req", "res"))) {
     ret <- list()
     # using `$` will retrieve the 1st occurance of req,res
@@ -141,24 +138,20 @@ getRelevantArgs <- function(args, plumberExpression) {
     return(ret)
   }
 
-  if (!"..." %in% fargs) {
+  # The remaining code MUST work with unnamed arguments
+  # If there is no `...`, then the unnamed args will not be in `fargs` and will be removed
+  # If there is `...`, then the unnamed args will not be in `fargs` and will be passed through
+
+  if (!("..." %in% fargs)) {
     # Use the named arguments that match, drop the rest.
     args <- args[names(args) %in% fargs]
   }
 
-  # for all args, check if they are duplicated
+  # dedupe matched formals
   arg_names <- names(args)
-  matched_arg_names <- arg_names[arg_names %in% fargs]
-  duplicated_matched_arg_names <- duplicated(matched_arg_names)
-
-  if (any(duplicated_matched_arg_names)) {
-    stop(
-      "Can't call a Plumber function with duplicated matching formal arguments: ",
-      paste0(unique(matched_arg_names[duplicated_matched_arg_names]), collapse = ", "),
-      "\nPlumber recommends that the route's function signature be `function(req, res)`",
-      "\nand to access arguments via `req$args`, `req$argsPath`, `req$argsBody`, or `req$argsQuery`."
-    )
-  }
+  is_farg <- arg_names %in% fargs
+  # keep only the first matched formal argument (and all other non-`farg` params)
+  args <- args[(is_farg & !duplicated(arg_names)) | (!is_farg)]
 
   args
 }
@@ -237,6 +230,7 @@ PlumberEndpoint <- R6Class(
       } else {
         private$func <- expr
       }
+      throw_if_func_is_not_a_function(private$func)
       private$envir <- envir
 
       private$regex <- createPathRegex(path, self$getFuncParams())
@@ -305,6 +299,7 @@ PlumberFilter <- R6Class(
       } else {
         private$func <- expr
       }
+      throw_if_func_is_not_a_function(private$func)
       private$envir <- envir
 
       if (!missing(serializer)){
@@ -316,3 +311,10 @@ PlumberFilter <- R6Class(
     }
   )
 )
+
+
+throw_if_func_is_not_a_function <- function(func) {
+  if(!is.function(func)) {
+    stop("`expr` did not evaluate to a function")
+  }
+}

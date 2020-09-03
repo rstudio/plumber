@@ -26,15 +26,12 @@
 #' OpenAPI Specification. Defaults to an empty string}
 #' \item{`plumber.maxRequestSize`}{Maximum length in bytes of request body. Body larger
 #' than maximum are rejected with http error 413. `0` means unlimited size. Defaults to `0`}
-#' \item{`plumber.postBody`}{Copy body content to `req$postBody` using system encoding.
-#' This should be set to `FALSE` if you do not need it. Default is `TRUE` to preserve compatibility with
-#' previous version behavior. Defaults to `TRUE`}
 #' \item{`plumber.sharedSecret`}{Shared secret used to filter incoming request.
 #' When `NULL`, secret is not validated. Otherwise, Plumber compares secret with http header
 #' `PLUMBER_SHARED_SECRET`. Failure to match results in http error 400. Defaults to `NULL`}
 #' }
 #'
-#' @param port,docs,docs.callback,apiScheme,apiHost,apiPort,apiPath,apiURL,maxRequestSize,postBody,sharedSecret See details
+#' @param port,docs,docs.callback,apiScheme,apiHost,apiPort,apiPath,apiURL,maxRequestSize,sharedSecret See details
 #' @return
 #' The complete, prior set of [options()] values.
 #' If a particular parameter is not supplied, it will return the current value.
@@ -50,7 +47,6 @@ options_plumber <- function(
   apiPort              = getOption("plumber.apiPort"),
   apiPath              = getOption("plumber.apiPath"),
   maxRequestSize       = getOption("plumber.maxRequestSize"),
-  postBody             = getOption("plumber.postBody"),
   sharedSecret         = getOption("plumber.sharedSecret")
 ) {
   options(
@@ -60,7 +56,6 @@ options_plumber <- function(
     plumber.apiPath = apiPath,
     plumber.apiURL = apiURL,
     plumber.maxRequestSize = maxRequestSize,
-    plumber.postBody = postBody,
     plumber.port = port,
     plumber.sharedSecret = sharedSecret,
     plumber.docs = docs,
