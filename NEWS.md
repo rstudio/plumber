@@ -19,13 +19,6 @@ plumber 1.0.0
   * Unnamed elements that are added to `req$args` by filters or creating `req$argsBody` will no longer throw an error. They will only be passed through via `...` (#666)
 
 
-* An error will be thrown if multiple arguments are matched to an Plumber Endpoint route definition.
-  While it is not required, it is safer to define routes to only use `req` and `res` when there is a possiblity to have multiple arguments match a single parameter name.
-  Use `req$argsQuery`, `req$argsPath`, and `req$argsBody` to access path, query, and body parameters respectively.
-  See `system.file("plumber/17-arguments/plumber.R", package = "plumber")` to view an example with expected output and `plumb_api("plumber", "17-arguments")` to retrieve the api.
-  (#637)
-
-
 #### OpenAPI
 
 * API Documentation is now hosted at `/__docs__`. If `swagger` documentation is being used, `/__swagger__` will redirect to `/__docs__`. (#654)
