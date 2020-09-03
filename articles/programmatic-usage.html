@@ -153,16 +153,14 @@
   }) <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_handle.html">pr_post</a></span>(<span class="st">"/submit"</span>, <span class="fu">function</span>(<span class="kw">req</span>, <span class="kw">res</span>){
     <span class="co"># ...</span>
-  })
-</pre></div>
+  })</pre></div>
 <p>The “handler” functions that you define in these calls are identical to the code you would have defined in your <code>plumber.R</code> file if you were using annotations to define your API.</p>
 <p>The route methods take additional arguments that allow you to control nuanced behavior of the endpoint like which filter it might preempt or which serializer it should use. For instance, the following endpoint would use Plumber’s HTML serializer.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="fu"><a href="../reference/pr.html">pr</a></span>() <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span>(<span class="st">"/"</span>, <span class="fu">function</span>(){
     <span class="st">"&lt;html&gt;&lt;h1&gt;Programmatic Plumber!&lt;/h1&gt;&lt;/html&gt;"</span>
-  }, serializer = <span class="kw">plumber</span>::<span class="fu"><a href="../reference/serializer_headers.html">serializer_html</a></span>())
-</pre></div>
+  }, serializer = <span class="kw">plumber</span>::<span class="fu"><a href="../reference/serializer_headers.html">serializer_html</a></span>())</pre></div>
 </div>
 <div id="defining-filters" class="section level2">
 <h2 class="hasAnchor">
@@ -176,8 +174,7 @@
   }) <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span>(<span class="st">"/"</span>, <span class="fu">function</span>(<span class="kw">req</span>){
     <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Am I filtered?"</span>, <span class="kw">req</span><span class="op">$</span><span class="kw">filtered</span>)
-  })
-</pre></div>
+  })</pre></div>
 <p>You can specify other options such as the serializer to use if the filter returns a value in the <code><a href="../reference/pr_filter.html">pr_filter()</a></code> method, as well.</p>
 </div>
 <div id="router-hooks" class="section level2">
@@ -212,8 +209,7 @@
       <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw">res</span><span class="op">$</span><span class="kw">body</span>)
     }
   )) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span>(<span class="st">"/"</span>, <span class="fu">function</span>(){ <span class="fl">123</span> })
-</pre></div>
+  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span>(<span class="st">"/"</span>, <span class="fu">function</span>(){ <span class="fl">123</span> })</pre></div>
 <p>Making a <code>GET</code> request to <code><a href="https://rdrr.io/r/base/Arithmetic.html">/</a></code> will print out various information from the three events for which we registered hooks.</p>
 </div>
 <div id="mount-static" class="section level2">
@@ -230,14 +226,12 @@
   <span class="fu"><a href="../reference/pr_mount.html">pr_mount</a></span>(<span class="st">"/users"</span>, <span class="kw">users</span>) <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_mount.html">pr_mount</a></span>(<span class="st">"/products"</span>, <span class="kw">products</span>)
 
-<span class="kw">root</span>
-</pre></div>
+<span class="kw">root</span></pre></div>
 <p>This is the same approach used for defining routers that serve a directory of static files. Static file routers are just a special case of Plumber routers created using <code><a href="../reference/pr_static.html">pr_static()</a></code>. For example</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="fu"><a href="../reference/pr.html">pr</a></span>() <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_static.html">pr_static</a></span>(<span class="st">"/assets"</span>, <span class="st">"./myfiles"</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span>()
-</pre></div>
+  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span>()</pre></div>
 <p>This will make the files and directories stored in the <code>./myfiles</code> directory available on your API under the <code>/assets/</code> path.</p>
 </div>
 <div id="customize-router" class="section level2">

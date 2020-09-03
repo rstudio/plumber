@@ -161,17 +161,14 @@
 
   <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">myData</span><span class="op">$</span><span class="kw">Sepal.Length</span>, <span class="kw">myData</span><span class="op">$</span><span class="kw">Petal.Length</span>,
        main=<span class="kw">title</span>, xlab=<span class="st">"Sepal Length"</span>, ylab=<span class="st">"Petal Length"</span>)
-}
-</pre></div>
+}</pre></div>
 <p>This file defines two Plumber “endpoints.” One is hosted at the path <code>/echo</code> and simply echoes the message passed in; the other is hosted at the path <code>/plot</code> and returns an image showing a simple R plot.</p>
 <p>If you haven’t installed <code>plumber</code> yet, see the <a href="./index.html#installation">installation section</a>. Once you have <code>plumber</code> installed, you can use the <code><a href="../reference/pr.html">pr()</a></code> function to translate this R file into a Plumber API:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="fu"><a href="../reference/pr.html">pr</a></span>(<span class="st">"plumber.R"</span>)
-</pre></div>
+<span class="fu"><a href="../reference/pr.html">pr</a></span>(<span class="st">"plumber.R"</span>)</pre></div>
 <p>The <code>pr</code> object now encapsulates all the logic represented in your <code>plumber.R</code> file. The next step is to bring the API to life using the <code><a href="../reference/pr_run.html">pr_run()</a></code> method:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="../reference/pr_run.html">pr_run</a></span>()
-</pre></div>
+<span class="fu"><a href="../reference/pr_run.html">pr_run</a></span>()</pre></div>
 <p>You should see a message about your API running on your computer on port <code>8000</code>. The API will continue running in your R session until you press the <code>Esc</code> key. If you’re running this code locally on your personal machine, you should be able to open <a href="http://localhost:8000/echo">http://localhost:8000/echo</a> or <a href="http://localhost:8000/plot">http://localhost:8000/plot</a> in a web browser to test your new API endpoints.</p>
 <blockquote>
 <p>If you’re using a tool like RStudio Server to run your R code on a remote machine, you should see the <a href="./security.html#networking">networking section</a> for help with visiting your API.</p>
@@ -199,8 +196,7 @@
 <span class="co">#' @serializer html</span>
 <span class="fu">function</span>(){
   <span class="st">"&lt;html&gt;&lt;h1&gt;hello world&lt;/h1&gt;&lt;/html&gt;"</span>
-}
-</pre></div>
+}</pre></div>
 <p>This endpoint would produce something like the following, when visited. It also sets the appropriate <code>Content-Type</code> header so that a browser that visits this page would know to render the result as HTML.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">&lt;html&gt;&lt;h1&gt;</span>hello world<span class="kw">&lt;/h1&gt;&lt;/html&gt;</span></span></code></pre></div>
 <p>You can even provide your own custom serializers and define how to translate the R object produced by your endpoint into the bits that will produce Plumber’s HTTP response.</p>

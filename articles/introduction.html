@@ -161,8 +161,7 @@
 
   <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">myData</span><span class="op">$</span><span class="kw">Sepal.Length</span>, <span class="kw">myData</span><span class="op">$</span><span class="kw">Petal.Length</span>,
        main=<span class="kw">title</span>, xlab=<span class="st">"Sepal Length"</span>, ylab=<span class="st">"Petal Length"</span>)
-}
-</pre></div>
+}</pre></div>
 <p>Even without knowing R, you can probably get a rough idea for what the above Plumber API will do. The first function above defines the <code>/echo</code> endpoint which simply echoes back the text that it was sent. The second function generates a plot based on Edgar Anderson’s famous Iris Dataset; it includes a filter that allows the caller to subset the dataset to a particular species.</p>
 <p>Plumber makes use of these comment “annotations” above your functions to define the web service. When you feed the above file into Plumber, you’ll get a runnable web service that other systems can interact with over a network.</p>
 <div id="web-apis" class="section level2">
