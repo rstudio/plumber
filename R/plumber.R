@@ -611,7 +611,6 @@ Plumber <- R6Class(
             req$argsBody
           )
 
-          # req$args will be filled inside `h$exec()`
           return(
             h$exec(req, res)
           )
