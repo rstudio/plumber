@@ -199,6 +199,8 @@ plumber 1.0.0
 
 * Date response header is now supplied by httpuv and not plumber. Fixes non standard date response header issues when using different locales. (@shrektan, #319, #380)
 
+* Due to incompatibilities with `multipart` body values, `req$postBody` will only be calculated if accessed. It is strongly recommended to use `req$bodyRaw` when trying to create content from the input body. (#665)
+
 
 
 plumber 0.4.6
