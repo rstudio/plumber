@@ -12,7 +12,7 @@ plumber 1.0.0
 
 * An error will be thrown if multiple arguments are matched to an Plumber Endpoint route definition.
   While it is not required, it is safer to define routes to only use `req` and `res` when there is a possiblity to have multiple arguments match a single parameter name.
-  Use `req$argsPath`, `req$argsQuery`, and `req$argsBody` to access path, query, and postBody parameters respectively.
+  Use `req$argsPath`, `req$argsQuery`, and `req$argsBody` to access path, query, and body parameters respectively.
   See `system.file("plumber/17-arguments/plumber.R", package = "plumber")` to view an example with expected output and `plumb_api("plumber", "17-arguments")` to retrieve the api.
   (#637)
 
@@ -189,6 +189,8 @@ plumber 1.0.0
 * Bumped version of httpuv to >= 1.4.5.9000 to address an unexpected segfault (@shapenaji, #289)
 
 * Date response header is now supplied by httpuv and not plumber. Fixes non standard date response header issues when using different locales. (@shrektan, #319, #380)
+
+* Due to incompatibilities with `multipart` body values, `req$postBody` will only be calculated if accessed. It is strongly recommended to use `req$bodyRaw` when trying to create content from the input body. (#665)
 
 
 
