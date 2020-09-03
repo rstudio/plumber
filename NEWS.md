@@ -10,13 +10,13 @@ plumber 1.0.0
 
 * Added support for `#' @plumber` tag to gain programmatic access to the `plumber` router via `function(pr) {....}`. See `system.file("plumber/06-sessions/plumber.R", package = "plumber")` and how it adds cookie support from within `plumber.R`. (@meztez and @blairj09, #568)
 
-* An error will be thrown if multiple arguments are matched to an Plumber Endpoint route definition.
-  While it is not required, it is safer to define routes to only use `req` and `res` when there is a possiblity to have multiple arguments match a single parameter name.
-  Use `req$argsPath`, `req$argsQuery`, and `req$argsBody` to access path, query, and body parameters respectively.
-  See `system.file("plumber/17-arguments/plumber.R", package = "plumber")` to view an example with expected output and `plumb_api("plumber", "17-arguments")` to retrieve the api.
-  (#637)
-
 * Added `plumb_api()` for standardizing where to locate (`inst/plumber`) and how to run (`plumb_api(package, name)`) plumber apis inside an R package. To view the available Plumber APIs, call `available_apis()`. (#631)
+
+* Improved argument handling in Plumber Endpoint route definitions. See `system.file("plumber/17-arguments/plumber.R", package = "plumber")` to view an example with expected output and `plumb_api("plumber", "17-arguments")` to retrieve the api. Improvements include:
+  * The value supplied to `req` and `res` arguments in a route definition are now _always_ Plumber request and response objects. In the past, this was not guaranteed. (#666, #637)
+  * To assist with conflicts in argument names deriving from different locations, `req$argsQuery`, `req$argsPath`, and `req$argsBody` have been added to access query, path, and `req$body` parameters, respectively. For this reason, we suggest defining routes with only `req` and `res` (i.e., `function(req, res) {}`) and accessing argument(s) under these new fields to avoid naming conflicts. (#637)
+  * An error is no longer thrown if multiple arguments are matched to an Plumber Endpoint route definition. Instead, Plumber now retains the first named argument according to the highest priority match (`req$argsQuery` is 1st priority, then `req$argsPath`, then `req$argsBody`). (#666)
+  * Unnamed elements that are added to `req$args` by filters or creating `req$argsBody` will no longer throw an error. They will only be passed through via `...` (#666)
 
 
 #### OpenAPI
@@ -117,6 +117,10 @@ plumber 1.0.0
   #328).
 
 * `options(plumber.debug)` is not set anymore when running the plumber application. Instead retrieve the debug value using `$getDebug()` on the Plumber router directly. Ex: `function(req, res) { req$pr$getDebug() }`. (#639)
+
+* `PlumberEndpoint`'s method `$exec()` now has a shape of `$exec(req, res)` (vs `$exec(...)`).  This allows for fine tune control over the arguments being sent to the endpoint function.
+
+* When creating a `PlumberFilter` or `PlumberEndpoint`, an error will be thrown if `expr` does not evaluate to a function. (#666)
 
 ### Deprecations
 

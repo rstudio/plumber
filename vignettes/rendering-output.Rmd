@@ -97,7 +97,7 @@ Visiting http://localhost:8000/boxed?letter=U or http://localhost:8000/unboxed?l
 ```{r, echo=FALSE, results='asis'}
 r <- plumber::plumb("files/apis/04-03-letters.R")
 e <- r$endpoints[[1]][[1]]
-code_chunk(json_serialize(e$exec(letter="U")), "json")
+code_chunk(json_serialize(e$exec(req = list(args = list(letter="U")), res = NULL)), "json")
 ```
 
 However, http://localhost:8000/boxed?letter=Y will produce:
@@ -105,14 +105,14 @@ However, http://localhost:8000/boxed?letter=Y will produce:
 ```{r, echo=FALSE, results='asis'}
 r <- plumber::plumb("files/apis/04-03-letters.R")
 e <- r$endpoints[[1]][[1]]
-code_chunk(jsonlite::toJSON(e$exec(letter="Y"), auto_unbox = FALSE), "json")
+code_chunk(jsonlite::toJSON(e$exec(req = list(args = list(letter="Y")), res = NULL), auto_unbox = FALSE), "json")
 ```
 
 while http://localhost:8000/unboxed?letter=Y will produce:
 
 ```{r, echo=FALSE, results='asis'}
 e <- r$endpoints[[1]][[2]]
-code_chunk(jsonlite::toJSON(e$exec(letter="Y"), auto_unbox = TRUE))
+code_chunk(jsonlite::toJSON(e$exec(req = list(args = list(letter="Y")), res = NULL), auto_unbox = TRUE))
 ```
 
 The `/boxed` endpoint, as the name implies, produces "boxed" JSON output in which length-1 vectors are still rendered as an array. Conversely, the `/unboxed` endpoint sets `auto_unbox=TRUE` in its call to `jsonlite::toJSON`, causing length-1 R vectors to be rendered as JSON scalars.
@@ -169,7 +169,7 @@ This means that it is possible for you to intentionally `stop()` in an endpoint 
 ```{r, echo=FALSE, results='asis'}
 r <- plumber::plumb("files/apis/04-05-error.R")
 e <- r$endpoints[[1]][[2]]
-code_chunk(json_serialize(e$exec(res=list(status=1))), "json")
+code_chunk(json_serialize(e$exec(req = list(), res=list(status=1))), "json")
 ```
 
 A custom error handler can be set using the `setErrorHandler()` method:
@@ -217,7 +217,7 @@ Since this API is using a `PUT` request to test this API, we'll use `curl` on th
 ```{r, echo=FALSE, results='asis'}
 r <- plumber::plumb("files/apis/06-01-capitalize.R")
 e <- r$endpoints[[1]][[2]]
-code_chunk(json_serialize(e$exec(req=list(cookies=list()))), "json")
+code_chunk(json_serialize(e$exec(req=list(cookies=list()), res = NULL)), "json")
 ```
 
 If we send a `PUT` request and specify the `capital` parameter, a cookie will be set on the client which will allow the server to accommodate our preference in future requests. In `curl`, you need to specify a file in which you want to save these cookies using the `-c` option. This is a good reminder that clients handle cookies differently -- some won't support them at all -- so be sure that the clients you intend to support with your API play nicely with cookies if you want to use them.
