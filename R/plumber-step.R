@@ -60,20 +60,24 @@ PlumberStep <- R6Class(
     exec = function(req, res) {
       hookEnv <- new.env(parent = emptyenv())
 
-      args <- c(
-        # add in `req`, `res` as they have been removed from `req$args`
-        list(req = req, res = res),
-        req$args
-      )
+      # use a function as items could possibly be added to `req$args` in each step
+      args_for_formal_matching <- function() {
+        args <- c(
+          # add in `req`, `res` as they have been removed from `req$args`
+          list(req = req, res = res),
+          req$args
+        )
+      }
+
       preexecStep <- function(...) {
-        private$runHooks("preexec", c(list(data = hookEnv), args))
+        private$runHooks("preexec", c(list(data = hookEnv), args_for_formal_matching()))
       }
       execStep <- function(...) {
-        relevant_args <- getRelevantArgs(args, plumberExpression=private$func)
+        relevant_args <- getRelevantArgs(args_for_formal_matching(), plumberExpression=private$func)
         do.call(private$func, relevant_args, envir = private$envir)
       }
       postexecStep <- function(value, ...) {
-        private$runHooks("postexec", c(list(data = hookEnv, value = value), args))
+        private$runHooks("postexec", c(list(data = hookEnv, value = value), args_for_formal_matching()))
       }
       runSteps(
         NULL,
