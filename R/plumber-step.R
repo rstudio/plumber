@@ -58,7 +58,7 @@ PlumberStep <- R6Class(
     #' @description step execution function
     #' @param req,res Request and response objects created by a Plumber request
     exec = function(req, res) {
-      hookEnv <- new.env()
+      hookEnv <- new.env(parent = emptyenv())
 
       args <- c(
         # add in `req`, `res` as they have been removed from `req$args`
