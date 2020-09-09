@@ -44,9 +44,11 @@ former since `#'` will collide with Roxygen.
 
 ```r
 library(plumber)
+library(magrittr)
+
 # 'plumber.R' is the location of the file shown above
-pr("plumber.R") %>%
-  pr_run(port=8000)
+server <- plumb("plumber.R")
+server$run(port=8000)
 ```
 
 You can visit this URL using a browser or a terminal to run your R function and
