@@ -73,6 +73,32 @@ Hookable <- R6Class(
           )
         )
       )
+    },
+    # Some stages (aroundexec) use a continuation passing style instead of callback style.
+    # https://en.wikipedia.org/wiki/Continuation-passing_style
+    # https://expressjs.com/en/guide/using-middleware.html
+    runHooksAround = function(stage, args = list(), .next) {
+      stageHooks <- private$hooks[[stage]]
+
+      # Execute the specified (i) hook. If i == 0, execute the .next continuation.
+      execHook <- function(i, hookArgs) {
+        if (i == 0) {
+          do.call(.next, getRelevantArgs(hookArgs, func = .next))
+        } else {
+          # Need to pass continuation to the hook
+          hookArgs <- c(hookArgs, .next = nextHook(i - 1))
+          stageHook <- stageHooks[[i]]
+          do.call(stageHook, getRelevantArgs(hookArgs, func = stageHook))
+        }
+      }
+
+      nextHook <- function(i) {
+        function(...) {
+          execHook(i, list(...))
+        }
+      }
+
+      execHook(i = length(stageHooks), args)
     }
   )
 )

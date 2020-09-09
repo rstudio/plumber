@@ -409,13 +409,16 @@ serializer_xml <- function() {
 #' # * `preexec`, `postexec` hooks
 #' # * a `serializer_content_type` serializer
 #' print(serializer_device)
-endpoint_serializer <- function(serializer, preexec_hook = NULL, postexec_hook = NULL) {
+endpoint_serializer <- function(serializer, preexec_hook = NULL, postexec_hook = NULL,
+  aroundexec_hook = NULL) {
+
   stopifnot(is.function(serializer))
   structure(
     list(
       serializer = serializer,
       preexec_hook = preexec_hook,
-      postexec_hook = postexec_hook
+      postexec_hook = postexec_hook,
+      aroundexec_hook = aroundexec_hook
     ),
     class = "plumber_endpoint_serializer"
   )
@@ -429,6 +432,9 @@ self_set_serializer <- function(self, serializer) {
     }
     if (!is.null(serializer$postexec_hook)) {
       self$registerHook("postexec", serializer$postexec_hook)
+    }
+    if (!is.null(serializer$aroundexec_hook)) {
+      self$registerHook("aroundexec", serializer$aroundexec_hook)
     }
   } else {
     self$serializer <- serializer
@@ -458,20 +464,45 @@ serializer_device <- function(type, dev_on, dev_off = grDevices::dev.off) {
 
   endpoint_serializer(
     serializer = serializer_content_type(type),
-    preexec_hook = function(req, res, data) {
+    aroundexec_hook = function(..., .next) {
       tmpfile <- tempfile()
-      data$file <- tmpfile
 
       dev_on(filename = tmpfile)
-    },
-    postexec_hook = function(value, req, res, data) {
-      dev_off()
+      device_id <- dev.cur()
+      dev_off_once <- once(function() dev_off(device_id))
 
-      on.exit({unlink(data$file)}, add = TRUE)
-      con <- file(data$file, "rb")
-      on.exit({close(con)}, add = TRUE)
-      img <- readBin(con, "raw", file.info(data$file)$size)
-      img
+      success <- function(value) {
+        dev_off_once()
+        con <- file(tmpfile, "rb")
+        on.exit({close(con)}, add = TRUE)
+        img <- readBin(con, "raw", file.info(tmpfile)$size)
+        img
+      }
+
+      cleanup <- function() {
+        dev_off_once()
+        on.exit({unlink(tmpfile)}, add = TRUE)
+      }
+
+      # This is just a flag to ensure we don't cleanup() if the .next(...) is
+      # async.
+      async <- FALSE
+
+      on.exit({
+        if (!async) {
+          cleanup()
+        }
+      }, add = TRUE)
+
+      result <- promises::with_promise_domain(createGraphicsDevicePromiseDomain(device_id), {
+        .next(...)
+      })
+      if (is.promising(result)) {
+        async <- TRUE
+        result %>% then(success) %>% finally(cleanup)
+      } else {
+        success(result)
+      }
     }
   )
 }
@@ -579,4 +610,40 @@ add_serializers_onLoad <- function() {
 
   ## Do not register until implemented
   # register_serializer("xml", serializer_xml)
+}
+
+# From https://github.com/rstudio/shiny/blob/ee13087d575d378fba2fae34664725dc7452df2d/R/imageutils.R
+#' @importFrom grDevices dev.set dev.cur
+createGraphicsDevicePromiseDomain <- function(which = dev.cur()) {
+  force(which)
+
+  promises::new_promise_domain(
+    wrapOnFulfilled = function(onFulfilled) {
+      force(onFulfilled)
+      function(...) {
+        old <- dev.cur()
+        dev.set(which)
+        on.exit(dev.set(old))
+
+        onFulfilled(...)
+      }
+    },
+    wrapOnRejected = function(onRejected) {
+      force(onRejected)
+      function(...) {
+        old <- dev.cur()
+        dev.set(which)
+        on.exit(dev.set(old))
+
+        onRejected(...)
+      }
+    },
+    wrapSync = function(expr) {
+      old <- dev.cur()
+      dev.set(which)
+      on.exit(dev.set(old))
+
+      force(expr)
+    }
+  )
 }
