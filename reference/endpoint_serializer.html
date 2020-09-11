@@ -53,7 +53,8 @@
 
 
 <meta property="og:title" content="Endpoint Serializer with Hooks — endpoint_serializer" />
-<meta property="og:description" content="This method allows serializers to return both preexec and postexec hooks in addition to a serializer.
+<meta property="og:description" content="This method allows serializers to return preexec, postexec, and aroundexec (
+) hooks in addition to a serializer.
 This is useful for graphics device serializers which need a preexec and postexec hook to capture the graphics output." />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
 
@@ -177,11 +178,17 @@ This is useful for graphics device serializers which need a preexec and postexec
     </div>
 
     <div class="ref-description">
-    <p>This method allows serializers to return both <code>preexec</code> and <code>postexec</code> hooks in addition to a serializer.
+    <p>This method allows serializers to return <code>preexec</code>, <code>postexec</code>, and <code>aroundexec</code> (<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>
+) hooks in addition to a serializer.
 This is useful for graphics device serializers which need a <code>preexec</code> and <code>postexec</code> hook to capture the graphics output.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>endpoint_serializer</span>(<span class='kw'>serializer</span>, preexec_hook = <span class='kw'>NULL</span>, postexec_hook = <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>endpoint_serializer</span>(
+  <span class='kw'>serializer</span>,
+  preexec_hook = <span class='kw'>NULL</span>,
+  postexec_hook = <span class='kw'>NULL</span>,
+  aroundexec_hook = <span class='kw'>NULL</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -198,6 +205,10 @@ This is useful for graphics device serializers which need a <code>preexec</code>
       <th>postexec_hook</th>
       <td><p>Function to be run directly after a <a href='PlumberEndpoint.html'>PlumberEndpoint</a> calls its route method.</p></td>
     </tr>
+    <tr>
+      <th>aroundexec_hook</th>
+      <td><p>Function to be run around a <a href='PlumberEndpoint.html'>PlumberEndpoint</a> call. Must handle a <code>.next</code> argument to continue execution. <a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a></p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -207,8 +218,8 @@ These hooks are specific to a single <a href='PlumberEndpoint.html'>PlumberEndpo
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># The definition of `serializer_device` returns</span>
-<span class='co'># * `preexec`, `postexec` hooks</span>
 <span class='co'># * a `serializer_content_type` serializer</span>
+<span class='co'># * `aroundexec` hook</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>serializer_device</span>)
 </div><div class='output co'>#&gt; function (type, dev_on, dev_off = grDevices::dev.off) 
 #&gt; {
@@ -221,24 +232,50 @@ These hooks are specific to a single <a href='PlumberEndpoint.html'>PlumberEndpo
 #&gt;     }
 #&gt;     stopifnot(is.function(dev_off))
 #&gt;     endpoint_serializer(serializer = serializer_content_type(type), 
-#&gt;         preexec_hook = function(req, res, data) {
+#&gt;         aroundexec_hook = function(..., .next) {
 #&gt;             tmpfile &lt;- tempfile()
-#&gt;             data$file &lt;- tmpfile
 #&gt;             dev_on(filename = tmpfile)
-#&gt;         }, postexec_hook = function(value, req, res, data) {
-#&gt;             dev_off()
+#&gt;             device_id &lt;- dev.cur()
+#&gt;             dev_off_once &lt;- once(function() dev_off(device_id))
+#&gt;             success &lt;- function(value) {
+#&gt;                 dev_off_once()
+#&gt;                 if (!file.exists(tmpfile)) {
+#&gt;                   stop("The device output file is missing. Did you produce an image?", 
+#&gt;                     call. = FALSE)
+#&gt;                 }
+#&gt;                 con &lt;- file(tmpfile, "rb")
+#&gt;                 on.exit({
+#&gt;                   close(con)
+#&gt;                 }, add = TRUE)
+#&gt;                 img &lt;- readBin(con, "raw", file.info(tmpfile)$size)
+#&gt;                 img
+#&gt;             }
+#&gt;             cleanup &lt;- function() {
+#&gt;                 dev_off_once()
+#&gt;                 on.exit({
+#&gt;                   unlink(tmpfile)
+#&gt;                 }, add = TRUE)
+#&gt;             }
+#&gt;             async &lt;- FALSE
 #&gt;             on.exit({
-#&gt;                 unlink(data$file)
+#&gt;                 if (!async) {
+#&gt;                   cleanup()
+#&gt;                 }
 #&gt;             }, add = TRUE)
-#&gt;             con &lt;- file(data$file, "rb")
-#&gt;             on.exit({
-#&gt;                 close(con)
-#&gt;             }, add = TRUE)
-#&gt;             img &lt;- readBin(con, "raw", file.info(data$file)$size)
-#&gt;             img
+#&gt;             result &lt;- promises::with_promise_domain(createGraphicsDevicePromiseDomain(device_id), 
+#&gt;                 {
+#&gt;                   .next(...)
+#&gt;                 })
+#&gt;             if (is.promising(result)) {
+#&gt;                 async &lt;- TRUE
+#&gt;                 result %&gt;% then(success) %&gt;% finally(cleanup)
+#&gt;             }
+#&gt;             else {
+#&gt;                 success(result)
+#&gt;             }
 #&gt;         })
 #&gt; }
-#&gt; &lt;bytecode: 0x7fb8fb20a1a0&gt;
+#&gt; &lt;bytecode: 0x7fb79512e838&gt;
 #&gt; &lt;environment: namespace:plumber&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

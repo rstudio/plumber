@@ -242,7 +242,10 @@ of a request by a plumber router.</p>
 <p><hr>
 <a id="method-registerHook"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>registerHook()</code></h3>
 <p>step hook registration method</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
-<p><div class="r"></p><pre><span class='kw'>PlumberStep</span><span class='op'>$</span><span class='fu'>registerHook</span>(stage = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"preexec"</span>, <span class='st'>"postexec"</span>), <span class='kw'>handler</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>PlumberStep</span><span class='op'>$</span><span class='fu'>registerHook</span>(
+  stage = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"preexec"</span>, <span class='st'>"postexec"</span>, <span class='st'>"aroundexec"</span>),
+  <span class='kw'>handler</span>
+)</pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
