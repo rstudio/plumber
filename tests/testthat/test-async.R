@@ -393,12 +393,12 @@ test_that("accessing two images created using promises does not create an error"
   expect_equal(p1_val$status, 200L)
   expect_equal(p1_val$headers$`Content-Type`, "image/png")
   expect_true(is.raw(p1_val$body))
-  expect_gt(length(p1_val$body), 10 * 1000)
+  expect_gt(length(p1_val$body), 1000)
 
   expect_equal(p2_val$status, 200L)
   expect_equal(p2_val$headers$`Content-Type`, "image/png")
   expect_true(is.raw(p2_val$body))
-  expect_gt(length(p2_val$body), 10 * 1000)
+  expect_gt(length(p2_val$body), 1000)
 
   # make sure they are not the same image
   expect_false(
