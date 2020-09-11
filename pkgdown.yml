@@ -1,8 +1,18 @@
 pandoc: 2.7.3
-pkgdown: 1.5.1.9000
-pkgdown_sha: c6b35532515a7ae433eff4b547d77eeae4278664
-articles: []
-last_built: 2020-09-03T21:34Z
+pkgdown: 1.6.0.9000
+pkgdown_sha: 2c210e86c82ea19f74c122c7329dad11a647e956
+articles:
+  execution-model: execution-model.html
+  hosting: hosting.html
+  introduction: introduction.html
+  migration: migration.html
+  programmatic-usage: programmatic-usage.html
+  quickstart: quickstart.html
+  rendering-output: rendering-output.html
+  routing-and-input: routing-and-input.html
+  security: security.html
+  tips-and-tricks: tips-and-tricks.html
+last_built: 2020-09-11T19:07Z
 urls:
   reference: https://www.rplumber.io/reference
   article: https://www.rplumber.io/articles

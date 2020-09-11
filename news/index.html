@@ -299,7 +299,7 @@
 <ul>
 <li><p>Secret session cookies are now encrypted using <code>sodium</code>. All prior <code>req$session</code> information will be lost. Please see <code><a href="../reference/session_cookie.html">?session_cookie</a></code> for more information. (<a href='https://github.com/rstudio/plumber/issues/404'>#404</a>)</p></li>
 <li><p>Session cookies set the <code>HttpOnly</code> flag by default to mitigate cross-site scripting (XSS). Please see <code><a href="../reference/session_cookie.html">?session_cookie</a></code> for more information. (<a href='https://github.com/rstudio/plumber/issues/404'>#404</a>)</p></li>
-<li><p>Wrap <code><a href="https://jeroen.cran.dev/jsonlite/reference/fromJSON.html">jsonlite::fromJSON</a></code> to ensure that <code>jsonlite</code> never reads input as a remote address (such as a file path or URL) and attempts to parse that. The only known way to exploit this behavior in plumber unless an API were using encrypted cookies and an attacker knew the encryption key in order to craft arbitrary cookies. (<a href='https://github.com/rstudio/plumber/issues/325'>#325</a>)</p></li>
+<li><p>Wrap <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">jsonlite::fromJSON</a></code> to ensure that <code>jsonlite</code> never reads input as a remote address (such as a file path or URL) and attempts to parse that. The only known way to exploit this behavior in plumber unless an API were using encrypted cookies and an attacker knew the encryption key in order to craft arbitrary cookies. (<a href='https://github.com/rstudio/plumber/issues/325'>#325</a>)</p></li>
 </ul>
 </div>
 <div id="breaking-changes" class="section level3">
@@ -545,7 +545,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.9000.</p>
 </div>
 
       </footer>

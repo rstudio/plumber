@@ -244,7 +244,7 @@ more details on Plumber serializers and how to customize their behavior.</p>
     </tr>
     <tr>
       <th>serialize_fn</th>
-      <td><p>Function to serialize the data. The result object will be converted to a character string. Ex: <code><a href='https://jeroen.cran.dev/jsonlite/reference/fromJSON.html'>jsonlite::toJSON()</a></code>.</p></td>
+      <td><p>Function to serialize the data. The result object will be converted to a character string. Ex: <code><a href='https://rdrr.io/pkg/jsonlite/man/fromJSON.html'>jsonlite::toJSON()</a></code>.</p></td>
     </tr>
     <tr>
       <th>type</th>
@@ -256,7 +256,7 @@ more details on Plumber serializers and how to customize their behavior.</p>
     </tr>
     <tr>
       <th>auto_unbox</th>
-      <td><p>automatically <code><a href='https://jeroen.cran.dev/jsonlite/reference/unbox.html'>unbox</a></code> all atomic vectors of length 1. It is usually safer to avoid this and instead use the <code><a href='https://jeroen.cran.dev/jsonlite/reference/unbox.html'>unbox</a></code> function to unbox individual elements.
+      <td><p>automatically <code><a href='https://rdrr.io/pkg/jsonlite/man/unbox.html'>unbox</a></code> all atomic vectors of length 1. It is usually safer to avoid this and instead use the <code><a href='https://rdrr.io/pkg/jsonlite/man/unbox.html'>unbox</a></code> function to unbox individual elements.
 An exception is that objects of class <code>AsIs</code> (i.e. wrapped in <code><a href='https://rdrr.io/r/base/AsIs.html'>I()</a></code>) are not automatically unboxed. This is a way to mark single values as length-1 arrays.</p></td>
     </tr>
     <tr>
@@ -300,8 +300,8 @@ The graphics device <code>dev_on</code> function will receive any arguments supp
 <li><p><code>serializer_csv</code>: CSV serializer. See also: <code><a href='https://readr.tidyverse.org/reference/format_delim.html'>readr::format_csv()</a></code></p></li>
 <li><p><code>serializer_tsv</code>: TSV serializer. See also: <code><a href='https://readr.tidyverse.org/reference/format_delim.html'>readr::format_tsv()</a></code></p></li>
 <li><p><code>serializer_html</code>: HTML serializer</p></li>
-<li><p><code>serializer_json</code>: JSON serializer. See also: <code><a href='https://jeroen.cran.dev/jsonlite/reference/fromJSON.html'>jsonlite::toJSON()</a></code></p></li>
-<li><p><code>serializer_unboxed_json</code>: JSON serializer with <code>auto_unbox</code> defaulting to <code>TRUE</code>. See also: <code><a href='https://jeroen.cran.dev/jsonlite/reference/fromJSON.html'>jsonlite::toJSON()</a></code></p></li>
+<li><p><code>serializer_json</code>: JSON serializer. See also: <code><a href='https://rdrr.io/pkg/jsonlite/man/fromJSON.html'>jsonlite::toJSON()</a></code></p></li>
+<li><p><code>serializer_unboxed_json</code>: JSON serializer with <code>auto_unbox</code> defaulting to <code>TRUE</code>. See also: <code><a href='https://rdrr.io/pkg/jsonlite/man/fromJSON.html'>jsonlite::toJSON()</a></code></p></li>
 <li><p><code>serializer_rds</code>: RDS serializer. See also: <code><a href='https://rdrr.io/r/base/serialize.html'>base::serialize()</a></code></p></li>
 <li><p><code>serializer_feather</code>: feather serializer. See also: <code><a href='https://rdrr.io/pkg/feather/man/read_feather.html'>feather::write_feather()</a></code></p></li>
 <li><p><code>serializer_yaml</code>: YAML serializer. See also: <code><a href='https://rdrr.io/pkg/yaml/man/as.yaml.html'>yaml::as.yaml()</a></code></p></li>
@@ -335,7 +335,7 @@ The graphics device <code>dev_on</code> function will receive any arguments supp
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.9000.</p>
 </div>
 
       </footer>

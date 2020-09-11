@@ -237,13 +237,13 @@
 <tr class="odd">
 <td><code>@serializer json</code></td>
 <td><code>application/json</code></td>
-<td>Object processed with <code><a href="https://jeroen.cran.dev/jsonlite/reference/fromJSON.html">jsonlite::toJSON()</a></code>
+<td>Object processed with <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">jsonlite::toJSON()</a></code>
 </td>
 </tr>
 <tr class="even">
 <td><code>@serializer unboxedJSON</code></td>
 <td><code>application/json</code></td>
-<td>Object processed with <code><a href="https://jeroen.cran.dev/jsonlite/reference/fromJSON.html">jsonlite::toJSON(auto_unbox=TRUE)</a></code>
+<td>Object processed with <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">jsonlite::toJSON(auto_unbox=TRUE)</a></code>
 </td>
 </tr>
 <tr class="odd">
@@ -286,7 +286,7 @@
 <a href="#boxed-vs-unboxed-json" class="anchor"></a>Boxed vs Unboxed JSON</h3>
 <p>You may have noticed that API responses generated from Plumber render singular values (or “scalars”) as arrays. For instance:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw">jsonlite</span>::<span class="fu"><a href="https://jeroen.cran.dev/jsonlite/reference/fromJSON.html">toJSON</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(a=<span class="fl">5</span>))</pre></div>
+<span class="kw">jsonlite</span>::<span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">toJSON</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(a=<span class="fl">5</span>))</pre></div>
 <pre><code>#&gt; {"a":[5]}</code></pre>
 <p>The value of the <code>a</code> element, though it’s singular, is still rendered as an array. This may surprise you initially, but this is done to keep the output consistent. While JSON differentiates scalar from vector objects, R does not. This creates ambiguity when serializing an R object to JSON since it is unclear whether a particular element should be rendered as an atomic value or a JSON array.</p>
 <p>Consider the following API which returns all the letters lexicographically “higher” than the given letter.</p>
@@ -310,10 +310,10 @@
 <div class="sourceCode" id="cb5"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1"></a><span class="ot">[</span><span class="st">"Z"</span><span class="ot">]</span></span></code></pre></div>
 <p>while <a href="http://localhost:8000/unboxed?letter=Y" class="uri">http://localhost:8000/unboxed?letter=Y</a> will produce:</p>
 <pre><code>"Z"</code></pre>
-<p>The <code>/boxed</code> endpoint, as the name implies, produces “boxed” JSON output in which length-1 vectors are still rendered as an array. Conversely, the <code>/unboxed</code> endpoint sets <code>auto_unbox=TRUE</code> in its call to <code><a href="https://jeroen.cran.dev/jsonlite/reference/fromJSON.html">jsonlite::toJSON</a></code>, causing length-1 R vectors to be rendered as JSON scalars.</p>
+<p>The <code>/boxed</code> endpoint, as the name implies, produces “boxed” JSON output in which length-1 vectors are still rendered as an array. Conversely, the <code>/unboxed</code> endpoint sets <code>auto_unbox=TRUE</code> in its call to <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">jsonlite::toJSON</a></code>, causing length-1 R vectors to be rendered as JSON scalars.</p>
 <p>While R doesn’t distinguish between scalars and vectors, API clients may respond very differently when encountering a JSON array versus an atomic value. You may find that your API clients will not respond gracefully when an object that they expected to be a vector becomes a scalar in one call.</p>
-<p>For this reason, Plumber inherits the <code><a href="https://jeroen.cran.dev/jsonlite/reference/fromJSON.html">jsonlite::toJSON</a></code> default of setting <code>auto_unbox=FALSE</code> which will result in all length-1 vectors still being rendered as JSON arrays. You can configure an endpoint to use the <code>unboxedJSON</code> serializer (as shown above) if you want to alter this behavior for a particular endpoint.</p>
-<p>There are a couple of functions to be aware of around this feature set. If using boxed JSON serialization, <code><a href="https://jeroen.cran.dev/jsonlite/reference/unbox.html">jsonlite::unbox()</a></code> can be used to force a length-1 object in R to be presented in JSON as a scalar. If using unboxed JSON serialization, <code><a href="https://rdrr.io/r/base/AsIs.html">I()</a></code> will cause a length-1 R object to present as a JSON array.</p>
+<p>For this reason, Plumber inherits the <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">jsonlite::toJSON</a></code> default of setting <code>auto_unbox=FALSE</code> which will result in all length-1 vectors still being rendered as JSON arrays. You can configure an endpoint to use the <code>unboxedJSON</code> serializer (as shown above) if you want to alter this behavior for a particular endpoint.</p>
+<p>There are a couple of functions to be aware of around this feature set. If using boxed JSON serialization, <code><a href="https://rdrr.io/pkg/jsonlite/man/unbox.html">jsonlite::unbox()</a></code> can be used to force a length-1 object in R to be presented in JSON as a scalar. If using unboxed JSON serialization, <code><a href="https://rdrr.io/r/base/AsIs.html">I()</a></code> will cause a length-1 R object to present as a JSON array.</p>
 </div>
 <div id="customizing-image-serializers" class="section level3">
 <h3 class="hasAnchor">
@@ -376,7 +376,7 @@
 <span class="fu">function</span>(<span class="kw">res</span>){
   <span class="kw">msg</span> <span class="op">&lt;-</span> <span class="st">"Your request did not include a required parameter."</span>
   <span class="kw">res</span><span class="op">$</span><span class="kw">status</span> <span class="op">&lt;-</span> <span class="fl">400</span> <span class="co"># Bad request</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(error=<span class="kw">jsonlite</span>::<span class="fu"><a href="https://jeroen.cran.dev/jsonlite/reference/unbox.html">unbox</a></span>(<span class="kw">msg</span>))
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(error=<span class="kw">jsonlite</span>::<span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/unbox.html">unbox</a></span>(<span class="kw">msg</span>))
 }</pre></div>
 <p>If you run this API and visit <a href="http://localhost:8000/simple" class="uri">http://localhost:8000/simple</a>, you’ll notice two things:</p>
 <ol style="list-style-type: decimal">
@@ -445,7 +445,7 @@
 }</pre></div>
 <p>Since this API is using a <code>PUT</code> request to test this API, we’ll use <code>curl</code> on the command line to test it. (There’s nothing about cookies that necessitates <code>PUT</code> requests; you could just as easily modify this API to use a <code>GET</code> request.) We can start by visiting the <code>/letter</code> endpoint and we’ll see that the API defaults to a lower-case alphabet. <code>curl http://localhost:8000/letter</code></p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">{</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a>  <span class="dt">"letter"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"s"</span><span class="ot">]</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>  <span class="dt">"letter"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"h"</span><span class="ot">]</span></span>
 <span id="cb15-3"><a href="#cb15-3"></a><span class="fu">}</span></span></code></pre></div>
 <p>If we send a <code>PUT</code> request and specify the <code>capital</code> parameter, a cookie will be set on the client which will allow the server to accommodate our preference in future requests. In <code>curl</code>, you need to specify a file in which you want to save these cookies using the <code>-c</code> option. This is a good reminder that clients handle cookies differently – some won’t support them at all – so be sure that the clients you intend to support with your API play nicely with cookies if you want to use them.</p>
 <p>To send a <code>PUT</code> request, setting the parameter <code>capital</code> to <code>1</code>, we could invoke: <code>curl -c cookies.txt -X PUT --data 'capital=1' "http://localhost:8000/preferences"</code>. If you print out the <code>cookies.txt</code> file, you should now see that it contains a single cookie called <code>capitalize</code> with a value of <code>1</code>.</p>
@@ -497,7 +497,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.9000.</p>
 </div>
 
       </footer>
