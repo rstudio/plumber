@@ -473,6 +473,9 @@ serializer_device <- function(type, dev_on, dev_off = grDevices::dev.off) {
 
       success <- function(value) {
         dev_off_once()
+        if (!file.exists(tmpfile)) {
+          stop("The device output file is missing. Did you produce an image?", call. = FALSE)
+        }
         con <- file(tmpfile, "rb")
         on.exit({close(con)}, add = TRUE)
         img <- readBin(con, "raw", file.info(tmpfile)$size)
