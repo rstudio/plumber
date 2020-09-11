@@ -394,7 +394,7 @@ serializer_xml <- function() {
 
 #' Endpoint Serializer with Hooks
 #'
-#' This method allows serializers to return both `preexec` and `postexec` hooks in addition to a serializer.
+#' This method allows serializers to return `preexec`, `postexec`, and `aroundexec` (\lifecycle{experimental}) hooks in addition to a serializer.
 #' This is useful for graphics device serializers which need a `preexec` and `postexec` hook to capture the graphics output.
 #'
 #' `preexec` and `postexec` hooks happend directly before and after a route is executed.
@@ -403,19 +403,28 @@ serializer_xml <- function() {
 #' @param serializer Serializer method to be used.  This method should already have its initialization arguments applied.
 #' @param preexec_hook Function to be run directly before a [PlumberEndpoint] calls its route method.
 #' @param postexec_hook Function to be run directly after a [PlumberEndpoint] calls its route method.
+#' @param aroundexec_hook Function to be run around a [PlumberEndpoint] call. Must handle a `.next` argument to continue execution. \lifecycle{experimental}
 #'
+#' @export
 #' @examples
 #' # The definition of `serializer_device` returns
-#' # * `preexec`, `postexec` hooks
 #' # * a `serializer_content_type` serializer
+#' # * `aroundexec` hook
 #' print(serializer_device)
-endpoint_serializer <- function(serializer, preexec_hook = NULL, postexec_hook = NULL) {
+endpoint_serializer <- function(
+  serializer,
+  preexec_hook = NULL,
+  postexec_hook = NULL,
+  aroundexec_hook = NULL
+) {
+
   stopifnot(is.function(serializer))
   structure(
     list(
       serializer = serializer,
       preexec_hook = preexec_hook,
-      postexec_hook = postexec_hook
+      postexec_hook = postexec_hook,
+      aroundexec_hook = aroundexec_hook
     ),
     class = "plumber_endpoint_serializer"
   )
@@ -429,6 +438,9 @@ self_set_serializer <- function(self, serializer) {
     }
     if (!is.null(serializer$postexec_hook)) {
       self$registerHook("postexec", serializer$postexec_hook)
+    }
+    if (!is.null(serializer$aroundexec_hook)) {
+      self$registerHook("aroundexec", serializer$aroundexec_hook)
     }
   } else {
     self$serializer <- serializer
@@ -458,20 +470,51 @@ serializer_device <- function(type, dev_on, dev_off = grDevices::dev.off) {
 
   endpoint_serializer(
     serializer = serializer_content_type(type),
-    preexec_hook = function(req, res, data) {
+    aroundexec_hook = function(..., .next) {
       tmpfile <- tempfile()
-      data$file <- tmpfile
 
       dev_on(filename = tmpfile)
-    },
-    postexec_hook = function(value, req, res, data) {
-      dev_off()
+      device_id <- dev.cur()
+      dev_off_once <- once(function() dev_off(device_id))
 
-      on.exit({unlink(data$file)}, add = TRUE)
-      con <- file(data$file, "rb")
-      on.exit({close(con)}, add = TRUE)
-      img <- readBin(con, "raw", file.info(data$file)$size)
-      img
+      success <- function(value) {
+        dev_off_once()
+        if (!file.exists(tmpfile)) {
+          stop("The device output file is missing. Did you produce an image?", call. = FALSE)
+        }
+        con <- file(tmpfile, "rb")
+        on.exit({close(con)}, add = TRUE)
+        img <- readBin(con, "raw", file.info(tmpfile)$size)
+        img
+      }
+
+      cleanup <- function() {
+        dev_off_once()
+        on.exit({
+          # works even if the file does not exist
+          unlink(tmpfile)
+        }, add = TRUE)
+      }
+
+      # This is just a flag to ensure we don't cleanup() if the .next(...) is
+      # async.
+      async <- FALSE
+
+      on.exit({
+        if (!async) {
+          cleanup()
+        }
+      }, add = TRUE)
+
+      result <- promises::with_promise_domain(createGraphicsDevicePromiseDomain(device_id), {
+        .next(...)
+      })
+      if (is.promising(result)) {
+        async <- TRUE
+        result %>% then(success) %>% finally(cleanup)
+      } else {
+        success(result)
+      }
     }
   )
 }
@@ -579,4 +622,56 @@ add_serializers_onLoad <- function() {
 
   ## Do not register until implemented
   # register_serializer("xml", serializer_xml)
+}
+
+# From https://github.com/rstudio/shiny/blob/ee13087d575d378fba2fae34664725dc7452df2d/R/imageutils.R
+#' @importFrom grDevices dev.set dev.cur
+# if the graphics device was not maintained for the promises, two promises could break how graphics are recorded
+## Bad
+## * Open p1 device
+## * Open p2 device
+## * Draw p1 in p2 device
+## * Draw p2 in p2 device
+## * Close cur device (p2)
+## * Close cur device (p1) (which is empty)
+##
+## Good (and implemented using the function below)
+## * Open p1 device in p1
+## * Open p2 device in p2
+## * Draw p1 in p1 device in p1
+## * Draw p2 in p2 device in p2
+## * Close p1 device in p1
+## * Close p2 device in p2
+createGraphicsDevicePromiseDomain <- function(which = dev.cur()) {
+  force(which)
+
+  promises::new_promise_domain(
+    wrapOnFulfilled = function(onFulfilled) {
+      force(onFulfilled)
+      function(...) {
+        old <- dev.cur()
+        dev.set(which)
+        on.exit(dev.set(old))
+
+        onFulfilled(...)
+      }
+    },
+    wrapOnRejected = function(onRejected) {
+      force(onRejected)
+      function(...) {
+        old <- dev.cur()
+        dev.set(which)
+        on.exit(dev.set(old))
+
+        onRejected(...)
+      }
+    },
+    wrapSync = function(expr) {
+      old <- dev.cur()
+      dev.set(which)
+      on.exit(dev.set(old))
+
+      force(expr)
+    }
+  )
 }

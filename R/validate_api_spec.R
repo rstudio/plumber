@@ -49,7 +49,7 @@ validate_api_spec__install_node_modules <- function() {
 #'
 #' If the api is deemed invalid, an error will be thrown.
 #'
-#' This function is VERY experimental and may be altered, changed, or removed in the future.
+#' This function is VERY \lifecycle{experimental} and may be altered, changed, or removed in the future.
 #'
 #' @param pr A Plumber API
 #' @param verbose Logical that determines if a "is valid" statement is displayed. Defaults to `TRUE`

@@ -84,7 +84,10 @@ step execution function
 \subsection{Method \code{registerHook()}}{
 step hook registration method
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PlumberStep$registerHook(stage = c("preexec", "postexec"), handler)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PlumberStep$registerHook(
+  stage = c("preexec", "postexec", "aroundexec"),
+  handler
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
