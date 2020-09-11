@@ -28,3 +28,17 @@ is_available <- function (package, version = NULL) {
     x
   }
 }
+
+once <- function(f) {
+  called <- FALSE
+
+  function() {
+    if (!called) {
+      called <<- TRUE
+      f()
+      invisible(TRUE)
+    } else {
+      invisible(FALSE)
+    }
+  }
+}

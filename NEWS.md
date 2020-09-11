@@ -5,7 +5,7 @@ plumber 1.0.0
 
 #### Plumber router
 
-* Added support for promises in endpoints, filters, and hooks.  This allows for multi-core execution when paired with `future`. See `plumb_api("plumber", "13-promises")` and `plumb_api("plumber", "14-future")` for an example implementation. (#248)
+* Added support for promises in endpoints, filters, and hooks.  This allows for multi-core execution when paired with `future`. See `plumb_api("plumber", "13-promises")` and `plumb_api("plumber", "14-future")` for example implementations. (#248)
 * Added a Tidy API for more natural usage with magrittr's `%>%`. For example, a plumber object can now be initiated and run with `pr() %>% pr_run(port = 8080)`. For more examples, see [here](https://www.rplumber.io/articles/programmatic-usage.html) (@blairj09, #590)
 
 * Added support for `#' @plumber` tag to gain programmatic access to the `plumber` router via `function(pr) {....}`. See `system.file("plumber/06-sessions/plumber.R", package = "plumber")` and how it adds cookie support from within `plumber.R`. (@meztez and @blairj09, #568)
@@ -172,6 +172,8 @@ plumber 1.0.0
 * Improve speed of `canServe()` method of the `PlumberEndpoint` class (@atheriel, #484)
 
 * Get more file extension content types using the `mime` package. (#660)
+
+* Endpoints that produce images within a `promises::promise()` will now use the expected graphics device. (#669)
 
 ### Bug fixes
 

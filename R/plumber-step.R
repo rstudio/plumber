@@ -73,8 +73,10 @@ PlumberStep <- R6Class(
         private$runHooks("preexec", c(list(data = hookEnv), args_for_formal_matching()))
       }
       execStep <- function(...) {
-        relevant_args <- getRelevantArgs(args_for_formal_matching(), func = private$func)
-        do.call(private$func, relevant_args, envir = private$envir)
+        private$runHooksAround("aroundexec", args_for_formal_matching(), .next = function(...) {
+          relevant_args <- getRelevantArgs(list(...), func = private$func)
+          do.call(private$func, relevant_args, envir = private$envir)
+        })
       }
       postexecStep <- function(value, ...) {
         private$runHooks("postexec", c(list(data = hookEnv, value = value), args_for_formal_matching()))
@@ -95,7 +97,7 @@ PlumberStep <- R6Class(
     #' @description step hook registration method
     #' @param stage a character string.
     #' @param handler a step handler function.
-    registerHook = function(stage=c("preexec", "postexec"), handler){
+    registerHook = function(stage=c("preexec", "postexec", "aroundexec"), handler){
       stage <- match.arg(stage)
       super$registerHook(stage, handler)
     }
