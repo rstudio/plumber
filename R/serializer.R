@@ -484,7 +484,10 @@ serializer_device <- function(type, dev_on, dev_off = grDevices::dev.off) {
 
       cleanup <- function() {
         dev_off_once()
-        on.exit({unlink(tmpfile)}, add = TRUE)
+        on.exit({
+          # works even if the file does not exist
+          unlink(tmpfile)
+        }, add = TRUE)
       }
 
       # This is just a flag to ensure we don't cleanup() if the .next(...) is
@@ -617,6 +620,22 @@ add_serializers_onLoad <- function() {
 
 # From https://github.com/rstudio/shiny/blob/ee13087d575d378fba2fae34664725dc7452df2d/R/imageutils.R
 #' @importFrom grDevices dev.set dev.cur
+# if the graphics device was not maintained for the promises, two promises could break how graphics are recorded
+## Bad
+## * Open p1 device
+## * Open p2 device
+## * Draw p1 in p2 device
+## * Draw p2 in p2 device
+## * Close cur device (p2)
+## * Close cur device (p1) (which is empty)
+##
+## Good (and implemented using the function below)
+## * Open p1 device in p1
+## * Open p2 device in p2
+## * Draw p1 in p1 device in p1
+## * Draw p2 in p2 device in p2
+## * Close p1 device in p1
+## * Close p2 device in p2
 createGraphicsDevicePromiseDomain <- function(which = dev.cur()) {
   force(which)
 
