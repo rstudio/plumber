@@ -348,8 +348,61 @@ test_that("hook errors are caught", {
 
 
 
+test_that("accessing two images created using promises does not create an error", {
 
+  root <- async_router() %>% pr_set_debug(TRUE)
 
+  # access route 1
+  p1 <-
+    # Open p1 on p1
+    root$call(make_req("GET", "/promise_plot1")) %>%
+    expect_promise()
+  # access route 2
+  p2 <-
+    # Open p2 on p2
+    root$call(make_req("GET", "/promise_plot2")) %>%
+    expect_promise()
 
+  # if the graphics device was not maintained for the promises, two promises could break how graphics are recorded
+  ## Bad
+  ## * Open p1 device
+  ## * Open p2 device
+  ## * Draw p1 in p2 device
+  ## * Draw p2 in p2 device
+  ## * Close cur device (p2)
+  ## * Close cur device (p1) (which is empty)
+  ##
+  ## Good
+  ## * Open p1 device in p1
+  ## * Open p2 device in p2
+  ## * Draw p1 in p1 device in p1
+  ## * Draw p2 in p2 device in p2
+  ## * Close p1 device in p1
+  ## * Close p2 device in p2
+
+  # These actual steps may be interwoven with each other (, but commented to where they might occur)
+  expect_silent({
+    # Draw p1 in p1 device
+    # Close p1 device in p1
+    p1_val <- get_result(p1)
+    # Draw p2 in p2 device
+    # Close p2 device in p2
+    p2_val <- get_result(p2)
+  })
+
+  expect_equal(p1_val$status, 200L)
+  expect_equal(p1_val$headers$`Content-Type`, "image/png")
+  expect_true(is.raw(p1_val$body))
+  expect_gt(length(p1_val$body), 10 * 1000)
+
+  expect_equal(p2_val$status, 200L)
+  expect_equal(p2_val$headers$`Content-Type`, "image/png")
+  expect_true(is.raw(p2_val$body))
+  expect_gt(length(p2_val$body), 10 * 1000)
+
+  # make sure they are not the same image
+  expect_false(
+    identical(p1_val$body, p2_val$body)
+  )
 
 })
