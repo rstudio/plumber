@@ -125,3 +125,17 @@ test_that("serializers can register all pre,post,aroundexec stages", {
   )
   expect_equal(result$body, "4")
 })
+
+
+test_that("not producing an image produces an error", {
+  root <- with_tmp_serializers({
+    plumb(test_path("files/endpoint-serializer.R")) %>% pr_set_debug(TRUE)
+  })
+
+  expect_output(
+    result <- root$call(make_req("GET", "/no_plot")),
+    "device output file is missing"
+  )
+  expect_equal(result$status, 500)
+  expect_true(grepl("device output file is missing", result$body$message))
+})
