@@ -90,13 +90,14 @@ test_that("async works", {
 context("Promise - hooks")
 
 hooks <- c(
-  # "preexec", "postexec", # can not execute
+  # PlumberEndpoint only
+  "preexec", "postexec", "aroundexec",
+  # Plumber router only
   "preserialize", "postserialize",
   "preroute", "postroute"
 )
 
 test_that("async hooks create async execution", {
-
   # exhaustive test of all public hooks
 
   # make an exhaustive matrix of T/F values of which hooks are async
@@ -134,7 +135,40 @@ test_that("async hooks create async execution", {
     for (hook in hooks) {
       hook_is_async <- hooks_are_async_row[[hook]]
       if (hook_is_async) {
-        pr$registerHook(hook, async_hook)
+        switch(hook,
+          # PlumberEndpoint hooks
+          "preexec" = ,
+          "postexec" = {
+            expect_equal(pr$endpoints[[1]][[2]]$path, "/sync")
+            pr$endpoints[[1]][[2]]$registerHook(hook, async_hook)
+          },
+          "aroundexec" = {
+            expect_equal(pr$endpoints[[1]][[2]]$path, "/sync")
+            pr$endpoints[[1]][[2]]$registerHook(hook, function(..., .next) {
+              p <- promise_resolve(TRUE)
+              # add extra promises
+              for (i in 1:10) {
+                p <- then(p, function(val) {
+                  val
+                })
+              }
+              p <- then(p, function(val) {
+                .next(...)
+              })
+              # increment the counter
+              p <- then(p, function(val) {
+                async_hook_count <<- async_hook_count + 1
+                val
+              })
+              p
+            })
+          },
+          # default case
+          {
+            # Plumber hooks
+            pr$registerHook(hook, async_hook)
+          }
+        )
       }
     }
     # run the sync route with some async hooks
@@ -241,89 +275,81 @@ test_that("async error is caught", {
 
 
 
-test_that("sync hook errors are caught", {
+test_that("hook errors are caught", {
 
-  check_hook <- function(hook) {
-    bad_expression <- paste0("boom ", hook, " sync")
-    pr <- async_router()
-    pr$registerHook(hook, function(...) {
-      # no value arg
-      stop(bad_expression)
-    })
+  for (pr_is_async in c(TRUE, FALSE)) {
+    for (error_is_async in c(TRUE, FALSE)) {
+      for (hook in hooks) {
+        local({
+          bad_expression <- paste0("boom ", hook, " sync")
+          pr <- async_router()
 
-    expect_output(
-      {
-        pr %>%
-          pr_set_debug(TRUE) %>%
-          serve_route("/sync") %>%
-          expect_not_promise() %>%
-          get_result() %>%
-          expect_route_error(bad_expression)
-      },
-      bad_expression
-    )
-  }
-  lapply(hooks, check_hook)
+          if (pr_is_async) {
+            pr$registerHook("preroute", function(...) {
+              # no value arg
+              promise_resolve(TRUE) # make execution in a promise
+            })
+          }
+
+          bad_hook <-
+            if (error_is_async) {
+              function(...) {
+                # no value arg
+                p <- promise_resolve(TRUE)
+                p <- then(p, function(value) {
+                  stop(bad_expression, call. = FALSE)
+                })
+                p
+              }
+            } else {
+              function(...) {
+                # no value arg
+                stop(bad_expression, call. = FALSE)
+              }
+            }
+          switch(hook,
+            # PlumberEndpoint hooks
+            "preexec" = ,
+            "postexec" = {
+              expect_equal(pr$endpoints[[1]][[2]]$path, "/sync")
+              pr$endpoints[[1]][[2]]$registerHook(hook, bad_hook)
+            },
+            "aroundexec" = {
+              expect_equal(pr$endpoints[[1]][[2]]$path, "/sync")
+              pr$endpoints[[1]][[2]]$registerHook(hook, bad_hook)
+            },
+            # default
+            pr$registerHook(hook, bad_hook)
+          )
+
+          expect_output(
+            {
+              pr %>%
+                pr_set_debug(TRUE) %>%
+                serve_route("/sync") %>%
+                {
+                  if (pr_is_async || error_is_async) {
+                    expect_promise(.)
+                  } else {
+                    expect_not_promise(.)
+                  }
+                } %>%
+                get_result() %>%
+                expect_route_error(bad_expression)
+            },
+            bad_expression
+          ) # expect_output
+        }) # local
+      } # hook
+    } # error_is_sync
+  } # pr_is_sync
+
 })
 
 
-test_that("async hook errors are caught", {
 
-  check_sync_error <- function(hook) {
-    bad_expression <- paste0("boom ", hook, " sync")
-    pr <- async_router()
-    pr$registerHook("preroute", function(...) {
-      # no value arg
-      promise_resolve(TRUE) # make execution in a promise
-    })
 
-    pr$registerHook(hook, function(...) {
-      # no value arg
-      stop(bad_expression)
-    })
 
-    expect_output(
-      {
-        pr %>%
-          pr_set_debug(TRUE) %>%
-          serve_route("/sync") %>%
-          expect_promise() %>%
-          get_result() %>%
-          expect_route_error(bad_expression)
-      },
-      bad_expression
-    )
-  }
-  lapply(hooks, check_sync_error)
 
-  check_async_error <- function(hook) {
-    bad_expression <- paste0("boom ", hook, " sync")
-    pr <- async_router()
-    pr$registerHook("preroute", function(...) {
-      # no value arg
-      promise_resolve(TRUE) # make execution in a promise
-    })
 
-    pr$registerHook(hook, function(...) {
-      # no value arg
-      p <- promise_resolve(TRUE)
-      p <- then(p, function(value) {
-        stop(bad_expression)
-      })
-      p
-    })
-
-    expect_output(
-      {
-        pr %>%
-          pr_set_debug(TRUE) %>%
-          serve_route("/sync") %>%
-          expect_promise() %>%
-          get_result() %>%
-          expect_route_error(bad_expression)
-      },
-      bad_expression
-    )
-  }
-  lapply(hooks, check_async_error)
 })
