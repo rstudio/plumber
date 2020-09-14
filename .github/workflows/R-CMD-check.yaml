@@ -24,7 +24,7 @@ jobs:
           - {os: macOS-latest,   r: 'release'}
           - {os: macOS-latest,   r: 'oldrel'}
 
-          - {os: windows-latest,   r: 'devel'}
+          - {os: windows-latest, r: 'devel'}
           - {os: windows-latest, r: 'release'}
           # - {os: windows-latest, r: 'oldrel'} # do not test due to binaries not being created
 
@@ -71,8 +71,8 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ matrix.config.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ matrix.config.os }}-${{ hashFiles('.github/R-version') }}-1-
+          key: ${{ matrix.config.os }}-${{ hashFiles('.github/R-version') }}-2-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ matrix.config.os }}-${{ hashFiles('.github/R-version') }}-2-
 
       # Install Cairo system dependencies
       # used for svg testing
