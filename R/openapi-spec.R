@@ -181,7 +181,7 @@ isNa <- function(x) {
 #' Check na or null
 #' @noRd
 isNaOrNull <- function(x) {
-  any(isNa(x)) || is.null(x)
+  is.null(x) || any(isNa(x))
 }
 
 #' Remove na or null
