@@ -2,6 +2,34 @@
 
 #### 2020-9-14
 
+I've fixed the urls and resubmitting.
+
+Best,
+Barret
+
+#### 2020-9-14
+
+Flavor: r-devel-linux-x86_64-debian-gcc
+Check: CRAN incoming feasibility, Result: NOTE
+  Maintainer: 'Barret Schloerke <barret@rstudio.com>'
+
+  New maintainer:
+    Barret Schloerke <barret@rstudio.com>
+  Old maintainer(s):
+    Jeff Allen <cran@trestletech.com>
+
+  Found the following (possibly) invalid URLs:
+    URL: https://rstudio.github.io/plumber (moved to https://www.rplumber.io/)
+      From: README.md
+      Status: 200
+      Message: OK
+    URL: https://www.rstudio.com/products/connect/ (moved to https://rstudio.com/products/connect/)
+      From: README.md
+      Status: 200
+      Message: OK
+
+#### 2020-9-14
+
 This is a major version update.
 
 Please let me know if there is anything else I can provide.
