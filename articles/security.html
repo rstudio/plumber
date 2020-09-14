@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -179,7 +179,7 @@
 <p>This plot takes a negligible amount of time to create.</p>
 <p>However, plots with more points will take more time to create.</p>
 <p><img src="security_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>This plot, with 10,000 points added, took 0.183 seconds to generate. While that doesn’t sound like much, if we exposed this API publicly on the Internet, an attacker could easily generate enough traffic on this endpoint to overwhelm the Plumber process. Even worse, an attacker could make a request on this endpoint with millions or billions of points which might cause our server to run out of memory or consume so much CPU that it deprives other important system resources. Either case could result in our Plumber process crashing altogether.</p>
+<p>This plot, with 10,000 points added, took 0.151 seconds to generate. While that doesn’t sound like much, if we exposed this API publicly on the Internet, an attacker could easily generate enough traffic on this endpoint to overwhelm the Plumber process. Even worse, an attacker could make a request on this endpoint with millions or billions of points which might cause our server to run out of memory or consume so much CPU that it deprives other important system resources. Either case could result in our Plumber process crashing altogether.</p>
 <p>The solution, in this case, is to ensure that we have reasonable safety guards in place for any user input.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="co">#' This is an example of an safe endpoint which</span>
@@ -259,11 +259,11 @@
 <li>
 <strong>expiration</strong> - When the cookie should expire. Can either be a <code>POSIXt</code> object that gives the time explicitly, or a raw integer which will be interpreted as the number of seconds in the future when this cookie should expire. If no value is provided, the cookie will be a <code>session</code> cookie, meaning that it will persist until the user closes the tab/browser. Remember, however, that a client may accidentally or maliciously retain this cookie beyond its assigned expiration time. From a security standpoint, you cannot rely on a client to be well-behaved and to delete this cookie at the assigned time.</li>
 <li>
-<strong>http</strong> - The <code>HttpOnly</code> property on a cookie determines whether or not the cookie should be accessible to JavaScript running on your domain. If you were using a cookie to persist user settings and host some JavaScript that may also leverage the preferences stored in that cookie, then you would want <code>http</code> parameter to be <code>FALSE</code>, indicating that the cookie should <em>not</em> be <code>HttpOnly</code>, and <em>should</em> be available to Javascript. If you were storing a session ID in the cookie that is only interpretable by the server, then you should set <code>http</code> to <code>TRUE</code>. There are a variety of attacks (such as “cross-site scripting”) that would enable an attacker to run malicious JavaScript on your clients’ machines, so it’s wise to limit the amount of information accessible from JavaScript.</li>
+<strong>http</strong> - The <code>HttpOnly</code> property on a cookie determines whether or not the cookie should be accessible to JavaScript running on your domain. If you were using a cookie to persist user settings and host some JavaScript that may also leverage the preferences stored in that cookie, then you would want <code>http</code> parameter to be <code>FALSE</code>, indicating that the cookie should <em>not</em> be <code>HttpOnly</code>, and <em>should</em> be available to JavaScript. If you were storing a session ID in the cookie that is only interpretable by the server, then you should set <code>http</code> to <code>TRUE</code>. There are a variety of attacks (such as “cross-site scripting”) that would enable an attacker to run malicious JavaScript on your clients’ machines, so it’s wise to limit the amount of information accessible from JavaScript.</li>
 <li>
 <strong>secure</strong> - If <code>TRUE</code>, instructs clients to only send the cookie when connecting to your server over HTTPS. HTTPS is a mechanism by which clients can gain more assurance that the server they’re connected to is indeed the server that they intended to be communicating with. If your API uses HTTPS, using secure cookies protects against a use case in which an attacker tricks one of your clients into connecting to an HTTP server impersonating your API. In that scenario, a client may send their cookies to this malicious server, at which point the attacker could use those cookies on your server to impersonate the actual user. Note that you shouldn’t enable this until you have your API stably running HTTPS.</li>
 </ul>
-<p>Additionally, bear in mind that if an attacker gets physical access to a client who has a valid cookie, the attacker could copy that cookie off to a different machine and begin using it themselves. Unfortunately, you can’t perfectly protect against such attacks, but you can minimize the impact by 1.) using shorter session lifetimes (perhaps a few hours instead of days), 2.) invalidating sessions after a period of user inactivity, or 3.) rotating the sesion ID periodically; this way you’d be able to detect that multiple clients were trying to use the same session and could take action. You can also consider adding an additional layer of security around very security-sensitive endpoints (like changing a user’s password).</p>
+<p>Additionally, bear in mind that if an attacker gets physical access to a client who has a valid cookie, the attacker could copy that cookie off to a different machine and begin using it themselves. Unfortunately, you can’t perfectly protect against such attacks, but you can minimize the impact by 1.) using shorter session lifetimes (perhaps a few hours instead of days), 2.) invalidating sessions after a period of user inactivity, or 3.) rotating the session ID periodically; this way you’d be able to detect that multiple clients were trying to use the same session and could take action. You can also consider adding an additional layer of security around very security-sensitive endpoints (like changing a user’s password).</p>
 <p>Lastly, if using encrypted cookies to store sensitive information, you should remember that expiring a cookie is an instruction that you’re sending to the client that may or may not be honored. Thus if you were to set an encrypted cookie on a client to authenticate the user and that user wishes to log out, all you can do is instruct the client that they should delete that cookie. If the cookie had been stolen or if a misbehaving client doesn’t delete the cookie, it’s possible that that cookie could still be used to continue making authenticated requests to your API.</p>
 </div>
   </div>
@@ -283,7 +283,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

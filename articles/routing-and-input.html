@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -192,7 +192,7 @@
     <span class="kw">req</span><span class="op">$</span><span class="kw">HTTP_USER_AGENT</span>, <span class="st">"@"</span>, <span class="kw">req</span><span class="op">$</span><span class="kw">REMOTE_ADDR</span>, <span class="st">"\n"</span>)
   <span class="kw">plumber</span>::<span class="fu"><a href="../reference/forward.html">forward</a></span>()
 }</pre></div>
-<p>This filter is straightfoward: it invokes an external action (logging) and then calls <code><a href="../reference/forward.html">forward()</a></code> to pass control to the next handler in the pipeline (another filter or an endpoint).</p>
+<p>This filter is straightforward: it invokes an external action (logging) and then calls <code><a href="../reference/forward.html">forward()</a></code> to pass control to the next handler in the pipeline (another filter or an endpoint).</p>
 <p>Because the <code>req</code> and <code>res</code> parameters in Plumber are based on R environments, they exhibit “pass-by-reference” behavior. This means that changes that are made in one filter on the <code>req</code> or <code>res</code> object will be visible to other filters or endpoints also touching this same request or response.</p>
 <p>A similar filter may mutate some state on the request or response object it’s given.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
@@ -522,7 +522,7 @@
 <span id="cb19-9"><a href="#cb19-9"></a><span class="fu">}</span></span></code></pre></div>
 <p>Alternatively, <code>curl --data '{"id":123, "name": "Jennifer"}' "http://localhost:8000/user"</code> (formatting the body as JSON) will have the same effect.</p>
 <p>As demonstrated above, the raw request body is made available as <code>req$bodyRaw</code> and parsed request body is available as <code>req$body</code>.</p>
-<p>If multiple parameters are matched to the endpoint formals, an error will be thrown. Due to the nature of how multiple values can be matched to the same argument, it is recommended that <code>POST</code> enpoints have a function definition that only accepts the formals <code>req</code>, <code>res</code>, and <code>...</code>. If the endpoint arguments are to be processed like a list, they are available at <code>req$argsBody</code>, with all arguments at <code>req$args</code>. <code>req$args</code> is a combination of <code><a href="https://rdrr.io/r/base/list.html">list(req = req, res = res)</a></code>, <code>req$argsPath</code>, <code>req$argsBody</code>, and <code>req$argsQuery</code>.</p>
+<p>If multiple parameters are matched to the endpoint formals, an error will be thrown. Due to the nature of how multiple values can be matched to the same argument, it is recommended that <code>POST</code> endpoints have a function definition that only accepts the formals <code>req</code>, <code>res</code>, and <code>...</code>. If the endpoint arguments are to be processed like a list, they are available at <code>req$argsBody</code>, with all arguments at <code>req$args</code>. <code>req$args</code> is a combination of <code><a href="https://rdrr.io/r/base/list.html">list(req = req, res = res)</a></code>, <code>req$argsPath</code>, <code>req$argsBody</code>, and <code>req$argsQuery</code>.</p>
 </div>
 <div id="read-cookies" class="section level3">
 <h3 class="hasAnchor">
@@ -566,7 +566,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

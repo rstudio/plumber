@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -154,7 +154,7 @@
 <div id="rstudio-connect" class="section level2">
 <h2 class="hasAnchor">
 <a href="#rstudio-connect" class="anchor"></a>RStudio Connect</h2>
-<p><a href="https://www.rstudio.com/products/connect/">RStudio Connect</a> is an enterprise publishing platform from RStudio. It supports push-button publishing from the RStudio IDE of a variety of R content types including Plumber APIs. Unlike all the other options listed here, RStudio Connect automatically manages the dependent packages and files your API has and recreates an environment closely mimicking your local development environment on the server.</p>
+<p><a href="https://rstudio.com/products/connect/">RStudio Connect</a> is an enterprise publishing platform from RStudio. It supports push-button publishing from the RStudio IDE of a variety of R content types including Plumber APIs. Unlike all the other options listed here, RStudio Connect automatically manages the dependent packages and files your API has and recreates an environment closely mimicking your local development environment on the server.</p>
 <p>RStudio Connect automatically manages the number of R processes necessary to handle the current load and balances incoming traffic across all available processes. It can also shut down idle processes when they’re not in use. This allows you to run the appropriate number of R processes to scale your capacity to accommodate the current load.</p>
 <blockquote>
 <p>Conflict of interest: the primary authors of <code>plumber</code> work for RStudio.</p>
@@ -256,7 +256,7 @@ CMD ["/app/plumber.R"]</code></pre>
 <span id="cb7-16"><a href="#cb7-16"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> always</span></span>
 <span id="cb7-17"><a href="#cb7-17"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
 <span id="cb7-18"><a href="#cb7-18"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="st">"7001:8000"</span></span></code></pre></div>
-<p>More detail on what each of these options does and what other options exist can be found <a href="https://docs.docker.com/compose/compose-file/">here</a>. This configuration defines two Docker containers that should run <code>app1</code> and <code>app2</code>. The associated files in this case are layed out on disk as follows:</p>
+<p>More detail on what each of these options does and what other options exist can be found <a href="https://docs.docker.com/compose/compose-file/">here</a>. This configuration defines two Docker containers that should run <code>app1</code> and <code>app2</code>. The associated files in this case are laid out on disk as follows:</p>
 <pre><code>docker-compose.yml
 app1
 ├── Dockerfile
@@ -473,7 +473,7 @@ sudo systemctl start plumber-api   # start the service right now</code></pre>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

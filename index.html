@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -127,7 +127,7 @@
   <div class="contents col-md-9">
 <div id="plumber-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#plumber-" class="anchor"></a><code>plumber</code> <a href="https://rstudio.github.io/plumber"><img src="reference/figures/logo.svg" align="right" height="138.5" style="margin:10px;"></a>
+<a href="#plumber-" class="anchor"></a><code>plumber</code> <a href="https://www.rplumber.io/"><img src="reference/figures/logo.svg" align="right" height="138.5" style="margin:10px;"></a>
 </h1></div>
 <!-- badges: start -->
 
@@ -163,7 +163,7 @@
 <span class="co"># 'plumber.R' is the location of the file shown above</span>
 <span class="fu"><a href="reference/pr.html">pr</a></span>(<span class="st">"plumber.R"</span>) <span class="op">%&gt;%</span>
   <span class="fu"><a href="reference/pr_run.html">pr_run</a></span>(port=<span class="fl">8000</span>)</pre></div>
-<p>You can visit this URL using a browser or a terminal to run your R function and get the results. For instance <a href="http://localhost:8000/plot">http://localhost:8000/plot</a> will show you a histogram, and <a href="http://localhost:8000/echo?msg=hello">http://localhost:8000/echo?msg=hello</a> will echo back the ‘hello’ message you provided.</p>
+<p>You can visit this URL using a browser or a terminal to run your R function and get the results. For instance <code>http://localhost:8000/plot</code> will show you a histogram, and <code>http://localhost:8000/echo?msg=hello</code> will echo back the ‘hello’ message you provided.</p>
 <p>Here we’re using <code>curl</code> via a Mac/Linux terminal.</p>
 <pre><code>$ curl "http://localhost:8000/echo"
  {"msg":["The message is: ''"]}
@@ -190,7 +190,7 @@ $ curl "http://localhost:8000/echo?msg=hello"
 <h2 class="hasAnchor">
 <a href="#hosting" class="anchor"></a>Hosting</h2>
 <p>If you’re just getting started with hosting cloud servers, the <a href="https://www.digitalocean.com">DigitalOcean</a> integration included in <code>plumber</code> will be the best way to get started. You’ll be able to get a server hosting your custom API in just two R commands. To deploy to DigitalOcean, check out the <code>plumber</code> companion package <a href="https://github.com/meztez/plumberDeploy"><code>plumberDeploy</code></a>.</p>
-<p><a href="https://www.rstudio.com/products/connect/">RStudio Connect</a> is a commercial publishing platform that enables R developers to easily publish a variety of R content types, including Plumber APIs. Additional documentation is available at <a href="https://www.rplumber.io/articles/hosting.html#rstudio-connect-1" class="uri">https://www.rplumber.io/articles/hosting.html#rstudio-connect-1</a>.</p>
+<p><a href="https://rstudio.com/products/connect/">RStudio Connect</a> is a commercial publishing platform that enables R developers to easily publish a variety of R content types, including Plumber APIs. Additional documentation is available at <a href="https://www.rplumber.io/articles/hosting.html#rstudio-connect-1" class="uri">https://www.rplumber.io/articles/hosting.html#rstudio-connect-1</a>.</p>
 <p>A couple of other approaches to hosting plumber are also made available:</p>
 <ul>
 <li><p>PM2 - <a href="https://www.rplumber.io/articles/hosting.html#pm2-1" class="uri">https://www.rplumber.io/articles/hosting.html#pm2-1</a></p></li>
@@ -262,7 +262,7 @@ $ curl "http://localhost:8000/echo?msg=hello"
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
