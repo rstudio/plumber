@@ -39,9 +39,17 @@ Barret
   * ubuntu16
     * 3.4, 3.5, oldrel, release, devel
 
-* devtools::build_win()
-
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+
+* devtools::build_win()
+  * checking CRAN incoming feasibility ... NOTE
+  Maintainer: 'Barret Schloerke <barret@rstudio.com>'
+
+  New maintainer:
+    Barret Schloerke <barret@rstudio.com>
+  Old maintainer(s):
+    Jeff Allen <cran@trestletech.com>
+Status: 1 NOTE
 
 ## revdepcheck results
 
