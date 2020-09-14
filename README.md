@@ -1,4 +1,4 @@
-# `plumber` <a href='https://rstudio.github.io/plumber'><img src='man/figures/logo.svg' align="right" height="138.5" style="margin:10px;" /></a>
+# `plumber` <a href='https://www.rplumber.io/'><img src='man/figures/logo.svg' align="right" height="138.5" style="margin:10px;" /></a>
 
 <!-- badges: start -->
 [![R build status](https://github.com/rstudio/plumber/workflows/R-CMD-check/badge.svg)](https://github.com/rstudio/plumber/actions)
@@ -103,7 +103,7 @@ will be the best way to get started. You'll be able to get a server hosting your
 custom API in just two R commands. To deploy to DigitalOcean, check out the
 `plumber` companion package [`plumberDeploy`](https://github.com/meztez/plumberDeploy).
 
-[RStudio Connect](https://www.rstudio.com/products/connect/) is a commercial
+[RStudio Connect](https://rstudio.com/products/connect/) is a commercial
 publishing platform that enables R developers to easily publish a variety of R
 content types, including Plumber APIs. Additional documentation is available at
 https://www.rplumber.io/articles/hosting.html#rstudio-connect-1.
