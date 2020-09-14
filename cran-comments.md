@@ -1,8 +1,26 @@
-# Comments
+## Comments
 
-## 2020-9-8
+#### 2020-9-14
+
+This is a major version update.
 
 Please let me know if there is anything else I can provide.
+
+Thank you,
+Barret
+
+#### 2020-9-14
+
+Confirmed! You may change the maintainer.
+
+- Jeff
+
+#### 2020-9-14
+
+Hi Jeff,
+
+I'm emailing to have a formal request to change the maintainer in `plumber` to Barret Schloerke...
+My I change `plumber`'s maintainer to Barret Schloerke?
 
 Thank you,
 Barret
