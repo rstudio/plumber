@@ -28,7 +28,7 @@ Imports:
     crayon,
     promises (>= 1.1.0),
     sodium,
-    swagger (>= 3.20.3.99991),
+    swagger (>= 3.33.0),
     magrittr,
     mime,
     lifecycle
@@ -45,8 +45,6 @@ Suggests:
     yaml,
     feather,
     future
-Remotes:
-    rstudio/swagger
 RoxygenNote: 7.1.1
 Collate:
     'async.R'
