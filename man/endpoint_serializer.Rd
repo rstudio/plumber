@@ -25,7 +25,7 @@ This method allows serializers to return \code{preexec}, \code{postexec}, and \c
 This is useful for graphics device serializers which need a \code{preexec} and \code{postexec} hook to capture the graphics output.
 }
 \details{
-\code{preexec} and \code{postexec} hooks happend directly before and after a route is executed.
+\code{preexec} and \code{postexec} hooks happened directly before and after a route is executed.
 These hooks are specific to a single \link{PlumberEndpoint}'s route calculation.
 }
 \examples{

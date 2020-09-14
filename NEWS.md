@@ -134,7 +134,7 @@ plumber 1.0.0
 * `randomCookieKey()` has been deprecated in favor of `random_cookie_key()` (#651)
 * `sessionCookie()` has been deprecated in favor of `session_cookie()` (#651)
 
-* DigitalOcean helper functions are now defunct (`do_*()`). The funtionality and documentation on how to deploy to DigitalOcean has been moved to [`plumberDeploy`](https://github.com/meztez/plumberDeploy) (by @meztez) (#649)
+* DigitalOcean helper functions are now defunct (`do_*()`). The functionality and documentation on how to deploy to DigitalOcean has been moved to [`plumberDeploy`](https://github.com/meztez/plumberDeploy) (by @meztez) (#649)
 
 
 ### Minor new features and improvements

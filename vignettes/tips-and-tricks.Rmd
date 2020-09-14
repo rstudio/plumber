@@ -17,7 +17,7 @@ knitr::include_graphics("files/images/plumber_broken.png")
 
 ## Debugging
 
-If you've historically used R interactively, you may find it difficult to define functions that get executed at once without your input as Plumber requires. There are a couple of debugging techniques to be aware of when working on your Plumber APIs; these techniques are equally transferrable to debugging your R scripts, packages, or reports.
+If you've historically used R interactively, you may find it difficult to define functions that get executed at once without your input as Plumber requires. There are a couple of debugging techniques to be aware of when working on your Plumber APIs; these techniques are equally transferable to debugging your R scripts, packages, or reports.
 
 ### Print Debugging
 

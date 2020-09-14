@@ -96,15 +96,15 @@ An exception is that objects of class \code{AsIs} (i.e. wrapped in \code{I()}) a
     representation is written; otherwise (default) a binary one.
     See also the comments in the help for \code{\link[base]{save}}.}
 
-\item{write_fn}{Function that should write serialized contnet to the temp file provided. \code{write_fn} should have the function signature of \code{function(value, tmp_file){}}.}
+\item{write_fn}{Function that should write serialized content to the temp file provided. \code{write_fn} should have the function signature of \code{function(value, tmp_file){}}.}
 
-\item{fileext}{A non-empty character vector giving the file extension. This value will try to be infered from the content type provided.}
+\item{fileext}{A non-empty character vector giving the file extension. This value will try to be inferred from the content type provided.}
 
 \item{dev_on}{Function to turn on a graphics device.
 The graphics device \code{dev_on} function will receive any arguments supplied to the serializer in addition to \code{filename}.
 \code{filename} points to the temporary file name that should be used when saving content.}
 
-\item{dev_off}{Function to turn off the grahpics device. Defaults to \code{\link[grDevices:dev]{grDevices::dev.off()}}}
+\item{dev_off}{Function to turn off the graphics device. Defaults to \code{\link[grDevices:dev]{grDevices::dev.off()}}}
 }
 \description{
 Serializers are used in Plumber to transform the R object produced by a

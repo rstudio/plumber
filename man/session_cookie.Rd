@@ -50,7 +50,7 @@ The cookie's secret encryption \code{key} value must be consistent to maintain
 
 While it is very quick to get started with user session cookies using
 \code{plumber}, please exercise precaution when storing secure key information.
-If a malicious person were to gain access to the secret \code{key}, they woud
+If a malicious person were to gain access to the secret \code{key}, they would
 be able to eavesdrop on all \code{req$session} information and/or tamper with
 \code{req$session} information being processed.
 

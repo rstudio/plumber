@@ -228,7 +228,7 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.
 
-This value does not need to be explicitly assigned. To explicity set it, see \code{\link[=options_plumber]{options_plumber()}}.}
+This value does not need to be explicitly assigned. To explicitly set it, see \code{\link[=options_plumber]{options_plumber()}}.}
 
 \item{\code{swagger}}{Deprecated. See \verb{$setDocs(docs)} or \verb{$setApiSpec()}}
 
@@ -482,7 +482,7 @@ router, set to \code{TRUE}.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A terminal friendly represention of a plumber router.
+A terminal friendly representation of a plumber router.
 }
 }
 \if{html}{\out{<hr>}}

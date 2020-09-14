@@ -160,7 +160,7 @@ services:
      - "7001:8000"
 ```
 
-More detail on what each of these options does and what other options exist can be found [here](https://docs.docker.com/compose/compose-file/). This configuration defines two Docker containers that should run `app1` and `app2`. The associated files in this case are layed out on disk as follows:
+More detail on what each of these options does and what other options exist can be found [here](https://docs.docker.com/compose/compose-file/). This configuration defines two Docker containers that should run `app1` and `app2`. The associated files in this case are laid out on disk as follows:
 
 ```
 docker-compose.yml
