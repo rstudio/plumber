@@ -68,7 +68,7 @@ serializer_identity <- function(){
 #' Return an attachment response
 #'
 #' This will set the appropriate fields in the `Content-Disposition` header value.
-#' To make sure the attachement is used, be sure your serializer eventually calls `serializer_headers`
+#' To make sure the attachment is used, be sure your serializer eventually calls `serializer_headers`
 #'
 #' @param value Response value to be saved
 #' @param filename File name to use when saving the attachment.
@@ -324,8 +324,8 @@ serializer_cat <- function(..., type = "text/plain; charset=UTF-8") {
 }
 
 #' @describeIn serializers Write output to a temp file whose contents are read back as a serialized response. `serializer_write_file()` creates (and cleans up) a temp file, calls the serializer (which should write to the temp file), and then reads the contents back as the serialized value.  If the content `type` starts with `"text"`, the return result will be read into a character string, otherwise the result will be returned as a raw vector.
-#' @param write_fn Function that should write serialized contnet to the temp file provided. `write_fn` should have the function signature of `function(value, tmp_file){}`.
-#' @param fileext A non-empty character vector giving the file extension. This value will try to be infered from the content type provided.
+#' @param write_fn Function that should write serialized content to the temp file provided. `write_fn` should have the function signature of `function(value, tmp_file){}`.
+#' @param fileext A non-empty character vector giving the file extension. This value will try to be inferred from the content type provided.
 #' @export
 serializer_write_file <- function(
   type,
@@ -397,7 +397,7 @@ serializer_xml <- function() {
 #' This method allows serializers to return `preexec`, `postexec`, and `aroundexec` (\lifecycle{experimental}) hooks in addition to a serializer.
 #' This is useful for graphics device serializers which need a `preexec` and `postexec` hook to capture the graphics output.
 #'
-#' `preexec` and `postexec` hooks happend directly before and after a route is executed.
+#' `preexec` and `postexec` hooks happened directly before and after a route is executed.
 #' These hooks are specific to a single [PlumberEndpoint]'s route calculation.
 #'
 #' @param serializer Serializer method to be used.  This method should already have its initialization arguments applied.
@@ -453,7 +453,7 @@ self_set_serializer <- function(self, serializer) {
 #' @param dev_on Function to turn on a graphics device.
 #' The graphics device `dev_on` function will receive any arguments supplied to the serializer in addition to `filename`.
 #' `filename` points to the temporary file name that should be used when saving content.
-#' @param dev_off Function to turn off the grahpics device. Defaults to [grDevices::dev.off()]
+#' @param dev_off Function to turn off the graphics device. Defaults to [grDevices::dev.off()]
 #' @export
 serializer_device <- function(type, dev_on, dev_off = grDevices::dev.off) {
 

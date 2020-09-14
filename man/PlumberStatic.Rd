@@ -101,7 +101,7 @@ router, set to \code{TRUE}.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A terminal friendly represention of a \code{PlumberStatic()} router.
+A terminal friendly representation of a \code{PlumberStatic()} router.
 }
 }
 \if{html}{\out{<hr>}}

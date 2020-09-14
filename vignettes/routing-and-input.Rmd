@@ -80,7 +80,7 @@ function(req){
 }
 ```
 
-This filter is straightfoward: it invokes an external action (logging) and then calls `forward()` to pass control to the next handler in the pipeline (another filter or an endpoint).
+This filter is straightforward: it invokes an external action (logging) and then calls `forward()` to pass control to the next handler in the pipeline (another filter or an endpoint).
 
 Because the `req` and `res` parameters in Plumber are based on R environments, they exhibit "pass-by-reference" behavior. This means that changes that are made in one filter on the `req` or `res` object will be visible to other filters or endpoints also touching this same request or response.
 
@@ -307,7 +307,7 @@ Alternatively, `curl --data '{"id":123, "name": "Jennifer"}' "http://localhost:8
 
 As demonstrated above, the raw request body is made available as `req$bodyRaw` and parsed request body is available as `req$body`.
 
-If multiple parameters are matched to the endpoint formals, an error will be thrown. Due to the nature of how multiple values can be matched to the same argument, it is recommended that `POST` enpoints have a function definition that only accepts the formals `req`, `res`, and `...`. If the endpoint arguments are to be processed like a list, they are available at `req$argsBody`, with all arguments at `req$args`. `req$args` is a combination of `list(req = req, res = res)`, `req$argsPath`, `req$argsBody`, and `req$argsQuery`.
+If multiple parameters are matched to the endpoint formals, an error will be thrown. Due to the nature of how multiple values can be matched to the same argument, it is recommended that `POST` endpoints have a function definition that only accepts the formals `req`, `res`, and `...`. If the endpoint arguments are to be processed like a list, they are available at `req$argsBody`, with all arguments at `req$args`. `req$args` is a combination of `list(req = req, res = res)`, `req$argsPath`, `req$argsBody`, and `req$argsQuery`.
 
 ### Cookies {#read-cookies}
 

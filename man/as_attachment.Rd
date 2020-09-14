@@ -17,7 +17,7 @@ Object with class \code{"plumber_attachment"}
 }
 \description{
 This will set the appropriate fields in the \code{Content-Disposition} header value.
-To make sure the attachement is used, be sure your serializer eventually calls \code{serializer_headers}
+To make sure the attachment is used, be sure your serializer eventually calls \code{serializer_headers}
 }
 \examples{
 # plumber.R

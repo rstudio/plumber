@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: plumber
 Type: Package
 Title: An API Generator for R
-Version: 0.4.7.9000
+Version: 1.0.0
 Roxygen: list(markdown = TRUE)
 Authors@R: c(
   person("Barret", "Schloerke", role = c("cre", "aut"), email = "barret@rstudio.com"),
@@ -28,7 +28,7 @@ Imports:
     crayon,
     promises (>= 1.1.0),
     sodium,
-    swagger (>= 3.20.3.99991),
+    swagger (>= 3.33.0),
     magrittr,
     mime,
     lifecycle
@@ -45,8 +45,6 @@ Suggests:
     yaml,
     feather,
     future
-Remotes:
-    rstudio/swagger
 RoxygenNote: 7.1.1
 Collate:
     'async.R'

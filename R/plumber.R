@@ -34,7 +34,7 @@ defaultPlumberFilters <- list(
 #' taking an incoming request, submitting it through the appropriate filters and
 #' eventually to a corresponding endpoint, if one is found.
 #'
-#' See \url{http://www.rplumber.io/articles/programmatic-usage.html} for additional
+#' See \url{https://www.rplumber.io/articles/programmatic-usage.html} for additional
 #' details on the methods available on this object.
 #' @seealso
 #'  [pr()],
@@ -141,7 +141,7 @@ Plumber <- R6Class(
     #' be listened on. Note that on most Unix-like systems including Linux and
     #' Mac OS X, port numbers smaller than 1025 require root privileges.
     #'
-    #' This value does not need to be explicitly assigned. To explicity set it, see [options_plumber()].
+    #' This value does not need to be explicitly assigned. To explicitly set it, see [options_plumber()].
     #' @param debug Deprecated. See `$setDebug()`
     #' @param swagger Deprecated. See `$setDocs(docs)` or `$setApiSpec()`
     #' @param swaggerCallback Deprecated. See `$setDocsCallback()`
@@ -370,7 +370,7 @@ Plumber <- R6Class(
     #' @param topLevel a logical value. When method executed on top level
     #' router, set to `TRUE`.
     #' @param ... additional arguments for recursive calls
-    #' @return A terminal friendly represention of a plumber router.
+    #' @return A terminal friendly representation of a plumber router.
     print = function(prefix="", topLevel=TRUE, ...){
       endCount <- as.character(sum(unlist(lapply(self$endpoints, length))))
 

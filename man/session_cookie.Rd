@@ -50,7 +50,7 @@ The cookie's secret encryption \code{key} value must be consistent to maintain
 
 While it is very quick to get started with user session cookies using
 \code{plumber}, please exercise precaution when storing secure key information.
-If a malicious person were to gain access to the secret \code{key}, they woud
+If a malicious person were to gain access to the secret \code{key}, they would
 be able to eavesdrop on all \code{req$session} information and/or tamper with
 \code{req$session} information being processed.
 
@@ -107,7 +107,7 @@ plumb_api("plumber", "01-append") \%>\%
 \seealso{
 \itemize{
 \item \href{https://github.com/jeroen/sodium}{'sodium'}: R bindings to 'libsodium'
-\item \href{https://download.libsodium.org/doc/}{'libsodium'}: A Modern and Easy-to-Use Crypto Library
+\item \href{https://doc.libsodium.org/}{'libsodium'}: A Modern and Easy-to-Use Crypto Library
 \item \href{https://github.com/r-lib/keyring}{'keyring'}: Access the system credential store from R
 \item \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#Directives}{Set-Cookie flags}: Descriptions of different flags for \code{Set-Cookie}
 \item \href{https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting}{Cross-site scripting}: A security exploit which allows an attacker to inject into a website malicious client-side code

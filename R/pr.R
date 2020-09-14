@@ -361,7 +361,7 @@ pr_hooks <- function(pr,
 #'   If not specified or a non-character is given, no SameSite policy is attached to the cookie.
 #' @seealso \itemize{
 #' \item \href{https://github.com/jeroen/sodium}{'sodium'}: R bindings to 'libsodium'
-#' \item \href{https://download.libsodium.org/doc/}{'libsodium'}: A Modern and Easy-to-Use Crypto Library
+#' \item \href{https://doc.libsodium.org/}{'libsodium'}: A Modern and Easy-to-Use Crypto Library
 #' \item \href{https://github.com/r-lib/keyring}{'keyring'}: Access the system credential store from R
 #' \item \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#Directives}{Set-Cookie flags}: Descriptions of different flags for \code{Set-Cookie}
 #' \item \href{https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting}{Cross-site scripting}: A security exploit which allows an attacker to inject into a website malicious client-side code
