@@ -332,8 +332,7 @@ Plumber <- R6Class(
     #' @param serializer a serializer function.
     #' @param parsers a named list of parsers.
     #' @param endpoint a `PlumberEndpoint` object.
-    #' @param environment an R environment where to evaluate handle handler.
-    #' @param ... additional arguments for [PlumberEndpoint] `new` method (namely `lines`, `params`, `comments`, `responses` and `tags`).
+    #' @param ... additional arguments for [PlumberEndpoint] `new` method (namely `lines`, `params`, `comments`, `responses` and `tags`. Excludes `envir`).
     #' @examples
     #' \dontrun{
     #' pr <- pr()
@@ -341,7 +340,7 @@ Plumber <- R6Class(
     #'   "<html><h1>Programmatic Plumber!</h1></html>"
     #' }, serializer=plumber::serializer_html())
     #' }
-    handle = function(methods, path, handler, preempt, serializer, parsers, endpoint, environment, ...) {
+    handle = function(methods, path, handler, preempt, serializer, parsers, endpoint, ...) {
       epdef <- !missing(methods) || !missing(path) || !missing(handler) || !missing(serializer) || !missing(parsers)
       if (!missing(endpoint) && epdef) {
         stop("You must provide either the components for an endpoint (handler and serializer) OR provide the endpoint yourself. You cannot do both.")
@@ -354,14 +353,14 @@ Plumber <- R6Class(
         if (missing(parsers)) {
           parsers <- private$parsers
         }
-        if (missing(environment)) {
-          environment <- private$envir
+        if ("envir" %in% names(list(...))) {
+          stop("`envir` can not be supplied to `pr$handle()`")
         }
 
         endpoint <- PlumberEndpoint$new(verbs = methods,
                                         path = path,
                                         expr = handler,
-                                        envir = environment,
+                                        envir = private$envir,
                                         serializer = serializer,
                                         parsers = parsers, ...)
       }

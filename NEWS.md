@@ -3,7 +3,7 @@ plumber 1.0.0.9999 Development version
 
 ### Bug fixes
 
-* Something about how handle deals with ... in relation to PlumberEndpoint
+* When manually calling `Plumber$handle()`, `envir` may not be passed through when defining a new `PlumberEndpoint` #677  
 
 plumber 1.0.0
 --------------------------------------------------------------------------------
