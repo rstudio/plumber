@@ -93,12 +93,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -179,7 +173,7 @@
     <p><code>port</code> does not need to be explicitly assigned.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pr_run</span>(<span class='kw'>pr</span>, host = <span class='st'>"127.0.0.1"</span>, port = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.port"</span>, <span class='kw'>NULL</span>))</pre>
+    <pre class="usage"><span class='fu'>pr_run</span><span class='op'>(</span><span class='va'>pr</span>, host <span class='op'>=</span> <span class='st'>"127.0.0.1"</span>, port <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.port"</span>, <span class='cn'>NULL</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -204,13 +198,13 @@ Mac OS X, port numbers smaller than 1025 require root privileges.</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'>pr_run</span>()
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>pr_run</span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'>pr_run</span>(port = <span class='fl'>5762</span>, debug = <span class='fl'>TRUE</span>)
-}
+<span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>pr_run</span><span class='op'>(</span>port <span class='op'>=</span> <span class='fl'>5762</span><span class='op'>)</span>
+<span class='op'>}</span>
 
 </div></pre>
   </div>

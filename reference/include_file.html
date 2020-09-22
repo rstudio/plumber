@@ -93,12 +93,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -179,13 +173,13 @@
     <p>Returns the file at the given path as the response.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>include_file</span>(<span class='kw'>file</span>, <span class='kw'>res</span>, content_type = <span class='fu'>getContentType</span>(<span class='kw'>tools</span>::<span class='fu'><a href='https://rdrr.io/r/tools/fileutils.html'>file_ext</a></span>(<span class='kw'>file</span>)))
+    <pre class="usage"><span class='fu'>include_file</span><span class='op'>(</span><span class='va'>file</span>, <span class='va'>res</span>, content_type <span class='op'>=</span> <span class='fu'>getContentType</span><span class='op'>(</span><span class='fu'>tools</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/tools/fileutils.html'>file_ext</a></span><span class='op'>(</span><span class='va'>file</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='fu'>include_html</span>(<span class='kw'>file</span>, <span class='kw'>res</span>)
+<span class='fu'>include_html</span><span class='op'>(</span><span class='va'>file</span>, <span class='va'>res</span><span class='op'>)</span>
 
-<span class='fu'>include_md</span>(<span class='kw'>file</span>, <span class='kw'>res</span>, format = <span class='kw'>NULL</span>)
+<span class='fu'>include_md</span><span class='op'>(</span><span class='va'>file</span>, <span class='va'>res</span>, format <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
-<span class='fu'>include_rmd</span>(<span class='kw'>file</span>, <span class='kw'>res</span>, format = <span class='kw'>NULL</span>)</pre>
+<span class='fu'>include_rmd</span><span class='op'>(</span><span class='va'>file</span>, <span class='va'>res</span>, format <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

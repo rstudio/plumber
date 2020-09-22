@@ -96,12 +96,6 @@ error" />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -184,7 +178,7 @@ error</h1>
 error</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pr_set_error</span>(<span class='kw'>pr</span>, <span class='kw'>fun</span>)</pre>
+    <pre class="usage"><span class='fu'>pr_set_error</span><span class='op'>(</span><span class='va'>pr</span>, <span class='va'>fun</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -204,17 +198,17 @@ error</p>
     <p>The Plumber router with a modified error handler</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='kw'>handler_error</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>req</span>, <span class='kw'>res</span>, <span class='kw'>err</span>){
-  <span class='kw'>res</span><span class='op'>$</span><span class='kw'>status</span> <span class='op'>&lt;-</span> <span class='fl'>500</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(error = <span class='st'>"Custom Error Message"</span>)
-}
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>handler_error</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>req</span>, <span class='va'>res</span>, <span class='va'>err</span><span class='op'>)</span><span class='op'>{</span>
+  <span class='va'>res</span><span class='op'>$</span><span class='va'>status</span> <span class='op'>&lt;-</span> <span class='fl'>500</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>error <span class='op'>=</span> <span class='st'>"Custom Error Message"</span><span class='op'>)</span>
+<span class='op'>}</span>
 
-<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_handle.html'>pr_get</a></span>(<span class='st'>"/error"</span>, <span class='fu'>function</span>() <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='st'>"a"</span>)) <span class='op'>%&gt;%</span>
-  <span class='fu'>pr_set_error</span>(<span class='kw'>handler_error</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
-}
+<span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_handle.html'>pr_get</a></span><span class='op'>(</span><span class='st'>"/error"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='st'>"a"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>pr_set_error</span><span class='op'>(</span><span class='va'>handler_error</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_run.html'>pr_run</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -96,12 +96,6 @@ more details on Plumber serializers and how to customize their behavior." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -185,55 +179,55 @@ filter/endpoint into an HTTP response that can be returned to the client. See
 more details on Plumber serializers and how to customize their behavior.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>serializer_headers</span>(headers = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), serialize_fn = <span class='kw'>identity</span>)
+    <pre class="usage"><span class='fu'>serializer_headers</span><span class='op'>(</span>headers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>, serialize_fn <span class='op'>=</span> <span class='va'>identity</span><span class='op'>)</span>
 
-<span class='fu'>serializer_content_type</span>(<span class='kw'>type</span>, serialize_fn = <span class='kw'>identity</span>)
+<span class='fu'>serializer_content_type</span><span class='op'>(</span><span class='va'>type</span>, serialize_fn <span class='op'>=</span> <span class='va'>identity</span><span class='op'>)</span>
 
-<span class='fu'>serializer_csv</span>(<span class='kw'>...</span>, type = <span class='st'>"text/csv; charset=UTF-8"</span>)
+<span class='fu'>serializer_csv</span><span class='op'>(</span><span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"text/csv; charset=UTF-8"</span><span class='op'>)</span>
 
-<span class='fu'>serializer_tsv</span>(<span class='kw'>...</span>, type = <span class='st'>"text/tab-separated-values; charset=UTF-8"</span>)
+<span class='fu'>serializer_tsv</span><span class='op'>(</span><span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"text/tab-separated-values; charset=UTF-8"</span><span class='op'>)</span>
 
-<span class='fu'>serializer_html</span>(type = <span class='st'>"text/html; charset=UTF-8"</span>)
+<span class='fu'>serializer_html</span><span class='op'>(</span>type <span class='op'>=</span> <span class='st'>"text/html; charset=UTF-8"</span><span class='op'>)</span>
 
-<span class='fu'>serializer_json</span>(<span class='kw'>...</span>, type = <span class='st'>"application/json"</span>)
+<span class='fu'>serializer_json</span><span class='op'>(</span><span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"application/json"</span><span class='op'>)</span>
 
-<span class='fu'>serializer_unboxed_json</span>(auto_unbox = <span class='fl'>TRUE</span>, <span class='kw'>...</span>, type = <span class='st'>"application/json"</span>)
+<span class='fu'>serializer_unboxed_json</span><span class='op'>(</span>auto_unbox <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"application/json"</span><span class='op'>)</span>
 
-<span class='fu'>serializer_rds</span>(version = <span class='st'>"2"</span>, ascii = <span class='fl'>FALSE</span>, <span class='kw'>...</span>, type = <span class='st'>"application/rds"</span>)
+<span class='fu'>serializer_rds</span><span class='op'>(</span>version <span class='op'>=</span> <span class='st'>"2"</span>, ascii <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"application/rds"</span><span class='op'>)</span>
 
-<span class='fu'>serializer_feather</span>(type = <span class='st'>"application/feather"</span>)
+<span class='fu'>serializer_feather</span><span class='op'>(</span>type <span class='op'>=</span> <span class='st'>"application/feather"</span><span class='op'>)</span>
 
-<span class='fu'>serializer_yaml</span>(<span class='kw'>...</span>, type = <span class='st'>"text/x-yaml; charset=UTF-8"</span>)
+<span class='fu'>serializer_yaml</span><span class='op'>(</span><span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"text/x-yaml; charset=UTF-8"</span><span class='op'>)</span>
 
-<span class='fu'>serializer_text</span>(
-  <span class='kw'>...</span>,
-  serialize_fn = <span class='kw'>as.character</span>,
-  type = <span class='st'>"text/plain; charset=UTF-8"</span>
-)
+<span class='fu'>serializer_text</span><span class='op'>(</span>
+  <span class='va'>...</span>,
+  serialize_fn <span class='op'>=</span> <span class='va'>as.character</span>,
+  type <span class='op'>=</span> <span class='st'>"text/plain; charset=UTF-8"</span>
+<span class='op'>)</span>
 
-<span class='fu'>serializer_format</span>(<span class='kw'>...</span>, type = <span class='st'>"text/plain; charset=UTF-8"</span>)
+<span class='fu'>serializer_format</span><span class='op'>(</span><span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"text/plain; charset=UTF-8"</span><span class='op'>)</span>
 
-<span class='fu'>serializer_print</span>(<span class='kw'>...</span>, type = <span class='st'>"text/plain; charset=UTF-8"</span>)
+<span class='fu'>serializer_print</span><span class='op'>(</span><span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"text/plain; charset=UTF-8"</span><span class='op'>)</span>
 
-<span class='fu'>serializer_cat</span>(<span class='kw'>...</span>, type = <span class='st'>"text/plain; charset=UTF-8"</span>)
+<span class='fu'>serializer_cat</span><span class='op'>(</span><span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"text/plain; charset=UTF-8"</span><span class='op'>)</span>
 
-<span class='fu'>serializer_write_file</span>(<span class='kw'>type</span>, <span class='kw'>write_fn</span>, fileext = <span class='kw'>NULL</span>)
+<span class='fu'>serializer_write_file</span><span class='op'>(</span><span class='va'>type</span>, <span class='va'>write_fn</span>, fileext <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
-<span class='fu'>serializer_htmlwidget</span>(<span class='kw'>...</span>, type = <span class='st'>"text/html; charset=UTF-8"</span>)
+<span class='fu'>serializer_htmlwidget</span><span class='op'>(</span><span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"text/html; charset=UTF-8"</span><span class='op'>)</span>
 
-<span class='fu'>serializer_device</span>(<span class='kw'>type</span>, <span class='kw'>dev_on</span>, dev_off = <span class='kw'>grDevices</span>::<span class='kw'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span>)
+<span class='fu'>serializer_device</span><span class='op'>(</span><span class='va'>type</span>, <span class='va'>dev_on</span>, dev_off <span class='op'>=</span> <span class='fu'>grDevices</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/r/grDevices/dev.html'>dev.off</a></span><span class='op'>)</span>
 
-<span class='fu'>serializer_jpeg</span>(<span class='kw'>...</span>, type = <span class='st'>"image/jpeg"</span>)
+<span class='fu'>serializer_jpeg</span><span class='op'>(</span><span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"image/jpeg"</span><span class='op'>)</span>
 
-<span class='fu'>serializer_png</span>(<span class='kw'>...</span>, type = <span class='st'>"image/png"</span>)
+<span class='fu'>serializer_png</span><span class='op'>(</span><span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"image/png"</span><span class='op'>)</span>
 
-<span class='fu'>serializer_svg</span>(<span class='kw'>...</span>, type = <span class='st'>"image/svg+xml"</span>)
+<span class='fu'>serializer_svg</span><span class='op'>(</span><span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"image/svg+xml"</span><span class='op'>)</span>
 
-<span class='fu'>serializer_bmp</span>(<span class='kw'>...</span>, type = <span class='st'>"image/bmp"</span>)
+<span class='fu'>serializer_bmp</span><span class='op'>(</span><span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"image/bmp"</span><span class='op'>)</span>
 
-<span class='fu'>serializer_tiff</span>(<span class='kw'>...</span>, type = <span class='st'>"image/tiff"</span>)
+<span class='fu'>serializer_tiff</span><span class='op'>(</span><span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"image/tiff"</span><span class='op'>)</span>
 
-<span class='fu'>serializer_pdf</span>(<span class='kw'>...</span>, type = <span class='st'>"application/pdf"</span>)</pre>
+<span class='fu'>serializer_pdf</span><span class='op'>(</span><span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"application/pdf"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

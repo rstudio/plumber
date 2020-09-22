@@ -95,12 +95,6 @@ Plumber router pr_run() method is executed using default plumber.docs.callback o
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -183,7 +177,7 @@ to the API visual documentation url. This allows RStudio to open <code>swagger</
 Plumber router <code><a href='pr_run.html'>pr_run()</a></code> method is executed using default <code>plumber.docs.callback</code> option.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pr_set_api_spec</span>(<span class='kw'>pr</span>, <span class='kw'>api</span>)</pre>
+    <pre class="usage"><span class='fu'>pr_set_api_spec</span><span class='op'>(</span><span class='va'>pr</span>, <span class='va'>api</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -208,22 +202,22 @@ Plumber router <code><a href='pr_run.html'>pr_run()</a></code> method is execute
     <p>The Plumber router with the new OpenAPI Specification object or function.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Set the API Spec to a function to use the auto-generated OAS object</span>
-<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'>pr_set_api_spec</span>(<span class='fu'>function</span>(<span class='kw'>spec</span>) {
-    <span class='kw'>spec</span><span class='op'>$</span><span class='kw'>info</span><span class='op'>$</span><span class='kw'>title</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.time</a></span>()
-    <span class='kw'>spec</span>
-  }) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_handle.html'>pr_get</a></span>(<span class='st'>"/plus/&lt;a:int&gt;/&lt;b:int&gt;"</span>, <span class='fu'>function</span>(<span class='kw'>a</span>, <span class='kw'>b</span>) { <span class='kw'>a</span> <span class='op'>+</span> <span class='kw'>b</span> }) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
+<span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>pr_set_api_spec</span><span class='op'>(</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>spec</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='va'>spec</span><span class='op'>$</span><span class='va'>info</span><span class='op'>$</span><span class='va'>title</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.time</a></span><span class='op'>(</span><span class='op'>)</span>
+    <span class='va'>spec</span>
+  <span class='op'>}</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_handle.html'>pr_get</a></span><span class='op'>(</span><span class='st'>"/plus/&lt;a:int&gt;/&lt;b:int&gt;"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span><span class='op'>)</span> <span class='op'>{</span> <span class='va'>a</span> <span class='op'>+</span> <span class='va'>b</span> <span class='op'>}</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_run.html'>pr_run</a></span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='co'># Set the API Spec using an object</span>
-<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'>pr_set_api_spec</span>(<span class='kw'>my_custom_object</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_handle.html'>pr_get</a></span>(<span class='st'>"/plus/&lt;a:int&gt;/&lt;b:int&gt;"</span>, <span class='fu'>function</span>(<span class='kw'>a</span>, <span class='kw'>b</span>) { <span class='kw'>a</span> <span class='op'>+</span> <span class='kw'>b</span> }) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
-}
+<span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>pr_set_api_spec</span><span class='op'>(</span><span class='va'>my_custom_object</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_handle.html'>pr_get</a></span><span class='op'>(</span><span class='st'>"/plus/&lt;a:int&gt;/&lt;b:int&gt;"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span><span class='op'>)</span> <span class='op'>{</span> <span class='va'>a</span> <span class='op'>+</span> <span class='va'>b</span> <span class='op'>}</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_run.html'>pr_run</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

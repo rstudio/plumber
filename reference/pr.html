@@ -93,12 +93,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -179,11 +173,11 @@
     <p>Create a new Plumber router</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pr</span>(
-  file = <span class='kw'>NULL</span>,
-  filters = <span class='kw'>defaultPlumberFilters</span>,
-  envir = <span class='fu'><a href='https://rdrr.io/r/base/environment.html'>new.env</a></span>(parent = <span class='kw'>.GlobalEnv</span>)
-)</pre>
+    <pre class="usage"><span class='fu'>pr</span><span class='op'>(</span>
+  file <span class='op'>=</span> <span class='cn'>NULL</span>,
+  filters <span class='op'>=</span> <span class='va'>defaultPlumberFilters</span>,
+  envir <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/environment.html'>new.env</a></span><span class='op'>(</span>parent <span class='op'>=</span> <span class='va'>.GlobalEnv</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -207,10 +201,10 @@
     <p>A new <code><a href='Plumber.html'>Plumber</a></code> router</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'>pr</span>() <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
-}
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>pr</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_run.html'>pr_run</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
 
 </div></pre>
   </div>

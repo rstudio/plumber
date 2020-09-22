@@ -101,12 +101,6 @@ See http://spec.openapis.org/oas/v3.0.3" />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -195,7 +189,7 @@ list containing OpenAPI Specification.
 See <a href='http://spec.openapis.org/oas/v3.0.3'>http://spec.openapis.org/oas/v3.0.3</a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>pr_set_docs</span>(<span class='kw'>pr</span>, docs = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.docs"</span>, <span class='fl'>TRUE</span>), <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>pr_set_docs</span><span class='op'>(</span><span class='va'>pr</span>, docs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.docs"</span>, <span class='cn'>TRUE</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -220,43 +214,43 @@ If using <code><a href='options_plumber.html'>options_plumber()</a></code>, the 
     <p>The Plumber router with the new docs settings.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'>## View API using Swagger UI</span>
 <span class='co'># Official Website: https://swagger.io/tools/swagger-ui/</span>
 <span class='co'># install.packages("swagger")</span>
-<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='https://github.com/rstudio/swagger'>swagger</a></span>)) {
-  <span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
-    <span class='fu'>pr_set_docs</span>(<span class='st'>"swagger"</span>) <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='pr_handle.html'>pr_get</a></span>(<span class='st'>"/plus/&lt;a:int&gt;/&lt;b:int&gt;"</span>, <span class='fu'>function</span>(<span class='kw'>a</span>, <span class='kw'>b</span>) { <span class='kw'>a</span> <span class='op'>+</span> <span class='kw'>b</span> }) <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
-}
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/rstudio/swagger'>swagger</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>pr_set_docs</span><span class='op'>(</span><span class='st'>"swagger"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='pr_handle.html'>pr_get</a></span><span class='op'>(</span><span class='st'>"/plus/&lt;a:int&gt;/&lt;b:int&gt;"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span><span class='op'>)</span> <span class='op'>{</span> <span class='va'>a</span> <span class='op'>+</span> <span class='va'>b</span> <span class='op'>}</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='pr_run.html'>pr_run</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
 
 <span class='co'>## View API using Redoc</span>
 <span class='co'># Official Website: https://github.com/Redocly/redoc</span>
 <span class='co'># remotes::install_github("https://github.com/meztez/redoc/")</span>
-<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'>redoc</span>)) {
-  <span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
-    <span class='fu'>pr_set_docs</span>(<span class='st'>"redoc"</span>) <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='pr_handle.html'>pr_get</a></span>(<span class='st'>"/plus/&lt;a:int&gt;/&lt;b:int&gt;"</span>, <span class='fu'>function</span>(<span class='kw'>a</span>, <span class='kw'>b</span>) { <span class='kw'>a</span> <span class='op'>+</span> <span class='kw'>b</span> }) <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
-}
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'>redoc</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>pr_set_docs</span><span class='op'>(</span><span class='st'>"redoc"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='pr_handle.html'>pr_get</a></span><span class='op'>(</span><span class='st'>"/plus/&lt;a:int&gt;/&lt;b:int&gt;"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span><span class='op'>)</span> <span class='op'>{</span> <span class='va'>a</span> <span class='op'>+</span> <span class='va'>b</span> <span class='op'>}</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='pr_run.html'>pr_run</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
 
 <span class='co'>## View API using RapiDoc</span>
 <span class='co'># Official Website: https://github.com/mrin9/RapiDoc</span>
 <span class='co'># remotes::install_github("https://github.com/meztez/rapidoc/")</span>
-<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'>rapidoc</span>)) {
-  <span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
-    <span class='fu'>pr_set_docs</span>(<span class='st'>"rapidoc"</span>) <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='pr_handle.html'>pr_get</a></span>(<span class='st'>"/plus/&lt;a:int&gt;/&lt;b:int&gt;"</span>, <span class='fu'>function</span>(<span class='kw'>a</span>, <span class='kw'>b</span>) { <span class='kw'>a</span> <span class='op'>+</span> <span class='kw'>b</span> }) <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
-}
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'>rapidoc</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>pr_set_docs</span><span class='op'>(</span><span class='st'>"rapidoc"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='pr_handle.html'>pr_get</a></span><span class='op'>(</span><span class='st'>"/plus/&lt;a:int&gt;/&lt;b:int&gt;"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span><span class='op'>)</span> <span class='op'>{</span> <span class='va'>a</span> <span class='op'>+</span> <span class='va'>b</span> <span class='op'>}</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='pr_run.html'>pr_run</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
 
 <span class='co'>## Disable the OpenAPI Spec UI</span>
-<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'>pr_set_docs</span>(<span class='fl'>FALSE</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_handle.html'>pr_get</a></span>(<span class='st'>"/plus/&lt;a:int&gt;/&lt;b:int&gt;"</span>, <span class='fu'>function</span>(<span class='kw'>a</span>, <span class='kw'>b</span>) { <span class='kw'>a</span> <span class='op'>+</span> <span class='kw'>b</span> }) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
-}
+<span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>pr_set_docs</span><span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_handle.html'>pr_get</a></span><span class='op'>(</span><span class='st'>"/plus/&lt;a:int&gt;/&lt;b:int&gt;"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span><span class='op'>)</span> <span class='op'>{</span> <span class='va'>a</span> <span class='op'>+</span> <span class='va'>b</span> <span class='op'>}</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_run.html'>pr_run</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

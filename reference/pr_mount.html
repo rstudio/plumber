@@ -97,12 +97,6 @@ also invisibly returns the updated router." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -187,7 +181,7 @@ files. This function mutates the Plumber router (<code><a href='pr.html'>pr()</a
 also invisibly returns the updated router.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pr_mount</span>(<span class='kw'>pr</span>, <span class='kw'>path</span>, <span class='kw'>router</span>)</pre>
+    <pre class="usage"><span class='fu'>pr_mount</span><span class='op'>(</span><span class='va'>pr</span>, <span class='va'>path</span>, <span class='va'>router</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -211,15 +205,15 @@ also invisibly returns the updated router.</p>
     <p>A Plumber router with the supplied router mounted</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='kw'>pr1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_handle.html'>pr_get</a></span>(<span class='st'>"/hello"</span>, <span class='fu'>function</span>() <span class='st'>"Hello"</span>)
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>pr1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_handle.html'>pr_get</a></span><span class='op'>(</span><span class='st'>"/hello"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='st'>"Hello"</span><span class='op'>)</span>
 
-<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_handle.html'>pr_get</a></span>(<span class='st'>"/goodbye"</span>, <span class='fu'>function</span>() <span class='st'>"Goodbye"</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'>pr_mount</span>(<span class='st'>"/hi"</span>, <span class='kw'>pr1</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
-}
+<span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_handle.html'>pr_get</a></span><span class='op'>(</span><span class='st'>"/goodbye"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='st'>"Goodbye"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>pr_mount</span><span class='op'>(</span><span class='st'>"/hi"</span>, <span class='va'>pr1</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_run.html'>pr_run</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
 
 </div></pre>
   </div>

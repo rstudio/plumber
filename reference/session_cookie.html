@@ -94,12 +94,6 @@ req$session information for each server request." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -181,14 +175,14 @@ req$session information for each server request." />
 <code>req$session</code> information for each server request.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>session_cookie</span>(
-  <span class='kw'>key</span>,
-  name = <span class='st'>"plumber"</span>,
-  expiration = <span class='fl'>FALSE</span>,
-  http = <span class='fl'>TRUE</span>,
-  secure = <span class='fl'>FALSE</span>,
-  same_site = <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>session_cookie</span><span class='op'>(</span>
+  <span class='va'>key</span>,
+  name <span class='op'>=</span> <span class='st'>"plumber"</span>,
+  expiration <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  http <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  secure <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  same_site <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -270,39 +264,39 @@ to prevent others from reading it.</p></li>
 </div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 
 <span class='co'>## Set secret key using `keyring` (preferred method)</span>
-<span class='kw'>keyring</span>::<span class='fu'>key_set_with_value</span>(<span class='st'>"plumber_api"</span>, <span class='kw'>plumber</span>::<span class='fu'><a href='random_cookie_key.html'>random_cookie_key</a></span>())
+<span class='fu'>keyring</span><span class='fu'>::</span><span class='fu'>key_set_with_value</span><span class='op'>(</span><span class='st'>"plumber_api"</span>, <span class='fu'>plumber</span><span class='fu'>::</span><span class='fu'><a href='random_cookie_key.html'>random_cookie_key</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 
 
 <span class='co'># Load a plumber API</span>
-<span class='fu'><a href='plumb_api.html'>plumb_api</a></span>(<span class='st'>"plumber"</span>, <span class='st'>"01-append"</span>) <span class='op'>%&gt;%</span>
+<span class='fu'><a href='plumb_api.html'>plumb_api</a></span><span class='op'>(</span><span class='st'>"plumber"</span>, <span class='st'>"01-append"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='co'># Add cookie support via `keyring`</span>
-  <span class='fu'><a href='pr_cookie.html'>pr_cookie</a></span>(
-    <span class='kw'>keyring</span>::<span class='fu'>key_get</span>(<span class='st'>"plumber_api"</span>)
-  ) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
+  <span class='fu'><a href='pr_cookie.html'>pr_cookie</a></span><span class='op'>(</span>
+    <span class='fu'>keyring</span><span class='fu'>::</span><span class='fu'>key_get</span><span class='op'>(</span><span class='st'>"plumber_api"</span><span class='op'>)</span>
+  <span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_run.html'>pr_run</a></span><span class='op'>(</span><span class='op'>)</span>
 
 
 <span class='co'>#### -------------------------------- ###</span>
 
 
 <span class='co'>## Save key to a local file</span>
-<span class='kw'>pswd_file</span> <span class='op'>&lt;-</span> <span class='st'>"normal_file.txt"</span>
-<span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='kw'>plumber</span>::<span class='fu'><a href='random_cookie_key.html'>random_cookie_key</a></span>(), file = <span class='kw'>pswd_file</span>)
+<span class='va'>pswd_file</span> <span class='op'>&lt;-</span> <span class='st'>"normal_file.txt"</span>
+<span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='fu'>plumber</span><span class='fu'>::</span><span class='fu'><a href='random_cookie_key.html'>random_cookie_key</a></span><span class='op'>(</span><span class='op'>)</span>, file <span class='op'>=</span> <span class='va'>pswd_file</span><span class='op'>)</span>
 <span class='co'># Make file read-only</span>
-<span class='fu'><a href='https://rdrr.io/r/base/files2.html'>Sys.chmod</a></span>(<span class='kw'>pswd_file</span>, mode = <span class='st'>"0600"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/files2.html'>Sys.chmod</a></span><span class='op'>(</span><span class='va'>pswd_file</span>, mode <span class='op'>=</span> <span class='st'>"0600"</span><span class='op'>)</span>
 
 
 <span class='co'># Load a plumber API</span>
-<span class='fu'><a href='plumb_api.html'>plumb_api</a></span>(<span class='st'>"plumber"</span>, <span class='st'>"01-append"</span>) <span class='op'>%&gt;%</span>
+<span class='fu'><a href='plumb_api.html'>plumb_api</a></span><span class='op'>(</span><span class='st'>"plumber"</span>, <span class='st'>"01-append"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='co'># Add cookie support and retrieve secret key from file</span>
-  <span class='fu'><a href='pr_cookie.html'>pr_cookie</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span>(<span class='kw'>pswd_file</span>, warn = <span class='fl'>FALSE</span>)
-  ) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
-}
+  <span class='fu'><a href='pr_cookie.html'>pr_cookie</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span><span class='op'>(</span><span class='va'>pswd_file</span>, warn <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+  <span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_run.html'>pr_run</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

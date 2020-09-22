@@ -96,12 +96,6 @@ available serializers in plumber is global." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -185,9 +179,9 @@ serializes R objects into JSON before returning them to the user. The list of
 available serializers in plumber is global.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>register_serializer</span>(<span class='kw'>name</span>, <span class='kw'>serializer</span>, verbose = <span class='fl'>TRUE</span>)
+    <pre class="usage"><span class='fu'>register_serializer</span><span class='op'>(</span><span class='va'>name</span>, <span class='va'>serializer</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='fu'>registered_serializers</span>()</pre>
+<span class='fu'>registered_serializers</span><span class='op'>(</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -227,16 +221,16 @@ See <code><a href='https://rdrr.io/r/base/print.html'>print(serializer_json)</a>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># `serializer_json()` calls `serializer_content_type()` and supplies a serialization function</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>serializer_json</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>serializer_json</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; function (..., type = "application/json") 
 #&gt; {
 #&gt;     serializer_content_type(type, function(val) {
 #&gt;         toJSON(val, ...)
 #&gt;     })
 #&gt; }
-#&gt; &lt;bytecode: 0x7ff886435358&gt;
+#&gt; &lt;bytecode: 0x7fa99787b8b0&gt;
 #&gt; &lt;environment: namespace:plumber&gt;</div><div class='input'><span class='co'># serializer_content_type() calls `serializer_headers()` and supplies a serialization function</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>serializer_content_type</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>serializer_content_type</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; function (type, serialize_fn = identity) 
 #&gt; {
 #&gt;     if (missing(type)) {
@@ -247,7 +241,7 @@ See <code><a href='https://rdrr.io/r/base/print.html'>print(serializer_json)</a>
 #&gt;     stopifnot(nchar(type) &gt; 0)
 #&gt;     serializer_headers(list(`Content-Type` = type), serialize_fn)
 #&gt; }
-#&gt; &lt;bytecode: 0x7ff886440400&gt;
+#&gt; &lt;bytecode: 0x7fa997876720&gt;
 #&gt; &lt;environment: namespace:plumber&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

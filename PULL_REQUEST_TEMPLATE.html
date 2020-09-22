@@ -92,12 +92,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -198,11 +192,11 @@
 <a href="#minimal-reproducible-example" class="anchor"></a>Minimal reproducible example</h2>
 <p>Finally, please include a minimal reprex. The goal of a reprex is to make it as easy as possible for me to recreate your problem so that I can fix it. If you’ve never heard of a reprex before, start by reading <a href="https://github.com/jennybc/reprex#what-is-a-reprex" class="uri">https://github.com/jennybc/reprex#what-is-a-reprex</a>, and follow the advice further down the page. Do NOT include session info unless it’s explicitly asked for, or you’ve used <code>reprex::reprex(..., si = TRUE)</code> to hide it away.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw">reprex</span>::<span class="fu">reprex</span>({
-  <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://www.rplumber.io">plumber</a></span>)
+<span class="fu">reprex</span><span class="fu">::</span><span class="fu">reprex</span><span class="op">(</span><span class="op">{</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.rplumber.io">plumber</a></span><span class="op">)</span>
   <span class="co"># insert reprex here</span>
 
-})</pre></div>
+<span class="op">}</span><span class="op">)</span></pre></div>
 <p>Delete these instructions once you have read them.</p>
 <hr>
 <p>Brief description of the original problem and the approach behind your solution.</p>

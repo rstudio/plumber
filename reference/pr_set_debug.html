@@ -94,12 +94,6 @@ The debug value is enabled by default for interactive() sessions." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -181,7 +175,7 @@ The debug value is enabled by default for interactive() sessions." />
 The <code>debug</code> value is enabled by default for <code><a href='https://rdrr.io/r/base/interactive.html'>interactive()</a></code> sessions.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pr_set_debug</span>(<span class='kw'>pr</span>, debug = <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>())</pre>
+    <pre class="usage"><span class='fu'>pr_set_debug</span><span class='op'>(</span><span class='va'>pr</span>, debug <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -201,19 +195,19 @@ The <code>debug</code> value is enabled by default for <code><a href='https://rd
     <p>The Plumber router with the new debug setting.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Will contain the original error message</span>
-<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'>pr_set_debug</span>(<span class='fl'>TRUE</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_handle.html'>pr_get</a></span>(<span class='st'>"/boom"</span>, <span class='fu'>function</span>() <span class='fu'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span>(<span class='st'>"boom"</span>)) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
+<span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>pr_set_debug</span><span class='op'>(</span><span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_handle.html'>pr_get</a></span><span class='op'>(</span><span class='st'>"/boom"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"boom"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_run.html'>pr_run</a></span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='co'># Will NOT contain an error message</span>
-<span class='fu'><a href='pr.html'>pr</a></span>() <span class='op'>%&gt;%</span>
-  <span class='fu'>pr_set_debug</span>(<span class='fl'>FALSE</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_handle.html'>pr_get</a></span>(<span class='st'>"/boom"</span>, <span class='fu'>function</span>() <span class='fu'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span>(<span class='st'>"boom"</span>)) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_run.html'>pr_run</a></span>()
-}
+<span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>pr_set_debug</span><span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_handle.html'>pr_get</a></span><span class='op'>(</span><span class='st'>"/boom"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"boom"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='pr_run.html'>pr_run</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -47,12 +47,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -141,35 +135,35 @@
 <span class="co">#' Echo the parameter that was sent in</span>
 <span class="co">#' @param msg The message to echo back.</span>
 <span class="co">#' @get /echo</span>
-<span class="fu">function</span>(<span class="kw">msg</span>=<span class="st">""</span>){
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(msg = <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"The message is: '"</span>, <span class="kw">msg</span>, <span class="st">"'"</span>))
-}
+<span class="kw">function</span><span class="op">(</span><span class="va">msg</span><span class="op">=</span><span class="st">""</span><span class="op">)</span><span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>msg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"The message is: '"</span>, <span class="va">msg</span>, <span class="st">"'"</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
 
 <span class="co">#' Plot out data from the iris dataset</span>
 <span class="co">#' @param spec If provided, filter the data to only this species (e.g. 'setosa')</span>
 <span class="co">#' @get /plot</span>
 <span class="co">#' @serializer png</span>
-<span class="fu">function</span>(<span class="kw">spec</span>){
-  <span class="kw">myData</span> <span class="op">&lt;-</span> <span class="kw">iris</span>
-  <span class="kw">title</span> <span class="op">&lt;-</span> <span class="st">"All Species"</span>
+<span class="kw">function</span><span class="op">(</span><span class="va">spec</span><span class="op">)</span><span class="op">{</span>
+  <span class="va">myData</span> <span class="op">&lt;-</span> <span class="va">iris</span>
+  <span class="va">title</span> <span class="op">&lt;-</span> <span class="st">"All Species"</span>
 
   <span class="co"># Filter if the species was specified</span>
-  <span class="co">if</span> (<span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/missing.html">missing</a></span>(<span class="kw">spec</span>)){
-    <span class="kw">title</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Only the '"</span>, <span class="kw">spec</span>, <span class="st">"' Species"</span>)
-    <span class="kw">myData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(<span class="kw">iris</span>, <span class="kw">Species</span> <span class="op">==</span> <span class="kw">spec</span>)
-  }
+  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/missing.html">missing</a></span><span class="op">(</span><span class="va">spec</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
+    <span class="va">title</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Only the '"</span>, <span class="va">spec</span>, <span class="st">"' Species"</span><span class="op">)</span>
+    <span class="va">myData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">iris</span>, <span class="va">Species</span> <span class="op">==</span> <span class="va">spec</span><span class="op">)</span>
+  <span class="op">}</span>
 
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">myData</span><span class="op">$</span><span class="kw">Sepal.Length</span>, <span class="kw">myData</span><span class="op">$</span><span class="kw">Petal.Length</span>,
-       main=<span class="kw">title</span>, xlab=<span class="st">"Sepal Length"</span>, ylab=<span class="st">"Petal Length"</span>)
-}</pre></div>
+  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">myData</span><span class="op">$</span><span class="va">Sepal.Length</span>, <span class="va">myData</span><span class="op">$</span><span class="va">Petal.Length</span>,
+       main<span class="op">=</span><span class="va">title</span>, xlab<span class="op">=</span><span class="st">"Sepal Length"</span>, ylab<span class="op">=</span><span class="st">"Petal Length"</span><span class="op">)</span>
+<span class="op">}</span></pre></div>
 <p>This file defines two Plumber “endpoints.” One is hosted at the path <code>/echo</code> and simply echoes the message passed in; the other is hosted at the path <code>/plot</code> and returns an image showing a simple R plot.</p>
 <p>If you haven’t installed <code>plumber</code> yet, see the <a href="./index.html#installation">installation section</a>. Once you have <code>plumber</code> installed, you can use the <code><a href="../reference/pr.html">pr()</a></code> function to translate this R file into a Plumber API:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw">root</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr.html">pr</a></span>(<span class="st">"plumber.R"</span>)
-<span class="kw">root</span></pre></div>
+<span class="va">root</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"plumber.R"</span><span class="op">)</span>
+<span class="va">root</span></pre></div>
 <p>The <code>pr</code> object now encapsulates all the logic represented in your <code>plumber.R</code> file. The next step is to bring the API to life using the <code><a href="../reference/pr_run.html">pr_run()</a></code> method:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw">root</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span>()</pre></div>
+<span class="va">root</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span><span class="op">)</span></pre></div>
 <p>You should see a message about your API running on your computer on port <code>8000</code>. The API will continue running in your R session until you press the <code>Esc</code> key. If you’re running this code locally on your personal machine, you should be able to open <a href="http://localhost:8000/echo">http://localhost:8000/echo</a> or <a href="http://localhost:8000/plot">http://localhost:8000/plot</a> in a web browser to test your new API endpoints.</p>
 <blockquote>
 <p>If you’re using a tool like RStudio Server to run your R code on a remote machine, you should see the <a href="./security.html#networking">networking section</a> for help with visiting your API.</p>
@@ -195,9 +189,9 @@
 <div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="co">#' @get /hello</span>
 <span class="co">#' @serializer html</span>
-<span class="fu">function</span>(){
+<span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span>
   <span class="st">"&lt;html&gt;&lt;h1&gt;hello world&lt;/h1&gt;&lt;/html&gt;"</span>
-}</pre></div>
+<span class="op">}</span></pre></div>
 <p>This endpoint would produce something like the following, when visited. It also sets the appropriate <code>Content-Type</code> header so that a browser that visits this page would know to render the result as HTML.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">&lt;html&gt;&lt;h1&gt;</span>hello world<span class="kw">&lt;/h1&gt;&lt;/html&gt;</span></span></code></pre></div>
 <p>You can even provide your own custom serializers and define how to translate the R object produced by your endpoint into the bits that will produce Plumber’s HTTP response.</p>

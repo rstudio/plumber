@@ -95,12 +95,6 @@ This is useful for graphics device serializers which need a preexec and postexec
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -183,12 +177,12 @@ This is useful for graphics device serializers which need a preexec and postexec
 This is useful for graphics device serializers which need a <code>preexec</code> and <code>postexec</code> hook to capture the graphics output.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>endpoint_serializer</span>(
-  <span class='kw'>serializer</span>,
-  preexec_hook = <span class='kw'>NULL</span>,
-  postexec_hook = <span class='kw'>NULL</span>,
-  aroundexec_hook = <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>endpoint_serializer</span><span class='op'>(</span>
+  <span class='va'>serializer</span>,
+  preexec_hook <span class='op'>=</span> <span class='cn'>NULL</span>,
+  postexec_hook <span class='op'>=</span> <span class='cn'>NULL</span>,
+  aroundexec_hook <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -220,7 +214,7 @@ These hooks are specific to a single <a href='PlumberEndpoint.html'>PlumberEndpo
     <pre class="examples"><div class='input'><span class='co'># The definition of `serializer_device` returns</span>
 <span class='co'># * a `serializer_content_type` serializer</span>
 <span class='co'># * `aroundexec` hook</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>serializer_device</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>serializer_device</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; function (type, dev_on, dev_off = grDevices::dev.off) 
 #&gt; {
 #&gt;     stopifnot(!missing(type))
@@ -275,7 +269,7 @@ These hooks are specific to a single <a href='PlumberEndpoint.html'>PlumberEndpo
 #&gt;             }
 #&gt;         })
 #&gt; }
-#&gt; &lt;bytecode: 0x7ff88647e208&gt;
+#&gt; &lt;bytecode: 0x7fa9978bcf18&gt;
 #&gt; &lt;environment: namespace:plumber&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
