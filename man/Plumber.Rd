@@ -400,7 +400,6 @@ See also: \code{\link[=pr_handle]{pr_handle()}}, \code{\link[=pr_get]{pr_get()}}
   serializer,
   parsers,
   endpoint,
-  environment,
   ...
 )}\if{html}{\out{</div>}}
 }
@@ -422,9 +421,7 @@ See also: \code{\link[=pr_handle]{pr_handle()}}, \code{\link[=pr_get]{pr_get()}}
 
 \item{\code{endpoint}}{a \code{PlumberEndpoint} object.}
 
-\item{\code{environment}}{an R environment where to evaluate handle handler.}
-
-\item{\code{...}}{additional arguments for \link{PlumberEndpoint} \code{new} method (namely \code{lines}, \code{params}, \code{comments}, \code{responses} and \code{tags}).}
+\item{\code{...}}{additional arguments for \link{PlumberEndpoint} \code{new} method (namely \code{lines}, \code{params}, \code{comments}, \code{responses} and \code{tags}. Excludes \code{envir}).}
 }
 \if{html}{\out{</div>}}
 }
