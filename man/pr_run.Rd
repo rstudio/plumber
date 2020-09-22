@@ -26,7 +26,7 @@ pr() \%>\%
   pr_run()
 
 pr() \%>\%
-  pr_run(port = 5762, debug = TRUE)
+  pr_run(port = 5762)
 }
 
 }
