@@ -523,3 +523,13 @@ test_that("routes that don't start with a slash are prepended with a slash", {
   expect_equal(length(pr$endpoints[[1]]), 1L)
   expect_equal(pr$endpoints[[1]][[1]]$path, "/nested/path/here")
 })
+
+test_that("handle method rejects forbidden arguments", {
+  pr <- pr()
+  expect_error(pr$handle("GET", "nested/path/here", function(){}, envir = new.env()),
+               "can not be supplied to", )
+  expect_error(pr$handle("GET", "nested/path/here", function(){}, verbs = "GET"),
+               "can not be supplied to")
+  expect_error(pr$handle("GET", "nested/path/here", function(){}, expr = function(){}),
+               "can not be supplied to")
+})

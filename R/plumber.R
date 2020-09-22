@@ -353,8 +353,10 @@ Plumber <- R6Class(
         if (missing(parsers)) {
           parsers <- private$parsers
         }
-        if ("envir" %in% names(list(...))) {
-          stop("`envir` can not be supplied to `pr$handle()`")
+        forbid <- c("verbs", "expr", "envir")
+        forbid_check <- forbid %in% names(list(...))
+        if (any(forbid_check)) {
+          stop(paste0("`", forbid[forbid_check], "`", collapse = ", "), " can not be supplied to `pr$handle()` method.")
         }
 
         endpoint <- PlumberEndpoint$new(verbs = methods,
