@@ -50,7 +50,7 @@ plumbOneGlobal <- function(fields, argument){
            tagMat <- stri_match(def, regex="^\\s*(\\w+)\\s+(\\S.+)\\s*$")
            name <- tagMat[1,2]
            description <- tagMat[1,3]
-           if(!is.null(fields$tags) && name %in% sapply(fields$tags, "[[", "name")) {
+           if(!is.null(fields$tags) && name %in% unlist(lapply(fields$tags, "[[", "name"))) {
              stop("Error: '", argument, "' - ","Duplicate tag definition specified.")
            }
            fields$tags <- c(fields$tags, list(list(name=name, description=description)))
