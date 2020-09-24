@@ -4,14 +4,14 @@
 \alias{pr_static}
 \title{Add a static route to the \code{plumber} object}
 \usage{
-pr_static(pr, path, direc)
+pr_static(pr, direc, path = "/public")
 }
 \arguments{
 \item{pr}{A Plumber API. Note: The supplied Plumber API object will also be updated in place as well as returned by the function.}
 
-\item{path}{The mounted path location of the static folder}
-
 \item{direc}{The local folder to be served statically}
+
+\item{path}{The mounted path location of the static folder}
 }
 \description{
 Add a static route to the \code{plumber} object
@@ -19,7 +19,7 @@ Add a static route to the \code{plumber} object
 \examples{
 \dontrun{
 pr() \%>\%
-  pr_static("/path", "./my_folder/location") \%>\%
+  pr_static("./my_folder/location", "/path") \%>\%
   pr_run()
 }
 

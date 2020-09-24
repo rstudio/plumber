@@ -57,7 +57,7 @@ test_that("pr_mount mounts router", {
 
 test_that("pr_static mounts a static router", {
   p1 <- pr() %>%
-    pr_static("/ex", system.file("plumber", package = "plumber"))
+    pr_static(system.file("plumber", package = "plumber"), "/ex")
 
   expect_equal(length(p1$mounts), 1)
   expect_equal(names(p1$mounts), "/ex/")

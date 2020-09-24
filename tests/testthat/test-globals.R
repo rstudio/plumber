@@ -24,13 +24,9 @@ test_that("plumbGlobals works", {
              "#' @apiContact contact",
              "#' @apiLicense license",
              "#' @apiVersion version",
-             "#' @apiHost host",
-             "#' @apiBasePath basepath",
-             "#' @apiSchemes schemes",
-             "#' @apiConsumes consumes",
-             "#' @apiProduces produces",
              "#' @apiTag tag description",
-             "#' @apiTag tag2 description2")
+             "#' @apiTag tag2 description2",
+             "#' @apiTag tag3 description in part")
 
   fields <- plumbGlobals(lines)
 
@@ -43,12 +39,22 @@ test_that("plumbGlobals works", {
       license="license",
       version="version"
     ),
-    host="host",
-    basePath="basepath",
-    schemes="schemes",
-    consumes="consumes",
-    produces="produces",
-    tags=data.frame(name=c("tag","tag2"),description=c("description","description2"), stringsAsFactors = FALSE)
+    tags=list(list(name="tag", description="description"),
+              list(name="tag2", description="description2"),
+              list(name="tag3", description="description in part"))
+  ))
+
+  # Test contact and licence object
+  lines <- c('#* @apiContact list(name = "API Support", url = "http://www.example.com/support", email = "support@example.com")',
+             '#* @apiLicense list(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0.html")')
+
+  fields <- plumbGlobals(lines)
+
+  expect_equal(fields, list(
+    info=list(
+      contact=list(name = "API Support", url = "http://www.example.com/support", email = "support@example.com"),
+      license=list(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0.html")
+    )
   ))
 })
 

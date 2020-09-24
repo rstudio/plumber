@@ -32,37 +32,28 @@ plumbOneGlobal <- function(fields, argument){
            fields$info$termsOfService <- def
          },
          apiContact={
+           if (grepl("^list\\(", def)) {
+             def <- eval(parse(text = def))
+           }
            fields$info$contact <- def
          },
          apiLicense={
+           if (grepl("^list\\(", def)) {
+             def <- eval(parse(text = def))
+           }
            fields$info$license <- def
          },
          apiVersion={
            fields$info$version <- def
          },
-         apiHost={
-           fields$host <- def
-         },
-         apiBasePath={
-           fields$basePath <- def
-         },
-         apiSchemes={
-           fields$schemes <- strsplit(def, split="\\s+")[[1]]
-         },
-         apiConsumes={
-           fields$consumes <- strsplit(def, split="\\s+")[[1]]
-         },
-         apiProduces={
-           fields$produces <- strsplit(def, split="\\s+")[[1]]
-         },
          apiTag={
            tagMat <- stri_match(def, regex="^\\s*(\\w+)\\s+(\\S.+)\\s*$")
            name <- tagMat[1,2]
            description <- tagMat[1,3]
-           if(!is.null(fields$tags) && name %in% fields$tags$name) {
+           if(!is.null(fields$tags) && name %in% sapply(fields$tags, "[[", "name")) {
              stop("Error: '", argument, "' - ","Duplicate tag definition specified.")
            }
-           fields$tags <- rbind(fields$tags,data.frame(name=name, description=description, stringsAsFactors = FALSE))
+           fields$tags <- c(fields$tags, list(list(name=name, description=description)))
          })
   fields
 }

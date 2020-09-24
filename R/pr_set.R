@@ -130,11 +130,7 @@ pr_set_debug <- function(pr, debug = interactive()) {
 #' When `TRUE` or a
 #' function, multiple handles will be added to [`Plumber`] object. OpenAPI json
 #' file will be served on paths `/openapi.json` and `/swagger.json`. Documentation
-#' will be served on paths `/__docs__/index.html` and `/__docs__/`. When
-#' using a function, it will receive the Plumber router as the first parameter
-#' and current OpenAPI Specification as the second. This function should return a
-#' list containing OpenAPI Specification.
-#' See \url{http://spec.openapis.org/oas/v3.0.3}
+#' will be served on paths `/__docs__/index.html` and `/__docs__/`.
 #'
 #' @template param_pr
 

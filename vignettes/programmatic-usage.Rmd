@@ -123,7 +123,7 @@ This is the same approach used for defining routers that serve a directory of st
 
 ```r
 pr() %>%
-  pr_static("/assets", "./myfiles") %>%
+  pr_static("./myfiles", "/assets") %>%
   pr_run()
 ```
 

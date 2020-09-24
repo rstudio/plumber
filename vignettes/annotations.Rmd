@@ -1,0 +1,150 @@
+---
+title: "Annotations reference"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Annotations reference}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+source("_helpers.R")
+```
+
+## Annotations {#annotations} 
+
+Annotations are specially-structured comments used in your plumber file to create an API. A full annotation line starts with `#*` or `#'`, then the annotation keyword `@...`, any number of space characters followed by the content. It is recommended to use `#*` to differentiate them from `Roxygen2` annotations.
+
+## Global annotations {#global-annotations} 
+
+Global annotations can be used anywhere in your plumber file. They are independent from other annotations and do not require an expression.
+
+Annotation | Description/References
+-----------| ----------------------
+`@apiTitle` | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object)
+`@apiDescription` | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object)
+`@apiTOS`  | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object)
+`@apiContact` | [Contact Object](http://spec.openapis.org/oas/v3.0.3#contact-object)
+`@apiLicense` | [License Object](http://spec.openapis.org/oas/v3.0.3#license-object)
+`@apiVersion` | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object)
+`@apiTag` | Can be reused to add multiple tags. [Tag Object](http://spec.openapis.org/oas/v3.0.3#tag-object)
+
+##### Annotations example
+
+```{r, eval = FALSE, echo = TRUE}
+#* @apiTitle Sample Pet Store App
+#* @apiDescription This is a sample server for a pet store.
+#* @apiTOS http://example.com/terms/
+#* @apiContact list(name = "API Support", url = "http://www.example.com/support", email = "support@example.com")
+#* @apiLicense list(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0.html")
+#* @apiVersion 1.0.1
+#* @apiTag pet Pets operations
+#* @apiTag toy Toys operations
+```
+
+##### Equivalent programmatic usage
+
+```{r, eval = FALSE, echo = TRUE}
+pr() %>%
+  pr_set_api_spec(function(spec) {
+    spec$info <- list(
+      title = "Sample Pet Store App",
+      description = "This is a sample server for a pet store.",
+      termsOfService = "http://example.com/terms/",
+      contact = list(name = "API Support", url = "http://www.example.com/support", email = "support@example.com"),
+      license = list(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0.html"),
+      version = "1.0.1"
+    )
+    spec$tags <- list(list(name = "pet", description = "Pets operations"), list(name = "toy", description = "Toys operations"))
+    spec
+  })
+```
+
+## Block annotations {#block-annotations} 
+
+A block of annotations is a combination of annotations that create either an [endpoint](./routing-and-input.html#endpoints), a [filter](./routing-and-input.html#filters), a [static file handler](./routing-and-input.html#static-file-handler) or a Plumber object modifier. Block annotations are always followed by an expression.
+
+### Endpoint {#endpoint-block-annotations}
+### Filter {#filter-block-annotations}
+
+Annotation | Argument | Description/References
+-----------| -------- | ----------------------
+`@filter` | `Filter name` | [Filters](./routing-and-input.html#filters)
+
+##### Annotations example
+
+```{r, eval = FALSE, echo = TRUE}
+#* @filter logger
+function(req){
+  cat(as.character(Sys.time()), "-",
+    req$REQUEST_METHOD, req$PATH_INFO, "-",
+    req$HTTP_USER_AGENT, "@", req$REMOTE_ADDR, "\n")
+  plumber::forward()
+}
+```
+
+##### Equivalent programmatic usage
+```{r, eval = FALSE, echo = TRUE}
+pr() %>%
+  pr_filter("logger", function(req){
+    cat(as.character(Sys.time()), "-",
+      req$REQUEST_METHOD, req$PATH_INFO, "-",
+      req$HTTP_USER_AGENT, "@", req$REMOTE_ADDR, "\n")
+    plumber::forward()
+  })
+```
+
+### Static File Handler {#static-block-annotations}
+
+Annotation | Arguments | Description/References
+-----------| --------- | ----------------------
+`@assets` | `Directory`, `Mount path` (Optional) | [Static files](./routing-and-input.html#static-file-handler)
+
+##### Annotations example
+
+```{r, eval = FALSE, echo = TRUE}
+#* @assets ./files/static
+list()
+
+#* @assets ./files/static /static
+list()
+
+#* @assets ./files/static /
+list()
+```
+
+##### Equivalent programmatic usage
+```{r, eval = FALSE, echo = TRUE}
+pr() %>%
+  pr_static("./files/static")
+
+pr() %>%
+  pr_static("./files/static", "/static")
+
+pr() %>%
+  pr_static("./files/static", "/")
+```
+
+### Plumber Object Modifier {#plumber-block-annotations}
+
+Annotation | Arguments | Description/References
+-----------| --------- | ----------------------
+`@plumber` | None | Modify plumber router from plumber file. 
+
+##### Annotations example
+
+```{r, eval = FALSE, echo = TRUE}
+#* @plumber
+function(pr) {
+  pr %>%
+    pr_set_debug(TRUE) %>%
+    pr_set_docs("swagger")
+}
+```
+
+##### Equivalent programmatic usage
+```{r, eval = FALSE, echo = TRUE}
+pr() %>%
+  pr_set_debug(TRUE) %>%
+  pr_set_docs("swagger")
+```

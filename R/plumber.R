@@ -118,7 +118,7 @@ Plumber <- R6Class(
           private$disable_run <- FALSE
         }, add = TRUE)
 
-        for (i in 1:length(private$parsed)){
+        for (i in seq_len(length(private$parsed))) {
           e <- private$parsed[i]
 
           srcref <- attr(e, "srcref")[[1]][c(1,3)]
@@ -827,7 +827,8 @@ Plumber <- R6Class(
       private$docs_info <- list(
         enabled = enabled,
         docs = docs,
-        args = list(...)
+        args = list(...),
+        has_not_been_set = FALSE
       )
     },
     #' @description Set a callback to notify where the API's visual documentation is located.
