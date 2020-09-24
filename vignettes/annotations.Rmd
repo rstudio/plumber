@@ -19,15 +19,15 @@ Annotations are specially-structured comments used in your plumber file to creat
 
 Global annotations can be used anywhere in your plumber file. They are independent from other annotations and do not require an expression.
 
-Annotation | Description/References
------------| ----------------------
-`@apiTitle` | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object)
-`@apiDescription` | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object)
-`@apiTOS`  | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object)
-`@apiContact` | [Contact Object](http://spec.openapis.org/oas/v3.0.3#contact-object)
-`@apiLicense` | [License Object](http://spec.openapis.org/oas/v3.0.3#license-object)
-`@apiVersion` | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object)
-`@apiTag` | Can be reused to add multiple tags. [Tag Object](http://spec.openapis.org/oas/v3.0.3#tag-object)
+Annotation | Argument | Description/References
+-----------| -------- | ----------------------
+`@apiTitle` | `Title` | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object)
+`@apiDescription` | `Description` | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object)
+`@apiTOS` | `TOS link` | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object)
+`@apiContact` | `Contact object` | [Contact Object](http://spec.openapis.org/oas/v3.0.3#contact-object)
+`@apiLicense` | `License object` | [License Object](http://spec.openapis.org/oas/v3.0.3#license-object)
+`@apiVersion` | `Version` | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object)
+`@apiTag` | `Tag` `Description` | Can be repeated to add multiple tags. [Tag Object](http://spec.openapis.org/oas/v3.0.3#tag-object)
 
 ##### Annotations example
 
@@ -65,6 +65,55 @@ pr() %>%
 A block of annotations is a combination of annotations that create either an [endpoint](./routing-and-input.html#endpoints), a [filter](./routing-and-input.html#filters), a [static file handler](./routing-and-input.html#static-file-handler) or a Plumber object modifier. Block annotations are always followed by an expression.
 
 ### Endpoint {#endpoint-block-annotations}
+
+Annotation | Argument | Description/References
+-----------| -------- | ----------------------
+`@get`, `@post`, `@put`, `@use`, `@delete`, `@head`, `@options`, `@patch` | `Path` | [Endpoints](./routing-and-input.html#endpoints), [Dynamic Routes](./routing-and-input.html#dynamic-routes), [Typed Dynamic Routes](./routing-and-input.html#typed-dynamic-routes)
+`@serializer` | `Alias` [`Args list]`] | Some serializers accept arguments. See [serializers article](./rendering-output.html#serializers) and [serializers reference](../reference/serializers.html). Aliases : `r paste0("<code>", registered_serializers(), "</code>", collapse = ", ")` from [`registered_serializers()`](../reference/register_serializer.html).
+`@parser` | `Alias` `[Args list]` | Some parsers accept arguments. See [parsers reference](../reference/parsers.html). Can be repeated to allow multiple parsers on the same endpoint. Aliases : `r paste0("<code>", registered_parsers(), "</code>", collapse = ", ")` from [`registered_parsers()`](../reference/register_parser.html).
+`@param` | `Name`[`:Type` `Description`] | Enclose `Type` between square brackets `[]` to indicate it is an array. Can be repeated to define different parameters.
+`@response` | `Name` `Description` | Simple [Response object](http://spec.openapis.org/oas/v3.0.3#response-object). Can be repeated to define different responses.
+`@tags` | `Tag` | Can be repeated to add multiple tags. [Tag field](http://spec.openapis.org/oas/v3.0.3#operation-object)
+`@preempt` | `Filter` | Specify that this endpoint has to execute before `Filter`. [Filters](./programmatic-usage.html#defining-filters)
+None | `Comments` | Lines without annotation will be mapped to [Summary field](http://spec.openapis.org/oas/v3.0.3#fixed-fields-6).
+
+
+#### More details on `@param`
+Types are used to define API inputs. You can use most of them in dynamic routes. Note that Plumber first look in block expression to set endpoint parameters names, types and default value. Then `@param` annotations and dynamic route/path defined parameters will override Plumber guesses from block expression.
+
+Plumber parameter type to OpenAPI type refenrence.
+
+Type | OpenApi | Availability
+---------------- | ----------- | ---------
+`bool`, `boolean`, `logical` | `boolean` | `query`, `path`
+`dbl`, `double`, `float`, `number`, `numeric` | `number` `format:double` | `query`, `path`
+`int`, `integer` | `integer` `format:int64` | `query`, `path`
+`chr`, `str`, `character`, `string` | `string` | `query`, `path`
+`list`, `data.frame`, `df`, `object` | `object` | `body`
+`file`, `binary` | `string` `format:binary` | `body`
+
+##### Annotations example
+
+```{r, eval = FALSE, echo = TRUE}
+#* @get /dyn/<name:str>/<age:[int]>/route
+#* @serializer text
+#* @parser none
+#* @response 200 A sentence
+function(name, age) {
+  sprintf("%s is %i years old", name, age)
+}
+
+#* @post /upload_file
+#* @serializer rds
+#* @parser multi
+#* @parser rds
+#* @param f:file
+#* Upload an rds file and return the object
+function(f) {
+  as_attachment(f[[1]], names(f)[1])
+}
+```
+
 ### Filter {#filter-block-annotations}
 
 Annotation | Argument | Description/References
@@ -98,7 +147,7 @@ pr() %>%
 
 Annotation | Arguments | Description/References
 -----------| --------- | ----------------------
-`@assets` | `Directory`, `Mount path` (Optional) | [Static files](./routing-and-input.html#static-file-handler)
+`@assets` | `Directory` [`Mount path`] | [Static files](./routing-and-input.html#static-file-handler)
 
 ##### Annotations example
 

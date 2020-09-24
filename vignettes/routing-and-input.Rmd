@@ -288,7 +288,10 @@ Some web browsers impose limitations on the length of a URL. Internet Explorer, 
 
 Another way to provide additional information inside an HTTP request is using the message body. Effectively, once a client specifies all the metadata about a request (the path it's trying to reach, some HTTP headers, etc.) it can then provide a message body. The maximum size of a request body depends largely on the technologies involved (client, proxies, etc.) but is typically at least 2MB -- much larger than a query string. This approach is most commonly seen with `PUT` and `POST` requests, though you could encounter it with other HTTP methods.
 
-Plumber will attempt to parse the request body in one of two ways: if it appears that the message is JSON, then Plumber will parse the body as a JSON message; otherwise it will decode it as a standard query string. Any fields provided in the message body in either format will be passed through as parameters to the function.
+Plumber will attempt to parse the request body in one using allowed [parsers](../reference/parsers.html). Any fields provided in the message body will be passed through as parameters to the function.
+
+#### Files handling note
+When dealing with binary parameters, Plumber will return a named list of raw vector. The names in the list are the original uploaded filenames. Raw values are binary content of each file.
 
 Unfortunately, crafting a request with a message body requires a bit more work than making a `GET` request with a query string from your web browser, but you can use tools like `curl` on the command line or the [httr R package](https://github.com/hadley/httr/). We'll use `curl` for the examples below.
 
