@@ -332,7 +332,7 @@ Plumber <- R6Class(
     #' @param serializer a serializer function.
     #' @param parsers a named list of parsers.
     #' @param endpoint a `PlumberEndpoint` object.
-    #' @param ... additional arguments for `PlumberEndpoint` creation
+    #' @param ... additional arguments for [PlumberEndpoint] `new` method (namely `lines`, `params`, `comments`, `responses` and `tags`. Excludes `envir`).
     #' @examples
     #' \dontrun{
     #' pr <- pr()
@@ -342,7 +342,7 @@ Plumber <- R6Class(
     #' }
     handle = function(methods, path, handler, preempt, serializer, parsers, endpoint, ...) {
       epdef <- !missing(methods) || !missing(path) || !missing(handler) || !missing(serializer) || !missing(parsers)
-      if (!missing(endpoint) && epdef){
+      if (!missing(endpoint) && epdef) {
         stop("You must provide either the components for an endpoint (handler and serializer) OR provide the endpoint yourself. You cannot do both.")
       }
 
@@ -353,8 +353,18 @@ Plumber <- R6Class(
         if (missing(parsers)) {
           parsers <- private$parsers
         }
+        forbid <- c("verbs", "expr", "envir")
+        forbid_check <- forbid %in% names(list(...))
+        if (any(forbid_check)) {
+          stop(paste0("`", forbid[forbid_check], "`", collapse = ", "), " can not be supplied to `pr$handle()` method.")
+        }
 
-        endpoint <- PlumberEndpoint$new(methods, path, handler, private$envir, serializer, parsers, ...)
+        endpoint <- PlumberEndpoint$new(verbs = methods,
+                                        path = path,
+                                        expr = handler,
+                                        envir = private$envir,
+                                        serializer = serializer,
+                                        parsers = parsers, ...)
       }
       private$addEndpointInternal(endpoint, preempt)
     },
