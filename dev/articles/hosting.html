@@ -17,7 +17,9 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Hosting">
+<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Hosting">
 <meta property="og:description" content="plumber">
 <meta property="og:image" content="https://www.rplumber.io/logo.svg">
 <meta name="robots" content="noindex">
@@ -39,18 +41,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.7.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.0.0.9999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -61,9 +57,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li class="divider">
-    <li class="dropdown-header">Creating APIs</li>
-    <li>
+<li>
       <a href="../articles/introduction.html">Introduction</a>
     </li>
     <li>
@@ -107,7 +101,13 @@
   </a>
 </li>
       </ul>
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
+      </form>
+      
+    </div>
 <!--/.nav-collapse -->
   </div>
 <!--/.container -->
@@ -144,27 +144,15 @@
 <h2 class="hasAnchor">
 <a href="#digitalocean" class="anchor"></a>DigitalOcean</h2>
 <p><a href="https://m.do.co/c/add0b50f54c4">DigitalOcean</a> is an easy-to-use Cloud Computing provider. They offer a simple way to spin up a Linux virtual machine and access it remotely. You can choose what size machine you want to run – with options ranging from small machines with 512MB of RAM for a few dollars a month up to large machines with dozens of GB of RAM – and only pay for it while it’s online.</p>
-<p>Plumber includes helper functions that enable you to automatically provision a Plumber server and deploy your APIs to it. So in order to setup a Plumber server running on DigitalOcean, you’ll follow these steps:</p>
-<ol style="list-style-type: decimal">
-<li>
-<a href="https://m.do.co/c/add0b50f54c4">Create a DigitalOcean account</a>.</li>
-<li>Setup an SSH key and deploy the public portion to DigitalOcean so you’ll be able to login to your server.</li>
-<li>Install the <code>analogsea</code> R package and run a test command like <code><a href="https://rdrr.io/pkg/analogsea/man/droplets.html">analogsea::droplets()</a></code> to confirm that it’s able to connect to your DigitalOcean account.</li>
-<li>Run <code>mydrop &lt;- plumber::do_provision()</code>. This will start a virtual machine (or “droplet”, as DigitalOcean calls them) and install Plumber and all the necessary prerequisite software. Once the provisioning is complete, you should be able to access port <code>8000</code> on your server’s IP and see a response from Plumber.</li>
-<li>Install any R packages on the server that your API requires using <code><a href="https://rdrr.io/pkg/analogsea/man/debian.html">analogsea::install_r_package()</a></code>.</li>
-<li>You can use <code><a href="../reference/do_deploy_api.html">plumber::do_deploy_api()</a></code> to deploy or update your own custom APIs to a particular port on your server.</li>
-<li>(Optional) <a href="http://tres.tl/dns">Setup a domain name</a> for your Plumber server so you can use www.myplumberserver.com instead of the server’s IP address.</li>
-<li>(Optional) Configure SSL</li>
-</ol>
-<p>Getting everything connected the first time can be a bit of work, but once you have <code>analogsea</code> connected to your DigitalOcean account, you’re now able to spin up new Plumber servers in DigitalOcean hosting your APIs with just a couple of R commands. You can even write <a href="https://github.com/trestletech/plumber/blob/d9f4acc163168ae179c55e781cfa43f03551f825/inst/hosted-new.R">scripts that provision an entire Plumber server</a> with multiple APIs associated.</p>
+<p>To deploy your Plumber API to DigitalOcean, please check out the <code>plumber</code> companion package <a href="https://github.com/meztez/plumberDeploy"><code>plumberDeploy</code></a>.</p>
 </div>
 <div id="rstudio-connect" class="section level2">
 <h2 class="hasAnchor">
 <a href="#rstudio-connect" class="anchor"></a>RStudio Connect</h2>
-<p><a href="https://www.rstudio.com/products/connect/">RStudio Connect</a> is an enterprise publishing platform from RStudio. It supports push-button publishing from the RStudio IDE of a variety of R content types including Plumber APIs. Unlike all the other options listed here, RStudio Connect automatically manages the dependent packages and files your API has and recreates an environment closely mimicking your local development environment on the server.</p>
+<p><a href="https://rstudio.com/products/connect/">RStudio Connect</a> is an enterprise publishing platform from RStudio. It supports push-button publishing from the RStudio IDE of a variety of R content types including Plumber APIs. Unlike all the other options listed here, RStudio Connect automatically manages the dependent packages and files your API has and recreates an environment closely mimicking your local development environment on the server.</p>
 <p>RStudio Connect automatically manages the number of R processes necessary to handle the current load and balances incoming traffic across all available processes. It can also shut down idle processes when they’re not in use. This allows you to run the appropriate number of R processes to scale your capacity to accommodate the current load.</p>
 <blockquote>
-<p>Conflict of interest: the primary author of plumber and this book works for RStudio on RStudio Connect.</p>
+<p>Conflict of interest: the primary authors of <code>plumber</code> work for RStudio.</p>
 </blockquote>
 </div>
 <div id="docker" class="section level2">
@@ -172,17 +160,17 @@
 <a href="#docker" class="anchor"></a>Docker (Basic)</h2>
 <p><a href="https://docker.io">Docker</a> is a platform built on top of Linux Containers that allow you to run processes in an isolated environment; that environment might have certain resources/software pre-configured or may emulate a particular Linux environment like Ubuntu 14.04 or CentOS 7.3.</p>
 <p>We won’t delve into the details of Docker or how to setup or install everything on your system. Docker provides some <a href="https://docs.docker.com/">great resources</a> for those who are looking to get started. Here we’ll assume that you have Docker installed and you’re familiar with the basic commands required to spin up a container.</p>
-<p>In this article, we’ll take advantage of the <a href="https://hub.docker.com/r/trestletech/plumber/">trestletech/plumber</a> Docker image that bundles a recent version of R with the most recent version of plumber pre-installed (the underlying R image is courtesy of the <a href="https://github.com/rocker-org/rocker">rocker</a> project). You can get this image with a</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">docker</span> pull trestletech/plumber</span></code></pre></div>
+<p>In this article, we’ll take advantage of the <a href="https://hub.docker.com/r/rstudio/plumber/">rstudio/plumber</a> Docker image that bundles a recent version of R with the most recent version of plumber pre-installed (the underlying R image is courtesy of the <a href="https://github.com/rocker-org/rocker">rocker</a> project). You can get this image with a</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">docker</span> pull rstudio/plumber</span></code></pre></div>
 <p>Remember that this will get you the current snapshot of Plumber and will continue to use that image until you run <code>pull</code> again.</p>
 <div id="default-dockerfile" class="section level3">
 <h3 class="hasAnchor">
 <a href="#default-dockerfile" class="anchor"></a>Default Dockerfile</h3>
-<p>We’ll start by just running a single Plumber application in Docker just to see things at work. By default, the <code>trestletech/plumber</code> image will take the first argument after the image name as the name of the file that you want to <code><a href="../reference/plumb.html">plumb()</a></code> and serve on port <code>8000</code>. So right away you can run one of the examples that’s included in plumber as it is already installed on the image.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">docker</span> run --rm -p 8000:8000 trestletech/plumber</span></code></pre></div>
+<p>We’ll start by just running a single Plumber application in Docker just to see things at work. By default, the <code>rstudio/plumber</code> image will take the first argument after the image name as the name of the file that you want to <code><a href="../reference/plumb.html">plumb()</a></code> and serve on port <code>8000</code>. So right away you can run one of the examples that’s included in plumber as it is already installed on the image.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">docker</span> run --rm -p 8000:8000 rstudio/plumber</span></code></pre></div>
 <p>which is the same as:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">docker</span> run --rm -p 8000:8000 trestletech/plumber \</span>
-<span id="cb3-2"><a href="#cb3-2"></a>  /usr/local/lib/R/site-library/plumber/examples/04-mean-sum/plumber.R</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">docker</span> run --rm -p 8000:8000 rstudio/plumber \</span>
+<span id="cb3-2"><a href="#cb3-2"></a>  /usr/local/lib/R/site-library/plumber/plumber/04-mean-sum/plumber.R</span></code></pre></div>
 <ul>
 <li>
 <code>docker run</code> tells Docker to run a new container</li>
@@ -191,48 +179,48 @@
 <li>
 <code>-p 8000:8000</code> says to map port 8000 from the plumber container (which is where we’ll run the server) to port 8000 of your local machine</li>
 <li>
-<code>trestletech/plumber</code> is the name of the image we want to run</li>
+<code>rstudio/plumber</code> is the name of the image we want to run</li>
 <li>
-<code>/usr/local/lib/R/site-library/plumber/examples/03-mean-sum/plumber.R</code> is the path <strong>inside of the Docker container</strong> to the Plumber file you want to host. You’ll note that you do not need plumber installed on your host machine for this to work, nor does the path <code>/usr/local/...</code> need to exist on your host machine. This references the path inside of the docker container where the R file you want to <code><a href="../reference/plumb.html">plumb()</a></code> can be found. This <code>mean-sum</code> path is the default path that the image uses if you don’t specify one yourself.</li>
+<code>/usr/local/lib/R/site-library/plumber/plumber/03-mean-sum/plumber.R</code> is the path <strong>inside of the Docker container</strong> to the Plumber file you want to host. You’ll note that you do not need plumber installed on your host machine for this to work, nor does the path <code>/usr/local/...</code> need to exist on your host machine. This references the path inside of the docker container where the R file you want to <code><a href="../reference/plumb.html">plumb()</a></code> can be found. This <code>mean-sum</code> path is the default path that the image uses if you don’t specify one yourself.</li>
 </ul>
 <p>This will ask Plumber to <code>plumb</code> and <code>run</code> the file you specified on port 8000 of that new container. Because you used the <code>-p</code> argument, port 8000 of your local machine will be forwarded into your container. You can test this by running this on the machine where Docker is running: <code>curl localhost:8000/mean</code>, or if you know the IP address of the machine where Docker is running, you could visit it in a web browser. The <code>/mean</code> path is one that’s defined in the plumber file we just specified – you should get an single number in an array back (<code>[-0.1993]</code>).</p>
 <p>If that works, you can try using one of your own plumber files in this arrangement. Keep in mind that the file you want to run <strong>must</strong> be available inside of the container and you must specify the path to that file as it exists inside of the container. Keep it simple for now – use a plumber file that doesn’t require any additional R packages or depend on any other files outside of the plumber definition.</p>
 <p>For instance if you have a plumber file saved in your current directory called <code>api.R</code>, you could use the following command</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">docker</span> run --rm -p 8000:8000 -v <span class="kw">`</span><span class="bu">pwd</span><span class="kw">`</span>/api.R:/plumber.R trestletech/plumber /plumber.R</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">docker</span> run --rm -p 8000:8000 -v <span class="kw">`</span><span class="bu">pwd</span><span class="kw">`</span>/api.R:/plumber.R rstudio/plumber /plumber.R</span></code></pre></div>
 <p>You’ll notice that we used the <code>-v</code> argument to specify a “volume” that should be mapped from our host machine into the Docker container. We defined that the location of that file should be at <code>/plumber.R</code>, so that’s the argument we give last to tell the container where to look for the plumber definition. You can use this same technique to share a whole directory instead of just passing in a single R file; this approach is useful if your Plumber API depends on other files.</p>
-<p>You can also use the <code>trestletech/plumber</code> image just like you use any other. For example, if you want to start a container based on this image and poke around in a bash shell:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="ex">docker</span> run -it --rm --entrypoint /bin/bash trestletech/plumber</span></code></pre></div>
-<p>This can be a handy way to debug problems. Prepare the command that you think should work then add <code>--entrypoint /bin/bash</code> before <code>trestletech/plumber</code> and explore a bit. Alternatively, you can try to run the R process and spawn the plumber application yourself and see where things go wrong (often a missing package or missing file).</p>
+<p>You can also use the <code>rstudio/plumber</code> image just like you use any other. For example, if you want to start a container based on this image and poke around in a bash shell:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="ex">docker</span> run -it --rm --entrypoint /bin/bash rstudio/plumber</span></code></pre></div>
+<p>This can be a handy way to debug problems. Prepare the command that you think should work then add <code>--entrypoint /bin/bash</code> before <code>rstudio/plumber</code> and explore a bit. Alternatively, you can try to run the R process and spawn the plumber application yourself and see where things go wrong (often a missing package or missing file).</p>
 </div>
 <div id="custom-dockerfiles" class="section level3">
 <h3 class="hasAnchor">
 <a href="#custom-dockerfiles" class="anchor"></a>Custom Dockerfiles</h3>
-<p>You can build upon the <code>trestletech/plumber</code> image and build your own Docker image by writing your own Dockerfile. Dockerfiles have a vast array of options and possible configurations, so <a href="https://docs.docker.com/engine/reference/builder/">see the official docs</a> if you want to learn more about any of these options.</p>
+<p>You can build upon the <code>rstudio/plumber</code> image and build your own Docker image by writing your own Dockerfile. Dockerfiles have a vast array of options and possible configurations, so <a href="https://docs.docker.com/engine/reference/builder/">see the official docs</a> if you want to learn more about any of these options.</p>
 <p>A couple of commands that are relevant here:</p>
 <ul>
 <li>
 <code>RUN</code> runs a command and persists the side-effects in the Docker image you’re building. So if you want to build a new image that has the <code>broom</code> package, you could add a line in your Dockerfile that says <code>RUN R -e "install.packages('broom')"</code> which would make the <code>broom</code> package available in your new Docker image.</li>
 <li>
-<code>ENTRYPOINT</code> is the command to run when starting the image. <code>trestletech/plumber</code> specifies an entrypoint that starts R, <code><a href="../reference/plumb.html">plumb()</a></code>s a file, then <code>run()</code>s the router. If you want to change how plumber starts, or run some extra commands (like add a global processor) before you run the router, you’ll need to provide a custom <code>ENTRYPOINT</code>.</li>
+<code>ENTRYPOINT</code> is the command to run when starting the image. <code>rstudio/plumber</code> specifies an entrypoint that starts R, <code><a href="../reference/plumb.html">plumb()</a></code>s a file, then <code>run()</code>s the router. If you want to change how plumber starts, or run some extra commands (like add a global processor) before you run the router, you’ll need to provide a custom <code>ENTRYPOINT</code>.</li>
 <li>
-<code>CMD</code> these are the default arguments to provide to <code>ENTRYPOINT</code>. <code>trestletech/plumber</code> uses only the first argument as the name of the file that you want to <code><a href="../reference/plumb.html">plumb()</a></code>.</li>
+<code>CMD</code> these are the default arguments to provide to <code>ENTRYPOINT</code>. <code>rstudio/plumber</code> uses only the first argument as the name of the file that you want to <code><a href="../reference/plumb.html">plumb()</a></code>.</li>
 </ul>
 <p>So your custom Dockerfile could be as simple as:</p>
-<pre><code>FROM trestletech/plumber
+<pre><code>FROM rstudio/plumber
 MAINTAINER Docker User &lt;docker@user.org&gt;
 
 RUN R -e "install.packages('broom')"
 
 CMD ["/app/plumber.R"]</code></pre>
-<p>This Dockerfile would just extend the <code>trestletech/plumber</code> image in two ways. First, it <code>RUN</code>s one additional command to install the <code>broom</code> package. Second, it customizes the default <code>CMD</code> argument that will be used when running the image. In this case, you would be expected to mount a Plumber application into the container at <code>/app/plumber.R</code></p>
+<p>This Dockerfile would just extend the <code>rstudio/plumber</code> image in two ways. First, it <code>RUN</code>s one additional command to install the <code>broom</code> package. Second, it customizes the default <code>CMD</code> argument that will be used when running the image. In this case, you would be expected to mount a Plumber application into the container at <code>/app/plumber.R</code></p>
 <p>You could then build your custom Docker image from this Dockerfile using the command <code>docker build -t mycustomdocker .</code> (where <code>.</code> – the current directory – is the directory where that Dockerfile is stored).</p>
 <p>Then you’d be able to use <code>docker run --rm -v</code>pwd<code>:/app mycustomdocker</code> to run your custom image, passing in your application’s directory as a volume mounted at <code>/app</code>.</p>
 </div>
 <div id="automatically-run-on-restart" class="section level3">
 <h3 class="hasAnchor">
 <a href="#automatically-run-on-restart" class="anchor"></a>Automatically Run on Restart</h3>
-<p>If you want your container to start automatically when your machine is booted, you can use the <code>-d</code> switch for <code>docker run</code>.</p>
-<p><code>docker run -p 1234:8000 -d myCustomDocker</code> would run the custom image you created above automatically every time your machine boots and expose the plumber service on port <code>1234</code> of your host machine. Like all other hosting options, you’ll need to make sure that your firewall allows connections on port <code>1234</code> if you want others to be able to access your service.</p>
+<p>If you want your container to start automatically when your machine is booted, you can use the <code>--restart</code> parameter for <code>docker run</code>.</p>
+<p><code>docker run -p 1234:8000 -dit --restart=unless-stopped myCustomDocker</code> would run the custom image you created above automatically every time your machine boots and expose the plumber service on port <code>1234</code> of your host machine, unless the container is explicitly stopped. Like all other hosting options, you’ll need to make sure that your firewall allows connections on port <code>1234</code> if you want others to be able to access your service.</p>
 </div>
 </div>
 <div id="docker-advanced" class="section level2">
@@ -256,14 +244,14 @@ CMD ["/app/plumber.R"]</code></pre>
 <span id="cb7-9"><a href="#cb7-9"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
 <span id="cb7-10"><a href="#cb7-10"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="st">"7000:8000"</span></span>
 <span id="cb7-11"><a href="#cb7-11"></a><span class="at">  </span><span class="fu">app2</span><span class="kw">:</span></span>
-<span id="cb7-12"><a href="#cb7-12"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> trestletech/plumber</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> rstudio/plumber</span></span>
 <span id="cb7-13"><a href="#cb7-13"></a><span class="at">    </span><span class="fu">command</span><span class="kw">:</span><span class="at"> /app/plumber.R</span></span>
 <span id="cb7-14"><a href="#cb7-14"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
 <span id="cb7-15"><a href="#cb7-15"></a><span class="at">     </span><span class="kw">-</span><span class="at"> ../app2:/app</span></span>
 <span id="cb7-16"><a href="#cb7-16"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> always</span></span>
 <span id="cb7-17"><a href="#cb7-17"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
 <span id="cb7-18"><a href="#cb7-18"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="st">"7001:8000"</span></span></code></pre></div>
-<p>More detail on what each of these options does and what other options exist can be found <a href="https://docs.docker.com/compose/compose-file/">here</a>. This configuration defines two Docker containers that should run <code>app1</code> and <code>app2</code>. The associated files in this case are layed out on disk as follows:</p>
+<p>More detail on what each of these options does and what other options exist can be found <a href="https://docs.docker.com/compose/compose-file/">here</a>. This configuration defines two Docker containers that should run <code>app1</code> and <code>app2</code>. The associated files in this case are laid out on disk as follows:</p>
 <pre><code>docker-compose.yml
 app1
 ├── Dockerfile
@@ -358,7 +346,7 @@ http {
 <p>Do keep in mind that when using load-balancing that it’s not longer guaranteed that subsequent requests for a particular application will land on the same process. This means that if you maintain any state in your Plumber application (like a global counter, or a user’s session state), you can’t expect that to be shared across the processes that the user might encounter. There are at least three possible solutions to this problem:</p>
 <ol style="list-style-type: decimal">
 <li>Use a more robust means of maintaining state. You could put the state in a database, for instance, that lives outside of your R processes and your Plumber processes could get and save their state externally.</li>
-<li>You could serialize the state to the user using <a href="#encrypted-cookies">(encrypted) session cookies</a>, assuming it’s small enough. In this scenario, your workers would write data back to the user in the form of a cookie, then the user would include that same cookie in its subsequent requests. This works best if the state is going to be set rarely and read often (for instance, the cookie could be set when the user logs in, then read on each request to detect the identity of this user).</li>
+<li>You could serialize the state to the user using <a href="./rendering-output.html#encrypted-cookies">(encrypted) session cookies</a>, assuming it’s small enough. In this scenario, your workers would write data back to the user in the form of a cookie, then the user would include that same cookie in its subsequent requests. This works best if the state is going to be set rarely and read often (for instance, the cookie could be set when the user logs in, then read on each request to detect the identity of this user).</li>
 <li>You can enable “sticky sessions” in the HAProxy load balancer. This would ensure that each user’s traffic always gets routed to the same worker. The downside of this approach is that it will distribute traffic less evenly. You could end up in a situation in which you have 2 R processes for an application but 90% of your traffic is hitting one of them if it happens the users triggering the majority of the requests are all “stuck” to one particular worker.</li>
 </ol>
 </div>
@@ -396,15 +384,13 @@ http {
 <a href="#wrap-your-plumber-file" class="anchor"></a>Wrap Your Plumber File</h3>
 <p>Once you’ve deployed your Plumber files onto the server, you’ll still need to tell the server <em>how</em> to run your server. You’re probably used to running commands like</p>
 <div class="sourceCode" id="cb17"><pre class="downlit">
-<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plumb.html">plumb</a></span>(<span class="st">"myfile.R"</span>)
-<span class="kw">pr</span><span class="op">$</span><span class="fu">run</span>(port=<span class="fl">4500</span>)
-</pre></div>
+<span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"myfile.R"</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span>port<span class="op">=</span><span class="fl">4500</span><span class="op">)</span></pre></div>
 <p>Unfortunately, pm2 doesn’t understand R scripts natively; however, it is possible to specify a custom interpreter. We can use this feature to launch an R-based wrapper for our plumber file using the <code>Rscript</code> scripting front-end that comes with R. The following script will run the two commands listed above.</p>
 <pre><code><a href="https://www.rplumber.io">#!/usr/bin/env Rscript
 
 library(plumber)
-pr &lt;- plumb('myfile.R')
-pr$run(port=4000, host="0.0.0.0")
+pr("myfile.R") %&gt;%
+  pr_run(port=4000, host="0.0.0.0")
 # Setting the host option on a VM instance ensures the application can be accessed externally.
 # (This may be only true for Linux users.)</a></code></pre>
 <p>Save this R script on your server as something like <code>run-myfile.R</code>. You should also make it executable by changing the permissions on the file using a command like <code>chmod 755 run-myfile.R</code>. You should now execute that file to make sure that it runs the service like you expect. You should be able to make requests to your server on the appropriate port and have the plumber service respond. You can kill the process using <code>Ctrl-c</code> when you’re convinced that it’s working. Make sure the shell script is in a permanent location so that it won’t be erased or modified accidentally. You can consider creating a designated directory for all your plumber services in some directory like <code>/usr/local/plumber</code>, then put all services and their associated Rscript-runners in their own subdirectory like <code>/usr/local/plumber/myfile/</code>.</p>
@@ -419,7 +405,7 @@ pr$run(port=4000, host="0.0.0.0")
 <p>Once you’re happy with the pm2 services you have defined, you can use <code>pm2 save</code> to tell pm2 to retain the set of services you have running next time you boot the machine. All of the services you have defined will be automatically restarted for you.</p>
 <p>At this point, you have a persistent pm2 service created for your Plumber application. This means that you can reboot your server, or find and kill the underlying R process that your plumber application is using and pm2 will automatically bring a new process in to replace it. This should help guarantee that you always have a Plumber process running on the port number you specified in the shell script. It is a good idea to reboot the server to ensure that everything comes back the way you expected.</p>
 <p>You can repeat this process with all the plumber applications you want to deploy, as long as you give each a unique port to run on. Remember that you can’t have more than one service running on a single port. And be sure to <code>pm2 save</code> every time you add services that you want to survive a restart.</p>
-<p>Run <code>netstat -tulpn</code> to see how the application is being ran. If you see the application on host <code>127.0.0.0</code> or <code>127.0.0.1</code>, the application cannot be accessed externally. You should change the host parameter to <code>0.0.0.0</code>, for example: `pr$run(host = “0.0.0.0”).</p>
+<p>Run <code>netstat -tulpn</code> to see how the application is being ran. If you see the application on host <code>127.0.0.0</code> or <code>127.0.0.1</code>, the application cannot be accessed externally. You should change the host parameter to <code>0.0.0.0</code>, for example: `pr_run(host = “0.0.0.0”).</p>
 </div>
 <div id="logs-and-management" class="section level3">
 <h3 class="hasAnchor">
@@ -437,7 +423,7 @@ pr$run(port=4000, host="0.0.0.0")
 <p><code>systemd</code> is the service manager used by certain Linux distributions including RedHat/CentOS 7, SUSE 12, and Ubuntu versions 16.04 and later.</p>
 </blockquote>
 <p>If you use a Linux server you can use <code>systemd</code> to run Plumber as a service that can be accessed from your local network or even outside your network depending on your firewall rules. This option is similar to using the <a href="#docker">Docker method</a>. One of the main advantages of using <code>systemd</code> over using Docker is that <code>systemd</code> won’t bypass firewall rules (Docker does!) and avoids the overhead of running a container.</p>
-<p>Compared to <code><a href="../reference/do_provision.html">plumber::do_provision()</a></code> this option won’t create a new droplet if you use <a href="#digitalocean">Digital Ocean</a>; it will run on your existing droplet instead.</p>
+<p>Compared to <code><a href="../reference/do_provision.html">plumber::do_provision()</a></code> this option won’t create a new droplet if you use <a href="#digitalocean">DigitalOcean</a>; it will run on your existing droplet instead.</p>
 <p>To implement this option you’ll complete the following three steps from the terminal:</p>
 <ol style="list-style-type: decimal">
 <li>Verify that you have the <code>plumber</code> package available globally on the server:</li>
@@ -452,7 +438,7 @@ Description=Plumber API
 # (or mariadb, mysql, etc if you use a DB with Plumber, otherwise leave this commented)
 
 [Service]
-ExecStart=/usr/bin/Rscript -e "api &lt;- plumber::plumb('/your-dir/your-api-script.R'); api$run(port=8080, host='0.0.0.0')"
+ExecStart=/usr/bin/Rscript -e "library(plumber); pr('/your-dir/your-api-script.R') %&gt;% pr_run(port=8080, host='0.0.0.0')"
 Restart=on-abnormal
 WorkingDirectory=/your-dir/
 
@@ -482,14 +468,27 @@ sudo systemctl start plumber-api   # start the service right now</code></pre>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
 </div>
 
   
-
-
-  </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
+  docsearch({
+    
+    
+    apiKey: '',
+    indexName: '',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+</body>
 </html>

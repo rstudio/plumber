@@ -44,6 +44,12 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 
 <meta property="og:title" content="Static file router — PlumberStatic" />
@@ -81,19 +87,13 @@ Static file router" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.7.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.0.0.9999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -103,8 +103,6 @@ Static file router" />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li class="divider"></li>
-    <li class="dropdown-header">Creating APIs</li>
     <li>
       <a href="../articles/introduction.html">Introduction</a>
     </li>
@@ -150,6 +148,12 @@ Static file router" />
 </li>
       </ul>
       
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -178,11 +182,11 @@ Static file router" />
     <p>Creates a router that is backed by a directory of files on disk.</p>
     <h2 class="hasAnchor" id="super-classes"><a class="anchor" href="#super-classes"></a>Super classes</h2>
 
-    <p><code><a href='https://www.rplumber.io/reference/hookable.html'>plumber::hookable</a></code> -&gt; <code><a href='https://www.rplumber.io/reference/plumber.html'>plumber::plumber</a></code> -&gt; <code>plumberstatic</code></p>
+    <p><code><a href='Hookable.html'>plumber::Hookable</a></code> -&gt; <code><a href='Plumber.html'>plumber::Plumber</a></code> -&gt; <code>PlumberStatic</code></p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
-<h3>Public methods</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Public methods</h3>
 
 <ul>
 <li><p><a href='#method-new'><code>PlumberStatic$new()</code></a></p></li>
@@ -191,50 +195,58 @@ Static file router" />
 </ul>
 <p><details ><summary>Inherited methods</summary>
 <ul>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="hookable" data-id="registerHooks"><a href='../../plumber/html/hookable.html#method-registerHooks'><code>plumber::hookable$registerHooks()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="addAssets"><a href='../../plumber/html/plumber.html#method-addAssets'><code>plumber::plumber$addAssets()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="addEndpoint"><a href='../../plumber/html/plumber.html#method-addEndpoint'><code>plumber::plumber$addEndpoint()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="addFilter"><a href='../../plumber/html/plumber.html#method-addFilter'><code>plumber::plumber$addFilter()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="addGlobalProcessor"><a href='../../plumber/html/plumber.html#method-addGlobalProcessor'><code>plumber::plumber$addGlobalProcessor()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="apiSpec"><a href='../../plumber/html/plumber.html#method-apiSpec'><code>plumber::plumber$apiSpec()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="call"><a href='../../plumber/html/plumber.html#method-call'><code>plumber::plumber$call()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="filter"><a href='../../plumber/html/plumber.html#method-filter'><code>plumber::plumber$filter()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="handle"><a href='../../plumber/html/plumber.html#method-handle'><code>plumber::plumber$handle()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="mount"><a href='../../plumber/html/plumber.html#method-mount'><code>plumber::plumber$mount()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="onHeaders"><a href='../../plumber/html/plumber.html#method-onHeaders'><code>plumber::plumber$onHeaders()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="onWSOpen"><a href='../../plumber/html/plumber.html#method-onWSOpen'><code>plumber::plumber$onWSOpen()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="openAPIFile"><a href='../../plumber/html/plumber.html#method-openAPIFile'><code>plumber::plumber$openAPIFile()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="registerHook"><a href='../../plumber/html/plumber.html#method-registerHook'><code>plumber::plumber$registerHook()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="route"><a href='../../plumber/html/plumber.html#method-route'><code>plumber::plumber$route()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="run"><a href='../../plumber/html/plumber.html#method-run'><code>plumber::plumber$run()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="serve"><a href='../../plumber/html/plumber.html#method-serve'><code>plumber::plumber$serve()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="set404Handler"><a href='../../plumber/html/plumber.html#method-set404Handler'><code>plumber::plumber$set404Handler()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="setErrorHandler"><a href='../../plumber/html/plumber.html#method-setErrorHandler'><code>plumber::plumber$setErrorHandler()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="setSerializer"><a href='../../plumber/html/plumber.html#method-setSerializer'><code>plumber::plumber$setSerializer()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="plumber" data-id="swaggerFile"><a href='../../plumber/html/plumber.html#method-swaggerFile'><code>plumber::plumber$swaggerFile()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks"><a href='../../plumber/html/Hookable.html#method-registerHooks'><code>plumber::Hookable$registerHooks()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="addAssets"><a href='../../plumber/html/Plumber.html#method-addAssets'><code>plumber::Plumber$addAssets()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="addEndpoint"><a href='../../plumber/html/Plumber.html#method-addEndpoint'><code>plumber::Plumber$addEndpoint()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="addFilter"><a href='../../plumber/html/Plumber.html#method-addFilter'><code>plumber::Plumber$addFilter()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="addGlobalProcessor"><a href='../../plumber/html/Plumber.html#method-addGlobalProcessor'><code>plumber::Plumber$addGlobalProcessor()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="call"><a href='../../plumber/html/Plumber.html#method-call'><code>plumber::Plumber$call()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="filter"><a href='../../plumber/html/Plumber.html#method-filter'><code>plumber::Plumber$filter()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="getApiSpec"><a href='../../plumber/html/Plumber.html#method-getApiSpec'><code>plumber::Plumber$getApiSpec()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="getDebug"><a href='../../plumber/html/Plumber.html#method-getDebug'><code>plumber::Plumber$getDebug()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="handle"><a href='../../plumber/html/Plumber.html#method-handle'><code>plumber::Plumber$handle()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="mount"><a href='../../plumber/html/Plumber.html#method-mount'><code>plumber::Plumber$mount()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="onHeaders"><a href='../../plumber/html/Plumber.html#method-onHeaders'><code>plumber::Plumber$onHeaders()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="onWSOpen"><a href='../../plumber/html/Plumber.html#method-onWSOpen'><code>plumber::Plumber$onWSOpen()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="openAPIFile"><a href='../../plumber/html/Plumber.html#method-openAPIFile'><code>plumber::Plumber$openAPIFile()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="registerHook"><a href='../../plumber/html/Plumber.html#method-registerHook'><code>plumber::Plumber$registerHook()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="removeHandle"><a href='../../plumber/html/Plumber.html#method-removeHandle'><code>plumber::Plumber$removeHandle()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="route"><a href='../../plumber/html/Plumber.html#method-route'><code>plumber::Plumber$route()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="run"><a href='../../plumber/html/Plumber.html#method-run'><code>plumber::Plumber$run()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="serve"><a href='../../plumber/html/Plumber.html#method-serve'><code>plumber::Plumber$serve()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set404Handler"><a href='../../plumber/html/Plumber.html#method-set404Handler'><code>plumber::Plumber$set404Handler()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setApiSpec"><a href='../../plumber/html/Plumber.html#method-setApiSpec'><code>plumber::Plumber$setApiSpec()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setDebug"><a href='../../plumber/html/Plumber.html#method-setDebug'><code>plumber::Plumber$setDebug()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setDocs"><a href='../../plumber/html/Plumber.html#method-setDocs'><code>plumber::Plumber$setDocs()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setDocsCallback"><a href='../../plumber/html/Plumber.html#method-setDocsCallback'><code>plumber::Plumber$setDocsCallback()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setErrorHandler"><a href='../../plumber/html/Plumber.html#method-setErrorHandler'><code>plumber::Plumber$setErrorHandler()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setParsers"><a href='../../plumber/html/Plumber.html#method-setParsers'><code>plumber::Plumber$setParsers()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setSerializer"><a href='../../plumber/html/Plumber.html#method-setSerializer'><code>plumber::Plumber$setSerializer()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="swaggerFile"><a href='../../plumber/html/Plumber.html#method-swaggerFile'><code>plumber::Plumber$swaggerFile()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="unmount"><a href='../../plumber/html/Plumber.html#method-unmount'><code>plumber::Plumber$unmount()</code></a></span></p></li>
 </ul>
 </details>
 
 <hr>
-<a id="method-new"></a></p><h3>Method <code>new()</code></h3>
-<p>Create a new <code>plumberstatic</code> router</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>PlumberStatic</span><span class='op'>$</span><span class='fu'>new</span>(<span class='kw'>direc</span>, <span class='kw'>options</span>)</pre><p></div></p>
+<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
+<p>Create a new <code>PlumberStatic</code> router</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberStatic</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>direc</span>, <span class='va'>options</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>direc</code></dt><dd><p>a path to an asset directory.</p></dd>
 
-<dt><code>options</code></dt><dd><p>options to be evaluated in the plumberstatic router environment</p></dd>
+<dt><code>options</code></dt><dd><p>options to be evaluated in the <code>PlumberStatic</code> router environment</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
-<p>A new <code>plumberstatic</code> router</p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
+<p>A new <code>PlumberStatic</code> router</p>
 <p><hr>
-<a id="method-print"></a></p><h3>Method <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></h3>
-<p>Print representation of <code><a href='https://www.rplumber.io/reference/PlumberStatic.html'>PlumberStatic()</a></code> router.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>PlumberStatic</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(prefix = <span class='st'>""</span>, topLevel = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)</pre><p></div></p>
+<a id="method-print"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></h3>
+<p>Print representation of <code>PlumberStatic()</code> router.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberStatic</span><span class='op'>$</span><span class='fu'>print</span><span class='op'>(</span>prefix <span class='op'>=</span> <span class='st'>""</span>, topLevel <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>prefix</code></dt><dd><p>a character string. Prefix to append to representation.</p></dd>
 
@@ -244,14 +256,14 @@ router, set to <code>TRUE</code>.</p></dd>
 <dt><code>...</code></dt><dd><p>additional arguments for recursive calls</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
-<p>A terminal friendly represention of a <code><a href='https://www.rplumber.io/reference/PlumberStatic.html'>PlumberStatic()</a></code> router.</p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
+<p>A terminal friendly representation of a <code>PlumberStatic()</code> router.</p>
 <p><hr>
-<a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
-<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>PlumberStatic</span><span class='op'>$</span><span class='fu'>clone</span>(deep = <span class='fl'>FALSE</span>)</pre><p></div></p>
+<a id="method-clone"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>clone()</code></h3>
+<p>The objects of this class are cloneable with this method.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberStatic</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
 
@@ -274,13 +286,30 @@ router, set to <code>TRUE</code>.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '',
+    indexName: '',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
 
   </body>

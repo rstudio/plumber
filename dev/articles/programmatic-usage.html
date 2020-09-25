@@ -17,7 +17,9 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Programmatic Usage">
+<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Programmatic Usage">
 <meta property="og:description" content="plumber">
 <meta property="og:image" content="https://www.rplumber.io/logo.svg">
 <meta name="robots" content="noindex">
@@ -39,18 +41,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.7.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.0.0.9999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -61,9 +57,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li class="divider">
-    <li class="dropdown-header">Creating APIs</li>
-    <li>
+<li>
       <a href="../articles/introduction.html">Introduction</a>
     </li>
     <li>
@@ -107,7 +101,13 @@
   </a>
 </li>
       </ul>
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
+      </form>
+      
+    </div>
 <!--/.nav-collapse -->
   </div>
 <!--/.container -->
@@ -134,49 +134,43 @@
 <h2 class="hasAnchor">
 <a href="#creating-and-controlling-a-router" class="anchor"></a>Creating and Controlling a Router</h2>
 <p>The centerpiece of Plumber is the router. Plumber routers are responsible for coordinating incoming requests from httpuv, dispatching the requests to the appropriate filters/endpoints, serializing the response, and handling errors that might pop up along the way. If you’ve been using annotations to define Plumber APIs, then you’ve already worked with Plumber routers as that’s what the <code><a href="../reference/plumb.html">plumb()</a></code> command produces.</p>
-<p>To instantiate a new Plumber router programmatically, you can call <code>plumber$new()</code>. This will return a blank Plumber router with no endpoints. You could call <code>run()</code> on the returned object to start the API, but it doesn’t know how to respond to any requests so any incoming traffic would get a <code>404</code> response. We’ll see momentarily how to add endpoints and filters onto this empty router. Alternatively, you can pass a file that contains your annotation-based Plumber API as the first parameter to create a router much like you do with <code><a href="../reference/plumb.html">plumb()</a></code>.</p>
+<p>To instantiate a new Plumber router programmatically, you can call <code><a href="../reference/pr.html">pr()</a></code>. This will return a blank Plumber router with no endpoints. You could call <code><a href="../reference/pr_run.html">pr_run()</a></code> on the returned object to start the API, but it doesn’t know how to respond to any requests so any incoming traffic would get a <code>404</code> response. We’ll see momentarily how to add endpoints and filters onto this empty router. Alternatively, you can pass a file that contains your annotation-based Plumber API as the first parameter to create a router much like you do with <code><a href="../reference/plumb.html">plumb()</a></code>.</p>
 <p>Be aware that Plumber routers do come with a handful of filters pre-configured. These built-in filters are used to do things like process properties of the incoming request like its cookies, <code>POST</code> body, or query string. You can specify which filters you want in your new router by overriding the <code>filters</code> parameter when creating your new router.</p>
 </div>
 <div id="defining-endpoints" class="section level2">
 <h2 class="hasAnchor">
 <a href="#defining-endpoints" class="anchor"></a>Defining Endpoints</h2>
-<p>You can define endpoints on your router by using the <code>handle()</code> method. For instance, to define a Plumber API that response to <code>GET</code> requests on <code><a href="https://rdrr.io/r/base/Arithmetic.html">/</a></code> and <code>POST</code> requests on <code>/submit</code>, you could use the following code:</p>
+<p>You can define endpoints on your router by using the <code><a href="../reference/pr_handle.html">pr_handle()</a></code>, <code><a href="../reference/pr_handle.html">pr_get()</a></code>, or <code><a href="../reference/pr_handle.html">pr_post()</a></code>. For instance, to define a Plumber API that response to <code>GET</code> requests on <code><a href="https://rdrr.io/r/base/Arithmetic.html">/</a></code> and <code>POST</code> requests on <code>/submit</code>, you could use the following code:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">plumber</span><span class="op">$</span><span class="fu">new</span>()
-<span class="kw">pr</span><span class="op">$</span><span class="fu">handle</span>(<span class="st">"GET"</span>, <span class="st">"/"</span>, <span class="fu">function</span>(<span class="kw">req</span>, <span class="kw">res</span>){
-  <span class="co"># ...</span>
-})
-
-<span class="kw">pr</span><span class="op">$</span><span class="fu">handle</span>(<span class="st">"POST"</span>, <span class="st">"/submit"</span>, <span class="fu">function</span>(<span class="kw">req</span>, <span class="kw">res</span>){
-  <span class="co"># ...</span>
-})
-</pre></div>
-<p>The “handler” functions that you define in these <code>handle</code> calls are identical to the code you would have defined in your <code>plumber.R</code> file if you were using annotations to define your API.</p>
-<p>The <code>handle()</code> method takes additional arguments that allow you to control nuanced behavior of the endpoint like which filter it might preempt or which serializer it should use. For instance, the following endpoint would use Plumber’s HTML serializer.</p>
+<span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span><span class="st">"/"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span><span class="op">)</span><span class="op">{</span>
+    <span class="co"># ...</span>
+  <span class="op">}</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_handle.html">pr_post</a></span><span class="op">(</span><span class="st">"/submit"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span><span class="op">)</span><span class="op">{</span>
+    <span class="co"># ...</span>
+  <span class="op">}</span><span class="op">)</span></pre></div>
+<p>The “handler” functions that you define in these calls are identical to the code you would have defined in your <code>plumber.R</code> file if you were using annotations to define your API.</p>
+<p>The route methods take additional arguments that allow you to control nuanced behavior of the endpoint like which filter it might preempt or which serializer it should use. For instance, the following endpoint would use Plumber’s HTML serializer.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">plumber</span><span class="op">$</span><span class="fu">new</span>()
-<span class="kw">pr</span><span class="op">$</span><span class="fu">handle</span>(<span class="st">"GET"</span>, <span class="st">"/"</span>, <span class="fu">function</span>(){
-  <span class="st">"&lt;html&gt;&lt;h1&gt;Programmatic Plumber!&lt;/h1&gt;&lt;/html&gt;"</span>
-}, serializer=<span class="kw">plumber</span>::<span class="fu"><a href="../reference/serializer_json.html">serializer_html</a></span>())
-</pre></div>
+<span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span><span class="st">"/"</span>, <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span>
+    <span class="st">"&lt;html&gt;&lt;h1&gt;Programmatic Plumber!&lt;/h1&gt;&lt;/html&gt;"</span>
+  <span class="op">}</span>, serializer <span class="op">=</span> <span class="fu">plumber</span><span class="fu">::</span><span class="fu"><a href="../reference/serializer_headers.html">serializer_html</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></pre></div>
 </div>
 <div id="defining-filters" class="section level2">
 <h2 class="hasAnchor">
 <a href="#defining-filters" class="anchor"></a>Defining Filters</h2>
 <p>Use the <code><a href="https://rdrr.io/r/stats/filter.html">filter()</a></code> method of a Plumber router to define a new filter:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">plumber</span><span class="op">$</span><span class="fu">new</span>()
-
-<span class="kw">pr</span><span class="op">$</span><span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="st">"myFilter"</span>, <span class="fu">function</span>(<span class="kw">req</span>){
-  <span class="kw">req</span><span class="op">$</span><span class="kw">filtered</span> <span class="op">&lt;-</span> <span class="fl">TRUE</span>
-  <span class="fu"><a href="../reference/forward.html">forward</a></span>()
-})
-
-<span class="kw">pr</span><span class="op">$</span><span class="fu">handle</span>(<span class="st">"GET"</span>, <span class="st">"/"</span>, <span class="fu">function</span>(<span class="kw">req</span>){
-  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Am I filtered?"</span>, <span class="kw">req</span><span class="op">$</span><span class="kw">filtered</span>)
-})
-</pre></div>
-<p>You can specify other options such as the serializer to use if the filter returns a value in the <code><a href="https://rdrr.io/r/stats/filter.html">filter()</a></code> method, as well.</p>
+<span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_filter.html">pr_filter</a></span><span class="op">(</span><span class="st">"myFilter"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span><span class="op">{</span>
+    <span class="va">req</span><span class="op">$</span><span class="va">filtered</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span>
+    <span class="fu"><a href="../reference/forward.html">forward</a></span><span class="op">(</span><span class="op">)</span>
+  <span class="op">}</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span><span class="st">"/"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span><span class="op">{</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Am I filtered?"</span>, <span class="va">req</span><span class="op">$</span><span class="va">filtered</span><span class="op">)</span>
+  <span class="op">}</span><span class="op">)</span></pre></div>
+<p>You can specify other options such as the serializer to use if the filter returns a value in the <code><a href="../reference/pr_filter.html">pr_filter()</a></code> method, as well.</p>
 </div>
 <div id="router-hooks" class="section level2">
 <h2 class="hasAnchor">
@@ -190,50 +184,49 @@
 </ul>
 <p>In all of the above you have access to a disposable environment in the <code>data</code> parameter that is created as a temporary data store for each request. Hooks can store temporary data in these hooks that can be reused by other hooks processing this same request.</p>
 <p>One feature when defining hooks in Plumber routers is the ability to modify the returned value. The convention for such hooks is: any function that accepts a parameter named <code>value</code> is expected to return the new value. This could be an unmodified version of the value that was passed in, or it could be a mutated value. But in either case, if your hook accepts a parameter named <code>value</code>, whatever your hook returns will be used as the new value for the response.</p>
-<p>You can add hooks using the <code>registerHook</code> method, or you can add multiple hooks at once using the <code>registerHooks</code> method which takes a name list in which the names are the names of the hooks, and the values are the handlers themselves.</p>
+<p>You can add hooks using the <code>pr_hook</code> method, or you can add multiple hooks at once using the <code>pr_hooks</code> method which takes a name list in which the names are the names of the hooks, and the values are the handlers themselves.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">plumber</span><span class="op">$</span><span class="fu">new</span>()
-<span class="kw">pr</span><span class="op">$</span><span class="fu">registerHook</span>(<span class="st">"preroute"</span>, <span class="fu">function</span>(<span class="kw">req</span>){
-  <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="st">"Routing a request for"</span>, <span class="kw">req</span><span class="op">$</span><span class="kw">PATH_INFO</span>, <span class="st">"...\n"</span>)
-})
-<span class="kw">pr</span><span class="op">$</span><span class="fu">registerHooks</span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
-  preserialize=<span class="fu">function</span>(<span class="kw">req</span>, <span class="kw">value</span>){
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"About to serialize this value:"</span>)
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw">value</span>)
+<span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_hook.html">pr_hook</a></span><span class="op">(</span><span class="st">"preroute"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"Routing a request for"</span>, <span class="va">req</span><span class="op">$</span><span class="va">PATH_INFO</span>, <span class="st">"...\n"</span><span class="op">)</span>
+  <span class="op">}</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_hook.html">pr_hooks</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+    preserialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">value</span><span class="op">)</span> <span class="op">{</span>
+      <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="st">"About to serialize this value:"</span><span class="op">)</span>
+      <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>
 
-    <span class="co"># Must return the value since we took one in. Here we're not choosing</span>
-    <span class="co"># to mutate it, but we could.</span>
-    <span class="kw">value</span>
-  },
-  postserialize=<span class="fu">function</span>(<span class="kw">res</span>){
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"We serialized the value as:"</span>)
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw">res</span><span class="op">$</span><span class="kw">body</span>)
-  }
-))
-
-<span class="kw">pr</span><span class="op">$</span><span class="fu">handle</span>(<span class="st">"GET"</span>, <span class="st">"/"</span>, <span class="fu">function</span>(){ <span class="fl">123</span> })
-</pre></div>
+      <span class="co"># Must return the value since we took one in. Here we're not choosing</span>
+      <span class="co"># to mutate it, but we could.</span>
+      <span class="va">value</span>
+    <span class="op">}</span>,
+    postserialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">{</span>
+      <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="st">"We serialized the value as:"</span><span class="op">)</span>
+      <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">body</span><span class="op">)</span>
+    <span class="op">}</span>
+  <span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span><span class="st">"/"</span>, <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span> <span class="fl">123</span> <span class="op">}</span><span class="op">)</span></pre></div>
 <p>Making a <code>GET</code> request to <code><a href="https://rdrr.io/r/base/Arithmetic.html">/</a></code> will print out various information from the three events for which we registered hooks.</p>
 </div>
 <div id="mount-static" class="section level2">
 <h2 class="hasAnchor">
 <a href="#mount-static" class="anchor"></a>Mounting &amp; Static File Routers</h2>
 <p>Plumber routers can be “nested” by mounting one into another using the <code>mount()</code> method. This allows you to compartmentalize your API by paths which is a great technique for decomposing large APIs into smaller files.</p>
-<pre><code>root &lt;- plumber$new()
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="va">root</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span>
 
-users &lt;- plumber$new("users.R")
-root$mount("/users", users)
+<span class="va">users</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"users.R"</span><span class="op">)</span>
+<span class="va">products</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"products.R"</span><span class="op">)</span>
 
-products &lt;- plumber$new("products.R")
-root$mount("/products", products)</code></pre>
-<p>This is the same approach used for defining routers that serve a directory of static files. Static file routers are just a special case of Plumber routers created using <code>PlumberStatic$new()</code>. For example</p>
+<span class="va">root</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_mount.html">pr_mount</a></span><span class="op">(</span><span class="st">"/users"</span>, <span class="va">users</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_mount.html">pr_mount</a></span><span class="op">(</span><span class="st">"/products"</span>, <span class="va">products</span><span class="op">)</span>
+
+<span class="va">root</span></pre></div>
+<p>This is the same approach used for defining routers that serve a directory of static files. Static file routers are just a special case of Plumber routers created using <code><a href="../reference/pr_static.html">pr_static()</a></code>. For example</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">plumber</span><span class="op">$</span><span class="fu">new</span>()
-
-<span class="kw">stat</span> <span class="op">&lt;-</span> <span class="kw">PlumberStatic</span><span class="op">$</span><span class="fu">new</span>(<span class="st">"./myfiles"</span>)
-
-<span class="kw">pr</span><span class="op">$</span><span class="fu">mount</span>(<span class="st">"/assets"</span>, <span class="kw">stat</span>)
-</pre></div>
+<span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_static.html">pr_static</a></span><span class="op">(</span><span class="st">"/assets"</span>, <span class="st">"./myfiles"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span><span class="op">)</span></pre></div>
 <p>This will make the files and directories stored in the <code>./myfiles</code> directory available on your API under the <code>/assets/</code> path.</p>
 </div>
 <div id="customize-router" class="section level2">
@@ -242,11 +235,11 @@ root$mount("/products", products)</code></pre>
 <p>There are a handful of useful methods to be aware of to modify the behavior of a router. <a href="#router-hooks">Using hooks to alter request processing</a> has already been discussed, but additionally you can modify a router’s behavior using any of the following:</p>
 <ul>
 <li>
-<code>setSerializer()</code> - Sets the default serializer of the router.</li>
+<code><a href="../reference/pr_set_serializer.html">pr_set_serializer()</a></code> - Sets the default serializer of the router.</li>
 <li>
-<code>setErrorHandler()</code> - Sets the error handler which gets invoked if any filter or endpoint generates an error.</li>
+<code><a href="../reference/pr_set_error.html">pr_set_error()</a></code> - Sets the error handler which gets invoked if any filter or endpoint generates an error.</li>
 <li>
-<code>set404Handler()</code> - Sets the handler that gets called if an incoming request can’t be served by any filter, endpoint, or sub-router.</li>
+<code><a href="../reference/pr_set_404.html">pr_set_404()</a></code> - Sets the handler that gets called if an incoming request can’t be served by any filter, endpoint, or sub-router.</li>
 </ul>
 </div>
   </div>
@@ -266,14 +259,27 @@ root$mount("/products", products)</code></pre>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
 </div>
 
   
-
-
-  </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
+  docsearch({
+    
+    
+    apiKey: '',
+    indexName: '',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+</body>
 </html>

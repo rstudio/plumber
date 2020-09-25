@@ -17,7 +17,9 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Migration Guide">
+<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Migration Guide">
 <meta property="og:description" content="plumber">
 <meta property="og:image" content="https://www.rplumber.io/logo.svg">
 <meta name="robots" content="noindex">
@@ -39,18 +41,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.7.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.0.0.9999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -61,9 +57,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li class="divider">
-    <li class="dropdown-header">Creating APIs</li>
-    <li>
+<li>
       <a href="../articles/introduction.html">Introduction</a>
     </li>
     <li>
@@ -107,7 +101,13 @@
   </a>
 </li>
       </ul>
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
+      </form>
+      
+    </div>
 <!--/.nav-collapse -->
   </div>
 <!--/.container -->
@@ -136,11 +136,11 @@
 <p>There are a number of changes that users should consider when preparing to upgrade to <code>plumber</code> 0.4.0.</p>
 <ol style="list-style-type: decimal">
 <li>
-<strong>Plumber no longer accepts external connections by default</strong>. The <code>host</code> parameter for the <code>run()</code> method now defaults to <code>127.0.0.1</code>, meaning that Plumber will only listen for incoming requests from the local machine on which it’s running – not from any other machine on the network. This is done for security reasons so that you don’t accidentally expose a Plumber API that you’re developing to your entire network. To restore the old behavior in which Plumber listened for connections from any machine on the network, use <code>$run(host="0.0.0.0")</code>. Note that if you’re deploying to an environment that includes an HTTP proxy (such as the <a href="#digitalocean">DigitalOcean</a> servers which use nginx), having Plumber listen only on <code>127.0.0.1</code> is likely the right default, as your proxy – not Plumber – is the one receiving external connections.</li>
+<strong>Plumber no longer accepts external connections by default</strong>. The <code>host</code> parameter for the <code>run()</code> method now defaults to <code>127.0.0.1</code>, meaning that Plumber will only listen for incoming requests from the local machine on which it’s running – not from any other machine on the network. This is done for security reasons so that you don’t accidentally expose a Plumber API that you’re developing to your entire network. To restore the old behavior in which Plumber listened for connections from any machine on the network, use <code>$run(host="0.0.0.0")</code>. Note that if you’re deploying to an environment that includes an HTTP proxy (such as the <a href="./hosting.html#digitalocean">DigitalOcean</a> servers which use nginx), having Plumber listen only on <code>127.0.0.1</code> is likely the right default, as your proxy – not Plumber – is the one receiving external connections.</li>
 <li>Plumber no longer sets the <code>Access-Control-Allow-Origin</code> HTTP header to <code><a href="https://rdrr.io/r/base/Arithmetic.html">*</a></code>. This was previously done for convenience but given the security implications we’re reversing this decision. The previous behavior would have allowed web browsers to make requests of your API from other domains using JavaScript if the request used only standard HTTP headers and were a <code>GET</code>, <code>HEAD</code>, or <code>POST</code> request. These requests will no longer work by default. If you wish to allow an endpoint to be accessible from other origins in a web browser, you can use <code>res$setHeader("Access-Control-Allow-Origin", "*")</code> in an endpoint or filter.</li>
 <li>Rather than setting the default port to <code>8000</code>, <strong>the port is now randomly selected</strong>. This ensures that a shared server (like RStudio Server) will be able to support multiple people developing Plumber APIs concurrently without them having to manually identify an available port. This can be controlled by specifying the <code>port</code> parameter in the <code>run()</code> method or by setting the <code>plumber.port</code> option.</li>
 <li>
-<strong>The object-oriented model for Plumber routers has changed</strong>. If you’re calling any of the following methods on your Plumber router, you will need to modify your code to use the newer alternatives: <code>addFilter</code>, <code>addEndpoint</code>, <code>addGlobalProcessor</code>, and <code>addAssets</code>. The code around these functions has undergone a major rewrite and some breaking changes have been introduced. These four functions are still supported with a deprecation warning in 0.4.0, but support is only best-effort. Certain parameters on these methods are no longer supported, so you should thoroughly test any Plumber API that leverages any of these methods before deploying version 0.4.0. <a href="#programmatic-usage">Updated documentation</a> for using Plumber programmatically is now available.</li>
+<strong>The object-oriented model for Plumber routers has changed</strong>. If you’re calling any of the following methods on your Plumber router, you will need to modify your code to use the newer alternatives: <code>addFilter</code>, <code>addEndpoint</code>, <code>addGlobalProcessor</code>, and <code>addAssets</code>. The code around these functions has undergone a major rewrite and some breaking changes have been introduced. These four functions are still supported with a deprecation warning in 0.4.0, but support is only best-effort. Certain parameters on these methods are no longer supported, so you should thoroughly test any Plumber API that leverages any of these methods before deploying version 0.4.0. <a href="./execution-model.html#programmatic-usage">Updated documentation</a> for using Plumber programmatically is now available.</li>
 </ol>
 </div>
   </div>
@@ -160,14 +160,27 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
 </div>
 
   
-
-
-  </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
+  docsearch({
+    
+    
+    apiKey: '',
+    indexName: '',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+</body>
 </html>

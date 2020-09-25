@@ -17,7 +17,9 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Quickstart">
+<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Quickstart">
 <meta property="og:description" content="plumber">
 <meta property="og:image" content="https://www.rplumber.io/logo.svg">
 <meta name="robots" content="noindex">
@@ -39,18 +41,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.7.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.0.0.9999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -61,9 +57,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li class="divider">
-    <li class="dropdown-header">Creating APIs</li>
-    <li>
+<li>
       <a href="../articles/introduction.html">Introduction</a>
     </li>
     <li>
@@ -107,7 +101,13 @@
   </a>
 </li>
       </ul>
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
+      </form>
+      
+    </div>
 <!--/.nav-collapse -->
   </div>
 <!--/.container -->
@@ -136,40 +136,38 @@
 <span class="co">#' Echo the parameter that was sent in</span>
 <span class="co">#' @param msg The message to echo back.</span>
 <span class="co">#' @get /echo</span>
-<span class="fu">function</span>(<span class="kw">msg</span>=<span class="st">""</span>){
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(msg = <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"The message is: '"</span>, <span class="kw">msg</span>, <span class="st">"'"</span>))
-}
+<span class="kw">function</span><span class="op">(</span><span class="va">msg</span><span class="op">=</span><span class="st">""</span><span class="op">)</span><span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>msg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"The message is: '"</span>, <span class="va">msg</span>, <span class="st">"'"</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
 
 <span class="co">#' Plot out data from the iris dataset</span>
 <span class="co">#' @param spec If provided, filter the data to only this species (e.g. 'setosa')</span>
 <span class="co">#' @get /plot</span>
-<span class="co">#' @png</span>
-<span class="fu">function</span>(<span class="kw">spec</span>){
-  <span class="kw">myData</span> <span class="op">&lt;-</span> <span class="kw">iris</span>
-  <span class="kw">title</span> <span class="op">&lt;-</span> <span class="st">"All Species"</span>
+<span class="co">#' @serializer png</span>
+<span class="kw">function</span><span class="op">(</span><span class="va">spec</span><span class="op">)</span><span class="op">{</span>
+  <span class="va">myData</span> <span class="op">&lt;-</span> <span class="va">iris</span>
+  <span class="va">title</span> <span class="op">&lt;-</span> <span class="st">"All Species"</span>
 
   <span class="co"># Filter if the species was specified</span>
-  <span class="co">if</span> (<span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/missing.html">missing</a></span>(<span class="kw">spec</span>)){
-    <span class="kw">title</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Only the '"</span>, <span class="kw">spec</span>, <span class="st">"' Species"</span>)
-    <span class="kw">myData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(<span class="kw">iris</span>, <span class="kw">Species</span> <span class="op">==</span> <span class="kw">spec</span>)
-  }
+  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/missing.html">missing</a></span><span class="op">(</span><span class="va">spec</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
+    <span class="va">title</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Only the '"</span>, <span class="va">spec</span>, <span class="st">"' Species"</span><span class="op">)</span>
+    <span class="va">myData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">iris</span>, <span class="va">Species</span> <span class="op">==</span> <span class="va">spec</span><span class="op">)</span>
+  <span class="op">}</span>
 
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="kw">myData</span><span class="op">$</span><span class="kw">Sepal.Length</span>, <span class="kw">myData</span><span class="op">$</span><span class="kw">Petal.Length</span>,
-       main=<span class="kw">title</span>, xlab=<span class="st">"Sepal Length"</span>, ylab=<span class="st">"Petal Length"</span>)
-}
-</pre></div>
+  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">myData</span><span class="op">$</span><span class="va">Sepal.Length</span>, <span class="va">myData</span><span class="op">$</span><span class="va">Petal.Length</span>,
+       main<span class="op">=</span><span class="va">title</span>, xlab<span class="op">=</span><span class="st">"Sepal Length"</span>, ylab<span class="op">=</span><span class="st">"Petal Length"</span><span class="op">)</span>
+<span class="op">}</span></pre></div>
 <p>This file defines two Plumber “endpoints.” One is hosted at the path <code>/echo</code> and simply echoes the message passed in; the other is hosted at the path <code>/plot</code> and returns an image showing a simple R plot.</p>
-<p>If you haven’t installed <code>plumber</code> yet, see the <a href="#installation">installation section</a>. Once you have <code>plumber</code> installed, you can use the <code><a href="../reference/plumb.html">plumber::plumb()</a></code> function to translate this R file into a Plumber API:</p>
+<p>If you haven’t installed <code>plumber</code> yet, see the <a href="./index.html#installation">installation section</a>. Once you have <code>plumber</code> installed, you can use the <code><a href="../reference/pr.html">pr()</a></code> function to translate this R file into a Plumber API:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw">pr</span> <span class="op">&lt;-</span> <span class="kw">plumber</span>::<span class="fu"><a href="../reference/plumb.html">plumb</a></span>(<span class="st">"plumber.R"</span>)
-</pre></div>
-<p>The <code>pr</code> object now encapsulates all the logic represented in your <code>plumber.R</code> file. The next step is to bring the API to life using the <code>run()</code> method:</p>
+<span class="va">root</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"plumber.R"</span><span class="op">)</span>
+<span class="va">root</span></pre></div>
+<p>The <code>pr</code> object now encapsulates all the logic represented in your <code>plumber.R</code> file. The next step is to bring the API to life using the <code><a href="../reference/pr_run.html">pr_run()</a></code> method:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw">pr</span><span class="op">$</span><span class="fu">run</span>()
-</pre></div>
+<span class="va">root</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span><span class="op">)</span></pre></div>
 <p>You should see a message about your API running on your computer on port <code>8000</code>. The API will continue running in your R session until you press the <code>Esc</code> key. If you’re running this code locally on your personal machine, you should be able to open <a href="http://localhost:8000/echo">http://localhost:8000/echo</a> or <a href="http://localhost:8000/plot">http://localhost:8000/plot</a> in a web browser to test your new API endpoints.</p>
 <blockquote>
-<p>If you’re using a tool like RStudio Server to run your R code on a remote machine, you should see the <a href="#networking">networking section</a> for help with visiting your API.</p>
+<p>If you’re using a tool like RStudio Server to run your R code on a remote machine, you should see the <a href="./security.html#networking">networking section</a> for help with visiting your API.</p>
 </blockquote>
 <p>The <code>/echo</code> endpoint should show output resembling the following.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">{</span></span>
@@ -183,23 +181,22 @@
 <a href="#specifying-the-inputs" class="anchor"></a>Specifying the Inputs</h2>
 <p>You may have noticed that the functions that define our endpoints accept parameters. These parameters allow us to customize the behavior of our endpoints. One of the ways to do this is using “query strings” which are a way of passing parameters into an HTTP API. If you visit <a href="http://localhost:8000/plot?spec=setosa">http://localhost:8000/plot?spec=setosa</a>, you should see a similar graph to the one you saw before, but now the dataset has been filtered to only include the “setosa” species in the iris dataset.</p>
 <p><img src="quickstart_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
-<p>As you might have guessed, the <code>spec=setosa</code> portion of the URL sets the <code>spec</code> parameter to <code>setosa</code>. More details on how Plumber processes inputs are available in the <a href="#routing-and-input">Routing &amp; Input Chapter</a>.</p>
+<p>As you might have guessed, the <code>spec=setosa</code> portion of the URL sets the <code>spec</code> parameter to <code>setosa</code>. More details on how Plumber processes inputs are available in the <a href="./routing-and-input.html">Routing &amp; Input article</a>.</p>
 </div>
 <div id="customizing-the-output" class="section level2">
 <h2 class="hasAnchor">
 <a href="#customizing-the-output" class="anchor"></a>Customizing The Output</h2>
-<p>In the previous example, you saw one endpoint that rendered into JSON and one that produced an image. Unless instructed otherwise, Plumber will attempt to render whatever your endpoint function returns as JSON. However, you can specify alternative “serializers” which instruct Plumber to render the output as some other format such as HTML (<code>@html</code>), PNG (<code>@png</code>), or JPEG (<code>@jpeg</code>).</p>
+<p>In the previous example, you saw one endpoint that rendered into JSON and one that produced an image. Unless instructed otherwise, Plumber will attempt to render whatever your endpoint function returns as JSON. However, you can specify alternative “serializers” which instruct Plumber to render the output as some other format such as HTML (<code>@serializer html</code>), PNG (<code>@serializer png</code>), or JPEG (<code>@serializer jpeg</code>).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="co">#' @get /hello</span>
-<span class="co">#' @html</span>
-<span class="fu">function</span>(){
+<span class="co">#' @serializer html</span>
+<span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span>
   <span class="st">"&lt;html&gt;&lt;h1&gt;hello world&lt;/h1&gt;&lt;/html&gt;"</span>
-}
-</pre></div>
+<span class="op">}</span></pre></div>
 <p>This endpoint would produce something like the following, when visited. It also sets the appropriate <code>Content-Type</code> header so that a browser that visits this page would know to render the result as HTML.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">&lt;html&gt;&lt;h1&gt;</span>hello world<span class="kw">&lt;/h1&gt;&lt;/html&gt;</span></span></code></pre></div>
 <p>You can even provide your own custom serializers and define how to translate the R object produced by your endpoint into the bits that will produce Plumber’s HTTP response.</p>
-<p>You can find more details in the <a href="#rendering-and-output">Rendering &amp; Output chapter</a>.</p>
+<p>You can find more details in the <a href="./rendering-output.html">Rendering &amp; Output article</a>.</p>
 </div>
   </div>
 
@@ -218,14 +215,27 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
 </div>
 
   
-
-
-  </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
+  docsearch({
+    
+    
+    apiKey: '',
+    indexName: '',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+</body>
 </html>

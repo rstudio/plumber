@@ -44,6 +44,12 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 
 <meta property="og:title" content="Plumber Endpoint — PlumberEndpoint" />
@@ -81,19 +87,13 @@ Plumber Endpoint" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.7.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.0.0.9999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -103,8 +103,6 @@ Plumber Endpoint" />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li class="divider"></li>
-    <li class="dropdown-header">Creating APIs</li>
     <li>
       <a href="../articles/introduction.html">Introduction</a>
     </li>
@@ -150,6 +148,12 @@ Plumber Endpoint" />
 </li>
       </ul>
       
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -180,7 +184,7 @@ Plumber Endpoint" />
 They can also be provided manually for historical reasons.</p>
     <h2 class="hasAnchor" id="super-classes"><a class="anchor" href="#super-classes"></a>Super classes</h2>
 
-    <p><code><a href='https://www.rplumber.io/reference/hookable.html'>plumber::hookable</a></code> -&gt; <code><a href='https://www.rplumber.io/reference/PlumberStep.html'>plumber::PlumberStep</a></code> -&gt; <code>PlumberEndpoint</code></p>
+    <p><code><a href='Hookable.html'>plumber::Hookable</a></code> -&gt; <code><a href='PlumberStep.html'>plumber::PlumberStep</a></code> -&gt; <code>PlumberEndpoint</code></p>
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
     <p><div class="r6-fields"></p><dl>
@@ -198,107 +202,139 @@ each separate verb/path into its own endpoint, so we just do that.</p></dd>
 
 <dt><code>tags</code></dt><dd><p>endpoint tags</p></dd>
 
+<dt><code>parsers</code></dt><dd><p>step allowed parsers</p></dd>
+
 </dl><p></div></p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
-<h3>Public methods</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Public methods</h3>
 
 <ul>
 <li><p><a href='#method-getTypedParams'><code>PlumberEndpoint$getTypedParams()</code></a></p></li>
 <li><p><a href='#method-canServe'><code>PlumberEndpoint$canServe()</code></a></p></li>
+<li><p><a href='#method-matchesPath'><code>PlumberEndpoint$matchesPath()</code></a></p></li>
 <li><p><a href='#method-new'><code>PlumberEndpoint$new()</code></a></p></li>
 <li><p><a href='#method-getPathParams'><code>PlumberEndpoint$getPathParams()</code></a></p></li>
 <li><p><a href='#method-getFuncParams'><code>PlumberEndpoint$getFuncParams()</code></a></p></li>
+<li><p><a href='#method-getEndpointParams'><code>PlumberEndpoint$getEndpointParams()</code></a></p></li>
 <li><p><a href='#method-clone'><code>PlumberEndpoint$clone()</code></a></p></li>
 </ul>
 <p><details open ><summary>Inherited methods</summary>
 <ul>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="hookable" data-id="registerHooks"><a href='../../plumber/html/hookable.html#method-registerHooks'><code>plumber::hookable$registerHooks()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks"><a href='../../plumber/html/Hookable.html#method-registerHooks'><code>plumber::Hookable$registerHooks()</code></a></span></p></li>
 <li><p><span class="pkg-link" data-pkg="plumber" data-topic="PlumberStep" data-id="exec"><a href='../../plumber/html/PlumberStep.html#method-exec'><code>plumber::PlumberStep$exec()</code></a></span></p></li>
 <li><p><span class="pkg-link" data-pkg="plumber" data-topic="PlumberStep" data-id="registerHook"><a href='../../plumber/html/PlumberStep.html#method-registerHook'><code>plumber::PlumberStep$registerHook()</code></a></span></p></li>
 </ul>
 </details>
 
 <hr>
-<a id="method-getTypedParams"></a></p><h3>Method <code>getTypedParams()</code></h3>
-<p>retrieve endpoint typed parameters</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>getTypedParams</span>()</pre><p></div></p>
+<a id="method-getTypedParams"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>getTypedParams()</code></h3>
+<p>retrieve endpoint typed parameters</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>getTypedParams</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-canServe"></a></p><h3>Method <code>canServe()</code></h3>
-<p>ability to serve request</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>canServe</span>(<span class='kw'>req</span>)</pre><p></div></p>
+<a id="method-canServe"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>canServe()</code></h3>
+<p>ability to serve request</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>canServe</span><span class='op'>(</span><span class='va'>req</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>req</code></dt><dd><p>a request object</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>a logical. <code>TRUE</code> when endpoint can serve request.</p>
 <p><hr>
-<a id="method-new"></a></p><h3>Method <code>new()</code></h3>
-<p>Create a new <code>PlumberEndpoint</code> object</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>new</span>(
-  <span class='kw'>verbs</span>,
-  <span class='kw'>path</span>,
-  <span class='kw'>expr</span>,
-  <span class='kw'>envir</span>,
-  <span class='kw'>serializer</span>,
-  <span class='kw'>lines</span>,
-  <span class='kw'>params</span>,
-  <span class='kw'>comments</span>,
-  <span class='kw'>responses</span>,
-  <span class='kw'>tags</span>
-)</pre><p></div></p>
+<a id="method-matchesPath"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>matchesPath()</code></h3>
+<p>determines if route matches requested path</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>matchesPath</span><span class='op'>(</span><span class='va'>path</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>verbs</code></dt><dd><p>endpoint verb</p></dd>
-
-<dt><code>path</code></dt><dd><p>endpoint path</p></dd>
-
-<dt><code>expr</code></dt><dd><p>endpoint expr</p></dd>
-
-<dt><code>envir</code></dt><dd><p>endpoint environment</p></dd>
-
-<dt><code>serializer</code></dt><dd><p>endpoint serializer</p></dd>
-
-<dt><code>lines</code></dt><dd><p>endpoint block</p></dd>
-
-<dt><code>params</code></dt><dd><p>endpoint params</p></dd>
-
-<dt><code>comments</code></dt><dd><p>endpoint comments</p></dd>
-
-<dt><code>responses</code></dt><dd><p>endpoint responses</p></dd>
-
-<dt><code>tags</code></dt><dd><p>endpoint tags</p></dd>
+<dt><code>path</code></dt><dd><p>a url path</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
+<p>a logical. <code>TRUE</code> when endpoint matches the requested path.</p>
+<p><hr>
+<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
+<p>Create a new <code>PlumberEndpoint</code> object</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>
+  <span class='va'>verbs</span>,
+  <span class='va'>path</span>,
+  <span class='va'>expr</span>,
+  <span class='va'>envir</span>,
+  <span class='va'>serializer</span>,
+  <span class='va'>parsers</span>,
+  <span class='va'>lines</span>,
+  <span class='va'>params</span>,
+  <span class='va'>comments</span>,
+  <span class='va'>responses</span>,
+  <span class='va'>tags</span>
+<span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>verbs</code></dt><dd><p>Endpoint verb Ex: <code>"GET"</code>, <code>"POST"</code></p></dd>
+
+<dt><code>path</code></dt><dd><p>Endpoint path. Ex: <code>"/index.html"</code>, <code>"/foo/bar/baz"</code></p></dd>
+
+<dt><code>expr</code></dt><dd><p>Endpoint function or expression that evaluates to a function.</p></dd>
+
+<dt><code>envir</code></dt><dd><p>Endpoint environment</p></dd>
+
+<dt><code>serializer</code></dt><dd><p>Endpoint serializer. Ex: <code><a href='serializer_headers.html'>serializer_json()</a></code></p></dd>
+
+<dt><code>parsers</code></dt><dd><p>Can be one of:
+<ul>
+<li><p>A <code>NULL</code> value</p></li>
+<li><p>A character vector of parser names</p></li>
+<li><p>A named <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code> whose keys are parser names names and values are arguments to be applied with <code><a href='https://rdrr.io/r/base/do.call.html'>do.call()</a></code></p></li>
+<li><p>A <code>TRUE</code> value, which will default to combining all parsers. This is great for seeing what is possible, but not great for security purposes</p></li>
+</ul>If the parser name <code>"all"</code> is found in any character value or list name, all remaining parsers will be added.
+When using a list, parser information already defined will maintain their existing argument values.  All remaining parsers will use their default arguments.Example:<pre><span class='co'># provide a character string</span>
+<span class='va'>parsers</span> <span class='op'>=</span> <span class='st'>"json"</span><span class='co'># provide a named list with no arguments</span>
+<span class='va'>parsers</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>json <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='co'># provide a named list with arguments; include `rds`</span>
+<span class='va'>parsers</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>json <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>simplifyVector <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>, rds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='co'># default plumber parsers</span>
+<span class='va'>parsers</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"json"</span>, <span class='st'>"form"</span>, <span class='st'>"text"</span>, <span class='st'>"octet"</span>, <span class='st'>"multi"</span><span class='op'>)</span>
+</pre></p></dd>
+
+<dt><code>lines</code></dt><dd><p>Endpoint block</p></dd>
+
+<dt><code>params</code></dt><dd><p>Endpoint params</p></dd>
+
+<dt><code>comments, responses, tags</code></dt><dd><p>Values to be used within the OpenAPI Spec</p></dd>
+
+</dl><p></div></p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>A new <code>PlumberEndpoint</code> object</p>
 <p><hr>
-<a id="method-getPathParams"></a></p><h3>Method <code>getPathParams()</code></h3>
-<p>retrieve endpoint path parameters</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>getPathParams</span>(<span class='kw'>path</span>)</pre><p></div></p>
+<a id="method-getPathParams"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>getPathParams()</code></h3>
+<p>retrieve endpoint path parameters</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>getPathParams</span><span class='op'>(</span><span class='va'>path</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>path</code></dt><dd><p>endpoint path</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-getFuncParams"></a></p><h3>Method <code>getFuncParams()</code></h3>
-<p>retrieve endpoint expression parameters</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>getFuncParams</span>()</pre><p></div></p>
+<a id="method-getFuncParams"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>getFuncParams()</code></h3>
+<p>retrieve endpoint expression parameters</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>getFuncParams</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <p><hr>
-<a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
-<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>clone</span>(deep = <span class='fl'>FALSE</span>)</pre><p></div></p>
+<a id="method-getEndpointParams"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>getEndpointParams()</code></h3>
+<p>retrieve endpoint defined parameters</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>getEndpointParams</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<p><hr>
+<a id="method-clone"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>clone()</code></h3>
+<p>The objects of this class are cloneable with this method.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
 
@@ -321,13 +357,30 @@ each separate verb/path into its own endpoint, so we just do that.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '',
+    indexName: '',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
 
   </body>

@@ -44,6 +44,12 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 
 <meta property="og:title" content="plumber step R6 class — PlumberStep" />
@@ -81,19 +87,13 @@ of a request by a plumber router." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.7.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.0.0.9999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -103,8 +103,6 @@ of a request by a plumber router." />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li class="divider"></li>
-    <li class="dropdown-header">Creating APIs</li>
     <li>
       <a href="../articles/introduction.html">Introduction</a>
     </li>
@@ -150,6 +148,12 @@ of a request by a plumber router." />
 </li>
       </ul>
       
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -175,7 +179,7 @@ of a request by a plumber router.</p>
 
     <h2 class="hasAnchor" id="super-class"><a class="anchor" href="#super-class"></a>Super class</h2>
 
-    <p><code><a href='https://www.rplumber.io/reference/hookable.html'>plumber::hookable</a></code> -&gt; <code>PlumberStep</code></p>
+    <p><code><a href='Hookable.html'>plumber::Hookable</a></code> -&gt; <code>PlumberStep</code></p>
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
     <p><div class="r6-fields"></p><dl>
@@ -187,7 +191,7 @@ of a request by a plumber router.</p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
-<h3>Public methods</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Public methods</h3>
 
 <ul>
 <li><p><a href='#method-new'><code>PlumberStep$new()</code></a></p></li>
@@ -197,16 +201,16 @@ of a request by a plumber router.</p>
 </ul>
 <p><details open ><summary>Inherited methods</summary>
 <ul>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="hookable" data-id="registerHooks"><a href='../../plumber/html/hookable.html#method-registerHooks'><code>plumber::hookable$registerHooks()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks"><a href='../../plumber/html/Hookable.html#method-registerHooks'><code>plumber::Hookable$registerHooks()</code></a></span></p></li>
 </ul>
 </details>
 
 <hr>
-<a id="method-new"></a></p><h3>Method <code>new()</code></h3>
-<p>Create a new <code><a href='https://www.rplumber.io/reference/PlumberStep.html'>PlumberStep()</a></code> object</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>PlumberStep</span><span class='op'>$</span><span class='fu'>new</span>(<span class='kw'>expr</span>, <span class='kw'>envir</span>, <span class='kw'>lines</span>, <span class='kw'>serializer</span>)</pre><p></div></p>
+<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
+<p>Create a new <code>PlumberStep()</code> object</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberStep</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>expr</span>, <span class='va'>envir</span>, <span class='va'>lines</span>, <span class='va'>serializer</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>expr</code></dt><dd><p>step expr</p></dd>
 
@@ -217,24 +221,27 @@ of a request by a plumber router.</p>
 <dt><code>serializer</code></dt><dd><p>step serializer</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>A new <code>PlumberStep</code> object</p>
 <p><hr>
-<a id="method-exec"></a></p><h3>Method <code>exec()</code></h3>
-<p>step execution function</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>PlumberStep</span><span class='op'>$</span><span class='fu'>exec</span>(<span class='kw'>...</span>)</pre><p></div></p>
+<a id="method-exec"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>exec()</code></h3>
+<p>step execution function</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberStep</span><span class='op'>$</span><span class='fu'>exec</span><span class='op'>(</span><span class='va'>req</span>, <span class='va'>res</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>...</code></dt><dd><p>additional arguments for step execution</p></dd>
+<dt><code>req, res</code></dt><dd><p>Request and response objects created by a Plumber request</p></dd>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-registerHook"></a></p><h3>Method <code>registerHook()</code></h3>
-<p>step hook registration method</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>PlumberStep</span><span class='op'>$</span><span class='fu'>registerHook</span>(stage = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"preexec"</span>, <span class='st'>"postexec"</span>), <span class='kw'>handler</span>)</pre><p></div></p>
+<a id="method-registerHook"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>registerHook()</code></h3>
+<p>step hook registration method</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberStep</span><span class='op'>$</span><span class='fu'>registerHook</span><span class='op'>(</span>
+  stage <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"preexec"</span>, <span class='st'>"postexec"</span>, <span class='st'>"aroundexec"</span><span class='op'>)</span>,
+  <span class='va'>handler</span>
+<span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>stage</code></dt><dd><p>a character string.</p></dd>
 
@@ -242,11 +249,11 @@ of a request by a plumber router.</p>
 
 </dl><p></div></p>
 <p><hr>
-<a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
-<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='kw'>PlumberStep</span><span class='op'>$</span><span class='fu'>clone</span>(deep = <span class='fl'>FALSE</span>)</pre><p></div></p>
+<a id="method-clone"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>clone()</code></h3>
+<p>The objects of this class are cloneable with this method.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberStep</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
 
@@ -269,13 +276,30 @@ of a request by a plumber router.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '',
+    indexName: '',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
 
   </body>

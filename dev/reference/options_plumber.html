@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>How to use Plumber options — options_plumber • plumber</title>
+<title>Plumber options — options_plumber • plumber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -44,10 +44,18 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="How to use Plumber options — options_plumber" />
-<meta property="og:description" content="How to use Plumber options" />
+
+<meta property="og:title" content="Plumber options — options_plumber" />
+<meta property="og:description" content="There are a number of global options that affect Plumber's behavior. These can
+be set globally with options() or with options_plumber(). Options set using
+options_plumber() should not include the plumber. prefix." />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
 
 
@@ -80,19 +88,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.7.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.0.0.9999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -102,8 +104,6 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li class="divider"></li>
-    <li class="dropdown-header">Creating APIs</li>
     <li>
       <a href="../articles/introduction.html">Introduction</a>
     </li>
@@ -149,6 +149,12 @@
 </li>
       </ul>
       
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -160,55 +166,36 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>How to use Plumber options</h1>
+    <h1>Plumber options</h1>
     <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/plumber-options.R'><code>R/plumber-options.R</code></a></small>
     <div class="hidden name"><code>options_plumber.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>How to use Plumber options</p>
+    <p>There are a number of global options that affect Plumber's behavior. These can
+be set globally with <code><a href='https://rdrr.io/r/base/options.html'>options()</a></code> or with <code>options_plumber()</code>. Options set using
+<code>options_plumber()</code> should not include the <code>plumber.</code> prefix.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://www.rplumber.io/reference/options_plumber.html'>options_plumber</a></span>(
-  apiHost = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.apiHost"</span>),
-  debug = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.debug"</span>),
-  maxRequestSize = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.maxRequestSize"</span>),
-  postBody = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.postBody"</span>),
-  port = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.port"</span>),
-  sharedSecret = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.sharedSecret"</span>),
-  swagger.url = <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"plumber.swagger.url"</span>)
-)</pre>
+    <pre class="usage"><span class='fu'>options_plumber</span><span class='op'>(</span>
+  port <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.port"</span><span class='op'>)</span>,
+  docs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.docs"</span><span class='op'>)</span>,
+  docs.callback <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.docs.callback"</span><span class='op'>)</span>,
+  apiURL <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.apiURL"</span><span class='op'>)</span>,
+  apiScheme <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.apiScheme"</span><span class='op'>)</span>,
+  apiHost <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.apiHost"</span><span class='op'>)</span>,
+  apiPort <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.apiPort"</span><span class='op'>)</span>,
+  apiPath <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.apiPath"</span><span class='op'>)</span>,
+  maxRequestSize <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.maxRequestSize"</span><span class='op'>)</span>,
+  sharedSecret <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.sharedSecret"</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>apiHost</th>
-      <td><p>see details</p></td>
-    </tr>
-    <tr>
-      <th>debug</th>
-      <td><p>see details</p></td>
-    </tr>
-    <tr>
-      <th>maxRequestSize</th>
-      <td><p>see details</p></td>
-    </tr>
-    <tr>
-      <th>postBody</th>
-      <td><p>see details</p></td>
-    </tr>
-    <tr>
-      <th>port</th>
-      <td><p>see details</p></td>
-    </tr>
-    <tr>
-      <th>sharedSecret</th>
-      <td><p>see details</p></td>
-    </tr>
-    <tr>
-      <th>swagger.url</th>
-      <td><p>see details</p></td>
+      <th>port, docs, docs.callback, apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, sharedSecret</th>
+      <td><p>See details</p></td>
     </tr>
     </table>
 
@@ -217,32 +204,34 @@
     <p>The complete, prior set of <code><a href='https://rdrr.io/r/base/options.html'>options()</a></code> values.
 If a particular parameter is not supplied, it will return the current value.
 If no parameters are supplied, all returned values will be the current <code><a href='https://rdrr.io/r/base/options.html'>options()</a></code> values.</p>
-    <h2 class="hasAnchor" id="options"><a class="anchor" href="#options"></a>Options</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     
-
-<p>There are a number of global options that affect Plumber's behavior. These can
-be set globally with <code><a href='https://rdrr.io/r/base/options.html'>options()</a></code> or with <code><a href='https://www.rplumber.io/reference/options_plumber.html'>options_plumber()</a></code>. Options set using
-<code><a href='https://www.rplumber.io/reference/options_plumber.html'>options_plumber()</a></code> should not include the <code>plumber.</code> prefix.</p>
 <dl>
-<dt><code>plumber.apiHost</code> (defaults to <code>host</code> defined by <code>run</code> method, or an empty string
-when used outside a running router)</dt><dd><p>Host used to build UI url and server url for
-OpenAPI specification.</p></dd>
-<dt><code>plumber.debug</code> (defaults to <code>FALSE</code>)</dt><dd><p>Provides more insight into your API errors. Alternatively,
-use parameter <code>debug</code> of plumber router <code>run</code> method</p></dd>
-<dt><code>plumber.maxRequestSize</code> (defaults to <code>0</code>)</dt><dd><p>Maximum length in bytes of request body. Body larger
-than maximum are rejected with http error 413. <code>0</code> means unlimited size.</p></dd>
-<dt><code>plumber.postBody</code> (defaults to <code>TRUE</code>)</dt><dd><p>Copy post body content to <code>req$postBody</code> using system encoding.
-This should be set to <code>FALSE</code> if you do not need it. Default is <code>TRUE</code> to preserve compatibility with
-previous version behavior.</p></dd>
-<dt><code>plumber.port</code> (defaults to <code>NULL</code>)</dt><dd><p>Port Plumber will attempt to use to start http server.
-If the port is already in use, server will not be able to start.</p></dd>
-<dt><code>plumber.sharedSecret</code> (defaults to <code>NULL</code>)</dt><dd><p>Shared secret used to filter incoming request.
+<dt><code>plumber.port</code></dt><dd><p>Port Plumber will attempt to use to start http server.
+If the port is already in use, server will not be able to start. Defaults to <code>NULL</code></p></dd>
+<dt><code>plumber.docs</code></dt><dd><p>Name of the visual documentation interface to use. Defaults to <code>TRUE</code>, which will use <code>"swagger"</code></p></dd>
+<dt><code>plumber.docs.callback</code></dt><dd><p>A function. Called with
+a single parameter corresponding to the visual documentation url after Plumber server is ready. This can be used
+by RStudio to open the docs when then API is ran from the editor. Defaults to option <code>NULL</code></p></dd>
+<dt><code>plumber.apiURL</code></dt><dd><p>Server urls for OpenAPI Specification respecting
+pattern <code>scheme://host:port/path</code>. Other <code>api*</code> options will be ignored when set.</p></dd>
+<dt><code>plumber.apiScheme</code></dt><dd><p>Scheme used to build OpenAPI url and server url for
+OpenAPI Specification. Defaults to <code>http</code>, or an empty string
+when used outside a running router</p></dd>
+<dt><code>plumber.apiHost</code></dt><dd><p>Host used to build docs url and server url for
+OpenAPI Specification. Defaults to <code>host</code> defined by <code>run</code> method, or an empty string
+when used outside a running router</p></dd>
+<dt><code>plumber.apiPort</code></dt><dd><p>Port used to build OpenAPI url and server url for
+OpenAPI Specification. Defaults to <code>port</code> defined by <code>run</code> method, or an empty string
+when used outside a running router</p></dd>
+<dt><code>plumber.apiPath</code></dt><dd><p>Path used to build OpenAPI url and server url for
+OpenAPI Specification. Defaults to an empty string</p></dd>
+<dt><code>plumber.maxRequestSize</code></dt><dd><p>Maximum length in bytes of request body. Body larger
+than maximum are rejected with http error 413. <code>0</code> means unlimited size. Defaults to <code>0</code></p></dd>
+<dt><code>plumber.sharedSecret</code></dt><dd><p>Shared secret used to filter incoming request.
 When <code>NULL</code>, secret is not validated. Otherwise, Plumber compares secret with http header
-<code>PLUMBER_SHARED_SECRET</code>. Failure to match results in http error 400.</p></dd>
-<dt><code>plumber.swagger.url</code> (defaults to <code>NULL</code>)</dt><dd><p>A function. Called with
-a single parameter corresponding to ui url after Plumber server is ready. This can be used
-by RStudio to open UI when API is ran for the editor.</p></dd>
+<code>PLUMBER_SHARED_SECRET</code>. Failure to match results in http error 400. Defaults to <code>NULL</code></p></dd>
 
 </dl>
 
@@ -262,13 +251,30 @@ by RStudio to open UI when API is ran for the editor.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '',
+    indexName: '',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
 
   </body>

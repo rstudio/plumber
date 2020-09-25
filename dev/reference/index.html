@@ -44,6 +44,12 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 
 <meta property="og:title" content="Function reference" />
@@ -79,19 +85,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.7.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.0.0.9999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -101,8 +101,6 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li class="divider"></li>
-    <li class="dropdown-header">Creating APIs</li>
     <li>
       <a href="../articles/introduction.html">Introduction</a>
     </li>
@@ -148,6 +146,12 @@
 </li>
       </ul>
       
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -173,7 +177,7 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <h2 id="section-router" class="hasAnchor"><a href="#section-router" class="anchor"></a>Router</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
@@ -183,6 +187,333 @@
       
       
       <tr>
+        
+        <td>
+          <p><code><a href="plumb.html">plumb()</a></code> </p>
+        </td>
+        <td><p>Process a Plumber API</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plumb_api.html">plumb_api()</a></code> <code><a href="plumb_api.html">available_apis()</a></code> </p>
+        </td>
+        <td><p>Process a Package's Plumber API</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pr.html">pr()</a></code> </p>
+        </td>
+        <td><p>Create a new Plumber router</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pr_run.html">pr_run()</a></code> </p>
+        </td>
+        <td><p>Start a server using <code>plumber</code> object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="options_plumber.html">options_plumber()</a></code> </p>
+        </td>
+        <td><p>Plumber options</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="is_plumber.html">is_plumber()</a></code> </p>
+        </td>
+        <td><p>Determine if Plumber object</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-router-methods" class="hasAnchor"><a href="#section-router-methods" class="anchor"></a>Router Methods</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="pr_handle.html">pr_handle()</a></code> <code><a href="pr_handle.html">pr_get()</a></code> <code><a href="pr_handle.html">pr_post()</a></code> <code><a href="pr_handle.html">pr_put()</a></code> <code><a href="pr_handle.html">pr_delete()</a></code> <code><a href="pr_handle.html">pr_head()</a></code> </p>
+        </td>
+        <td><p>Add handler to Plumber router</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pr_mount.html">pr_mount()</a></code> </p>
+        </td>
+        <td><p>Mount a Plumber router</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pr_static.html">pr_static()</a></code> </p>
+        </td>
+        <td><p>Add a static route to the <code>plumber</code> object</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-router-hooks" class="hasAnchor"><a href="#section-router-hooks" class="anchor"></a>Router Hooks</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="pr_hook.html">pr_hook()</a></code> <code><a href="pr_hook.html">pr_hooks()</a></code> </p>
+        </td>
+        <td><p>Register a hook</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pr_cookie.html">pr_cookie()</a></code> </p>
+        </td>
+        <td><p>Store session data in encrypted cookies.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pr_filter.html">pr_filter()</a></code> </p>
+        </td>
+        <td><p>Add a filter to Plumber router</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-router-defaults" class="hasAnchor"><a href="#section-router-defaults" class="anchor"></a>Router Defaults</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="pr_set_api_spec.html">pr_set_api_spec()</a></code> </p>
+        </td>
+        <td><p>Set the OpenAPI Specification information</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pr_set_docs.html">pr_set_docs()</a></code> </p>
+        </td>
+        <td><p>Set the API visual documentation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pr_set_serializer.html">pr_set_serializer()</a></code> </p>
+        </td>
+        <td><p>Set the default serializer of the router</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pr_set_parsers.html">pr_set_parsers()</a></code> </p>
+        </td>
+        <td><p>Set the default endpoint parsers for the router</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pr_set_404.html">pr_set_404()</a></code> </p>
+        </td>
+        <td><p>Set the handler that is called when the incoming request can't be served</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pr_set_error.html">pr_set_error()</a></code> </p>
+        </td>
+        <td><p>Set the error handler that is invoked if any filter or endpoint generates an
+error</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pr_set_debug.html">pr_set_debug()</a></code> </p>
+        </td>
+        <td><p>Set debug value to include error messages of routes cause an error</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pr_set_docs_callback.html">pr_set_docs_callback()</a></code> </p>
+        </td>
+        <td><p>Set the <code>callback</code> to tell where the API visual documentation is located</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-visual-documentation-interface" class="hasAnchor"><a href="#section-visual-documentation-interface" class="anchor"></a>Visual Documentation Interface</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="pr_set_api_spec.html">pr_set_api_spec()</a></code> </p>
+        </td>
+        <td><p>Set the OpenAPI Specification information</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pr_set_docs.html">pr_set_docs()</a></code> </p>
+        </td>
+        <td><p>Set the API visual documentation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="register_docs.html">register_docs()</a></code> <code><a href="register_docs.html">registered_docs()</a></code> </p>
+        </td>
+        <td><p>Add visual documentation for plumber to use</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="validate_api_spec.html">validate_api_spec()</a></code> </p>
+        </td>
+        <td><p>Validate OpenAPI Spec</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-body-parsers" class="hasAnchor"><a href="#section-body-parsers" class="anchor"></a>Body Parsers</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="register_parser.html">register_parser()</a></code> <code><a href="register_parser.html">registered_parsers()</a></code> </p>
+        </td>
+        <td><p>Manage parsers</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="parsers.html">parser_form()</a></code> <code><a href="parsers.html">parser_json()</a></code> <code><a href="parsers.html">parser_text()</a></code> <code><a href="parsers.html">parser_yaml()</a></code> <code><a href="parsers.html">parser_csv()</a></code> <code><a href="parsers.html">parser_tsv()</a></code> <code><a href="parsers.html">parser_read_file()</a></code> <code><a href="parsers.html">parser_rds()</a></code> <code><a href="parsers.html">parser_feather()</a></code> <code><a href="parsers.html">parser_octet()</a></code> <code><a href="parsers.html">parser_multi()</a></code> <code><a href="parsers.html">parser_none()</a></code> </p>
+        </td>
+        <td><p>Plumber Parsers</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_character_set.html">get_character_set()</a></code> </p>
+        </td>
+        <td><p>Request character set</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-response" class="hasAnchor"><a href="#section-response" class="anchor"></a>Response</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="as_attachment.html">as_attachment()</a></code> </p>
+        </td>
+        <td><p>Return an attachment response</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="register_serializer.html">register_serializer()</a></code> <code><a href="register_serializer.html">registered_serializers()</a></code> </p>
+        </td>
+        <td><p>Register a Serializer</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="serializers.html">serializer_headers()</a></code> <code><a href="serializers.html">serializer_content_type()</a></code> <code><a href="serializers.html">serializer_csv()</a></code> <code><a href="serializers.html">serializer_tsv()</a></code> <code><a href="serializers.html">serializer_html()</a></code> <code><a href="serializers.html">serializer_json()</a></code> <code><a href="serializers.html">serializer_unboxed_json()</a></code> <code><a href="serializers.html">serializer_rds()</a></code> <code><a href="serializers.html">serializer_feather()</a></code> <code><a href="serializers.html">serializer_yaml()</a></code> <code><a href="serializers.html">serializer_text()</a></code> <code><a href="serializers.html">serializer_format()</a></code> <code><a href="serializers.html">serializer_print()</a></code> <code><a href="serializers.html">serializer_cat()</a></code> <code><a href="serializers.html">serializer_write_file()</a></code> <code><a href="serializers.html">serializer_htmlwidget()</a></code> <code><a href="serializers.html">serializer_device()</a></code> <code><a href="serializers.html">serializer_jpeg()</a></code> <code><a href="serializers.html">serializer_png()</a></code> <code><a href="serializers.html">serializer_svg()</a></code> <code><a href="serializers.html">serializer_bmp()</a></code> <code><a href="serializers.html">serializer_tiff()</a></code> <code><a href="serializers.html">serializer_pdf()</a></code> </p>
+        </td>
+        <td><p>Plumber Serializers</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="endpoint_serializer.html">endpoint_serializer()</a></code> </p>
+        </td>
+        <td><p>Endpoint Serializer with Hooks</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="include_file.html">include_file()</a></code> <code><a href="include_file.html">include_html()</a></code> <code><a href="include_file.html">include_md()</a></code> <code><a href="include_file.html">include_rmd()</a></code> </p>
+        </td>
+        <td><p>Send File Contents as Response</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-cookies-and-filters" class="hasAnchor"><a href="#section-cookies-and-filters" class="anchor"></a>Cookies and Filters</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="pr_cookie.html">pr_cookie()</a></code> </p>
+        </td>
+        <td><p>Store session data in encrypted cookies.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="random_cookie_key.html">random_cookie_key()</a></code> </p>
+        </td>
+        <td><p>Random cookie key generator</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="session_cookie.html">session_cookie()</a></code> </p>
+        </td>
+        <td><p>Store session data in encrypted cookies.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="forward.html">forward()</a></code> </p>
+        </td>
+        <td><p>Forward Request to The Next Handler</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-r-constructors" class="hasAnchor"><a href="#section-r-constructors" class="anchor"></a>R6 Constructors</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="Plumber.html">Plumber</a></code> </p>
+        </td>
+        <td><p>Package Plumber Router</p></td>
+      </tr><tr>
         
         <td>
           <p><code><a href="PlumberEndpoint.html">PlumberEndpoint</a></code> </p>
@@ -203,111 +534,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="addParser.html">addParser()</a></code> </p>
+          <p><code><a href="Hookable.html">Hookable</a></code> </p>
         </td>
-        <td><p>Add a Parsers</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="addSerializer.html">addSerializer()</a></code> </p>
-        </td>
-        <td><p>Add a Serializer</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="do_configure_https.html">do_configure_https()</a></code> </p>
-        </td>
-        <td><p>Add HTTPS to a plumber Droplet</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="do_deploy_api.html">do_deploy_api()</a></code> </p>
-        </td>
-        <td><p>Deploy or Update an API</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="do_forward.html">do_forward()</a></code> </p>
-        </td>
-        <td><p>Forward Root Requests to an API</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="do_provision.html">do_provision()</a></code> </p>
-        </td>
-        <td><p>Provision a DigitalOcean plumber server</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="do_remove_api.html">do_remove_api()</a></code> </p>
-        </td>
-        <td><p>Remove an API from the server</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="do_remove_forward.html">do_remove_forward()</a></code> </p>
-        </td>
-        <td><p>Remove the forwarding rule</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="forward.html">forward()</a></code> </p>
-        </td>
-        <td><p>Forward Request to The Next Handler</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="getCharacterSet.html">getCharacterSet()</a></code> </p>
-        </td>
-        <td><p>Request character set</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hookable.html">hookable</a></code> </p>
-        </td>
-        <td><p>hookable</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="include_file.html">include_file()</a></code> <code><a href="include_file.html">include_html()</a></code> <code><a href="include_file.html">include_md()</a></code> <code><a href="include_file.html">include_rmd()</a></code> </p>
-        </td>
-        <td><p>Send File Contents as Response</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="options_plumber.html">options_plumber()</a></code> </p>
-        </td>
-        <td><p>How to use Plumber options</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="parsers.html">parser_json()</a></code> <code><a href="parsers.html">parser_query()</a></code> <code><a href="parsers.html">parser_text()</a></code> <code><a href="parsers.html">parser_rds()</a></code> <code><a href="parsers.html">parser_multi()</a></code> <code><a href="parsers.html">parser_octet()</a></code> <code><a href="parsers.html">parser_yaml()</a></code> </p>
-        </td>
-        <td><p>Plumber Parsers</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plumber.html">plumb()</a></code> </p>
-        </td>
-        <td><p>Plumber Router</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="randomCookieKey.html">randomCookieKey()</a></code> </p>
-        </td>
-        <td><p>Random cookie key generator</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="serializers.html">serializer_json()</a></code> <code><a href="serializers.html">serializer_unboxed_json()</a></code> <code><a href="serializers.html">serializer_content_type()</a></code> <code><a href="serializers.html">serializer_csv()</a></code> <code><a href="serializers.html">serializer_html()</a></code> <code><a href="serializers.html">serializer_htmlwidget()</a></code> <code><a href="serializers.html">serializer_rds()</a></code> <code><a href="serializers.html">serializer_yaml()</a></code> </p>
-        </td>
-        <td><p>Plumber Serializers</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="sessionCookie.html">sessionCookie()</a></code> </p>
-        </td>
-        <td><p>Store session data in encrypted cookies.</p></td>
+        <td><p>Hookable</p></td>
       </tr>
     </tbody>
     </table>
@@ -327,13 +556,30 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '',
+    indexName: '',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
 
   </body>

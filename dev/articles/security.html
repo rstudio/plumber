@@ -17,7 +17,9 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Security">
+<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Security">
 <meta property="og:description" content="plumber">
 <meta property="og:image" content="https://www.rplumber.io/logo.svg">
 <meta name="robots" content="noindex">
@@ -39,18 +41,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.7.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.0.0.9999</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -61,9 +57,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li class="divider">
-    <li class="dropdown-header">Creating APIs</li>
-    <li>
+<li>
       <a href="../articles/introduction.html">Introduction</a>
     </li>
     <li>
@@ -107,7 +101,13 @@
   </a>
 </li>
       </ul>
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
+      </form>
+      
+    </div>
 <!--/.nav-collapse -->
   </div>
 <!--/.container -->
@@ -153,7 +153,7 @@
 </ol>
 <p>These two assurances are critical if your API will be handling any sensitive data or performing actions intended only for authenticated users. Some hosting options support serving on both HTTP and HTTPS simultaneously. The most secure configuration would be to redirect incoming HTTP traffic to your HTTPS hosting option.</p>
 <p>As an added layer of protection, you can consider enabling <a href="https://www.troyhunt.com/understanding-http-strict-transport/">HTTP Strict Transport Security (HSTS)</a>. HSTS is a way to instruct clients that – in the future – they should refuse to connect to this server over unsecure HTTP. This ensures that no imposter server would be able to trick a client into connecting over insecure HTTP in the future.</p>
-<p>Unfortunately, Plumber does not implement HTTPS support natively, but most of the <a href="#hosting">documented hosting options</a> offer ways to deploy HTTPS and HSTS in front of your Plumber API.</p>
+<p>Unfortunately, Plumber does not implement HTTPS support natively, but most of the <a href="./hosting.html">documented hosting options</a> offer ways to deploy HTTPS and HSTS in front of your Plumber API.</p>
 </div>
 <div id="dos" class="section level2">
 <h2 class="hasAnchor">
@@ -164,32 +164,30 @@
 <span class="co">#' This is an example of an UNSAFE endpoint which</span>
 <span class="co">#' is vulnerable to a DOS attack.</span>
 <span class="co">#' @get /</span>
-<span class="co">#' @png</span>
-<span class="fu">function</span>(<span class="kw">pts</span>=<span class="fl">10</span>) {
+<span class="co">#' @serializer png</span>
+<span class="kw">function</span><span class="op">(</span><span class="va">pts</span><span class="op">=</span><span class="fl">10</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># An example of an UNSAFE endpoint.</span>
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="fl">1</span><span class="op">:</span><span class="kw">pts</span>)
-}
-</pre></div>
+  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">pts</span><span class="op">)</span>
+<span class="op">}</span></pre></div>
 <p>The expected output here is a harmless plot.</p>
 <p><img src="security_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 <p>This plot takes a negligible amount of time to create.</p>
 <p>However, plots with more points will take more time to create.</p>
 <p><img src="security_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>This plot, with 10,000 points added, took 0.311 seconds to generate. While that doesn’t sound like much, if we exposed this API publicly on the Internet, an attacker could easily generate enough traffic on this endpoint to overwhelm the Plumber process. Even worse, an attacker could make a request on this endpoint with millions or billions of points which might cause our server to run out of memory or consume so much CPU that it deprives other important system resources. Either case could result in our Plumber process crashing altogether.</p>
+<p>This plot, with 10,000 points added, took 0.165 seconds to generate. While that doesn’t sound like much, if we exposed this API publicly on the Internet, an attacker could easily generate enough traffic on this endpoint to overwhelm the Plumber process. Even worse, an attacker could make a request on this endpoint with millions or billions of points which might cause our server to run out of memory or consume so much CPU that it deprives other important system resources. Either case could result in our Plumber process crashing altogether.</p>
 <p>The solution, in this case, is to ensure that we have reasonable safety guards in place for any user input.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="co">#' This is an example of an safe endpoint which</span>
 <span class="co">#' checks user input to avoid a DOS attack</span>
 <span class="co">#' @get /</span>
-<span class="co">#' @png</span>
-<span class="fu">function</span>(<span class="kw">pts</span>=<span class="fl">10</span>) {
-  <span class="co">if</span> (<span class="kw">pts</span> <span class="op">&gt;</span> <span class="fl">1000</span>){
-    <span class="fu"><a href="https://rdrr.io/r/base/stop.html">stop</a></span>(<span class="st">"pts must be &lt; 1,000"</span>)
-  }
+<span class="co">#' @serializer png</span>
+<span class="kw">function</span><span class="op">(</span><span class="va">pts</span><span class="op">=</span><span class="fl">10</span><span class="op">)</span> <span class="op">{</span>
+  <span class="kw">if</span> <span class="op">(</span><span class="va">pts</span> <span class="op">&gt;</span> <span class="fl">1000</span> <span class="op">&amp;</span> <span class="va">pts</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">{</span>
+    <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"pts must be between 1 and 1,000"</span><span class="op">)</span>
+  <span class="op">}</span>
 
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span>(<span class="fl">1</span><span class="op">:</span><span class="kw">pts</span>)
-}
-</pre></div>
+  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">pts</span><span class="op">)</span>
+<span class="op">}</span></pre></div>
 <p>Here you can see that we only allow the user to request a graph with up to 1,000 points. Any requests exceeding that limit will immediately be terminated without any further computation.</p>
 <p>You should be very attentive to the resources that could be consumed by any of your filters or endpoints. Consider the various values that a user could provide for each of your API endpoint’s parameters and ensure that the behavior of the system is reasonable in those cases. For API endpoints that do require extensive computation, consider how you could protect those endpoints (perhaps only exposing them for authenticated users) to prevent a malicious user from abusing the system.</p>
 </div>
@@ -201,27 +199,25 @@
 <span class="co">#' This is an example of an UNSAFE endpoint which</span>
 <span class="co">#' does not sanitize user input</span>
 <span class="co">#' @get /</span>
-<span class="fu">function</span>(<span class="kw">file</span>) {
+<span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span> <span class="op">{</span>
 
   <span class="co"># An example of an UNSAFE endpoint.</span>
-  <span class="kw">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"./datasets"</span>, <span class="kw">file</span>)
-  <span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span>(<span class="kw">path</span>)
-}
-</pre></div>
+  <span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"./datasets"</span>, <span class="va">file</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span>
+<span class="op">}</span></pre></div>
 <p>Unfortunately, this API endpoint does not properly sanitize the user input. The user could set the <code>file</code> parameter to <code>../plumber.R</code> and now the endpoint would return the source code of your Plumber API. Of course they could just as easy attempt to read other files that might contain API keys or other sensitive data.</p>
 <p>One solution in this case is to strip all special characters off of the user input which will prevent users from being able to escape into a different directory.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="co">#' This is an example of an endpoint which</span>
 <span class="co">#' checks user input.</span>
 <span class="co">#' @get /</span>
-<span class="fu">function</span>(<span class="kw">file</span>) {
+<span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># Strip all "non-word" characters from user input</span>
-  <span class="kw">sanitizedFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">"\\W"</span>, <span class="st">""</span>, <span class="kw">file</span>)
+  <span class="va">sanitizedFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"\\W"</span>, <span class="st">""</span>, <span class="va">file</span><span class="op">)</span>
 
-  <span class="kw">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"./datasets"</span>, <span class="kw">sanitizedFile</span>)
-  <span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span>(<span class="kw">path</span>)
-}
-</pre></div>
+  <span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"./datasets"</span>, <span class="va">sanitizedFile</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span>
+<span class="op">}</span></pre></div>
 <p>File paths are not the only opportunity for malicious input to do damage to your system, however. Another way in which user input can be dangerous is an attack known as “cross site scripting,” or “XSS.” This attack can be leveraged whenever user input may be rendered in a user’s browser. For instance if you had an endpoint which allows users to comment on a page and then later displays those comments to other users, an attacked could craft a comment such as:</p>
 <pre><code>"This is a comment with JavaScript! &lt;script&gt;alert('I could do something bad here!');&lt;/script&gt;</code></pre>
 <p>As you can see, the comment has JavaScript embedded within it, in this case used to popup a message to the user. Of course JavaScript could be used in other harmful way by redirecting your users to a malicious site, for instance, or uploading data that they have special access to on your server to some other destination. Any user input that might be included on an HTML page should be properly escaped (see <code>htmltools::html_escape</code> for help).</p>
@@ -231,50 +227,39 @@
 <div id="cross-origin-resource-sharing-cors" class="section level2">
 <h2 class="hasAnchor">
 <a href="#cross-origin-resource-sharing-cors" class="anchor"></a>Cross-Origin Resource Sharing (CORS)</h2>
-<p>// TODO: revisit this when CORS is properly implemented in plumber</p>
-<p>//TODO {introduction on CORS principles}</p>
 <p>By default, the API endpoint forbids “cross-domain” requests, but it’s possible with a workaround to override this behavior creating a custom function that will forward the right headers to the API using a filter such as the following snippet.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="co">#* @filter cors</span>
-<span class="kw">cors</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">res</span>) {
-    <span class="kw">res</span><span class="op">$</span><span class="fu">setHeader</span>(<span class="st">"Access-Control-Allow-Origin"</span>, <span class="st">"*"</span>)
-    <span class="kw">plumber</span>::<span class="fu"><a href="../reference/forward.html">forward</a></span>()
-}
-</pre></div>
+<span class="va">cors</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">res</span><span class="op">$</span><span class="fu">setHeader</span><span class="op">(</span><span class="st">"Access-Control-Allow-Origin"</span>, <span class="st">"*"</span><span class="op">)</span>
+    <span class="fu">plumber</span><span class="fu">::</span><span class="fu"><a href="../reference/forward.html">forward</a></span><span class="op">(</span><span class="op">)</span>
+<span class="op">}</span></pre></div>
 <p>Once this filter is defined, each endpoint will allow “cross-domain” requests. It’s possible to disable it for some, by appending the line <code>#* @preempt cors</code> before the declaration of a function like this :</p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
 <span class="co">#* @preempt cors</span>
 <span class="co">#* @get /sub</span>
-<span class="kw">cors_disabled</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">a</span>, <span class="kw">b</span>){
-  <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="kw">a</span>) <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="kw">b</span>)
-}
-</pre></div>
+<span class="va">cors_disabled</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span><span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span>
+<span class="op">}</span></pre></div>
 <p>Understand that, this is a temporary workaround and can constitute critical security issues if some endpoints that shouldn’t be exposed through <code>CORS</code> and have been enabled by default.</p>
-</div>
-<div id="cross-site-request-forgery-csrf-or-xsrf" class="section level2">
-<h2 class="hasAnchor">
-<a href="#cross-site-request-forgery-csrf-or-xsrf" class="anchor"></a>Cross-Site Request Forgery (CSRF, or XSRF)</h2>
-<p>// TODO XSRF</p>
 </div>
 <div id="security-cookies" class="section level2">
 <h2 class="hasAnchor">
 <a href="#security-cookies" class="anchor"></a>Cookies</h2>
-<p>In the <a href="#setting-cookies">section on setting cookies</a>, we discussed the mechanics of setting cookies. However, if you intend to use cookies for any security-sensitive purpose, you should be aware of some ways that cookies can be exploited.</p>
+<p>In the <a href="./rendering-output.html#setting-cookies">section on setting cookies</a>, we discussed the mechanics of setting cookies. However, if you intend to use cookies for any security-sensitive purpose, you should be aware of some ways that cookies can be exploited.</p>
 <p>First and foremost, recognize that that the client has the ability to modify or fabricate the cookies that they send to your API. So storing preferences that the user themselves provided in a cookie is not a concern. Storing something with security implications – like the identity of the user making requests – however, would be; a malicious user would just need to modify the user ID saved in their cookie in order to trick your API into thinking that they were someone they’re not.</p>
-<p>There are two common work-arounds to this concern. You can store all session information on the server identified by long, cryptographically random IDs and only rely on the cookie to store the ID. Or you can use signed/encrypted cookies, as detailed in the <a href="#encrypted-cookies">section on setting encrypted cookies</a>.</p>
-<p>// TODO: demo of an API that uses cryptographically secure session IDs</p>
+<p>There are two common work-arounds to this concern. You can store all session information on the server identified by long, cryptographically random IDs and only rely on the cookie to store the ID. Or you can use signed/encrypted cookies, as detailed in the <a href="./rendering-output.html#encrypted-cookies">section on setting encrypted cookies</a>.</p>
 <p>You should also be aware of how cookies will be handled and managed by clients. You can manage these properties by providing different parameters to the <code>setCookie()</code> call.</p>
 <ul>
 <li>
 <strong>expiration</strong> - When the cookie should expire. Can either be a <code>POSIXt</code> object that gives the time explicitly, or a raw integer which will be interpreted as the number of seconds in the future when this cookie should expire. If no value is provided, the cookie will be a <code>session</code> cookie, meaning that it will persist until the user closes the tab/browser. Remember, however, that a client may accidentally or maliciously retain this cookie beyond its assigned expiration time. From a security standpoint, you cannot rely on a client to be well-behaved and to delete this cookie at the assigned time.</li>
 <li>
-<strong>http</strong> - The <code>HttpOnly</code> property on a cookie determines whether or not the cookie should be accessible to JavaScript running on your domain. If you were using a cookie to persist user settings and host some JavaScript that may also leverage the preferences stored in that cookie, then you would want <code>http</code> parameter to be <code>FALSE</code>, indicating that the cookie should <em>not</em> be <code>HttpOnly</code>, and <em>should</em> be available to Javascript. If you were storing a session ID in the cookie that is only interpretable by the server, then you should set <code>http</code> to <code>TRUE</code>. There are a variety of attacks (such as “cross-site scripting”) that would enable an attacker to run malicious JavaScript on your clients’ machines, so it’s wise to limit the amount of information accessible from JavaScript.</li>
+<strong>http</strong> - The <code>HttpOnly</code> property on a cookie determines whether or not the cookie should be accessible to JavaScript running on your domain. If you were using a cookie to persist user settings and host some JavaScript that may also leverage the preferences stored in that cookie, then you would want <code>http</code> parameter to be <code>FALSE</code>, indicating that the cookie should <em>not</em> be <code>HttpOnly</code>, and <em>should</em> be available to JavaScript. If you were storing a session ID in the cookie that is only interpretable by the server, then you should set <code>http</code> to <code>TRUE</code>. There are a variety of attacks (such as “cross-site scripting”) that would enable an attacker to run malicious JavaScript on your clients’ machines, so it’s wise to limit the amount of information accessible from JavaScript.</li>
 <li>
 <strong>secure</strong> - If <code>TRUE</code>, instructs clients to only send the cookie when connecting to your server over HTTPS. HTTPS is a mechanism by which clients can gain more assurance that the server they’re connected to is indeed the server that they intended to be communicating with. If your API uses HTTPS, using secure cookies protects against a use case in which an attacker tricks one of your clients into connecting to an HTTP server impersonating your API. In that scenario, a client may send their cookies to this malicious server, at which point the attacker could use those cookies on your server to impersonate the actual user. Note that you shouldn’t enable this until you have your API stably running HTTPS.</li>
 </ul>
-<p>Additionally, bear in mind that if an attacker gets physical access to a client who has a valid cookie, the attacker could copy that cookie off to a different machine and begin using it themselves. Unfortunately, you can’t perfectly protect against such attacks, but you can minimize the impact by 1.) using shorter session lifetimes (perhaps a few hours instead of days), 2.) invalidating sessions after a period of user inactivity, or 3.) rotating the sesion ID periodically; this way you’d be able to detect that multiple clients were trying to use the same session and could take action. You can also consider adding an additional layer of security around very security-sensitive endpoints (like changing a user’s password).</p>
+<p>Additionally, bear in mind that if an attacker gets physical access to a client who has a valid cookie, the attacker could copy that cookie off to a different machine and begin using it themselves. Unfortunately, you can’t perfectly protect against such attacks, but you can minimize the impact by 1.) using shorter session lifetimes (perhaps a few hours instead of days), 2.) invalidating sessions after a period of user inactivity, or 3.) rotating the session ID periodically; this way you’d be able to detect that multiple clients were trying to use the same session and could take action. You can also consider adding an additional layer of security around very security-sensitive endpoints (like changing a user’s password).</p>
 <p>Lastly, if using encrypted cookies to store sensitive information, you should remember that expiring a cookie is an instruction that you’re sending to the client that may or may not be honored. Thus if you were to set an encrypted cookie on a client to authenticate the user and that user wishes to log out, all you can do is instruct the client that they should delete that cookie. If the cookie had been stolen or if a misbehaving client doesn’t delete the cookie, it’s possible that that cookie could still be used to continue making authenticated requests to your API.</p>
-<p>// TODO: cookies with regards to XSRF, or nest XSRF under this section?</p>
 </div>
   </div>
 
@@ -293,14 +278,27 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
 </div>
 
   
-
-
-  </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
+  docsearch({
+    
+    
+    apiKey: '',
+    indexName: '',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+</body>
 </html>
