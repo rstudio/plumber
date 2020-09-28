@@ -4,8 +4,9 @@
 #' @param argument The line (including the plumber comment prefix) to append.
 #'   If this line represents what was once multiple lines, intermediate comment
 #'   prefixes should have been removed.
+#' @param envir An environment where to evaluate parsed expressions
 #' @noRd
-plumbOneGlobal <- function(fields, argument){
+plumbOneGlobal <- function(fields, argument, envir = parent.frame()){
   if (nchar(argument) == 0){
     return(fields)
   }
@@ -33,13 +34,13 @@ plumbOneGlobal <- function(fields, argument){
          },
          apiContact={
            if (grepl("^list\\(", def)) {
-             def <- eval(parse(text = def))
+             def <- eval(parse(text = def), envir)
            }
            fields$info$contact <- def
          },
          apiLicense={
            if (grepl("^list\\(", def)) {
-             def <- eval(parse(text = def))
+             def <- eval(parse(text = def), envir)
            }
            fields$info$license <- def
          },
@@ -63,7 +64,7 @@ argRegex <- "^#['\\*]\\s*(@(api\\w+)\\s+)?(.*)$"
 #' Parse out the global API settings of a given set of lines and return a
 #' OpenAPI-compliant list describing the global API.
 #' @noRd
-plumbGlobals <- function(lines){
+plumbGlobals <- function(lines, envir = parent.frame()){
   # Build up the entire argument here; needed since a single directive
   # might wrap multiple lines
   fullArg <- ""
@@ -81,19 +82,19 @@ plumbGlobals <- function(lines){
         fullArg <- paste(fullArg, parsedLine[4])
       } else {
         # New argument, parse the buffer and start a new one
-        fields <- plumbOneGlobal(fields, fullArg)
+        fields <- plumbOneGlobal(fields, fullArg, envir)
         fullArg <- line
       }
     } else {
       # This isn't a line we can underestand. Parse what we have in the
       # buffer and then reset
-      fields <- plumbOneGlobal(fields, fullArg)
+      fields <- plumbOneGlobal(fields, fullArg, envir)
       fullArg <- ""
     }
   }
 
   # Clear out the buffer
-  fields <- plumbOneGlobal(fields, fullArg)
+  fields <- plumbOneGlobal(fields, fullArg, envir)
 
   fields
 }

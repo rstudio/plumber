@@ -127,7 +127,7 @@ Plumber <- R6Class(
                         private$addFilterInternal, self)
         }
 
-        private$globalSettings <- plumbGlobals(private$lines)
+        private$globalSettings <- plumbGlobals(private$lines, private$envir)
       }
 
     },

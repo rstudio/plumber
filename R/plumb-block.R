@@ -11,6 +11,7 @@ stopOnLine <- function(lineNum, line, msg){
 
 #' @param lineNum The line number just above the function we're documenting
 #' @param file A character vector representing all the lines in the file
+#' @param envir An environment where to evaluate parsed expressions
 #' @noRd
 plumbBlock <- function(lineNum, file, envir = parent.frame()){
   paths <- NULL
