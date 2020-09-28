@@ -499,24 +499,21 @@ pr_run <- function(pr,
 #' Add a static route to the `plumber` object
 #'
 #' @template param_pr
-#' @param direc The local folder to be served statically
 #' @param path The mounted path location of the static folder
+#' @param direc The local folder to be served statically
 #'
 #' @examples
 #' \dontrun{
 #' pr() %>%
-#'   pr_static("./my_folder/location", "/path") %>%
+#'   pr_static("/path", "./my_folder/location") %>%
 #'   pr_run()
 #' }
 #'
 #' @export
-# TODO: Validate if this makes sense?
-# Arguments path and direc are in reverse order compared to plumber annotation `@assets direc {path}`.
-# Default path is `/public` for annotation `@assets`
 pr_static <- function(
   pr,
-  direc,
-  path = "/public"
+  path,
+  direc
 ) {
   pr_mount(pr, path, PlumberStatic$new(direc))
 }
