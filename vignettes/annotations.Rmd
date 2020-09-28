@@ -162,16 +162,16 @@ list()
 list()
 ```
 
-##### Equivalent programmatic usage
+##### Equivalent programmatic usage (note that argument order is reversed)
 ```{r, eval = FALSE, echo = TRUE}
 pr() %>%
-  pr_static("./files/static")
+  pr_static(direc = "./files/static")
 
 pr() %>%
-  pr_static("./files/static", "/static")
+  pr_static("/static", "./files/static")
 
 pr() %>%
-  pr_static("./files/static", "/")
+  pr_static("/", "./files/static")
 ```
 
 ### Plumber Object Modifier {#plumber-block-annotations}
