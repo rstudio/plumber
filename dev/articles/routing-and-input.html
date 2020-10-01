@@ -82,6 +82,9 @@
       <a href="../articles/programmatic-usage.html">Programmatic Usage</a>
     </li>
     <li>
+      <a href="../articles/annotations.html">Annotations reference</a>
+    </li>
+    <li>
       <a href="../articles/tips-and-tricks.html">Tips &amp; Tricks</a>
     </li>
     <li>
@@ -493,7 +496,11 @@
 <h3 class="hasAnchor">
 <a href="#request-body" class="anchor"></a>Request Body</h3>
 <p>Another way to provide additional information inside an HTTP request is using the message body. Effectively, once a client specifies all the metadata about a request (the path it’s trying to reach, some HTTP headers, etc.) it can then provide a message body. The maximum size of a request body depends largely on the technologies involved (client, proxies, etc.) but is typically at least 2MB – much larger than a query string. This approach is most commonly seen with <code>PUT</code> and <code>POST</code> requests, though you could encounter it with other HTTP methods.</p>
-<p>Plumber will attempt to parse the request body in one of two ways: if it appears that the message is JSON, then Plumber will parse the body as a JSON message; otherwise it will decode it as a standard query string. Any fields provided in the message body in either format will be passed through as parameters to the function.</p>
+<p>Plumber will attempt to parse the request body in one using allowed <a href="../reference/parsers.html">parsers</a>. Any fields provided in the message body will be passed through as parameters to the function.</p>
+<div id="files-handling-note" class="section level4">
+<h4 class="hasAnchor">
+<a href="#files-handling-note" class="anchor"></a>Files handling note</h4>
+<p>When dealing with binary parameters, Plumber will return a named list of raw vector. The names in the list are the original uploaded filenames. Raw values are binary content of each file.</p>
 <p>Unfortunately, crafting a request with a message body requires a bit more work than making a <code>GET</code> request with a query string from your web browser, but you can use tools like <code>curl</code> on the command line or the <a href="https://github.com/hadley/httr/">httr R package</a>. We’ll use <code>curl</code> for the examples below.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit">
 <span class="co">#' @post /user</span>
@@ -518,6 +525,7 @@
 <p>Alternatively, <code>curl --data '{"id":123, "name": "Jennifer"}' "http://localhost:8000/user"</code> (formatting the body as JSON) will have the same effect.</p>
 <p>As demonstrated above, the raw request body is made available as <code>req$bodyRaw</code> and parsed request body is available as <code>req$body</code>.</p>
 <p>If multiple parameters are matched to the endpoint formals, an error will be thrown. Due to the nature of how multiple values can be matched to the same argument, it is recommended that <code>POST</code> endpoints have a function definition that only accepts the formals <code>req</code>, <code>res</code>, and <code>...</code>. If the endpoint arguments are to be processed like a list, they are available at <code>req$argsBody</code>, with all arguments at <code>req$args</code>. <code>req$args</code> is a combination of <code><a href="https://rdrr.io/r/base/list.html">list(req = req, res = res)</a></code>, <code>req$argsPath</code>, <code>req$argsBody</code>, and <code>req$argsQuery</code>.</p>
+</div>
 </div>
 <div id="read-cookies" class="section level3">
 <h3 class="hasAnchor">

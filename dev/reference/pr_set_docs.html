@@ -57,11 +57,7 @@
 When TRUE or a
 function, multiple handles will be added to Plumber object. OpenAPI json
 file will be served on paths /openapi.json and /swagger.json. Documentation
-will be served on paths /__docs__/index.html and /__docs__/. When
-using a function, it will receive the Plumber router as the first parameter
-and current OpenAPI Specification as the second. This function should return a
-list containing OpenAPI Specification.
-See http://spec.openapis.org/oas/v3.0.3" />
+will be served on paths /__docs__/index.html and /__docs__/." />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
 
 
@@ -135,6 +131,9 @@ See http://spec.openapis.org/oas/v3.0.3" />
       <a href="../articles/programmatic-usage.html">Programmatic Usage</a>
     </li>
     <li>
+      <a href="../articles/annotations.html">Annotations reference</a>
+    </li>
+    <li>
       <a href="../articles/tips-and-tricks.html">Tips &amp; Tricks</a>
     </li>
     <li>
@@ -182,11 +181,7 @@ See http://spec.openapis.org/oas/v3.0.3" />
 When <code>TRUE</code> or a
 function, multiple handles will be added to <code><a href='Plumber.html'>Plumber</a></code> object. OpenAPI json
 file will be served on paths <code>/openapi.json</code> and <code>/swagger.json</code>. Documentation
-will be served on paths <code>/__docs__/index.html</code> and <code>/__docs__/</code>. When
-using a function, it will receive the Plumber router as the first parameter
-and current OpenAPI Specification as the second. This function should return a
-list containing OpenAPI Specification.
-See <a href='http://spec.openapis.org/oas/v3.0.3'>http://spec.openapis.org/oas/v3.0.3</a></p>
+will be served on paths <code>/__docs__/index.html</code> and <code>/__docs__/</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>pr_set_docs</span><span class='op'>(</span><span class='va'>pr</span>, docs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.docs"</span>, <span class='cn'>TRUE</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
