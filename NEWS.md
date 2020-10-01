@@ -5,7 +5,7 @@ plumber 1.0.0.9999 Development version
 
 * When calling `Plumber$handle()` and defining a new `PlumberEndpoint`, `...` will be checked for invalid names #677
 
-* When calling `print` on router, detect mount recursion and exit early #682
+* When calling `print` on router, detect mount recursion and exit early #683
 
 plumber 1.0.0
 --------------------------------------------------------------------------------
