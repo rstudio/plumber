@@ -382,6 +382,15 @@ Plumber <- R6Class(
     #' @param ... additional arguments for recursive calls
     #' @return A terminal friendly representation of a plumber router.
     print = function(prefix="", topLevel=TRUE, ...){
+
+      # Avoid printing recursion (mount on mount on mount on ...)
+      on.exit({private$printing = NULL}, add = TRUE)
+      private$printing = sum(private$printing, ifelse(topLevel, 0L, 1L))
+      if (isTRUE(private$printing == 2L)) {
+        cat(prefix, "# Circular reference detected", "\n", sep="")
+        return()
+      }
+
       endCount <- as.character(sum(unlist(lapply(self$endpoints, length))))
 
       # Reference on box characters: https://en.wikipedia.org/wiki/Box-drawing_character
@@ -1066,6 +1075,7 @@ Plumber <- R6Class(
     parsed = NULL, # The parsed representation of the API
     globalSettings = list(info=list()), # Global settings for this API. Primarily used for OpenAPI Specification.
     disable_run = NULL, # Disable run method during parsing of the Plumber file
+    printing = NULL, # Logical flag indicating if router is printing
 
     errorHandler = NULL,
     notFoundHandler = NULL,
