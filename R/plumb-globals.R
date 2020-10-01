@@ -4,8 +4,9 @@
 #' @param argument The line (including the plumber comment prefix) to append.
 #'   If this line represents what was once multiple lines, intermediate comment
 #'   prefixes should have been removed.
+#' @param envir An environment where to evaluate parsed expressions
 #' @noRd
-plumbOneGlobal <- function(fields, argument){
+plumbOneGlobal <- function(fields, argument, envir = parent.frame()){
   if (nchar(argument) == 0){
     return(fields)
   }
@@ -32,37 +33,28 @@ plumbOneGlobal <- function(fields, argument){
            fields$info$termsOfService <- def
          },
          apiContact={
+           if (grepl("^list\\(", def)) {
+             def <- eval(parse(text = def), envir)
+           }
            fields$info$contact <- def
          },
          apiLicense={
+           if (grepl("^list\\(", def)) {
+             def <- eval(parse(text = def), envir)
+           }
            fields$info$license <- def
          },
          apiVersion={
            fields$info$version <- def
          },
-         apiHost={
-           fields$host <- def
-         },
-         apiBasePath={
-           fields$basePath <- def
-         },
-         apiSchemes={
-           fields$schemes <- strsplit(def, split="\\s+")[[1]]
-         },
-         apiConsumes={
-           fields$consumes <- strsplit(def, split="\\s+")[[1]]
-         },
-         apiProduces={
-           fields$produces <- strsplit(def, split="\\s+")[[1]]
-         },
          apiTag={
            tagMat <- stri_match(def, regex="^\\s*(\\w+)\\s+(\\S.+)\\s*$")
            name <- tagMat[1,2]
            description <- tagMat[1,3]
-           if(!is.null(fields$tags) && name %in% fields$tags$name) {
+           if(!is.null(fields$tags) && name %in% unlist(lapply(fields$tags, "[[", "name"))) {
              stop("Error: '", argument, "' - ","Duplicate tag definition specified.")
            }
-           fields$tags <- rbind(fields$tags,data.frame(name=name, description=description, stringsAsFactors = FALSE))
+           fields$tags <- c(fields$tags, list(list(name=name, description=description)))
          })
   fields
 }
@@ -72,7 +64,7 @@ argRegex <- "^#['\\*]\\s*(@(api\\w+)\\s+)?(.*)$"
 #' Parse out the global API settings of a given set of lines and return a
 #' OpenAPI-compliant list describing the global API.
 #' @noRd
-plumbGlobals <- function(lines){
+plumbGlobals <- function(lines, envir = parent.frame()){
   # Build up the entire argument here; needed since a single directive
   # might wrap multiple lines
   fullArg <- ""
@@ -90,19 +82,19 @@ plumbGlobals <- function(lines){
         fullArg <- paste(fullArg, parsedLine[4])
       } else {
         # New argument, parse the buffer and start a new one
-        fields <- plumbOneGlobal(fields, fullArg)
+        fields <- plumbOneGlobal(fields, fullArg, envir)
         fullArg <- line
       }
     } else {
       # This isn't a line we can underestand. Parse what we have in the
       # buffer and then reset
-      fields <- plumbOneGlobal(fields, fullArg)
+      fields <- plumbOneGlobal(fields, fullArg, envir)
       fullArg <- ""
     }
   }
 
   # Clear out the buffer
-  fields <- plumbOneGlobal(fields, fullArg)
+  fields <- plumbOneGlobal(fields, fullArg, envir)
 
   fields
 }

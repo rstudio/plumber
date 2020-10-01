@@ -16,8 +16,16 @@ test_that("Endpoints are properly identified", {
   expect_equal(exec_endpoint(r, 5), 14)
 })
 
-test_that("Empty file is OK", {
+test_that("Empty file argument is OK", {
   r <- pr()
+  expect_equal(length(r$endpoints), 0)
+})
+
+test_that("Empty file is OK", {
+  f <- tempfile()
+  writeLines(character(), f)
+  on.exit(unlink(f), add = TRUE)
+  r <- pr(f)
   expect_equal(length(r$endpoints), 0)
 })
 
