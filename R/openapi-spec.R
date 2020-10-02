@@ -45,7 +45,7 @@ defaultResponse <- list(
   ),
   "500" = list(
     description = "Internal Server Error",
-    content = list("text/plain" = list())
+    content = list("text/plain" = list(schema = list(type = "string")))
   ),
   "default" = list(
     description = "Default response."
