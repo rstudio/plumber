@@ -1,6 +1,10 @@
 plumber 1.0.0.9999 Development version
 --------------------------------------------------------------------------------
 
+### New features
+
+* Guess OpenApi response content type from serializer. #684
+
 ### Bug fixes
 
 * When calling `Plumber$handle()` and defining a new `PlumberEndpoint`, `...` will be checked for invalid names #677  

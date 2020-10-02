@@ -128,11 +128,17 @@ test_that("responsesSpecification works", {
   expect_equal(r, defaultResponse)
 
   # Responses with no default
-  customResps <- list("200" = list())
-  r <- responsesSpecification(customResps)
-  expect_length(r, 2)
+  customResps <- list("400" = list())
+  endpts <- plumber::PlumberEndpoint$new(
+    path = "/a",
+    responses = customResps,
+    verbs = "GET",
+    expr = function() {},
+    envir = new.env(parent = globalenv()))
+  r <- responsesSpecification(endpts)
+  expect_length(r, 4)
   expect_equal(r$default, defaultResponse$default)
-  expect_equal(r$`200`, customResps$`200`)
+  expect_equal(r$`400`, customResps$`400`)
 })
 
 test_that("parametersSpecification works", {
@@ -326,4 +332,13 @@ test_that("no params plumber router still produces spec when there is a func par
   pr$handle("GET", "/sum", handler, serializer = serializer_json())
   spec <- pr$getApiSpec()
   expect_equal(spec$paths$`/sum`$get$parameters[[1]]$name, "num")
+})
+
+test_that("Response content type set with serializer", {
+  a <- pr()
+  pr_get(a, "/json", function() {"OK"}, serializer = serializer_json)
+  pr_get(a, "/csv", function() {"OK"}, serializer = serializer_csv())
+  spec <- a$getApiSpec()
+  expect_equal(spec$paths$`/json`$get$responses$`200`$content, list("application/json" = list()))
+  expect_equal(spec$paths$`/csv`$get$responses$`200`$content, list("text/csv; charset=UTF-8" = list()))
 })
