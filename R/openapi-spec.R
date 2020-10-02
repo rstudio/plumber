@@ -45,7 +45,7 @@ defaultResponse <- list(
   ),
   "500" = list(
     description = "Internal Server Error",
-    content = list("text/plain; charset=UTF-8" = list())
+    content = list("text/plain" = list())
   ),
   "default" = list(
     description = "Default response."
@@ -73,7 +73,9 @@ responsesSpecification <- function(endpts){
         }
       }
       if (isTRUE(nchar(ctype) > 0)) {
-        resps[[resp]]$content <- setNames(list(list()), ctype)
+        ctype <- stri_split_regex(ctype, "[ ;]")[[1]][1]
+        schema = list(type = ifelse(grepl("^text", ctype), "string", "object"))
+        resps[[resp]]$content <- setNames(list(list(schema = schema)), ctype)
       }
     }
   }
