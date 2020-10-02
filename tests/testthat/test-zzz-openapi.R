@@ -339,6 +339,6 @@ test_that("Response content type set with serializer", {
   pr_get(a, "/json", function() {"OK"}, serializer = serializer_json)
   pr_get(a, "/csv", function() {"OK"}, serializer = serializer_csv())
   spec <- a$getApiSpec()
-  expect_equal(spec$paths$`/json`$get$responses$`200`$content, list("application/json" = list()))
-  expect_equal(spec$paths$`/csv`$get$responses$`200`$content, list("text/csv; charset=UTF-8" = list()))
+  expect_equal(spec$paths$`/json`$get$responses$`200`$content, list("application/json" = list(schema = list(type = "object"))))
+  expect_equal(spec$paths$`/csv`$get$responses$`200`$content, list("text/csv" = list(schema = list(type = "string"))))
 })
