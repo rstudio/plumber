@@ -44,6 +44,12 @@ JSON is not appropriate for every situation, however. If you want your API to re
 
 By default, Plumber serializes objects into JSON via the `jsonlite` R package. However, there are a variety of other serializers that are built in to the package.
 
+You can also pass arguments to certain serializers to modify their behavior like in the example below.
+```r
+#* @serializer json list(na="string")
+```
+See [here](../reference/serializers.html) for possible arguments.
+
 Annotation | Content Type | Description/References
 ---------- | ------------ | ---------------------
 `@serializer contentType` | (user supplied) | Send response with a particular `Content-Type` header
