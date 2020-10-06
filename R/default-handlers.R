@@ -6,6 +6,7 @@ default404Handler <- function(req, res){
     return(list(error = "405 - Method Not Allowed"))
   }
   res$status <- 404
+  res$serializer <- serializer_unboxed_json()
   list(error="404 - Resource Not Found")
 }
 
@@ -20,6 +21,7 @@ defaultErrorHandler <- function(){
       # It's possible, however, than a handler set a 40x and then wants to use this function to
       # render an error, though.
       res$status <- 500
+      res$serializer <- serializer_unboxed_json()
       li$error <- "500 - Internal server error"
     } else {
       li$error <- "Internal error"
