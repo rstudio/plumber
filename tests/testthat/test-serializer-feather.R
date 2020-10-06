@@ -34,7 +34,7 @@ test_that("Errors are rendered correctly with debug TRUE", {
   skip_if_not_installed("feather")
 
   pr <- pr() %>% pr_get("/", function() stop("myerror"), serializer = serializer_feather()) %>% pr_set_debug(TRUE)
-  res <- pr$serve(make_req(pr = pr), PlumberResponse$new("csv"))
+  capture.output(res <- pr$serve(make_req(pr = pr), PlumberResponse$new("csv")))
 
   expect_match(res$body, "Error in (function () : myerror", fixed = TRUE)
 })
