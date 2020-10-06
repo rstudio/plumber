@@ -43,9 +43,9 @@ These map to the HTTP methods that an API client might send along with a request
 Note that a single endpoint can support multiple verbs. The following function would be used to service any incoming `GET`, `POST`, or `PUT` request to `/cars`.
 
 ```r
-#' @get /cars
-#' @post /cars
-#' @put /cars
+#* @get /cars
+#* @post /cars
+#* @put /cars
 function(){
   ...
 }
@@ -137,7 +137,7 @@ You can name these dynamic path elements however you'd like, but note that the n
 You can even do more complex dynamic routes like:
 
 ```r
-#' @get /user/<from>/connect/<to>
+#* @get /user/<from>/connect/<to>
 function(from, to){
   # Do something with the `from` and `to` variables...
 }

@@ -3,8 +3,8 @@ users <- data.frame(
   username=c("kim", "john")
 )
 
-#' Lookup a user
-#' @get /users/<id>
+#* Lookup a user
+#* @get /users/<id>
 function(id){
   subset(users, uid %in% id)
 }

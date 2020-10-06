@@ -1,4 +1,4 @@
-#' @put /preferences
+#* @put /preferences
 function(res, capital){
   if (missing(capital)){
     stop("You must specify a value for the 'capital' preference.")
@@ -6,7 +6,7 @@ function(res, capital){
   res$setCookie("capitalize", capital)
 }
 
-#' @get /letter
+#* @get /letter
 function(req) {
   capitalize <- req$cookies$capitalize
 

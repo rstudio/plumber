@@ -76,6 +76,7 @@ serializer_identity <- function(){
 #' @return Object with class `"plumber_attachment"`
 #' @export
 #' @examples
+#' \dontrun{
 #' # plumber.R
 #'
 #' #' @get /data
@@ -83,6 +84,7 @@ serializer_identity <- function(){
 #' function() {
 #'   # will cause the file to be saved as `iris.csv`, not `data` or `data.csv`
 #'   as_attachment(iris, "iris.csv")
+#' }
 #' }
 as_attachment <- function(value, filename = NULL) {
   stopifnot(is.character(filename) || is.null(filename))
