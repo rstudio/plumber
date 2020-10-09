@@ -53,9 +53,9 @@
 
 
 <meta property="og:title" content="Plumber Parsers — parser_form" />
-<meta property="og:description" content="Parsers are used in Plumber to transform the raw body content received
-by a request to the API. Extra parameters may be provided to parser
-functions when adding the parser to plumber. This will allow for
+<meta property="og:description" content="Parsers are used in Plumber to transform request body received
+by the API. Extra parameters may be provided to parser
+functions when enabling them on router. This will allow for
 non-default behavior." />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
 
@@ -176,9 +176,9 @@ non-default behavior." />
     </div>
 
     <div class="ref-description">
-    <p>Parsers are used in Plumber to transform the raw body content received
-by a request to the API. Extra parameters may be provided to parser
-functions when adding the parser to plumber. This will allow for
+    <p>Parsers are used in Plumber to transform request body received
+by the API. Extra parameters may be provided to parser
+functions when enabling them on router. This will allow for
 non-default behavior.</p>
     </div>
 
@@ -225,13 +225,12 @@ non-default behavior.</p>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Parsers are optional. When unspecified, only the <code>parser_json()</code>,
-<code>parser_octet()</code>, <code>parser_form()</code> and <code>parser_text()</code> are available.
-You can use <code>@parser parser</code> tag to activate parsers per endpoint.
-Multiple parsers can be activated for the same endpoint using multiple <code>@parser parser</code> tags.</p>
+    <p>Parsers are optional. When unspecified, only default endpoint parsers are enabled.
+You can use <code>@parser parser</code> tag to enable parser on endpoint.
+Multiple parsers can be enabled on the same endpoint using multiple <code>@parser parser</code> tags.</p>
 <p>User should be aware that <code>rds</code> parsing should only be done from a
 trusted source. Do not accept <code>rds</code> files blindly.</p>
-<p>See <code><a href='register_parser.html'>registered_parsers()</a></code> for a list of registered parsers.</p>
+<p>See <code><a href='register_parser.html'>registered_parsers()</a></code> for a list of registered parsers aliases.</p>
     <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
 
     

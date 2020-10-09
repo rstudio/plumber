@@ -163,10 +163,10 @@
 <p>Denial of service (DoS) attacks are employed in order to temporarily shut down a server or service by overwhelming it with traffic. A DoS scenario could be caused by a single ignorant user unintentionally making a request that could ask the server to do some impossible task, or could be intentionally introduced by a malicious actor leveraging a vast number of machines to repeatedly make requests that are expensive for the server to respond to. The later form is often called a distributed denial of service attack (or DDoS) and typically requires special infrastructure and network capacity that is beyond the scope of what we’ll discuss here.</p>
 <p>However, there are practices that you should employ when designing your Plumber API to put safety guards around the work that an API request might instigate.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="co">#' This is an example of an UNSAFE endpoint which</span>
-<span class="co">#' is vulnerable to a DOS attack.</span>
-<span class="co">#' @get /</span>
-<span class="co">#' @serializer png</span>
+<span class="co">#* This is an example of an UNSAFE endpoint which</span>
+<span class="co">#* is vulnerable to a DOS attack.</span>
+<span class="co">#* @get /</span>
+<span class="co">#* @serializer png</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">pts</span><span class="op">=</span><span class="fl">10</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># An example of an UNSAFE endpoint.</span>
   <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">pts</span><span class="op">)</span>
@@ -176,13 +176,13 @@
 <p>This plot takes a negligible amount of time to create.</p>
 <p>However, plots with more points will take more time to create.</p>
 <p><img src="security_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>This plot, with 10,000 points added, took 0.149 seconds to generate. While that doesn’t sound like much, if we exposed this API publicly on the Internet, an attacker could easily generate enough traffic on this endpoint to overwhelm the Plumber process. Even worse, an attacker could make a request on this endpoint with millions or billions of points which might cause our server to run out of memory or consume so much CPU that it deprives other important system resources. Either case could result in our Plumber process crashing altogether.</p>
+<p>This plot, with 10,000 points added, took 0.145 seconds to generate. While that doesn’t sound like much, if we exposed this API publicly on the Internet, an attacker could easily generate enough traffic on this endpoint to overwhelm the Plumber process. Even worse, an attacker could make a request on this endpoint with millions or billions of points which might cause our server to run out of memory or consume so much CPU that it deprives other important system resources. Either case could result in our Plumber process crashing altogether.</p>
 <p>The solution, in this case, is to ensure that we have reasonable safety guards in place for any user input.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co">#' This is an example of an safe endpoint which</span>
-<span class="co">#' checks user input to avoid a DOS attack</span>
-<span class="co">#' @get /</span>
-<span class="co">#' @serializer png</span>
+<span class="co">#* This is an example of an safe endpoint which</span>
+<span class="co">#* checks user input to avoid a DOS attack</span>
+<span class="co">#* @get /</span>
+<span class="co">#* @serializer png</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">pts</span><span class="op">=</span><span class="fl">10</span><span class="op">)</span> <span class="op">{</span>
   <span class="kw">if</span> <span class="op">(</span><span class="va">pts</span> <span class="op">&gt;</span> <span class="fl">1000</span> <span class="op">&amp;</span> <span class="va">pts</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">{</span>
     <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"pts must be between 1 and 1,000"</span><span class="op">)</span>
@@ -198,9 +198,9 @@
 <a href="#sanitization" class="anchor"></a>Sanitization &amp; Injection</h2>
 <p>Any time you accept input from a user in your code, you should plan for the worst-case scenario. If, for example, your API endpoint allows the user to specify the name of a file that should be read out of a particular directory and then returns its contents, you might naively implement it like so.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="co">#' This is an example of an UNSAFE endpoint which</span>
-<span class="co">#' does not sanitize user input</span>
-<span class="co">#' @get /</span>
+<span class="co">#* This is an example of an UNSAFE endpoint which</span>
+<span class="co">#* does not sanitize user input</span>
+<span class="co">#* @get /</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span> <span class="op">{</span>
 
   <span class="co"># An example of an UNSAFE endpoint.</span>
@@ -210,9 +210,9 @@
 <p>Unfortunately, this API endpoint does not properly sanitize the user input. The user could set the <code>file</code> parameter to <code>../plumber.R</code> and now the endpoint would return the source code of your Plumber API. Of course they could just as easy attempt to read other files that might contain API keys or other sensitive data.</p>
 <p>One solution in this case is to strip all special characters off of the user input which will prevent users from being able to escape into a different directory.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="co">#' This is an example of an endpoint which</span>
-<span class="co">#' checks user input.</span>
-<span class="co">#' @get /</span>
+<span class="co">#* This is an example of an endpoint which</span>
+<span class="co">#* checks user input.</span>
+<span class="co">#* @get /</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># Strip all "non-word" characters from user input</span>
   <span class="va">sanitizedFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"\\W"</span>, <span class="st">""</span>, <span class="va">file</span><span class="op">)</span>

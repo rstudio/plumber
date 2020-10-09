@@ -212,29 +212,29 @@ If no parameters are supplied, all returned values will be the current <code><a 
     
 <dl>
 <dt><code>plumber.port</code></dt><dd><p>Port Plumber will attempt to use to start http server.
-If the port is already in use, server will not be able to start. Defaults to <code>NULL</code></p></dd>
-<dt><code>plumber.docs</code></dt><dd><p>Name of the visual documentation interface to use. Defaults to <code>TRUE</code>, which will use <code>"swagger"</code></p></dd>
+If the port is already in use, server will not be able to start. Defaults to <code>NULL</code>.</p></dd>
+<dt><code>plumber.docs</code></dt><dd><p>Name of the visual documentation interface to use. Defaults to <code>TRUE</code>, which will use <code>"swagger"</code>.</p></dd>
 <dt><code>plumber.docs.callback</code></dt><dd><p>A function. Called with
 a single parameter corresponding to the visual documentation url after Plumber server is ready. This can be used
-by RStudio to open the docs when then API is ran from the editor. Defaults to option <code>NULL</code></p></dd>
+by RStudio to open the docs when then API is ran from the editor. Defaults to option <code>NULL</code>.</p></dd>
 <dt><code>plumber.apiURL</code></dt><dd><p>Server urls for OpenAPI Specification respecting
 pattern <code>scheme://host:port/path</code>. Other <code>api*</code> options will be ignored when set.</p></dd>
 <dt><code>plumber.apiScheme</code></dt><dd><p>Scheme used to build OpenAPI url and server url for
 OpenAPI Specification. Defaults to <code>http</code>, or an empty string
-when used outside a running router</p></dd>
+when used outside a running router.</p></dd>
 <dt><code>plumber.apiHost</code></dt><dd><p>Host used to build docs url and server url for
 OpenAPI Specification. Defaults to <code>host</code> defined by <code>run</code> method, or an empty string
-when used outside a running router</p></dd>
+when used outside a running router.</p></dd>
 <dt><code>plumber.apiPort</code></dt><dd><p>Port used to build OpenAPI url and server url for
 OpenAPI Specification. Defaults to <code>port</code> defined by <code>run</code> method, or an empty string
-when used outside a running router</p></dd>
+when used outside a running router.</p></dd>
 <dt><code>plumber.apiPath</code></dt><dd><p>Path used to build OpenAPI url and server url for
-OpenAPI Specification. Defaults to an empty string</p></dd>
+OpenAPI Specification. Defaults to an empty string.</p></dd>
 <dt><code>plumber.maxRequestSize</code></dt><dd><p>Maximum length in bytes of request body. Body larger
-than maximum are rejected with http error 413. <code>0</code> means unlimited size. Defaults to <code>0</code></p></dd>
+than maximum are rejected with http error 413. <code>0</code> means unlimited size. Defaults to <code>0</code>.</p></dd>
 <dt><code>plumber.sharedSecret</code></dt><dd><p>Shared secret used to filter incoming request.
 When <code>NULL</code>, secret is not validated. Otherwise, Plumber compares secret with http header
-<code>PLUMBER_SHARED_SECRET</code>. Failure to match results in http error 400. Defaults to <code>NULL</code></p></dd>
+<code>PLUMBER_SHARED_SECRET</code>. Failure to match results in http error 400. Defaults to <code>NULL</code>.</p></dd>
 
 </dl>
 

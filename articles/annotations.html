@@ -251,14 +251,14 @@
 <td><code>@serializer</code></td>
 <td>
 <code>Alias</code> [<code>Args list]</code>]</td>
-<td>Some serializers accept arguments. See <a href="./rendering-output.html#serializers">serializers article</a> and <a href="../reference/serializers.html">serializers reference</a>. Aliases : <code>bmp</code>, <code>cat</code>, <code>contentType</code>, <code>csv</code>, <code>device</code>, <code>feather</code>, <code>format</code>, <code>html</code>, <code>htmlwidget</code>, <code>jpeg</code>, <code>json</code>, <code>null</code>, <code>pdf</code>, <code>png</code>, <code>print</code>, <code>rds</code>, <code>svg</code>, <code>text</code>, <code>tiff</code>, <code>tsv</code>, <code>unboxedJSON</code>, <code>yaml</code> from <a href="../reference/register_serializer.html"><code>registered_serializers()</code></a>.</td>
+<td>Some serializers accept arguments. See <a href="./rendering-output.html#serializers">serializers article</a> and <a href="https://www.rplumber.io/reference/serializers.html">serializers reference</a>. Aliases : <code>bmp</code>, <code>cat</code>, <code>contentType</code>, <code>csv</code>, <code>device</code>, <code>feather</code>, <code>format</code>, <code>html</code>, <code>htmlwidget</code>, <code>jpeg</code>, <code>json</code>, <code>null</code>, <code>pdf</code>, <code>png</code>, <code>print</code>, <code>rds</code>, <code>svg</code>, <code>text</code>, <code>tiff</code>, <code>tsv</code>, <code>unboxedJSON</code>, <code>yaml</code> from <a href="https://www.rplumber.io/reference/register_serializer.html"><code>registered_serializers()</code></a>.</td>
 </tr>
 <tr class="odd">
 <td><code>@parser</code></td>
 <td>
 <code>Alias</code> <code>[Args list]</code>
 </td>
-<td>Some parsers accept arguments. See <a href="../reference/parsers.html">parsers reference</a>. Can be repeated to allow multiple parsers on the same endpoint. Aliases : <code>all</code>, <code>csv</code>, <code>feather</code>, <code>form</code>, <code>json</code>, <code>multi</code>, <code>none</code>, <code>octet</code>, <code>rds</code>, <code>text</code>, <code>tsv</code>, <code>yaml</code> from <a href="../reference/register_parser.html"><code>registered_parsers()</code></a>.</td>
+<td>Some parsers accept arguments. See <a href="https://www.rplumber.io/reference/parsers.html">parsers reference</a>. Can be repeated to allow multiple parsers on the same endpoint. Aliases : <code>all</code>, <code>csv</code>, <code>feather</code>, <code>form</code>, <code>json</code>, <code>multi</code>, <code>none</code>, <code>octet</code>, <code>rds</code>, <code>text</code>, <code>tsv</code>, <code>yaml</code> from <a href="https://www.rplumber.io/reference/register_parser.html"><code>registered_parsers()</code></a>.</td>
 </tr>
 <tr class="even">
 <td><code>@param</code></td>
@@ -297,7 +297,7 @@
 <a href="#more-details-on-param" class="anchor"></a>More details on <code>@param</code>
 </h4>
 <p>Types are used to define API inputs. You can use most of them in dynamic routes. Note that Plumber first look in block expression to set endpoint parameters names, types and default value. Then <code>@param</code> annotations and dynamic route/path defined parameters will override Plumber guesses from block expression.</p>
-<p>Plumber parameter type to OpenAPI type refenrence.</p>
+<p>Plumber parameter type to OpenAPI type refenrence. For programmatic use, pick the one with an asterisk.</p>
 <table class="table">
 <thead><tr class="header">
 <th>Type</th>
@@ -307,7 +307,7 @@
 <tbody>
 <tr class="odd">
 <td>
-<code>bool</code>, <code>boolean</code>, <code>logical</code>
+<code>bool</code>, <code>boolean</code>*, <code>logical</code>
 </td>
 <td><code>boolean</code></td>
 <td>
@@ -316,7 +316,7 @@
 </tr>
 <tr class="even">
 <td>
-<code>dbl</code>, <code>double</code>, <code>float</code>, <code>number</code>, <code>numeric</code>
+<code>dbl</code>, <code>double</code>, <code>float</code>, <code>number</code>*, <code>numeric</code>
 </td>
 <td>
 <code>number</code> <code>format:double</code>
@@ -327,8 +327,7 @@
 </tr>
 <tr class="odd">
 <td>
-<code>int</code>, <code>integer</code>
-</td>
+<code>int</code>, <code>integer</code>*</td>
 <td>
 <code>integer</code> <code>format:int64</code>
 </td>
@@ -338,8 +337,7 @@
 </tr>
 <tr class="even">
 <td>
-<code>chr</code>, <code>str</code>, <code>character</code>, <code>string</code>
-</td>
+<code>chr</code>, <code>str</code>, <code>character</code>, <code>string</code>*</td>
 <td><code>string</code></td>
 <td>
 <code>query</code>, <code>path</code>
@@ -347,14 +345,13 @@
 </tr>
 <tr class="odd">
 <td>
-<code>list</code>, <code>data.frame</code>, <code>df</code>, <code>object</code>
-</td>
+<code>list</code>, <code>data.frame</code>, <code>df</code>, <code>object</code>*</td>
 <td><code>object</code></td>
 <td><code>body</code></td>
 </tr>
 <tr class="even">
 <td>
-<code>file</code>, <code>binary</code>
+<code>file</code>*, <code>binary</code>
 </td>
 <td>
 <code>string</code> <code>format:binary</code>
@@ -379,11 +376,30 @@
 <span class="co">#* @serializer rds</span>
 <span class="co">#* @parser multi</span>
 <span class="co">#* @parser rds</span>
-<span class="co">#* @param f:file</span>
+<span class="co">#* @param f:file A file</span>
 <span class="co">#* Upload an rds file and return the object</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">f</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="../reference/as_attachment.html">as_attachment</a></span><span class="op">(</span><span class="va">f</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>
 <span class="op">}</span></pre></div>
+</div>
+<div id="equivalent-programmatic-usage-1" class="section level5">
+<h5 class="hasAnchor">
+<a href="#equivalent-programmatic-usage-1" class="anchor"></a>Equivalent programmatic usage</h5>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="va">text_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span><span class="st">"%s is %i years old"</span>, <span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">}</span>
+<span class="va">file_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="../reference/as_attachment.html">as_attachment</a></span><span class="op">(</span><span class="va">file</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">}</span>
+<span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/dyn/&lt;name:str&gt;/&lt;age:[int]&gt;/route"</span>, 
+         handler <span class="op">=</span> <span class="va">text_handler</span>, 
+         serializer <span class="op">=</span> <span class="fu"><a href="../reference/serializer_headers.html">serializer_text</a></span><span class="op">(</span><span class="op">)</span>,
+         parsers <span class="op">=</span> <span class="st">"none"</span>,
+         responses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"200"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>description <span class="op">=</span> <span class="st">"A sentence"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_handle.html">pr_post</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/upload_file"</span>,
+          handler <span class="op">=</span> <span class="va">file_handler</span>,
+          serializer <span class="op">=</span> <span class="fu"><a href="../reference/serializer_headers.html">serializer_rds</a></span><span class="op">(</span><span class="op">)</span>,
+          parsers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"multi"</span>, <span class="st">"rds"</span><span class="op">)</span>,
+          params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"file"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"file"</span>, desc <span class="op">=</span> <span class="st">"A file"</span>, required <span class="op">=</span> <span class="cn">FALSE</span>, isArray <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>,
+          comments <span class="op">=</span> <span class="st">"Upload an rds file and return the object"</span><span class="op">)</span></pre></div>
 </div>
 </div>
 </div>
@@ -405,7 +421,7 @@
 <div id="annotations-example-2" class="section level5">
 <h5 class="hasAnchor">
 <a href="#annotations-example-2" class="anchor"></a>Annotations example</h5>
-<div class="sourceCode" id="cb4"><pre class="downlit">
+<div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="co">#* @filter logger</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="st">"-"</span>,
@@ -414,10 +430,10 @@
   <span class="fu">plumber</span><span class="fu">::</span><span class="fu"><a href="../reference/forward.html">forward</a></span><span class="op">(</span><span class="op">)</span>
 <span class="op">}</span></pre></div>
 </div>
-<div id="equivalent-programmatic-usage-1" class="section level5">
+<div id="equivalent-programmatic-usage-2" class="section level5">
 <h5 class="hasAnchor">
-<a href="#equivalent-programmatic-usage-1" class="anchor"></a>Equivalent programmatic usage</h5>
-<div class="sourceCode" id="cb5"><pre class="downlit">
+<a href="#equivalent-programmatic-usage-2" class="anchor"></a>Equivalent programmatic usage</h5>
+<div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_filter.html">pr_filter</a></span><span class="op">(</span><span class="st">"logger"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span><span class="op">{</span>
     <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="st">"-"</span>,
@@ -446,7 +462,7 @@
 <div id="annotations-example-3" class="section level5">
 <h5 class="hasAnchor">
 <a href="#annotations-example-3" class="anchor"></a>Annotations example</h5>
-<div class="sourceCode" id="cb6"><pre class="downlit">
+<div class="sourceCode" id="cb7"><pre class="downlit">
 <span class="co">#* @assets ./files/static</span>
 <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
 
@@ -459,7 +475,7 @@
 <div id="equivalent-programmatic-usage-note-that-argument-order-is-reversed" class="section level5">
 <h5 class="hasAnchor">
 <a href="#equivalent-programmatic-usage-note-that-argument-order-is-reversed" class="anchor"></a>Equivalent programmatic usage (note that argument order is reversed)</h5>
-<div class="sourceCode" id="cb7"><pre class="downlit">
+<div class="sourceCode" id="cb8"><pre class="downlit">
 <span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_static.html">pr_static</a></span><span class="op">(</span>direc <span class="op">=</span> <span class="st">"./files/static"</span><span class="op">)</span>
 
@@ -488,7 +504,7 @@
 <div id="annotations-example-4" class="section level5">
 <h5 class="hasAnchor">
 <a href="#annotations-example-4" class="anchor"></a>Annotations example</h5>
-<div class="sourceCode" id="cb8"><pre class="downlit">
+<div class="sourceCode" id="cb9"><pre class="downlit">
 <span class="co">#* @plumber</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">pr</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">pr</span> <span class="op">%&gt;%</span>
@@ -496,10 +512,10 @@
     <span class="fu"><a href="../reference/pr_set_docs.html">pr_set_docs</a></span><span class="op">(</span><span class="st">"swagger"</span><span class="op">)</span>
 <span class="op">}</span></pre></div>
 </div>
-<div id="equivalent-programmatic-usage-2" class="section level5">
+<div id="equivalent-programmatic-usage-3" class="section level5">
 <h5 class="hasAnchor">
-<a href="#equivalent-programmatic-usage-2" class="anchor"></a>Equivalent programmatic usage</h5>
-<div class="sourceCode" id="cb9"><pre class="downlit">
+<a href="#equivalent-programmatic-usage-3" class="anchor"></a>Equivalent programmatic usage</h5>
+<div class="sourceCode" id="cb10"><pre class="downlit">
 <span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_set_debug.html">pr_set_debug</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_set_docs.html">pr_set_docs</a></span><span class="op">(</span><span class="st">"swagger"</span><span class="op">)</span></pre></div>

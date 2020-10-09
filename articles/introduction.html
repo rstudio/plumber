@@ -135,17 +135,17 @@
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="co"># plumber.R</span>
 
-<span class="co">#' Echo the parameter that was sent in</span>
-<span class="co">#' @param msg The message to echo back.</span>
-<span class="co">#' @get /echo</span>
+<span class="co">#* Echo the parameter that was sent in</span>
+<span class="co">#* @param msg The message to echo back.</span>
+<span class="co">#* @get /echo</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">msg</span><span class="op">=</span><span class="st">""</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>msg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"The message is: '"</span>, <span class="va">msg</span>, <span class="st">"'"</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
 
-<span class="co">#' Plot out data from the iris dataset</span>
-<span class="co">#' @param spec If provided, filter the data to only this species (e.g. 'setosa')</span>
-<span class="co">#' @get /plot</span>
-<span class="co">#' @serializer png</span>
+<span class="co">#* Plot out data from the iris dataset</span>
+<span class="co">#* @param spec If provided, filter the data to only this species (e.g. 'setosa')</span>
+<span class="co">#* @get /plot</span>
+<span class="co">#* @serializer png</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">spec</span><span class="op">)</span><span class="op">{</span>
   <span class="va">myData</span> <span class="op">&lt;-</span> <span class="va">iris</span>
   <span class="va">title</span> <span class="op">&lt;-</span> <span class="st">"All Species"</span>

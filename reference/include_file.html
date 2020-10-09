@@ -53,7 +53,7 @@
 
 
 <meta property="og:title" content="Send File Contents as Response — include_file" />
-<meta property="og:description" content="Returns the file at the given path as the response." />
+<meta property="og:description" content="Returns the file at the given path as the response. If you want an endpoint to return a file as an attachment for user to download see as_attachment()." />
 <meta property="og:image" content="https://www.rplumber.io/logo.svg" />
 
 
@@ -173,7 +173,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Returns the file at the given path as the response.</p>
+    <p>Returns the file at the given path as the response. If you want an endpoint to return a file as an attachment for user to download see <code><a href='as_attachment.html'>as_attachment()</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>include_file</span><span class='op'>(</span><span class='va'>file</span>, <span class='va'>res</span>, content_type <span class='op'>=</span> <span class='fu'>getContentType</span><span class='op'>(</span><span class='fu'>tools</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/tools/fileutils.html'>file_ext</a></span><span class='op'>(</span><span class='va'>file</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>

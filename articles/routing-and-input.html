@@ -140,8 +140,8 @@
 <a href="#endpoints" class="anchor"></a>Endpoints</h2>
 <p>Endpoints are the terminal step in the process of serving a request. An endpoint can simply be viewed as the logic that is ultimately responsible for generating a response to a particular request. A request will be checked against each available endpoint until it finds an endpoint willing to serve it at which point it stops looking; i.e. a request will not ever be processed by more than one endpoint. You create an endpoint by annotating a function like so:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="co">#' Return "hello world"</span>
-<span class="co">#' @get /hello</span>
+<span class="co">#* Return "hello world"</span>
+<span class="co">#* @get /hello</span>
 <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span>
   <span class="st">"hello world"</span>
 <span class="op">}</span></pre></div>
@@ -157,9 +157,9 @@
 <p>These map to the HTTP methods that an API client might send along with a request. By default when you open a page in a web browser, that sends a <code>GET</code> request to the API. But you can use other API clients (or even JavaScript inside of a web browser) to form HTTP requests using the other methods listed here. There are conventions around when each of these methods should be used which you can read more about <a href="http://www.restapitutorial.com/lessons/httpmethods.html">here</a>. Note that some of these conventions carry with them security implications, so it’s a good idea to follow the recommended uses for each method until you fully understand why you might deviate from them.</p>
 <p>Note that a single endpoint can support multiple verbs. The following function would be used to service any incoming <code>GET</code>, <code>POST</code>, or <code>PUT</code> request to <code>/cars</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co">#' @get /cars</span>
-<span class="co">#' @post /cars</span>
-<span class="co">#' @put /cars</span>
+<span class="co">#* @get /cars</span>
+<span class="co">#* @post /cars</span>
+<span class="co">#* @put /cars</span>
 <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span>
   <span class="va">...</span>
 <span class="op">}</span></pre></div>
@@ -236,8 +236,8 @@
   username<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"kim"</span>, <span class="st">"john"</span><span class="op">)</span>
 <span class="op">)</span>
 
-<span class="co">#' Lookup a user</span>
-<span class="co">#' @get /users/&lt;id&gt;</span>
+<span class="co">#* Lookup a user</span>
+<span class="co">#* @get /users/&lt;id&gt;</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">users</span>, <span class="va">uid</span> <span class="op">%in%</span> <span class="va">id</span><span class="op">)</span>
 <span class="op">}</span></pre></div>
@@ -245,7 +245,7 @@
 <p>You can name these dynamic path elements however you’d like, but note that the name used in the dynamic path must match the name of the parameter for the function (in this case, both <code>id</code>).</p>
 <p>You can even do more complex dynamic routes like:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="co">#' @get /user/&lt;from&gt;/connect/&lt;to&gt;</span>
+<span class="co">#* @get /user/&lt;from&gt;/connect/&lt;to&gt;</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">from</span>, <span class="va">to</span><span class="op">)</span><span class="op">{</span>
   <span class="co"># Do something with the `from` and `to` variables...</span>
 <span class="op">}</span></pre></div>
@@ -256,7 +256,7 @@
 <a href="#typed-dynamic-routes" class="anchor"></a>Typed Dynamic Routes</h2>
 <p>Unless otherwise instructed, all parameters passed into plumber endpoints from query strings or dynamic paths will be character strings. For example, consider the following API.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="co">#' @get /type/&lt;id&gt;</span>
+<span class="co">#* @get /type/&lt;id&gt;</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
     id <span class="op">=</span> <span class="va">id</span>,
@@ -477,7 +477,7 @@
 <p>A query string may be appended to a URL in order to convey additional information beyond just the request route. Query strings allow for the encoding of character string keys and values. For example, in the URL <code>https://duckduckgo.com/?q=bread&amp;pretty=1</code>, everything following the <code><a href="https://rdrr.io/r/utils/Question.html">?</a></code> constitutes the query string. In this case, two variables (<code>q</code> and <code>pretty</code>) have been set (to <code>bread</code> and <code>1</code>, respectively).</p>
 <p>Plumber will automatically forward information from the query string into the function being executed by aligning the name of the query string with the name of the function parameter. The following example defines a search API that mimics the example from <a href="https://duckduckgo.com">DuckDuckGo</a> above but merely prints out what it receives.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit">
-<span class="co">#' @get /</span>
+<span class="co">#* @get /</span>
 <span class="va">search</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">q</span><span class="op">=</span><span class="st">""</span>, <span class="va">pretty</span><span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"The q parameter is '"</span>, <span class="va">q</span>, <span class="st">"'. "</span>,
          <span class="st">"The pretty parameter is '"</span>, <span class="va">pretty</span>, <span class="st">"'."</span><span class="op">)</span>
@@ -495,14 +495,14 @@
 <h3 class="hasAnchor">
 <a href="#request-body" class="anchor"></a>Request Body</h3>
 <p>Another way to provide additional information inside an HTTP request is using the message body. Effectively, once a client specifies all the metadata about a request (the path it’s trying to reach, some HTTP headers, etc.) it can then provide a message body. The maximum size of a request body depends largely on the technologies involved (client, proxies, etc.) but is typically at least 2MB – much larger than a query string. This approach is most commonly seen with <code>PUT</code> and <code>POST</code> requests, though you could encounter it with other HTTP methods.</p>
-<p>Plumber will attempt to parse the request body in one using allowed <a href="../reference/parsers.html">parsers</a>. Any fields provided in the message body will be passed through as parameters to the function.</p>
+<p>Plumber will attempt to parse the request body in one using allowed <a href="https://www.rplumber.io/reference/parsers.html">parsers</a>. Any fields provided in the message body will be passed through as parameters to the function.</p>
 <div id="files-handling-note" class="section level4">
 <h4 class="hasAnchor">
 <a href="#files-handling-note" class="anchor"></a>Files handling note</h4>
 <p>When dealing with binary parameters, Plumber will return a named list of raw vector. The names in the list are the original uploaded filenames. Raw values are binary content of each file.</p>
 <p>Unfortunately, crafting a request with a message body requires a bit more work than making a <code>GET</code> request with a query string from your web browser, but you can use tools like <code>curl</code> on the command line or the <a href="https://github.com/hadley/httr/">httr R package</a>. We’ll use <code>curl</code> for the examples below.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit">
-<span class="co">#' @post /user</span>
+<span class="co">#* @post /user</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">id</span>, <span class="va">name</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
     id <span class="op">=</span> <span class="va">id</span>,
@@ -521,7 +521,7 @@
 <span id="cb19-7"><a href="#cb19-7"></a>  <span class="fu">},</span></span>
 <span id="cb19-8"><a href="#cb19-8"></a>  <span class="dt">"raw"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"aWQ9MTIzJm5hbWU9SmVubmlmZXI="</span><span class="ot">]</span></span>
 <span id="cb19-9"><a href="#cb19-9"></a><span class="fu">}</span></span></code></pre></div>
-<p>Alternatively, <code>curl --data '{"id":123, "name": "Jennifer"}' "http://localhost:8000/user"</code> (formatting the body as JSON) will have the same effect.</p>
+<p>Alternatively, <code>echo {"id":123, "name": "Jennifer"} &gt; call.json &amp; curl --data @call.json "http://localhost:8000/user" -H "content-type: application/json"</code> (formatting the body as JSON) will have the same effect.</p>
 <p>As demonstrated above, the raw request body is made available as <code>req$bodyRaw</code> and parsed request body is available as <code>req$body</code>.</p>
 <p>If multiple parameters are matched to the endpoint formals, an error will be thrown. Due to the nature of how multiple values can be matched to the same argument, it is recommended that <code>POST</code> endpoints have a function definition that only accepts the formals <code>req</code>, <code>res</code>, and <code>...</code>. If the endpoint arguments are to be processed like a list, they are available at <code>req$argsBody</code>, with all arguments at <code>req$args</code>. <code>req$args</code> is a combination of <code><a href="https://rdrr.io/r/base/list.html">list(req = req, res = res)</a></code>, <code>req$argsPath</code>, <code>req$argsBody</code>, and <code>req$argsQuery</code>.</p>
 </div>
@@ -537,8 +537,8 @@
 <a href="#headers" class="anchor"></a>Headers</h3>
 <p>HTTP headers attached to the incoming request are attached to the request object. They are prefixed with <code>HTTP_</code>, the name of the header is capitalized, and hyphens are substituted for underscores. e.g. the <code>Content-Type</code> HTTP header can be found as <code>req$HTTP_CONTENT_TYPE</code>.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit">
-<span class="co">#' Return the value of a custom header</span>
-<span class="co">#' @get /</span>
+<span class="co">#* Return the value of a custom header</span>
+<span class="co">#* @get /</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
     val <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">HTTP_CUSTOMHEADER</span>

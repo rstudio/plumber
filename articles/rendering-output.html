@@ -209,6 +209,10 @@
 <p>In order to send a response from R to an API client, the object must be “serialized” into some format that the client can understand. JavaScript Object Notation (JSON) is one standard which is commonly used by web APIs. JSON serialization translates R objects like <code><a href="https://rdrr.io/r/base/list.html">list(a=123, b="hi!")</a></code> to JSON text resembling <code>{a: 123, b: "hi!"}</code>.</p>
 <p>JSON is not appropriate for every situation, however. If you want your API to render an HTML page that might be viewed in a browser, for instance, you will need a different serializer. Likewise, if you want to return an image rendered in R, you likely want to use a standard image format like PNG or JPEG rather than JSON.</p>
 <p>By default, Plumber serializes objects into JSON via the <code>jsonlite</code> R package. However, there are a variety of other serializers that are built in to the package.</p>
+<p>You can also pass arguments to certain serializers to modify their behavior like in the example below.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="co">#* @serializer json list(na="string")</span></pre></div>
+<p>See the <a href="https://www.rplumber.io/reference/serializers.html">Serialization</a> article for details.</p>
 <table class="table">
 <colgroup>
 <col width="23%">
@@ -273,38 +277,100 @@
 <td>Object processed with <code>yaml::as_yaml()</code>
 </td>
 </tr>
+<tr class="even">
+<td><code>@serializer htmlwidget</code></td>
+<td><code>text/html; charset=utf-8</code></td>
+<td><code><a href="https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html">htmlwidgets::saveWidget()</a></code></td>
+</tr>
+<tr class="odd">
+<td><code>@serializer text</code></td>
+<td><code>text/plain</code></td>
+<td>Text output processed by <code><a href="https://rdrr.io/r/base/character.html">as.character()</a></code>
+</td>
+</tr>
+<tr class="even">
+<td><code>@serializer format</code></td>
+<td><code>text/plain</code></td>
+<td>Text output processed by <code><a href="https://rdrr.io/r/base/format.html">format()</a></code>
+</td>
+</tr>
+<tr class="odd">
+<td><code>@serializer print</code></td>
+<td><code>text/plain</code></td>
+<td>Text output captured from <code><a href="https://rdrr.io/r/base/print.html">print()</a></code>
+</td>
+</tr>
+<tr class="even">
+<td><code>@serializer cat</code></td>
+<td><code>text/plain</code></td>
+<td>Text output captured from <code><a href="https://rdrr.io/r/base/cat.html">cat()</a></code>
+</td>
+</tr>
+<tr class="odd">
+<td><code>@serializer jpeg</code></td>
+<td><code>image/jpeg</code></td>
+<td>Images created with <code><a href="https://rdrr.io/r/grDevices/png.html">jpeg()</a></code>
+</td>
+</tr>
+<tr class="even">
+<td><code>@serializer png</code></td>
+<td><code>image/png</code></td>
+<td>Images created with <code><a href="https://rdrr.io/r/grDevices/png.html">png()</a></code>
+</td>
+</tr>
+<tr class="odd">
+<td><code>@serializer svg</code></td>
+<td><code>image/svg</code></td>
+<td>Images created with <code><a href="https://rdrr.io/r/grDevices/cairo.html">svg()</a></code>
+</td>
+</tr>
+<tr class="even">
+<td><code>@serializer bmp</code></td>
+<td><code>image/bmp</code></td>
+<td>Images created with <code><a href="https://rdrr.io/r/grDevices/png.html">bmp()</a></code>
+</td>
+</tr>
+<tr class="odd">
+<td><code>@serializer tiff</code></td>
+<td><code>image/tiff</code></td>
+<td>Images created with <code><a href="https://rdrr.io/r/grDevices/png.html">tiff()</a></code>
+</td>
+</tr>
+<tr class="even">
+<td><code>@serializer pdf</code></td>
+<td><code>application/pdf</code></td>
+<td>PDF File created with <code><a href="https://rdrr.io/r/grDevices/pdf.html">pdf()</a></code>
+</td>
+</tr>
 </tbody>
 </table>
-<p><code>@serializer htmlwidget</code> | <code>text/html; charset=utf-8</code> | <code><a href="https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html">htmlwidgets::saveWidget()</a></code></p>
-<p><code>@serializer text</code> | <code>text/plain</code> | Text output processed by <code><a href="https://rdrr.io/r/base/character.html">as.character()</a></code> <code>@serializer format</code> | <code>text/plain</code> | Text output processed by <code><a href="https://rdrr.io/r/base/format.html">format()</a></code> <code>@serializer print</code> | <code>text/plain</code> | Text output captured from <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> <code>@serializer cat</code> | <code>text/plain</code> | Text output captured from <code><a href="https://rdrr.io/r/base/cat.html">cat()</a></code></p>
-<p><code>@serializer jpeg</code> | <code>image/jpeg</code> | Images created with <code><a href="https://rdrr.io/r/grDevices/png.html">jpeg()</a></code> <code>@serializer png</code> | <code>image/png</code> | Images created with <code><a href="https://rdrr.io/r/grDevices/png.html">png()</a></code> <code>@serializer svg</code> | <code>image/svg</code> | Images created with <code><a href="https://rdrr.io/r/grDevices/cairo.html">svg()</a></code> <code>@serializer bmp</code> | <code>image/bmp</code> | Images created with <code><a href="https://rdrr.io/r/grDevices/png.html">bmp()</a></code> <code>@serializer tiff</code> | <code>image/tiff</code> | Images created with <code><a href="https://rdrr.io/r/grDevices/png.html">tiff()</a></code> <code>@serializer pdf</code> | <code>application/pdf</code> | PDF File created with <code><a href="https://rdrr.io/r/grDevices/pdf.html">pdf()</a></code></p>
 <div id="boxed-vs-unboxed-json" class="section level3">
 <h3 class="hasAnchor">
 <a href="#boxed-vs-unboxed-json" class="anchor"></a>Boxed vs Unboxed JSON</h3>
 <p>You may have noticed that API responses generated from Plumber render singular values (or “scalars”) as arrays. For instance:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
+<div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">toJSON</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></pre></div>
 <pre><code>#&gt; {"a":[5]}</code></pre>
 <p>The value of the <code>a</code> element, though it’s singular, is still rendered as an array. This may surprise you initially, but this is done to keep the output consistent. While JSON differentiates scalar from vector objects, R does not. This creates ambiguity when serializing an R object to JSON since it is unclear whether a particular element should be rendered as an atomic value or a JSON array.</p>
 <p>Consider the following API which returns all the letters lexicographically “higher” than the given letter.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="co">#' Get letters after a given letter</span>
-<span class="co">#' @get /boxed</span>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="co">#* Get letters after a given letter</span>
+<span class="co">#* @get /boxed</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">letter</span><span class="op">=</span><span class="st">"A"</span><span class="op">)</span><span class="op">{</span>
   <span class="va">LETTERS</span><span class="op">[</span><span class="va">LETTERS</span> <span class="op">&gt;</span> <span class="va">letter</span><span class="op">]</span>
 <span class="op">}</span>
 
-<span class="co">#' Get letters after a given letter</span>
-<span class="co">#' @serializer unboxedJSON</span>
-<span class="co">#' @get /unboxed</span>
+<span class="co">#* Get letters after a given letter</span>
+<span class="co">#* @serializer unboxedJSON</span>
+<span class="co">#* @get /unboxed</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">letter</span><span class="op">=</span><span class="st">"A"</span><span class="op">)</span><span class="op">{</span>
   <span class="va">LETTERS</span><span class="op">[</span><span class="va">LETTERS</span> <span class="op">&gt;</span> <span class="va">letter</span><span class="op">]</span>
 <span class="op">}</span></pre></div>
 <p>This is an example of an API that, in some instance, produces a scalar, and in other instances produces a vector.</p>
 <p>Visiting <a href="http://localhost:8000/boxed?letter=U" class="uri">http://localhost:8000/boxed?letter=U</a> or <a href="http://localhost:8000/unboxed?letter=U" class="uri">http://localhost:8000/unboxed?letter=U</a> will return identical responses:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1"></a><span class="ot">[</span><span class="st">"V"</span><span class="ot">,</span> <span class="st">"W"</span><span class="ot">,</span> <span class="st">"X"</span><span class="ot">,</span> <span class="st">"Y"</span><span class="ot">,</span> <span class="st">"Z"</span><span class="ot">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1"></a><span class="ot">[</span><span class="st">"V"</span><span class="ot">,</span> <span class="st">"W"</span><span class="ot">,</span> <span class="st">"X"</span><span class="ot">,</span> <span class="st">"Y"</span><span class="ot">,</span> <span class="st">"Z"</span><span class="ot">]</span></span></code></pre></div>
 <p>However, <a href="http://localhost:8000/boxed?letter=Y" class="uri">http://localhost:8000/boxed?letter=Y</a> will produce:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1"></a><span class="ot">[</span><span class="st">"Z"</span><span class="ot">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1"></a><span class="ot">[</span><span class="st">"Z"</span><span class="ot">]</span></span></code></pre></div>
 <p>while <a href="http://localhost:8000/unboxed?letter=Y" class="uri">http://localhost:8000/unboxed?letter=Y</a> will produce:</p>
 <pre><code>"Z"</code></pre>
 <p>The <code>/boxed</code> endpoint, as the name implies, produces “boxed” JSON output in which length-1 vectors are still rendered as an array. Conversely, the <code>/unboxed</code> endpoint sets <code>auto_unbox=TRUE</code> in its call to <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">jsonlite::toJSON</a></code>, causing length-1 R vectors to be rendered as JSON scalars.</p>
@@ -317,10 +383,10 @@
 <a href="#customizing-image-serializers" class="anchor"></a>Customizing Image Serializers</h3>
 <p>The <code>@serializer jpeg</code> and <code>@serializer png</code> annotations cause the graphical output of an endpoint to be written to a file then returned to the client using the <code><a href="https://rdrr.io/r/grDevices/png.html">jpeg()</a></code> or <code><a href="https://rdrr.io/r/grDevices/png.html">png()</a></code> functions, respectively. These functions both accept a variety of additional options that customize the output including <code>width</code>, <code>height</code>, and <code>bg</code> among others.</p>
 <p>As of version 0.4.3 of plumber, these annotations now accept additional arguments that will be passed into these functions. This enables the creation of endpoints like:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="co">#' Example of customizing graphical output</span>
-<span class="co">#' @serializer png list(width = 400, height = 500)</span>
-<span class="co">#' @get /</span>
+<div class="sourceCode" id="cb8"><pre class="downlit">
+<span class="co">#* Example of customizing graphical output</span>
+<span class="co">#* @serializer png list(width = 400, height = 500)</span>
+<span class="co">#* @get /</span>
 <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span>
 <span class="op">}</span></pre></div>
@@ -331,9 +397,9 @@
 <h3 class="hasAnchor">
 <a href="#bypassing-serialization" class="anchor"></a>Bypassing Serialization</h3>
 <p>In some instances it may be desirable to return a value directly from R without serialization. You can bypass serialization by returning the <a href="#response-object">response object</a> from an endpoint. For example, consider the following API.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="co">#' Endpoint that bypasses serialization</span>
-<span class="co">#' @get /</span>
+<div class="sourceCode" id="cb9"><pre class="downlit">
+<span class="co">#* Endpoint that bypasses serialization</span>
+<span class="co">#* @get /</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">{</span>
   <span class="va">res</span><span class="op">$</span><span class="va">body</span> <span class="op">&lt;-</span> <span class="st">"Literal text here!"</span>
 
@@ -341,7 +407,7 @@
 <span class="op">}</span></pre></div>
 <p>The response that is returned from this endpoint would contain the body <code>Literal text here!</code> with no <code>Content-Type</code> header and without any additional serialization.</p>
 <p>Similarly, you can leverage the <code>@serializer contentType</code> annotation which does no serialization of the response but specifies the contentType header. You can use this annotation when you want more control over the response that you send.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
+<div class="sourceCode" id="cb10"><pre class="downlit">
 <span class="co">#* @serializer contentType list(type="application/pdf")</span>
 <span class="co">#* @get /pdf</span>
 <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span>
@@ -361,15 +427,15 @@
 <h2 class="hasAnchor">
 <a href="#error-handling" class="anchor"></a>Error Handling</h2>
 <p>Plumber wraps each endpoint invocation so that it can gracefully capture errors.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="co">#' Example of throwing an error</span>
-<span class="co">#' @get /simple</span>
+<div class="sourceCode" id="cb11"><pre class="downlit">
+<span class="co">#* Example of throwing an error</span>
+<span class="co">#* @get /simple</span>
 <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span>
   <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"I'm an error!"</span><span class="op">)</span>
 <span class="op">}</span>
 
-<span class="co">#' Generate a friendly error</span>
-<span class="co">#' @get /friendly</span>
+<span class="co">#* Generate a friendly error</span>
+<span class="co">#* @get /friendly</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">{</span>
   <span class="va">msg</span> <span class="op">&lt;-</span> <span class="st">"Your request did not include a required parameter."</span>
   <span class="va">res</span><span class="op">$</span><span class="va">status</span> <span class="op">&lt;-</span> <span class="fl">400</span> <span class="co"># Bad request</span>
@@ -382,11 +448,11 @@
 <li>A similar error is printed in the terminal where you’re running your Plumber API.</li>
 </ol>
 <p>This means that it is possible for you to intentionally <code><a href="https://rdrr.io/r/base/stop.html">stop()</a></code> in an endpoint or a filter as a way to communicate a problem to your user. However, it may be preferable to render errors from your API in a consistent format with more helpful error messages.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">{</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>  <span class="dt">"error"</span><span class="fu">:</span> <span class="st">"Your request did not include a required parameter."</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">{</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="dt">"error"</span><span class="fu">:</span> <span class="st">"Your request did not include a required parameter."</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="fu">}</span></span></code></pre></div>
 <p>A custom error handler can be set using the <code>setErrorHandler()</code> method:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit">
+<div class="sourceCode" id="cb13"><pre class="downlit">
 <span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span><span class="st">"/simple"</span>, <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"I'm an error!"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_set_error.html">pr_set_error</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span>, <span class="va">err</span><span class="op">)</span><span class="op">{</span>
@@ -395,7 +461,7 @@
   <span class="op">}</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span><span class="op">)</span></pre></div>
 <p>If you run this API and visit <a href="http://localhost:8000/simple" class="uri">http://localhost:8000/simple</a>, you’ll notice that the custom error message provided in the error handler is included in the browser. Since we didn’t do anything with the actual error message, nothing is printed to the console. If we wanted to include the error in the console, we could do the following:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit">
+<div class="sourceCode" id="cb14"><pre class="downlit">
 <span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span><span class="st">"/simple"</span>, <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"I'm an error!"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_set_error.html">pr_set_error</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span>, <span class="va">err</span><span class="op">)</span><span class="op">{</span>
@@ -415,8 +481,8 @@
 <h3 class="hasAnchor">
 <a href="#setting-unencrypted-cookies" class="anchor"></a>Setting Unencrypted Cookies</h3>
 <p>Plumber can both set and receive plaint-text cookies. The API endpoint below will return a random letter, but it remembers your preferences on whether you like capitalized or lower-case letters.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit">
-<span class="co">#' @put /preferences</span>
+<div class="sourceCode" id="cb15"><pre class="downlit">
+<span class="co">#* @put /preferences</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">res</span>, <span class="va">capital</span><span class="op">)</span><span class="op">{</span>
   <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/missing.html">missing</a></span><span class="op">(</span><span class="va">capital</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
     <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"You must specify a value for the 'capital' preference."</span><span class="op">)</span>
@@ -424,7 +490,7 @@
   <span class="va">res</span><span class="op">$</span><span class="fu">setCookie</span><span class="op">(</span><span class="st">"capitalize"</span>, <span class="va">capital</span><span class="op">)</span>
 <span class="op">}</span>
 
-<span class="co">#' @get /letter</span>
+<span class="co">#* @get /letter</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">capitalize</span> <span class="op">&lt;-</span> <span class="va">req</span><span class="op">$</span><span class="va">cookies</span><span class="op">$</span><span class="va">capitalize</span>
 
@@ -441,9 +507,9 @@
   <span class="op">)</span>
 <span class="op">}</span></pre></div>
 <p>Since this API is using a <code>PUT</code> request to test this API, we’ll use <code>curl</code> on the command line to test it. (There’s nothing about cookies that necessitates <code>PUT</code> requests; you could just as easily modify this API to use a <code>GET</code> request.) We can start by visiting the <code>/letter</code> endpoint and we’ll see that the API defaults to a lower-case alphabet. <code>curl http://localhost:8000/letter</code></p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">{</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a>  <span class="dt">"letter"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"l"</span><span class="ot">]</span></span>
-<span id="cb15-3"><a href="#cb15-3"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">{</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="dt">"letter"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"b"</span><span class="ot">]</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="fu">}</span></span></code></pre></div>
 <p>If we send a <code>PUT</code> request and specify the <code>capital</code> parameter, a cookie will be set on the client which will allow the server to accommodate our preference in future requests. In <code>curl</code>, you need to specify a file in which you want to save these cookies using the <code>-c</code> option. This is a good reminder that clients handle cookies differently – some won’t support them at all – so be sure that the clients you intend to support with your API play nicely with cookies if you want to use them.</p>
 <p>To send a <code>PUT</code> request, setting the parameter <code>capital</code> to <code>1</code>, we could invoke: <code>curl -c cookies.txt -X PUT --data 'capital=1' "http://localhost:8000/preferences"</code>. If you print out the <code>cookies.txt</code> file, you should now see that it contains a single cookie called <code>capitalize</code> with a value of <code>1</code>.</p>
 <p>We can make another <code>GET</code> request to <code>/letter</code> to see if it accommodates our preferences. But we’ll need to tell <code>curl</code> to use the cookies file we just created when sending this request using the <code>-b</code> switch: <code>curl -b cookies.txt http://localhost:8000/letter</code>. You should now see that the API is returning a random capitalized letter.</p>
@@ -456,14 +522,14 @@
 <a href="#encrypted-cookies" class="anchor"></a>Setting Encrypted Cookies</h3>
 <p>In addition to storing plain-text cookies, Plumber also supports handling cookies that are encrypted. Encrypted cookies prevent your users from seeing what is stored inside of them and also sign their contents so that users can’t modify what is stored.</p>
 <p>To use this feature, you must explicitly add it to your router after constructing it. For example, you could run the following sequence of commands to create a router that supports encrypted session cookies.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit">
+<div class="sourceCode" id="cb17"><pre class="downlit">
 <span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"myfile.R"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_cookie.html">pr_cookie</a></span><span class="op">(</span><span class="st">"mySecretHere"</span>, <span class="st">"cookieName"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span><span class="op">)</span></pre></div>
 <p>You’ll notice the above example is using the <code>session_cookie</code> hooks that come with Plumber. By adding registering these hooks on your router, you’ll ensure that the <code>req$session</code> object is made available on incoming requests and is persisted to the cookie named <code>cookieName</code> when the response is ready to be sent to the user. In this example, the key used to encrypt the data is <code>"mySecretHere"</code>, which is obviously a very weak secret key.</p>
 <p>Unlike <code>res$setHeader()</code>, the values attached to <code>req$session</code> <em>are</em> serialized via <code>jsonlite</code>; so you’re free to use more complex data structures like lists in your session. Also unlike <code>res$setHeaders()</code>, <code>req$session</code> encrypts the data using the secret key you provide as the first argument to the <code><a href="../reference/session_cookie.html">session_cookie()</a></code> function.</p>
 <p>As an example, we’ll store an encrypted cookie that counts how many times this client has visited a particular endpoint:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit">
+<div class="sourceCode" id="cb18"><pre class="downlit">
 <span class="co">#* @get /sessionCounter</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span><span class="op">{</span>
   <span class="va">count</span> <span class="op">&lt;-</span> <span class="fl">0</span>
