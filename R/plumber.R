@@ -891,7 +891,7 @@ Plumber <- R6Class(
     #'
     #'  The value returned will not be validated for OAS compatibility.
     setApiSpec = function(api = NULL) {
-      if (is.character(api)) {
+      if (is.character(api) && length(api) == 1 && file.exists(api)) {
         if (tools::file_ext(api) %in% c("yaml", "yml")) {
           if (!requireNamespace("yaml", quietly = TRUE)) {
             stop("yaml must be installed to read yaml format")
