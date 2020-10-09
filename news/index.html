@@ -85,7 +85,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.9999</span>
       </span>
     </div>
 
@@ -124,6 +124,9 @@
     </li>
     <li>
       <a href="../articles/programmatic-usage.html">Programmatic Usage</a>
+    </li>
+    <li>
+      <a href="../articles/annotations.html">Annotations reference</a>
     </li>
     <li>
       <a href="../articles/tips-and-tricks.html">Tips &amp; Tricks</a>
@@ -167,6 +170,17 @@
       <small>Source: <a href='https://github.com/rstudio/plumber/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="plumber-1009999-development-version" class="section level2">
+<h2 class="hasAnchor">
+<a href="#plumber-1009999-development-version" class="anchor"></a>plumber 1.0.0.9999 Development version</h2>
+<div id="bug-fixes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h3>
+<ul>
+<li>When calling <code>Plumber$handle()</code> and defining a new <code>PlumberEndpoint</code>, <code>...</code> will be checked for invalid names <a href='https://github.com/rstudio/plumber/issues/677'>#677</a></li>
+</ul>
+</div>
+</div>
     <div id="plumber-100" class="section level2">
 <h2 class="hasAnchor">
 <a href="#plumber-100" class="anchor"></a>plumber 1.0.0</h2>
@@ -349,12 +363,12 @@
 <li><p>Plumber files are now only evaluated once. Prior plumber behavior sourced endpoint functions twice and non-endpoint code blocks once. (<a href='https://github.com/rstudio/plumber/issues/328'>#328</a>)</p></li>
 <li><p>Improve speed of <code>canServe()</code> method of the <code>PlumberEndpoint</code> class (<a href='https://github.com/atheriel'>@atheriel</a>, <a href='https://github.com/rstudio/plumber/issues/484'>#484</a>)</p></li>
 <li><p>Get more file extension content types using the <code>mime</code> package. (<a href='https://github.com/rstudio/plumber/issues/660'>#660</a>)</p></li>
-<li><p>Endpoints that produce images within a <code><a href="https://rdrr.io/pkg/promises/man/promise.html">promises::promise()</a></code> will now use the expected graphics device. (<a href='https://github.com/rstudio/plumber/issues/669'>#669</a>)</p></li>
+<li><p>Endpoints that produce images within a <code><a href="https://rstudio.github.io/promises/reference/promise.html">promises::promise()</a></code> will now use the expected graphics device. (<a href='https://github.com/rstudio/plumber/issues/669'>#669</a>)</p></li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level3">
+<div id="bug-fixes-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li><p>Handle plus signs in URI as space characters instead of actual plus signs (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/618'>#618</a>)</p></li>
 <li><p>Paths that are missing a leading <code><a href="https://rdrr.io/r/base/Arithmetic.html">/</a></code> have a <code><a href="https://rdrr.io/r/base/Arithmetic.html">/</a></code> prepended to the path location. (<a href='https://github.com/rstudio/plumber/issues/656'>#656</a>)</p></li>
