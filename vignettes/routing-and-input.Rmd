@@ -306,7 +306,9 @@ e <- r$endpoints[[1]][[1]]
 code_chunk(json_serialize(e$exec(req=list(bodyRaw = charToRaw("id=123&name=Jennifer"), body=list(id = 123, name = "Jennifer"), args = list(id = 123, name = "Jennifer")), res = NULL)), "json")
 ```
 
-Alternatively, `curl --data '{"id":123, "name": "Jennifer"}' "http://localhost:8000/user"` (formatting the body as JSON) will have the same effect.
+Alternatively, `echo {"id":123, "name": "Jennifer"} > call.json & curl --data @call.json "http://localhost:8000/user" -H "content-type: application/json"` (formatting the body as JSON) will have the same effect.
+
+Plumber 
 
 As demonstrated above, the raw request body is made available as `req$bodyRaw` and parsed request body is available as `req$body`.
 
