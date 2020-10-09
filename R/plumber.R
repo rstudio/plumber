@@ -896,7 +896,7 @@ Plumber <- R6Class(
           if (!requireNamespace("yaml", quietly = TRUE)) {
             stop("yaml must be installed to read yaml format")
           }
-          api <- yaml::read_yaml(api)
+          api <- yaml::read_yaml(api, eval.expr = FALSE)
         } else {
           api <- jsonlite::parse_json(api, simplifyVector = TRUE)
         }
