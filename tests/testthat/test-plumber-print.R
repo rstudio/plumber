@@ -91,8 +91,8 @@ test_that("prints recursion is detected", {
   printed2 <- capture.output(print(a))
   printed3 <- capture.output(print(b))
 
-  expect_match(printed, "Circular reference detected", all = FALSE)
-  expect_match(printed3, "Circular reference detected", all = FALSE)
+  expect_match(printed, "Circular Plumber reference detected", all = FALSE)
+  expect_match(printed3, "Circular Plumber reference detected", all = FALSE)
   expect_equal(printed, printed2)
 
 })
