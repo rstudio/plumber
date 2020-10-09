@@ -1,4 +1,4 @@
-#' @get /type/<id>
+#* @get /type/<id>
 function(id){
   list(
     id = id,

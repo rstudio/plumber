@@ -69,8 +69,8 @@ A block of annotations is a combination of annotations that create either an [en
 Annotation | Argument | Description/References
 -----------| -------- | ----------------------
 `@get`, `@post`, `@put`, `@use`, `@delete`, `@head`, `@options`, `@patch` | `Path` | [Endpoints](./routing-and-input.html#endpoints), [Dynamic Routes](./routing-and-input.html#dynamic-routes), [Typed Dynamic Routes](./routing-and-input.html#typed-dynamic-routes)
-`@serializer` | `Alias` [`Args list]`] | Some serializers accept arguments. See [serializers article](./rendering-output.html#serializers) and [serializers reference](../reference/serializers.html). Aliases : `r paste0("<code>", registered_serializers(), "</code>", collapse = ", ")` from [`registered_serializers()`](../reference/register_serializer.html).
-`@parser` | `Alias` `[Args list]` | Some parsers accept arguments. See [parsers reference](../reference/parsers.html). Can be repeated to allow multiple parsers on the same endpoint. Aliases : `r paste0("<code>", registered_parsers(), "</code>", collapse = ", ")` from [`registered_parsers()`](../reference/register_parser.html).
+`@serializer` | `Alias` [`Args list]`] | Some serializers accept arguments. See [serializers article](./rendering-output.html#serializers) and [serializers reference](https://www.rplumber.io/reference/serializers.html). Aliases : `r paste0("<code>", registered_serializers(), "</code>", collapse = ", ")` from [`registered_serializers()`](https://www.rplumber.io/reference/register_serializer.html).
+`@parser` | `Alias` `[Args list]` | Some parsers accept arguments. See [parsers reference](https://www.rplumber.io/reference/parsers.html). Can be repeated to allow multiple parsers on the same endpoint. Aliases : `r paste0("<code>", registered_parsers(), "</code>", collapse = ", ")` from [`registered_parsers()`](https://www.rplumber.io/reference/register_parser.html).
 `@param` | `Name`[`:Type` `Description`] | Enclose `Type` between square brackets `[]` to indicate it is an array. Can be repeated to define different parameters.
 `@response` | `Name` `Description` | Simple [Response object](http://spec.openapis.org/oas/v3.0.3#response-object). Can be repeated to define different responses.
 `@tags` | `Tag` | Can be repeated to add multiple tags. [Tag field](http://spec.openapis.org/oas/v3.0.3#operation-object)
@@ -81,16 +81,16 @@ None | `Comments` | Lines without annotation will be mapped to [Summary field](h
 #### More details on `@param`
 Types are used to define API inputs. You can use most of them in dynamic routes. Note that Plumber first look in block expression to set endpoint parameters names, types and default value. Then `@param` annotations and dynamic route/path defined parameters will override Plumber guesses from block expression.
 
-Plumber parameter type to OpenAPI type refenrence.
+Plumber parameter type to OpenAPI type refenrence. For programmatic use, pick the one with an asterisk.
 
 Type | OpenApi | Availability
 ---------------- | ----------- | ---------
-`bool`, `boolean`, `logical` | `boolean` | `query`, `path`
-`dbl`, `double`, `float`, `number`, `numeric` | `number` `format:double` | `query`, `path`
-`int`, `integer` | `integer` `format:int64` | `query`, `path`
-`chr`, `str`, `character`, `string` | `string` | `query`, `path`
-`list`, `data.frame`, `df`, `object` | `object` | `body`
-`file`, `binary` | `string` `format:binary` | `body`
+`bool`, `boolean`*, `logical` | `boolean` | `query`, `path`
+`dbl`, `double`, `float`, `number`*, `numeric` | `number` `format:double` | `query`, `path`
+`int`, `integer`* | `integer` `format:int64` | `query`, `path`
+`chr`, `str`, `character`, `string`* | `string` | `query`, `path`
+`list`, `data.frame`, `df`, `object`* | `object` | `body`
+`file`*, `binary` | `string` `format:binary` | `body`
 
 ##### Annotations example
 
@@ -107,12 +107,31 @@ function(name, age) {
 #* @serializer rds
 #* @parser multi
 #* @parser rds
-#* @param f:file
+#* @param f:file A file
 #* Upload an rds file and return the object
 function(f) {
   as_attachment(f[[1]], names(f)[1])
 }
 ```
+
+##### Equivalent programmatic usage
+```{r, eval = FALSE, echo = TRUE}
+text_handler <- function(name, age) { sprintf("%s is %i years old", name, age) }
+file_handler <- function(file) { as_attachment(file[[1]], names(file)[1]) }
+pr() %>%
+  pr_get(path = "/dyn/<name:str>/<age:[int]>/route", 
+         handler = text_handler, 
+         serializer = serializer_text(),
+         parsers = "none",
+         responses = list("200" = list(description = "A sentence"))) %>%
+  pr_post(path = "/upload_file",
+          handler = file_handler,
+          serializer = serializer_rds(),
+          parsers = c("multi", "rds"),
+          params = list("file" = list(type = "file", desc = "A file", required = FALSE, isArray = FALSE)),
+          comments = "Upload an rds file and return the object")
+```
+
 
 ### Filter {#filter-block-annotations}
 
