@@ -4,7 +4,7 @@
 #' taking an incoming request, submitting it through the appropriate filters and
 #' eventually to a corresponding endpoint, if one is found.
 #'
-#' See [here](../articles/programmatic-usage.html) for additional
+#' See the [Programmatic Usage](../articles/programmatic-usage.html) article for additional
 #' details on the methods available on this object.
 #' @param file The file to parse as the plumber router definition.
 #' @param dir The directory containing the `plumber.R` file to parse as the

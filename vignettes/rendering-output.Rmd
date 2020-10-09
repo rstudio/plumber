@@ -48,7 +48,7 @@ You can also pass arguments to certain serializers to modify their behavior like
 ```r
 #* @serializer json list(na="string")
 ```
-See [here](../reference/serializers.html) for possible arguments.
+See the [Serialization](../reference/serializers.html) article for details.
 
 Annotation | Content Type | Description/References
 ---------- | ------------ | ---------------------

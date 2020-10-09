@@ -116,19 +116,19 @@ function(f) {
 
 ##### Equivalent programmatic usage
 ```{r, eval = FALSE, echo = TRUE}
-f <- function(name, age) { sprintf("%s is %i years old", name, age) }
-g <- function(f) { as_attachment(f[[1]], names(f)[1]) }
+text_handler <- function(name, age) { sprintf("%s is %i years old", name, age) }
+file_handler <- function(file) { as_attachment(file[[1]], names(file)[1]) }
 pr() %>%
   pr_get(path = "/dyn/<name:str>/<age:[int]>/route", 
-         handler = f, 
+         handler = text_handler, 
          serializer = serializer_text(),
          parsers = "none",
          responses = list("200" = list(description = "A sentence"))) %>%
   pr_post(path = "/upload_file",
-          handler = g,
+          handler = file_handler,
           serializer = serializer_rds(),
           parsers = c("multi", "rds"),
-          params = list("f" = list(type = "file", desc = "A file", required = FALSE, isArray = FALSE)),
+          params = list("file" = list(type = "file", desc = "A file", required = FALSE, isArray = FALSE)),
           comments = "Upload an rds file and return the object")
 ```
 

@@ -21,7 +21,7 @@ pr_set_serializer <- function(pr, serializer) {
 #' default parsers for any endpoint that does not define their own parsers.
 #'
 #' Note: The default set of parsers will be completely replaced if any value is supplied. Be sure to include all of your parsers that you would like to include.
-#' Use `registered_parsers()` to get a list of available parsers aliases.
+#' Use `registered_parsers()` to get a list of available parser names.
 #'
 #' @template param_pr
 #' @template pr_setParsers__parsers

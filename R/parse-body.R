@@ -150,11 +150,10 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
 #' @details
 #' When `parser` is evaluated, it should return a parser function.
 #' Parser matching is done first by `content-type` header matching with `fixed` then by using
-#' regular expressions with `regex`. Note that plumber strip `; charset*` from `content-type` header before
-#' performing match.
+#' regular expressions with `regex`. Note that plumber strips `; charset*` from `content-type` header before matching.
 #'
-#' It will try to use [parser_json()] if available when no `content-type` header is found and
-#' request body starts with `{` or `[`.
+#' Plumber will try to use [parser_json()] (if available) when no `content-type` header is found and
+#' the request body starts with `{` or `[`.
 #'
 #' Functions signature should include `value`, `...` and
 #' possibly `content_type`, `filename`. Other parameters may be provided
@@ -353,13 +352,13 @@ make_parser <- function(aliases) {
 #' non-default behavior.
 #'
 #' Parsers are optional. When unspecified, only default endpoint parsers are enabled.
-#' You can use `@parser parser` tag to enable parser on endpoint.
-#' Multiple parsers can be enabled on the same endpoint using multiple `@parser parser` tags.
+#' You can use `@parser NAME` tag to enable parser on endpoint.
+#' Multiple parsers can be enabled on the same endpoint using multiple `@parser NAME` tags.
 #'
 #' User should be aware that `rds` parsing should only be done from a
 #' trusted source. Do not accept `rds` files blindly.
 #'
-#' See [registered_parsers()] for a list of registered parsers aliases.
+#' See [registered_parsers()] for a list of registered parsers names.
 #'
 #' @param ... parameters supplied to the appropriate internal function
 #' @describeIn parsers Form query string parser

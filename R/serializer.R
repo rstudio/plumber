@@ -105,7 +105,7 @@ as_attachment <- function(value, filename = NULL) {
 #'
 #' Serializers are used in Plumber to transform the R object produced by a
 #' filter/endpoint into an HTTP response that can be returned to the client. See
-#' [here](../articles/rendering-output.html#serializers-1) for
+#' [here](https://www.rplumber.io/articles/rendering-output.html#serializers-1) for
 #' more details on Plumber serializers and how to customize their behavior.
 #' @describeIn serializers Add a static list of headers to each return value. Will add `Content-Disposition` header if a value is the result of `as_attachment()`.
 #' @param ... extra arguments supplied to respective internal serialization function.
