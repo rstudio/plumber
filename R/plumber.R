@@ -898,7 +898,7 @@ Plumber <- R6Class(
           }
           api <- yaml::read_yaml(api, eval.expr = FALSE)
         } else {
-          api <- jsonlite::parse_json(api, simplifyVector = TRUE)
+          api <- jsonlite::read_json(api, simplifyVector = TRUE)
         }
       }
       api_fun <-
