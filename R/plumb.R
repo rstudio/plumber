@@ -94,6 +94,7 @@ plumb <- function(file = NULL, dir = ".") {
 #' @param edit Whether or not to open the API source code for viewing / editing
 #' @describeIn plumb_api [plumb()]s a package's Plumber API. Returns a [`Plumber`] router object
 #' @return A [`Plumber`] object. If either `package` or `name` is null, the appropriate [available_apis()] will be returned.
+#' @importFrom utils file.edit
 #' @export
 plumb_api <- function(package = NULL, name = NULL, edit = FALSE) {
 
