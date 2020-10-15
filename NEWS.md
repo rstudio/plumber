@@ -4,7 +4,10 @@ plumber 1.0.0.9999 Development version
 ### Bug fixes
 
 * When calling `Plumber$handle()` and defining a new `PlumberEndpoint`, `...` will be checked for invalid names (@meztez, #677)
-* Force json serialization of endpoint error responses (@meztez, #689)
+
+### Breaking changes
+
+* Force json serialization of endpoint error responses instead of using endpoint serializer. (@meztez, #689)
 
 plumber 1.0.0
 --------------------------------------------------------------------------------
