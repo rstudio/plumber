@@ -59,9 +59,10 @@ test_that("errors are thrown", {
 
 test_that("edit opens correct file", {
   # Redefine editor so that file.edit doesn't try to open a file
-  editor <- options(editor = function(name, file, title) {
+  orig_opts <- options(editor = function(name, file, title) {
     print(file)
   })
+  on.exit(options(orig_opts), add = TRUE)
 
   apis <- available_apis()
 
