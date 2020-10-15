@@ -82,9 +82,9 @@ test_that("edit opens correct file", {
 })
 
 test_that("edit throws a warning", {
-  editor <- options(editor = function(name, file, title) NULL)
+  orig_opts <- options(editor = function(name, file, title) NULL)
+  on.exit(options(orig_opts), add = TRUE)
   expect_warning(plumb_api("plumber", "01-append", edit = TRUE))
-  options(editor)
 })
 
 context("plumb() plumber APIs")
