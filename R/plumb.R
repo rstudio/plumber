@@ -116,21 +116,21 @@ plumb_api <- function(package = NULL, name = NULL, edit = FALSE) {
     stop("Could not find Plumber API for package '", package, "'  with name '", name, "'")
   }
 
-  api_dir <- apis[apis_sub, "source_directory"]
-
-  if (edit) {
-    edit_warning <- function(file_path, package) {
-      warning(file_path, " has been opened in the editor. Any changes saved to this file are permament until the ", package, " package is reinstalled. If you would like to make persistent changes, consider copying the contents of this file to a new file.",
-              call. = FALSE)
-    }
+  if (isTRUE(edit)) {
+    api_dir <- apis[apis_sub, "source_directory"]
 
     if (file.exists(file.path(api_dir, "entrypoint.R"))) {
       file_loc <- file.path(api_dir, "entrypoint.R")
     } else {
       file_loc <- file.path(api_dir, "plumber.R")
     }
-      file.edit(file_loc)
-      edit_warning(file_loc, package)
+    file.edit(file_loc)
+    warning(
+      file_loc, " has been opened in the editor.",
+      " Any changes saved to this file are permanent until the ", package, " package is reinstalled.",
+      " If you would like to make persistent changes, consider copying the contents of this file to a new file.",
+      call. = FALSE
+    )
   }
 
   plumb(

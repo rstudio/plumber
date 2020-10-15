@@ -67,17 +67,17 @@ test_that("edit opens correct file", {
 
   selected_api <- apis$package == "plumber" & apis$name == "01-append"
 
-  expect_output(plumb_api("plumber", "01-append", edit = TRUE),
-                file.path(apis[selected_api, "source_directory"], "plumber.R"))
+  expect_output(
+  	plumb_api("plumber", "01-append", edit = TRUE),
+    paste0(file.path(apis[selected_api, "source_directory"], "plumber.R"), " has been opened")
+  )
 
   selected_api <- apis$package == "plumber" & apis$name == "12-entrypoint"
 
-  expect_output(plumb_api("plumber", "12-entrypoint", edit = TRUE),
-                file.path(apis[selected_api, "source_directory"], "entrypoint.R"))
-
-
-  # Reset editor
-  options(editor)
+  expect_output(
+    plumb_api("plumber", "12-entrypoint", edit = TRUE),
+    paste0(file.path(apis[selected_api, "source_directory"], "entrypoint.R"), " has been opened")
+  )
 })
 
 test_that("edit throws a warning", {
