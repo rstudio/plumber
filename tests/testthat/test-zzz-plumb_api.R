@@ -57,6 +57,34 @@ test_that("errors are thrown", {
   expect_error(available_apis("crayon"), "No Plumber APIs found for package")
 })
 
+test_that("edit opens correct file", {
+  # Redefine editor so that file.edit doesn't try to open a file
+  editor <- options(editor = function(name, file, title) {
+    print(file)
+  })
+
+  apis <- available_apis()
+
+  selected_api <- apis$package == "plumber" & apis$name == "01-append"
+
+  expect_output(plumb_api("plumber", "01-append", edit = TRUE),
+                file.path(apis[selected_api, "source_directory"], "plumber.R"))
+
+  selected_api <- apis$package == "plumber" & apis$name == "12-entrypoint"
+
+  expect_output(plumb_api("plumber", "12-entrypoint", edit = TRUE),
+                file.path(apis[selected_api, "source_directory"], "entrypoint.R"))
+
+
+  # Reset editor
+  options(editor)
+})
+
+test_that("edit throws a warning", {
+  editor <- options(editor = function(name, file, title) NULL)
+  expect_warning(plumb_api("plumber", "01-append", edit = TRUE))
+  options(editor)
+})
 
 context("plumb() plumber APIs")
 test_that("all example plumber apis plumb", {
