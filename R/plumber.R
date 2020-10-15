@@ -387,7 +387,7 @@ Plumber <- R6Class(
       on.exit({private$printing = NULL}, add = TRUE)
       private$printing = sum(private$printing, ifelse(topLevel, 0L, 1L))
       if (isTRUE(private$printing == 2L)) {
-        cat(prefix, "# Circular Plumber reference detected", "\n", sep="")
+        cat(crayon::bgBlue("# Circular Plumber reference detected", "\n", sep=""))
         return()
       }
 
