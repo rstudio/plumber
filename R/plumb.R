@@ -124,7 +124,13 @@ plumb_api <- function(package = NULL, name = NULL, edit = FALSE) {
     } else {
       file_loc <- file.path(api_dir, "plumber.R")
     }
-    file.edit(file_loc)
+
+    # Check for RStudio running
+    if (requireNamespace("rstudioapi", quietly = TRUE)) {
+      rstudioapi::navigateToFile(file_loc)
+    } else {
+      file.edit(file_loc)
+    }
     warning(
       file_loc, " has been opened in the editor.",
       " Any changes saved to this file are permanent until the ", package, " package is reinstalled.",
