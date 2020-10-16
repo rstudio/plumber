@@ -127,7 +127,11 @@ plumb_api <- function(package = NULL, name = NULL, edit = FALSE) {
 
     # Check for RStudio running
     if (requireNamespace("rstudioapi", quietly = TRUE)) {
-      rstudioapi::navigateToFile(file_loc)
+      if (rstudioapi::isAvailable()) {
+        rstudioapi::navigateToFile(file_loc)
+      } else {
+        file.edit(file_loc)
+      }
     } else {
       file.edit(file_loc)
     }
