@@ -251,4 +251,10 @@ test_that("device serializers produce a structure", {
   expect_s3_block("#' @serializer pdf", serializer_pdf)
 })
 
+test_that("Tags can contains space", {
+  lines <- c("#* @tag 'test space'",
+             "#* @tag \"test space2\"")
+  expect_equal(plumbBlock(length(lines), lines)$tags, c("test space", "test space2"))
+})
+
 # TODO: more testing around filter, assets, endpoint, etc.

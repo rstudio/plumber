@@ -26,7 +26,9 @@ test_that("plumbGlobals works", {
              "#' @apiVersion version",
              "#' @apiTag tag description",
              "#' @apiTag tag2 description2",
-             "#' @apiTag tag3 description in part")
+             "#' @apiTag tag3 description in part",
+             "#' @apiTag 'tag4 space' spaces",
+             "#' @apiTag \"tag5 space\" spaces")
 
   fields <- plumbGlobals(lines)
 
@@ -41,7 +43,9 @@ test_that("plumbGlobals works", {
     ),
     tags=list(list(name="tag", description="description"),
               list(name="tag2", description="description2"),
-              list(name="tag3", description="description in part"))
+              list(name="tag3", description="description in part"),
+              list(name="tag4 space", description="spaces"),
+              list(name="tag5 space", description="spaces"))
   ))
 
   # Test contact and licence object

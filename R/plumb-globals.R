@@ -48,8 +48,8 @@ plumbOneGlobal <- function(fields, argument, envir = parent.frame()){
            fields$info$version <- def
          },
          apiTag={
-           tagMat <- stri_match(def, regex="^\\s*(\\w+)\\s+(\\S.+)\\s*$")
-           name <- tagMat[1,2]
+           tagMat <- stri_match(def, regex="^\\s*(\"[^\"]+\"|'[^']+'|\\S+)\\s+(\\S.+)\\s*$")
+           name <- stri_trim_both(tagMat[1,2], pattern = "[[\\P{Wspace}]-[\"']]")
            description <- tagMat[1,3]
            if(!is.null(fields$tags) && name %in% unlist(lapply(fields$tags, "[[", "name"))) {
              stop("Error: '", argument, "' - ","Duplicate tag definition specified.")
