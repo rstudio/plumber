@@ -109,7 +109,7 @@ The graphics device \code{dev_on} function will receive any arguments supplied t
 \description{
 Serializers are used in Plumber to transform the R object produced by a
 filter/endpoint into an HTTP response that can be returned to the client. See
-\href{../articles/rendering-output.html#serializers-1}{here} for
+\href{https://www.rplumber.io/articles/rendering-output.html#serializers-1}{here} for
 more details on Plumber serializers and how to customize their behavior.
 }
 \section{Functions}{

@@ -29,11 +29,10 @@ For instance, \code{\link[=parser_json]{parser_json()}} parse content-type \code
 \details{
 When \code{parser} is evaluated, it should return a parser function.
 Parser matching is done first by \code{content-type} header matching with \code{fixed} then by using
-regular expressions with \code{regex}. Note that plumber strip \verb{; charset*} from \code{content-type} header before
-performing match.
+regular expressions with \code{regex}. Note that plumber strips \verb{; charset*} from \code{content-type} header before matching.
 
-It will try to use \code{\link[=parser_json]{parser_json()}} if available when no \code{content-type} header is found and
-request body starts with \verb{\{} or \code{[}.
+Plumber will try to use \code{\link[=parser_json]{parser_json()}} (if available) when no \code{content-type} header is found and
+the request body starts with \verb{\{} or \code{[}.
 
 Functions signature should include \code{value}, \code{...} and
 possibly \code{content_type}, \code{filename}. Other parameters may be provided

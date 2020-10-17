@@ -29,9 +29,12 @@
 #' \item{`plumber.sharedSecret`}{Shared secret used to filter incoming request.
 #' When `NULL`, secret is not validated. Otherwise, Plumber compares secret with http header
 #' `PLUMBER_SHARED_SECRET`. Failure to match results in http error 400. Defaults to `NULL`.}
+#' \item{`plumber.legacyRedirects`}{Plumber will redirect legacy route `/__swagger__/` and
+#' `/__swagger__/index.html` to `../__docs__/` and `../__docs__/index.html`. You can disable this
+#' by settings this option to `FALSE`. Defaults to `TRUE`}
 #' }
 #'
-#' @param port,docs,docs.callback,apiScheme,apiHost,apiPort,apiPath,apiURL,maxRequestSize,sharedSecret See details
+#' @param port,docs,docs.callback,apiScheme,apiHost,apiPort,apiPath,apiURL,maxRequestSize,sharedSecret,legacyRedirects See details
 #' @return
 #' The complete, prior set of [options()] values.
 #' If a particular parameter is not supplied, it will return the current value.
@@ -47,7 +50,8 @@ options_plumber <- function(
   apiPort              = getOption("plumber.apiPort"),
   apiPath              = getOption("plumber.apiPath"),
   maxRequestSize       = getOption("plumber.maxRequestSize"),
-  sharedSecret         = getOption("plumber.sharedSecret")
+  sharedSecret         = getOption("plumber.sharedSecret"),
+  legacyRedirects      = getOption("plumber.legacyRedirects")
 ) {
   options(
     plumber.apiScheme = apiScheme,
@@ -59,6 +63,7 @@ options_plumber <- function(
     plumber.port = port,
     plumber.sharedSecret = sharedSecret,
     plumber.docs = docs,
-    plumber.docs.callback = docs.callback
+    plumber.docs.callback = docs.callback,
+    plumber.legacyRedirects = legacyRedirects
   )
 }

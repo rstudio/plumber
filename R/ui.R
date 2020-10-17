@@ -180,8 +180,6 @@ register_docs <- function(name, index, static = NULL) {
   stopifnot(is.function(index))
   if (!is.null(static)) stopifnot(is.function(static))
 
-  is_swagger <- isTRUE(name == "swagger")
-
   docs_root <- paste0("/__docs__/")
   docs_paths <- c("/index.html", "/")
 
@@ -213,12 +211,10 @@ register_docs <- function(name, index, static = NULL) {
 
     pr$mount(docs_root, docs_router)
 
-    # add legacy swagger redirects
-    if (is_swagger) {
-      redirect_info <- swagger_redirects()
-      for (path in names(redirect_info)) {
-        pr_get(pr, path, redirect_info[[path]])
-      }
+    # add legacy swagger redirects (RStudio Connect)
+    redirect_info <- swagger_redirects()
+    for (path in names(redirect_info)) {
+      pr_get(pr, path, redirect_info[[path]])
     }
 
     docs_url <- paste0(api_url, docs_root)
@@ -228,12 +224,11 @@ register_docs <- function(name, index, static = NULL) {
     pr$unmount(docs_root)
 
     # remove legacy swagger redirects
-    if (is_swagger) {
-      redirect_info <- swagger_redirects()
-      for (path in names(redirect_info)) {
-        pr$removeHandle("GET", path)
-      }
+    redirect_info <- swagger_redirects()
+    for (path in names(redirect_info)) {
+      pr$removeHandle("GET", path)
     }
+
     invisible()
   }
 
@@ -261,10 +256,14 @@ swagger_redirects <- function() {
       res
     }
   }
-  list(
-    "/__swagger__/" = to_route("../__docs__/"),
-    "/__swagger__/index.html"  = to_route("../__docs__/index.html")
-  )
+  if (isTRUE(getOption("plumber.legacyRedirects", TRUE))) {
+    list(
+      "/__swagger__/" = to_route("../__docs__/"),
+      "/__swagger__/index.html"  = to_route("../__docs__/index.html")
+    )
+  } else {
+    list()
+  }
 }
 
 

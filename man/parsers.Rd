@@ -54,13 +54,13 @@ non-default behavior.
 }
 \details{
 Parsers are optional. When unspecified, only default endpoint parsers are enabled.
-You can use \verb{@parser parser} tag to enable parser on endpoint.
-Multiple parsers can be enabled on the same endpoint using multiple \verb{@parser parser} tags.
+You can use \verb{@parser NAME} tag to enable parser on endpoint.
+Multiple parsers can be enabled on the same endpoint using multiple \verb{@parser NAME} tags.
 
 User should be aware that \code{rds} parsing should only be done from a
 trusted source. Do not accept \code{rds} files blindly.
 
-See \code{\link[=registered_parsers]{registered_parsers()}} for a list of registered parsers aliases.
+See \code{\link[=registered_parsers]{registered_parsers()}} for a list of registered parsers names.
 }
 \section{Functions}{
 \itemize{
