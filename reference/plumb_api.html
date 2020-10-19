@@ -178,7 +178,7 @@ in the inst subfolder plumber (./inst/plumber/API_1/plumber.R)." />
 in the <code>inst</code> subfolder <code>plumber</code> (<code>./inst/plumber/API_1/plumber.R</code>).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plumb_api</span><span class='op'>(</span>package <span class='op'>=</span> <span class='cn'>NULL</span>, name <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>plumb_api</span><span class='op'>(</span>package <span class='op'>=</span> <span class='cn'>NULL</span>, name <span class='op'>=</span> <span class='cn'>NULL</span>, edit <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
 <span class='fu'>available_apis</span><span class='op'>(</span>package <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
@@ -192,6 +192,10 @@ in the <code>inst</code> subfolder <code>plumber</code> (<code>./inst/plumber/AP
     <tr>
       <th>name</th>
       <td><p>Name of the package folder to <code><a href='plumb.html'>plumb()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>edit</th>
+      <td><p>Whether or not to open the API source code for viewing / editing</p></td>
     </tr>
     </table>
 
@@ -207,7 +211,7 @@ A <code>package</code> value may be provided to only display a particular packag
     
 <ul>
 <li><p><code>plumb_api</code>: <code><a href='plumb.html'>plumb()</a></code>s a package's Plumber API. Returns a <code><a href='Plumber.html'>Plumber</a></code> router object</p></li>
-<li><p><code>available_apis</code>: Displays all available package Plumber APIs. Returns a <code>data.frame</code> of <code>package</code> and <code>name</code> information.</p></li>
+<li><p><code>available_apis</code>: Displays all available package Plumber APIs. Returns a <code>data.frame</code> of <code>package</code>, <code>name</code>, and <code>source_directory</code> information.</p></li>
 </ul>
 
   </div>
