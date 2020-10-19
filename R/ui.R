@@ -222,11 +222,11 @@ message("testing route: ", path, "\n")
       if (router_has_route(pr, path, "GET")) {
         message("Overwriting existing GET endpoint: ", path, ". Disable by setting `options_plumber(legacyRedirects = FALSE)`")
       }
-message("testing route: ", redirect_info[[path]], "\n")
-      if (router_has_route(pr, redirect_info[[path]], "GET")) {
-        message("Overwriting existing GET endpoint: ", redirect_info[[path]], ". Disable by setting `options_plumber(legacyRedirects = FALSE)`")
+message("testing route: ", redirect_info[[path]]$route, "\n")
+      if (router_has_route(pr, redirect_info[[path]]$route, "GET")) {
+        message("Overwriting existing GET endpoint: ", redirect_info[[path]]$route, ". Disable by setting `options_plumber(legacyRedirects = FALSE)`")
       }
-      pr_get(pr, path, redirect_info[[path]])
+      pr_get(pr, path, redirect_info[[path]]$handler)
     }
 
     docs_url <- paste0(api_url, docs_root)
@@ -265,12 +265,15 @@ swagger_redirects <- function() {
   }
 
   to_route <- function(route) {
-    function(req, res) {
-      res$status <- 301 # redirect permanently
-      res$setHeader("Location", route)
-      res$body <- "redirecting..."
-      res
-    }
+    list(
+      route = route,
+      handler = function(req, res) {
+        res$status <- 301 # redirect permanently
+        res$setHeader("Location", route)
+        res$body <- "redirecting..."
+        res
+      }
+    )
   }
   list(
     "/__swagger__/" = to_route("../__docs__/"),
