@@ -182,9 +182,7 @@ register_docs <- function(name, index, static = NULL) {
 
   docs_root <- paste0("/__docs__/")
   docs_paths <- c("/index.html", "/")
-
   mount_docs_func <- function(pr, api_url, ...) {
-
     # Save initial extra argument values
     args_index <- list(...)
 
@@ -217,10 +215,10 @@ register_docs <- function(name, index, static = NULL) {
       if (router_has_route(pr, path, "GET")) {
         message("Overwriting existing GET endpoint: ", path, ". Disable by setting `options_plumber(legacyRedirects = FALSE)`")
       }
-      if (router_has_route(pr, redirect_info[[path]], "GET")) {
-        message("Overwriting existing GET endpoint: ", path, ". Disable by setting `options_plumber(legacyRedirects = FALSE)`")
+      if (router_has_route(pr, redirect_info[[path]]$route, "GET")) {
+        message("Overwriting existing GET endpoint: ", redirect_info[[path]]$route, ". Disable by setting `options_plumber(legacyRedirects = FALSE)`")
       }
-      pr_get(pr, path, redirect_info[[path]])
+      pr_get(pr, path, redirect_info[[path]]$handler)
     }
 
     docs_url <- paste0(api_url, docs_root)
@@ -259,12 +257,15 @@ swagger_redirects <- function() {
   }
 
   to_route <- function(route) {
-    function(req, res) {
-      res$status <- 301 # redirect permanently
-      res$setHeader("Location", route)
-      res$body <- "redirecting..."
-      res
-    }
+    list(
+      route = route,
+      handler = function(req, res) {
+        res$status <- 301 # redirect permanently
+        res$setHeader("Location", route)
+        res$body <- "redirecting..."
+        res
+      }
+    )
   }
   list(
     "/__swagger__/" = to_route("../__docs__/"),
