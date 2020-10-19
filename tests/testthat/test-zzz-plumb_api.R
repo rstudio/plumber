@@ -70,14 +70,16 @@ test_that("edit opens correct file", {
 
   expect_output(
   	plumb_api("plumber", "01-append", edit = TRUE),
-    paste0(file.path(apis[selected_api, "source_directory"], "plumber.R"), " has been opened")
+    "plumber.R test file attempted to open",
+    fixed = TRUE
   )
 
   selected_api <- apis$package == "plumber" & apis$name == "12-entrypoint"
 
   expect_output(
     plumb_api("plumber", "12-entrypoint", edit = TRUE),
-    paste0(file.path(apis[selected_api, "source_directory"], "entrypoint.R"), " test file attempted to open")
+    "entrypoint.R test file attempted to open",
+    fixed = TRUE
   )
 })
 
