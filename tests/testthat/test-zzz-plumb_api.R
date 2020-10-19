@@ -60,7 +60,7 @@ test_that("errors are thrown", {
 test_that("edit opens correct file", {
   # Redefine editor so that file.edit doesn't try to open a file
   orig_opts <- options(editor = function(name, file, title) {
-    cat(file, " test file attempted to open\n")
+    cat(file, " test file attempted to open\n", sep = "")
   })
   on.exit(options(orig_opts), add = TRUE)
 
