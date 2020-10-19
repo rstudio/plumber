@@ -214,9 +214,11 @@ register_docs <- function(name, index, static = NULL) {
     # add legacy swagger redirects (RStudio Connect)
     redirect_info <- swagger_redirects()
     for (path in names(redirect_info)) {
+      cat("testing route: ", path, "\n")
       if (router_has_route(pr, path, "GET")) {
         message("Overwriting existing GET endpoint: ", path, ". Disable by setting `options_plumber(legacyRedirects = FALSE)`")
       }
+      cat("testing route: ", redirect_info[[path]], "\n")
       if (router_has_route(pr, redirect_info[[path]], "GET")) {
         message("Overwriting existing GET endpoint: ", path, ". Disable by setting `options_plumber(legacyRedirects = FALSE)`")
       }
