@@ -443,7 +443,15 @@ Plumber <- R6Class(
               TRUE
             } else {
               # there are other endpoints, so get only nodes with name ""
-              names(node) == ""
+              # which path does not end with / and path is not root
+              node_path <- function(node) {
+                if (!is.null(node$path)) {
+                  return(node$path)
+                } else {
+                  return(character(1))
+                }
+              }
+              names(node) == "" & !grepl(".+/$", vapply(node, node_path, character(1)))
             }
 
           # mounted routers at root location will also have a missing name.
@@ -1020,7 +1028,20 @@ Plumber <- R6Class(
         if (is.null(node)){
           node <- list()
         }
-        node[[children[1]]] <- addPath(node[[children[1]]], children[-1], endpoint)
+        existing_endpoints <-
+          vapply(
+            node[which(names(node) == children[1])],
+            inherits,
+            logical(1),
+            "PlumberEndpoint")
+        if (any(existing_endpoints) && length(children) > 1) {
+          node <- c(
+            node[which(names(node) == children[1])][which(existing_endpoints)],
+            addPath(node[which(names(node) == children[1])][which(!existing_endpoints)], children, endpoint)
+          )
+        } else {
+          node[[children[1]]] <- addPath(node[[children[1]]], children[-1], endpoint)
+        }
         node
       }
 
@@ -1030,6 +1051,7 @@ Plumber <- R6Class(
           path <- sub("^/", "", e$path)
 
           levels <- strsplit(path, "/", fixed=TRUE)[[1]]
+          if (grepl("/$", path)) {levels <- c(levels, "")}
           paths <<- addPath(paths, levels, e)
         })
       })
@@ -1047,9 +1069,17 @@ Plumber <- R6Class(
         }
       }
 
-      # TODO: Sort lexicographically
+      lexisort <- function(paths) {
+        if (is.list(paths)) {
+          paths <- lapply(paths, lexisort)
+          if (!is.null(names(paths))) {
+            paths <- paths[order(names(paths))]
+          }
+        }
+        paths
+      }
 
-      paths
+      lexisort(paths)
     }
   ), private = list(
     default_serializer = NULL, # The default serializer for the router

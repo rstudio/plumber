@@ -11,6 +11,8 @@ plumber 1.0.0.9999 Development version
 
 * `/__swagger__/` now always redirect to `/__docs__/`, even when Swagger isn't the selected interface. Use `options(plumber.legacyRedirects = FALSE)` to disable this behavior (@blairj09 #694)
 
+* Fix Plumber `$routes` resolution bugs. Also return routes in lexicographical order. (@meztez #702)
+
 plumber 1.0.0
 --------------------------------------------------------------------------------
 
