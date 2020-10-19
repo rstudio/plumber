@@ -87,3 +87,6 @@ is_405 <- function(pr, path_to_find, verb_to_find) {
 
   !(verb_to_find %in% verbs_allowed)
 }
+router_has_route <- function(pr, path_to_find, verb_to_find) {
+  ! is_405(pr, path_to_find, verb_to_find)
+}
