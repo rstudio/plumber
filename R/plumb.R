@@ -91,10 +91,12 @@ plumb <- function(file = NULL, dir = ".") {
 #'
 #' @param package Package to inspect
 #' @param name Name of the package folder to [plumb()].
+#' @param edit Whether or not to open the API source code for viewing / editing
 #' @describeIn plumb_api [plumb()]s a package's Plumber API. Returns a [`Plumber`] router object
 #' @return A [`Plumber`] object. If either `package` or `name` is null, the appropriate [available_apis()] will be returned.
+#' @importFrom utils file.edit
 #' @export
-plumb_api <- function(package = NULL, name = NULL) {
+plumb_api <- function(package = NULL, name = NULL, edit = FALSE) {
 
   if (is.null(package)) {
     return(available_apis(package = NULL))
@@ -114,6 +116,33 @@ plumb_api <- function(package = NULL, name = NULL) {
     stop("Could not find Plumber API for package '", package, "'  with name '", name, "'")
   }
 
+  if (isTRUE(edit)) {
+    api_dir <- apis[apis_sub, "source_directory"]
+
+    if (file.exists(file.path(api_dir, "entrypoint.R"))) {
+      file_loc <- file.path(api_dir, "entrypoint.R")
+    } else {
+      file_loc <- file.path(api_dir, "plumber.R")
+    }
+
+    # Check for RStudio running
+    if (requireNamespace("rstudioapi", quietly = TRUE)) {
+      if (rstudioapi::isAvailable()) {
+        rstudioapi::navigateToFile(file_loc)
+      } else {
+        file.edit(file_loc)
+      }
+    } else {
+      file.edit(file_loc)
+    }
+    warning(
+      file_loc, " has been opened in the editor.",
+      " Any changes saved to this file are permanent until the ", package, " package is reinstalled.",
+      " If you would like to make persistent changes, consider copying the contents of this file to a new file.",
+      call. = FALSE
+    )
+  }
+
   plumb(
     dir = system.file(
       file.path("plumber", name),
@@ -123,7 +152,7 @@ plumb_api <- function(package = NULL, name = NULL) {
 }
 
 
-#' @describeIn plumb_api Displays all available package Plumber APIs. Returns a `data.frame` of `package` and `name` information.
+#' @describeIn plumb_api Displays all available package Plumber APIs. Returns a `data.frame` of `package`, `name`, and `source_directory` information.
 #' @export
 available_apis <- function(package = NULL) {
   info <-
@@ -181,6 +210,7 @@ available_apis_for_package <- function(package) {
     data.frame(
       package = package,
       name = basename(api_dir),
+      source_directory = api_dir,
       stringsAsFactors = FALSE,
       row.names = FALSE
     )
