@@ -445,11 +445,9 @@ Plumber <- R6Class(
               # there are other endpoints, so get only nodes with name ""
               # which path does not end with / and path is not root
               node_path <- function(node) {
-                if (!is.null(node$path)) {
-                  return(node$path)
-                } else {
-                  return(character(1))
-                }
+                path <- node$path %||% ""
+                if (!is.character(path)) path <-""
+                path
               }
               names(node) == "" & !grepl(".+/$", vapply(node, node_path, character(1)))
             }
@@ -1028,18 +1026,26 @@ Plumber <- R6Class(
         if (is.null(node)){
           node <- list()
         }
+        # Check for existing endpoints at current children node that share the same name
         existing_endpoints <-
           vapply(
             node[which(names(node) == children[1])],
             inherits,
             logical(1),
             "PlumberEndpoint")
+        # This is for situation where an endpoint is on `/A` and you
+        # also have route with an endpoint on `A/B`. Resulting nested list
+        # already has an endpoint on the children node and you need a deeper nested
+        # list for the current children node. Combine them.
         if (any(existing_endpoints) && length(children) > 1) {
           node <- c(
+            # Nodes with preexisting endpoints sharing the same name
             node[which(names(node) == children[1])][which(existing_endpoints)],
+            # New nested list to combine with, passing the nodes that are not endpoints
             addPath(node[which(names(node) == children[1])][which(!existing_endpoints)], children, endpoint)
           )
         } else {
+          # Keep building the nested list until you hit an endpoint
           node[[children[1]]] <- addPath(node[[children[1]]], children[-1], endpoint)
         }
         node
@@ -1051,6 +1057,7 @@ Plumber <- R6Class(
           path <- sub("^/", "", e$path)
 
           levels <- strsplit(path, "/", fixed=TRUE)[[1]]
+          # If there is a trailing `/`, add a blank level for an extra print line
           if (grepl("/$", path)) {levels <- c(levels, "")}
           paths <<- addPath(paths, levels, e)
         })
