@@ -199,6 +199,7 @@ Plumber <- R6Class(
       }
 
       if (isTRUE(private$docs_info$enabled)) {
+message("Mounting docs\n")
         mount_docs(
           pr = self,
           host = host,

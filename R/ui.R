@@ -22,7 +22,7 @@ mount_docs <- function(pr, host, port, docs_info, callback) {
   )
 
   # Mount openAPI spec paths openapi.json
-cat("Mounting openpi")
+message("Mounting openpi\n")
   mount_openapi(pr, api_url)
 
   # Mount Docs
@@ -33,7 +33,7 @@ cat("Mounting openpi")
 
   if (is_docs_available(docs_info$docs)) {
     docs_mount <- .globals$docs[[docs_info$docs]]$mount
-cat("Attempt to set up docs: ", docs_info$docs, "\n")
+message("Attempt to set up docs: ", docs_info$docs, "\n")
     docs_url <- do.call(docs_mount, c(list(pr, api_url), docs_info$args))
     message("Running ", docs_info$docs, " Docs at ", docs_url, sep = "")
   } else {
@@ -184,9 +184,9 @@ register_docs <- function(name, index, static = NULL) {
 
   docs_root <- paste0("/__docs__/")
   docs_paths <- c("/index.html", "/")
-cat("Registering docs: ", name, "\n")
+message("Registering docs: ", name, "\n")
   mount_docs_func <- function(pr, api_url, ...) {
-cat("Calling docs fn: ", name, "\n")
+message("Calling docs fn: ", name, "\n")
     # Save initial extra argument values
     args_index <- list(...)
 
@@ -211,18 +211,18 @@ cat("Calling docs fn: ", name, "\n")
       message("")
     }
 
-cat("Mounting docs_root: ", name, ", ", docs_root, "\n")
+message("Mounting docs_root: ", name, ", ", docs_root, "\n")
     pr$mount(docs_root, docs_router)
 
     # add legacy swagger redirects (RStudio Connect)
     redirect_info <- swagger_redirects()
-str(redirect_info)
+message(paste0(capture.output(str(redirect_info)), collapse = "\n"))
     for (path in names(redirect_info)) {
-cat("testing route: ", path, "\n")
+message("testing route: ", path, "\n")
       if (router_has_route(pr, path, "GET")) {
         message("Overwriting existing GET endpoint: ", path, ". Disable by setting `options_plumber(legacyRedirects = FALSE)`")
       }
-cat("testing route: ", redirect_info[[path]], "\n")
+message("testing route: ", redirect_info[[path]], "\n")
       if (router_has_route(pr, redirect_info[[path]], "GET")) {
         message("Overwriting existing GET endpoint: ", redirect_info[[path]], ". Disable by setting `options_plumber(legacyRedirects = FALSE)`")
       }
