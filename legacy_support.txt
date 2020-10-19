@@ -1,0 +1,12 @@
+
+
+# RSConnect Support
+
+* `Plumber$run(swagger, debug, swaggerCallback)`
+  * Checks must be kept for >= 2 yrs after plumber v1.0.0 release date
+    * v1.0.0 release: 9/14/2020
+    * Must stay until >= 10/1/2022
+
+
+* `/__swagger__/` redirects to `/__docs__/`
+  * Must stay until >= 2 years after plumber v1.1.0 release

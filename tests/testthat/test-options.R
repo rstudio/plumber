@@ -46,3 +46,19 @@ test_that("all options used are `options_plumber()` parameters", {
     options_plumber_formals
   )
 })
+
+
+test_that("Legacy swagger redirect can be disabled", {
+  option_value <- getOption("plumber.legacyRedirects")
+  on.exit({
+    options(plumber.legacyRedirects = option_value)
+  }, add = TRUE)
+
+  options_plumber(legacyRedirects = TRUE)
+  redirects <- swagger_redirects()
+  expect_gt(length(redirects), 0)
+
+  options_plumber(legacyRedirects = FALSE)
+  redirects <- swagger_redirects()
+  expect_equal(length(redirects), 0)
+})

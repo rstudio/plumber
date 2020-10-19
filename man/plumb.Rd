@@ -22,6 +22,6 @@ API routers are the core request handler in plumber. A router is responsible for
 taking an incoming request, submitting it through the appropriate filters and
 eventually to a corresponding endpoint, if one is found.
 
-See \href{../articles/programmatic-usage.html}{here} for additional
+See the \href{https://www.rplumber.io/articles/programmatic-usage.html}{Programmatic Usage} article for additional
 details on the methods available on this object.
 }

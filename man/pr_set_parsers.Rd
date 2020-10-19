@@ -42,5 +42,5 @@ default parsers for any endpoint that does not define their own parsers.
 }
 \details{
 Note: The default set of parsers will be completely replaced if any value is supplied. Be sure to include all of your parsers that you would like to include.
-Use \code{registered_parsers()} to get a list of available parsers aliases.
+Use \code{registered_parsers()} to get a list of available parser names.
 }

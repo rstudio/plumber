@@ -14,11 +14,12 @@ options_plumber(
   apiPort = getOption("plumber.apiPort"),
   apiPath = getOption("plumber.apiPath"),
   maxRequestSize = getOption("plumber.maxRequestSize"),
-  sharedSecret = getOption("plumber.sharedSecret")
+  sharedSecret = getOption("plumber.sharedSecret"),
+  legacyRedirects = getOption("plumber.legacyRedirects")
 )
 }
 \arguments{
-\item{port, docs, docs.callback, apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, sharedSecret}{See details}
+\item{port, docs, docs.callback, apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, sharedSecret, legacyRedirects}{See details}
 }
 \value{
 The complete, prior set of \code{\link[=options]{options()}} values.
@@ -56,5 +57,8 @@ than maximum are rejected with http error 413. \code{0} means unlimited size. De
 \item{\code{plumber.sharedSecret}}{Shared secret used to filter incoming request.
 When \code{NULL}, secret is not validated. Otherwise, Plumber compares secret with http header
 \code{PLUMBER_SHARED_SECRET}. Failure to match results in http error 400. Defaults to \code{NULL}.}
+\item{\code{plumber.legacyRedirects}}{Plumber will redirect legacy route \verb{/__swagger__/} and
+\verb{/__swagger__/index.html} to \verb{../__docs__/} and \verb{../__docs__/index.html}. You can disable this
+by settings this option to \code{FALSE}. Defaults to \code{TRUE}}
 }
 }

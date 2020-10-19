@@ -180,8 +180,6 @@ register_docs <- function(name, index, static = NULL) {
   stopifnot(is.function(index))
   if (!is.null(static)) stopifnot(is.function(static))
 
-  is_swagger <- isTRUE(name == "swagger")
-
   docs_root <- paste0("/__docs__/")
   docs_paths <- c("/index.html", "/")
 
@@ -213,12 +211,16 @@ register_docs <- function(name, index, static = NULL) {
 
     pr$mount(docs_root, docs_router)
 
-    # add legacy swagger redirects
-    if (is_swagger) {
-      redirect_info <- swagger_redirects()
-      for (path in names(redirect_info)) {
-        pr_get(pr, path, redirect_info[[path]])
+    # add legacy swagger redirects (RStudio Connect)
+    redirect_info <- swagger_redirects()
+    for (path in names(redirect_info)) {
+      if (router_has_route(pr, path, "GET")) {
+        message("Overwriting existing GET endpoint: ", path, ". Disable by setting `options_plumber(legacyRedirects = FALSE)`")
       }
+      if (router_has_route(pr, redirect_info[[path]], "GET")) {
+        message("Overwriting existing GET endpoint: ", path, ". Disable by setting `options_plumber(legacyRedirects = FALSE)`")
+      }
+      pr_get(pr, path, redirect_info[[path]])
     }
 
     docs_url <- paste0(api_url, docs_root)
@@ -228,12 +230,11 @@ register_docs <- function(name, index, static = NULL) {
     pr$unmount(docs_root)
 
     # remove legacy swagger redirects
-    if (is_swagger) {
-      redirect_info <- swagger_redirects()
-      for (path in names(redirect_info)) {
-        pr$removeHandle("GET", path)
-      }
+    redirect_info <- swagger_redirects()
+    for (path in names(redirect_info)) {
+      pr$removeHandle("GET", path)
     }
+
     invisible()
   }
 
@@ -253,6 +254,10 @@ registered_docs <- function() {
 
 
 swagger_redirects <- function() {
+  if (!isTRUE(getOption("plumber.legacyRedirects", TRUE))) {
+    return(list())
+  }
+
   to_route <- function(route) {
     function(req, res) {
       res$status <- 301 # redirect permanently
