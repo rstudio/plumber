@@ -190,14 +190,15 @@ be set globally with <code><a href='https://rdrr.io/r/base/options.html'>options
   apiPort <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.apiPort"</span><span class='op'>)</span>,
   apiPath <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.apiPath"</span><span class='op'>)</span>,
   maxRequestSize <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.maxRequestSize"</span><span class='op'>)</span>,
-  sharedSecret <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.sharedSecret"</span><span class='op'>)</span>
+  sharedSecret <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.sharedSecret"</span><span class='op'>)</span>,
+  legacyRedirects <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.legacyRedirects"</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>port, docs, docs.callback, apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, sharedSecret</th>
+      <th>port, docs, docs.callback, apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, sharedSecret, legacyRedirects</th>
       <td><p>See details</p></td>
     </tr>
     </table>
@@ -235,6 +236,9 @@ than maximum are rejected with http error 413. <code>0</code> means unlimited si
 <dt><code>plumber.sharedSecret</code></dt><dd><p>Shared secret used to filter incoming request.
 When <code>NULL</code>, secret is not validated. Otherwise, Plumber compares secret with http header
 <code>PLUMBER_SHARED_SECRET</code>. Failure to match results in http error 400. Defaults to <code>NULL</code>.</p></dd>
+<dt><code>plumber.legacyRedirects</code></dt><dd><p>Plumber will redirect legacy route <code>/__swagger__/</code> and
+<code>/__swagger__/index.html</code> to <code>../__docs__/</code> and <code>../__docs__/index.html</code>. You can disable this
+by settings this option to <code>FALSE</code>. Defaults to <code>TRUE</code></p></dd>
 
 </dl>
 

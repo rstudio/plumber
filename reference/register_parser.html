@@ -214,10 +214,9 @@ displayed when alias in map are overwritten.</p></td>
 
     <p>When <code>parser</code> is evaluated, it should return a parser function.
 Parser matching is done first by <code>content-type</code> header matching with <code>fixed</code> then by using
-regular expressions with <code>regex</code>. Note that plumber strip <code>; charset*</code> from <code>content-type</code> header before
-performing match.</p>
-<p>It will try to use <code><a href='parser_form.html'>parser_json()</a></code> if available when no <code>content-type</code> header is found and
-request body starts with <code>{</code> or <code><a href='https://rdrr.io/r/base/Extract.html'>[</a></code>.</p>
+regular expressions with <code>regex</code>. Note that plumber strips <code>; charset*</code> from <code>content-type</code> header before matching.</p>
+<p>Plumber will try to use <code><a href='parser_form.html'>parser_json()</a></code> (if available) when no <code>content-type</code> header is found and
+the request body starts with <code>{</code> or <code><a href='https://rdrr.io/r/base/Extract.html'>[</a></code>.</p>
 <p>Functions signature should include <code>value</code>, <code>...</code> and
 possibly <code>content_type</code>, <code>filename</code>. Other parameters may be provided
 if you want to use the headers from <code><a href='https://rdrr.io/pkg/webutils/man/parse_multipart.html'>webutils::parse_multipart()</a></code>.</p>
