@@ -60,7 +60,7 @@ test_that("errors are thrown", {
 test_that("edit opens correct file", {
   # Redefine editor so that file.edit doesn't try to open a file
   orig_opts <- options(editor = function(name, file, title) {
-    cat(file, "has been opened\n")
+    cat(file, " test file attempted to open\n")
   })
   on.exit(options(orig_opts), add = TRUE)
 
@@ -77,7 +77,7 @@ test_that("edit opens correct file", {
 
   expect_output(
     plumb_api("plumber", "12-entrypoint", edit = TRUE),
-    paste0(file.path(apis[selected_api, "source_directory"], "entrypoint.R"), " has been opened")
+    paste0(file.path(apis[selected_api, "source_directory"], "entrypoint.R"), " test file attempted to open")
   )
 })
 
