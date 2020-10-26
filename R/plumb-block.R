@@ -304,7 +304,12 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr)
         stopOnLine(lineNum, file[lineNum], e)
       })
       if (is.function(func)) {
-        func(pr)
+        assign("__plump_block_check__", TRUE, envir = envir)
+        on.exit(rm("__plump_block_check__", envir = envir), add = TRUE)
+        fpr <- func(pr)
+        if (inherits(fpr, "Plumber") && !isTRUE(fpr$environment[["__plump_block_check__"]])) {
+          stopOnLine(lineNum, file[lineNum], "Plumber object returned is not the same as the one in argument.")
+        }
         return()
       }
     }
