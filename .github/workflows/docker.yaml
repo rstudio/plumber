@@ -24,7 +24,12 @@ jobs:
         config:
         - name: CRAN
           # always overwrite the latest version with the CRAN version
-          tags: "v0.4.6,latest"
+          tags: "v1.0.0,latest"
+          ref: "v1.0.0"
+        
+        # always rebuild legacy to pick up newer R library builds
+        - name: "v0.4.6"
+          tags: "v0.4.6"
           ref: "v0.4.6"
           extra_buildargs: ",ENTRYPOINT_FILE=/usr/local/lib/R/site-library/plumber/examples/04-mean-sum/plumber.R"
 
