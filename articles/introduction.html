@@ -132,8 +132,8 @@
     
     
 <p>The <a href="http://www.R-project.org/">R Programming Language</a> has become one of the most dominant programming languages for data analysis and visualization in recent years. At the same time, web services have become a common language for allowing various systems to interact with one another. The <code>plumber</code> R package allows users to expose existing R code as a service available to others on the Web. Plumber is best illustrated with an example:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="co"># plumber.R</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># plumber.R</span>
 
 <span class="co">#* Echo the parameter that was sent in</span>
 <span class="co">#* @param msg The message to echo back.</span>
@@ -158,7 +158,7 @@
 
   <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">myData</span><span class="op">$</span><span class="va">Sepal.Length</span>, <span class="va">myData</span><span class="op">$</span><span class="va">Petal.Length</span>,
        main<span class="op">=</span><span class="va">title</span>, xlab<span class="op">=</span><span class="st">"Sepal Length"</span>, ylab<span class="op">=</span><span class="st">"Petal Length"</span><span class="op">)</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 <p>Even without knowing R, you can probably get a rough idea for what the above Plumber API will do. The first function above defines the <code>/echo</code> endpoint which simply echoes back the text that it was sent. The second function generates a plot based on Edgar Anderson’s famous Iris Dataset; it includes a filter that allows the caller to subset the dataset to a particular species.</p>
 <p>Plumber makes use of these comment “annotations” above your functions to define the web service. When you feed the above file into Plumber, you’ll get a runnable web service that other systems can interact with over a network.</p>
 <div id="web-apis" class="section level2">

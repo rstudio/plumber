@@ -129,8 +129,8 @@
 <!-- badges: start -->
 
 <p>Plumber allows you to create a web API by merely decorating your existing R source code with special comments. Take a look at an example.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="co"># plumber.R</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># plumber.R</span>
 
 <span class="co">#* Echo back the input</span>
 <span class="co">#* @param msg The message to echo</span>
@@ -153,13 +153,13 @@
 <span class="co">#* @post /sum</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 <p>These comments allow <code>plumber</code> to make your R functions available as API endpoints. You can use either <code>#*</code> as the prefix or <code>#'</code>, but we recommend the former since <code>#'</code> will collide with Roxygen.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.rplumber.io">plumber</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.rplumber.io">plumber</a></span><span class="op">)</span>
 <span class="co"># 'plumber.R' is the location of the file shown above</span>
 <span class="fu"><a href="reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"plumber.R"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="reference/pr_run.html">pr_run</a></span><span class="op">(</span>port<span class="op">=</span><span class="fl">8000</span><span class="op">)</span></pre></div>
+  <span class="fu"><a href="reference/pr_run.html">pr_run</a></span><span class="op">(</span>port<span class="op">=</span><span class="fl">8000</span><span class="op">)</span></code></pre></div>
 <p>You can visit this URL using a browser or a terminal to run your R function and get the results. For instance <code>http://localhost:8000/plot</code> will show you a histogram, and <code>http://localhost:8000/echo?msg=hello</code> will echo back the ‘hello’ message you provided.</p>
 <p>Here we’re using <code>curl</code> via a Mac/Linux terminal.</p>
 <pre><code>$ curl "http://localhost:8000/echo"
@@ -176,12 +176,12 @@ $ curl "http://localhost:8000/echo?msg=hello"
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the latest stable version from CRAN using the following command:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"plumber"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"plumber"</span><span class="op">)</span></code></pre></div>
 <p>If you want to try out the latest development version, you can install it from GitHub.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"rstudio/plumber"</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.rplumber.io">plumber</a></span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"rstudio/plumber"</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.rplumber.io">plumber</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div id="hosting" class="section level2">
 <h2 class="hasAnchor">

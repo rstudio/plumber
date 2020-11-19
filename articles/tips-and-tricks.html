@@ -147,13 +147,13 @@
 <a href="#interactive-debugging" class="anchor"></a>Interactive Debugging</h3>
 <p>Print debugging is an obvious starting point, but most developers eventually wish for something more powerful. In R, this capacity is built in to the <code><a href="https://rdrr.io/r/base/browser.html">browser()</a></code> function. If you’re unfamiliar, <code><a href="https://rdrr.io/r/base/browser.html">browser()</a></code> pauses the execution of some function and gives you an interactive session in which you can inspect the current value of internal variables or even proceed through your function one statement at a time.</p>
 <p>You can leverage <code><a href="https://rdrr.io/r/base/browser.html">browser()</a></code> when developing your APIs locally by adding a <code><a href="https://rdrr.io/r/base/browser.html">browser()</a></code> call in one of your filters or endpoints and then visiting your API in a client. This offers a powerful technique to use when you want to inspect multiple different variables or interact with the current state of things inside of your function. This is also a good way to get your hands dirty with Plumber and get better acquainted with how things behave at a low level. Consider the following API endpoint:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="co">#* @get /</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#* @get /</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/browser.html">browser</a></span><span class="op">(</span><span class="op">)</span>
 
   <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">123</span><span class="op">)</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 <p>If you run this API locally and then visit the API in a web browser, you’ll see your R session switch into debug mode when the request arrives, allowing you to look at the objects contained inside your <code>req</code> and <code>res</code> objects.</p>
 </div>
 <div id="plumber-server" class="section level3">
@@ -165,15 +165,15 @@
 <h2 class="hasAnchor">
 <a href="#port-range" class="anchor"></a>Port Range</h2>
 <p>You can use [httpuv::randomPort()] to define a range of port for Plumber to pick from when running an API.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co"># plumber.R</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># plumber.R</span>
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span><span class="st">"plumber.port"</span> <span class="op">=</span> <span class="fu">httpuv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/httpuv/man/randomPort.html">randomPort</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fl">4000</span>, max <span class="op">=</span> <span class="fl">7000</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span>
 
-<span class="co">### define the rest of your plumber router...</span></pre></div>
+<span class="co">### define the rest of your plumber router...</span></code></pre></div>
 <p>or more programmatically</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span>port <span class="op">=</span> <span class="fu">httpuv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/httpuv/man/randomPort.html">randomPort</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fl">4000</span>, max <span class="op">=</span> <span class="fl">7000</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span>port <span class="op">=</span> <span class="fu">httpuv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/httpuv/man/randomPort.html">randomPort</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fl">4000</span>, max <span class="op">=</span> <span class="fl">7000</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
   </div>
 
