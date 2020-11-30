@@ -31,7 +31,7 @@ Imports:
     swagger (>= 3.33.0),
     magrittr,
     mime,
-    lifecycle
+    lifecycle (>= 0.2.0)
 LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
