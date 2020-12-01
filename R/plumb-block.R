@@ -25,9 +25,14 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
   responses <- NULL
   tags <- NULL
   routerModifier <- NULL
-  while (lineNum > 0 && (stri_detect_regex(file[lineNum], pattern="^#['\\*]") || stri_trim_both(file[lineNum]) == "")){
+  while (lineNum > 0 && (stri_detect_regex(file[lineNum], pattern="^#['\\*]?") || stri_trim_both(file[lineNum]) == "")){
 
     line <- file[lineNum]
+
+    if (!stri_detect_regex(line, pattern="^#['\\*]")) {
+      lineNum <- lineNum - 1
+      next
+    }
 
     epMat <- stri_match(line, regex="^#['\\*]\\s*@(get|put|post|use|delete|head|options|patch)(\\s+(.*)$)?")
     if (!is.na(epMat[1,2])){
