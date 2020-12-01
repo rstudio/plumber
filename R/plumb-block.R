@@ -25,11 +25,11 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
   responses <- NULL
   tags <- NULL
   routerModifier <- NULL
-  while (lineNum > 0 && (stri_detect_regex(file[lineNum], pattern="^#['\\*]?") || stri_trim_both(file[lineNum]) == "")){
+  while (lineNum > 0 && (stri_detect_regex(file[lineNum], pattern="^#['\\*]?|^\\s*$") || stri_trim_both(file[lineNum]) == "")){
 
     line <- file[lineNum]
 
-    if (!stri_detect_regex(line, pattern="^#['\\*]")) {
+    if (!stri_detect_regex(line, pattern="^#['\\*]|^\\s*$")) {
       lineNum <- lineNum - 1
       next
     }
