@@ -31,7 +31,7 @@ Name | Example | Description
 ---- | ------- | -----------------------
 `setCookie` | `res$setCookie("foo", "bar")` | Sets an HTTP cookie on the client
 `removeCookie` | `res$removeCookie("foo")` | Removes an HTTP cookie
-`setHeader` | `res$setHeader(foo = "bar")` | Sets a header that's available in `res$headers`
+`setHeader` | `res$setHeader("foo", "bar")` | Sets an HTTP header
 `toResponse` | `res$toResponse()` | Renders the response object as a list containing `status`, `headers`, and `body`.
 
 The other methods (`clone`, `initialize`, and `serializer`) should not be directly invoked on the response object.
