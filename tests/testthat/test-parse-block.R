@@ -55,7 +55,7 @@ test_that("plumbBlock images", {
   expect_warning({
     b <- plumbBlock(length(lines), lines)
   })
-  expect_equal(b$serializer, serializer_jpeg(w=1))
+  expect_equal(b$serializer, serializer_jpeg(w=1), check.environment=FALSE)
 
   # Additional chars after name don't count as image tags
   lines <- c("#' @jpegs")
@@ -69,7 +69,7 @@ test_that("plumbBlock images", {
   expect_warning({
     b <- plumbBlock(length(lines), lines)
   })
-  expect_equal(b$serializer, serializer_jpeg(width = 100))
+  expect_equal(b$serializer, serializer_jpeg(width = 100), check.environment=FALSE)
 
   # Ill-formatted arguments return a meaningful error
   lines <- c("#'@jpeg width=100")
