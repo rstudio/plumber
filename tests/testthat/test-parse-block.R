@@ -257,4 +257,14 @@ test_that("Tags can contains space", {
   expect_equal(plumbBlock(length(lines), lines)$tags, c("test space", "test space2"))
 })
 
+test_that("single character tag and response", {
+  lines <- c(
+    "#' @tag a",
+    "#' @response 2 b",
+    "#' @response 4 b c")
+  b <- plumbBlock(length(lines), lines)
+  expect_equal(b$tags, "a")
+  expect_equal(b$responses, list(`2` = list(description = "b"), `4` = list(description = "b c")))
+})
+
 # TODO: more testing around filter, assets, endpoint, etc.
