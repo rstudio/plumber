@@ -7,7 +7,7 @@ plumber 1.0.0.9999 Development version
 
 ### Bug fixes
 
-* Block parsing comments, tags and responses ordering match plumber api ordering.
+* Block parsing comments, tags and responses ordering match plumber api ordering. (#722)
 * When calling `Plumber$handle()` and defining a new `PlumberEndpoint`, `...` will be checked for invalid names #677
 
 * `/__swagger__/` now always redirect to `/__docs__/`, even when Swagger isn't the selected interface. Use `options(plumber.legacyRedirects = FALSE)` to disable this behavior (@blairj09 #694)
