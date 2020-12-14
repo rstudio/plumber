@@ -647,6 +647,13 @@ add_serializers_onLoad <- function() {
 createGraphicsDevicePromiseDomain <- function(which = dev.cur()) {
   force(which)
 
+  if (which < 2) {
+    stop(
+      "`createGraphicsDevicePromiseDomain()` was called without opening a device first.",
+      " Open a new graphics device before calling."
+    )
+  }
+
   promises::new_promise_domain(
     wrapOnFulfilled = function(onFulfilled) {
       force(onFulfilled)
@@ -677,10 +684,12 @@ createGraphicsDevicePromiseDomain <- function(which = dev.cur()) {
     }
   )
 }
-    
+
 dev_set <- function(i) {
-  # make sure to not open a device when calling `dev.set(1)`
+  # make sure to not open a new device when calling `dev.set(1)`
   if (i > 1) {
     dev.set(i)
+  } else {
+    warning("Can not set `.Device` to the `null device`. Was `dev.off()` manually called?")
   }
 }
