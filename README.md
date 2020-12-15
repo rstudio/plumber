@@ -76,7 +76,7 @@ $ curl --data "a=4&b=3" "http://localhost:8000/sum"
 You can also send your data as JSON:
 
 ```
-$ curl --data '{"a":4, "b":5}' http://localhost:8000/sum
+$ echo {"a":4, "b":5} > call.json & curl --data @call.json "http://localhost:8000/sum" -H "content-type: application/json"
  [9]
 ```
 
