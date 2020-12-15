@@ -18,11 +18,10 @@ defaultWebsocket <- function(pr, ser) {
       req$.internal$bodyHandled <- TRUE
       res <- PlumberResponse$new(ser)
       pr$serve(req, res)
-      if (res$status == "200") {
-        ws$send(res$body)
-      } else {
-        ws$send(paste(res$status, res$body))
-      }
+      ws$send(paste("_status_", res$status))
+      ws$send(paste("_headers_", paste(names(res$headers), unlist(res$headers), sep = "=", collapse = ";")))
+      ws$send("_body_ nextmessage")
+      ws$send(res$body)
     })
   }
 }
