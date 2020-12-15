@@ -96,6 +96,7 @@ Plumber <- R6Class(
       self$setDocsCallback(getOption('plumber.docs.callback', getOption('plumber.swagger.url', NULL)))
       self$setDebug(interactive())
       self$setApiSpec(NULL)
+      self$websocket(defaultWebsocket(self, private$default_serializer))
 
       # Add in the initial filters
       for (fn in names(filters)){
@@ -926,7 +927,7 @@ Plumber <- R6Class(
 
       ret
     },
-    #' @description Assign functions to websocket methods
+    #' @description Set websocket open method
     #' @param open on open websocket method
     websocket = function(open = NULL) {
       if (!is.null(open)) stopifnot(is.function(open))

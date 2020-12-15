@@ -84,5 +84,6 @@ Collate:
     'utils-pipe.R'
     'utils.R'
     'validate_api_spec.R'
+    'websocket.R'
     'zzz.R'
 RdMacros: lifecycle
