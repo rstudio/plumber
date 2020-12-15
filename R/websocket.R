@@ -1,10 +1,10 @@
 #' @noRd
 defaultWebsocket <- function(pr, ser) {
   function(ws) {
+    req <- ws$request
+    req$ws <- ws
+    req$pr <- pr
     ws$onMessage(function(binary, message) {
-      req <- ws$request
-      req$ws <- ws
-      req$pr <- pr
       req$.internal <- new.env()
       req$args <- list()
       req$bodyRaw <- message
