@@ -23,7 +23,7 @@ ARG PLUMBER_REF=master
 RUN Rscript -e "remotes::install_github('rstudio/plumber@${PLUMBER_REF}')"
 
 EXPOSE 8000
-ENTRYPOINT ["R", "-e", "pr <- plumber::plumb(rev(commandArgs())[1]); pr$run(host='0.0.0.0', port=8000, swagger=TRUE)"]
+ENTRYPOINT ["R", "-e", "pr <- plumber::plumb(rev(commandArgs())[1]); pr$setDocs(TRUE); pr$run(host='0.0.0.0', port=8000)"]
 
 # Copy installed example to default file at ~/plumber.R
 ARG ENTRYPOINT_FILE=/usr/local/lib/R/site-library/plumber/plumber/04-mean-sum/plumber.R
