@@ -158,6 +158,7 @@ pr$setErrorHandler(function(req, res, err) {
 \item \href{#method-filter}{\code{Plumber$filter()}}
 \item \href{#method-setApiSpec}{\code{Plumber$setApiSpec()}}
 \item \href{#method-getApiSpec}{\code{Plumber$getApiSpec()}}
+\item \href{#method-websocket}{\code{Plumber$websocket()}}
 \item \href{#method-addEndpoint}{\code{Plumber$addEndpoint()}}
 \item \href{#method-addAssets}{\code{Plumber$addAssets()}}
 \item \href{#method-addFilter}{\code{Plumber$addFilter()}}
@@ -845,6 +846,23 @@ Retrieve openAPI file
 \if{html}{\out{<div class="r">}}\preformatted{Plumber$getApiSpec()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-websocket"></a>}}
+\if{latex}{\out{\hypertarget{method-websocket}{}}}
+\subsection{Method \code{websocket()}}{
+Set websocket open method
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$websocket(open = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{open}}{on open websocket method}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-addEndpoint"></a>}}

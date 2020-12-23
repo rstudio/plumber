@@ -96,6 +96,7 @@ Plumber <- R6Class(
       self$setDocsCallback(getOption('plumber.docs.callback', getOption('plumber.swagger.url', NULL)))
       self$setDebug(interactive())
       self$setApiSpec(NULL)
+      self$websocket(defaultWebsocket(self, private$default_serializer))
 
       # Add in the initial filters
       for (fn in names(filters)){
@@ -755,7 +756,10 @@ Plumber <- R6Class(
     #' @description httpuv interface onWSOpen function. (Required for \pkg{httpuv})
     #' @param ws WebSocket object
     onWSOpen = function(ws){
-      warning("WebSockets not supported.")
+      if (!is.null(private$ws_open)) {
+        private$ws_open(ws)
+      }
+      invisible(self)
     },
     #' @description Sets the default serializer of the router.
     #'
@@ -923,7 +927,12 @@ Plumber <- R6Class(
 
       ret
     },
-
+    #' @description Set websocket open method
+    #' @param open on open websocket method
+    websocket = function(open = NULL) {
+      if (!is.null(open)) stopifnot(is.function(open))
+        private$ws_open <- open
+    },
 
     ### Legacy/Deprecated
     #' @description addEndpoint has been deprecated in v0.4.0 and will be removed in a coming release. Please use `handle()` instead.
@@ -1074,6 +1083,7 @@ Plumber <- R6Class(
     docs_info = NULL,
     docs_callback = NULL,
     debug = NULL,
+    ws_open = NULL,
 
     addFilterInternal = function(filter){
       # Create a new filter and add it to the router
