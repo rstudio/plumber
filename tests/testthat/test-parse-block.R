@@ -20,8 +20,9 @@ test_that("plumbBlock works", {
     "#' @serializer json")
   b <- plumbBlock(length(lines), lines)
   expect_length(b$paths, 2)
-  expect_equal(b$paths[[1]], list(verb="POST", path="/"))
-  expect_equal(b$paths[[2]], list(verb="GET", path="/"))
+  # Paths order follow original code
+  expect_equal(b$paths[[1]], list(verb="GET", path="/"))
+  expect_equal(b$paths[[2]], list(verb="POST", path="/"))
   expect_equal(b$filter, "test")
   expect_equal(b$comments, " Plumber comments")
 
@@ -62,7 +63,7 @@ test_that("plumbBlock images", {
   expect_warning({
     b <- plumbBlock(length(lines), lines)
   })
-  expect_equal(b$serializer, serializer_jpeg(w=1))
+  expect_equal(b$serializer, serializer_jpeg(w=1), check.environment=FALSE)
 
   # Additional chars after name don't count as image tags
   lines <- c("#' @jpegs")
@@ -76,7 +77,7 @@ test_that("plumbBlock images", {
   expect_warning({
     b <- plumbBlock(length(lines), lines)
   })
-  expect_equal(b$serializer, serializer_jpeg(width = 100))
+  expect_equal(b$serializer, serializer_jpeg(width = 100), check.environment=FALSE)
 
   # Ill-formatted arguments return a meaningful error
   lines <- c("#'@jpeg width=100")
@@ -256,6 +257,20 @@ test_that("device serializers produce a structure", {
   expect_s3_block("#' @serializer bmp", serializer_bmp)
   expect_s3_block("#' @serializer tiff", serializer_tiff)
   expect_s3_block("#' @serializer pdf", serializer_pdf)
+})
+
+test_that("block respect original order of lines for comments, tags and responses", {
+  lines <- c(
+    "#' @tag aaa",
+    "#' @tag bbb",
+    "#' comments first line",
+    "#' comments second line",
+    "#' @response 200 ok",
+    "#' @response 404 not ok")
+  b <- plumbBlock(length(lines), lines)
+  expect_equal(b$comments, "comments first line comments second line")
+  expect_equal(b$tags, c("aaa", "bbb"))
+  expect_equal(b$responses, list(`200`=list(description="ok"), `404` = list(description="not ok")))
 })
 
 # TODO: more testing around filter, assets, endpoint, etc.

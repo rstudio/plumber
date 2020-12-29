@@ -24,8 +24,8 @@ function() {
 
 }
 
-#* @get /test
 #* @post /test
+#* @get /test
 function(){
 
 }

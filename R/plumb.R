@@ -271,7 +271,7 @@ format.plumber_available_apis <- function(x, ...) {
     function(apis_sub) {
       paste0(
         "* ", apis_sub$package[1], "\n",
-        paste0("  - ", apis$name, collapse = "\n")
+        paste0("  - ", apis_sub$name, collapse = "\n")
       )
     },
     character(1)
