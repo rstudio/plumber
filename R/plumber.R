@@ -390,6 +390,23 @@ Plumber <- R6Class(
       if (!topLevel){
         cat("\u2502 ") # "| "
       }
+
+      # Avoid printing recursion (mount on mount on mount on ...)
+      if (!isTRUE(topLevel)) {
+        if (isTRUE(private$flags$is_printing)) {
+          cat(
+            crayon::bgYellow(
+              crayon::black(
+                "# Circular Plumber router definition detected")),
+            "\n", sep=""
+          )
+          return()
+        }
+        # set flags to avoid inf recursion
+        on.exit({ private$flags$is_printing <- NULL }, add = TRUE)
+        private$flags$is_printing <- TRUE
+      }
+
       cat(crayon::silver("# Plumber router with ", endCount, " endpoint", ifelse(endCount == 1, "", "s"),", ",
                          as.character(length(private$filts)), " filter", ifelse(length(private$filts) == 1, "", "s"),", and ",
                          as.character(length(self$mounts)), " sub-router", ifelse(length(self$mounts) == 1, "", "s"),".\n", sep=""))
