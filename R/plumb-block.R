@@ -195,7 +195,7 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
       parsers[[parser_alias]] <- arg_list
     }
 
-    responseMat <- stri_match(line, regex="^#['\\*]\\s*@response\\s+(\\w+)\\s+(\\S.+)\\s*$")
+    responseMat <- stri_match(line, regex="^#['\\*]\\s*@response\\s+(\\w+)\\s+(\\S.*)\\s*$")
     if (!is.na(responseMat[1,1])){
       resp <- list()
       resp[[responseMat[1,2]]] <- list(description=responseMat[1,3])
@@ -217,9 +217,9 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
       params[[name]] <- list(desc=paramMat[1,6], type=apiType, required=required, isArray=isArray)
     }
 
-    tagMat <- stri_match(line, regex="^#['\\*]\\s*@tag\\s+(\\S.+)\\s*")
+    tagMat <- stri_match(line, regex="^#['\\*]\\s*@tag\\s+(\"[^\"]+\"|'[^']+'|\\S+)\\s*")
     if (!is.na(tagMat[1,1])){
-      t <- stri_trim_both(tagMat[1,2])
+      t <- stri_trim_both(tagMat[1,2], pattern = "[[\\P{Wspace}]-[\"']]")
       if (is.na(t) || t == ""){
         stopOnLine(lineNum, line, "No tag specified.")
       }

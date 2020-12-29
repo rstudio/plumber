@@ -259,6 +259,22 @@ test_that("device serializers produce a structure", {
   expect_s3_block("#' @serializer pdf", serializer_pdf)
 })
 
+test_that("Tags can contains space", {
+  lines <- c("#* @tag 'test space'",
+             "#* @tag \"test space2\"")
+  expect_equal(plumbBlock(length(lines), lines)$tags, c("test space", "test space2"))
+})
+
+test_that("single character tag and response", {
+  lines <- c(
+    "#' @tag a",
+    "#' @response 2 b",
+    "#' @response 4 b c")
+  b <- plumbBlock(length(lines), lines)
+  expect_equal(b$tags, "a")
+  expect_equal(b$responses, list(`2` = list(description = "b"), `4` = list(description = "b c")))
+})
+
 test_that("block respect original order of lines for comments, tags and responses", {
   lines <- c(
     "#' @tag aaa",

@@ -27,7 +27,7 @@ Annotation | Argument | Description/References
 `@apiContact` | `Contact object` | [Contact Object](http://spec.openapis.org/oas/v3.0.3#contact-object)
 `@apiLicense` | `License object` | [License Object](http://spec.openapis.org/oas/v3.0.3#license-object)
 `@apiVersion` | `Version` | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object)
-`@apiTag` | `Tag` `Description` | Can be repeated to add multiple tags. [Tag Object](http://spec.openapis.org/oas/v3.0.3#tag-object)
+`@apiTag` | `Tag` `Description` | Can be repeated to add multiple tags. Quote with " or ' to use non word character (like spaces) in `Tag`. [Tag Object](http://spec.openapis.org/oas/v3.0.3#tag-object)
 
 ##### Annotations example
 
@@ -40,6 +40,7 @@ Annotation | Argument | Description/References
 #* @apiVersion 1.0.1
 #* @apiTag pet Pets operations
 #* @apiTag toy Toys operations
+#* @apiTag "toy space" Toys operations
 ```
 
 ##### Equivalent programmatic usage
@@ -55,7 +56,7 @@ pr() %>%
       license = list(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0.html"),
       version = "1.0.1"
     )
-    spec$tags <- list(list(name = "pet", description = "Pets operations"), list(name = "toy", description = "Toys operations"))
+    spec$tags <- list(list(name = "pet", description = "Pets operations"), list(name = "toy", description = "Toys operations"), list(name = "toy space", description = "Toys operations"))
     spec
   })
 ```
@@ -73,7 +74,7 @@ Annotation | Argument | Description/References
 `@parser` | `Alias` `[Args list]` | Some parsers accept arguments. See [parsers reference](https://www.rplumber.io/reference/parsers.html). Can be repeated to allow multiple parsers on the same endpoint. Aliases : `r paste0("<code>", registered_parsers(), "</code>", collapse = ", ")` from [`registered_parsers()`](https://www.rplumber.io/reference/register_parser.html).
 `@param` | `Name`[`:Type` `Description`] | Enclose `Type` between square brackets `[]` to indicate it is an array. Can be repeated to define different parameters.
 `@response` | `Name` `Description` | Simple [Response object](http://spec.openapis.org/oas/v3.0.3#response-object). Can be repeated to define different responses.
-`@tags` | `Tag` | Can be repeated to add multiple tags. [Tag field](http://spec.openapis.org/oas/v3.0.3#operation-object)
+`@tags` | `Tag` | Can be repeated to add multiple tags. Quote with " or ' to use non word character (like spaces) in `Tag`. [Tag field](http://spec.openapis.org/oas/v3.0.3#operation-object)
 `@preempt` | `Filter` | Specify that this endpoint has to execute before `Filter`. [Filters](./programmatic-usage.html#defining-filters)
 None | `Comments` | Lines without annotation will be mapped to [Summary field](http://spec.openapis.org/oas/v3.0.3#fixed-fields-6).
 
