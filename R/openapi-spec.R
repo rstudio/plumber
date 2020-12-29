@@ -52,7 +52,7 @@ defaultResponse <- list(
   )
 )
 responsesSpecification <- function(endpts){
-  if (!is.environment(endpts)) {
+  if (!inherits(endpts, "PlumberEndpoint")) {
     return(defaultResponse)
   }
   resps <- defaultResponse
@@ -74,7 +74,7 @@ responsesSpecification <- function(endpts){
       }
       if (isTRUE(nchar(ctype) > 0)) {
         ctype <- stri_split_regex(ctype, "[ ;]")[[1]][1]
-        schema = list(type = ifelse(grepl("^text", ctype), "string", "object"))
+        schema <- list(type = ifelse(grepl("^text", ctype), "string", "object"))
         resps[[resp]]$content <- setNames(list(list(schema = schema)), ctype)
       }
     }
