@@ -25,6 +25,7 @@ plumber 1.0.0.9999 Development version
 
 * Fixed `available_apis()` bug where all packages printed all available APIs (@meztez #708)
 
+* Fix Plumber `$routes` resolution bugs. Also return routes in lexicographical order. (@meztez #702)
 
 plumber 1.0.0
 --------------------------------------------------------------------------------
