@@ -141,6 +141,11 @@
 <a href="#global-annotations" class="anchor"></a>Global annotations</h2>
 <p>Global annotations can be used anywhere in your plumber file. They are independent from other annotations and do not require an expression.</p>
 <table class="table">
+<colgroup>
+<col width="26%">
+<col width="19%">
+<col width="53%">
+</colgroup>
 <thead><tr class="header">
 <th>Annotation</th>
 <th>Argument</th>
@@ -182,7 +187,7 @@
 <td>
 <code>Tag</code> <code>Description</code>
 </td>
-<td>Can be repeated to add multiple tags. <a href="http://spec.openapis.org/oas/v3.0.3#tag-object">Tag Object</a>
+<td>Can be repeated to add multiple tags. Quote with " or ’ to use non word character (like spaces) in <code>Tag</code>. <a href="http://spec.openapis.org/oas/v3.0.3#tag-object">Tag Object</a>
 </td>
 </tr>
 </tbody>
@@ -198,7 +203,8 @@
 <span class="co">#* @apiLicense list(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0.html")</span>
 <span class="co">#* @apiVersion 1.0.1</span>
 <span class="co">#* @apiTag pet Pets operations</span>
-<span class="co">#* @apiTag toy Toys operations</span></code></pre></div>
+<span class="co">#* @apiTag toy Toys operations</span>
+<span class="co">#* @apiTag "toy space" Toys operations</span></code></pre></div>
 </div>
 <div id="equivalent-programmatic-usage" class="section level5">
 <h5 class="hasAnchor">
@@ -214,7 +220,7 @@
       license <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Apache 2.0"</span>, url <span class="op">=</span> <span class="st">"https://www.apache.org/licenses/LICENSE-2.0.html"</span><span class="op">)</span>,
       version <span class="op">=</span> <span class="st">"1.0.1"</span>
     <span class="op">)</span>
-    <span class="va">spec</span><span class="op">$</span><span class="va">tags</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"pet"</span>, description <span class="op">=</span> <span class="st">"Pets operations"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"toy"</span>, description <span class="op">=</span> <span class="st">"Toys operations"</span><span class="op">)</span><span class="op">)</span>
+    <span class="va">spec</span><span class="op">$</span><span class="va">tags</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"pet"</span>, description <span class="op">=</span> <span class="st">"Pets operations"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"toy"</span>, description <span class="op">=</span> <span class="st">"Toys operations"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"toy space"</span>, description <span class="op">=</span> <span class="st">"Toys operations"</span><span class="op">)</span><span class="op">)</span>
     <span class="va">spec</span>
   <span class="op">}</span><span class="op">)</span></code></pre></div>
 </div>
@@ -276,7 +282,7 @@
 <tr class="even">
 <td><code>@tags</code></td>
 <td><code>Tag</code></td>
-<td>Can be repeated to add multiple tags. <a href="http://spec.openapis.org/oas/v3.0.3#operation-object">Tag field</a>
+<td>Can be repeated to add multiple tags. Quote with " or ’ to use non word character (like spaces) in <code>Tag</code>. <a href="http://spec.openapis.org/oas/v3.0.3#operation-object">Tag field</a>
 </td>
 </tr>
 <tr class="odd">
