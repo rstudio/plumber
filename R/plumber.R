@@ -443,7 +443,13 @@ Plumber <- R6Class(
               TRUE
             } else {
               # there are other endpoints, so get only nodes with name ""
-              names(node) == ""
+              # which path does not end with / and path is not root
+              node_path <- function(node) {
+                path <- node$path %||% ""
+                if (!is.character(path)) path <-""
+                path
+              }
+              names(node) == "" & !grepl(".+/$", vapply(node, node_path, character(1)))
             }
 
           # mounted routers at root location will also have a missing name.
@@ -1026,7 +1032,27 @@ Plumber <- R6Class(
         if (is.null(node)){
           node <- list()
         }
-        node[[children[1]]] <- addPath(node[[children[1]]], children[-1], endpoint)
+
+        # Check for existing endpoints at current children node that share the same name
+        matching_name_nodes <- node[names(node) == children[1]]
+        existing_endpoints <- vapply(matching_name_nodes, inherits, logical(1), "PlumberEndpoint")
+
+        # This is for situation where an endpoint is on `/A` and you
+        # also have route with an endpoint on `A/B`. Resulting nested list
+        # already has an endpoint on the children node and you need a deeper nested
+        # list for the current children node. Combine them.
+        if (any(existing_endpoints) && length(children) > 1) {
+          node <- c(
+            # Nodes with preexisting endpoints sharing the same name
+            matching_name_nodes[existing_endpoints],
+            # New nested list to combine with, passing the nodes that are not endpoints
+            addPath(matching_name_nodes[!existing_endpoints], children, endpoint)
+          )
+        } else {
+          # Keep building the nested list until you hit an endpoint
+          node[[children[1]]] <- addPath(node[[children[1]]], children[-1], endpoint)
+        }
+
         node
       }
 
@@ -1036,6 +1062,8 @@ Plumber <- R6Class(
           path <- sub("^/", "", e$path)
 
           levels <- strsplit(path, "/", fixed=TRUE)[[1]]
+          # If there is a trailing `/`, add a blank level for an extra print line
+          if (grepl("/$", path)) {levels <- c(levels, "")}
           paths <<- addPath(paths, levels, e)
         })
       })
@@ -1053,9 +1081,17 @@ Plumber <- R6Class(
         }
       }
 
-      # TODO: Sort lexicographically
+      lexisort <- function(paths) {
+        if (is.list(paths)) {
+          paths <- lapply(paths, lexisort)
+          if (!is.null(names(paths))) {
+            paths <- paths[order(names(paths))]
+          }
+        }
+        paths
+      }
 
-      paths
+      lexisort(paths)
     }
   ), private = list(
     default_serializer = NULL, # The default serializer for the router

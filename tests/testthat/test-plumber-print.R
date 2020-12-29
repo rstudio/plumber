@@ -24,9 +24,6 @@ test_that("prints correctly", {
     "├──[body]",
     "├──[cookieParser]",
     "├──[sharedSecret]",
-    "├──/nested",
-    "│  ├──/path",
-    "│  │  └──/here (GET, POST)",
     "├──/mysubpath",
     "│  │ # Plumber router with 2 endpoints, 4 filters, and 0 sub-routers.",
     "│  ├──[queryString]",
@@ -35,11 +32,28 @@ test_that("prints correctly", {
     "│  ├──[sharedSecret]",
     "│  ├──/ (GET)",
     "│  └──/something (POST)",
+    "├──/nested",
+    "│  ├──/path",
+    "│  │  └──/here (GET, POST)",
     "├──/static",
     "│  │ # Plumber static router serving from directory: ."
   )
 
   expect_equal(printed, expected_output)
+
+  expected_output2 <- c(
+    "# Plumber router with 1 endpoint, 4 filters, and 0 sub-routers.",
+    "# Call run() on this object to start the API.",
+    "├──[queryString]",
+    "├──[body]",
+    "├──[cookieParser]",
+    "├──[sharedSecret]",
+    "├──/A",
+    "│  ├──/B",
+    "│  │  └──/ (GET)"
+  )
+  printed2 <- capture.output(print(pr_get(pr(), "/A/B/", identity)))
+  expect_equal(printed2, expected_output2)
 })
 
 test_that("prints correctly", {
@@ -72,9 +86,9 @@ test_that("prints correctly", {
     "│  ├──[cookieParser]",
     "│  ├──[sharedSecret]",
     "│  ├──/ (GET, POST)",
-    "│  ├──/something (POST)",
     "│  ├──/nested",
-    "│  │  └──/path (GET, POST)"
+    "│  │  └──/path (GET, POST)",
+    "│  └──/something (POST)"
   )
 
   expect_equal(printed, expected_output)
