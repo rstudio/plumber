@@ -1,6 +1,10 @@
 plumber 1.0.0.9999 Development version
 --------------------------------------------------------------------------------
 
+### Breaking changes
+
+* Force json serialization of endpoint error responses instead of using endpoint serializer. (@meztez, #689)
+
 ### New features
 
 * Passing `edit = TRUE` to `plumb_api()` will open the API source file (#699)
@@ -9,9 +13,10 @@ plumber 1.0.0.9999 Development version
 
 ### Bug fixes
 
-* When calling `Plumber$handle()` and defining a new `PlumberEndpoint`, `...` will be checked for invalid names #677
+* When calling `Plumber$handle()` and defining a new `PlumberEndpoint`, `...` will be checked for invalid names (@meztez, #677)
 
 * `/__swagger__/` now always redirect to `/__docs__/`, even when Swagger isn't the selected interface. Use `options(plumber.legacyRedirects = FALSE)` to disable this behavior (@blairj09 #694)
+
 
 plumber 1.0.0
 --------------------------------------------------------------------------------
