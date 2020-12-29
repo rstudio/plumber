@@ -32,6 +32,32 @@ test_that("available_apis() print method works", {
     expected_apis_output
   )
 })
+test_that("available_apis() print method works with two packages", {
+  top <- available_apis("plumber")
+  bottom <- top
+  top$package <- "top"
+  bottom$package <- "bottom"
+
+  apis_output <- capture.output({
+    rbind(top, bottom)
+  })
+
+  plumber_apis <- paste0("  - ", dir(system.file("plumber", package = "plumber")))
+
+  # printed in alpha order
+  expected_apis_output <- c(
+    "Available Plumber APIs:",
+    "* bottom",
+    plumber_apis,
+    "* top",
+    plumber_apis
+  )
+
+  expect_equal(
+    apis_output,
+    expected_apis_output
+  )
+})
 
 test_that("missing args are handled", {
   expect_equal(plumb_api("plumber", NULL), available_apis("plumber"))
@@ -68,18 +94,24 @@ test_that("edit opens correct file", {
 
   selected_api <- apis$package == "plumber" & apis$name == "01-append"
 
-  expect_output(
-  	plumb_api("plumber", "01-append", edit = TRUE),
-    "plumber.R test file attempted to open",
-    fixed = TRUE
+  expect_warning(
+    expect_output(
+      plumb_api("plumber", "01-append", edit = TRUE),
+      "plumber.R test file attempted to open",
+      fixed = TRUE
+    ),
+    "plumber.R has been opened in the editor"
   )
 
   selected_api <- apis$package == "plumber" & apis$name == "12-entrypoint"
 
-  expect_output(
-    plumb_api("plumber", "12-entrypoint", edit = TRUE),
-    "entrypoint.R test file attempted to open",
-    fixed = TRUE
+  expect_warning(
+    expect_output(
+      plumb_api("plumber", "12-entrypoint", edit = TRUE),
+      "entrypoint.R test file attempted to open",
+      fixed = TRUE
+    ),
+    "entrypoint.R has been opened in the editor"
   )
 })
 
