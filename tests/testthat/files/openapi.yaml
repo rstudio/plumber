@@ -1,0 +1,15 @@
+servers:
+  - url: ''
+openapi: 3.0.3
+info:
+  description: API Description
+  title: Foo
+  version: 1.0.0
+paths:
+  /health-check:
+    get:
+      summary: ' Determine if the API is running and listening as expected'
+      responses:
+        default:
+          description: Default response.
+      parameters: []
