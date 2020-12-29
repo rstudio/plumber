@@ -3,7 +3,7 @@ plumber 1.0.0.9999 Development version
 
 ### New features
 
-* Guess OpenApi response content type from serializer. #684
+* Guess OpenApi response content type from serializer (@meztez #684)
 
 ### Bug fixes
 
