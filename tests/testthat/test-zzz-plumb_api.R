@@ -94,18 +94,24 @@ test_that("edit opens correct file", {
 
   selected_api <- apis$package == "plumber" & apis$name == "01-append"
 
-  expect_output(
-  	plumb_api("plumber", "01-append", edit = TRUE),
-    "plumber.R test file attempted to open",
-    fixed = TRUE
+  expect_warning(
+    expect_output(
+      plumb_api("plumber", "01-append", edit = TRUE),
+      "plumber.R test file attempted to open",
+      fixed = TRUE
+    ),
+    "plumber.R has been opened in the editor"
   )
 
   selected_api <- apis$package == "plumber" & apis$name == "12-entrypoint"
 
-  expect_output(
-    plumb_api("plumber", "12-entrypoint", edit = TRUE),
-    "entrypoint.R test file attempted to open",
-    fixed = TRUE
+  expect_warning(
+    expect_output(
+      plumb_api("plumber", "12-entrypoint", edit = TRUE),
+      "entrypoint.R test file attempted to open",
+      fixed = TRUE
+    ),
+    "entrypoint.R has been opened in the editor"
   )
 })
 
