@@ -5,7 +5,7 @@ plumber 1.0.0.9999 Development version
 
 * Passing `edit = TRUE` to `plumb_api()` will open the API source file (#699)
 
-* OpenAPI Specification can be set using a file path.
+* OpenAPI Specification can be set using a file path. (@meztez #696)
 
 ### Bug fixes
 
