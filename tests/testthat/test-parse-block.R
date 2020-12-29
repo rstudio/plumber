@@ -8,10 +8,12 @@ test_that("trimws works", {
 
 test_that("plumbBlock works", {
   lines <- c(
+    "#* Plumber comment not reached",
+    "NULL",
     "#* Plumber comments",
     "",
     "  ",
-    "# Normals comments",
+    "# Normal comments",
     "#' @get /",
     "#' @post /",
     "#' @filter test",
