@@ -1032,13 +1032,11 @@ Plumber <- R6Class(
         if (is.null(node)){
           node <- list()
         }
+
         # Check for existing endpoints at current children node that share the same name
-        existing_endpoints <-
-          vapply(
-            node[which(names(node) == children[1])],
-            inherits,
-            logical(1),
-            "PlumberEndpoint")
+        matching_name_nodes <- node[names(node) == children[1]]
+        existing_endpoints <- vapply(matching_name_nodes, inherits, logical(1), "PlumberEndpoint")
+
         # This is for situation where an endpoint is on `/A` and you
         # also have route with an endpoint on `A/B`. Resulting nested list
         # already has an endpoint on the children node and you need a deeper nested
@@ -1046,14 +1044,15 @@ Plumber <- R6Class(
         if (any(existing_endpoints) && length(children) > 1) {
           node <- c(
             # Nodes with preexisting endpoints sharing the same name
-            node[which(names(node) == children[1])][which(existing_endpoints)],
+            matching_name_nodes[existing_endpoints],
             # New nested list to combine with, passing the nodes that are not endpoints
-            addPath(node[which(names(node) == children[1])][which(!existing_endpoints)], children, endpoint)
+            addPath(matching_name_nodes[!existing_endpoints], children, endpoint)
           )
         } else {
           # Keep building the nested list until you hit an endpoint
           node[[children[1]]] <- addPath(node[[children[1]]], children[-1], endpoint)
         }
+
         node
       }
 
