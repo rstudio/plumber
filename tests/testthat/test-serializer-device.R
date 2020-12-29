@@ -1,8 +1,29 @@
-# Only test on CI
-skip_on_cran()
-
 context("device serializer")
 
+test_that("graphics device promise domains must have a device", {
+  expect_error(
+    # send in a value that is returned for a null device
+    createGraphicsDevicePromiseDomain(which = c(`null device` = 1L)),
+    "was called without opening a device"
+  )
+})
+
+test_that("you should not call `dev_set()` with a null device", {
+
+  expect_warning(
+    # send in a value that is returned for a null device
+    dev_set(c(`null device` = 1L)),
+    "null device"
+  )
+})
+
+
+
+
+
+
+# Only test on CI
+skip_on_cran()
 
 expect_device_output <- function(name, content_type, capability_type = name) {
 
