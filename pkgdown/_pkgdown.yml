@@ -7,8 +7,8 @@ template:
   assets: pkgdown/assets
   params:
     docsearch:
-      apiKey: 'e8f0e2420e2e9aac7973efb2cc877b06'
-      indexName: 'rplumber'
+      api_key: 'e8f0e2420e2e9aac7973efb2cc877b06'
+      index_name: 'rplumber'
 
 authors:
   Barret Schloerke:
