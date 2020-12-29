@@ -393,7 +393,7 @@ Plumber <- R6Class(
 
       # Avoid printing recursion (mount on mount on mount on ...)
       if (!isTRUE(topLevel)) {
-        if (isTRUE(private$flags$is_printing)) {
+        if (isTRUE(self$flags$is_printing)) {
           cat(
             crayon::bgYellow(
               crayon::black(
@@ -403,8 +403,8 @@ Plumber <- R6Class(
           return()
         }
         # set flags to avoid inf recursion
-        on.exit({ private$flags$is_printing <- NULL }, add = TRUE)
-        private$flags$is_printing <- TRUE
+        on.exit({ self$flags$is_printing <- NULL }, add = TRUE)
+        self$flags$is_printing <- TRUE
       }
 
       cat(crayon::silver("# Plumber router with ", endCount, " endpoint", ifelse(endCount == 1, "", "s"),", ",
@@ -953,6 +953,10 @@ Plumber <- R6Class(
       ret
     },
 
+    # list of key/value pairs that should be temporarily set. Ex: is_printing = 1
+    #' @field flags For internal use only
+    flags = list(),
+
 
     ### Legacy/Deprecated
     #' @description addEndpoint has been deprecated in v0.4.0 and will be removed in a coming release. Please use `handle()` instead.
@@ -1135,8 +1139,6 @@ Plumber <- R6Class(
     docs_info = NULL,
     docs_callback = NULL,
     debug = NULL,
-
-    flags = list(), # list of key/value pairs that should be temporarily set. Ex: printing = 1
 
     addFilterInternal = function(filter){
       # Create a new filter and add it to the router
