@@ -1093,7 +1093,9 @@ Plumber <- R6Class(
 
       lexisort(paths)
     }
-  ), private = list(
+  ),
+  private = list(
+
     default_serializer = NULL, # The default serializer for the router
     default_parsers = NULL, # The default parsers for the router
 
@@ -1116,6 +1118,8 @@ Plumber <- R6Class(
     docs_info = NULL,
     docs_callback = NULL,
     debug = NULL,
+
+    flags = list(), # list of key/value pairs that should be temporarily set. Ex: printing = 1
 
     addFilterInternal = function(filter){
       # Create a new filter and add it to the router
