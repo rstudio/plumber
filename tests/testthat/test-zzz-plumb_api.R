@@ -32,6 +32,32 @@ test_that("available_apis() print method works", {
     expected_apis_output
   )
 })
+test_that("available_apis() print method works with two packages", {
+  top <- available_apis("plumber")
+  bottom <- top
+  top$package <- "top"
+  bottom$package <- "bottom"
+
+  apis_output <- capture.output({
+    rbind(top, bottom)
+  })
+
+  plumber_apis <- paste0("  - ", dir(system.file("plumber", package = "plumber")))
+
+  # printed in alpha order
+  expected_apis_output <- c(
+    "Available Plumber APIs:",
+    "* bottom",
+    plumber_apis,
+    "* top",
+    plumber_apis
+  )
+
+  expect_equal(
+    apis_output,
+    expected_apis_output
+  )
+})
 
 test_that("missing args are handled", {
   expect_equal(plumb_api("plumber", NULL), available_apis("plumber"))
