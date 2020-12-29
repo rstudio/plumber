@@ -170,7 +170,7 @@ $ curl "http://localhost:8000/echo?msg=hello"
 <pre><code>$ curl --data "a=4&amp;b=3" "http://localhost:8000/sum"
  [7]</code></pre>
 <p>You can also send your data as JSON:</p>
-<pre><code>$ curl --data '{"a":4, "b":5}' http://localhost:8000/sum
+<pre><code>$ curl -H "Content-Type: application/json" --data '{"a":4, "b":5}' http://localhost:8000/sum
  [9]</code></pre>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
