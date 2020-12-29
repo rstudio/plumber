@@ -1,5 +1,5 @@
-#' Return "hello world"
-#' @get /hello
+#* Return "hello world"
+#* @get /hello
 function(){
   "hello world"
 }

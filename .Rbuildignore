@@ -24,3 +24,4 @@
 ^man-roxygen
 rsconnect
 ^CRAN-RELEASE$
+^legacy_support.txt$

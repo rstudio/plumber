@@ -14,11 +14,12 @@ options_plumber(
   apiPort = getOption("plumber.apiPort"),
   apiPath = getOption("plumber.apiPath"),
   maxRequestSize = getOption("plumber.maxRequestSize"),
-  sharedSecret = getOption("plumber.sharedSecret")
+  sharedSecret = getOption("plumber.sharedSecret"),
+  legacyRedirects = getOption("plumber.legacyRedirects")
 )
 }
 \arguments{
-\item{port, docs, docs.callback, apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, sharedSecret}{See details}
+\item{port, docs, docs.callback, apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, sharedSecret, legacyRedirects}{See details}
 }
 \value{
 The complete, prior set of \code{\link[=options]{options()}} values.
@@ -33,28 +34,31 @@ be set globally with \code{\link[=options]{options()}} or with \code{\link[=opti
 \details{
 \describe{
 \item{\code{plumber.port}}{Port Plumber will attempt to use to start http server.
-If the port is already in use, server will not be able to start. Defaults to \code{NULL}}
-\item{\code{plumber.docs}}{Name of the visual documentation interface to use. Defaults to \code{TRUE}, which will use \code{"swagger"}}
+If the port is already in use, server will not be able to start. Defaults to \code{NULL}.}
+\item{\code{plumber.docs}}{Name of the visual documentation interface to use. Defaults to \code{TRUE}, which will use \code{"swagger"}.}
 \item{\code{plumber.docs.callback}}{A function. Called with
 a single parameter corresponding to the visual documentation url after Plumber server is ready. This can be used
-by RStudio to open the docs when then API is ran from the editor. Defaults to option \code{NULL}}
+by RStudio to open the docs when then API is ran from the editor. Defaults to option \code{NULL}.}
 \item{\code{plumber.apiURL}}{Server urls for OpenAPI Specification respecting
 pattern \verb{scheme://host:port/path}. Other \verb{api*} options will be ignored when set.}
 \item{\code{plumber.apiScheme}}{Scheme used to build OpenAPI url and server url for
 OpenAPI Specification. Defaults to \code{http}, or an empty string
-when used outside a running router}
+when used outside a running router.}
 \item{\code{plumber.apiHost}}{Host used to build docs url and server url for
 OpenAPI Specification. Defaults to \code{host} defined by \code{run} method, or an empty string
-when used outside a running router}
+when used outside a running router.}
 \item{\code{plumber.apiPort}}{Port used to build OpenAPI url and server url for
 OpenAPI Specification. Defaults to \code{port} defined by \code{run} method, or an empty string
-when used outside a running router}
+when used outside a running router.}
 \item{\code{plumber.apiPath}}{Path used to build OpenAPI url and server url for
-OpenAPI Specification. Defaults to an empty string}
+OpenAPI Specification. Defaults to an empty string.}
 \item{\code{plumber.maxRequestSize}}{Maximum length in bytes of request body. Body larger
-than maximum are rejected with http error 413. \code{0} means unlimited size. Defaults to \code{0}}
+than maximum are rejected with http error 413. \code{0} means unlimited size. Defaults to \code{0}.}
 \item{\code{plumber.sharedSecret}}{Shared secret used to filter incoming request.
 When \code{NULL}, secret is not validated. Otherwise, Plumber compares secret with http header
-\code{PLUMBER_SHARED_SECRET}. Failure to match results in http error 400. Defaults to \code{NULL}}
+\code{PLUMBER_SHARED_SECRET}. Failure to match results in http error 400. Defaults to \code{NULL}.}
+\item{\code{plumber.legacyRedirects}}{Plumber will redirect legacy route \verb{/__swagger__/} and
+\verb{/__swagger__/index.html} to \verb{../__docs__/} and \verb{../__docs__/index.html}. You can disable this
+by settings this option to \code{FALSE}. Defaults to \code{TRUE}}
 }
 }

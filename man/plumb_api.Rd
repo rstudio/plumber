@@ -5,7 +5,7 @@
 \alias{available_apis}
 \title{Process a Package's Plumber API}
 \usage{
-plumb_api(package = NULL, name = NULL)
+plumb_api(package = NULL, name = NULL, edit = FALSE)
 
 available_apis(package = NULL)
 }
@@ -13,6 +13,8 @@ available_apis(package = NULL)
 \item{package}{Package to inspect}
 
 \item{name}{Name of the package folder to \code{\link[=plumb]{plumb()}}.}
+
+\item{edit}{Whether or not to open the API source code for viewing / editing}
 }
 \value{
 A \code{\link{Plumber}} object. If either \code{package} or \code{name} is null, the appropriate \code{\link[=available_apis]{available_apis()}} will be returned.
@@ -29,6 +31,6 @@ A \code{package} value may be provided to only display a particular package's Pl
 \itemize{
 \item \code{plumb_api}: \code{\link[=plumb]{plumb()}}s a package's Plumber API. Returns a \code{\link{Plumber}} router object
 
-\item \code{available_apis}: Displays all available package Plumber APIs. Returns a \code{data.frame} of \code{package} and \code{name} information.
+\item \code{available_apis}: Displays all available package Plumber APIs. Returns a \code{data.frame} of \code{package}, \code{name}, and \code{source_directory} information.
 }}
 

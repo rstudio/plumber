@@ -20,6 +20,7 @@ This will set the appropriate fields in the \code{Content-Disposition} header va
 To make sure the attachment is used, be sure your serializer eventually calls \code{serializer_headers}
 }
 \examples{
+\dontrun{
 # plumber.R
 
 #' @get /data
@@ -27,5 +28,6 @@ To make sure the attachment is used, be sure your serializer eventually calls \c
 function() {
   # will cause the file to be saved as `iris.csv`, not `data` or `data.csv`
   as_attachment(iris, "iris.csv")
+}
 }
 }
