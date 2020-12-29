@@ -21,7 +21,7 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
   parsers <- NULL
   assets <- NULL
   params <- NULL
-  comments <- ""
+  comments <- NULL
   responses <- NULL
   tags <- NULL
   routerModifier <- NULL
@@ -225,7 +225,7 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
 
     commentMat <- stri_match(line, regex="^#['\\*]\\s*([^@\\s].*$)")
     if (!is.na(commentMat[1,2])){
-      comments <- paste(comments, commentMat[1,2])
+      comments <- c(comments, trimws(commentMat[1,2]))
     }
 
     routerModifierMat <- stri_match(line, regex="^#['\\*]\\s*@plumber")
@@ -237,16 +237,16 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
   }
 
   list(
-    paths = paths,
+    paths = rev(paths),
     preempt = preempt,
     filter = filter,
     serializer = serializer,
-    parsers = parsers,
+    parsers = rev(parsers),
     assets = assets,
     params = rev(params),
-    comments = comments,
-    responses = responses,
-    tags = tags,
+    comments = paste0(rev(comments), collapse = " "),
+    responses = rev(responses),
+    tags = rev(tags),
     routerModifier = routerModifier
   )
 }
