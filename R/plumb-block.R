@@ -21,13 +21,19 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
   parsers <- NULL
   assets <- NULL
   params <- NULL
-  comments <- ""
+  comments <- NULL
   responses <- NULL
   tags <- NULL
   routerModifier <- NULL
-  while (lineNum > 0 && (stri_detect_regex(file[lineNum], pattern="^#['\\*]") || stri_trim_both(file[lineNum]) == "")){
+  while (lineNum > 0 && (stri_detect_regex(file[lineNum], pattern="^#['\\*]?|^\\s*$") || stri_trim_both(file[lineNum]) == "")){
 
     line <- file[lineNum]
+
+    # If the line does not start with a plumber tag `#*` or `#'`, continue to next line
+    if (!stri_detect_regex(line, pattern="^#['\\*]")) {
+      lineNum <- lineNum - 1
+      next
+    }
 
     epMat <- stri_match(line, regex="^#['\\*]\\s*@(get|put|post|use|delete|head|options|patch)(\\s+(.*)$)?")
     if (!is.na(epMat[1,2])){
@@ -225,7 +231,7 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
 
     commentMat <- stri_match(line, regex="^#['\\*]\\s*([^@\\s].*$)")
     if (!is.na(commentMat[1,2])){
-      comments <- paste(comments, commentMat[1,2])
+      comments <- c(comments, trimws(commentMat[1,2]))
     }
 
     routerModifierMat <- stri_match(line, regex="^#['\\*]\\s*@plumber")
@@ -237,14 +243,14 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
   }
 
   list(
-    paths = paths,
+    paths = rev(paths),
     preempt = preempt,
     filter = filter,
     serializer = serializer,
-    parsers = parsers,
+    parsers = rev(parsers),
     assets = assets,
     params = rev(params),
-    comments = comments,
+    comments = paste0(rev(comments), collapse = " "),
     responses = rev(responses),
     tags = rev(tags),
     routerModifier = routerModifier

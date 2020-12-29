@@ -8,15 +8,23 @@ test_that("trimws works", {
 
 test_that("plumbBlock works", {
   lines <- c(
+    "#* Plumber comment not reached",
+    "NULL",
+    "#* Plumber comments",
+    "",
+    "  ",
+    "# Normal comments",
     "#' @get /",
     "#' @post /",
     "#' @filter test",
     "#' @serializer json")
   b <- plumbBlock(length(lines), lines)
   expect_length(b$paths, 2)
-  expect_equal(b$paths[[1]], list(verb="POST", path="/"))
-  expect_equal(b$paths[[2]], list(verb="GET", path="/"))
+  # Paths order follow original code
+  expect_equal(b$paths[[1]], list(verb="GET", path="/"))
+  expect_equal(b$paths[[2]], list(verb="POST", path="/"))
   expect_equal(b$filter, "test")
+  expect_equal(b$comments, "Plumber comments")
 
   # due to covr changing some code, the return answer is very strange
   # the tests below should be skipped on covr
@@ -265,6 +273,20 @@ test_that("single character tag and response", {
   b <- plumbBlock(length(lines), lines)
   expect_equal(b$tags, "a")
   expect_equal(b$responses, list(`2` = list(description = "b"), `4` = list(description = "b c")))
+})
+
+test_that("block respect original order of lines for comments, tags and responses", {
+  lines <- c(
+    "#' @tag aaa",
+    "#' @tag bbb",
+    "#' comments first line",
+    "#' comments second line",
+    "#' @response 200 ok",
+    "#' @response 404 not ok")
+  b <- plumbBlock(length(lines), lines)
+  expect_equal(b$comments, "comments first line comments second line")
+  expect_equal(b$tags, c("aaa", "bbb"))
+  expect_equal(b$responses, list(`200`=list(description="ok"), `404` = list(description="not ok")))
 })
 
 # TODO: more testing around filter, assets, endpoint, etc.
