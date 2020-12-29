@@ -29,7 +29,8 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
 
     line <- file[lineNum]
 
-    if (!stri_detect_regex(line, pattern="^#['\\*]|^\\s*$")) {
+    # If the line does not start with a plumber tag `#*` or `#'`, continue to next line
+    if (!stri_detect_regex(line, pattern="^#['\\*]")) {
       lineNum <- lineNum - 1
       next
     }
