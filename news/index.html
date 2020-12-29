@@ -173,6 +173,13 @@
     <div id="plumber-1009999-development-version" class="section level2">
 <h2 class="hasAnchor">
 <a href="#plumber-1009999-development-version" class="anchor"></a>plumber 1.0.0.9999 Development version</h2>
+<div id="breaking-changes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#breaking-changes" class="anchor"></a>Breaking changes</h3>
+<ul>
+<li>Force json serialization of endpoint error responses instead of using endpoint serializer. (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/689'>#689</a>)</li>
+</ul>
+</div>
 <div id="new-features" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h3>
@@ -185,7 +192,7 @@
 <h3 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>Bug fixes</h3>
 <ul>
-<li><p>When calling <code>Plumber$handle()</code> and defining a new <code>PlumberEndpoint</code>, <code>...</code> will be checked for invalid names <a href='https://github.com/rstudio/plumber/issues/677'>#677</a></p></li>
+<li><p>When calling <code>Plumber$handle()</code> and defining a new <code>PlumberEndpoint</code>, <code>...</code> will be checked for invalid names (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/677'>#677</a>)</p></li>
 <li><p><code>/__swagger__/</code> now always redirect to <code>/__docs__/</code>, even when Swagger isn’t the selected interface. Use <code><a href="https://rdrr.io/r/base/options.html">options(plumber.legacyRedirects = FALSE)</a></code> to disable this behavior (<a href='https://github.com/blairj09'>@blairj09</a> <a href='https://github.com/rstudio/plumber/issues/694'>#694</a>)</p></li>
 </ul>
 </div>
@@ -319,9 +326,9 @@
 <li><p>Wrap <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">jsonlite::fromJSON</a></code> to ensure that <code>jsonlite</code> never reads input as a remote address (such as a file path or URL) and attempts to parse that. The only known way to exploit this behavior in plumber unless an API were using encrypted cookies and an attacker knew the encryption key in order to craft arbitrary cookies. (<a href='https://github.com/rstudio/plumber/issues/325'>#325</a>)</p></li>
 </ul>
 </div>
-<div id="breaking-changes" class="section level3">
+<div id="breaking-changes-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#breaking-changes" class="anchor"></a>Breaking changes</h3>
+<a href="#breaking-changes-1" class="anchor"></a>Breaking changes</h3>
 <ul>
 <li><p>When <code><a href="../reference/plumb.html">plumb()</a></code>ing a file (or <code>Plumber$new(file)</code>), the working directory is set to the file’s directory before parsing the file. When running the Plumber API, the working directory will be set to file’s directory before running.(<a href='https://github.com/rstudio/plumber/issues/631'>#631</a>)</p></li>
 <li><p>Plumber’s OpenAPI Specification is now defined using <a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md">OpenAPI 3</a>, upgrading from Swagger Specification. (<a href='https://github.com/rstudio/plumber/issues/365'>#365</a>)</p></li>
