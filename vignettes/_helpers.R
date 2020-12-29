@@ -16,8 +16,8 @@ code_chunk <- function(output, language=""){
 #   code_chunk(paste0(readLines(file), collapse="\n"), language="r")
 # }
 
-#' Serialize an object into JSON the same way that plumber would.
-#' This way if the logic changes we consolidate all references to here.
+#* Serialize an object into JSON the same way that plumber would.
+#* This way if the logic changes we consolidate all references to here.
 json_serialize <- function(obj){
   jsonlite::toJSON(obj, auto_unbox = FALSE, pretty = TRUE)
 }

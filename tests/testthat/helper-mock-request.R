@@ -1,5 +1,5 @@
 
-make_req <- function(verb = "GET", path = "/", qs="", body="", args = c(), ...){
+make_req <- function(verb = "GET", path = "/", qs="", body="", args = c(), pr = NULL, ...){
   req <- as.environment(list(...))
   req$REQUEST_METHOD <- toupper(verb)
   req$PATH_INFO <- path
@@ -13,5 +13,6 @@ make_req <- function(verb = "GET", path = "/", qs="", body="", args = c(), ...){
                          read = function(){ body },
                          rewind = function(){ length(body) })
   req$bodyRaw <- body
+  req$pr <- pr
   req
 }

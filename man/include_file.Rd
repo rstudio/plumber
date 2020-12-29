@@ -27,7 +27,7 @@ To disable the \code{Content-Type} header, set \code{content_type = NULL}.}
 \item{format}{Passed as the \code{output_format} to \code{rmarkdown::render}}
 }
 \description{
-Returns the file at the given path as the response.
+Returns the file at the given path as the response. If you want an endpoint to return a file as an attachment for user to download see \code{\link[=as_attachment]{as_attachment()}}.
 }
 \details{
 \code{include_html} will merely return the file with the proper

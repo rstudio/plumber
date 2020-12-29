@@ -32,7 +32,7 @@ Print debugging is an obvious starting point, but most developers eventually wis
 You can leverage `browser()` when developing your APIs locally by adding a `browser()` call in one of your filters or endpoints and then visiting your API in a client. This offers a powerful technique to use when you want to inspect multiple different variables or interact with the current state of things inside of your function. This is also a good way to get your hands dirty with Plumber and get better acquainted with how things behave at a low level. Consider the following API endpoint:
 
 ```r
-#' @get /
+#* @get /
 function(req, res){
   browser()
 

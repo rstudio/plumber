@@ -135,9 +135,12 @@ test_that("not producing an image produces an error", {
   })
 
   expect_output(
-    result <- root$call(make_req("GET", "/no_plot")),
+    result <- root$call(make_req("GET", "/no_plot", pr = root)),
     "device output file is missing"
   )
   expect_equal(result$status, 500)
+  if (!is.list(result$body)) {
+    result$body <- jsonlite::parse_json(result$body, simplifyVector = TRUE)
+  }
   expect_true(grepl("device output file is missing", result$body$message))
 })

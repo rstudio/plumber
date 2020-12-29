@@ -1,5 +1,5 @@
-#' @get /hello
-#' @serializer html
+#* @get /hello
+#* @serializer html
 function(){
   "<html><h1>hello world</h1></html>"
 }

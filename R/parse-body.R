@@ -149,12 +149,11 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
 #'
 #' @details
 #' When `parser` is evaluated, it should return a parser function.
-#' Parser matching is done first by `content-type` header matching on `fixed` then by using a
-#' regular expressions on `regex`. Note that plumber strip the header from `; charset*` to
-#' perform matching.
+#' Parser matching is done first by `content-type` header matching with `fixed` then by using
+#' regular expressions with `regex`. Note that plumber strips `; charset*` from `content-type` header before matching.
 #'
-#' There is a special case when no `content-type` header is
-#' provided that will use a [parser_json()] when it detects a `json` string.
+#' Plumber will try to use [parser_json()] (if available) when no `content-type` header is found and
+#' the request body starts with `{` or `[`.
 #'
 #' Functions signature should include `value`, `...` and
 #' possibly `content_type`, `filename`. Other parameters may be provided
@@ -347,20 +346,19 @@ make_parser <- function(aliases) {
 
 #' Plumber Parsers
 #'
-#' Parsers are used in Plumber to transform the raw body content received
-#' by a request to the API. Extra parameters may be provided to parser
-#' functions when adding the parser to plumber. This will allow for
+#' Parsers are used in Plumber to transform request body received
+#' by the API. Extra parameters may be provided to parser
+#' functions when enabling them on router. This will allow for
 #' non-default behavior.
 #'
-#' Parsers are optional. When unspecified, only the [parser_json()],
-#' [parser_octet()], [parser_form()] and [parser_text()] are available.
-#' You can use `@parser parser` tag to activate parsers per endpoint.
-#' Multiple parsers can be activated for the same endpoint using multiple `@parser parser` tags.
+#' Parsers are optional. When unspecified, only default endpoint parsers are enabled.
+#' You can use `@parser NAME` tag to enable parser on endpoint.
+#' Multiple parsers can be enabled on the same endpoint using multiple `@parser NAME` tags.
 #'
 #' User should be aware that `rds` parsing should only be done from a
 #' trusted source. Do not accept `rds` files blindly.
 #'
-#' See [registered_parsers()] for a list of registered parsers.
+#' See [registered_parsers()] for a list of registered parsers names.
 #'
 #' @param ... parameters supplied to the appropriate internal function
 #' @describeIn parsers Form query string parser

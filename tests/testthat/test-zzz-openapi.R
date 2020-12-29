@@ -327,3 +327,8 @@ test_that("no params plumber router still produces spec when there is a func par
   spec <- pr$getApiSpec()
   expect_equal(spec$paths$`/sum`$get$parameters[[1]]$name, "num")
 })
+
+test_that("Api spec can be set using a file path", {
+  pr <- pr() %>% pr_set_api_spec(test_path("files/openapi.yaml"))
+  expect_equal(pr$getApiSpec()$paths$`/health-check`$get$summary, " Determine if the API is running and listening as expected")
+})

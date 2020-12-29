@@ -12,16 +12,15 @@ pr_set_docs(pr, docs = getOption("plumber.docs", TRUE), ...)
 \item{docs}{a character value or a logical value.
 If using \code{\link[=options_plumber]{options_plumber()}}, the value must be set before initializing your Plumber router.}
 
-\item{...}{Other params to be passed to the \code{docs} functions.}
+\item{...}{Arguments for the visual documentation. See each visual documentation package for further details.}
 }
 \value{
 The Plumber router with the new docs settings.
 }
 \description{
 \code{docs} should be either a logical or a character value matching a registered visual documentation.
-When \code{TRUE} or a
-function, multiple handles will be added to \code{\link{Plumber}} object. OpenAPI json
-file will be served on paths \verb{/openapi.json} and \verb{/swagger.json}. Documentation
+Multiple handles will be added to \code{\link{Plumber}} object. OpenAPI json
+file will be served on paths \verb{/openapi.json}. Documentation
 will be served on paths \verb{/__docs__/index.html} and \verb{/__docs__/}.
 }
 \examples{

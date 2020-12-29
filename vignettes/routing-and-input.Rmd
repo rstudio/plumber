@@ -43,9 +43,9 @@ These map to the HTTP methods that an API client might send along with a request
 Note that a single endpoint can support multiple verbs. The following function would be used to service any incoming `GET`, `POST`, or `PUT` request to `/cars`.
 
 ```r
-#' @get /cars
-#' @post /cars
-#' @put /cars
+#* @get /cars
+#* @post /cars
+#* @put /cars
 function(){
   ...
 }
@@ -137,7 +137,7 @@ You can name these dynamic path elements however you'd like, but note that the n
 You can even do more complex dynamic routes like:
 
 ```r
-#' @get /user/<from>/connect/<to>
+#* @get /user/<from>/connect/<to>
 function(from, to){
   # Do something with the `from` and `to` variables...
 }
@@ -288,7 +288,7 @@ Some web browsers impose limitations on the length of a URL. Internet Explorer, 
 
 Another way to provide additional information inside an HTTP request is using the message body. Effectively, once a client specifies all the metadata about a request (the path it's trying to reach, some HTTP headers, etc.) it can then provide a message body. The maximum size of a request body depends largely on the technologies involved (client, proxies, etc.) but is typically at least 2MB -- much larger than a query string. This approach is most commonly seen with `PUT` and `POST` requests, though you could encounter it with other HTTP methods.
 
-Plumber will attempt to parse the request body in one using allowed [parsers](../reference/parsers.html). Any fields provided in the message body will be passed through as parameters to the function.
+Plumber will attempt to parse the request body in one using allowed [parsers](https://www.rplumber.io/reference/parsers.html). Any fields provided in the message body will be passed through as parameters to the function.
 
 #### Files handling note
 When dealing with binary parameters, Plumber will return a named list of raw vector. The names in the list are the original uploaded filenames. Raw values are binary content of each file.
@@ -306,7 +306,7 @@ e <- r$endpoints[[1]][[1]]
 code_chunk(json_serialize(e$exec(req=list(bodyRaw = charToRaw("id=123&name=Jennifer"), body=list(id = 123, name = "Jennifer"), args = list(id = 123, name = "Jennifer")), res = NULL)), "json")
 ```
 
-Alternatively, `curl --data '{"id":123, "name": "Jennifer"}' "http://localhost:8000/user"` (formatting the body as JSON) will have the same effect.
+Alternatively, `echo {"id":123, "name": "Jennifer"} > call.json & curl --data @call.json "http://localhost:8000/user" -H "content-type: application/json"` (formatting the body as JSON) will have the same effect.
 
 As demonstrated above, the raw request body is made available as `req$bodyRaw` and parsed request body is available as `req$body`.
 
