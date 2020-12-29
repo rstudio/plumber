@@ -13,6 +13,8 @@ plumber 1.0.0.9999 Development version
 
 ### Bug fixes
 
+* Ignore regular comments in block parsing (@meztez #718)
+
 * Block parsing comments, tags and responses ordering match plumber api ordering. (#722)
 
 * When calling `Plumber$handle()` and defining a new `PlumberEndpoint`, `...` will be checked for invalid names (@meztez, #677)
