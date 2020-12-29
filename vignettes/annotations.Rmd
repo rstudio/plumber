@@ -11,11 +11,11 @@ vignette: >
 source("_helpers.R")
 ```
 
-## Annotations {#annotations} 
+## Annotations {#annotations}
 
 Annotations are specially-structured comments used in your plumber file to create an API. A full annotation line starts with `#*` or `#'`, then the annotation keyword `@...`, any number of space characters followed by the content. It is recommended to use `#*` to differentiate them from `Roxygen2` annotations.
 
-## Global annotations {#global-annotations} 
+## Global annotations {#global-annotations}
 
 Global annotations can be used anywhere in your plumber file. They are independent from other annotations and do not require an expression.
 
@@ -61,7 +61,7 @@ pr() %>%
   })
 ```
 
-## Block annotations {#block-annotations} 
+## Block annotations {#block-annotations}
 
 A block of annotations is a combination of annotations that create either an [endpoint](./routing-and-input.html#endpoints), a [filter](./routing-and-input.html#filters), a [static file handler](./routing-and-input.html#static-file-handler) or a Plumber object modifier. Block annotations are always followed by an expression.
 
@@ -120,8 +120,8 @@ function(f) {
 text_handler <- function(name, age) { sprintf("%s is %i years old", name, age) }
 file_handler <- function(file) { as_attachment(file[[1]], names(file)[1]) }
 pr() %>%
-  pr_get(path = "/dyn/<name:str>/<age:[int]>/route", 
-         handler = text_handler, 
+  pr_get(path = "/dyn/<name:str>/<age:[int]>/route",
+         handler = text_handler,
          serializer = serializer_text(),
          parsers = "none",
          responses = list("200" = list(description = "A sentence"))) %>%
@@ -194,11 +194,11 @@ pr() %>%
   pr_static("/", "./files/static")
 ```
 
-### Plumber Object Modifier {#plumber-block-annotations}
+### Plumber Router Modifier {#plumber-block-annotations}
 
 Annotation | Arguments | Description/References
 -----------| --------- | ----------------------
-`@plumber` | None | Modify plumber router from plumber file. 
+`@plumber` | None | Modify plumber router from plumber file. The plumber router provided to the function **must** be returned.
 
 ##### Annotations example
 
