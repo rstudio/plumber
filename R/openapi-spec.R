@@ -23,7 +23,7 @@ endpointSpecification <- function(routerEndpointEntry, path = routerEndpointEntr
     # If we haven't already documented a path param, we should add it here.
     # FIXME: warning("Undocumented path parameters: ", paste0())
 
-    resps <- responsesSpecification(routerEndpointEntry$responses)
+    resps <- responsesSpecification(routerEndpointEntry)
 
     endptSpec <- list(
       summary = routerEndpointEntry$comments,
@@ -40,15 +40,44 @@ endpointSpecification <- function(routerEndpointEntry, path = routerEndpointEntr
 }
 
 defaultResponse <- list(
+  "200" = list(
+    description = "OK"
+  ),
+  "500" = list(
+    description = "Internal Server Error",
+    content = list("application/json" = list(schema = list(type = "string")))
+  ),
   "default" = list(
     description = "Default response."
   )
 )
-responsesSpecification <- function(resps){
-  if (is.null(resps) || is.na(resps)){
-    resps <- defaultResponse
-  } else if (!("default" %in% names(resps))){
-    resps <- c(resps, defaultResponse)
+responsesSpecification <- function(endpts){
+  if (!inherits(endpts, "PlumberEndpoint")) {
+    return(defaultResponse)
+  }
+  resps <- defaultResponse
+  if (is.list(endpts$responses)){
+    resps <- utils::modifyList(defaultResponse, endpts$responses)
+  }
+  for (resp in names(resps)) {
+    if (!length(resps[[resp]]$content)) {
+      ctype <- NULL
+      if (is.function(endpts$serializer)) {
+        ctype <- formals(endpts$serializer)$type
+        if (is.null(ctype)) {
+          ctype <- tryCatch({
+            get("type", envir =
+                  environment(get("serialize_fn", envir =
+                                    environment(endpts$serializer))))},
+            error = function(e) {NULL})
+        }
+      }
+      if (isTRUE(nchar(ctype) > 0)) {
+        ctype <- stri_split_regex(ctype, "[ ;]")[[1]][1]
+        schema <- list(type = ifelse(grepl("^text", ctype), "string", "object"))
+        resps[[resp]]$content <- setNames(list(list(schema = schema)), ctype)
+      }
+    }
   }
   resps
 }
