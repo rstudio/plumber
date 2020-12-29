@@ -1,6 +1,6 @@
-#' This is an example of an UNSAFE endpoint which
-#' does not sanitize user input
-#' @get /
+#* This is an example of an UNSAFE endpoint which
+#* does not sanitize user input
+#* @get /
 function(file) {
 
   # An example of an UNSAFE endpoint.

@@ -7,7 +7,7 @@ requireRmd <- function(fun_name){
 
 #' Send File Contents as Response
 #'
-#' Returns the file at the given path as the response.
+#' Returns the file at the given path as the response. If you want an endpoint to return a file as an attachment for user to download see [as_attachment()].
 #'
 #' \code{include_html} will merely return the file with the proper
 #' \code{content_type} for HTML. \code{include_md} and \code{include_rmd} will

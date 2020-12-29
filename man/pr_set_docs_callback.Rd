@@ -16,8 +16,7 @@ The Plumber router with the new docs callback setting.
 }
 \description{
 When set, it will be called with a character string corresponding
-to the API visual documentation url. This allows RStudio to open \code{swagger} docs when a
-Plumber router \code{\link[=pr_run]{pr_run()}} method.
+to the API visual documentation url. This allows RStudio to locate visual documentation.
 }
 \details{
 If using \code{\link[=options_plumber]{options_plumber()}}, the value must be set before initializing your Plumber router.

@@ -237,6 +237,9 @@ test_that("async hooks change value being passed through",  {
 context("Promise - errors are handled")
 
 expect_route_error <- function(response, txt) {
+  if (!is.list(response$body)) {
+    response$body <- jsonlite::parse_json(response$body, simplifyVector = TRUE)
+  }
   expect_equal(response$body$error, "500 - Internal server error")
   expect_true(grepl(txt, response$body$message))
 }

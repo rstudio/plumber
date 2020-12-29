@@ -76,6 +76,7 @@ serializer_identity <- function(){
 #' @return Object with class `"plumber_attachment"`
 #' @export
 #' @examples
+#' \dontrun{
 #' # plumber.R
 #'
 #' #' @get /data
@@ -83,6 +84,7 @@ serializer_identity <- function(){
 #' function() {
 #'   # will cause the file to be saved as `iris.csv`, not `data` or `data.csv`
 #'   as_attachment(iris, "iris.csv")
+#' }
 #' }
 as_attachment <- function(value, filename = NULL) {
   stopifnot(is.character(filename) || is.null(filename))
@@ -103,7 +105,7 @@ as_attachment <- function(value, filename = NULL) {
 #'
 #' Serializers are used in Plumber to transform the R object produced by a
 #' filter/endpoint into an HTTP response that can be returned to the client. See
-#' [here](https://book.rplumber.io/articles/rendering-output.html#serializers-1) for
+#' [here](https://www.rplumber.io/articles/rendering-output.html#serializers-1) for
 #' more details on Plumber serializers and how to customize their behavior.
 #' @describeIn serializers Add a static list of headers to each return value. Will add `Content-Disposition` header if a value is the result of `as_attachment()`.
 #' @param ... extra arguments supplied to respective internal serialization function.

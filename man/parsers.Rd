@@ -47,21 +47,20 @@ parser_none()
 \item{read_fn}{function used to read a the content of a file. Ex: \code{\link[=readRDS]{readRDS()}}}
 }
 \description{
-Parsers are used in Plumber to transform the raw body content received
-by a request to the API. Extra parameters may be provided to parser
-functions when adding the parser to plumber. This will allow for
+Parsers are used in Plumber to transform request body received
+by the API. Extra parameters may be provided to parser
+functions when enabling them on router. This will allow for
 non-default behavior.
 }
 \details{
-Parsers are optional. When unspecified, only the \code{\link[=parser_json]{parser_json()}},
-\code{\link[=parser_octet]{parser_octet()}}, \code{\link[=parser_form]{parser_form()}} and \code{\link[=parser_text]{parser_text()}} are available.
-You can use \verb{@parser parser} tag to activate parsers per endpoint.
-Multiple parsers can be activated for the same endpoint using multiple \verb{@parser parser} tags.
+Parsers are optional. When unspecified, only default endpoint parsers are enabled.
+You can use \verb{@parser NAME} tag to enable parser on endpoint.
+Multiple parsers can be enabled on the same endpoint using multiple \verb{@parser NAME} tags.
 
 User should be aware that \code{rds} parsing should only be done from a
 trusted source. Do not accept \code{rds} files blindly.
 
-See \code{\link[=registered_parsers]{registered_parsers()}} for a list of registered parsers.
+See \code{\link[=registered_parsers]{registered_parsers()}} for a list of registered parsers names.
 }
 \section{Functions}{
 \itemize{

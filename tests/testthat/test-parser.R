@@ -71,6 +71,7 @@ test_that("parsers work", {
   expect_equal(r$routes$all$parsers, make_parser("all"))
   expect_equal(r$routes$default$parsers, NULL)
   expect_equal(r$routes$json$parsers, make_parser("json"))
-  expect_equal(r$routes$mixed$parsers, make_parser(c("json", "form")))
+  # Paths order follow original code
+  expect_equal(r$routes$mixed$parsers, make_parser(c("form", "json")))
   expect_equal(r$routes$repeated$parsers, make_parser("json"))
 })

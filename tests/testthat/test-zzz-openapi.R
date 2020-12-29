@@ -342,3 +342,8 @@ test_that("Response content type set with serializer", {
   expect_equal(spec$paths$`/json`$get$responses$`200`$content, list("application/json" = list(schema = list(type = "object"))))
   expect_equal(spec$paths$`/csv`$get$responses$`200`$content, list("text/csv" = list(schema = list(type = "string"))))
 })
+
+test_that("Api spec can be set using a file path", {
+  pr <- pr() %>% pr_set_api_spec(test_path("files/openapi.yaml"))
+  expect_equal(pr$getApiSpec()$paths$`/health-check`$get$summary, " Determine if the API is running and listening as expected")
+})

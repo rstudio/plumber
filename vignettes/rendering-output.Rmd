@@ -31,7 +31,7 @@ Name | Example | Description
 ---- | ------- | -----------------------
 `setCookie` | `res$setCookie("foo", "bar")` | Sets an HTTP cookie on the client
 `removeCookie` | `res$removeCookie("foo")` | Removes an HTTP cookie
-`setHeader` | `res$setHeader(foo = "bar")` | Sets a header that's available in `res$headers`
+`setHeader` | `res$setHeader("foo", "bar")` | Sets an HTTP header
 `toResponse` | `res$toResponse()` | Renders the response object as a list containing `status`, `headers`, and `body`.
 
 The other methods (`clone`, `initialize`, and `serializer`) should not be directly invoked on the response object.
@@ -44,6 +44,12 @@ JSON is not appropriate for every situation, however. If you want your API to re
 
 By default, Plumber serializes objects into JSON via the `jsonlite` R package. However, there are a variety of other serializers that are built in to the package.
 
+You can also pass arguments to certain serializers to modify their behavior like in the example below.
+```r
+#* @serializer json list(na="string")
+```
+See the [Serialization](https://www.rplumber.io/reference/serializers.html) article for details.
+
 Annotation | Content Type | Description/References
 ---------- | ------------ | ---------------------
 `@serializer contentType` | (user supplied) | Send response with a particular `Content-Type` header
@@ -55,24 +61,17 @@ Annotation | Content Type | Description/References
 `@serializer tsv` | `text/tab-separated-values` | Object processed with `readr::format_tsv()`
 `@serializer feather` | `application/feather` | Object processed with `feather::write_feather()`
 `@serializer yaml` | `text/x-yaml` | Object processed with `yaml::as_yaml()`
-
 `@serializer htmlwidget` | `text/html; charset=utf-8` | `htmlwidgets::saveWidget()`
-
 `@serializer text` | `text/plain` | Text output processed by `as.character()`
 `@serializer format` | `text/plain` | Text output processed by `format()`
 `@serializer print` | `text/plain` | Text output captured from `print()`
 `@serializer cat` | `text/plain` | Text output captured from `cat()`
-
 `@serializer jpeg` | `image/jpeg` | Images created with `jpeg()`
 `@serializer png` | `image/png` | Images created with `png()`
 `@serializer svg` | `image/svg` | Images created with `svg()`
 `@serializer bmp` | `image/bmp` | Images created with `bmp()`
 `@serializer tiff` | `image/tiff` | Images created with `tiff()`
 `@serializer pdf` | `application/pdf` | PDF File created with `pdf()`
-
-
-
-
 
 
 ### Boxed vs Unboxed JSON
