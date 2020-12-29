@@ -9,7 +9,7 @@ Package Plumber Router
 Package Plumber Router
 }
 \details{
-Routers are the core request handler in plumber. A router is responsible for
+Routers are the core request handler in \pkg{plumber}. A router is responsible for
 taking an incoming request, submitting it through the appropriate filters and
 eventually to a corresponding endpoint, if one is found.
 
@@ -116,18 +116,25 @@ pr$setErrorHandler(function(req, res, err) {
 \section{Super class}{
 \code{\link[plumber:Hookable]{plumber::Hookable}} -> \code{Plumber}
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{flags}}{For internal use only}
+}
+\if{html}{\out{</div>}}
+}
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{\code{endpoints}}{plumber router endpoints read-only}
+\item{\code{endpoints}}{Plumber router endpoints read-only}
 
-\item{\code{filters}}{plumber router filters read-only}
+\item{\code{filters}}{Plumber router filters read-only}
 
-\item{\code{mounts}}{plumber router mounts read-only}
+\item{\code{mounts}}{Plumber router mounts read-only}
 
-\item{\code{environment}}{plumber router environment read-only}
+\item{\code{environment}}{Plumber router environment read-only}
 
-\item{\code{routes}}{plumber router routes read-only}
+\item{\code{routes}}{Plumber router routes read-only}
 }
 \if{html}{\out{</div>}}
 }
@@ -204,7 +211,7 @@ A new \code{Plumber} router
 \if{html}{\out{<a id="method-run"></a>}}
 \if{latex}{\out{\hypertarget{method-run}{}}}
 \subsection{Method \code{run()}}{
-Start a server using \code{plumber} object.
+Start a server using \code{Plumber} object.
 
 See also: \code{\link[=pr_run]{pr_run()}}
 \subsection{Usage}{

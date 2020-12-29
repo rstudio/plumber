@@ -30,7 +30,7 @@ defaultPlumberFilters <- list(
 
 #' Package Plumber Router
 #'
-#' Routers are the core request handler in plumber. A router is responsible for
+#' Routers are the core request handler in \pkg{plumber}. A router is responsible for
 #' taking an incoming request, submitting it through the appropriate filters and
 #' eventually to a corresponding endpoint, if one is found.
 #'
@@ -54,6 +54,7 @@ Plumber <- R6Class(
   "Plumber",
   inherit = Hookable,
   public = list(
+
     #' @description Create a new `Plumber` router
     #'
     #' See also [plumb()], [pr()]
@@ -131,7 +132,7 @@ Plumber <- R6Class(
       }
 
     },
-    #' @description Start a server using `plumber` object.
+    #' @description Start a server using `Plumber` object.
     #'
     #' See also: [pr_run()]
     #' @param host a string that is a valid IPv4 or IPv6 address that is owned by
@@ -179,7 +180,7 @@ Plumber <- R6Class(
             # $setDocs() has been called (other than during initialization).
             # Believe that it is the correct behavior
             # Warn about updating the run method
-            lifecycle::deprecate_warn("1.0.0", "run(swagger = )", details = "The plumber docs have already been set. Ignoring `swagger` parameter.")
+            lifecycle::deprecate_warn("1.0.0", "run(swagger = )", details = "The Plumber docs have already been set. Ignoring `swagger` parameter.")
           }
         }
       }
@@ -1020,23 +1021,23 @@ Plumber <- R6Class(
       self$getApiSpec()
     }
   ), active = list(
-    #' @field endpoints plumber router endpoints read-only
+    #' @field endpoints Plumber router endpoints read-only
     endpoints = function(){
       private$ends
     },
-    #' @field filters plumber router filters read-only
+    #' @field filters Plumber router filters read-only
     filters = function(){
       private$filts
     },
-    #' @field mounts plumber router mounts read-only
+    #' @field mounts Plumber router mounts read-only
     mounts = function(){
       private$mnts
     },
-    #' @field environment plumber router environment read-only
+    #' @field environment Plumber router environment read-only
     environment = function() {
       private$envir
     },
-    #' @field routes plumber router routes read-only
+    #' @field routes Plumber router routes read-only
     routes = function(){
       paths <- list()
 
@@ -1154,9 +1155,9 @@ Plumber <- R6Class(
       }
       if (!noPreempt && ! preempt %in% filterNames){
         if (!is.null(ep$lines)){
-          stopOnLine(ep$lines[1], private$fileLines[ep$lines[1]], paste0("The given @preempt filter does not exist in this plumber router: '", preempt, "'"))
+          stopOnLine(ep$lines[1], private$fileLines[ep$lines[1]], paste0("The given @preempt filter does not exist in this Plumber router: '", preempt, "'"))
         } else {
-          stop(paste0("The given preempt filter does not exist in this plumber router: '", preempt, "'"))
+          stop(paste0("The given preempt filter does not exist in this Plumber router: '", preempt, "'"))
         }
       }
 
