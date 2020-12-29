@@ -1,13 +1,15 @@
 plumber 1.0.0.9999 Development version
 --------------------------------------------------------------------------------
 
+### Breaking changes
+
+* Force json serialization of endpoint error responses instead of using endpoint serializer. (@meztez, #689)
+
 ### New features
 
 * Passing `edit = TRUE` to `plumb_api()` will open the API source file (#699)
 
-### Breaking changes
-
-* Force json serialization of endpoint error responses instead of using endpoint serializer. (@meztez, #689)
+* OpenAPI Specification can be set using a file path. (@meztez #696)
 
 ### Bug fixes
 
