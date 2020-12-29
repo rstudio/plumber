@@ -17,6 +17,8 @@ plumber 1.0.0.9999 Development version
 
 * `/__swagger__/` now always redirect to `/__docs__/`, even when Swagger isn't the selected interface. Use `options(plumber.legacyRedirects = FALSE)` to disable this behavior (@blairj09 #694)
 
+* Fixed `available_apis()` bug where all packages printed all available APIs (@meztez #708)
+
 
 plumber 1.0.0
 --------------------------------------------------------------------------------
