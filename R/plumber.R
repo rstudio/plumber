@@ -496,7 +496,7 @@ Plumber <- R6Class(
       }
       printNode(self$routes, "", prefix, TRUE)
 
-      invisible(self)
+      invisible(self) # actually needs to be invisible
     },
     #' @description Serve a request
     #' @param req request object
@@ -1144,7 +1144,8 @@ Plumber <- R6Class(
     addFilterInternal = function(filter){
       # Create a new filter and add it to the router
       private$filts <- c(private$filts, filter)
-      invisible(self)
+
+      self
     },
     addEndpointInternal = function(ep, preempt){
       noPreempt <- missing(preempt) || is.null(preempt)

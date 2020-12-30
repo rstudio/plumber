@@ -20,8 +20,8 @@ A Plumber router with the supplied router mounted
 Plumber routers can be “nested” by mounting one into another
 using the \code{mount()} method. This allows you to compartmentalize your API
 by paths which is a great technique for decomposing large APIs into smaller
-files. This function mutates the Plumber router (\code{\link[=pr]{pr()}}) in place, but
-also invisibly returns the updated router.
+files. This function mutates the Plumber router (\code{\link[=pr]{pr()}}) in place and
+returns the updated router.
 }
 \examples{
 \dontrun{

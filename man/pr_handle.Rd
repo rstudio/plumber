@@ -53,7 +53,7 @@ functions are implemented for the following HTTP methods:
 \item \code{PUT}
 \item \code{DELETE}
 \item \code{HEAD}
-Each function mutates the Plumber router in place, but also invisibly returns
+Each function mutates the Plumber router in place and returns
 the updated router.
 }
 }
