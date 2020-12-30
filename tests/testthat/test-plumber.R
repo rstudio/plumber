@@ -371,9 +371,43 @@ test_that("handle invokes correctly", {
 
 })
 
+test_that("trailing slashes are redirected", {
 
+  pr <- pr() %>%
+    pr_get("/get/", function(a) a) %>%
+    pr_post("/post/", function(a) a) %>%
+    pr_mount(
+      "/mnt",
+      pr() %>%
+        pr_get("/", function(a) a)
+    )
 
+  with_options(list(plumber.redirect = FALSE), {
+    res <- pr$call(make_req("GET", "/get", "?a=1"))
+    expect_equal(res$status, 404)
+
+    res <- pr$call(make_req("POST", "/post", "?a=1"))
+    expect_equal(res$status, 404)
+
+    res <- pr$call(make_req("GET", "/mnt", "?a=1"))
+    expect_equal(res$status, 404)
+  })
+
+  with_options(list(plumber.redirect = TRUE), {
+    res <- pr$call(make_req("GET", "/get", "?a=1"))
+    expect_equal(res$status, 307)
+    expect_equal(res$headers$Location, "/get/?a=1")
+
+    res <- pr$call(make_req("POST", "/post", "?a=1"))
+    expect_equal(res$status, 307)
+    expect_equal(res$headers$Location, "/post/?a=1")
+
+    res <- pr$call(make_req("GET", "/mnt", "?a=1"))
+    expect_equal(res$status, 307)
+    expect_equal(res$headers$Location, "/mnt/?a=1")
+  })
 })
+
 
 test_that("No 405 on same path, different verb", {
 
