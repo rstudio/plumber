@@ -395,8 +395,8 @@
 <code class="sourceCode R"><span class="va">text_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span><span class="st">"%s is %i years old"</span>, <span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">}</span>
 <span class="va">file_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="../reference/as_attachment.html">as_attachment</a></span><span class="op">(</span><span class="va">file</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">}</span>
 <span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/dyn/&lt;name:str&gt;/&lt;age:[int]&gt;/route"</span>, 
-         handler <span class="op">=</span> <span class="va">text_handler</span>, 
+  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/dyn/&lt;name:str&gt;/&lt;age:[int]&gt;/route"</span>,
+         handler <span class="op">=</span> <span class="va">text_handler</span>,
          serializer <span class="op">=</span> <span class="fu"><a href="../reference/serializer_headers.html">serializer_text</a></span><span class="op">(</span><span class="op">)</span>,
          parsers <span class="op">=</span> <span class="st">"none"</span>,
          responses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"200"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>description <span class="op">=</span> <span class="st">"A sentence"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -494,8 +494,13 @@
 </div>
 <div id="plumber-block-annotations" class="section level3">
 <h3 class="hasAnchor">
-<a href="#plumber-block-annotations" class="anchor"></a>Plumber Object Modifier</h3>
+<a href="#plumber-block-annotations" class="anchor"></a>Plumber Router Modifier</h3>
 <table class="table">
+<colgroup>
+<col width="26%">
+<col width="21%">
+<col width="52%">
+</colgroup>
 <thead><tr class="header">
 <th>Annotation</th>
 <th>Arguments</th>
@@ -504,7 +509,7 @@
 <tbody><tr class="odd">
 <td><code>@plumber</code></td>
 <td>None</td>
-<td>Modify plumber router from plumber file.</td>
+<td>Modify plumber router from plumber file. The plumber router provided to the function <strong>must</strong> be returned.</td>
 </tr></tbody>
 </table>
 <div id="annotations-example-4" class="section level5">

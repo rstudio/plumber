@@ -177,16 +177,17 @@
 <h3 class="hasAnchor">
 <a href="#breaking-changes" class="anchor"></a>Breaking changes</h3>
 <ul>
-<li>Force json serialization of endpoint error responses instead of using endpoint serializer. (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/689'>#689</a>)</li>
+<li><p>Force json serialization of endpoint error responses instead of using endpoint serializer. (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/689'>#689</a>)</p></li>
+<li><p>When plumbing a Plumber file and using a Plumber router modifier (<code>#* <a href='https://github.com/plumber'>@plumber</a></code>), an error will be thrown if the original router is not returned. (<a href='https://github.com/rstudio/plumber/issues/738'>#738</a>)</p></li>
 </ul>
 </div>
 <div id="new-features" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h3>
 <ul>
-<li><p>Guess OpenApi response content type from serializer (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/684'>#684</a>)</p></li>
-<li><p>Passing <code>edit = TRUE</code> to <code><a href="../reference/plumb_api.html">plumb_api()</a></code> will open the API source file (<a href='https://github.com/rstudio/plumber/issues/699'>#699</a>)</p></li>
-<li><p>Allow for spaces in <code>@apiTag</code> and <code>@tag</code> when tag is surrended by single or double quotes (<a href='https://github.com/rstudio/plumber/issues/685'>#685</a>)</p></li>
+<li><p>Guess OpenApi response content type from serializer. (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/684'>#684</a>)</p></li>
+<li><p>Passing <code>edit = TRUE</code> to <code><a href="../reference/plumb_api.html">plumb_api()</a></code> will open the API source file. (<a href='https://github.com/rstudio/plumber/issues/699'>#699</a>)</p></li>
+<li><p>Allow for spaces in <code>@apiTag</code> and <code>@tag</code> when tag is surrended by single or double quotes. (<a href='https://github.com/rstudio/plumber/issues/685'>#685</a>)</p></li>
 <li><p>OpenAPI Specification can be set using a file path. (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/696'>#696</a>)</p></li>
 </ul>
 </div>
@@ -196,10 +197,11 @@
 <ul>
 <li><p>Ignore regular comments in block parsing (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/718'>#718</a>)</p></li>
 <li><p>Block parsing comments, tags and responses ordering match plumber api ordering. (<a href='https://github.com/rstudio/plumber/issues/722'>#722</a>)</p></li>
-<li><p>When calling <code>Plumber$handle()</code> and defining a new <code>PlumberEndpoint</code>, <code>...</code> will be checked for invalid names (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/677'>#677</a>)</p></li>
-<li><p><code>/__swagger__/</code> now always redirect to <code>/__docs__/</code>, even when Swagger isn’t the selected interface. Use <code><a href="https://rdrr.io/r/base/options.html">options(plumber.legacyRedirects = FALSE)</a></code> to disable this behavior (<a href='https://github.com/blairj09'>@blairj09</a> <a href='https://github.com/rstudio/plumber/issues/694'>#694</a>)</p></li>
-<li><p>Fixed <code><a href="../reference/plumb_api.html">available_apis()</a></code> bug where all packages printed all available APIs (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/708'>#708</a>)</p></li>
-<li><p>Fix Plumber <code>$routes</code> resolution bugs. Also return routes in lexicographical order. (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/702'>#702</a>)</p></li>
+<li><p>When calling <code>Plumber$handle()</code> and defining a new <code>PlumberEndpoint</code>, <code>...</code> will be checked for invalid names. (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/677'>#677</a>)</p></li>
+<li><p><code>/__swagger__/</code> now always redirect to <code>/__docs__/</code>, even when Swagger isn’t the selected interface. Use <code><a href="https://rdrr.io/r/base/options.html">options(plumber.legacyRedirects = FALSE)</a></code> to disable this behavior. (<a href='https://github.com/blairj09'>@blairj09</a> <a href='https://github.com/rstudio/plumber/issues/694'>#694</a>)</p></li>
+<li><p>Fixed <code><a href="../reference/plumb_api.html">available_apis()</a></code> bug where all packages printed all available APIs. (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/708'>#708</a>)</p></li>
+<li><p>Fixed Plumber <code>$routes</code> resolution bugs. Routes are now returned in lexicographical order. (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/702'>#702</a>)</p></li>
+<li><p>Plumber will now display a circular reference if one is found while printing. (<a href='https://github.com/rstudio/plumber/issues/738'>#738</a>)</p></li>
 </ul>
 </div>
 </div>

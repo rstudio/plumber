@@ -182,7 +182,7 @@ Package Plumber Router" />
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Routers are the core request handler in plumber. A router is responsible for
+    <p>Routers are the core request handler in <span class="pkg">plumber</span>. A router is responsible for
 taking an incoming request, submitting it through the appropriate filters and
 eventually to a corresponding endpoint, if one is found.</p>
 <p>See the <a href='https://www.rplumber.io/articles/programmatic-usage.html'>Programmatic Usage</a> article for additional
@@ -203,18 +203,24 @@ details on the methods available on this object.</p>
     <h2 class="hasAnchor" id="super-class"><a class="anchor" href="#super-class"></a>Super class</h2>
 
     <p><code><a href='Hookable.html'>plumber::Hookable</a></code> -&gt; <code>Plumber</code></p>
+    <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
+
+    <p><div class="r6-fields"></p><dl>
+<dt><code>flags</code></dt><dd><p>For internal use only</p></dd>
+
+</dl><p></div></p>
     <h2 class="hasAnchor" id="active-bindings"><a class="anchor" href="#active-bindings"></a>Active bindings</h2>
 
     <p><div class="r6-active-bindings"></p><dl>
-<dt><code>endpoints</code></dt><dd><p>plumber router endpoints read-only</p></dd>
+<dt><code>endpoints</code></dt><dd><p>Plumber router endpoints read-only</p></dd>
 
-<dt><code>filters</code></dt><dd><p>plumber router filters read-only</p></dd>
+<dt><code>filters</code></dt><dd><p>Plumber router filters read-only</p></dd>
 
-<dt><code>mounts</code></dt><dd><p>plumber router mounts read-only</p></dd>
+<dt><code>mounts</code></dt><dd><p>Plumber router mounts read-only</p></dd>
 
-<dt><code>environment</code></dt><dd><p>plumber router environment read-only</p></dd>
+<dt><code>environment</code></dt><dd><p>Plumber router environment read-only</p></dd>
 
-<dt><code>routes</code></dt><dd><p>plumber router routes read-only</p></dd>
+<dt><code>routes</code></dt><dd><p>Plumber router routes read-only</p></dd>
 
 </dl><p></div></p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
@@ -280,7 +286,7 @@ details on the methods available on this object.</p>
 <p>A new <code>Plumber</code> router</p>
 <p><hr>
 <a id="method-run"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>run()</code></h3>
-<p>Start a server using <code>plumber</code> object.</p>
+<p>Start a server using <code>Plumber</code> object.</p>
 <p>See also: <code><a href='pr_run.html'>pr_run()</a></code></p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Plumber</span><span class='op'>$</span><span class='fu'>run</span><span class='op'>(</span>
   host <span class='op'>=</span> <span class='st'>"127.0.0.1"</span>,
