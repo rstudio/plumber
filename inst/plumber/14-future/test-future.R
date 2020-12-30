@@ -69,7 +69,7 @@ cat(readLines(log_file), sep = "\n")
 }))
 # --------------------------
 
-## Sample output using future::plan(future::multiprocess(workers = 2)) # only two cores
+## Sample output using future::plan(future::multisession(workers = 2)) # only two workers
 # --START route requests
 # "/sync; 2019-10-07 13:11:06; pid:82424" - 1
 # "/sync; 2019-10-07 13:11:07; pid:82424" - 3
@@ -88,7 +88,7 @@ cat(readLines(log_file), sep = "\n")
 
 # --------------------------
 
-## Sample output using future::plan("multiprocess") # use all available cores
+## Sample output using future::plan("multisession") # a worker for each core
 # --START route requests
 # "/sync; 2019-10-07 13:16:22; pid:82424" - 1
 # "/sync; 2019-10-07 13:16:23; pid:82424" - 3
