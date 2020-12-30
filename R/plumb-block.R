@@ -303,18 +303,35 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr)
     pr$mount(path, stat)
 
   } else if (!is.null(block$routerModifier)) {
-    if (is.expression(expr)){
+    if (is.expression(expr)) {
       func <- tryCatch({
         eval(expr, envir)
       }, error = function(e) {
         stopOnLine(lineNum, file[lineNum], e)
       })
-      if (is.function(func)) {
-        func(pr)
-        return()
+
+      if (!is.function(func)) {
+        stopOnLine(lineNum, file[lineNum], "Invalid expression for @plumber tag, please use the form `function(pr) { }`.")
+      }
+
+      # Use time as an ID
+      # Creating a new pr() takes at least a millisec
+      pr_id <- as.numeric(Sys.time())
+      pr$flags$id <- pr_id
+      on.exit({
+        pr$flags$id <- NULL
+      }, add = TRUE)
+
+      # process func
+      func_ret <- func(pr)
+
+      if (inherits(func_ret, "Plumber")) {
+        func_ret_id <- func_ret$flags$id
+        if (!identical(pr_id, func_ret_id)) {
+          stopOnLine(lineNum, file[lineNum], "Plumber object returned is not the same as the one provided.")
+        }
       }
     }
-    stopOnLine(lineNum, file[lineNum], "Invalid expression for @plumber tag, please use the form `function(pr) { }`.")
   } else {
     tryCatch({
       eval(expr, envir)
@@ -322,4 +339,8 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr)
       stopOnLine(lineNum, file[lineNum], e)
     })
   }
+
+  # Show that we are returning nothing
+  # Only modify pr in place
+  return()
 }

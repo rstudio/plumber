@@ -5,12 +5,14 @@ plumber 1.0.0.9999 Development version
 
 * Force json serialization of endpoint error responses instead of using endpoint serializer. (@meztez, #689)
 
+* When plumbing a Plumber file and using a Plumber router modifier (`#* @plumber`), an error will be thrown if the original router is not returned. (#738)
+
 ### New features
 
-* Guess OpenApi response content type from serializer (@meztez #684)
+* Guess OpenApi response content type from serializer. (@meztez #684)
 
-* Passing `edit = TRUE` to `plumb_api()` will open the API source file (#699)
-* Allow for spaces in `@apiTag` and `@tag` when tag is surrended by single or double quotes (#685)
+* Passing `edit = TRUE` to `plumb_api()` will open the API source file. (#699)
+* Allow for spaces in `@apiTag` and `@tag` when tag is surrended by single or double quotes. (#685)
 
 * OpenAPI Specification can be set using a file path. (@meztez #696)
 
@@ -20,13 +22,16 @@ plumber 1.0.0.9999 Development version
 
 * Block parsing comments, tags and responses ordering match plumber api ordering. (#722)
 
-* When calling `Plumber$handle()` and defining a new `PlumberEndpoint`, `...` will be checked for invalid names (@meztez, #677)
+* When calling `Plumber$handle()` and defining a new `PlumberEndpoint`, `...` will be checked for invalid names. (@meztez, #677)
 
-* `/__swagger__/` now always redirect to `/__docs__/`, even when Swagger isn't the selected interface. Use `options(plumber.legacyRedirects = FALSE)` to disable this behavior (@blairj09 #694)
+* `/__swagger__/` now always redirect to `/__docs__/`, even when Swagger isn't the selected interface. Use `options(plumber.legacyRedirects = FALSE)` to disable this behavior. (@blairj09 #694)
 
-* Fixed `available_apis()` bug where all packages printed all available APIs (@meztez #708)
+* Fixed `available_apis()` bug where all packages printed all available APIs. (@meztez #708)
 
-* Fix Plumber `$routes` resolution bugs. Also return routes in lexicographical order. (@meztez #702)
+* Fixed Plumber `$routes` resolution bugs. Routes are now returned in lexicographical order. (@meztez #702)
+
+* Plumber will now display a circular reference if one is found while printing. (#738)
+
 
 plumber 1.0.0
 --------------------------------------------------------------------------------

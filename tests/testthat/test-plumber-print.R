@@ -93,3 +93,21 @@ test_that("prints correctly", {
 
   expect_equal(printed, expected_output)
 })
+
+
+test_that("prints recursion is detected", {
+  a <- pr()
+  b <- pr()
+
+  a$mount("B", b)
+  b$mount("A", a)
+
+  printed <- capture.output(print(a))
+  printed2 <- capture.output(print(a))
+  printed3 <- capture.output(print(b))
+
+  expect_match(printed, "Circular Plumber router definition detected", all = FALSE)
+  expect_match(printed3, "Circular Plumber router definition detected", all = FALSE)
+  expect_equal(printed, printed2)
+
+})
