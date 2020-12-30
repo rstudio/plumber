@@ -7,7 +7,7 @@ PlumberResponse <- R6Class(
     },
     status = 200L,
     body = NULL,
-    headers = list(),
+    headers = stats::setNames(list(), character()),
     serializer = NULL,
     setHeader = function(name, value){
       he <- list()
