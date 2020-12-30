@@ -51,7 +51,7 @@ pr <- function(file = NULL,
 #' * `PUT`
 #' * `DELETE`
 #' * `HEAD`
-#' Each function mutates the Plumber router in place, but also invisibly returns
+#' Each function mutates the Plumber router in place and returns
 #' the updated router.
 #'
 #' @template param_pr
@@ -206,8 +206,8 @@ pr_head <- function(pr,
 #' Plumber routers can be “nested” by mounting one into another
 #' using the `mount()` method. This allows you to compartmentalize your API
 #' by paths which is a great technique for decomposing large APIs into smaller
-#' files. This function mutates the Plumber router ([pr()]) in place, but
-#' also invisibly returns the updated router.
+#' files. This function mutates the Plumber router ([pr()]) in place and
+#' returns the updated router.
 #'
 #' @param pr The host Plumber router.
 #' @param path A character string. Where to mount router.
