@@ -2,8 +2,8 @@
 library(promises)
 library(future)
 
-future::plan("multiprocess") # use all available cores
-# future::plan(future::multiprocess(workers = 2)) # only two cores
+future::plan("multisession") # a worker for each core
+# future::plan(future::multisession(workers = 2)) # only two workers
 
 # Quick manual test:
 # Within 10 seconds...
