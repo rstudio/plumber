@@ -18,6 +18,8 @@ plumber 1.0.0.9999 Development version
 
 ### Bug fixes
 
+* Fixed bug where `httpuv` would return a status of `500` with body `An exception occurred` if no headers were set on the response object. (#745)
+
 * Fixed bug where all `pr_*()` returned invisibly. Now all `pr_*()` methods will print the router if displayed in the console. (#740)
 
 * Ignore regular comments in block parsing (@meztez #718)
