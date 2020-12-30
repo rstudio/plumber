@@ -36,6 +36,8 @@ plumber 1.0.0.9999 Development version
 
 * Plumber will now display a circular reference if one is found while printing. (#738)
 
+* Changed `future::plan()` from `multiprocess` to `multisession` in example API `14-future` as "Strategy 'multiprocess' is deprecated in future (>= 1.20.0)". (#747)
+
 
 plumber 1.0.0
 --------------------------------------------------------------------------------
