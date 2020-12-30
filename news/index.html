@@ -195,6 +195,7 @@
 <h3 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>Bug fixes</h3>
 <ul>
+<li><p>Fixed bug where all <code>pr_*()</code> returned invisibly. Now all <code>pr_*()</code> methods will print the router if displayed in the console. (<a href='https://github.com/rstudio/plumber/issues/740'>#740</a>)</p></li>
 <li><p>Ignore regular comments in block parsing (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/718'>#718</a>)</p></li>
 <li><p>Block parsing comments, tags and responses ordering match plumber api ordering. (<a href='https://github.com/rstudio/plumber/issues/722'>#722</a>)</p></li>
 <li><p>When calling <code>Plumber$handle()</code> and defining a new <code>PlumberEndpoint</code>, <code>...</code> will be checked for invalid names. (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/677'>#677</a>)</p></li>
