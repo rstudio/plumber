@@ -19,7 +19,7 @@ test_that("prints correctly", {
 
   expected_output <- c(
     "# Plumber router with 2 endpoints, 4 filters, and 2 sub-routers.",
-    "# Call run() on this object to start the API.",
+    "# Use `pr_run()` on this object to start the API.",
     "├──[queryString]",
     "├──[body]",
     "├──[cookieParser]",
@@ -43,7 +43,7 @@ test_that("prints correctly", {
 
   expected_output2 <- c(
     "# Plumber router with 1 endpoint, 4 filters, and 0 sub-routers.",
-    "# Call run() on this object to start the API.",
+    "# Use `pr_run()` on this object to start the API.",
     "├──[queryString]",
     "├──[body]",
     "├──[cookieParser]",
@@ -74,7 +74,7 @@ test_that("prints correctly", {
 
   expected_output <- c(
     "# Plumber router with 0 endpoints, 4 filters, and 1 sub-router.",
-    "# Call run() on this object to start the API.",
+    "# Use `pr_run()` on this object to start the API.",
     "├──[queryString]",
     "├──[body]",
     "├──[cookieParser]",
