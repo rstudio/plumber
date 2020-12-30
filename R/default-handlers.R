@@ -10,12 +10,14 @@ defaultErrorHandler <- function(){
 
     li <- list()
 
+    # always serialize error with unboxed json
+    res$serializer <- serializer_unboxed_json()
+
     if (res$status == 200L){
       # The default is a 200. If that's still set, then we should probably override with a 500.
       # It's possible, however, than a handler set a 40x and then wants to use this function to
       # render an error, though.
       res$status <- 500
-      res$serializer <- serializer_unboxed_json()
       li$error <- "500 - Internal server error"
     } else {
       li$error <- "Internal error"
@@ -81,13 +83,15 @@ is_405 <- function(pr, path_to_find, verb_to_find) {
   # nothing found, not 405
   if (length(verbs_allowed) == 0) return(FALSE)
 
+  # is verb excluded?
   !(verb_to_find %in% verbs_allowed)
 }
 router_has_route <- function(pr, path_to_find, verb_to_find) {
   verbs_allowed <- allowed_verbs(pr, path_to_find)
 
-  # nothing found, not 405
+  # nothing found, not a route
   if (length(verbs_allowed) == 0) return(FALSE)
 
+  # is verb found?
   verb_to_find %in% verbs_allowed
 }
