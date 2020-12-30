@@ -12,7 +12,7 @@
 pr_set_serializer <- function(pr, serializer) {
   validate_pr(pr)
   pr$setSerializer(serializer)
-  invisible(pr)
+  pr
 }
 
 #' Set the default endpoint parsers for the router
@@ -32,7 +32,7 @@ pr_set_serializer <- function(pr, serializer) {
 pr_set_parsers <- function(pr, parsers) {
   validate_pr(pr)
   pr$setParsers(parsers)
-  invisible(pr)
+  pr
 }
 
 #' Set the handler that is called when the incoming request can't be served
@@ -62,7 +62,7 @@ pr_set_parsers <- function(pr, parsers) {
 pr_set_404 <- function(pr, fun) {
   validate_pr(pr)
   pr$set404Handler(fun)
-  invisible(pr)
+  pr
 }
 
 #' Set the error handler that is invoked if any filter or endpoint generates an
@@ -89,7 +89,7 @@ pr_set_404 <- function(pr, fun) {
 pr_set_error <- function(pr, fun) {
   validate_pr(pr)
   pr$setErrorHandler(fun)
-  invisible(pr)
+  pr
 }
 
 
@@ -121,7 +121,7 @@ pr_set_error <- function(pr, fun) {
 pr_set_debug <- function(pr, debug = interactive()) {
   validate_pr(pr)
   pr$setDebug(debug = debug)
-  invisible(pr)
+  pr
 }
 
 
@@ -184,7 +184,7 @@ pr_set_docs <- function(
 ) {
   validate_pr(pr)
   pr$setDocs(docs = docs, ...)
-  invisible(pr)
+  pr
 }
 
 
@@ -212,7 +212,7 @@ pr_set_docs_callback <- function(
 ) {
   validate_pr(pr)
   pr$setDocsCallback(callback = callback)
-  invisible(pr)
+  pr
 }
 
 
@@ -250,5 +250,5 @@ pr_set_api_spec <- function(
 ) {
   validate_pr(pr)
   pr$setApiSpec(api = api)
-  invisible(pr)
+  pr
 }

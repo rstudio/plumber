@@ -447,7 +447,8 @@ self_set_serializer <- function(self, serializer) {
   } else {
     self$serializer <- serializer
   }
-  invisible(self)
+
+  self
 }
 
 

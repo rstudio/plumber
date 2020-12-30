@@ -103,7 +103,7 @@ pr_handle <- function(pr,
             serializer = serializer,
             endpoint = endpoint,
             ...)
-  invisible(pr)
+  pr
 }
 
 #' @rdname pr_handle
@@ -232,7 +232,7 @@ pr_mount <- function(pr,
                      router) {
   validate_pr(pr)
   pr$mount(path = path, router = router)
-  invisible(pr)
+  pr
 }
 
 #' Register a hook
@@ -299,7 +299,7 @@ pr_hook <- function(pr,
                     handler) {
   validate_pr(pr)
   pr$registerHook(stage = stage, handler = handler)
-  invisible(pr)
+  pr
 }
 
 #' @rdname pr_hook
@@ -308,7 +308,7 @@ pr_hooks <- function(pr,
                      handlers) {
   validate_pr(pr)
   pr$registerHooks(handlers)
-  invisible(pr)
+  pr
 }
 
 #' Store session data in encrypted cookies.
@@ -425,7 +425,7 @@ pr_cookie <- function(pr,
   pr$registerHooks(
     session_cookie(key = key, name = name, expiration = expiration, http = http, secure = secure, same_site = same_site)
   )
-  invisible(pr)
+  pr
 }
 
 
@@ -460,7 +460,7 @@ pr_filter <- function(pr,
                       serializer) {
   validate_pr(pr)
   pr$filter(name = name, expr = expr, serializer = serializer)
-  invisible(pr)
+  pr
 }
 
 #' Start a server using `plumber` object
