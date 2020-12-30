@@ -413,7 +413,7 @@ Plumber <- R6Class(
                          as.character(length(self$mounts)), " sub-router", ifelse(length(self$mounts) == 1, "", "s"),".\n", sep=""))
 
       if(topLevel){
-        cat(prefix, crayon::silver("# Call run() on this object to start the API.\n"), sep="")
+        cat(prefix, crayon::silver("# Use `pr_run()` on this object to start the API.\n"), sep="")
       }
 
       # Filters
