@@ -60,7 +60,7 @@ function(pr) {
 }
 ```
 
-If we were to execute a request against `GET` request on `/stage_debug`
+If we were to execute a `GET` request on `/stage_debug`
 
 ```r
 #* @get /stage_debug
