@@ -35,12 +35,14 @@
 #' }
 #'
 #' @param port,docs,docs.callback,apiScheme,apiHost,apiPort,apiPath,apiURL,maxRequestSize,sharedSecret,legacyRedirects See details
+#' @param ... Ignored. Should be empty
 #' @return
 #' The complete, prior set of [options()] values.
 #' If a particular parameter is not supplied, it will return the current value.
 #' If no parameters are supplied, all returned values will be the current [options()] values.
 #' @export
 options_plumber <- function(
+  ...,
   port                 = getOption("plumber.port"),
   docs                 = getOption("plumber.docs"),
   docs.callback        = getOption("plumber.docs.callback"),
@@ -53,6 +55,8 @@ options_plumber <- function(
   sharedSecret         = getOption("plumber.sharedSecret"),
   legacyRedirects      = getOption("plumber.legacyRedirects")
 ) {
+  ellipsis::check_dots_empty()
+
   options(
     plumber.apiScheme = apiScheme,
     plumber.apiHost = apiHost,
