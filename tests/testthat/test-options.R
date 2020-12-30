@@ -39,7 +39,12 @@ test_that("all options used are `options_plumber()` parameters", {
   deprecated_options <-  c("plumber.swagger.url")
   plumber_options_used <- plumber_options_used[!(plumber_options_used %in% deprecated_options)]
   ### code to match formals
-  options_plumber_formals <- paste0("plumber.", sort(names(formals(options_plumber))))
+  formals_to_match <-
+    sort(setdiff(
+      names(formals(options_plumber)),
+      "..."
+    ))
+  options_plumber_formals <- paste0("plumber.", formals_to_match)
 
   expect_equal(
     plumber_options_used,
