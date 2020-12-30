@@ -1,10 +1,4 @@
-default404Handler <- function(req, res){
-  if (is_405(req$pr, req$PATH_INFO, req$REQUEST_METHOD)) {
-    res$status <- 405L
-    # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Allow
-    res$setHeader("Allow", paste(req$verbsAllowed, collapse = ", "))
-    return(list(error = "405 - Method Not Allowed"))
-  }
+default404Handler <- function(req, res) {
   res$status <- 404
   res$serializer <- serializer_unboxed_json()
   list(error="404 - Resource Not Found")

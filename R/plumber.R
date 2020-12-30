@@ -726,6 +726,20 @@ Plumber <- R6Class(
 
       # No endpoint could handle this request. 404
       notFoundStep <- function(...) {
+        # Try allowed verbs
+
+        if (isTRUE(getOption("plumber.allowMethods", TRUE))) {
+          # Notify about allowed verbs
+          if (is_405(req$pr, req$PATH_INFO, req$REQUEST_METHOD)) {
+            res$status <- 405L
+            # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Allow
+            res$setHeader("Allow", paste(req$verbsAllowed, collapse = ", "))
+            res$serializer <- serializer_unboxed_json()
+            return(list(error = "405 - Method Not Allowed"))
+          }
+        }
+
+        # Notify that there is no route found
         private$notFoundHandler(req = req, res = res)
       }
       steps <- append(steps, list(notFoundStep))
