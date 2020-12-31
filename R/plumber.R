@@ -220,6 +220,12 @@ Plumber <- R6Class(
     #' using the `mount()` method. This allows you to compartmentalize your API
     #' by paths which is a great technique for decomposing large APIs into smaller files.
     #'
+    #' Mounts with a more specific path name will be used over mounts with a
+    #' matching, but less specific path name. For example, let's say we have two
+    #' mounts: `/aaa` and `/aaa/bbb`. If a request came in for `/aaa/bbb/ccc`,
+    #' mount `/aaa/bbb` will be used to process the request. If a request came in
+    #' for `/aaa/ccc`, mount `/aaa` will be used to process the request.
+    #'
     #' See also: [pr_mount()]
     #' @param path a character string. Where to mount router.
     #' @param router a Plumber router. Router to be mounted.

@@ -23,6 +23,13 @@ by paths which is a great technique for decomposing large APIs into smaller
 files. This function mutates the Plumber router (\code{\link[=pr]{pr()}}) in place and
 returns the updated router.
 }
+\details{
+Mounts with a more specific path name will be used over mounts with a
+matching, but less specific path name. For example, let's say we have two
+mounts: \verb{/aaa} and \verb{/aaa/bbb}. If a request came in for \verb{/aaa/bbb/ccc},
+mount \verb{/aaa/bbb} will be used to process the request. If a request came in
+for \verb{/aaa/ccc}, mount \verb{/aaa} will be used to process the request.
+}
 \examples{
 \dontrun{
 pr1 <- pr() \%>\%
@@ -30,6 +37,7 @@ pr1 <- pr() \%>\%
 
 pr() \%>\%
   pr_get("/goodbye", function() "Goodbye") \%>\%
+  # By mounting pr1, we can make a GET request to `/hi/hello`
   pr_mount("/hi", pr1) \%>\%
   pr_run()
 }
