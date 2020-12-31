@@ -1076,7 +1076,8 @@ Plumber <- R6Class(
 
         # Check for existing endpoints at current children node that share the same name
         matching_name_nodes <- node[names(node) == children[1]]
-        existing_endpoints <- vapply(matching_name_nodes, inherits, logical(1), "PlumberEndpoint")
+        # if there is an endpoint or router...
+        existing_endpoints <- vapply(matching_name_nodes, inherits, logical(1), c("PlumberEndpoint", "Plumber"))
 
         # This is for situation where an endpoint is on `/A` and you
         # also have route with an endpoint on `A/B`. Resulting nested list
