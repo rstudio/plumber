@@ -92,7 +92,7 @@ plumberToApiType <- function(type, inPath = FALSE) {
     return(vapply(type, plumberToApiType, character(1), inPath, USE.NAMES = FALSE))
   }
   # default type is "string" type
-  if (is.na(type)) {
+  if (isNaOrNull(type)) {
     return(defaultApiType)
   }
 

@@ -220,6 +220,12 @@ Plumber <- R6Class(
     #' using the `mount()` method. This allows you to compartmentalize your API
     #' by paths which is a great technique for decomposing large APIs into smaller files.
     #'
+    #' Mounts with a more specific path name will be used over mounts with a
+    #' matching, but less specific path name. For example, let's say we have two
+    #' mounts: `/aaa` and `/aaa/bbb`. If a request came in for `/aaa/bbb/ccc`,
+    #' mount `/aaa/bbb` will be used to process the request. If a request came in
+    #' for `/aaa/ccc`, mount `/aaa` will be used to process the request.
+    #'
     #' See also: [pr_mount()]
     #' @param path a character string. Where to mount router.
     #' @param router a Plumber router. Router to be mounted.
@@ -242,7 +248,9 @@ Plumber <- R6Class(
         path <- paste0(path, "/")
       }
 
+      # order the mounts so that the more specific mount paths are ahead of the less specific mount paths
       private$mnts[[path]] <- router
+      private$mnts <- private$mnts[order(names(private$mnts), decreasing = TRUE)]
     },
     #' @description Unmount a Plumber router
     #' @param path a character string. Where to unmount router.
@@ -410,7 +418,7 @@ Plumber <- R6Class(
 
       cat(crayon::silver("# Plumber router with ", endCount, " endpoint", ifelse(endCount == 1, "", "s"),", ",
                          as.character(length(private$filts)), " filter", ifelse(length(private$filts) == 1, "", "s"),", and ",
-                         as.character(length(self$mounts)), " sub-router", ifelse(length(self$mounts) == 1, "", "s"),".\n", sep=""))
+                         as.character(length(private$mnts)), " sub-router", ifelse(length(private$mnts) == 1, "", "s"),".\n", sep=""))
 
       if(topLevel){
         cat(prefix, crayon::silver("# Use `pr_run()` on this object to start the API.\n"), sep="")
@@ -704,8 +712,18 @@ Plumber <- R6Class(
       # If we still haven't found a match, check the un-preempt'd endpoints.
       steps <- append(steps, list(makeHandleStep("__no-preempt__")))
 
-      # We aren't going to serve this endpoint; see if any mounted routers will
-      mountSteps <- lapply(names(private$mnts), function(mountPath) {
+      # This router can not serve this endpoint; See if any mounted routers will.
+      # `private$mnts` is reverse alpha-sorted to have more specific mount paths be found first.
+      # `self$mounts` is alpha-sorted to have less specific mount paths be found first.
+      # Ex:
+      # * `/aaa/bbb/foo` is requested.
+      # * Mounts `/aaa` and `/aaa/bbb` exist.
+      # * We want to use mount `/aaa/bbb` as it is more specific
+      # TODO
+      # * If `/aaa/bbb` mount does not support `/aaa/bbb/foo`, then try mount `/aaa`.
+      # * Current behavior is to return a 404
+      mnts <- private$mnts
+      mountSteps <- lapply(names(mnts), function(mountPath) {
         # (make step function)
         function(...) {
           resetForward()
@@ -716,7 +734,7 @@ Plumber <- R6Class(
 
             # First trim the prefix off of the PATH_INFO element
             req$PATH_INFO <- substr(req$PATH_INFO, nchar(mountPath), nchar(req$PATH_INFO))
-            return(private$mnts[[mountPath]]$route(req, res))
+            return(mnts[[mountPath]]$route(req, res))
           } else {
             return(forward())
           }
@@ -935,7 +953,7 @@ Plumber <- R6Class(
       private$api_spec_handler <- api_fun
     },
     #' @description Retrieve openAPI file
-    getApiSpec = function() { #FIXME: test
+    getApiSpec = function() {
 
       routerSpec <- private$routerSpecificationInternal(self)
 
@@ -1021,23 +1039,25 @@ Plumber <- R6Class(
       self$getApiSpec()
     }
   ), active = list(
-    #' @field endpoints Plumber router endpoints read-only
+    #' @field endpoints Plumber router endpoints. Read-only
     endpoints = function(){
       private$ends
     },
-    #' @field filters Plumber router filters read-only
+    #' @field filters Plumber router filters. Read-only
     filters = function(){
       private$filts
     },
-    #' @field mounts Plumber router mounts read-only
+    #' @field mounts Plumber router mounts sorted by mount location. Read-only.
     mounts = function(){
-      private$mnts
+      mnts <- private$mnts
+      if (length(mnts) == 0) return(mnts)
+      mnts[sort(names(mnts), decreasing = FALSE)]
     },
-    #' @field environment Plumber router environment read-only
+    #' @field environment Plumber router environment. Read-only
     environment = function() {
       private$envir
     },
-    #' @field routes Plumber router routes read-only
+    #' @field routes Plumber router routes. Read-only
     routes = function(){
       paths <- list()
 
@@ -1057,7 +1077,8 @@ Plumber <- R6Class(
 
         # Check for existing endpoints at current children node that share the same name
         matching_name_nodes <- node[names(node) == children[1]]
-        existing_endpoints <- vapply(matching_name_nodes, inherits, logical(1), "PlumberEndpoint")
+        # if there is an endpoint or router...
+        existing_endpoints <- vapply(matching_name_nodes, inherits, logical(1), c("PlumberEndpoint", "Plumber"))
 
         # This is for situation where an endpoint is on `/A` and you
         # also have route with an endpoint on `A/B`. Resulting nested list
@@ -1091,16 +1112,16 @@ Plumber <- R6Class(
       })
 
       # Sub-routers
-      if (length(self$mounts) > 0){
-        for(i in 1:length(self$mounts)){
+      mnts <- self$mounts
+      if (length(mnts) > 0) {
+        Map(mnts, names(mnts), f = function(mnt, mnt_name) {
           # Trim leading slash
-          path <- sub("^/", "", names(self$mounts)[i])
+          path <- sub("^/", "", mnt_name)
 
           levels <- strsplit(path, "/", fixed=TRUE)[[1]]
 
-          m <- self$mounts[[i]]
-          paths <- addPath(paths, levels, m)
-        }
+          paths <<- addPath(paths, levels, mnt)
+        })
       }
 
       lexisort <- function(paths) {
@@ -1211,10 +1232,11 @@ Plumber <- R6Class(
       }
 
       # recursively gather mounted enpoint entries
-      if (length(router$mounts) > 0) {
-        for (mountPath in names(router$mounts)) {
+      router_mnts <- router$mounts
+      if (length(router_mnts) > 0) {
+        for (mountPath in sort(names(router_mnts))) {
           mountEndpoints <- private$routerSpecificationInternal(
-            router$mounts[[mountPath]],
+            router_mnts[[mountPath]],
             join_paths(parentPath, mountPath)
           )
           endpointList <- utils::modifyList(endpointList, mountEndpoints)

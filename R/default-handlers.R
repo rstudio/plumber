@@ -42,7 +42,7 @@ defaultErrorHandler <- function(){
 #' @noRd
 allowed_verbs <- function(pr, path_to_find) {
 
-  verbs_allowed <- c()
+  verbs_allowed <- NULL
 
   # look at all possible endpoints
   for (endpoint_group in pr$endpoints) {
@@ -54,9 +54,10 @@ allowed_verbs <- function(pr, path_to_find) {
   }
 
   # look at all possible mounts
-  for (i in seq_along(pr$mounts)) {
-    mount <- pr$mounts[[i]]
-    mount_path <- sub("/$", "", names(pr$mounts)[i]) # trim trailing `/`
+  mnts <- pr$mounts
+  for (i in seq_along(mnts)) {
+    mount <- mnts[[i]]
+    mount_path <- sub("/$", "", names(mnts)[i]) # trim trailing `/`
 
     # if the front of the urls don't match, move on to next mount
     if (!identical(
@@ -77,6 +78,9 @@ allowed_verbs <- function(pr, path_to_find) {
   }
 
   # return verbs
+  if (is.null(verbs_allowed)) {
+    return(verbs_allowed)
+  }
   sort(unique(verbs_allowed))
 }
 

@@ -126,15 +126,15 @@ pr$setErrorHandler(function(req, res, err) {
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{\code{endpoints}}{Plumber router endpoints read-only}
+\item{\code{endpoints}}{Plumber router endpoints. Read-only}
 
-\item{\code{filters}}{Plumber router filters read-only}
+\item{\code{filters}}{Plumber router filters. Read-only}
 
-\item{\code{mounts}}{Plumber router mounts read-only}
+\item{\code{mounts}}{Plumber router mounts sorted by mount location. Read-only.}
 
-\item{\code{environment}}{Plumber router environment read-only}
+\item{\code{environment}}{Plumber router environment. Read-only}
 
-\item{\code{routes}}{Plumber router routes read-only}
+\item{\code{routes}}{Plumber router routes. Read-only}
 }
 \if{html}{\out{</div>}}
 }
@@ -255,6 +255,12 @@ Mount a Plumber router
 Plumber routers can be “nested” by mounting one into another
 using the \code{mount()} method. This allows you to compartmentalize your API
 by paths which is a great technique for decomposing large APIs into smaller files.
+
+Mounts with a more specific path name will be used over mounts with a
+matching, but less specific path name. For example, let's say we have two
+mounts: \verb{/aaa} and \verb{/aaa/bbb}. If a request came in for \verb{/aaa/bbb/ccc},
+mount \verb{/aaa/bbb} will be used to process the request. If a request came in
+for \verb{/aaa/ccc}, mount \verb{/aaa} will be used to process the request.
 
 See also: \code{\link[=pr_mount]{pr_mount()}}
 \subsection{Usage}{

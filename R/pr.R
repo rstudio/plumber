@@ -209,6 +209,12 @@ pr_head <- function(pr,
 #' files. This function mutates the Plumber router ([pr()]) in place and
 #' returns the updated router.
 #'
+#' Mounts with a more specific path name will be used over mounts with a
+#' matching, but less specific path name. For example, let's say we have two
+#' mounts: `/aaa` and `/aaa/bbb`. If a request came in for `/aaa/bbb/ccc`,
+#' mount `/aaa/bbb` will be used to process the request. If a request came in
+#' for `/aaa/ccc`, mount `/aaa` will be used to process the request.
+#'
 #' @param pr The host Plumber router.
 #' @param path A character string. Where to mount router.
 #' @param router A Plumber router. Router to be mounted.
@@ -222,6 +228,7 @@ pr_head <- function(pr,
 #'
 #' pr() %>%
 #'   pr_get("/goodbye", function() "Goodbye") %>%
+#'   # By mounting pr1, we can make a GET request to `/hi/hello`
 #'   pr_mount("/hi", pr1) %>%
 #'   pr_run()
 #' }

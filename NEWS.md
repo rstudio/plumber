@@ -7,6 +7,8 @@ plumber 1.0.0.9999 Development version
 
 * When plumbing a Plumber file and using a Plumber router modifier (`#* @plumber`), an error will be thrown if the original router is not returned. (#738)
 
+* When processing a route, the mount location with the larger path match will be used. Before, the first mount added that could possibly process the requested path was used. For more details, see `?pr_mount`. (#748)
+
 ### New features
 
 * Guess OpenApi response content type from serializer. (@meztez #684)
