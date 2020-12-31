@@ -50,10 +50,8 @@ test_that("mounts with more specific paths are used", {
     )
 
 
-  # make sure it can print... which calls root$routes
-  expect_silent({
-    capture.output(print(root))
-  })
+  # make sure it can print without error... which calls root$routes
+  expect_error(capture.output(print(root)), NA)
 
   res <- PlumberResponse$new()
   # route with more specific mount is used
