@@ -242,7 +242,9 @@ Plumber <- R6Class(
         path <- paste0(path, "/")
       }
 
+      # order the mounts so that the more specific mount paths are ahead of the less specific mount paths
       private$mnts[[path]] <- router
+      private$mnts <- private$mnts[order(names(private$mnts), decreasing = TRUE)]
     },
     #' @description Unmount a Plumber router
     #' @param path a character string. Where to unmount router.
