@@ -33,3 +33,40 @@ test_that("Routing to errors and 404s works", {
   expect_equal(er, errRes)
   expect_equal(errors, 1)
 })
+
+
+test_that("mounts with more specific paths are used", {
+
+  root <- pr() %>%
+    pr_mount("/aaa",
+      pr() %>%
+        pr_get("/bbb/hello", function() "/aaa - /bbb/hello") %>%
+        pr_get("/bbb/test", function() "/aaa - /bbb/test")
+    ) %>%
+    pr_mount("/aaa/bbb",
+      pr() %>%
+        pr_get("/hello", function() "/aaa/bbb - /hello") %>%
+        pr_set_404(function(...) { "404" })
+    )
+
+
+  # make sure it can print... which calls root$routes
+  expect_silent({
+    capture.output(print(root))
+  })
+
+  res <- PlumberResponse$new()
+  # route with more specific mount is used
+  expect_equal(
+    root$route(make_req("GET", "/aaa/bbb/hello"), res),
+    "/aaa/bbb - /hello"
+  )
+
+  # currently "bad" behavior. TODO - make this return "/aaa - /bbb/test"
+  expect_equal(
+    root$route(make_req("GET", "/aaa/bbb/test"), res),
+    "404"
+  )
+
+
+})
