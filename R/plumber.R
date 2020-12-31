@@ -706,8 +706,18 @@ Plumber <- R6Class(
       # If we still haven't found a match, check the un-preempt'd endpoints.
       steps <- append(steps, list(makeHandleStep("__no-preempt__")))
 
-      # We aren't going to serve this endpoint; see if any mounted routers will
-      mountSteps <- lapply(names(private$mnts), function(mountPath) {
+      # This router can not serve this endpoint; See if any mounted routers will.
+      # `private$mnts` is reverse alpha-sorted to have more specific mount paths be found first.
+      # `self$mounts` is alpha-sorted to have less specific mount paths be found first.
+      # Ex:
+      # * `/aaa/bbb/foo` is requested.
+      # * Mounts `/aaa` and `/aaa/bbb` exist.
+      # * We want to use mount `/aaa/bbb` as it is more specific
+      # TODO
+      # * If `/aaa/bbb` mount does not support `/aaa/bbb/foo`, then try mount `/aaa`.
+      # * Current behavior is to return a 404
+      mnts <- private$mnts
+      mountSteps <- lapply(names(mnts), function(mountPath) {
         # (make step function)
         function(...) {
           resetForward()
@@ -718,7 +728,7 @@ Plumber <- R6Class(
 
             # First trim the prefix off of the PATH_INFO element
             req$PATH_INFO <- substr(req$PATH_INFO, nchar(mountPath), nchar(req$PATH_INFO))
-            return(private$mnts[[mountPath]]$route(req, res))
+            return(mnts[[mountPath]]$route(req, res))
           } else {
             return(forward())
           }
