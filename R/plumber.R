@@ -1111,16 +1111,15 @@ Plumber <- R6Class(
 
       # Sub-routers
       mnts <- self$mounts
-      if (length(mnts) > 0){
-        for(i in 1:length(mnts)){
+      if (length(mnts) > 0) {
+        Map(mnts, names(mnts), f = function(mnt, mnt_name) {
           # Trim leading slash
-          path <- sub("^/", "", names(mnts)[i])
+          path <- sub("^/", "", mnt_name)
 
           levels <- strsplit(path, "/", fixed=TRUE)[[1]]
 
-          m <- mnts[[i]]
-          paths <- addPath(paths, levels, m)
-        }
+          paths <<- addPath(paths, levels, mnt)
+        })
       }
 
       lexisort <- function(paths) {
