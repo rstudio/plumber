@@ -126,15 +126,15 @@ pr$setErrorHandler(function(req, res, err) {
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{\code{endpoints}}{Plumber router endpoints read-only}
+\item{\code{endpoints}}{Plumber router endpoints. Read-only}
 
-\item{\code{filters}}{Plumber router filters read-only}
+\item{\code{filters}}{Plumber router filters. Read-only}
 
-\item{\code{mounts}}{Plumber router mounts read-only}
+\item{\code{mounts}}{Plumber router mounts sorted by mount location. Read-only.}
 
-\item{\code{environment}}{Plumber router environment read-only}
+\item{\code{environment}}{Plumber router environment. Read-only}
 
-\item{\code{routes}}{Plumber router routes read-only}
+\item{\code{routes}}{Plumber router routes. Read-only}
 }
 \if{html}{\out{</div>}}
 }

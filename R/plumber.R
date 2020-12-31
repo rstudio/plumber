@@ -412,7 +412,7 @@ Plumber <- R6Class(
 
       cat(crayon::silver("# Plumber router with ", endCount, " endpoint", ifelse(endCount == 1, "", "s"),", ",
                          as.character(length(private$filts)), " filter", ifelse(length(private$filts) == 1, "", "s"),", and ",
-                         as.character(length(self$mounts)), " sub-router", ifelse(length(self$mounts) == 1, "", "s"),".\n", sep=""))
+                         as.character(length(private$mnts)), " sub-router", ifelse(length(private$mnts) == 1, "", "s"),".\n", sep=""))
 
       if(topLevel){
         cat(prefix, crayon::silver("# Use `pr_run()` on this object to start the API.\n"), sep="")
@@ -947,7 +947,7 @@ Plumber <- R6Class(
       private$api_spec_handler <- api_fun
     },
     #' @description Retrieve openAPI file
-    getApiSpec = function() { #FIXME: test
+    getApiSpec = function() {
 
       routerSpec <- private$routerSpecificationInternal(self)
 
@@ -1033,11 +1033,11 @@ Plumber <- R6Class(
       self$getApiSpec()
     }
   ), active = list(
-    #' @field endpoints Plumber router endpoints read-only
+    #' @field endpoints Plumber router endpoints. Read-only
     endpoints = function(){
       private$ends
     },
-    #' @field filters Plumber router filters read-only
+    #' @field filters Plumber router filters. Read-only
     filters = function(){
       private$filts
     },
@@ -1046,11 +1046,11 @@ Plumber <- R6Class(
       mnts <- private$mnts
       mnts[sort(names(mnts), decreasing = FALSE)]
     },
-    #' @field environment Plumber router environment read-only
+    #' @field environment Plumber router environment. Read-only
     environment = function() {
       private$envir
     },
-    #' @field routes Plumber router routes read-only
+    #' @field routes Plumber router routes. Read-only
     routes = function(){
       paths <- list()
 
@@ -1104,14 +1104,15 @@ Plumber <- R6Class(
       })
 
       # Sub-routers
-      if (length(self$mounts) > 0){
-        for(i in 1:length(self$mounts)){
+      mnts <- self$mounts
+      if (length(mnts) > 0){
+        for(i in 1:length(mnts)){
           # Trim leading slash
-          path <- sub("^/", "", names(self$mounts)[i])
+          path <- sub("^/", "", names(mnts)[i])
 
           levels <- strsplit(path, "/", fixed=TRUE)[[1]]
 
-          m <- self$mounts[[i]]
+          m <- mnts[[i]]
           paths <- addPath(paths, levels, m)
         }
       }
@@ -1224,10 +1225,11 @@ Plumber <- R6Class(
       }
 
       # recursively gather mounted enpoint entries
-      if (length(router$mounts) > 0) {
-        for (mountPath in names(router$mounts)) {
+      router_mnts <- router$mounts
+      if (length(router_mnts) > 0) {
+        for (mountPath in sort(names(router_mnts))) {
           mountEndpoints <- private$routerSpecificationInternal(
-            router$mounts[[mountPath]],
+            router_mnts[[mountPath]],
             join_paths(parentPath, mountPath)
           )
           endpointList <- utils::modifyList(endpointList, mountEndpoints)
