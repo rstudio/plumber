@@ -1041,9 +1041,10 @@ Plumber <- R6Class(
     filters = function(){
       private$filts
     },
-    #' @field mounts Plumber router mounts read-only
+    #' @field mounts Plumber router mounts sorted by mount location. Read-only.
     mounts = function(){
-      private$mnts
+      mnts <- private$mnts
+      mnts[sort(names(mnts), decreasing = FALSE)]
     },
     #' @field environment Plumber router environment read-only
     environment = function() {
