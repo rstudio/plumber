@@ -42,7 +42,7 @@ defaultErrorHandler <- function(){
 #' @noRd
 allowed_verbs <- function(pr, path_to_find) {
 
-  verbs_allowed <- c()
+  verbs_allowed <- NULL
 
   # look at all possible endpoints
   for (endpoint_group in pr$endpoints) {
@@ -78,6 +78,9 @@ allowed_verbs <- function(pr, path_to_find) {
   }
 
   # return verbs
+  if (is.null(verbs_allowed)) {
+    return(verbs_allowed)
+  }
   sort(unique(verbs_allowed))
 }
 
