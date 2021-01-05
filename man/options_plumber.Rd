@@ -9,8 +9,8 @@ options_plumber(
   port = getOption("plumber.port"),
   docs = getOption("plumber.docs"),
   docs.callback = getOption("plumber.docs.callback"),
-  redirect = getOption("plumber.redirect"),
-  allowMethods = getOption("plumber.allowMethods"),
+  trailingSlash = getOption("plumber.trailingSlash"),
+  methodNotAllowed = getOption("plumber.methodNotAllowed"),
   apiURL = getOption("plumber.apiURL"),
   apiScheme = getOption("plumber.apiScheme"),
   apiHost = getOption("plumber.apiHost"),
@@ -24,7 +24,7 @@ options_plumber(
 \arguments{
 \item{...}{Ignored. Should be empty}
 
-\item{port, docs, docs.callback, redirect, allowMethods, apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, sharedSecret, legacyRedirects}{See details}
+\item{port, docs, docs.callback, trailingSlash, methodNotAllowed, apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, sharedSecret, legacyRedirects}{See details}
 }
 \value{
 The complete, prior set of \code{\link[=options]{options()}} values.
@@ -44,11 +44,11 @@ If the port is already in use, server will not be able to start. Defaults to \co
 \item{\code{plumber.docs.callback}}{A function. Called with
 a single parameter corresponding to the visual documentation url after Plumber server is ready. This can be used
 by RStudio to open the docs when then API is ran from the editor. Defaults to option \code{NULL}.}
-\item{\code{plumber.redirect}}{Logical value which allows the router to redirect any request
+\item{\code{plumber.trailingSlash}}{Logical value which allows the router to redirect any request
 that has a matching route with a trailing slash. For example, if set to \code{TRUE} and the
 GET route \verb{/test/} existed, then a GET request of \verb{/test?a=1} would redirect to
 \verb{/test/?a=1}. Defaults to \code{FALSE}. This option will default to \code{TRUE} in a future release.}
-\item{\code{plumber.allowMethods}}{Logical value which allows the router to notify that an
+\item{\code{plumber.methodNotAllowed}}{Logical value which allows the router to notify that an
 unavailable method was requested, but a different request method is allowed. For example,
 if set to \code{TRUE} and the GET route \verb{/test} existed, then a POST request of \verb{/test} would
 receive a 405 status and the allowed methods. Defaults to \code{TRUE}.}

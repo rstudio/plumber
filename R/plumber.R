@@ -727,7 +727,7 @@ Plumber <- R6Class(
       # No endpoint could handle this request. 404
       notFoundStep <- function(...) {
 
-        if (isTRUE(getOption("plumber.redirect", FALSE))) {
+        if (isTRUE(getOption("plumber.trailingSlash", FALSE))) {
           # Redirect to the slash route, if it exists
           path <- req$PATH_INFO
           # If the path does not end in a slash,
@@ -756,7 +756,7 @@ Plumber <- R6Class(
         # No trailing-slash route exists...
         # Try allowed verbs
 
-        if (isTRUE(getOption("plumber.allowMethods", TRUE))) {
+        if (isTRUE(getOption("plumber.methodNotAllowed", TRUE))) {
           # Notify about allowed verbs
           if (is_405(req$pr, req$PATH_INFO, req$REQUEST_METHOD)) {
             res$status <- 405L
