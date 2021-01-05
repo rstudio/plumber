@@ -9,7 +9,7 @@
 <!-- badges: end -->
 
 Plumber allows you to create a web API by merely decorating your existing R
-source code with special comments. Take a look at an example.
+source code with `roxygen2`-like comments. Take a look at an example.
 
 ```r
 # plumber.R
@@ -40,7 +40,7 @@ function(a, b) {
 
 These comments allow `plumber` to make your R functions available as API
 endpoints. You can use either `#*` as the prefix or `#'`, but we recommend the
-former since `#'` will collide with Roxygen.
+former since `#'` will collide with `roxygen2`.
 
 ```r
 library(plumber)

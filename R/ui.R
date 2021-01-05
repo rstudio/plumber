@@ -21,7 +21,7 @@ mount_docs <- function(pr, host, port, docs_info, callback) {
     )
   )
 
-  # Mount openAPI spec paths openapi.json
+  # Mount OpenAPI spec paths openapi.json
   mount_openapi(pr, api_url)
 
   # Mount Docs
@@ -67,7 +67,7 @@ unmount_docs <- function(pr, docs_info) {
     return()
   }
 
-  # Unount openAPI spec paths openapi.json
+  # Unount OpenAPI spec paths openapi.json
   unmount_openapi(pr)
 
   # Mount Docs

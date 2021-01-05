@@ -269,7 +269,7 @@ We can use the [dockercloud/haproxy](https://github.com/docker/dockercloud-hapro
 
 The trick that allows this image to listen in to our scaling of `app1` is by passing in the docker socket as a shared volume. Note that this particular arrangement will differ based on your host OS. The above configuration is intended for Linux, but MacOS X users would require a [slightly different config](https://github.com/docker/dockercloud-haproxy#example-of-docker-composeyml-running-in-linux).
 
-We could export port `80` of our new load balancer to port `80` of our host machine if we solely wanted to load-balance a single application. Alternatively, we can actually use both nginx (to handle the routing of various applications) and HAProxy (to handle the load balancing of a particular application). To do that, we'd merely add a new `location` block to our `nginx.conf` file that knows how to send traffic to HAproxy, or modify the existing `location` block to send traffic to the load balancer instead of going directly to the application.
+We could export port `80` of our new load balancer to port `80` of our host machine if we solely wanted to load-balance a single application. Alternatively, we can actually use both nginx (to handle the routing of various applications) and HAProxy (to handle the load balancing of a particular application). To do that, we'd merely add a new `location` block to our `nginx.conf` file that knows how to send traffic to HAProxy, or modify the existing `location` block to send traffic to the load balancer instead of going directly to the application.
 
 So the `location /app1/` block becomes:
 

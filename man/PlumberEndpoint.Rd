@@ -9,7 +9,7 @@ Plumber Endpoint
 Plumber Endpoint
 }
 \details{
-Defines a terminal handler in a PLumber router.
+Defines a terminal handler in a Plumber router.
 
 Parameters values are obtained from parsing blocks of lines in a plumber file.
 They can also be provided manually for historical reasons.

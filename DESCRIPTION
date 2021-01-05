@@ -46,7 +46,8 @@ Suggests:
     yaml,
     feather,
     future,
-    rstudioapi
+    rstudioapi,
+    spelling
 RoxygenNote: 7.1.1
 Collate:
     'async.R'
@@ -87,3 +88,4 @@ Collate:
     'validate_api_spec.R'
     'zzz.R'
 RdMacros: lifecycle
+Language: en-US

@@ -138,7 +138,7 @@ In the [section on setting cookies](./rendering-output.html#setting-cookies), we
 
 First and foremost, recognize that that the client has the ability to modify or fabricate the cookies that they send to your API. So storing preferences that the user themselves provided in a cookie is not a concern. Storing something with security implications -- like the identity of the user making requests -- however, would be; a malicious user would just need to modify the user ID saved in their cookie in order to trick your API into thinking that they were someone they're not.
 
-There are two common work-arounds to this concern. You can store all session information on the server identified by long, cryptographically random IDs and only rely on the cookie to store the ID. Or you can use signed/encrypted cookies, as detailed in the [section on setting encrypted cookies](./rendering-output.html#encrypted-cookies).
+There are two common workarounds to this concern. You can store all session information on the server identified by long, cryptographically random IDs and only rely on the cookie to store the ID. Or you can use signed/encrypted cookies, as detailed in the [section on setting encrypted cookies](./rendering-output.html#encrypted-cookies).
 
 You should also be aware of how cookies will be handled and managed by clients. You can manage these properties by providing different parameters to the `setCookie()` call.
 

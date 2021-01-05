@@ -160,7 +160,7 @@ getRelevantArgs <- function(args, func) {
 
 #' Plumber Endpoint
 #'
-#' Defines a terminal handler in a PLumber router.
+#' Defines a terminal handler in a Plumber router.
 #'
 #' @export
 PlumberEndpoint <- R6Class(

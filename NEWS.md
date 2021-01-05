@@ -15,11 +15,11 @@ plumber 1.1.0
 
 * Added option `plumber.methodNotFound`. This option (which is enabled by default) allows for a status of `405` to be returned if an invalid method is used when requesting a valid route. This logic executed for before calling the default `404` handler. (#746)
 
-* Guess OpenApi response content type from serializer. (@meztez #684)
+* Guess OpenAPI response content type from serializer. (@meztez #684)
 
 * Passing `edit = TRUE` to `plumb_api()` will open the API source file. (#699)
 
-* Allow for spaces in `@apiTag` and `@tag` when tag is surrended by single or double quotes. (#685)
+* Allow for spaces in `@apiTag` and `@tag` when tag is surrounded by single or double quotes. (#685)
 
 * OpenAPI Specification can be set using a file path. (@meztez #696)
 
@@ -417,7 +417,7 @@ plumber 0.2.2
 
 plumber 0.2.1
 --------------------------------------------------------------------------------
-* Add more Roxygen documentation for exported functions
+* Add more `roxygen2` documentation for exported functions
 * Remove the warning in the README as the API seems to be stabilizing.
 
 

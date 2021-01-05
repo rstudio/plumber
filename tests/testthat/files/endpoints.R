@@ -9,7 +9,7 @@ function(req, res, forward){
 #* @get /test
 #* @post /test
 #* @more stuff
-#' @param req Roxygen params
+#' @param req roxygen2 params
 #* hey
 foo <- function(a, b, ..., req, res, forward){
   5
