@@ -2,11 +2,11 @@
 
 <details>
 
-* Version: 1.3.0
+* Version: 1.3.1
 * GitHub: https://github.com/Azure/AzureContainers
 * Source code: https://github.com/cran/AzureContainers
-* Date/Publication: 2020-05-06 08:10:02 UTC
-* Number of recursive dependencies: 57
+* Date/Publication: 2020-10-14 23:40:17 UTC
+* Number of recursive dependencies: 74
 
 Run `revdep_details(, "AzureContainers")` for more info
 
@@ -24,11 +24,11 @@ Run `revdep_details(, "AzureContainers")` for more info
 
 <details>
 
-* Version: 0.2.0
+* Version: 0.3.0
 * GitHub: https://github.com/atheriel/openmetrics
 * Source code: https://github.com/cran/openmetrics
-* Date/Publication: 2020-07-14 08:00:03 UTC
-* Number of recursive dependencies: 45
+* Date/Publication: 2020-11-09 21:20:02 UTC
+* Number of recursive dependencies: 57
 
 Run `revdep_details(, "openmetrics")` for more info
 
@@ -50,7 +50,7 @@ Run `revdep_details(, "openmetrics")` for more info
 * GitHub: https://github.com/ropensci/rjsonapi
 * Source code: https://github.com/cran/rjsonapi
 * Date/Publication: 2017-01-09 01:47:26
-* Number of recursive dependencies: 46
+* Number of recursive dependencies: 58
 
 Run `revdep_details(, "rjsonapi")` for more info
 
