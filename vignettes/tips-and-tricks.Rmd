@@ -25,6 +25,72 @@ Most programmers first approach debugging by adding print statements to their co
 
 This approach is equally viable with Plumber. When developing your Plumber API in an interactive environment, this debugging output will be logged to the same terminal where you called `run()` on your API. In a non-interactive production environment, these messages will be included in the API server logs for later inspection.
 
+### Router Stage Debugging
+
+Similar to print debugging, we can output what plumber knows at each stage of the processing pipeline.  You can do this by adding [hooks](./programmatic-usage.html#router-hooks) to two key stages: `"postroute"` and `"postserialize"`.
+
+For example, we can add these lines to our `plumber.R` file:
+
+```r
+#* @plumber
+function(pr) {
+  pr %>%
+    pr_hook("postroute", function(req, value) {
+      # Print stage information
+      str(list(
+        stage = "postroute",
+        type = req$REQUEST_METHOD,
+        path = req$PATH_INFO,
+        value = value
+      ))
+      # Must return the `value` since we took one in
+      value
+    }) %>%
+    pr_hook("postserialize", function(req, value) {
+      # Print stage information
+      str(list(
+        stage = "postserialize",
+        type = req$REQUEST_METHOD,
+        path = req$PATH_INFO,
+        value = value
+      ))
+      # Must return the `value` since we took one in
+      value
+    })
+}
+```
+
+If we were to execute a `GET` request on `/stage_debug`
+
+```r
+#* @get /stage_debug
+function(req, res) {
+  return(42)
+}
+```
+, we would expect to see output like:
+
+```
+List of 4
+ $ stage: chr "postroute"
+ $ type : chr "GET"
+ $ path : chr "/stage_debug"
+ $ value: num 42
+List of 4
+ $ stage: chr "postserialize"
+ $ type : chr "GET"
+ $ path : chr "/stage_debug"
+ $ value:List of 3
+  ..$ status : int 200
+  ..$ headers:List of 1
+  .. ..$ Content-Type: chr "application/json"
+  ..$ body   : 'json' chr "[42]"
+```
+
+This output shows that the route `/stage_debug` calculated the value `42` and that the value was serialized using json.  We should expect to see that the received response has a status of `200` and the body containing JSON matching `[42]`.
+
+
+
 ### Interactive Debugging
 
 Print debugging is an obvious starting point, but most developers eventually wish for something more powerful. In R, this capacity is built in to the `browser()` function. If you're unfamiliar, `browser()` pauses the execution of some function and gives you an interactive session in which you can inspect the current value of internal variables or even proceed through your function one statement at a time.

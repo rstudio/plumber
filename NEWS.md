@@ -25,6 +25,8 @@ plumber 1.0.0.9999 Development version
 
 ### Bug fixes
 
+* Fixed bug where `httpuv` would return a status of `500` with body `An exception occurred` if no headers were set on the response object. (#745)
+
 * Fixed bug where all `pr_*()` returned invisibly. Now all `pr_*()` methods will print the router if displayed in the console. (#740)
 
 * Ignore regular comments in block parsing (@meztez #718)
@@ -40,6 +42,8 @@ plumber 1.0.0.9999 Development version
 * Fixed Plumber `$routes` resolution bugs. Routes are now returned in lexicographical order. (@meztez #702)
 
 * Plumber will now display a circular reference if one is found while printing. (#738)
+
+* Changed `future::plan()` from `multiprocess` to `multisession` in example API `14-future` as "Strategy 'multiprocess' is deprecated in future (>= 1.20.0)". (#747)
 
 
 plumber 1.0.0
