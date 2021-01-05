@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - "master"
-      - "docker/**"
+      - "docker**"
   schedule:
     - cron:  '0 0 1 * *' # first of every month
 
@@ -26,7 +26,7 @@ jobs:
           # always overwrite the latest version with the CRAN version
           tags: "v1.0.0,latest"
           ref: "v1.0.0"
-        
+
         # always rebuild legacy to pick up newer R library builds
         - name: "v0.4.6"
           tags: "v0.4.6"
