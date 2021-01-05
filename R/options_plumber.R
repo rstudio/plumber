@@ -11,11 +11,11 @@
 #' \item{`plumber.docs.callback`}{A function. Called with
 #' a single parameter corresponding to the visual documentation url after Plumber server is ready. This can be used
 #' by RStudio to open the docs when then API is ran from the editor. Defaults to option `NULL`.}
-#' \item{`plumber.redirect`}{Logical value which allows the router to redirect any request
+#' \item{`plumber.trailingSlash`}{Logical value which allows the router to redirect any request
 #' that has a matching route with a trailing slash. For example, if set to `TRUE` and the
 #' GET route `/test/` existed, then a GET request of `/test?a=1` would redirect to
 #' `/test/?a=1`. Defaults to `FALSE`. This option will default to `TRUE` in a future release.}
-#' \item{`plumber.allowMethods`}{Logical value which allows the router to notify that an
+#' \item{`plumber.methodNotFound`}{Logical value which allows the router to notify that an
 #' unavailable method was requested, but a different request method is allowed. For example,
 #' if set to `TRUE` and the GET route `/test` existed, then a POST request of `/test` would
 #' receive a 405 status and the allowed methods. Defaults to `TRUE`.}
@@ -43,7 +43,7 @@
 #' }
 #'
 #' @param ... Ignored. Should be empty
-#' @param port,docs,docs.callback,redirect,allowMethods,apiScheme,apiHost,apiPort,apiPath,apiURL,maxRequestSize,sharedSecret,legacyRedirects See details
+#' @param port,docs,docs.callback,trailingSlash,methodNotFound,apiScheme,apiHost,apiPort,apiPath,apiURL,maxRequestSize,sharedSecret,legacyRedirects See details
 #' @return
 #' The complete, prior set of [options()] values.
 #' If a particular parameter is not supplied, it will return the current value.
@@ -54,8 +54,8 @@ options_plumber <- function(
   port                 = getOption("plumber.port"),
   docs                 = getOption("plumber.docs"),
   docs.callback        = getOption("plumber.docs.callback"),
-  redirect             = getOption("plumber.redirect"),
-  allowMethods         = getOption("plumber.allowMethods"),
+  trailingSlash        = getOption("plumber.trailingSlash"),
+  methodNotAllowed     = getOption("plumber.methodNotAllowed"),
   apiURL               = getOption("plumber.apiURL"),
   apiScheme            = getOption("plumber.apiScheme"),
   apiHost              = getOption("plumber.apiHost"),
@@ -71,8 +71,8 @@ options_plumber <- function(
     plumber.port                 =   port,
     plumber.docs                 =   docs,
     plumber.docs.callback        =   docs.callback,
-    plumber.redirect             =   redirect,
-    plumber.allowMethods         =   allowMethods,
+    plumber.trailingSlash        =   trailingSlash,
+    plumber.methodNotAllowed     =   methodNotAllowed,
     plumber.apiURL               =   apiURL,
     plumber.apiScheme            =   apiScheme,
     plumber.apiHost              =   apiHost,

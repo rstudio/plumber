@@ -349,7 +349,7 @@ test_that("invalid hooks err", {
 
 test_that("handle invokes correctly", {
   with_options(
-    list(plumber.redirect = NULL),
+    list(plumber.trailingSlash = NULL),
     {
       pr <- pr()
       pr$handle("GET", "/trailslash", function(){ "getter" })
@@ -382,7 +382,7 @@ test_that("trailing slashes are redirected", {
         pr_get("/", function(a) a)
     )
 
-  with_options(list(plumber.redirect = FALSE), {
+  with_options(list(plumber.trailingSlash = FALSE), {
     res <- pr$call(make_req("GET", "/get", "?a=1"))
     expect_equal(res$status, 404)
 
@@ -393,7 +393,7 @@ test_that("trailing slashes are redirected", {
     expect_equal(res$status, 404)
   })
 
-  with_options(list(plumber.redirect = TRUE), {
+  with_options(list(plumber.trailingSlash = TRUE), {
     res <- pr$call(make_req("GET", "/get", "?a=1"))
     expect_equal(res$status, 307)
     expect_equal(res$headers$Location, "/get/?a=1")
