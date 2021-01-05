@@ -348,24 +348,66 @@ test_that("invalid hooks err", {
 })
 
 test_that("handle invokes correctly", {
-  pr <- pr()
-  pr$handle("GET", "/trailslash", function(){ "getter" })
-  pr$handle("POST", "/trailslashp/", function(){ "poster" })
+  with_options(
+    list(plumber.trailingSlash = NULL),
+    {
+      pr <- pr()
+      pr$handle("GET", "/trailslash", function(){ "getter" })
+      pr$handle("POST", "/trailslashp/", function(){ "poster" })
 
-  expect_equal(pr$call(make_req("GET", "/trailslash"))$body, jsonlite::toJSON("getter"))
-  res <- pr$call(make_req("GET", "/trailslash/")) # With trailing slash
-  expect_equal(res$status, 404)
-  res <- pr$call(make_req("POST", "/trailslash")) # Wrong verb
-  expect_equal(res$status, 405)
+      expect_equal(pr$call(make_req("GET", "/trailslash"))$body, jsonlite::toJSON("getter"))
+      res <- pr$call(make_req("GET", "/trailslash/")) # With trailing slash
+      expect_equal(res$status, 404)
+      res <- pr$call(make_req("POST", "/trailslash")) # Wrong verb
+      expect_equal(res$status, 405)
 
-  expect_equal(pr$call(make_req("POST", "/trailslashp/"))$body, jsonlite::toJSON("poster"))
-  res <- pr$call(make_req("POST", "/trailslashp")) # w/o trailing slash
-  expect_equal(res$status, 404)
-  res <- pr$call(make_req("GET", "/trailslashp/")) # Wrong verb
-  expect_equal(res$status, 405)
-
+      expect_equal(pr$call(make_req("POST", "/trailslashp/"))$body, jsonlite::toJSON("poster"))
+      res <- pr$call(make_req("POST", "/trailslashp")) # w/o trailing slash
+      expect_equal(res$status, 404)
+      res <- pr$call(make_req("GET", "/trailslashp/")) # Wrong verb
+      expect_equal(res$status, 405)
+    }
+  )
 
 })
+
+test_that("trailing slashes are redirected", {
+
+  pr <- pr() %>%
+    pr_get("/get/", function(a) a) %>%
+    pr_post("/post/", function(a) a) %>%
+    pr_mount(
+      "/mnt",
+      pr() %>%
+        pr_get("/", function(a) a)
+    )
+
+  with_options(list(plumber.trailingSlash = FALSE), {
+    res <- pr$call(make_req("GET", "/get", "?a=1"))
+    expect_equal(res$status, 404)
+
+    res <- pr$call(make_req("POST", "/post", "?a=1"))
+    expect_equal(res$status, 404)
+
+    res <- pr$call(make_req("GET", "/mnt", "?a=1"))
+    expect_equal(res$status, 404)
+  })
+
+  with_options(list(plumber.trailingSlash = TRUE), {
+    res <- pr$call(make_req("GET", "/get", "?a=1"))
+    expect_equal(res$status, 307)
+    expect_equal(res$headers$Location, "/get/?a=1")
+
+    res <- pr$call(make_req("POST", "/post", "?a=1"))
+    expect_equal(res$status, 307)
+    expect_equal(res$headers$Location, "/post/?a=1")
+
+    res <- pr$call(make_req("GET", "/mnt", "?a=1"))
+    expect_equal(res$status, 307)
+    expect_equal(res$headers$Location, "/mnt/?a=1")
+  })
+})
+
 
 test_that("No 405 on same path, different verb", {
 

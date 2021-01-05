@@ -726,6 +726,48 @@ Plumber <- R6Class(
 
       # No endpoint could handle this request. 404
       notFoundStep <- function(...) {
+
+        if (isTRUE(getOption("plumber.trailingSlash", FALSE))) {
+          # Redirect to the slash route, if it exists
+          path <- req$PATH_INFO
+          # If the path does not end in a slash,
+          if (!grepl("/$", path)) {
+            new_path <- paste0(path, "/")
+            # and a route with a slash exists...
+            if (router_has_route(req$pr, new_path, req$REQUEST_METHOD)) {
+
+              # Temp redirect with same REQUEST_METHOD
+              # Add on the query string manually. They do not auto transfer
+              # The POST body will be reissued by caller
+              new_location <- paste0(new_path, req$QUERY_STRING)
+              res$status <- 307
+              res$setHeader(
+                name = "Location",
+                value = new_location
+              )
+              res$serializer <- serializer_unboxed_json()
+              return(
+                list(message = "307 - Redirecting with trailing slash")
+              )
+            }
+          }
+        }
+
+        # No trailing-slash route exists...
+        # Try allowed verbs
+
+        if (isTRUE(getOption("plumber.methodNotAllowed", TRUE))) {
+          # Notify about allowed verbs
+          if (is_405(req$pr, req$PATH_INFO, req$REQUEST_METHOD)) {
+            res$status <- 405L
+            # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Allow
+            res$setHeader("Allow", paste(req$verbsAllowed, collapse = ", "))
+            res$serializer <- serializer_unboxed_json()
+            return(list(error = "405 - Method Not Allowed"))
+          }
+        }
+
+        # Notify that there is no route found
         private$notFoundHandler(req = req, res = res)
       }
       steps <- append(steps, list(notFoundStep))
