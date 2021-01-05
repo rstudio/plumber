@@ -15,27 +15,27 @@ plumber 1.1.0
 
 * Added option `plumber.methodNotFound`. This option (which is enabled by default) allows for a status of `405` to be returned if an invalid method is used when requesting a valid route. This logic executed for before calling the default `404` handler. (#746)
 
-* Guess OpenAPI response content type from serializer. (@meztez #684)
-
 * Passing `edit = TRUE` to `plumb_api()` will open the API source file. (#699)
-
-* Allow for spaces in `@apiTag` and `@tag` when tag is surrounded by single or double quotes. (#685)
 
 * OpenAPI Specification can be set using a file path. (@meztez #696)
 
+* Guess OpenAPI response content type from serializer. (@meztez #684)
+
+* Allow for spaces in `@apiTag` and `@tag` when tag is surrounded by single or double quotes. (#685)
+
 ### Bug fixes
-
-* Fixed bug where `httpuv` would return a status of `500` with body `An exception occurred` if no headers were set on the response object. (#745)
-
-* Fixed bug where all `pr_*()` returned invisibly. Now all `pr_*()` methods will print the router if displayed in the console. (#740)
 
 * Ignore regular comments in block parsing. (@meztez #718)
 
 * Block parsing comments, tags and responses ordering match plumber api ordering. (#722)
 
+* Fixed bug where `httpuv` would return a status of `500` with body `An exception occurred` if no headers were set on the response object. (#745)
+
+* Fixed bug where all `pr_*()` returned invisibly. Now all `pr_*()` methods will print the router if displayed in the console. (#740)
+
 * When calling `Plumber$handle()` and defining a new `PlumberEndpoint`, `...` will be checked for invalid names. (@meztez, #677)
 
-* `/__swagger__/` now always redirect to `/__docs__/`, even when Swagger isn't the selected interface. Use `options(plumber.legacyRedirects = FALSE)` to disable this behavior. (@blairj09 #694)
+* `/__swagger__/` now always redirects to `/__docs__/`, even when Swagger isn't the selected interface. Use `options(plumber.legacyRedirects = FALSE)` to disable this behavior. (@blairj09 #694)
 
 * Fixed `available_apis()` bug where all packages printed all available APIs. (@meztez #708)
 
