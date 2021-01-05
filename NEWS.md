@@ -1,4 +1,4 @@
-plumber 1.0.0.9999 Development version
+plumber 1.1.0
 --------------------------------------------------------------------------------
 
 ### Breaking changes
@@ -22,7 +22,7 @@ plumber 1.0.0.9999 Development version
 
 * Fixed bug where all `pr_*()` returned invisibly. Now all `pr_*()` methods will print the router if displayed in the console. (#740)
 
-* Ignore regular comments in block parsing (@meztez #718)
+* Ignore regular comments in block parsing. (@meztez #718)
 
 * Block parsing comments, tags and responses ordering match plumber api ordering. (#722)
 
