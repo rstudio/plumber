@@ -85,7 +85,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -170,9 +170,9 @@
       <small>Source: <a href='https://github.com/rstudio/plumber/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="plumber-1009999-development-version" class="section level2">
+    <div id="plumber-110" class="section level2">
 <h2 class="hasAnchor">
-<a href="#plumber-1009999-development-version" class="anchor"></a>plumber 1.0.0.9999 Development version</h2>
+<a href="#plumber-110" class="anchor"></a>plumber 1.1.0</h2>
 <div id="breaking-changes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#breaking-changes" class="anchor"></a>Breaking changes</h3>
@@ -188,22 +188,22 @@
 <ul>
 <li><p>Added option <code>plumber.trailingSlash</code>. This option (which is <strong>disabled</strong> by default) allows routes to be redirected to route definitions with a trailing slash. For example, if a <code>GET</code> request is submitted to <code>/test?a=1</code> with no <code>/test</code> route is defined, but a <code>GET</code> <code>/test/</code> route definition does exist, then the original request will respond with a <code>307</code> to reattempt against <code>GET</code> <code>/test/?a=1</code>. This option will be <em>enabled</em> by default in a future release. This logic executed for before calling the <code>404</code> handler. (<a href='https://github.com/rstudio/plumber/issues/746'>#746</a>)</p></li>
 <li><p>Added option <code>plumber.methodNotFound</code>. This option (which is enabled by default) allows for a status of <code>405</code> to be returned if an invalid method is used when requesting a valid route. This logic executed for before calling the default <code>404</code> handler. (<a href='https://github.com/rstudio/plumber/issues/746'>#746</a>)</p></li>
-<li><p>Guess OpenApi response content type from serializer. (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/684'>#684</a>)</p></li>
 <li><p>Passing <code>edit = TRUE</code> to <code><a href="../reference/plumb_api.html">plumb_api()</a></code> will open the API source file. (<a href='https://github.com/rstudio/plumber/issues/699'>#699</a>)</p></li>
-<li><p>Allow for spaces in <code>@apiTag</code> and <code>@tag</code> when tag is surrended by single or double quotes. (<a href='https://github.com/rstudio/plumber/issues/685'>#685</a>)</p></li>
 <li><p>OpenAPI Specification can be set using a file path. (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/696'>#696</a>)</p></li>
+<li><p>Guess OpenAPI response content type from serializer. (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/684'>#684</a>)</p></li>
+<li><p>Allow for spaces in <code>@apiTag</code> and <code>@tag</code> when tag is surrounded by single or double quotes. (<a href='https://github.com/rstudio/plumber/issues/685'>#685</a>)</p></li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>Bug fixes</h3>
 <ul>
+<li><p>Ignore regular comments in block parsing. (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/718'>#718</a>)</p></li>
+<li><p>Block parsing comments, tags and responses ordering match plumber api ordering. (<a href='https://github.com/rstudio/plumber/issues/722'>#722</a>)</p></li>
 <li><p>Fixed bug where <code>httpuv</code> would return a status of <code>500</code> with body <code>An exception occurred</code> if no headers were set on the response object. (<a href='https://github.com/rstudio/plumber/issues/745'>#745</a>)</p></li>
 <li><p>Fixed bug where all <code>pr_*()</code> returned invisibly. Now all <code>pr_*()</code> methods will print the router if displayed in the console. (<a href='https://github.com/rstudio/plumber/issues/740'>#740</a>)</p></li>
-<li><p>Ignore regular comments in block parsing (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/718'>#718</a>)</p></li>
-<li><p>Block parsing comments, tags and responses ordering match plumber api ordering. (<a href='https://github.com/rstudio/plumber/issues/722'>#722</a>)</p></li>
 <li><p>When calling <code>Plumber$handle()</code> and defining a new <code>PlumberEndpoint</code>, <code>...</code> will be checked for invalid names. (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/677'>#677</a>)</p></li>
-<li><p><code>/__swagger__/</code> now always redirect to <code>/__docs__/</code>, even when Swagger isn’t the selected interface. Use <code><a href="https://rdrr.io/r/base/options.html">options(plumber.legacyRedirects = FALSE)</a></code> to disable this behavior. (<a href='https://github.com/blairj09'>@blairj09</a> <a href='https://github.com/rstudio/plumber/issues/694'>#694</a>)</p></li>
+<li><p><code>/__swagger__/</code> now always redirects to <code>/__docs__/</code>, even when Swagger isn’t the selected interface. Use <code><a href="https://rdrr.io/r/base/options.html">options(plumber.legacyRedirects = FALSE)</a></code> to disable this behavior. (<a href='https://github.com/blairj09'>@blairj09</a> <a href='https://github.com/rstudio/plumber/issues/694'>#694</a>)</p></li>
 <li><p>Fixed <code><a href="../reference/plumb_api.html">available_apis()</a></code> bug where all packages printed all available APIs. (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/708'>#708</a>)</p></li>
 <li><p>Fixed Plumber <code>$routes</code> resolution bugs. Routes are now returned in lexicographical order. (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/702'>#702</a>)</p></li>
 <li><p>Plumber will now display a circular reference if one is found while printing. (<a href='https://github.com/rstudio/plumber/issues/738'>#738</a>)</p></li>
@@ -546,7 +546,7 @@
 <h2 class="hasAnchor">
 <a href="#plumber-021" class="anchor"></a>plumber 0.2.1</h2>
 <ul>
-<li>Add more Roxygen documentation for exported functions</li>
+<li>Add more <code>roxygen2</code> documentation for exported functions</li>
 <li>Remove the warning in the README as the API seems to be stabilizing.</li>
 </ul>
 </div>
