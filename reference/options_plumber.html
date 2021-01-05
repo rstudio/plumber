@@ -88,7 +88,7 @@ options_plumber() should not include the plumber. prefix." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.9999</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90001</span>
       </span>
     </div>
 
@@ -170,7 +170,7 @@ options_plumber() should not include the plumber. prefix." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plumber options</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/plumber-options.R'><code>R/plumber-options.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/rstudio/plumber/blob/master/R/options_plumber.R'><code>R/options_plumber.R</code></a></small>
     <div class="hidden name"><code>options_plumber.Rd</code></div>
     </div>
 
@@ -181,9 +181,12 @@ be set globally with <code><a href='https://rdrr.io/r/base/options.html'>options
     </div>
 
     <pre class="usage"><span class='fu'>options_plumber</span><span class='op'>(</span>
+  <span class='va'>...</span>,
   port <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.port"</span><span class='op'>)</span>,
   docs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.docs"</span><span class='op'>)</span>,
   docs.callback <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.docs.callback"</span><span class='op'>)</span>,
+  trailingSlash <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.trailingSlash"</span><span class='op'>)</span>,
+  methodNotAllowed <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.methodNotAllowed"</span><span class='op'>)</span>,
   apiURL <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.apiURL"</span><span class='op'>)</span>,
   apiScheme <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.apiScheme"</span><span class='op'>)</span>,
   apiHost <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.apiHost"</span><span class='op'>)</span>,
@@ -198,7 +201,11 @@ be set globally with <code><a href='https://rdrr.io/r/base/options.html'>options
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>port, docs, docs.callback, apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, sharedSecret, legacyRedirects</th>
+      <th>...</th>
+      <td><p>Ignored. Should be empty</p></td>
+    </tr>
+    <tr>
+      <th>port, docs, docs.callback, trailingSlash, methodNotAllowed, apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, sharedSecret, legacyRedirects</th>
       <td><p>See details</p></td>
     </tr>
     </table>
@@ -218,6 +225,14 @@ If the port is already in use, server will not be able to start. Defaults to <co
 <dt><code>plumber.docs.callback</code></dt><dd><p>A function. Called with
 a single parameter corresponding to the visual documentation url after Plumber server is ready. This can be used
 by RStudio to open the docs when then API is ran from the editor. Defaults to option <code>NULL</code>.</p></dd>
+<dt><code>plumber.trailingSlash</code></dt><dd><p>Logical value which allows the router to redirect any request
+that has a matching route with a trailing slash. For example, if set to <code>TRUE</code> and the
+GET route <code>/test/</code> existed, then a GET request of <code>/test?a=1</code> would redirect to
+<code>/test/?a=1</code>. Defaults to <code>FALSE</code>. This option will default to <code>TRUE</code> in a future release.</p></dd>
+<dt><code>plumber.methodNotAllowed</code></dt><dd><p>Logical value which allows the router to notify that an
+unavailable method was requested, but a different request method is allowed. For example,
+if set to <code>TRUE</code> and the GET route <code>/test</code> existed, then a POST request of <code>/test</code> would
+receive a 405 status and the allowed methods. Defaults to <code>TRUE</code>.</p></dd>
 <dt><code>plumber.apiURL</code></dt><dd><p>Server urls for OpenAPI Specification respecting
 pattern <code>scheme://host:port/path</code>. Other <code>api*</code> options will be ignored when set.</p></dd>
 <dt><code>plumber.apiScheme</code></dt><dd><p>Scheme used to build OpenAPI url and server url for

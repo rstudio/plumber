@@ -85,7 +85,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.9999</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90001</span>
       </span>
     </div>
 
@@ -179,12 +179,15 @@
 <ul>
 <li><p>Force json serialization of endpoint error responses instead of using endpoint serializer. (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/689'>#689</a>)</p></li>
 <li><p>When plumbing a Plumber file and using a Plumber router modifier (<code>#* <a href='https://github.com/plumber'>@plumber</a></code>), an error will be thrown if the original router is not returned. (<a href='https://github.com/rstudio/plumber/issues/738'>#738</a>)</p></li>
+<li><p><code><a href="../reference/options_plumber.html">options_plumber()</a></code> now requires that all options are named. If no option name is provided, an error with be thrown. (<a href='https://github.com/rstudio/plumber/issues/746'>#746</a>)</p></li>
 </ul>
 </div>
 <div id="new-features" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h3>
 <ul>
+<li><p>Added option <code>plumber.trailingSlash</code>. This option (which is <strong>disabled</strong> by default) allows routes to be redirected to route definitions with a trailing slash. For example, if a <code>GET</code> request is submitted to <code>/test?a=1</code> with no <code>/test</code> route is defined, but a <code>GET</code> <code>/test/</code> route definition does exist, then the original request will respond with a <code>307</code> to reattempt against <code>GET</code> <code>/test/?a=1</code>. This option will be <em>enabled</em> by default in a future release. This logic executed for before calling the <code>404</code> handler. (<a href='https://github.com/rstudio/plumber/issues/746'>#746</a>)</p></li>
+<li><p>Added option <code>plumber.methodNotFound</code>. This option (which is enabled by default) allows for a status of <code>405</code> to be returned if an invalid method is used when requesting a valid route. This logic executed for before calling the default <code>404</code> handler. (<a href='https://github.com/rstudio/plumber/issues/746'>#746</a>)</p></li>
 <li><p>Guess OpenApi response content type from serializer. (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/684'>#684</a>)</p></li>
 <li><p>Passing <code>edit = TRUE</code> to <code><a href="../reference/plumb_api.html">plumb_api()</a></code> will open the API source file. (<a href='https://github.com/rstudio/plumber/issues/699'>#699</a>)</p></li>
 <li><p>Allow for spaces in <code>@apiTag</code> and <code>@tag</code> when tag is surrended by single or double quotes. (<a href='https://github.com/rstudio/plumber/issues/685'>#685</a>)</p></li>
