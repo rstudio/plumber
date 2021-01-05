@@ -85,40 +85,45 @@ test_that("errors are thrown", {
 
 test_that("edit opens correct file", {
   # Redefine editor so that file.edit doesn't try to open a file
-  orig_opts <- options(editor = function(name, file, title) {
-    cat(file, " test file attempted to open\n", sep = "")
-  })
-  on.exit(options(orig_opts), add = TRUE)
-
-  apis <- available_apis()
-
-  selected_api <- apis$package == "plumber" & apis$name == "01-append"
-
-  expect_warning(
-    expect_output(
-      plumb_api("plumber", "01-append", edit = TRUE),
-      "plumber.R test file attempted to open",
-      fixed = TRUE
+  with_options(
+    list(
+      editor = function(name, file, title) {
+        cat(file, " test file attempted to open\n", sep = "")
+      }
     ),
-    "plumber.R has been opened in the editor"
-  )
+    {
+      apis <- available_apis()
 
-  selected_api <- apis$package == "plumber" & apis$name == "12-entrypoint"
+      selected_api <- apis$package == "plumber" & apis$name == "01-append"
 
-  expect_warning(
-    expect_output(
-      plumb_api("plumber", "12-entrypoint", edit = TRUE),
-      "entrypoint.R test file attempted to open",
-      fixed = TRUE
-    ),
-    "entrypoint.R has been opened in the editor"
+      expect_warning(
+        expect_output(
+          plumb_api("plumber", "01-append", edit = TRUE),
+          "plumber.R test file attempted to open",
+          fixed = TRUE
+        ),
+        "plumber.R has been opened in the editor"
+      )
+
+      selected_api <- apis$package == "plumber" & apis$name == "12-entrypoint"
+
+      expect_warning(
+        expect_output(
+          plumb_api("plumber", "12-entrypoint", edit = TRUE),
+          "entrypoint.R test file attempted to open",
+          fixed = TRUE
+        ),
+        "entrypoint.R has been opened in the editor"
+      )
+    }
   )
 })
 
 test_that("edit throws a warning", {
-  orig_opts <- options(editor = function(name, file, title) NULL)
-  on.exit(options(orig_opts), add = TRUE)
-  expect_warning(plumb_api("plumber", "01-append", edit = TRUE))
+  with_options(
+    list(editor = function(name, file, title) NULL),
+    expect_warning(plumb_api("plumber", "01-append", edit = TRUE))
+  )
 })
 
 context("plumb() plumber APIs")

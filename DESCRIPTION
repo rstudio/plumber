@@ -31,7 +31,8 @@ Imports:
     swagger (>= 3.33.0),
     magrittr,
     mime,
-    lifecycle (>= 0.2.0)
+    lifecycle (>= 0.2.0),
+    ellipsis (>= 0.3.0)
 LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
@@ -67,11 +68,11 @@ Collate:
     'new-rstudio-project.R'
     'openapi-spec.R'
     'openapi-types.R'
+    'options_plumber.R'
     'paths.R'
     'plumb-block.R'
     'plumb-globals.R'
     'plumb.R'
-    'plumber-options.R'
     'plumber-response.R'
     'plumber-static.R'
     'plumber-step.R'

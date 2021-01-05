@@ -7,11 +7,18 @@ plumber 1.1.0
 
 * When plumbing a Plumber file and using a Plumber router modifier (`#* @plumber`), an error will be thrown if the original router is not returned. (#738)
 
+* `options_plumber()` now requires that all options are named. If no option name is provided, an error with be thrown. (#746)
+
 ### New features
+
+* Added option `plumber.trailingSlash`. This option (which is **disabled** by default) allows routes to be redirected to route definitions with a trailing slash. For example, if a `GET` request is submitted to `/test?a=1` with no `/test` route is defined, but a `GET` `/test/` route definition does exist, then the original request will respond with a `307` to reattempt against `GET` `/test/?a=1`. This option will be _enabled_ by default in a future release. This logic executed for before calling the `404` handler. (#746)
+
+* Added option `plumber.methodNotFound`. This option (which is enabled by default) allows for a status of `405` to be returned if an invalid method is used when requesting a valid route. This logic executed for before calling the default `404` handler. (#746)
 
 * Guess OpenApi response content type from serializer. (@meztez #684)
 
 * Passing `edit = TRUE` to `plumb_api()` will open the API source file. (#699)
+
 * Allow for spaces in `@apiTag` and `@tag` when tag is surrended by single or double quotes. (#685)
 
 * OpenAPI Specification can be set using a file path. (@meztez #696)
