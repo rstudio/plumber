@@ -19,7 +19,12 @@ test_that("static txt file is served", {
 
 test_that("static txt file with encoded URI is served", {
   res <- PlumberResponse$new()
+  f <- test_path("files/static/测试.txt")
+  file.create(f)
+  on.exit(unlink(f), add = TRUE)
+  writeChar("here be dragons", f)
   pr$route(make_req("GET", "/测试.txt"), res)
+  unlink(test_path("files/static/测试.txt"))
   expect_equal(res$headers$`Content-Type`, "text/plain")
   expect_equal(trimws(rawToChar(res$body)), "here be dragons")
 })
