@@ -18,6 +18,10 @@ test_that("static txt file is served", {
 })
 
 test_that("static txt file with encoded URI is served", {
+
+  # Some file systems cannot handle these characters.
+  testthat::skip_on_cran()
+
   res <- PlumberResponse$new()
   f <- test_path("files/static/测试.txt")
   file.create(f)
