@@ -62,6 +62,8 @@ available serializers in plumber is global." />
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -231,7 +233,7 @@ See <code><a href='https://rdrr.io/r/base/print.html'>print(serializer_json)</a>
 #&gt;         toJSON(val, ...)
 #&gt;     })
 #&gt; }
-#&gt; &lt;bytecode: 0x7fb02a1fdbb0&gt;
+#&gt; &lt;bytecode: 0x7fa70a06ef30&gt;
 #&gt; &lt;environment: namespace:plumber&gt;</div><div class='input'><span class='co'># serializer_content_type() calls `serializer_headers()` and supplies a serialization function</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>serializer_content_type</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; function (type, serialize_fn = identity) 
@@ -244,7 +246,7 @@ See <code><a href='https://rdrr.io/r/base/print.html'>print(serializer_json)</a>
 #&gt;     stopifnot(nchar(type) &gt; 0)
 #&gt;     serializer_headers(list(`Content-Type` = type), serialize_fn)
 #&gt; }
-#&gt; &lt;bytecode: 0x7fb02a206160&gt;
+#&gt; &lt;bytecode: 0x7fa7094655e0&gt;
 #&gt; &lt;environment: namespace:plumber&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
