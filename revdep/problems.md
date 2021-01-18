@@ -20,6 +20,28 @@ Run `revdep_details(, "AzureContainers")` for more info
       All declared Imports should be used.
     ```
 
+# log
+
+<details>
+
+* Version: 1.1.0
+* GitHub: NA
+* Source code: https://github.com/cran/log
+* Date/Publication: 2021-01-14 09:10:02 UTC
+* Number of recursive dependencies: 61
+
+Run `revdep_details(, "log")` for more info
+
+</details>
+
+## In both
+
+*   checking dependencies in R code ... NOTE
+    ```
+    Namespace in Imports field not imported from: ‘R6’
+      All declared Imports should be used.
+    ```
+
 # openmetrics
 
 <details>
