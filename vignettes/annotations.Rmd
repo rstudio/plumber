@@ -82,6 +82,9 @@ None | `Comments` | Lines without annotation will be mapped to [Summary field](h
 #### More details on `@param`
 Types are used to define API inputs. You can use most of them in dynamic routes. Note that Plumber first look in block expression to set endpoint parameters names, types and default value. Then `@param` annotations and dynamic route/path defined parameters will override Plumber guesses from block expression.
 
+Query parameters currently need to be explicitly converted as they are pushed as is (character) to block expression.
+Only dynamic route parameters are converted to specified `@param` type before being pushed to block expression.
+
 Plumber parameter type to OpenAPI type refenrence. For programmatic use, pick the one with an asterisk.
 
 Type | OpenApi | Availability
@@ -96,6 +99,16 @@ Type | OpenApi | Availability
 ##### Annotations example
 
 ```{r, eval = FALSE, echo = TRUE}
+#* @get /query/parameters
+#* @serializer text
+#* @param name:str
+#* @param age:[int]
+function(name, age) {
+  # Explicit conversion is required for query parameters
+  age <- as.integer(age)
+  sprintf("%s is %i years old", name, max(age))
+}
+
 #* @get /dyn/<name:str>/<age:[int]>/route
 #* @serializer text
 #* @parser none
@@ -117,9 +130,15 @@ function(f) {
 
 ##### Equivalent programmatic usage
 ```{r, eval = FALSE, echo = TRUE}
-text_handler <- function(name, age) { sprintf("%s is %i years old", name, age) }
+text_handler <- function(name, age) { sprintf("%s is %i years old", name, max(age)) }
+qp_handler <- function(name, age) { age <- as.integer(age); text_handler(name, age) }
 file_handler <- function(file) { as_attachment(file[[1]], names(file)[1]) }
 pr() %>%
+  pr_get(path = "/query/parameters",
+         handler = qp_handler,
+         serializer = serializer_text(),
+         params = list("name" = list(type = "string", required = FALSE, isArray = FALSE),
+                       "age" = list(type = "integer", required = FALSE, isArray = TRUE))) %>%
   pr_get(path = "/dyn/<name:str>/<age:[int]>/route",
          handler = text_handler,
          serializer = serializer_text(),
