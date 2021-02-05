@@ -45,7 +45,7 @@ plumber 1.0.0.9999 Development version
 
 * Changed `future::plan()` from `multiprocess` to `multisession` in example API `14-future` as "Strategy 'multiprocess' is deprecated in future (>= 1.20.0)". (#747)
 
-* Nullify body on HTTP responses which forbid it (e.g. 1xx, 204, 304)
+* Remove response bodies (and therefore the Content-Length header) for status codes which forbid it under the HTTP specification (e.g. 1xx, 204, 304). (@atheriel #758, @meztez #760)
 
 plumber 1.0.0
 --------------------------------------------------------------------------------
