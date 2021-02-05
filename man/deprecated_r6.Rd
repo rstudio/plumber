@@ -101,6 +101,7 @@ The objects of this class are cloneable with this method.
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="run">}\href{../../plumber/html/Plumber.html#method-run}{\code{plumber::Plumber$run()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="serve">}\href{../../plumber/html/Plumber.html#method-serve}{\code{plumber::Plumber$serve()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set404Handler">}\href{../../plumber/html/Plumber.html#method-set404Handler}{\code{plumber::Plumber$set404Handler()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set405Handler">}\href{../../plumber/html/Plumber.html#method-set405Handler}{\code{plumber::Plumber$set405Handler()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setApiSpec">}\href{../../plumber/html/Plumber.html#method-setApiSpec}{\code{plumber::Plumber$setApiSpec()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setDebug">}\href{../../plumber/html/Plumber.html#method-setDebug}{\code{plumber::Plumber$setDebug()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setDocs">}\href{../../plumber/html/Plumber.html#method-setDocs}{\code{plumber::Plumber$setDocs()}}\out{</span>}

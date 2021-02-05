@@ -89,6 +89,15 @@ pr$set404Handler(function(req, res) {cat(req$PATH_INFO)})
 }
 
 ## ------------------------------------------------
+## Method `Plumber$set405Handler`
+## ------------------------------------------------
+
+\dontrun{
+pr <- pr()
+pr$set405Handler(function(req, res) {cat(req$PATH_INFO)})
+}
+
+## ------------------------------------------------
 ## Method `Plumber$setErrorHandler`
 ## ------------------------------------------------
 
@@ -109,7 +118,7 @@ pr$setErrorHandler(function(req, res, err) {
 \code{\link[=pr_filter]{pr_filter()}},
 \code{\link[=pr_set_api_spec]{pr_set_api_spec()}}, \code{\link[=pr_set_docs]{pr_set_docs()}},
 \code{\link[=pr_set_serializer]{pr_set_serializer()}}, \code{\link[=pr_set_parsers]{pr_set_parsers()}},
-\code{\link[=pr_set_404]{pr_set_404()}}, \code{\link[=pr_set_error]{pr_set_error()}},
+\code{\link[=pr_set_404]{pr_set_404()}}, \code{\link[=pr_set_405]{pr_set_405()}}, \code{\link[=pr_set_error]{pr_set_error()}},
 \code{\link[=pr_set_debug]{pr_set_debug()}},
 \code{\link[=pr_set_docs_callback]{pr_set_docs_callback()}}
 }
@@ -157,6 +166,7 @@ pr$setErrorHandler(function(req, res, err) {
 \item \href{#method-setSerializer}{\code{Plumber$setSerializer()}}
 \item \href{#method-setParsers}{\code{Plumber$setParsers()}}
 \item \href{#method-set404Handler}{\code{Plumber$set404Handler()}}
+\item \href{#method-set405Handler}{\code{Plumber$set405Handler()}}
 \item \href{#method-setErrorHandler}{\code{Plumber$setErrorHandler()}}
 \item \href{#method-setDocs}{\code{Plumber$setDocs()}}
 \item \href{#method-setDocsCallback}{\code{Plumber$setDocsCallback()}}
@@ -682,13 +692,44 @@ pr$set404Handler(function(req, res) {cat(req$PATH_INFO)})
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set405Handler"></a>}}
+\if{latex}{\out{\hypertarget{method-set405Handler}{}}}
+\subsection{Method \code{set405Handler()}}{
+Sets the handler that gets called if an
+incoming request uses an unallowed method.
+
+See also: \code{\link[=pr_set_405]{pr_set_405()}}
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$set405Handler(fun)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{fun}}{a handler function.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+pr <- pr()
+pr$set405Handler(function(req, res) {cat(req$PATH_INFO)})
+}
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-setErrorHandler"></a>}}
 \if{latex}{\out{\hypertarget{method-setErrorHandler}{}}}
 \subsection{Method \code{setErrorHandler()}}{
 Sets the error handler which gets invoked if any filter or
 endpoint generates an error.
 
-See also: \code{\link[=pr_set_404]{pr_set_404()}}
+See also: \code{\link[=pr_set_error]{pr_set_error()}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Plumber$setErrorHandler(fun)}\if{html}{\out{</div>}}
 }
