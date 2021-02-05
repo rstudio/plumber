@@ -42,10 +42,17 @@ function(){
   stop("ERROR")
 }
 
-#* @get /response
+#* @get /response123
 function(res){
   res$body <- "overridden"
   res$status <- 123
+  res
+}
+
+#* @get /response200
+function(res){
+  res$body <- "overridden"
+  res$status <- 200
   res
 }
 
