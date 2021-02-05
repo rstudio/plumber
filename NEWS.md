@@ -23,7 +23,7 @@ plumber 1.0.0.9999 Development version
 
 * OpenAPI Specification can be set using a file path. (@meztez #696)
 
-* Add `$set_505_handler()` and `pr_set_405()` to customize 405 error type.
+* Add `$set_405_handler()` and `pr_set_405()` to customize 405 error type. (#759)
 
 ### Bug fixes
 
