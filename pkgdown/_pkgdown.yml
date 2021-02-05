@@ -75,6 +75,7 @@ reference:
   - 'pr_set_serializer'
   - 'pr_set_parsers'
   - 'pr_set_404'
+  - 'pr_set_405'
   - 'pr_set_error'
   - 'pr_set_debug'
   - 'pr_set_docs_callback'
