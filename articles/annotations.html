@@ -303,6 +303,7 @@
 <a href="#more-details-on-param" class="anchor"></a>More details on <code>@param</code>
 </h4>
 <p>Types are used to define API inputs. You can use most of them in dynamic routes. Note that Plumber first look in block expression to set endpoint parameters names, types and default value. Then <code>@param</code> annotations and dynamic route/path defined parameters will override Plumber guesses from block expression.</p>
+<p>Query parameters currently need to be explicitly converted as they are pushed as is (character) to block expression. Only dynamic route parameters are converted to specified <code>@param</code> type before being pushed to block expression.</p>
 <p>Plumber parameter type to OpenAPI type refenrence. For programmatic use, pick the one with an asterisk.</p>
 <table class="table">
 <thead><tr class="header">
@@ -370,7 +371,17 @@
 <h5 class="hasAnchor">
 <a href="#annotations-example-1" class="anchor"></a>Annotations example</h5>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#* @get /dyn/&lt;name:str&gt;/&lt;age:[int]&gt;/route</span>
+<code class="sourceCode R"><span class="co">#* @get /query/parameters</span>
+<span class="co">#* @serializer text</span>
+<span class="co">#* @param name:str</span>
+<span class="co">#* @param age:[int]</span>
+<span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">{</span>
+  <span class="co"># Explicit conversion is required for query parameters</span>
+  <span class="va">age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span><span class="st">"%s is %i years old"</span>, <span class="va">name</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="co">#* @get /dyn/&lt;name:str&gt;/&lt;age:[int]&gt;/route</span>
 <span class="co">#* @serializer text</span>
 <span class="co">#* @parser none</span>
 <span class="co">#* @response 200 A sentence</span>
@@ -392,9 +403,15 @@
 <h5 class="hasAnchor">
 <a href="#equivalent-programmatic-usage-1" class="anchor"></a>Equivalent programmatic usage</h5>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">text_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span><span class="st">"%s is %i years old"</span>, <span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">}</span>
+<code class="sourceCode R"><span class="va">text_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span><span class="st">"%s is %i years old"</span>, <span class="va">name</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span> <span class="op">}</span>
+<span class="va">qp_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">{</span> <span class="va">age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span>; <span class="fu">text_handler</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">}</span>
 <span class="va">file_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="../reference/as_attachment.html">as_attachment</a></span><span class="op">(</span><span class="va">file</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">}</span>
 <span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/query/parameters"</span>,
+         handler <span class="op">=</span> <span class="va">qp_handler</span>,
+         serializer <span class="op">=</span> <span class="fu"><a href="../reference/serializer_headers.html">serializer_text</a></span><span class="op">(</span><span class="op">)</span>,
+         params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"name"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"string"</span>, required <span class="op">=</span> <span class="cn">FALSE</span>, isArray <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
+                       <span class="st">"age"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"integer"</span>, required <span class="op">=</span> <span class="cn">FALSE</span>, isArray <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/dyn/&lt;name:str&gt;/&lt;age:[int]&gt;/route"</span>,
          handler <span class="op">=</span> <span class="va">text_handler</span>,
          serializer <span class="op">=</span> <span class="fu"><a href="../reference/serializer_headers.html">serializer_text</a></span><span class="op">(</span><span class="op">)</span>,
