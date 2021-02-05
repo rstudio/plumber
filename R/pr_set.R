@@ -65,6 +65,37 @@ pr_set_404 <- function(pr, fun) {
   pr
 }
 
+#' Set the handler that is called when the incoming request uses an unallowed
+#' method
+#'
+#' This function allows a custom error message to be returned when a request
+#' cannot uses an unallowed method.
+#'
+#' @template param_pr
+#' @param fun A handler function
+#'
+#' @return The Plumber router with a modified 404 handler
+#'
+#' @examples
+#' \dontrun{
+#' handler_405 <- function(req, res) {
+#'   res$status <- 405
+#'   res$body <- "Oops"
+#' }
+#'
+#' pr() %>%
+#'   pr_get("/hi", function() "Hello") %>%
+#'   pr_set_405(handler_405) %>%
+#'   pr_run()
+#' }
+#'
+#' @export
+pr_set_405 <- function(pr, fun) {
+  validate_pr(pr)
+  pr$set405Handler(fun)
+  pr
+}
+
 #' Set the error handler that is invoked if any filter or endpoint generates an
 #' error
 #'

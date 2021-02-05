@@ -45,7 +45,7 @@ defaultPlumberFilters <- list(
 #'  [pr_filter()],
 #'  [pr_set_api_spec()], [pr_set_docs()],
 #'  [pr_set_serializer()], [pr_set_parsers()],
-#'  [pr_set_404()], [pr_set_error()],
+#'  [pr_set_404()], [pr_set_405()], [pr_set_error()],
 #'  [pr_set_debug()],
 #'  [pr_set_docs_callback()]
 #' @include hookable.R
@@ -92,6 +92,7 @@ Plumber <- R6Class(
       self$setParsers(c("json", "form", "text", "octet", "multi"))
       self$setErrorHandler(defaultErrorHandler())
       self$set404Handler(default404Handler)
+      self$set405Handler(default405Handler)
       self$setDocs(TRUE)
       private$docs_info$has_not_been_set <- TRUE # set to know if `$setDocs()` has been called before `$run()`
       self$setDocsCallback(getOption('plumber.docs.callback', getOption('plumber.swagger.url', NULL)))
@@ -759,11 +760,7 @@ Plumber <- R6Class(
         if (isTRUE(getOption("plumber.methodNotAllowed", TRUE))) {
           # Notify about allowed verbs
           if (is_405(req$pr, req$PATH_INFO, req$REQUEST_METHOD)) {
-            res$status <- 405L
-            # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Allow
-            res$setHeader("Allow", paste(req$verbsAllowed, collapse = ", "))
-            res$serializer <- serializer_unboxed_json()
-            return(list(error = "405 - Method Not Allowed"))
+            return(private$unallowedMethodHandler(req = req, res = res))
           }
         }
 
@@ -853,10 +850,23 @@ Plumber <- R6Class(
     set404Handler = function(fun){
       private$notFoundHandler <- fun
     },
+    #' @description Sets the handler that gets called if an
+    #' incoming request uses an unallowed method.
+    #'
+    #' See also: [pr_set_405()]
+    #' @param fun a handler function.
+    #' @examples
+    #' \dontrun{
+    #' pr <- pr()
+    #' pr$set405Handler(function(req, res) {cat(req$PATH_INFO)})
+    #' }
+    set405Handler = function(fun){
+      private$unallowedMethodHandler <- fun
+    },
     #' @description Sets the error handler which gets invoked if any filter or
     #' endpoint generates an error.
     #'
-    #' See also: [pr_set_404()]
+    #' See also: [pr_set_error()]
     #' @param fun a handler function.
     #' @examples
     #' \dontrun{
@@ -1176,6 +1186,7 @@ Plumber <- R6Class(
 
     errorHandler = NULL,
     notFoundHandler = NULL,
+    unallowedMethodHandler = NULL,
     maxSize = NULL, # Max request size in bytes
 
     api_spec_handler = NULL,

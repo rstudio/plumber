@@ -8,6 +8,14 @@ test_that("404 handler sets 404", {
   expect_match(val$error, "Not Found")
 })
 
+test_that("405 handler sets 405", {
+  res <- PlumberResponse$new()
+  val <- default405Handler(list(), res)
+  expect_equal(res$status, 405)
+  expect_match(val$error, "405")
+  expect_match(val$error, "Method Not Allowed")
+})
+
 test_that("405 handling is ok, get the right verbs", {
   pr <- pr()
   sub <- pr()
