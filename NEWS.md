@@ -45,6 +45,7 @@ plumber 1.0.0.9999 Development version
 
 * Changed `future::plan()` from `multiprocess` to `multisession` in example API `14-future` as "Strategy 'multiprocess' is deprecated in future (>= 1.20.0)". (#747)
 
+* Fix Content-Length header on HTTP responses which forbid it (e.g. 1xx, 204, 304)
 
 plumber 1.0.0
 --------------------------------------------------------------------------------

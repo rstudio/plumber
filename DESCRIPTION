@@ -24,7 +24,7 @@ Imports:
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
     webutils (>= 1.1),
-    httpuv (>= 1.5.0),
+    httpuv (>= 1.5.5),
     crayon,
     promises (>= 1.1.0),
     sodium,
