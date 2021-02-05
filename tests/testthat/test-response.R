@@ -45,7 +45,7 @@ test_that("response properly sets cookies with multiple options", {
   expect_equal(head[["Set-Cookie"]], "abc=two%20words; HttpOnly; Secure; SameSite=None")
 })
 
-test_that("Content-Length header on HTTP responses which forbid it", {
+test_that("Body on HTTP responses which forbid it", {
   res <- PlumberResponse$new()
   res$body <- "Hello"
   res$status <- 204
