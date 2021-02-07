@@ -8,6 +8,7 @@ pr_run(
   pr,
   host = "127.0.0.1",
   port = getOption("plumber.port", NULL),
+  swaggerCallback,
   quiet = FALSE
 )
 }
@@ -21,6 +22,10 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 \item{port}{A number or integer that indicates the server port that should
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.}
+
+\item{swaggerCallback}{An optional single-argument function that is called
+back with the URL to an OpenAPI user interface when one becomes ready. If
+missing, defaults to \verb{$setDocsCallback()}.}
 
 \item{quiet}{If \code{TRUE}, don't print routine startup messages.}
 }

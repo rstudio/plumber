@@ -475,6 +475,9 @@ pr_filter <- function(pr,
 #' @param port A number or integer that indicates the server port that should
 #' be listened on. Note that on most Unix-like systems including Linux and
 #' Mac OS X, port numbers smaller than 1025 require root privileges.
+#' @param swaggerCallback An optional single-argument function that is called
+#'   back with the URL to an OpenAPI user interface when one becomes ready. If
+#'   missing, defaults to `$setDocsCallback()`.
 #' @param quiet If `TRUE`, don't print routine startup messages.
 #'
 #' @examples
@@ -490,11 +493,13 @@ pr_filter <- function(pr,
 pr_run <- function(pr,
                    host = '127.0.0.1',
                    port = getOption('plumber.port', NULL),
+                   swaggerCallback,
                    quiet = FALSE
 ) {
   validate_pr(pr)
   pr$run(host = host,
          port = port,
+         swaggerCallback = swaggerCallback,
          quiet = quiet)
 }
 
