@@ -220,7 +220,8 @@ See also: \code{\link[=pr_run]{pr_run()}}
   port = getOption("plumber.port", NULL),
   swagger = deprecated(),
   debug = deprecated(),
-  swaggerCallback = deprecated()
+  swaggerCallback,
+  quiet = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -241,7 +242,11 @@ This value does not need to be explicitly assigned. To explicitly set it, see \c
 
 \item{\code{debug}}{Deprecated. See \verb{$setDebug()}}
 
-\item{\code{swaggerCallback}}{Deprecated. See \verb{$setDocsCallback()}}
+\item{\code{swaggerCallback}}{An optional single-argument function that is
+called back with the URL to an OpenAPI user interface when one becomes
+ready. If missing, defaults to \verb{$setDocsCallback()}.}
+
+\item{\code{quiet}}{If \code{TRUE}, don't print routine startup messages.}
 }
 \if{html}{\out{</div>}}
 }

@@ -145,14 +145,18 @@ Plumber <- R6Class(
     #' This value does not need to be explicitly assigned. To explicitly set it, see [options_plumber()].
     #' @param debug Deprecated. See `$setDebug()`
     #' @param swagger Deprecated. See `$setDocs(docs)` or `$setApiSpec()`
-    #' @param swaggerCallback Deprecated. See `$setDocsCallback()`
+    #' @param swaggerCallback An optional single-argument function that is
+    #'   called back with the URL to an OpenAPI user interface when one becomes
+    #'   ready. If missing, defaults to `$setDocsCallback()`.
+    #' @param quiet If `TRUE`, don't print routine startup messages.
     #' @importFrom lifecycle deprecated
     run = function(
       host = '127.0.0.1',
       port = getOption('plumber.port', NULL),
       swagger = deprecated(),
       debug = deprecated(),
-      swaggerCallback = deprecated()
+      swaggerCallback,
+      quiet = FALSE
     ) {
 
       if (isTRUE(private$disable_run)) {
@@ -184,14 +188,16 @@ Plumber <- R6Class(
           }
         }
       }
-      if (lifecycle::is_present(swaggerCallback)) {
-        lifecycle::deprecate_warn("1.0.0", "run(swaggerCallback = )", "setDocsCallback(callback = )")
-        self$setDocsCallback(swaggerCallback)
+
+      if (missing(swaggerCallback)) {
+        swaggerCallback <- private$docs_callback
       }
 
       port <- findPort(port)
 
-      message("Running plumber API at ", urlHost(host = host, port = port, changeHostLocation = FALSE))
+      if (!isTRUE(quiet)) {
+        message("Running plumber API at ", urlHost(host = host, port = port, changeHostLocation = FALSE))
+      }
 
       # Set and restore the wd to make it appear that the proc is running local to the file's definition.
       if (!is.null(private$filename)) {
@@ -205,7 +211,8 @@ Plumber <- R6Class(
           host = host,
           port = port,
           docs_info = private$docs_info,
-          callback = private$docs_callback
+          callback = swaggerCallback,
+          quiet = quiet
         )
         on.exit(unmount_docs(self, private$docs_info), add = TRUE)
       }
