@@ -4,7 +4,12 @@
 \alias{pr_run}
 \title{Start a server using \code{plumber} object}
 \usage{
-pr_run(pr, host = "127.0.0.1", port = getOption("plumber.port", NULL))
+pr_run(
+  pr,
+  host = "127.0.0.1",
+  port = getOption("plumber.port", NULL),
+  quiet = FALSE
+)
 }
 \arguments{
 \item{pr}{A Plumber API. Note: The supplied Plumber API object will also be updated in place as well as returned by the function.}
@@ -16,6 +21,8 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 \item{port}{A number or integer that indicates the server port that should
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.}
+
+\item{quiet}{If \code{TRUE}, don't print routine startup messages.}
 }
 \description{
 \code{port} does not need to be explicitly assigned.

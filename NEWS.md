@@ -23,6 +23,8 @@ plumber 1.0.0.9999 Development version
 
 * OpenAPI Specification can be set using a file path. (@meztez #696)
 
+* Added `quiet = TRUE` to `Plumber$run()` to suppress routine startup messages. (@jcheng5 #765)
+
 ### Bug fixes
 
 * Fixed bug where `httpuv` would return a status of `500` with body `An exception occurred` if no headers were set on the response object. (#745)
