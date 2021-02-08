@@ -67,6 +67,7 @@ options_plumber <- function(
 ) {
   ellipsis::check_dots_empty()
 
+  # Make sure all fallback options are disabled
   if (!missing(docs.callback) && is.null(docs.callback)) {
     options("plumber.swagger.url" = NULL)
   }
