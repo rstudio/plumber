@@ -24,8 +24,6 @@ They can also be provided manually for historical reasons.
 to accept multiple verbs for a single path. Now it's simpler to just parse
 each separate verb/path into its own endpoint, so we just do that.}
 
-\item{\code{path}}{a character string. endpoint path}
-
 \item{\code{comments}}{endpoint comments}
 
 \item{\code{responses}}{endpoint responses}
@@ -35,6 +33,13 @@ each separate verb/path into its own endpoint, so we just do that.}
 \item{\code{tags}}{endpoint tags}
 
 \item{\code{parsers}}{step allowed parsers}
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{path}}{a character string. endpoint path}
 }
 \if{html}{\out{</div>}}
 }
