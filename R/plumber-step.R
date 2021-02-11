@@ -171,8 +171,6 @@ PlumberEndpoint <- R6Class(
     #' to accept multiple verbs for a single path. Now it's simpler to just parse
     #' each separate verb/path into its own endpoint, so we just do that.
     verbs = NA,
-    #' @field path a character string. endpoint path
-    path = NA,
     #' @field comments endpoint comments
     comments = NA,
     #' @field responses endpoint responses
@@ -219,12 +217,7 @@ PlumberEndpoint <- R6Class(
     #' @return A new `PlumberEndpoint` object
     initialize = function(verbs, path, expr, envir, serializer, parsers, lines, params, comments, responses, tags) {
 
-      if (substr(path, 1,1) != "/") {
-        path <- paste0("/", path)
-      }
-
       self$verbs <- verbs
-      self$path <- path
 
       private$expr <- expr
       if (is.expression(expr)){
@@ -235,7 +228,7 @@ PlumberEndpoint <- R6Class(
       throw_if_func_is_not_a_function(private$func)
       private$envir <- envir
 
-      private$regex <- createPathRegex(path, self$getFuncParams())
+      self$path <- path
 
       if (!missing(serializer) && !is.null(serializer)){
         self_set_serializer(self, serializer)
@@ -283,8 +276,22 @@ PlumberEndpoint <- R6Class(
       self$params
     }
   ),
+  active = list(
+    #' @field path a character string. endpoint path
+    path = function(value) {
+      if (missing(value)) {
+        return(private$pathVal)
+      }
+      if (substr(value, 1,1) != "/") {
+        value <- paste0("/", value)
+      }
+      private$regex <- createPathRegex(value, self$getFuncParams())
+      private$pathVal <- value
+    }
+  ),
   private = list(
-    regex = NULL
+    regex = NULL,
+    pathVal = NA
   )
 )
 

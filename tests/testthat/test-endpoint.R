@@ -114,3 +114,20 @@ test_that("Programmatic endpoints with functions work", {
   h <- res$headers
   expect_true(h$expr)
 })
+
+test_that("Path rewrites correctly", {
+  foo_pr <- pr() %>%
+    pr_get("/foo", function() "foo")
+
+  foo <- foo_pr$endpoints[[1]][[1]]
+
+  expect_true("foo" %in% names(foo_pr$routes))
+  expect_true(foo$matchesPath("/foo"))
+  expect_false(foo$matchesPath("/bar"))
+
+  foo$path <- "bar"
+
+  expect_false("foo" %in% names(foo_pr$routes))
+  expect_false(foo$matchesPath("/foo"))
+  expect_true(foo$matchesPath("/bar"))
+})
