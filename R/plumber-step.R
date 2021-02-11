@@ -285,6 +285,7 @@ PlumberEndpoint <- R6Class(
       if (substr(value, 1,1) != "/") {
         value <- paste0("/", value)
       }
+      # private$func is not updated after initialization
       private$regex <- createPathRegex(value, self$getFuncParams())
       private$pathVal <- value
     }
