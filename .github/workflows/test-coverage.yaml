@@ -10,44 +10,51 @@ name: test-coverage
 
 jobs:
   test-coverage:
-    runs-on: macOS-latest
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: ubuntu-18.04,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
     env:
+      RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
 
       - uses: r-lib/actions/setup-r@master
+        id: install-r
+        with:
+          r-version: ${{ matrix.config.r }}
 
       - uses: r-lib/actions/setup-pandoc@master
 
-      # Install Cairo system dependencies
-      # used for svg testing
-      - name: Mac systemdeps
-        if: runner.os == 'macOS'
-        run: |
-          brew install --cask xquartz
-          brew install cairo
-
-      - name: Query dependencies
-        run: |
-          install.packages('remotes')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+      - name: Install pak and query dependencies
         shell: Rscript {0}
-
+        run: |
+          install.packages("pak", repos = "https://r-lib.github.io/p/pak/dev/")
+          saveRDS(pak::pkg_deps_tree("local::.", dependencies = TRUE), ".github/r-depends.rds")
       - name: Cache R packages
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+          key: ${{ matrix.config.os }}-${{ steps.install-r.outputs.installed-r-version }}-1-testing-${{ hashFiles('.github/r-depends.rds') }}
+          restore-keys: |
+            ${{ matrix.config.os }}-${{ steps.install-r.outputs.installed-r-version }}-1-testing-
+            ${{ matrix.config.os }}-${{ steps.install-r.outputs.installed-r-version }}-1-
+
+      - name: Install system dependencies
+        if: runner.os == 'Linux'
+        shell: Rscript {0}
+        run: |
+          pak::local_system_requirements(execute = TRUE)
+          pak::pkg_system_requirements("pkgdown", execute = TRUE)
 
       - name: Install dependencies
-        run: |
-          install.packages(c("remotes"))
-          remotes::install_deps(dependencies = TRUE)
-          remotes::install_cran("covr")
         shell: Rscript {0}
+        run: |
+          pak::local_install_dev_deps(upgrade = TRUE)
+          pak::pkg_install("covr")
 
       - name: Test coverage
         run: covr::codecov()
