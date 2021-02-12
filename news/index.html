@@ -58,8 +58,6 @@
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -94,6 +92,12 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -327,7 +331,7 @@
 <h4 class="hasAnchor">
 <a href="#visual-documentation" class="anchor"></a>Visual Documentation</h4>
 <ul>
-<li><p>Generalize user interface integration. Plumber can now use other OpenAPI compatible user interfaces like <code>RapiDoc</code> (https://github.com/mrin9/RapiDoc) and <code>Redoc</code> (https://github.com/Redocly/redoc). Pending CRAN approbations, development R packages are available from https://github.com/meztez/rapidoc/ and https://github.com/meztez/redoc/. (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/562'>#562</a>)</p></li>
+<li><p>Generalize user interface integration. Plumber can now use other OpenAPI compatible user interfaces like <code>RapiDoc</code> (<a href="https://github.com/mrin9/RapiDoc" class="uri">https://github.com/mrin9/RapiDoc</a>) and <code>Redoc</code> (<a href="https://github.com/Redocly/redoc" class="uri">https://github.com/Redocly/redoc</a>). Pending CRAN approbations, development R packages are available from <a href="https://github.com/meztez/rapidoc/" class="uri">https://github.com/meztez/rapidoc/</a> and <a href="https://github.com/meztez/redoc/" class="uri">https://github.com/meztez/redoc/</a>. (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/562'>#562</a>)</p></li>
 <li><p>Changed Swagger UI to use <a href="https://github.com/rstudio/swagger">swagger</a> R package to display the swagger page. (<a href='https://github.com/rstudio/plumber/issues/365'>#365</a>)</p></li>
 <li><p>Added support for swagger for mounted routers (<a href='https://github.com/bradleyhd'>@bradleyhd</a>, <a href='https://github.com/rstudio/plumber/issues/274'>#274</a>).</p></li>
 </ul>
@@ -351,7 +355,10 @@
 <li><p>Plumber router <code>$run()</code> method arguments <code>swagger</code>, <code>swaggerCallback</code> and <code>debug</code> are now deprecated. User interface and url callback are now enabled by default and managed through Plumber router <code>$setDocs()</code>, <code>$setDocsCallback()</code>, and <code>$setDebug()</code> methods and options <code>plumber.docs</code> and <code>plumber.docs.callback</code>. (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/562'>#562</a>)</p></li>
 <li><p><code><a href="../reference/plumb.html">plumb()</a></code> now returns an object of class <code>"Plumber"</code> (previously <code>"plumber"</code>). To check if an object is a Plumber router, use new method <code><a href="../reference/is_plumber.html">is_plumber()</a></code>. (<a href='https://github.com/rstudio/plumber/issues/653'>#653</a>)</p></li>
 <li><p><code>PlumberStatic</code> objects now have a class of <code>"PlumberStatic"</code> (previously <code>"plumberstatic"</code>). (<a href='https://github.com/rstudio/plumber/issues/653'>#653</a>)</p></li>
-<li><p>The source files used in plumber <strong>must use</strong> the UTF-8 encoding if they contain non-ASCII characters (<a href='https://github.com/shrektan'>@shrektan</a>, <a href='https://github.com/rstudio/plumber/issues/312'>#312</a>, <a href='https://github.com/rstudio/plumber/issues/328'>#328</a>).</p></li>
+<li>
+<p>The source files used in plumber <strong>must use</strong> the UTF-8 encoding if they contain non-ASCII characters (<a href='https://github.com/shrektan'>@shrektan</a>, <a href='https://github.com/rstudio/plumber/issues/312'>#312</a>,</p>
+<p><a href='https://github.com/rstudio/plumber/issues/328'>#328</a>).</p>
+</li>
 <li><p><code><a href="https://rdrr.io/r/base/options.html">options(plumber.debug)</a></code> is not set anymore when running the plumber application. Instead retrieve the debug value using <code>$getDebug()</code> on the Plumber router directly. Ex: <code>function(req, res) { req$pr$getDebug() }</code>. (<a href='https://github.com/rstudio/plumber/issues/639'>#639</a>)</p></li>
 <li><p><code>PlumberEndpoint</code>’s method <code>$exec()</code> now has a shape of <code>$exec(req, res)</code> (vs <code>$exec(...)</code>). This allows for fine tune control over the arguments being sent to the endpoint function.</p></li>
 <li><p>When creating a <code>PlumberFilter</code> or <code>PlumberEndpoint</code>, an error will be thrown if <code>expr</code> does not evaluate to a function. (<a href='https://github.com/rstudio/plumber/issues/666'>#666</a>)</p></li>
@@ -392,7 +399,7 @@
 <li><p>Plumber files are now only evaluated once. Prior plumber behavior sourced endpoint functions twice and non-endpoint code blocks once. (<a href='https://github.com/rstudio/plumber/issues/328'>#328</a>)</p></li>
 <li><p>Improve speed of <code>canServe()</code> method of the <code>PlumberEndpoint</code> class (<a href='https://github.com/atheriel'>@atheriel</a>, <a href='https://github.com/rstudio/plumber/issues/484'>#484</a>)</p></li>
 <li><p>Get more file extension content types using the <code>mime</code> package. (<a href='https://github.com/rstudio/plumber/issues/660'>#660</a>)</p></li>
-<li><p>Endpoints that produce images within a <code><a href="https://rstudio.github.io/promises/reference/promise.html">promises::promise()</a></code> will now use the expected graphics device. (<a href='https://github.com/rstudio/plumber/issues/669'>#669</a>)</p></li>
+<li><p>Endpoints that produce images within a <code><a href="https://rstudio.github.io/promises//reference/promise.html">promises::promise()</a></code> will now use the expected graphics device. (<a href='https://github.com/rstudio/plumber/issues/669'>#669</a>)</p></li>
 </ul>
 </div>
 <div id="bug-fixes-1" class="section level3">
@@ -583,7 +590,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

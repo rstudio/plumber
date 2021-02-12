@@ -62,8 +62,6 @@ available serializers in plumber is global." />
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -98,6 +96,12 @@ available serializers in plumber is global." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -233,7 +237,7 @@ See <code><a href='https://rdrr.io/r/base/print.html'>print(serializer_json)</a>
 #&gt;         toJSON(val, ...)
 #&gt;     })
 #&gt; }
-#&gt; &lt;bytecode: 0x7fce50861340&gt;
+#&gt; &lt;bytecode: 0x5628e43d9ac8&gt;
 #&gt; &lt;environment: namespace:plumber&gt;</div><div class='input'><span class='co'># serializer_content_type() calls `serializer_headers()` and supplies a serialization function</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>serializer_content_type</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; function (type, serialize_fn = identity) 
@@ -246,7 +250,7 @@ See <code><a href='https://rdrr.io/r/base/print.html'>print(serializer_json)</a>
 #&gt;     stopifnot(nchar(type) &gt; 0)
 #&gt;     serializer_headers(list(`Content-Type` = type), serialize_fn)
 #&gt; }
-#&gt; &lt;bytecode: 0x7fce4e855908&gt;
+#&gt; &lt;bytecode: 0x5628e43e28d8&gt;
 #&gt; &lt;environment: namespace:plumber&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -263,7 +267,7 @@ See <code><a href='https://rdrr.io/r/base/print.html'>print(serializer_json)</a>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
