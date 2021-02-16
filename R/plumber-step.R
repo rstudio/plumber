@@ -277,6 +277,8 @@ PlumberEndpoint <- R6Class(
     }
   ),
   active = list(
+    # Normally, this would have been a `$setPath(path)` method, but `path` was already publicly available.
+    # It would not make sense to have `$getPath()` and deprecate `$path`
     #' @field path a character string. endpoint path
     path = function(value) {
       if (missing(value)) {
