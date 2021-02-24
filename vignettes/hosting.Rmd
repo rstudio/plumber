@@ -24,20 +24,19 @@ Once you have developed your Plumber API, the next step is to find a way to host
 
 For these reasons and more, you should consider setting up a separate server on which you can host your Plumber APIs. There are a variety of options that you can consider.
 
-## DigitalOcean {#digitalocean}
-
-[DigitalOcean](https://m.do.co/c/add0b50f54c4) is an easy-to-use Cloud Computing provider. They offer a simple way to spin up a Linux virtual machine and access it remotely. You can choose what size machine you want to run -- with options ranging from small machines with 512MB of RAM for a few dollars a month up to large machines with dozens of GB of RAM -- and only pay for it while it's online.
-
-To deploy your Plumber API to DigitalOcean, please check out the `plumber` companion package [`plumberDeploy`](https://github.com/meztez/plumberDeploy).
-
-
 ## RStudio Connect {#rstudio-connect}
 
 [RStudio Connect](https://rstudio.com/products/connect/) is an enterprise publishing platform from RStudio. It supports push-button publishing from the RStudio IDE of a variety of R content types including Plumber APIs. Unlike all the other options listed here, RStudio Connect automatically manages the dependent packages and files your API has and recreates an environment closely mimicking your local development environment on the server.
 
 RStudio Connect automatically manages the number of R processes necessary to handle the current load and balances incoming traffic across all available processes. It can also shut down idle processes when they're not in use. This allows you to run the appropriate number of R processes to scale your capacity to accommodate the current load.
 
-> Conflict of interest: the primary authors of `plumber` work for RStudio.
+
+## DigitalOcean {#digitalocean}
+
+[DigitalOcean](https://m.do.co/c/add0b50f54c4) is an easy-to-use Cloud Computing provider. They offer a simple way to spin up a Linux virtual machine and access it remotely. You can choose what size machine you want to run -- with options ranging from small machines with 512MB of RAM for a few dollars a month up to large machines with dozens of GB of RAM -- and only pay for it while it's online.
+
+To deploy your Plumber API to DigitalOcean, please check out the `plumber` companion package [`plumberDeploy`](https://github.com/meztez/plumberDeploy).
+
 
 ## Docker (Basic) {#docker}
 
