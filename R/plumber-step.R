@@ -171,6 +171,8 @@ PlumberEndpoint <- R6Class(
     #' to accept multiple verbs for a single path. Now it's simpler to just parse
     #' each separate verb/path into its own endpoint, so we just do that.
     verbs = NA,
+    #' @field path a character string. endpoint path
+    path = NA,
     #' @field comments endpoint comments
     comments = NA,
     #' @field responses endpoint responses
@@ -228,7 +230,7 @@ PlumberEndpoint <- R6Class(
       throw_if_func_is_not_a_function(private$func)
       private$envir <- envir
 
-      self$path <- path
+      self$setPath(path)
 
       if (!missing(serializer) && !is.null(serializer)){
         self_set_serializer(self, serializer)
@@ -274,27 +276,22 @@ PlumberEndpoint <- R6Class(
         return(list())
       }
       self$params
-    }
-  ),
-  active = list(
-    # Normally, this would have been a `$setPath(path)` method, but `path` was already publicly available.
+    },
     # It would not make sense to have `$getPath()` and deprecate `$path`
-    #' @field path a character string. endpoint path
-    path = function(value) {
-      if (missing(value)) {
-        return(private$pathVal)
-      }
-      if (substr(value, 1,1) != "/") {
-        value <- paste0("/", value)
+    #' @description Updates `$path` with a sanitized `path` and updates the internal path meta-data
+    #' @param path Path to set `$path`. If missing a beginning slash, one will be added.
+    setPath = function(path) {
+      if (substr(path, 1,1) != "/") {
+        path <- paste0("/", path)
       }
       # private$func is not updated after initialization
-      private$regex <- createPathRegex(value, self$getFuncParams())
-      private$pathVal <- value
+      self$path <- path
+      private$regex <- createPathRegex(path, self$getFuncParams())
+      path
     }
   ),
   private = list(
-    regex = NULL,
-    pathVal = NA
+    regex = NULL
   )
 )
 

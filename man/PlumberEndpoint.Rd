@@ -24,6 +24,8 @@ They can also be provided manually for historical reasons.
 to accept multiple verbs for a single path. Now it's simpler to just parse
 each separate verb/path into its own endpoint, so we just do that.}
 
+\item{\code{path}}{a character string. endpoint path}
+
 \item{\code{comments}}{endpoint comments}
 
 \item{\code{responses}}{endpoint responses}
@@ -33,13 +35,6 @@ each separate verb/path into its own endpoint, so we just do that.}
 \item{\code{tags}}{endpoint tags}
 
 \item{\code{parsers}}{step allowed parsers}
-}
-\if{html}{\out{</div>}}
-}
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{path}}{a character string. endpoint path}
 }
 \if{html}{\out{</div>}}
 }
@@ -53,6 +48,7 @@ each separate verb/path into its own endpoint, so we just do that.}
 \item \href{#method-getPathParams}{\code{PlumberEndpoint$getPathParams()}}
 \item \href{#method-getFuncParams}{\code{PlumberEndpoint$getFuncParams()}}
 \item \href{#method-getEndpointParams}{\code{PlumberEndpoint$getEndpointParams()}}
+\item \href{#method-setPath}{\code{PlumberEndpoint$setPath()}}
 \item \href{#method-clone}{\code{PlumberEndpoint$clone()}}
 }
 }
@@ -221,6 +217,23 @@ retrieve endpoint defined parameters
 \if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$getEndpointParams()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setPath"></a>}}
+\if{latex}{\out{\hypertarget{method-setPath}{}}}
+\subsection{Method \code{setPath()}}{
+Updates \verb{$path} with a sanitized \code{path} and updates the internal path meta-data
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$setPath(path)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{path}}{Path to set \verb{$path}. If missing a beginning slash, one will be added.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
