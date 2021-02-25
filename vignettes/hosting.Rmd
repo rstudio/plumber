@@ -18,7 +18,6 @@ Once you have developed your Plumber API, the next step is to find a way to host
 1. If your Plumber process crashes (for instance, due to your server running out of memory), the method of running Plumber will not automatically restart the crashed service for you. This means that your API will be offline until you manually login and restart it. Likewise if your development machine gets rebooted, your API will not automatically be started when the machine comes back online.
 1. This technique relies on having your clients specify a port number manually. Non-technical users may be tripped up by this; some of the other techniques do not require clients specifying the port for an API.
 1. This approach will eternally run one R process for your API. Some of the other approaches will allow you to load-balance traffic between multiple R processes to handle more requests. [RStudio Connect](#rstudio-connect) will even dynamically scale the number of running processes for you so that your API isn't consuming more system resources than is necessary.
-1. Plumber uses the `interactive()` function as a heuristic for whether it should behave in a more convenient mode or in a more robust, secure mode. This function is used as the default for some parameters on `run()` which could pose a security hazard if enabled on a public server.
 1. Most importantly, serving public requests from your development environment can be a security hazard. Ideally, you should separate your development instances from the servers that are accessible by others.
 
 
