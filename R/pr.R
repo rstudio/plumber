@@ -476,6 +476,9 @@ pr_filter <- function(pr,
 #' be listened on. Note that on most Unix-like systems including Linux and
 #' Mac OS X, port numbers smaller than 1025 require root privileges.
 #' @param ... Should be empty.
+#' @param debug If `TRUE`, it will provide more insight into your API errors.
+#'   Using this value will only last for the duration of the run.
+#'   If [pr_set_debug()] has not been called, `debug` will default to `interactive()` at [pr_run()] time
 #' @param docs Visual documentation value to use while running the API.
 #'   This value will only be used while running the router.
 #'   If missing, defaults to information previously set with [pr_set_docs()].
@@ -504,6 +507,7 @@ pr_run <- function(pr,
                    host = '127.0.0.1',
                    port = getOption('plumber.port', NULL),
                    ...,
+                   debug = missing_arg(),
                    docs = missing_arg(),
                    swaggerCallback = missing_arg(),
                    quiet = FALSE
@@ -512,6 +516,7 @@ pr_run <- function(pr,
   ellipsis::check_dots_empty()
   pr$run(host = host,
          port = port,
+         debug = debug,
          docs = docs,
          swaggerCallback = swaggerCallback,
          quiet = quiet)

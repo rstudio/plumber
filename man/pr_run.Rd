@@ -9,6 +9,7 @@ pr_run(
   host = "127.0.0.1",
   port = getOption("plumber.port", NULL),
   ...,
+  debug = missing_arg(),
   docs = missing_arg(),
   swaggerCallback = missing_arg(),
   quiet = FALSE
@@ -26,6 +27,10 @@ be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.}
 
 \item{...}{Should be empty.}
+
+\item{debug}{If \code{TRUE}, it will provide more insight into your API errors.
+Using this value will only last for the duration of the run.
+If \code{\link[=pr_set_debug]{pr_set_debug()}} has not been called, \code{debug} will default to \code{interactive()} at \code{\link[=pr_run]{pr_run()}} time}
 
 \item{docs}{Visual documentation value to use while running the API.
 This value will only be used while running the router.
