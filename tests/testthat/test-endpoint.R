@@ -125,7 +125,7 @@ test_that("Path rewrites correctly", {
   expect_true(foo$matchesPath("/foo"))
   expect_false(foo$matchesPath("/bar"))
 
-  foo$path <- "bar"
+  foo$setPath("bar")
 
   expect_false("foo" %in% names(foo_pr$routes))
   expect_false(foo$matchesPath("/foo"))
