@@ -23,7 +23,7 @@ plumber 1.0.0.9999 Development version
 
 * OpenAPI Specification can be set using a file path. (@meztez #696)
 
-* Update internal regex if `PlumberEndpoint$path` is altered after initialization. (@blairj09 #770)
+* To update a `PlumberEndpoint` path after initialization, call the new `PlumberEndpoint$setPath(path)`. This will update internal path matching meta data. (Active bindings were not used to avoid breaking changes.) (@blairj09 #770)
 
 ### Bug fixes
 
