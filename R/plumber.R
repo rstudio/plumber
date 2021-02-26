@@ -1,5 +1,6 @@
 #' @import R6
 #' @import stringi
+#' @importFrom rlang %||%
 NULL
 
 # used to identify annotation flags.
@@ -86,7 +87,6 @@ Plumber <- R6Class(
       }
 
       # Initialize
-      private$maxSize <- getOption('plumber.maxRequestSize', 0) #0  Unlimited
       self$setSerializer(serializer_json())
       # Default parsers to maintain legacy features
       self$setParsers(c("json", "form", "text", "octet", "multi"))
@@ -94,8 +94,8 @@ Plumber <- R6Class(
       self$set404Handler(default404Handler)
       self$setDocs(TRUE)
       private$docs_info$has_not_been_set <- TRUE # set to know if `$setDocs()` has been called before `$run()`
-      self$setDocsCallback(getOption('plumber.docs.callback', getOption('plumber.swagger.url')))
-      self$setDebug(interactive())
+      private$docs_callback <- rlang::missing_arg()
+      private$debug <- NULL
       self$setApiSpec(NULL)
 
       # Add in the initial filters
@@ -143,7 +143,7 @@ Plumber <- R6Class(
     #' Mac OS X, port numbers smaller than 1025 require root privileges.
     #'
     #' This value does not need to be explicitly assigned. To explicitly set it, see [options_plumber()].
-    #' @param debug If `TRUE`, it will provide more insight into your API errors. Using this value will only last for the duration of the run. See `$setDebug()`
+    #' @param debug If `TRUE`, it will provide more insight into your API errors. Using this value will only last for the duration of the run. If a `$setDebug()` has not been called, `debug` will default to `interactive()` at `$run()` time. See `$setDebug()` for more details.
     #' @param swagger Deprecated. Please use `docs` instead. See `$setDocs(docs)` or `$setApiSpec()` for more customization.
     #' @param swaggerCallback An optional single-argument function that is
     #'   called back with the URL to an OpenAPI user interface when one becomes
@@ -208,15 +208,35 @@ Plumber <- R6Class(
         }
       }
 
-      swaggerCallback <- rlang::maybe_missing(swaggerCallback, private$docs_callback)
       port <- findPort(port)
-      if (!rlang::is_missing(debug)) {
-        prev_debug <- self$getDebug()
-        self$setDebug(debug)
-        on.exit({
-          self$setDebug(prev_debug)
-        }, add = TRUE)
-      }
+
+      # Delay setting max size option. It could be set in `plumber.R`, which is after initialization
+      private$maxSize <- getOption('plumber.maxRequestSize', 0) #0  Unlimited
+
+      # Delay the setting of swaggerCallback as long as possible.
+      # An option could be set in `plumber.R`, which is after initialization
+      # Order: Run method parameter, internally set value, option, fallback option, NULL
+      swaggerCallback <-
+        rlang::maybe_missing(swaggerCallback,
+          rlang::maybe_missing(private$docs_callback,
+            getOption('plumber.docs.callback', getOption('plumber.swagger.url', NULL))
+          )
+        )
+
+      # Delay the setting of debug as long as possible.
+      # The router could be made in an interactive setting and used in background process.
+      # Do not determine if interactive until run time
+      prev_debug <- private$debug
+      # Fix the debug value while running.
+      self$setDebug(
+        # Order: Run method param, internally set value, is interactive()
+        # `$getDebug()` is dynamic given `setDebug()` has never been called.
+        rlang::maybe_missing(debug, self$getDebug())
+      )
+      on.exit({
+        private$debug <- prev_debug
+      }, add = TRUE)
+
       docs_info <-
         if (!rlang::is_missing(docs)) {
           # Manually provided. Need to upgrade the parameter
@@ -939,7 +959,7 @@ Plumber <- R6Class(
       }
       private$docs_callback <- callback
     },
-    #' @description Set debug value to include error messages
+    #' @description Set debug value to include error messages. If never set, the result of `interactive()` will be used.
     #'
     #' See also: `$getDebug()` and [pr_set_debug()]
     #' @param debug `TRUE` provides more insight into your API errors.
@@ -947,11 +967,11 @@ Plumber <- R6Class(
       stopifnot(length(debug) == 1)
       private$debug <- isTRUE(debug)
     },
-    #' @description Retrieve the `debug` value.
+    #' @description Retrieve the `debug` value. If it has never been set, the result of `interactive()` will be used.
     #'
     #' See also: `$getDebug()` and [pr_set_debug()]
     getDebug = function() {
-      private$debug
+      private$debug %||% default_debug()
     },
     #' @description Add a filter to plumber router
     #'
@@ -1197,7 +1217,7 @@ Plumber <- R6Class(
 
     errorHandler = NULL,
     notFoundHandler = NULL,
-    maxSize = NULL, # Max request size in bytes
+    maxSize = 0, # Max request size in bytes. (0 is a no-op)
 
     api_spec_handler = NULL,
     docs_info = NULL,
@@ -1315,7 +1335,9 @@ upgrade_docs_parameter <- function(docs, ...) {
 
 
 
-
+default_debug <- function() {
+  interactive()
+}
 
 
 urlHost <- function(scheme = "http", host, port, path = "", changeHostLocation = FALSE) {
