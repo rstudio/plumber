@@ -227,6 +227,7 @@ each separate verb/path into its own endpoint, so we just do that.</p></dd>
 <li><p><a href='#method-getPathParams'><code>PlumberEndpoint$getPathParams()</code></a></p></li>
 <li><p><a href='#method-getFuncParams'><code>PlumberEndpoint$getFuncParams()</code></a></p></li>
 <li><p><a href='#method-getEndpointParams'><code>PlumberEndpoint$getEndpointParams()</code></a></p></li>
+<li><p><a href='#method-setPath'><code>PlumberEndpoint$setPath()</code></a></p></li>
 <li><p><a href='#method-clone'><code>PlumberEndpoint$clone()</code></a></p></li>
 </ul>
 <p><details open ><summary>Inherited methods</summary>
@@ -338,6 +339,16 @@ When using a list, parser information already defined will maintain their existi
 <p>retrieve endpoint defined parameters</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>getEndpointParams</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
+<p><hr>
+<a id="method-setPath"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>setPath()</code></h3>
+<p>Updates <code>$path</code> with a sanitized <code>path</code> and updates the internal path meta-data</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>setPath</span><span class='op'>(</span><span class='va'>path</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>path</code></dt><dd><p>Path to set <code>$path</code>. If missing a beginning slash, one will be added.</p></dd>
+
+</dl><p></div></p>
 <p><hr>
 <a id="method-clone"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>clone()</code></h3>
 <p>The objects of this class are cloneable with this method.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
