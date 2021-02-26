@@ -47,6 +47,7 @@ plumber 1.0.0.9999 Development version
 
 * Changed `future::plan()` from `multiprocess` to `multisession` in example API `14-future` as "Strategy 'multiprocess' is deprecated in future (>= 1.20.0)". (#747)
 
+* Setting options `plumber.docs.callback` to `NULL` will also set deprecated but supported option `plumber.swagger.url`. (#766)
 
 plumber 1.0.0
 --------------------------------------------------------------------------------
