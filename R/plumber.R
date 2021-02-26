@@ -150,6 +150,7 @@ Plumber <- R6Class(
     #'   ready. If missing, defaults to `$setDocsCallback()`.
     #' @param quiet If `TRUE`, don't print routine startup messages.
     #' @importFrom lifecycle deprecated
+    #' @importFrom rlang missing_arg
     run = function(
       host = '127.0.0.1',
       port = getOption('plumber.port', NULL),
