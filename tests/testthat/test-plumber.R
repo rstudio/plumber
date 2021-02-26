@@ -602,14 +602,3 @@ test_that("handle method rejects forbidden arguments", {
   expect_error(pr$handle("GET", "nested/path/here", function(){}, expr = function(){}),
                "can not be supplied to")
 })
-
-test_that("quiet=TRUE suppresses startup messages", {
-  later::later(httpuv::interrupt) # Causes pr_run() to immediately exit
-  expect_message(pr() %>% pr_run())
-
-  later::later(httpuv::interrupt)
-  expect_message(pr() %>% pr_run(quiet = TRUE), NA)
-
-  later::later(httpuv::interrupt)
-  expect_message(pr()$run(quiet = TRUE), NA)
-})
