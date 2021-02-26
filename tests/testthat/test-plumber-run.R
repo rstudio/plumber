@@ -91,3 +91,61 @@ test_that("`swaggerCallback` can be set by option after the pr is created", {
   expect_equal(counter, 1)
 
 })
+
+
+### Test does not work as expected with R6 objects.
+test_that("`debug` is not set until runtime", {
+  skip_on_cran()
+
+  counter <- 0
+
+  local({
+    # Could not get `mockery` or `mockr` packages to work as expected.
+    # So shiming the function here...
+    plumber_env <- asNamespace("plumber")
+    prev_default_debug <- plumber_env$default_debug
+    on.exit({
+      plumber_env$default_debug <- prev_default_debug
+    }, add = TRUE)
+    plumber_env$default_debug <- function() {
+      counter <<- 1
+      TRUE
+    }
+
+    root <- pr()
+    expect_equal(counter, 0)
+
+    # Use default value
+    with_interrupt({
+      root %>% pr_run(quiet = TRUE)
+    })
+    expect_equal(counter, 1)
+
+    # listen to set value
+    with_interrupt({
+      root %>%
+        pr_set_debug(TRUE) %>%
+        pr_run(quiet = TRUE)
+    })
+    # not updated
+    expect_equal(counter, 1)
+
+    # listen to run value
+    with_interrupt({
+      root %>%
+        pr_run(debug = FALSE, quiet = TRUE)
+    })
+    # not updated
+    expect_equal(counter, 1)
+
+    # TODO test that run(debug=) has preference over pr_set_debug()
+  })
+
+
+  # make sure the function is restored
+  expect_equal(default_debug(), interactive())
+  # counter should not increment
+  expect_equal(counter, 1)
+
+
+})
