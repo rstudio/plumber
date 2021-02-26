@@ -475,9 +475,15 @@ pr_filter <- function(pr,
 #' @param port A number or integer that indicates the server port that should
 #' be listened on. Note that on most Unix-like systems including Linux and
 #' Mac OS X, port numbers smaller than 1025 require root privileges.
+#' @param ... Should be empty.
+#' @param docs Visual documentation value to use while running the API.
+#'   This value will only be used while running the router.
+#'   If missing, defaults to information previously set with [pr_set_docs()].
+#'   For more customization, see [pr_set_docs()] for examples.
 #' @param swaggerCallback An optional single-argument function that is called
 #'   back with the URL to an OpenAPI user interface when one becomes ready. If
-#'   missing, defaults to `$setDocsCallback()`.
+#'   missing, defaults to information set with [pr_set_docs_callback()].
+#'   This value will only be used while running the router.
 #' @param quiet If `TRUE`, don't print routine startup messages.
 #'
 #' @examples
@@ -486,19 +492,27 @@ pr_filter <- function(pr,
 #'   pr_run()
 #'
 #' pr() %>%
-#'   pr_run(port = 5762)
+#'   pr_run(
+#'     port = 5762,
+#'     docs = FALSE,
+#'     quiet = TRUE
+#'   )
 #' }
 #'
 #' @export
 pr_run <- function(pr,
                    host = '127.0.0.1',
                    port = getOption('plumber.port', NULL),
-                   swaggerCallback,
+                   ...,
+                   docs = missing_arg(),
+                   swaggerCallback = missing_arg(),
                    quiet = FALSE
 ) {
   validate_pr(pr)
+  ellipsis::check_dots_empty()
   pr$run(host = host,
          port = port,
+         docs = docs,
          swaggerCallback = swaggerCallback,
          quiet = quiet)
 }

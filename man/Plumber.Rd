@@ -219,8 +219,10 @@ See also: \code{\link[=pr_run]{pr_run()}}
   host = "127.0.0.1",
   port = getOption("plumber.port", NULL),
   swagger = deprecated(),
-  debug = deprecated(),
-  swaggerCallback,
+  debug = missing_arg(),
+  swaggerCallback = missing_arg(),
+  ...,
+  docs = missing_arg(),
   quiet = FALSE
 )}\if{html}{\out{</div>}}
 }
@@ -238,13 +240,21 @@ Mac OS X, port numbers smaller than 1025 require root privileges.
 
 This value does not need to be explicitly assigned. To explicitly set it, see \code{\link[=options_plumber]{options_plumber()}}.}
 
-\item{\code{swagger}}{Deprecated. See \verb{$setDocs(docs)} or \verb{$setApiSpec()}}
+\item{\code{swagger}}{Deprecated. Please use \code{docs} instead. See \verb{$setDocs(docs)} or \verb{$setApiSpec()} for more customization.}
 
-\item{\code{debug}}{Deprecated. See \verb{$setDebug()}}
+\item{\code{debug}}{If \code{TRUE}, it will provide more insight into your API errors. Using this value will only last for the duration of the run. See \verb{$setDebug()}}
 
 \item{\code{swaggerCallback}}{An optional single-argument function that is
 called back with the URL to an OpenAPI user interface when one becomes
-ready. If missing, defaults to \verb{$setDocsCallback()}.}
+ready. If missing, defaults to information previously set with \verb{$setDocsCallback()}.
+This value will only be used while running the router.}
+
+\item{\code{...}}{Should be empty.}
+
+\item{\code{docs}}{Visual documentation value to use while running the API.
+This value will only be used while running the router.
+If missing, defaults to information previously set with \code{setDocs()}.
+For more customization, see \verb{$setDocs()} or \code{\link[=pr_set_docs]{pr_set_docs()}} for examples.}
 
 \item{\code{quiet}}{If \code{TRUE}, don't print routine startup messages.}
 }

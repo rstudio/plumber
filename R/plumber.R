@@ -143,20 +143,29 @@ Plumber <- R6Class(
     #' Mac OS X, port numbers smaller than 1025 require root privileges.
     #'
     #' This value does not need to be explicitly assigned. To explicitly set it, see [options_plumber()].
-    #' @param debug Deprecated. See `$setDebug()`
-    #' @param swagger Deprecated. See `$setDocs(docs)` or `$setApiSpec()`
+    #' @param debug If `TRUE`, it will provide more insight into your API errors. Using this value will only last for the duration of the run. See `$setDebug()`
+    #' @param swagger Deprecated. Please use `docs` instead. See `$setDocs(docs)` or `$setApiSpec()` for more customization.
     #' @param swaggerCallback An optional single-argument function that is
     #'   called back with the URL to an OpenAPI user interface when one becomes
-    #'   ready. If missing, defaults to `$setDocsCallback()`.
+    #'   ready. If missing, defaults to information previously set with `$setDocsCallback()`.
+    #'   This value will only be used while running the router.
+    #' @param docs Visual documentation value to use while running the API.
+    #'   This value will only be used while running the router.
+    #'   If missing, defaults to information previously set with `setDocs()`.
+    #'   For more customization, see `$setDocs()` or [pr_set_docs()] for examples.
     #' @param quiet If `TRUE`, don't print routine startup messages.
+    #' @param ... Should be empty.
     #' @importFrom lifecycle deprecated
     #' @importFrom rlang missing_arg
     run = function(
       host = '127.0.0.1',
       port = getOption('plumber.port', NULL),
       swagger = deprecated(),
-      debug = deprecated(),
-      swaggerCallback,
+      debug = missing_arg(),
+      swaggerCallback = missing_arg(),
+      ...,
+      # any new args should go below `...`
+      docs = missing_arg(),
       quiet = FALSE
     ) {
 
@@ -164,37 +173,57 @@ Plumber <- R6Class(
         stop("Plumber router `$run()` method should not be called while `plumb()`ing a file")
       }
 
+      ellipsis::check_dots_empty()
+
       # Legacy support for RStudio pro products.
       # Checks must be kept for >= 2 yrs after plumber v1.0.0 release date
-      if (lifecycle::is_present(debug)) {
-        lifecycle::deprecate_warn("1.0.0", "run(debug = )", "setDebug(debug = )")
-        self$setDebug(debug)
-      }
       if (lifecycle::is_present(swagger)) {
-        if (is.function(swagger)) {
-          # between v0.4.6 and v1.0.0
-          lifecycle::deprecate_warn("1.0.0", "run(swagger = )", "setApiSpec(api = )")
-          self$setApiSpec(swagger)
-          # spec is now enabled by default. Do not alter
+        if (!rlang::is_missing(docs)) {
+          lifecycle::deprecate_warn("1.0.0", "Plumber$run(swagger = )", "Plumber$run(docs = )", details = "`docs` will take preference (ignoring `swagger`)")
+          # (`docs` is resolved after `swagger` checks)
         } else {
-          if (isTRUE(private$docs_info$has_not_been_set)) {
-            # <= v0.4.6
-            lifecycle::deprecate_warn("1.0.0", "run(swagger = )", "setDocs(docs = )")
-            self$setDocs(swagger)
+          if (is.function(swagger)) {
+            # between v0.4.6 and v1.0.0
+            lifecycle::deprecate_warn("1.0.0", "Plumber$run(swagger = )", "Plumber$setApiSpec(api = )")
+            # set the new api function and force turn on the docs
+            old_api_spec_handler <- private$api_spec_handler
+            self$setApiSpec(swagger)
+            on.exit({
+              private$api_spec_handler <- old_api_spec_handler
+            }, add = TRUE)
+            docs <- TRUE
           } else {
-            # $setDocs() has been called (other than during initialization).
-            # Believe that it is the correct behavior
-            # Warn about updating the run method
-            lifecycle::deprecate_warn("1.0.0", "run(swagger = )", details = "The Plumber docs have already been set. Ignoring `swagger` parameter.")
+            if (isTRUE(private$docs_info$has_not_been_set)) {
+              # <= v0.4.6
+              lifecycle::deprecate_warn("1.0.0", "Plumber$run(swagger = )", "Plumber$run(docs = )")
+              docs <- swagger
+            } else {
+              # $setDocs() has been called (other than during initialization).
+              # `docs` is not provided
+              # Believe that prior `$setDocs()` behavior is the correct behavior
+              # Warn about updating the run method
+              lifecycle::deprecate_warn("1.0.0", "Plumber$run(swagger = )", "Plumber$run(docs = )", details = "The Plumber docs have already been set. Ignoring `swagger` parameter.")
+            }
           }
         }
       }
 
-      if (missing(swaggerCallback)) {
-        swaggerCallback <- private$docs_callback
-      }
-
+      swaggerCallback <- rlang::maybe_missing(swaggerCallback, private$docs_callback)
       port <- findPort(port)
+      if (!rlang::is_missing(debug)) {
+        prev_debug <- self$getDebug()
+        self$setDebug(debug)
+        on.exit({
+          self$setDebug(prev_debug)
+        }, add = TRUE)
+      }
+      docs_info <-
+        if (!rlang::is_missing(docs)) {
+          # Manually provided. Need to upgrade the parameter
+          upgrade_docs_parameter(docs)
+        } else {
+          private$docs_info
+        }
 
       if (!isTRUE(quiet)) {
         message("Running plumber API at ", urlHost(host = host, port = port, changeHostLocation = FALSE))
@@ -206,16 +235,16 @@ Plumber <- R6Class(
         on.exit({setwd(old_wd)}, add = TRUE)
       }
 
-      if (isTRUE(private$docs_info$enabled)) {
+      if (isTRUE(docs_info$enabled)) {
         mount_docs(
           pr = self,
           host = host,
           port = port,
-          docs_info = private$docs_info,
+          docs_info = docs_info,
           callback = swaggerCallback,
           quiet = quiet
         )
-        on.exit(unmount_docs(self, private$docs_info), add = TRUE)
+        on.exit(unmount_docs(self, docs_info), add = TRUE)
       }
 
       on.exit(private$runHooks("exit"), add = TRUE)
@@ -887,23 +916,7 @@ Plumber <- R6Class(
       docs = getOption("plumber.docs", TRUE),
       ...
     ) {
-      stopifnot(length(docs) == 1)
-      stopifnot(is.logical(docs) || is.character(docs))
-      if (isTRUE(docs)) {
-        docs <- "swagger"
-      }
-      if (is.character(docs) && is_docs_available(docs)) {
-        enabled <- TRUE
-      } else {
-        enabled <- FALSE
-        docs <- "__not_enabled__"
-      }
-      private$docs_info <- list(
-        enabled = enabled,
-        docs = docs,
-        args = list(...),
-        has_not_been_set = FALSE
-      )
+      private$docs_info <- upgrade_docs_parameter(docs, ...)
     },
     #' @description Set a callback to notify where the API's visual documentation is located.
     #'
@@ -1278,6 +1291,27 @@ Plumber <- R6Class(
 )
 
 
+
+upgrade_docs_parameter <- function(docs, ...) {
+  stopifnot(length(docs) == 1)
+  stopifnot(is.logical(docs) || is.character(docs))
+  if (isTRUE(docs)) {
+    docs <- "swagger"
+  }
+  if (is.character(docs) && is_docs_available(docs)) {
+    enabled <- TRUE
+  } else {
+    enabled <- FALSE
+    docs <- "__not_enabled__"
+  }
+
+  list(
+    enabled = enabled,
+    docs = docs,
+    args = list(...),
+    has_not_been_set = FALSE
+  )
+}
 
 
 

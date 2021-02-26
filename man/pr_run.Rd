@@ -8,7 +8,9 @@ pr_run(
   pr,
   host = "127.0.0.1",
   port = getOption("plumber.port", NULL),
-  swaggerCallback,
+  ...,
+  docs = missing_arg(),
+  swaggerCallback = missing_arg(),
   quiet = FALSE
 )
 }
@@ -23,9 +25,17 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.}
 
+\item{...}{Should be empty.}
+
+\item{docs}{Visual documentation value to use while running the API.
+This value will only be used while running the router.
+If missing, defaults to information previously set with \code{\link[=pr_set_docs]{pr_set_docs()}}.
+For more customization, see \code{\link[=pr_set_docs]{pr_set_docs()}} for examples.}
+
 \item{swaggerCallback}{An optional single-argument function that is called
 back with the URL to an OpenAPI user interface when one becomes ready. If
-missing, defaults to \verb{$setDocsCallback()}.}
+missing, defaults to information set with \code{\link[=pr_set_docs_callback]{pr_set_docs_callback()}}.
+This value will only be used while running the router.}
 
 \item{quiet}{If \code{TRUE}, don't print routine startup messages.}
 }
@@ -38,7 +48,11 @@ pr() \%>\%
   pr_run()
 
 pr() \%>\%
-  pr_run(port = 5762)
+  pr_run(
+    port = 5762,
+    docs = FALSE,
+    quiet = TRUE
+  )
 }
 
 }
