@@ -214,6 +214,7 @@
 <li><p>Fixed Plumber <code>$routes</code> resolution bugs. Routes are now returned in lexicographical order. (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/702'>#702</a>)</p></li>
 <li><p>Plumber will now display a circular reference if one is found while printing. (<a href='https://github.com/rstudio/plumber/issues/738'>#738</a>)</p></li>
 <li><p>Changed <code><a href="https://rdrr.io/pkg/future/man/plan.html">future::plan()</a></code> from <code>multiprocess</code> to <code>multisession</code> in example API <code>14-future</code> as “Strategy ‘multiprocess’ is deprecated in future (&gt;= 1.20.0)”. (<a href='https://github.com/rstudio/plumber/issues/747'>#747</a>)</p></li>
+<li><p>Setting options <code>plumber.docs.callback</code> to <code>NULL</code> will also set deprecated but supported option <code>plumber.swagger.url</code>. (<a href='https://github.com/rstudio/plumber/issues/766'>#766</a>)</p></li>
 </ul>
 </div>
 </div>
