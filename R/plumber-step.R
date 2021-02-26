@@ -219,12 +219,7 @@ PlumberEndpoint <- R6Class(
     #' @return A new `PlumberEndpoint` object
     initialize = function(verbs, path, expr, envir, serializer, parsers, lines, params, comments, responses, tags) {
 
-      if (substr(path, 1,1) != "/") {
-        path <- paste0("/", path)
-      }
-
       self$verbs <- verbs
-      self$path <- path
 
       private$expr <- expr
       if (is.expression(expr)){
@@ -235,7 +230,7 @@ PlumberEndpoint <- R6Class(
       throw_if_func_is_not_a_function(private$func)
       private$envir <- envir
 
-      private$regex <- createPathRegex(path, self$getFuncParams())
+      self$setPath(path)
 
       if (!missing(serializer) && !is.null(serializer)){
         self_set_serializer(self, serializer)
@@ -281,6 +276,18 @@ PlumberEndpoint <- R6Class(
         return(list())
       }
       self$params
+    },
+    # It would not make sense to have `$getPath()` and deprecate `$path`
+    #' @description Updates `$path` with a sanitized `path` and updates the internal path meta-data
+    #' @param path Path to set `$path`. If missing a beginning slash, one will be added.
+    setPath = function(path) {
+      if (substr(path, 1,1) != "/") {
+        path <- paste0("/", path)
+      }
+      # private$func is not updated after initialization
+      self$path <- path
+      private$regex <- createPathRegex(path, self$getFuncParams())
+      path
     }
   ),
   private = list(

@@ -25,6 +25,8 @@ plumber 1.0.0.9999 Development version
 
 * Added `quiet = TRUE` to `Plumber$run()` to suppress routine startup messages. (@jcheng5 #765)
 
+* To update a `PlumberEndpoint` path after initialization, call the new `PlumberEndpoint$setPath(path)`. This will update internal path matching meta data. (Active bindings were not used to avoid breaking changes.) (@blairj09 #770)
+
 ### Bug fixes
 
 * Fixed bug where `httpuv` would return a status of `500` with body `An exception occurred` if no headers were set on the response object. (#745)
@@ -47,6 +49,7 @@ plumber 1.0.0.9999 Development version
 
 * Changed `future::plan()` from `multiprocess` to `multisession` in example API `14-future` as "Strategy 'multiprocess' is deprecated in future (>= 1.20.0)". (#747)
 
+* Setting options `plumber.docs.callback` to `NULL` will also set deprecated but supported option `plumber.swagger.url`. (#766)
 
 plumber 1.0.0
 --------------------------------------------------------------------------------

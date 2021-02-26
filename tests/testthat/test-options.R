@@ -62,3 +62,12 @@ test_that("Legacy swagger redirect can be disabled", {
     expect_equal(length(redirects), 0)
   })
 })
+
+test_that("docs.callback sync plumber.swagger.url", {
+  with_options(list(), {
+    options("plumber.swagger.url" = function(api_url) {cat(api_url)})
+    opt <- options_plumber(docs.callback = NULL)
+    expect_null(getOption("plumber.swagger.url"))
+    expect_null(opt$plumber.docs.callback)
+  })
+})

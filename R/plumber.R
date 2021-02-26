@@ -94,7 +94,7 @@ Plumber <- R6Class(
       self$set404Handler(default404Handler)
       self$setDocs(TRUE)
       private$docs_info$has_not_been_set <- TRUE # set to know if `$setDocs()` has been called before `$run()`
-      self$setDocsCallback(getOption('plumber.docs.callback', getOption('plumber.swagger.url', NULL)))
+      self$setDocsCallback(getOption('plumber.docs.callback', getOption('plumber.swagger.url')))
       self$setDebug(interactive())
       self$setApiSpec(NULL)
 
