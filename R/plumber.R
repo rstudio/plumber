@@ -227,15 +227,15 @@ Plumber <- R6Class(
       # The router could be made in an interactive setting and used in background process.
       # Do not determine if interactive until run time
       prev_debug <- private$debug
+      on.exit({
+        private$debug <- prev_debug
+      }, add = TRUE)
       # Fix the debug value while running.
       self$setDebug(
         # Order: Run method param, internally set value, is interactive()
         # `$getDebug()` is dynamic given `setDebug()` has never been called.
         rlang::maybe_missing(debug, self$getDebug())
       )
-      on.exit({
-        private$debug <- prev_debug
-      }, add = TRUE)
 
       docs_info <-
         if (!rlang::is_missing(docs)) {
@@ -959,7 +959,7 @@ Plumber <- R6Class(
       }
       private$docs_callback <- callback
     },
-    #' @description Set debug value to include error messages. If never set, the result of `interactive()` will be used.
+    #' @description Set debug value to include error messages.
     #'
     #' See also: `$getDebug()` and [pr_set_debug()]
     #' @param debug `TRUE` provides more insight into your API errors.

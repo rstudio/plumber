@@ -496,8 +496,11 @@ pr_filter <- function(pr,
 #'
 #' pr() %>%
 #'   pr_run(
+#'     # manually set port
 #'     port = 5762,
+#'     # turn of visual documentation
 #'     docs = FALSE,
+#'     # do not display startup messages
 #'     quiet = TRUE
 #'   )
 #' }

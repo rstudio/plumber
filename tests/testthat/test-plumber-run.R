@@ -17,6 +17,7 @@ test_that("quiet=TRUE suppresses startup messages", {
 test_that("`docs` does not not permanetly set pr information", {
   doc_name <- "swagger"
   root <- pr() %>% pr_set_docs(doc_name)
+  # no docs. do not find printed message
   with_interrupt({
     expect_failure(
       expect_message({
@@ -24,6 +25,7 @@ test_that("`docs` does not not permanetly set pr information", {
       }, doc_name)
     )
   })
+  # no docs. do not find printed message
   with_interrupt({
     expect_failure(
       expect_message({
@@ -31,6 +33,7 @@ test_that("`docs` does not not permanetly set pr information", {
       }, doc_name)
     )
   })
+  # docs enabled by default. Find printed message
   with_interrupt({
     expect_message({
       root %>% pr_run(quiet = FALSE)
@@ -44,19 +47,19 @@ test_that("`swaggerCallback` does not not permanetly set pr information", {
   m <- mockery::mock(TRUE, cycle = TRUE)
   m() # call once so that `length(m)` > 0 as `length(m)` represents the number of calls to `m`
   root <- pr() %>% pr_set_docs_callback(m)
-  # not used
+  # m not used
   with_interrupt({
     mockery::expect_called(m, 1)
     root %>% pr_run(swaggerCallback = NULL)
     mockery::expect_called(m, 1)
   })
-  # not used
+  # m not used
   with_interrupt({
     mockery::expect_called(m, 1)
     root$run(swaggerCallback = NULL)
     mockery::expect_called(m, 1)
   })
-  # used
+  # m is used
   with_interrupt({
     mockery::expect_called(m, 1)
     root %>% pr_run(quiet = FALSE)
@@ -69,7 +72,7 @@ test_that("`swaggerCallback` can be set by option after the pr is created", {
 
   m <- mockery::mock(TRUE)
 
-  # must initialize before options are set
+  # must initialize before options are set for this test
   root <- pr()
 
   with_options(
@@ -86,7 +89,7 @@ test_that("`swaggerCallback` can be set by option after the pr is created", {
       })
     }
   )
-  # used
+  # m is used
   mockery::expect_called(m, 1)
 
 })
@@ -99,7 +102,7 @@ test_that("`debug` is not set until runtime", {
   m <- mockery::mock(TRUE, cycle = TRUE)
   # https://github.com/r-lib/testthat/issues/734#issuecomment-377367516
   # > It should work if you fully qualify the function name (include the pkgname)
-  with_mock("plumber:::default_debug" = m, {
+  mockr::with_mock("plumber:::default_debug" = m, {
     root <- pr()
     root$getDebug()
     mockery::expect_called(m, 1)

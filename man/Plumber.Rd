@@ -780,7 +780,7 @@ See also: \code{\link[=pr_set_docs_callback]{pr_set_docs_callback()}}
 \if{html}{\out{<a id="method-setDebug"></a>}}
 \if{latex}{\out{\hypertarget{method-setDebug}{}}}
 \subsection{Method \code{setDebug()}}{
-Set debug value to include error messages. If never set, the result of \code{interactive()} will be used.
+Set debug value to include error messages.
 
 See also: \verb{$getDebug()} and \code{\link[=pr_set_debug]{pr_set_debug()}}
 \subsection{Usage}{
