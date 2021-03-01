@@ -92,12 +92,17 @@ jobs:
         shell: Rscript {0}
         run: |
           install.packages("Rcpp", type = "source")
-      - name: Ubuntu 16 sodium
+      - name: Ubuntu 16 xml2
         if: matrix.config.os == 'ubuntu-16.04'
         shell: Rscript {0}
         run: |
-          pak::pkg_system_requirements("xml2", execute = TRUE)
-          install.packages("xml2", type = "source")
+          if (system.file(package = "xml2") != "") {
+            pak::pkg_system_requirements("withr", execute = TRUE)
+            pak::pkg_install("withr")
+            pak::pkg_system_requirements("xml2", execute = TRUE)
+            # https://github.com/r-lib/xml2/issues/294
+            withr::with_makevars(c(CXX = "g++ -std=c++11"), install.packages("xml2", verbose = TRUE))
+          }
 
       - name: Install dependencies
         shell: Rscript {0}
