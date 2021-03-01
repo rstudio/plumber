@@ -21,7 +21,7 @@ plumber 1.1.0
 
 * Guess OpenAPI response content type from serializer. (@meztez #684)
 
-* Un-deprecated `Plumber$run(debug=, swaggerCallback=)` and added the parameters for `Plumber$run(docs=, quiet=)` and `pr_run(debug=, docs=, swaggerCallback=, quiet=)`. Now, all four parameters will not produce lingering effects on the `Plumber` router. (@jcheng5 #765)
+* Undeprecated `Plumber$run(debug=, swaggerCallback=)` and added the parameters for `Plumber$run(docs=, quiet=)` and `pr_run(debug=, docs=, swaggerCallback=, quiet=)`. Now, all four parameters will not produce lingering effects on the `Plumber` router. (@jcheng5 #765)
   * Setting `quiet = TRUE` will suppress routine startup messages.
   * Setting `debug = TRUE`, will display information when an error occurs. See `pr_set_debug()`.
   * Setting `docs` will update the visual documentation. See `pr_set_docs()`.
