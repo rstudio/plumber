@@ -39,36 +39,35 @@ test_that("`docs` does not not permanetly set pr information", {
 })
 
 test_that("`swaggerCallback` does not not permanetly set pr information", {
-  counter <- 0
-  my_func <- function(url) {
-    counter <<- counter + 1
-  }
-  root <- pr() %>% pr_set_docs_callback(my_func)
+  skip_if_not_installed("mockery", "0.4.2")
+
+  m <- mockery::mock(TRUE, cycle = TRUE)
+  m() # call once so that `length(m)` > 0 as `length(m)` represents the number of calls to `m`
+  root <- pr() %>% pr_set_docs_callback(m)
   # not used
   with_interrupt({
-    expect_equal(counter, 0)
+    mockery::expect_called(m, 1)
     root %>% pr_run(swaggerCallback = NULL)
-    expect_equal(counter, 0)
+    mockery::expect_called(m, 1)
   })
   # not used
   with_interrupt({
-    expect_equal(counter, 0)
+    mockery::expect_called(m, 1)
     root$run(swaggerCallback = NULL)
-    expect_equal(counter, 0)
+    mockery::expect_called(m, 1)
   })
   # used
   with_interrupt({
-    expect_equal(counter, 0)
+    mockery::expect_called(m, 1)
     root %>% pr_run(quiet = FALSE)
-    expect_equal(counter, 1)
+    mockery::expect_called(m, 2)
   })
 })
 
 test_that("`swaggerCallback` can be set by option after the pr is created", {
-  counter <- 0
-  my_func <- function(url) {
-    counter <<- counter + 1
-  }
+  skip_if_not_installed("mockery", "0.4.2")
+
+  m <- mockery::mock(TRUE)
 
   # must initialize before options are set
   root <- pr()
@@ -80,46 +79,34 @@ test_that("`swaggerCallback` can be set by option after the pr is created", {
     ),
     {
       # set option after init
-      options_plumber(docs.callback = my_func)
+      options_plumber(docs.callback = m)
       with_interrupt({
-        expect_equal(counter, 0)
+        mockery::expect_called(m, 0)
         pr_run(root)
       })
     }
   )
   # used
-  expect_equal(counter, 1)
+  mockery::expect_called(m, 1)
 
 })
 
 
 ### Test does not work as expected with R6 objects.
 test_that("`debug` is not set until runtime", {
-  skip_on_cran()
+  skip_if_not_installed("mockery", "0.4.2")
 
-  counter <- 0
-
-  local({
-    # Could not get `mockery` or `mockr` packages to work as expected.
-    # So shiming the function here...
-    plumber_env <- asNamespace("plumber")
-    prev_default_debug <- plumber_env$default_debug
-    on.exit({
-      plumber_env$default_debug <- prev_default_debug
-    }, add = TRUE)
-    plumber_env$default_debug <- function() {
-      counter <<- 1
-      TRUE
-    }
-
+  m <- mockery::mock(TRUE, cycle = TRUE)
+  with_mock(default_debug = m, {
     root <- pr()
-    expect_equal(counter, 0)
+    root$getDebug()
+    mockery::expect_called(m, 1)
 
-    # Use default value
     with_interrupt({
       root %>% pr_run(quiet = TRUE)
     })
-    expect_equal(counter, 1)
+    # increase by 1
+    mockery::expect_called(m, 2)
 
     # listen to set value
     with_interrupt({
@@ -127,25 +114,18 @@ test_that("`debug` is not set until runtime", {
         pr_set_debug(TRUE) %>%
         pr_run(quiet = TRUE)
     })
-    # not updated
-    expect_equal(counter, 1)
+    # not updated. stay at 2
+    mockery::expect_called(m, 2)
 
     # listen to run value
     with_interrupt({
       root %>%
         pr_run(debug = FALSE, quiet = TRUE)
     })
-    # not updated
-    expect_equal(counter, 1)
+    # not updated. stay at 2
+    mockery::expect_called(m, 2)
 
     # TODO test that run(debug=) has preference over pr_set_debug()
   })
-
-
-  # make sure the function is restored
-  expect_equal(default_debug(), interactive())
-  # counter should not increment
-  expect_equal(counter, 1)
-
 
 })

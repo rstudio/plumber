@@ -47,7 +47,8 @@ Suggests:
     yaml,
     feather,
     future,
-    rstudioapi
+    rstudioapi,
+    mockery (>= 0.4.2)
 RoxygenNote: 7.1.1
 Collate:
     'async.R'
