@@ -23,6 +23,12 @@ plumber 1.0.0.9999 Development version
 
 * OpenAPI Specification can be set using a file path. (@meztez #696)
 
+* Un-deprecated `Plumber$run(debug=, swaggerCallback=)` and added the parameters for `Plumber$run(docs=, quiet=)` and `pr_run(debug=, docs=, swaggerCallback=, quiet=)`. Now, all four parameters will not produce lingering effects on the `Plumber` router. (@jcheng5 #765)
+  * Setting `quiet = TRUE` will suppress routine startup messages.
+  * Setting `debug = TRUE`, will display information when an error occurs. See `pr_set_debug()`.
+  * Setting `docs` will update the visual documentation. See `pr_set_docs()`.
+  * Set `swaggerCallback` to a function which will be called with a url to the documentation, or `NULL` to do nothing. See `pr_set_docs_callback()`.
+
 * To update a `PlumberEndpoint` path after initialization, call the new `PlumberEndpoint$setPath(path)`. This will update internal path matching meta data. (Active bindings were not used to avoid breaking changes.) (@blairj09 #770)
 
 ### Bug fixes
