@@ -28,8 +28,6 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -42,12 +40,18 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
+<li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -99,7 +103,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/rstudio/plumber/" class="external-link">
+  <a href="https://github.com/rstudio/plumber/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -126,7 +130,7 @@
       <h1 data-toc-skip>Quickstart</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/rstudio/plumber/blob/master/vignettes/quickstart.Rmd" class="external-link"><code>vignettes/quickstart.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/rstudio/plumber/blob/master/vignettes/quickstart.Rmd"><code>vignettes/quickstart.Rmd</code></a></small>
       <div class="hidden name"><code>quickstart.Rmd</code></div>
 
     </div>
@@ -141,7 +145,7 @@
 <span class="co">#* @param msg The message to echo back.</span>
 <span class="co">#* @get /echo</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">msg</span><span class="op">=</span><span class="st">""</span><span class="op">)</span><span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>msg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"The message is: '"</span>, <span class="va">msg</span>, <span class="st">"'"</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>msg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"The message is: '"</span>, <span class="va">msg</span>, <span class="st">"'"</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
 
 <span class="co">#* Plot out data from the iris dataset</span>
@@ -153,12 +157,12 @@
   <span class="va">title</span> <span class="op">&lt;-</span> <span class="st">"All Species"</span>
 
   <span class="co"># Filter if the species was specified</span>
-  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/missing.html" class="external-link">missing</a></span><span class="op">(</span><span class="va">spec</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-    <span class="va">title</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Only the '"</span>, <span class="va">spec</span>, <span class="st">"' Species"</span><span class="op">)</span>
-    <span class="va">myData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">iris</span>, <span class="va">Species</span> <span class="op">==</span> <span class="va">spec</span><span class="op">)</span>
+  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/missing.html">missing</a></span><span class="op">(</span><span class="va">spec</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
+    <span class="va">title</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Only the '"</span>, <span class="va">spec</span>, <span class="st">"' Species"</span><span class="op">)</span>
+    <span class="va">myData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">iris</span>, <span class="va">Species</span> <span class="op">==</span> <span class="va">spec</span><span class="op">)</span>
   <span class="op">}</span>
 
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">myData</span><span class="op">$</span><span class="va">Sepal.Length</span>, <span class="va">myData</span><span class="op">$</span><span class="va">Petal.Length</span>,
+  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">myData</span><span class="op">$</span><span class="va">Sepal.Length</span>, <span class="va">myData</span><span class="op">$</span><span class="va">Petal.Length</span>,
        main<span class="op">=</span><span class="va">title</span>, xlab<span class="op">=</span><span class="st">"Sepal Length"</span>, ylab<span class="op">=</span><span class="st">"Petal Length"</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>This file defines two Plumber “endpoints.” One is hosted at the path <code>/echo</code> and simply echoes the message passed in; the other is hosted at the path <code>/plot</code> and returns an image showing a simple R plot.</p>
@@ -169,7 +173,7 @@
 <p>The <code>pr</code> object now encapsulates all the logic represented in your <code>plumber.R</code> file. The next step is to bring the API to life using the <code><a href="../reference/pr_run.html">pr_run()</a></code> method:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">root</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>You should see a message about your API running on your computer on port <code>8000</code>. The API will continue running in your R session until you press the <code>Esc</code> key. If you’re running this code locally on your personal machine, you should be able to open <a href="http://localhost:8000/echo" class="external-link">http://localhost:8000/echo</a> or <a href="http://localhost:8000/plot" class="external-link">http://localhost:8000/plot</a> in a web browser to test your new API endpoints.</p>
+<p>You should see a message about your API running on your computer on port <code>8000</code>. The API will continue running in your R session until you press the <code>Esc</code> key. If you’re running this code locally on your personal machine, you should be able to open <a href="http://localhost:8000/echo">http://localhost:8000/echo</a> or <a href="http://localhost:8000/plot">http://localhost:8000/plot</a> in a web browser to test your new API endpoints.</p>
 <blockquote>
 <p>If you’re using a tool like RStudio Server to run your R code on a remote machine, you should see the <a href="./security.html#networking">networking section</a> for help with visiting your API.</p>
 </blockquote>
@@ -183,7 +187,7 @@
 <div id="specifying-the-inputs" class="section level2">
 <h2 class="hasAnchor">
 <a href="#specifying-the-inputs" class="anchor"></a>Specifying the Inputs</h2>
-<p>You may have noticed that the functions that define our endpoints accept parameters. These parameters allow us to customize the behavior of our endpoints. One of the ways to do this is using “query strings” which are a way of passing parameters into an HTTP API. If you visit <a href="http://localhost:8000/plot?spec=setosa" class="external-link">http://localhost:8000/plot?spec=setosa</a>, you should see a similar graph to the one you saw before, but now the dataset has been filtered to only include the “setosa” species in the iris dataset.</p>
+<p>You may have noticed that the functions that define our endpoints accept parameters. These parameters allow us to customize the behavior of our endpoints. One of the ways to do this is using “query strings” which are a way of passing parameters into an HTTP API. If you visit <a href="http://localhost:8000/plot?spec=setosa">http://localhost:8000/plot?spec=setosa</a>, you should see a similar graph to the one you saw before, but now the dataset has been filtered to only include the “setosa” species in the iris dataset.</p>
 <p><img src="quickstart_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <p>As you might have guessed, the <code>spec=setosa</code> portion of the URL sets the <code>spec</code> parameter to <code>setosa</code>. More details on how Plumber processes inputs are available in the <a href="./routing-and-input.html">Routing &amp; Input article</a>.</p>
 </div>
@@ -215,13 +219,11 @@
 
 
       <footer><div class="copyright">
-  <p></p>
-<p>Developed by <a href="http://schloerke.com/" class="external-link external-link">Barret Schloerke</a>, <a href="https://trestletech.com/" class="external-link external-link">Jeff Allen</a>, RStudio.</p>
+  <p>Developed by <a href="http://schloerke.com/">Barret Schloerke</a>, <a href="https://trestletech.com/">Jeff Allen</a>,  RStudio.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

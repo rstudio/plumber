@@ -30,8 +30,6 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -44,12 +42,18 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
+<li>
+  <a href="index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -130,7 +134,7 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>Plumber allows you to create a web API by merely decorating your existing R source code with <code>roxygen2</code>-like comments. Take a look at an example.</p>
+<p>Plumber allows you to create a web API by merely decorating your existing R source code with special comments. Take a look at an example.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># plumber.R</span>
 
@@ -138,15 +142,15 @@
 <span class="co">#* @param msg The message to echo</span>
 <span class="co">#* @get /echo</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">msg</span><span class="op">=</span><span class="st">""</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>msg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"The message is: '"</span>, <span class="va">msg</span>, <span class="st">"'"</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>msg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"The message is: '"</span>, <span class="va">msg</span>, <span class="st">"'"</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
 
 <span class="co">#* Plot a histogram</span>
 <span class="co">#* @serializer png</span>
 <span class="co">#* @get /plot</span>
 <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">rand</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">rand</span><span class="op">)</span>
+  <span class="va">rand</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">rand</span><span class="op">)</span>
 <span class="op">}</span>
 
 <span class="co">#* Return the sum of two numbers</span>
@@ -154,11 +158,11 @@
 <span class="co">#* @param b The second number to add</span>
 <span class="co">#* @post /sum</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<p>These comments allow <code>plumber</code> to make your R functions available as API endpoints. You can use either <code>#*</code> as the prefix or <code>#'</code>, but we recommend the former since <code>#'</code> will collide with <code>roxygen2</code>.</p>
+<p>These comments allow <code>plumber</code> to make your R functions available as API endpoints. You can use either <code>#*</code> as the prefix or <code>#'</code>, but we recommend the former since <code>#'</code> will collide with Roxygen.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.rplumber.io">plumber</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.rplumber.io">plumber</a></span><span class="op">)</span>
 <span class="co"># 'plumber.R' is the location of the file shown above</span>
 <span class="fu"><a href="reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"plumber.R"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="reference/pr_run.html">pr_run</a></span><span class="op">(</span>port<span class="op">=</span><span class="fl">8000</span><span class="op">)</span></code></pre></div>
@@ -179,23 +183,26 @@ $ curl "http://localhost:8000/echo?msg=hello"
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the latest stable version from CRAN using the following command:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"plumber"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"plumber"</span><span class="op">)</span></code></pre></div>
 <p>If you want to try out the latest development version, you can install it from GitHub.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"rstudio/plumber"</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.rplumber.io">plumber</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"rstudio/plumber"</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.rplumber.io">plumber</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div id="hosting" class="section level2">
 <h2 class="hasAnchor">
 <a href="#hosting" class="anchor"></a>Hosting</h2>
-<p>If you’re just getting started with hosting cloud servers, the <a href="https://www.digitalocean.com" class="external-link">DigitalOcean</a> integration included in <code>plumber</code> will be the best way to get started. You’ll be able to get a server hosting your custom API in just two R commands. To deploy to DigitalOcean, check out the <code>plumber</code> companion package <a href="https://github.com/meztez/plumberDeploy" class="external-link"><code>plumberDeploy</code></a>.</p>
-<p><a href="https://rstudio.com/products/connect/" class="external-link">RStudio Connect</a> is a commercial publishing platform that enables R developers to easily publish a variety of R content types, including Plumber APIs. Additional documentation is available at https://www.rplumber.io/articles/hosting.html#rstudio-connect-1.</p>
+<p>If you’re just getting started with hosting cloud servers, the <a href="https://www.digitalocean.com">DigitalOcean</a> integration included in <code>plumber</code> will be the best way to get started. You’ll be able to get a server hosting your custom API in just two R commands. To deploy to DigitalOcean, check out the <code>plumber</code> companion package <a href="https://github.com/meztez/plumberDeploy"><code>plumberDeploy</code></a>.</p>
+<p><a href="https://rstudio.com/products/connect/">RStudio Connect</a> is a commercial publishing platform that enables R developers to easily publish a variety of R content types, including Plumber APIs. Additional documentation is available at <a href="https://www.rplumber.io/articles/hosting.html#rstudio-connect-1" class="uri">https://www.rplumber.io/articles/hosting.html#rstudio-connect-1</a>.</p>
 <p>A couple of other approaches to hosting plumber are also made available:</p>
 <ul>
-<li><p>PM2 - https://www.rplumber.io/articles/hosting.html#pm2-1</p></li>
-<li><p>Docker - https://www.rplumber.io/articles/hosting.html#docker-basic- ## Related Projects</p></li>
-<li><p><a href="https://www.opencpu.org/" class="external-link">OpenCPU</a> - A server designed for hosting R APIs with an eye towards scientific research.</p></li>
-<li><p><a href="http://bart6114.github.io/jug/index.html" class="external-link">jug</a> - <em>(development discontinued)</em> an R package similar to Plumber but uses a more programmatic approach to constructing the API.</p></li>
+<li><p>PM2 - <a href="https://www.rplumber.io/articles/hosting.html#pm2-1" class="uri">https://www.rplumber.io/articles/hosting.html#pm2-1</a></p></li>
+<li>
+<p>Docker - <a href="https://www.rplumber.io/articles/hosting.html#docker-basic-" class="uri">https://www.rplumber.io/articles/hosting.html#docker-basic-</a></p>
+<h2 id="related-projects">Related Projects</h2>
+</li>
+<li><p><a href="https://www.opencpu.org/">OpenCPU</a> - A server designed for hosting R APIs with an eye towards scientific research.</p></li>
+<li><p><a href="http://bart6114.github.io/jug/index.html">jug</a> - <em>(development discontinued)</em> an R package similar to Plumber but uses a more programmatic approach to constructing the API.</p></li>
 </ul>
 </div>
 </div>
@@ -203,7 +210,7 @@ $ curl "http://localhost:8000/echo?msg=hello"
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2 data-toc-skip>Links</h2>
+<h2>Links</h2>
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=plumber">https://​cloud.r-project.org/​package=plumber</a>
 </li>
@@ -213,58 +220,52 @@ $ curl "http://localhost:8000/echo?msg=hello"
 </li>
 </ul>
 </div>
-
 <div class="license">
-<h2 data-toc-skip>License</h2>
+<h2>License</h2>
 <ul class="list-unstyled">
 <li>
 <a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a>
 </li>
 </ul>
 </div>
-
 <div class="community">
-<h2 data-toc-skip>Community</h2>
+<h2>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 </ul>
 </div>
-
 <div class="developers">
-<h2 data-toc-skip>Developers</h2>
+<h2>Developers</h2>
 <ul class="list-unstyled">
 <li>
 <a href="http://schloerke.com/">Barret Schloerke</a> <br><small class="roles"> Maintainer, author </small>  </li>
 <li>
 <a href="https://trestletech.com/">Jeff Allen</a> <br><small class="roles"> Author, conceptor </small>  </li>
 <li> RStudio <br><small class="roles"> Copyright holder, funder </small>  </li>
-<li><a href="authors.html">More on authors...</a></li>
+<li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
 
-<div class="dev-status">
-<h2 data-toc-skip>Dev status</h2>
+  <div class="dev-status">
+<h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/rstudio/plumber/actions" class="external-link"><img src="https://github.com/rstudio/plumber/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://www.r-pkg.org/pkg/plumber" class="external-link"><img src="https://www.r-pkg.org/badges/version/plumber"></a></li>
-<li><a href="https://www.r-pkg.org/pkg/plumber" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/plumber?color=brightgreen" alt="CRAN RStudio mirror downloads"></a></li>
-<li><a href="https://codecov.io/gh/rstudio/plumber" class="external-link"><img src="https://codecov.io/gh/rstudio/plumber/branch/master/graph/badge.svg" alt="codecov"></a></li>
-<li><a href="https://community.rstudio.com/tag/plumber" class="external-link"><img src="https://img.shields.io/badge/community-plumber-blue?style=social&amp;logo=rstudio&amp;logoColor=75AADB" alt="RStudio community"></a></li>
+<li><a href="https://github.com/rstudio/plumber/actions"><img src="https://github.com/rstudio/plumber/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://www.r-pkg.org/pkg/plumber"><img src="https://www.r-pkg.org/badges/version/plumber"></a></li>
+<li><a href="https://www.r-pkg.org/pkg/plumber"><img src="https://cranlogs.r-pkg.org/badges/plumber?color=brightgreen" alt="CRAN RStudio mirror downloads"></a></li>
+<li><a href="https://codecov.io/gh/rstudio/plumber"><img src="https://codecov.io/gh/rstudio/plumber/branch/master/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="https://community.rstudio.com/tags/plumber"><img src="https://img.shields.io/badge/community-plumber-blue?style=social&amp;logo=rstudio&amp;logoColor=75AADB" alt="RStudio community"></a></li>
 </ul>
 </div>
-
-  </div>
+</div>
 </div>
 
 
       <footer><div class="copyright">
-  <p></p>
-<p>Developed by <a href="http://schloerke.com/" class="external-link">Barret Schloerke</a>, <a href="https://trestletech.com/" class="external-link">Jeff Allen</a>, RStudio.</p>
+  <p>Developed by <a href="http://schloerke.com/">Barret Schloerke</a>, <a href="https://trestletech.com/">Jeff Allen</a>,  RStudio.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

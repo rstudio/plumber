@@ -59,8 +59,6 @@
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -72,15 +70,9 @@
 
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -94,13 +86,19 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -184,7 +182,16 @@
     <p><code>port</code> does not need to be explicitly assigned.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pr_run</span><span class='op'>(</span><span class='va'>pr</span>, host <span class='op'>=</span> <span class='st'>"127.0.0.1"</span>, port <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.port"</span>, <span class='cn'>NULL</span><span class='op'>)</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>pr_run</span><span class='op'>(</span>
+  <span class='va'>pr</span>,
+  host <span class='op'>=</span> <span class='st'>"127.0.0.1"</span>,
+  port <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.port"</span>, <span class='cn'>NULL</span><span class='op'>)</span>,
+  <span class='va'>...</span>,
+  debug <span class='op'>=</span> <span class='fu'>missing_arg</span><span class='op'>(</span><span class='op'>)</span>,
+  docs <span class='op'>=</span> <span class='fu'>missing_arg</span><span class='op'>(</span><span class='op'>)</span>,
+  swaggerCallback <span class='op'>=</span> <span class='fu'>missing_arg</span><span class='op'>(</span><span class='op'>)</span>,
+  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -205,6 +212,34 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.</p></td>
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.</p></td>
     </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Should be empty.</p></td>
+    </tr>
+    <tr>
+      <th>debug</th>
+      <td><p>If <code>TRUE</code>, it will provide more insight into your API errors.
+Using this value will only last for the duration of the run.
+If <code><a href='pr_set_debug.html'>pr_set_debug()</a></code> has not been called, <code>debug</code> will default to <code><a href='https://rdrr.io/r/base/interactive.html'>interactive()</a></code> at <code>pr_run()</code> time</p></td>
+    </tr>
+    <tr>
+      <th>docs</th>
+      <td><p>Visual documentation value to use while running the API.
+This value will only be used while running the router.
+If missing, defaults to information previously set with <code><a href='pr_set_docs.html'>pr_set_docs()</a></code>.
+For more customization, see <code><a href='pr_set_docs.html'>pr_set_docs()</a></code> for examples.</p></td>
+    </tr>
+    <tr>
+      <th>swaggerCallback</th>
+      <td><p>An optional single-argument function that is called
+back with the URL to an OpenAPI user interface when one becomes ready. If
+missing, defaults to information set with <code><a href='pr_set_docs_callback.html'>pr_set_docs_callback()</a></code>.
+This value will only be used while running the router.</p></td>
+    </tr>
+    <tr>
+      <th>quiet</th>
+      <td><p>If <code>TRUE</code>, don't print routine startup messages.</p></td>
+    </tr>
     </table>
 
 
@@ -214,7 +249,14 @@ Mac OS X, port numbers smaller than 1025 require root privileges.</p></td>
   <span class='fu'>pr_run</span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>pr_run</span><span class='op'>(</span>port <span class='op'>=</span> <span class='fl'>5762</span><span class='op'>)</span>
+  <span class='fu'>pr_run</span><span class='op'>(</span>
+    <span class='co'># manually set port</span>
+    port <span class='op'>=</span> <span class='fl'>5762</span>,
+    <span class='co'># turn off visual documentation</span>
+    docs <span class='op'>=</span> <span class='cn'>FALSE</span>,
+    <span class='co'># do not display startup messages</span>
+    quiet <span class='op'>=</span> <span class='cn'>TRUE</span>
+  <span class='op'>)</span>
 <span class='op'>}</span>
 
 </div></pre>
@@ -229,11 +271,11 @@ Mac OS X, port numbers smaller than 1025 require root privileges.</p></td>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by <a href="http://schloerke.com/" class="external-link">Barret Schloerke</a>, <a href="https://trestletech.com/" class="external-link">Jeff Allen</a>, RStudio.</p></p>
+  <p>Developed by <a href='http://schloerke.com/'>Barret Schloerke</a>, <a href='https://trestletech.com/'>Jeff Allen</a>,  RStudio.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -258,8 +300,6 @@ Mac OS X, port numbers smaller than 1025 require root privileges.</p></td>
 </script>
 
 
-
-  
 
   </body>
 </html>

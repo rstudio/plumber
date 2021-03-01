@@ -28,8 +28,6 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -42,12 +40,18 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
+<li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -99,7 +103,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/rstudio/plumber/" class="external-link">
+  <a href="https://github.com/rstudio/plumber/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -126,14 +130,14 @@
       <h1 data-toc-skip>Introduction</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/rstudio/plumber/blob/master/vignettes/introduction.Rmd" class="external-link"><code>vignettes/introduction.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/rstudio/plumber/blob/master/vignettes/introduction.Rmd"><code>vignettes/introduction.Rmd</code></a></small>
       <div class="hidden name"><code>introduction.Rmd</code></div>
 
     </div>
 
     
     
-<p>The <a href="http://www.R-project.org/" class="external-link">R Programming Language</a> has become one of the most dominant programming languages for data analysis and visualization in recent years. At the same time, web services have become a common language for allowing various systems to interact with one another. The <code>plumber</code> R package allows users to expose existing R code as a service available to others on the Web. Plumber is best illustrated with an example:</p>
+<p>The <a href="http://www.R-project.org/">R Programming Language</a> has become one of the most dominant programming languages for data analysis and visualization in recent years. At the same time, web services have become a common language for allowing various systems to interact with one another. The <code>plumber</code> R package allows users to expose existing R code as a service available to others on the Web. Plumber is best illustrated with an example:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># plumber.R</span>
 
@@ -141,7 +145,7 @@
 <span class="co">#* @param msg The message to echo back.</span>
 <span class="co">#* @get /echo</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">msg</span><span class="op">=</span><span class="st">""</span><span class="op">)</span><span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>msg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"The message is: '"</span>, <span class="va">msg</span>, <span class="st">"'"</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>msg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"The message is: '"</span>, <span class="va">msg</span>, <span class="st">"'"</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
 
 <span class="co">#* Plot out data from the iris dataset</span>
@@ -153,12 +157,12 @@
   <span class="va">title</span> <span class="op">&lt;-</span> <span class="st">"All Species"</span>
 
   <span class="co"># Filter if the species was specified</span>
-  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/missing.html" class="external-link">missing</a></span><span class="op">(</span><span class="va">spec</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-    <span class="va">title</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Only the '"</span>, <span class="va">spec</span>, <span class="st">"' Species"</span><span class="op">)</span>
-    <span class="va">myData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">iris</span>, <span class="va">Species</span> <span class="op">==</span> <span class="va">spec</span><span class="op">)</span>
+  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/missing.html">missing</a></span><span class="op">(</span><span class="va">spec</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
+    <span class="va">title</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Only the '"</span>, <span class="va">spec</span>, <span class="st">"' Species"</span><span class="op">)</span>
+    <span class="va">myData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">iris</span>, <span class="va">Species</span> <span class="op">==</span> <span class="va">spec</span><span class="op">)</span>
   <span class="op">}</span>
 
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">myData</span><span class="op">$</span><span class="va">Sepal.Length</span>, <span class="va">myData</span><span class="op">$</span><span class="va">Petal.Length</span>,
+  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">myData</span><span class="op">$</span><span class="va">Sepal.Length</span>, <span class="va">myData</span><span class="op">$</span><span class="va">Petal.Length</span>,
        main<span class="op">=</span><span class="va">title</span>, xlab<span class="op">=</span><span class="st">"Sepal Length"</span>, ylab<span class="op">=</span><span class="st">"Petal Length"</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>Even without knowing R, you can probably get a rough idea for what the above Plumber API will do. The first function above defines the <code>/echo</code> endpoint which simply echoes back the text that it was sent. The second function generates a plot based on Edgar Anderson’s famous Iris Dataset; it includes a filter that allows the caller to subset the dataset to a particular species.</p>
@@ -170,8 +174,8 @@
 <p>HTTP APIs have become the predominant language by which software communicates. By creating an HTTP API, you’ll empower your R code to be leveraged by other services – whether they’re housed inside your organization or hosted on the other side of the world. Here are just a few ideas of the doors that are opened to you when you wrap your R code in a Plumber API:</p>
 <ul>
 <li>Software written in other languages in your organization can run your R code. Your company’s Java application could now pull in a custom ggplot2 graph that you generate on-demand, or a Python client could query a predictive model defined in R.</li>
-<li>You can have <a href="https://www.mailgun.com/" class="external-link">some third-party</a> receive emails on your behalf and then notify your Plumber service when new messages arrive.</li>
-<li>You could register a “<a href="https://api.slack.com/slash-commands" class="external-link">Slash Command</a>” on Slack, enabling you to execute your R function in response to a command being entered in Slack.</li>
+<li>You can have <a href="https://www.mailgun.com/">some third-party</a> receive emails on your behalf and then notify your Plumber service when new messages arrive.</li>
+<li>You could register a “<a href="https://api.slack.com/slash-commands">Slash Command</a>” on Slack, enabling you to execute your R function in response to a command being entered in Slack.</li>
 <li>You can write JavaScript code that queries your Plumber API from a visitor’s web browser. Even further, you could use Plumber exclusively as the back-end of an interactive web application.</li>
 </ul>
 </div>
@@ -188,13 +192,11 @@
 
 
       <footer><div class="copyright">
-  <p></p>
-<p>Developed by <a href="http://schloerke.com/" class="external-link external-link">Barret Schloerke</a>, <a href="https://trestletech.com/" class="external-link external-link">Jeff Allen</a>, RStudio.</p>
+  <p>Developed by <a href="http://schloerke.com/">Barret Schloerke</a>, <a href="https://trestletech.com/">Jeff Allen</a>,  RStudio.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

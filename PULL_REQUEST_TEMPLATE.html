@@ -58,8 +58,6 @@
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -71,15 +69,9 @@
 
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-title-body">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -93,13 +85,19 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -201,10 +199,10 @@
 <div id="minimal-reproducible-example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#minimal-reproducible-example" class="anchor"></a>Minimal reproducible example</h2>
-<p>Finally, please include a minimal reprex. The goal of a reprex is to make it as easy as possible for me to recreate your problem so that I can fix it. If you’ve never heard of a reprex before, start by reading <a href="https://github.com/jennybc/reprex#what-is-a-reprex" class="external-link uri">https://github.com/jennybc/reprex#what-is-a-reprex</a>, and follow the advice further down the page. Do NOT include session info unless it’s explicitly asked for, or you’ve used <code>reprex::reprex(..., si = TRUE)</code> to hide it away.</p>
+<p>Finally, please include a minimal reprex. The goal of a reprex is to make it as easy as possible for me to recreate your problem so that I can fix it. If you’ve never heard of a reprex before, start by reading <a href="https://github.com/jennybc/reprex#what-is-a-reprex" class="uri">https://github.com/jennybc/reprex#what-is-a-reprex</a>, and follow the advice further down the page. Do NOT include session info unless it’s explicitly asked for, or you’ve used <code>reprex::reprex(..., si = TRUE)</code> to hide it away.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">reprex</span><span class="fu">::</span><span class="fu">reprex</span><span class="op">(</span><span class="op">{</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.rplumber.io">plumber</a></span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.rplumber.io">plumber</a></span><span class="op">)</span>
   <span class="co"># insert reprex here</span>
 
 <span class="op">}</span><span class="op">)</span></code></pre></div>
@@ -213,7 +211,19 @@
 <p>Brief description of the original problem and the approach behind your solution.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># insert reprex here</span></code></pre></div>
-<p>PR task list: - [ ] Update NEWS - [ ] Add tests - [ ] Update documentation with <code>devtools::document()</code></p>
+<p>PR task list:</p>
+<ul>
+<li>
+<input type="checkbox" disabled>
+Update NEWS</li>
+<li>
+<input type="checkbox" disabled>
+Add tests</li>
+<li>
+<input type="checkbox" disabled>
+Update documentation with <code>devtools::document()</code>
+</li>
+</ul>
 </div>
 
 
@@ -231,11 +241,11 @@
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by <a href="http://schloerke.com/" class="external-link">Barret Schloerke</a>, <a href="https://trestletech.com/" class="external-link">Jeff Allen</a>, RStudio.</p></p>
+  <p>Developed by <a href='http://schloerke.com/'>Barret Schloerke</a>, <a href='https://trestletech.com/'>Jeff Allen</a>,  RStudio.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -260,8 +270,6 @@
 </script>
 
 
-
-  
 
   </body>
 </html>

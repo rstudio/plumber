@@ -298,8 +298,11 @@ details on the methods available on this object.</p>
   host <span class='op'>=</span> <span class='st'>"127.0.0.1"</span>,
   port <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"plumber.port"</span>, <span class='cn'>NULL</span><span class='op'>)</span>,
   swagger <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Deprecated.html'>deprecated</a></span><span class='op'>(</span><span class='op'>)</span>,
-  debug <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Deprecated.html'>deprecated</a></span><span class='op'>(</span><span class='op'>)</span>,
-  swaggerCallback <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Deprecated.html'>deprecated</a></span><span class='op'>(</span><span class='op'>)</span>
+  debug <span class='op'>=</span> <span class='fu'>missing_arg</span><span class='op'>(</span><span class='op'>)</span>,
+  swaggerCallback <span class='op'>=</span> <span class='fu'>missing_arg</span><span class='op'>(</span><span class='op'>)</span>,
+  <span class='va'>...</span>,
+  docs <span class='op'>=</span> <span class='fu'>missing_arg</span><span class='op'>(</span><span class='op'>)</span>,
+  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -312,11 +315,23 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.</p></dd>
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.This value does not need to be explicitly assigned. To explicitly set it, see <code><a href='options_plumber.html'>options_plumber()</a></code>.</p></dd>
 
-<dt><code>swagger</code></dt><dd><p>Deprecated. See <code>$setDocs(docs)</code> or <code>$setApiSpec()</code></p></dd>
+<dt><code>swagger</code></dt><dd><p>Deprecated. Please use <code>docs</code> instead. See <code>$setDocs(docs)</code> or <code>$setApiSpec()</code> for more customization.</p></dd>
 
-<dt><code>debug</code></dt><dd><p>Deprecated. See <code>$setDebug()</code></p></dd>
+<dt><code>debug</code></dt><dd><p>If <code>TRUE</code>, it will provide more insight into your API errors. Using this value will only last for the duration of the run. If a <code>$setDebug()</code> has not been called, <code>debug</code> will default to <code><a href='https://rdrr.io/r/base/interactive.html'>interactive()</a></code> at <code>$run()</code> time. See <code>$setDebug()</code> for more details.</p></dd>
 
-<dt><code>swaggerCallback</code></dt><dd><p>Deprecated. See <code>$setDocsCallback()</code></p></dd>
+<dt><code>swaggerCallback</code></dt><dd><p>An optional single-argument function that is
+called back with the URL to an OpenAPI user interface when one becomes
+ready. If missing, defaults to information previously set with <code>$setDocsCallback()</code>.
+This value will only be used while running the router.</p></dd>
+
+<dt><code>...</code></dt><dd><p>Should be empty.</p></dd>
+
+<dt><code>docs</code></dt><dd><p>Visual documentation value to use while running the API.
+This value will only be used while running the router.
+If missing, defaults to information previously set with <code>setDocs()</code>.
+For more customization, see <code>$setDocs()</code> or <code><a href='pr_set_docs.html'>pr_set_docs()</a></code> for examples.</p></dd>
+
+<dt><code>quiet</code></dt><dd><p>If <code>TRUE</code>, don't print routine startup messages.</p></dd>
 
 </dl><p></div></p>
 <p><hr>
@@ -665,7 +680,7 @@ to the API docs url. This allows RStudio to locate visual documentation.</p>
 </dl><p></div></p>
 <p><hr>
 <a id="method-setDebug"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>setDebug()</code></h3>
-<p>Set debug value to include error messages</p>
+<p>Set debug value to include error messages.</p>
 <p>See also: <code>$getDebug()</code> and <code><a href='pr_set_debug.html'>pr_set_debug()</a></code></p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Plumber</span><span class='op'>$</span><span class='fu'>setDebug</span><span class='op'>(</span>debug <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre><p></div></p>
 
@@ -676,7 +691,7 @@ to the API docs url. This allows RStudio to locate visual documentation.</p>
 </dl><p></div></p>
 <p><hr>
 <a id="method-getDebug"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>getDebug()</code></h3>
-<p>Retrieve the <code>debug</code> value.</p>
+<p>Retrieve the <code>debug</code> value. If it has never been set, the result of <code><a href='https://rdrr.io/r/base/interactive.html'>interactive()</a></code> will be used.</p>
 <p>See also: <code>$getDebug()</code> and <code><a href='pr_set_debug.html'>pr_set_debug()</a></code></p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Plumber</span><span class='op'>$</span><span class='fu'>getDebug</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 

@@ -1,6 +1,6 @@
 pandoc: 2.7.3
-pkgdown: 1.6.1.9000
-pkgdown_sha: 9c95f00d2505ddd83c4722e019202370715d3a3d
+pkgdown: 1.6.1
+pkgdown_sha: ~
 articles:
   annotations: annotations.html
   execution-model: execution-model.html
@@ -13,7 +13,7 @@ articles:
   routing-and-input: routing-and-input.html
   security: security.html
   tips-and-tricks: tips-and-tricks.html
-last_built: 2021-03-01T22:01Z
+last_built: 2021-03-01T22:09Z
 urls:
   reference: https://www.rplumber.io/reference
   article: https://www.rplumber.io/articles
