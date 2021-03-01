@@ -27,7 +27,7 @@ plumber 1.0.0.9999 Development version
   * Setting `quiet = TRUE` will suppress routine startup messages.
   * Setting `debug = TRUE`, will display information when an error occurs. See `pr_set_debug()`.
   * Setting `docs` will update the visual documentation. See `pr_set_docs()`.
-  * Setting `swaggerCallback` to a function which will be called with a url to the documentation. See `pr_set_docs_callback()`.
+  * Set `swaggerCallback` to a function which will be called with a url to the documentation, or `NULL` to do nothing. See `pr_set_docs_callback()`.
 
 * To update a `PlumberEndpoint` path after initialization, call the new `PlumberEndpoint$setPath(path)`. This will update internal path matching meta data. (Active bindings were not used to avoid breaking changes.) (@blairj09 #770)
 
