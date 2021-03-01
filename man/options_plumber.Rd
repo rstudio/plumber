@@ -48,7 +48,8 @@ by RStudio to open the docs when then API is ran from the editor. Defaults to op
 that has a matching route with a trailing slash. For example, if set to \code{TRUE} and the
 GET route \verb{/test/} existed, then a GET request of \verb{/test?a=1} would redirect to
 \verb{/test/?a=1}. Defaults to \code{FALSE}. This option will default to \code{TRUE} in a future release.}
-\item{\code{plumber.methodNotAllowed}}{Logical value which allows the router to notify that an
+\item{\code{plumber.methodNotAllowed}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+Logical value which allows the router to notify that an
 unavailable method was requested, but a different request method is allowed. For example,
 if set to \code{TRUE} and the GET route \verb{/test} existed, then a POST request of \verb{/test} would
 receive a 405 status and the allowed methods. Defaults to \code{TRUE}.}

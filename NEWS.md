@@ -13,7 +13,7 @@ plumber 1.1.0
 
 * Added option `plumber.trailingSlash`. This option (which is **disabled** by default) allows routes to be redirected to route definitions with a trailing slash. For example, if a `GET` request is submitted to `/test?a=1` with no `/test` route is defined, but a `GET` `/test/` route definition does exist, then the original request will respond with a `307` to reattempt against `GET` `/test/?a=1`. This option will be _enabled_ by default in a future release. This logic executed for before calling the `404` handler. (#746)
 
-* Added option `plumber.methodNotFound`. This option (which is enabled by default) allows for a status of `405` to be returned if an invalid method is used when requesting a valid route. This logic executed for before calling the default `404` handler. (#746)
+* Added an experimental option `plumber.methodNotAllowed`. This option (which is enabled by default) allows for a status of `405` to be returned if an invalid method is used when requesting a valid route. This logic executed for before calling the default `404` handler. (#746)
 
 * Passing `edit = TRUE` to `plumb_api()` will open the API source file. (#699)
 
