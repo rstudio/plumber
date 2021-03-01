@@ -32,7 +32,8 @@ Imports:
     magrittr,
     mime,
     lifecycle (>= 0.2.0),
-    ellipsis (>= 0.3.0)
+    ellipsis (>= 0.3.0),
+    rlang
 LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
@@ -47,7 +48,8 @@ Suggests:
     feather,
     future,
     rstudioapi,
-    spelling
+    spelling,
+    mockery (>= 0.4.2)
 RoxygenNote: 7.1.1
 Collate:
     'async.R'

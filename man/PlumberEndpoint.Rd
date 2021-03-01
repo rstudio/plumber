@@ -48,6 +48,7 @@ each separate verb/path into its own endpoint, so we just do that.}
 \item \href{#method-getPathParams}{\code{PlumberEndpoint$getPathParams()}}
 \item \href{#method-getFuncParams}{\code{PlumberEndpoint$getFuncParams()}}
 \item \href{#method-getEndpointParams}{\code{PlumberEndpoint$getEndpointParams()}}
+\item \href{#method-setPath}{\code{PlumberEndpoint$setPath()}}
 \item \href{#method-clone}{\code{PlumberEndpoint$clone()}}
 }
 }
@@ -216,6 +217,23 @@ retrieve endpoint defined parameters
 \if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$getEndpointParams()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setPath"></a>}}
+\if{latex}{\out{\hypertarget{method-setPath}{}}}
+\subsection{Method \code{setPath()}}{
+Updates \verb{$path} with a sanitized \code{path} and updates the internal path meta-data
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$setPath(path)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{path}}{Path to set \verb{$path}. If missing a beginning slash, one will be added.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

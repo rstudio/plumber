@@ -2,7 +2,7 @@
 
 # Mount OpenAPI and Docs
 #' @noRd
-mount_docs <- function(pr, host, port, docs_info, callback) {
+mount_docs <- function(pr, host, port, docs_info, callback, quiet = FALSE) {
 
   # return early if not enabled
   if (!isTRUE(docs_info$enabled)) {
@@ -26,14 +26,18 @@ mount_docs <- function(pr, host, port, docs_info, callback) {
 
   # Mount Docs
   if (length(registered_docs()) == 0) {
-    message("No visual documentation options registered. See help(register_docs).")
+    if (!isTRUE(quiet)) {
+      message("No visual documentation options registered. See help(register_docs).")
+    }
     return()
   }
 
   if (is_docs_available(docs_info$docs)) {
     docs_mount <- .globals$docs[[docs_info$docs]]$mount
     docs_url <- do.call(docs_mount, c(list(pr, api_url), docs_info$args))
-    message("Running ", docs_info$docs, " Docs at ", docs_url, sep = "")
+    if (!isTRUE(quiet)) {
+      message("Running ", docs_info$docs, " Docs at ", docs_url, sep = "")
+    }
   } else {
     return()
   }

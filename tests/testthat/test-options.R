@@ -52,13 +52,31 @@ test_that("all options used are `options_plumber()` parameters", {
 
 
 test_that("Legacy swagger redirect can be disabled", {
-  with_options(list(), {
-    options_plumber(legacyRedirects = TRUE)
-    redirects <- swagger_redirects()
-    expect_gt(length(redirects), 0)
+  with_options(
+    list(
+      plumber.legacyRedirets = getOption("plumber.legacyRedirects")
+    ), {
+      options_plumber(legacyRedirects = TRUE)
+      redirects <- swagger_redirects()
+      expect_gt(length(redirects), 0)
 
-    options_plumber(legacyRedirects = FALSE)
-    redirects <- swagger_redirects()
-    expect_equal(length(redirects), 0)
-  })
+      options_plumber(legacyRedirects = FALSE)
+      redirects <- swagger_redirects()
+      expect_equal(length(redirects), 0)
+    }
+  )
+})
+
+test_that("docs.callback sync plumber.swagger.url", {
+  with_options(
+    list(
+      plumber.swagger.url = getOption("plumber.swagger.url"),
+      plumber.docs.callback = getOption("plumber.docs.callback")
+    ), {
+      options("plumber.swagger.url" = function(api_url) {cat(api_url)})
+      opt <- options_plumber(docs.callback = NULL)
+      expect_null(getOption("plumber.swagger.url"))
+      expect_null(opt$plumber.docs.callback)
+    }
+  )
 })

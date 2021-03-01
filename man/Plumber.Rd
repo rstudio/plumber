@@ -219,8 +219,11 @@ See also: \code{\link[=pr_run]{pr_run()}}
   host = "127.0.0.1",
   port = getOption("plumber.port", NULL),
   swagger = deprecated(),
-  debug = deprecated(),
-  swaggerCallback = deprecated()
+  debug = missing_arg(),
+  swaggerCallback = missing_arg(),
+  ...,
+  docs = missing_arg(),
+  quiet = FALSE
 )}\if{html}{\out{</div>}}
 }
 
@@ -237,11 +240,23 @@ Mac OS X, port numbers smaller than 1025 require root privileges.
 
 This value does not need to be explicitly assigned. To explicitly set it, see \code{\link[=options_plumber]{options_plumber()}}.}
 
-\item{\code{swagger}}{Deprecated. See \verb{$setDocs(docs)} or \verb{$setApiSpec()}}
+\item{\code{swagger}}{Deprecated. Please use \code{docs} instead. See \verb{$setDocs(docs)} or \verb{$setApiSpec()} for more customization.}
 
-\item{\code{debug}}{Deprecated. See \verb{$setDebug()}}
+\item{\code{debug}}{If \code{TRUE}, it will provide more insight into your API errors. Using this value will only last for the duration of the run. If a \verb{$setDebug()} has not been called, \code{debug} will default to \code{interactive()} at \verb{$run()} time. See \verb{$setDebug()} for more details.}
 
-\item{\code{swaggerCallback}}{Deprecated. See \verb{$setDocsCallback()}}
+\item{\code{swaggerCallback}}{An optional single-argument function that is
+called back with the URL to an OpenAPI user interface when one becomes
+ready. If missing, defaults to information previously set with \verb{$setDocsCallback()}.
+This value will only be used while running the router.}
+
+\item{\code{...}}{Should be empty.}
+
+\item{\code{docs}}{Visual documentation value to use while running the API.
+This value will only be used while running the router.
+If missing, defaults to information previously set with \code{setDocs()}.
+For more customization, see \verb{$setDocs()} or \code{\link[=pr_set_docs]{pr_set_docs()}} for examples.}
+
+\item{\code{quiet}}{If \code{TRUE}, don't print routine startup messages.}
 }
 \if{html}{\out{</div>}}
 }
@@ -765,7 +780,7 @@ See also: \code{\link[=pr_set_docs_callback]{pr_set_docs_callback()}}
 \if{html}{\out{<a id="method-setDebug"></a>}}
 \if{latex}{\out{\hypertarget{method-setDebug}{}}}
 \subsection{Method \code{setDebug()}}{
-Set debug value to include error messages
+Set debug value to include error messages.
 
 See also: \verb{$getDebug()} and \code{\link[=pr_set_debug]{pr_set_debug()}}
 \subsection{Usage}{
@@ -784,7 +799,7 @@ See also: \verb{$getDebug()} and \code{\link[=pr_set_debug]{pr_set_debug()}}
 \if{html}{\out{<a id="method-getDebug"></a>}}
 \if{latex}{\out{\hypertarget{method-getDebug}{}}}
 \subsection{Method \code{getDebug()}}{
-Retrieve the \code{debug} value.
+Retrieve the \code{debug} value. If it has never been set, the result of \code{interactive()} will be used.
 
 See also: \verb{$getDebug()} and \code{\link[=pr_set_debug]{pr_set_debug()}}
 \subsection{Usage}{

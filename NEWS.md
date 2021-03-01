@@ -21,6 +21,14 @@ plumber 1.1.0
 
 * Guess OpenAPI response content type from serializer. (@meztez #684)
 
+* Un-deprecated `Plumber$run(debug=, swaggerCallback=)` and added the parameters for `Plumber$run(docs=, quiet=)` and `pr_run(debug=, docs=, swaggerCallback=, quiet=)`. Now, all four parameters will not produce lingering effects on the `Plumber` router. (@jcheng5 #765)
+  * Setting `quiet = TRUE` will suppress routine startup messages.
+  * Setting `debug = TRUE`, will display information when an error occurs. See `pr_set_debug()`.
+  * Setting `docs` will update the visual documentation. See `pr_set_docs()`.
+  * Set `swaggerCallback` to a function which will be called with a url to the documentation, or `NULL` to do nothing. See `pr_set_docs_callback()`.
+
+* To update a `PlumberEndpoint` path after initialization, call the new `PlumberEndpoint$setPath(path)`. This will update internal path matching meta data. (Active bindings were not used to avoid breaking changes.) (@blairj09 #770)
+
 * Allow for spaces in `@apiTag` and `@tag` when tag is surrounded by single or double quotes. (#685)
 
 ### Bug fixes
@@ -45,6 +53,7 @@ plumber 1.1.0
 
 * Changed `future::plan()` from `multiprocess` to `multisession` in example API `14-future` as "Strategy 'multiprocess' is deprecated in future (>= 1.20.0)". (#747)
 
+* Setting options `plumber.docs.callback` to `NULL` will also set deprecated but supported option `plumber.swagger.url`. (#766)
 
 plumber 1.0.0
 --------------------------------------------------------------------------------
