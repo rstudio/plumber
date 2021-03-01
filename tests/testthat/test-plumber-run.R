@@ -97,7 +97,9 @@ test_that("`debug` is not set until runtime", {
   skip_if_not_installed("mockery", "0.4.2")
 
   m <- mockery::mock(TRUE, cycle = TRUE)
-  with_mock(default_debug = m, {
+  # https://github.com/r-lib/testthat/issues/734#issuecomment-377367516
+  # > It should work if you fully qualify the function name (include the pkgname)
+  with_mock("plumber:::default_debug" = m, {
     root <- pr()
     root$getDebug()
     mockery::expect_called(m, 1)
