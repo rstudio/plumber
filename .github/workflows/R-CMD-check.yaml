@@ -91,6 +91,11 @@ jobs:
         shell: Rscript {0}
         run: |
           install.packages("Rcpp", type = "source")
+      - name: Ubuntu 16 sodium
+        if: matrix.config.os == 'macOS-latest'
+        shell: Rscript {0}
+        run: |
+          install.packages("sodium", type = "source")
 
       - name: Install dependencies
         shell: Rscript {0}
