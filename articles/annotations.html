@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -140,7 +140,7 @@
 <div id="annotations" class="section level2">
 <h2 class="hasAnchor">
 <a href="#annotations" class="anchor"></a>Annotations</h2>
-<p>Annotations are specially-structured comments used in your plumber file to create an API. A full annotation line starts with <code>#*</code> or <code>#'</code>, then the annotation keyword <code>@...</code>, any number of space characters followed by the content. It is recommended to use <code>#*</code> to differentiate them from <code>Roxygen2</code> annotations.</p>
+<p>Annotations are specially-structured comments used in your plumber file to create an API. A full annotation line starts with <code>#*</code> or <code>#'</code>, then the annotation keyword <code>@...</code>, any number of space characters followed by the content. It is recommended to use <code>#*</code> to differentiate them from <code>roxygen2</code> annotations.</p>
 </div>
 <div id="global-annotations" class="section level2">
 <h2 class="hasAnchor">
@@ -310,11 +310,11 @@
 </h4>
 <p>Types are used to define API inputs. You can use most of them in dynamic routes. Note that Plumber first look in block expression to set endpoint parameters names, types and default value. Then <code>@param</code> annotations and dynamic route/path defined parameters will override Plumber guesses from block expression.</p>
 <p>Query parameters currently need to be explicitly converted as they are pushed as is (character) to block expression. Only dynamic route parameters are converted to specified <code>@param</code> type before being pushed to block expression.</p>
-<p>Plumber parameter type to OpenAPI type refenrence. For programmatic use, pick the one with an asterisk.</p>
+<p>Plumber parameter type to OpenAPI type reference. For programmatic use, pick the one with an asterisk.</p>
 <table class="table">
 <thead><tr class="header">
 <th>Type</th>
-<th>OpenApi</th>
+<th>OpenAPI</th>
 <th>Availability</th>
 </tr></thead>
 <tbody>
