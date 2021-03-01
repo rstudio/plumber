@@ -28,6 +28,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -40,18 +42,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -103,7 +99,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/rstudio/plumber/">
+  <a href="https://github.com/rstudio/plumber/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -130,7 +126,7 @@
       <h1 data-toc-skip>Routing &amp; Input</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/rstudio/plumber/blob/master/vignettes/routing-and-input.Rmd"><code>vignettes/routing-and-input.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/rstudio/plumber/blob/master/vignettes/routing-and-input.Rmd" class="external-link"><code>vignettes/routing-and-input.Rmd</code></a></small>
       <div class="hidden name"><code>routing-and-input.Rmd</code></div>
 
     </div>
@@ -160,7 +156,7 @@
 <li><code>@delete</code></li>
 <li><code>@head</code></li>
 </ul>
-<p>These map to the HTTP methods that an API client might send along with a request. By default when you open a page in a web browser, that sends a <code>GET</code> request to the API. But you can use other API clients (or even JavaScript inside of a web browser) to form HTTP requests using the other methods listed here. There are conventions around when each of these methods should be used which you can read more about <a href="http://www.restapitutorial.com/lessons/httpmethods.html">here</a>. Note that some of these conventions carry with them security implications, so it’s a good idea to follow the recommended uses for each method until you fully understand why you might deviate from them.</p>
+<p>These map to the HTTP methods that an API client might send along with a request. By default when you open a page in a web browser, that sends a <code>GET</code> request to the API. But you can use other API clients (or even JavaScript inside of a web browser) to form HTTP requests using the other methods listed here. There are conventions around when each of these methods should be used which you can read more about <a href="http://www.restapitutorial.com/lessons/httpmethods.html" class="external-link">here</a>. Note that some of these conventions carry with them security implications, so it’s a good idea to follow the recommended uses for each method until you fully understand why you might deviate from them.</p>
 <p>Note that a single endpoint can support multiple verbs. The following function would be used to service any incoming <code>GET</code>, <code>POST</code>, or <code>PUT</code> request to <code>/cars</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#* @get /cars</span>
@@ -190,7 +186,7 @@
 <code class="sourceCode R"><span class="co">#* Log some information about the incoming request</span>
 <span class="co">#* @filter logger</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span><span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="st">"-"</span>,
+  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="st">"-"</span>,
     <span class="va">req</span><span class="op">$</span><span class="va">REQUEST_METHOD</span>, <span class="va">req</span><span class="op">$</span><span class="va">PATH_INFO</span>, <span class="st">"-"</span>,
     <span class="va">req</span><span class="op">$</span><span class="va">HTTP_USER_AGENT</span>, <span class="st">"@"</span>, <span class="va">req</span><span class="op">$</span><span class="va">REMOTE_ADDR</span>, <span class="st">"\n"</span><span class="op">)</span>
   <span class="fu">plumber</span><span class="fu">::</span><span class="fu"><a href="../reference/forward.html">forward</a></span><span class="op">(</span><span class="op">)</span>
@@ -216,9 +212,9 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#* @filter checkAuth</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span><span class="op">)</span><span class="op">{</span>
-  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">req</span><span class="op">$</span><span class="va">username</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
+  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">req</span><span class="op">$</span><span class="va">username</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
     <span class="va">res</span><span class="op">$</span><span class="va">status</span> <span class="op">&lt;-</span> <span class="fl">401</span> <span class="co"># Unauthorized</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>error<span class="op">=</span><span class="st">"Authentication required"</span><span class="op">)</span><span class="op">)</span>
+    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>error<span class="op">=</span><span class="st">"Authentication required"</span><span class="op">)</span><span class="op">)</span>
   <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
     <span class="fu">plumber</span><span class="fu">::</span><span class="fu"><a href="../reference/forward.html">forward</a></span><span class="op">(</span><span class="op">)</span>
   <span class="op">}</span>
@@ -228,7 +224,7 @@
 <div id="throw-an-error" class="section level3">
 <h3 class="hasAnchor">
 <a href="#throw-an-error" class="anchor"></a>Throw an Error</h3>
-<p>Finally, a filter can throw an error. This can occur if a mistake is made in the code defining the filter or if the filter intentionally invokes <code><a href="https://rdrr.io/r/base/stop.html">stop()</a></code> to trigger an error. In this case, the request will not be processed by any subsequent handlers and will immediately be sent to the router’s error handler. See <a href="./programmatic-usage.html#customize-router">router customization</a> for more details on how to customize this error handler.</p>
+<p>Finally, a filter can throw an error. This can occur if a mistake is made in the code defining the filter or if the filter intentionally invokes <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code> to trigger an error. In this case, the request will not be processed by any subsequent handlers and will immediately be sent to the router’s error handler. See <a href="./programmatic-usage.html#customize-router">router customization</a> for more details on how to customize this error handler.</p>
 </div>
 </div>
 <div id="dynamic-routes" class="section level2">
@@ -237,15 +233,15 @@
 <p>In addition to having hard-coded routes like <code>/hello</code>, Plumber endpoints can have dynamic routes. Dynamic routes allow endpoints to define a more flexible set of paths against which they should match.</p>
 <p>A common REST convention is to include the identifier of an object in the API paths associated with it. So to lookup information about user #13, you might make a <code>GET</code> request to the path <code>/users/13</code>. Rather than having to register routes for every user your API might possibly encounter, you can use a dynamic route to associate an endpoint with a variety of paths.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">users</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
-  uid<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">12</span>,<span class="fl">13</span><span class="op">)</span>,
-  username<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"kim"</span>, <span class="st">"john"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">users</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
+  uid<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>,<span class="fl">13</span><span class="op">)</span>,
+  username<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"kim"</span>, <span class="st">"john"</span><span class="op">)</span>
 <span class="op">)</span>
 
 <span class="co">#* Lookup a user</span>
 <span class="co">#* @get /users/&lt;id&gt;</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span><span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">users</span>, <span class="va">uid</span> <span class="op">%in%</span> <span class="va">id</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">users</span>, <span class="va">uid</span> <span class="op">%in%</span> <span class="va">id</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>This API uses the dynamic path <code>/users/&lt;id&gt;</code> to match any request that is of the form <code>/users/</code> followed by some path element like a number or letters. In this case, it will return information about the user if a user with the associated ID was found, or an empty object if not.</p>
 <p>You can name these dynamic path elements however you’d like, but note that the name used in the dynamic path must match the name of the parameter for the function (in this case, both <code>id</code>).</p>
@@ -264,12 +260,12 @@
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#* @get /type/&lt;id&gt;</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span><span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
     id <span class="op">=</span> <span class="va">id</span>,
-    type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/typeof.html">typeof</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span>
+    type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/typeof.html" class="external-link">typeof</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span>
   <span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<p>Visiting <a href="http://localhost:8000/types/14" class="uri">http://localhost:8000/types/14</a> will return:</p>
+<p>Visiting <a href="http://localhost:8000/types/14" class="external-link uri">http://localhost:8000/types/14</a> will return:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">{</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a>  <span class="dt">"id"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"14"</span><span class="ot">]</span><span class="fu">,</span></span>
 <span id="cb9-3"><a href="#cb9-3"></a>  <span class="dt">"type"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"character"</span><span class="ot">]</span></span>
@@ -321,18 +317,18 @@
 <p>Plumber includes a static file server which can be used to host directories of static assets such as JavaScript, CSS, or HTML files. These servers are fairly simple to configure and integrate into your plumber application.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#* @assets ./files/static</span>
-<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>This example would expose the local directory <code>./files/static</code> at the default <code>/public</code> path on your server. So if you had a file <code>./files/static/branding.html</code>, it would be available on your Plumber server at <code>/public/branding.html</code>.</p>
 <p>You can optionally provide an additional argument to configure the public path used for your server. For instance</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#* @assets ./files/static /static</span>
-<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>would expose the local directory <code>files/static</code> not at <code>/public</code>, but at <code>/static</code>. Likewise, to serve a main <code>index.html</code>, you can also map <code>/files/static</code> to <code><a href="https://rdrr.io/r/base/Arithmetic.html">/</a></code> by using</p>
+<span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p>would expose the local directory <code>files/static</code> not at <code>/public</code>, but at <code>/static</code>. Likewise, to serve a main <code>index.html</code>, you can also map <code>/files/static</code> to <code><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">/</a></code> by using</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#* @assets ./files/static /</span>
-<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>That enables you to serve your <code>/files/static/index.html</code> under the <a href="http://localhost:8000/" class="uri">http://localhost:8000/</a> root URL.</p>
-<p>The “implementation” of your server in the above examples is just an empty <code><a href="https://rdrr.io/r/base/list.html">list()</a></code>. You can also specify a <code>function()</code> like you do with the other plumber annotations. At this point, the implementation doesn’t alter the behavior of your static server. Eventually, this list or function may provide an opportunity to configure the server by changing things like cache control settings.</p>
+<span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p>That enables you to serve your <code>/files/static/index.html</code> under the <a href="http://localhost:8000/" class="external-link uri">http://localhost:8000/</a> root URL.</p>
+<p>The “implementation” of your server in the above examples is just an empty <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>. You can also specify a <code>function()</code> like you do with the other plumber annotations. At this point, the implementation doesn’t alter the behavior of your static server. Eventually, this list or function may provide an opportunity to configure the server by changing things like cache control settings.</p>
 <p>If you’re configuring a Plumber router programmatically, you can instantiate a special static file router and mount it onto another router as discussed in the <a href="./programmatic-usage.html#mount-static">static file router section</a>.</p>
 </div>
 <div id="input-handling" class="section level2">
@@ -342,7 +338,7 @@
 <div id="the-request-object" class="section level3">
 <h3 class="hasAnchor">
 <a href="#the-request-object" class="anchor"></a>The Request Object</h3>
-<p>HTTP requests in Plumber are stored as environments and satisfy the <a href="https://github.com/jeffreyhorner/Rook/blob/a5e45f751/README.md#the-environment">Rook interface</a>. The expected objects for all HTTP requests are the following.</p>
+<p>HTTP requests in Plumber are stored as environments and satisfy the <a href="https://github.com/jeffreyhorner/Rook/blob/a5e45f751/README.md#the-environment" class="external-link">Rook interface</a>. The expected objects for all HTTP requests are the following.</p>
 <table class="table">
 <colgroup>
 <col width="11%">
@@ -362,14 +358,14 @@
 </tr>
 <tr class="even">
 <td><code>cookies</code></td>
-<td><code><a href="https://rdrr.io/r/base/list.html">list(cook="abc")</a></code></td>
+<td><code><a href="https://rdrr.io/r/base/list.html" class="external-link">list(cook="abc")</a></code></td>
 <td>A list of the cookies as described in <a href="#read-cookies">Cookies</a>
 </td>
 </tr>
 <tr class="odd">
 <td><code>httpuv.version</code></td>
 <td><code>"1.3.3"</code></td>
-<td>The version of the underlying <a href="https://github.com/rstudio/httpuv"><code>httpuv</code> package</a>
+<td>The version of the underlying <a href="https://github.com/rstudio/httpuv" class="external-link"><code>httpuv</code> package</a>
 </td>
 </tr>
 <tr class="even">
@@ -379,33 +375,33 @@
 </tr>
 <tr class="odd">
 <td><code>bodyRaw</code></td>
-<td><code><a href="https://rdrr.io/r/base/rawConversion.html">charToRaw("a=1&amp;b=2")</a></code></td>
-<td>The <code><a href="https://rdrr.io/r/base/raw.html">raw()</a></code>, unparsed contents of the body of the request</td>
+<td><code><a href="https://rdrr.io/r/base/rawConversion.html" class="external-link">charToRaw("a=1&amp;b=2")</a></code></td>
+<td>The <code><a href="https://rdrr.io/r/base/raw.html" class="external-link">raw()</a></code>, unparsed contents of the body of the request</td>
 </tr>
 <tr class="even">
 <td><code>body</code></td>
-<td><code><a href="https://rdrr.io/r/base/list.html">list(a=1,b=2)</a></code></td>
-<td>This value will typically be the same as <code>argsBody</code>. However, with content type <code>"multipart/*"</code>, <code>req$body</code> may contain detailed information, such as <code>name</code>, <code>content_type</code>, <code>content_disposition</code>, <code>filename</code>, <code>value</code> (which is a <code><a href="https://rdrr.io/r/base/raw.html">raw()</a></code> vector), and <code>parsed</code> (parsed version of <code>value</code>).</td>
+<td><code><a href="https://rdrr.io/r/base/list.html" class="external-link">list(a=1,b=2)</a></code></td>
+<td>This value will typically be the same as <code>argsBody</code>. However, with content type <code>"multipart/*"</code>, <code>req$body</code> may contain detailed information, such as <code>name</code>, <code>content_type</code>, <code>content_disposition</code>, <code>filename</code>, <code>value</code> (which is a <code><a href="https://rdrr.io/r/base/raw.html" class="external-link">raw()</a></code> vector), and <code>parsed</code> (parsed version of <code>value</code>).</td>
 </tr>
 <tr class="odd">
 <td><code>argsBody</code></td>
-<td><code><a href="https://rdrr.io/r/base/list.html">list(a=1,b=2)</a></code></td>
+<td><code><a href="https://rdrr.io/r/base/list.html" class="external-link">list(a=1,b=2)</a></code></td>
 <td>The parsed body output. Typically this is the same as <code>req$body</code> except when type is <code>"multipart/*"</code>.</td>
 </tr>
 <tr class="even">
 <td><code>argsPath</code></td>
-<td><code><a href="https://rdrr.io/r/base/list.html">list(c=3,d=4)</a></code></td>
+<td><code><a href="https://rdrr.io/r/base/list.html" class="external-link">list(c=3,d=4)</a></code></td>
 <td>The values of the path arguments.</td>
 </tr>
 <tr class="odd">
 <td><code>argsQuery</code></td>
-<td><code><a href="https://rdrr.io/r/base/list.html">list(e=5,f=6)</a></code></td>
+<td><code><a href="https://rdrr.io/r/base/list.html" class="external-link">list(e=5,f=6)</a></code></td>
 <td>The parsed query string output.</td>
 </tr>
 <tr class="even">
 <td><code>args</code></td>
-<td><code><a href="https://rdrr.io/r/base/list.html">list(req=req,res=res,e=5,f=6,c=3,d=4,a=1,b=2)</a></code></td>
-<td>In a route, the combined arguments of <code><a href="https://rdrr.io/r/base/list.html">list(req = req, res = res)</a></code>, <code>req$args</code> (added by filters), <code>req$argsQuery</code>, <code>req$argsPath</code>, and <code>req$argsBody</code>. In a filter, <code>req$args</code> is initialized to an empty list, so when processing filters <code>req$args</code> will only contain arguments set by previously processed filters as the route information will not have been processed yet.</td>
+<td><code><a href="https://rdrr.io/r/base/list.html" class="external-link">list(req=req,res=res,e=5,f=6,c=3,d=4,a=1,b=2)</a></code></td>
+<td>In a route, the combined arguments of <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list(req = req, res = res)</a></code>, <code>req$args</code> (added by filters), <code>req$argsQuery</code>, <code>req$argsPath</code>, and <code>req$argsBody</code>. In a filter, <code>req$args</code> is initialized to an empty list, so when processing filters <code>req$args</code> will only contain arguments set by previously processed filters as the route information will not have been processed yet.</td>
 </tr>
 <tr class="odd">
 <td><code>QUERY_STRING</code></td>
@@ -430,13 +426,13 @@
 <tr class="odd">
 <td><code>rook.errors</code></td>
 <td>N/A</td>
-<td>See <a href="https://github.com/jeffreyhorner/Rook/blob/a5e45f751/README.md#the-input-stream">Rook docs</a>
+<td>See <a href="https://github.com/jeffreyhorner/Rook/blob/a5e45f751/README.md#the-input-stream" class="external-link">Rook docs</a>
 </td>
 </tr>
 <tr class="even">
 <td><code>rook.input</code></td>
 <td>N/A</td>
-<td>See <a href="https://github.com/jeffreyhorner/Rook/blob/a5e45f751/README.md#the-error-stream">Rook docs</a>
+<td>See <a href="https://github.com/jeffreyhorner/Rook/blob/a5e45f751/README.md#the-error-stream" class="external-link">Rook docs</a>
 </td>
 </tr>
 <tr class="odd">
@@ -480,19 +476,19 @@
 <div id="query-strings" class="section level3">
 <h3 class="hasAnchor">
 <a href="#query-strings" class="anchor"></a>Query Strings</h3>
-<p>A query string may be appended to a URL in order to convey additional information beyond just the request route. Query strings allow for the encoding of character string keys and values. For example, in the URL <code>https://duckduckgo.com/?q=bread&amp;pretty=1</code>, everything following the <code><a href="https://rdrr.io/r/utils/Question.html">?</a></code> constitutes the query string. In this case, two variables (<code>q</code> and <code>pretty</code>) have been set (to <code>bread</code> and <code>1</code>, respectively).</p>
-<p>Plumber will automatically forward information from the query string into the function being executed by aligning the name of the query string with the name of the function parameter. The following example defines a search API that mimics the example from <a href="https://duckduckgo.com">DuckDuckGo</a> above but merely prints out what it receives.</p>
+<p>A query string may be appended to a URL in order to convey additional information beyond just the request route. Query strings allow for the encoding of character string keys and values. For example, in the URL <code>https://duckduckgo.com/?q=bread&amp;pretty=1</code>, everything following the <code><a href="https://rdrr.io/r/utils/Question.html" class="external-link">?</a></code> constitutes the query string. In this case, two variables (<code>q</code> and <code>pretty</code>) have been set (to <code>bread</code> and <code>1</code>, respectively).</p>
+<p>Plumber will automatically forward information from the query string into the function being executed by aligning the name of the query string with the name of the function parameter. The following example defines a search API that mimics the example from <a href="https://duckduckgo.com" class="external-link">DuckDuckGo</a> above but merely prints out what it receives.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#* @get /</span>
 <span class="va">search</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">q</span><span class="op">=</span><span class="st">""</span>, <span class="va">pretty</span><span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"The q parameter is '"</span>, <span class="va">q</span>, <span class="st">"'. "</span>,
+  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"The q parameter is '"</span>, <span class="va">q</span>, <span class="st">"'. "</span>,
          <span class="st">"The pretty parameter is '"</span>, <span class="va">pretty</span>, <span class="st">"'."</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<p>Visiting <a href="http://localhost:8000/?q=bread&amp;pretty=1" class="uri">http://localhost:8000/?q=bread&amp;pretty=1</a> will print:</p>
+<p>Visiting <a href="http://localhost:8000/?q=bread&amp;pretty=1" class="external-link uri">http://localhost:8000/?q=bread&amp;pretty=1</a> will print:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb15-1"><a href="#cb15-1"></a><span class="ot">[</span><span class="st">"The q parameter is 'bread'. The pretty parameter is '1'."</span><span class="ot">]</span></span></code></pre></div>
-<p>This is equivalent to calling <code><a href="https://rdrr.io/r/base/search.html">search(q="bread", pretty="1")</a></code>. If a parameter were not specified in the query string, it would just be omitted from the invocation of the endpoint. For example <a href="http://localhost:8000/?q=cereal" class="uri">http://localhost:8000/?q=cereal</a> would be equivalent to <code><a href="https://rdrr.io/r/base/search.html">search(q="cereal")</a></code>. The function would fall back to the default value of the <code>pretty</code> parameter (<code>0</code>), since that was defined in the function signature.</p>
+<p>This is equivalent to calling <code><a href="https://rdrr.io/r/base/search.html" class="external-link">search(q="bread", pretty="1")</a></code>. If a parameter were not specified in the query string, it would just be omitted from the invocation of the endpoint. For example <a href="http://localhost:8000/?q=cereal" class="external-link uri">http://localhost:8000/?q=cereal</a> would be equivalent to <code><a href="https://rdrr.io/r/base/search.html" class="external-link">search(q="cereal")</a></code>. The function would fall back to the default value of the <code>pretty</code> parameter (<code>0</code>), since that was defined in the function signature.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb16-1"><a href="#cb16-1"></a><span class="ot">[</span><span class="st">"The q parameter is 'cereal'. The pretty parameter is '0'."</span><span class="ot">]</span></span></code></pre></div>
-<p>Including additional query string arguments that do not map to a parameter of the function has no effect. For instance <a href="http://localhost:8000/?test=123" class="uri">http://localhost:8000/?test=123</a> will return the same results as calling <code><a href="https://rdrr.io/r/base/search.html">search()</a></code>.</p>
+<p>Including additional query string arguments that do not map to a parameter of the function has no effect. For instance <a href="http://localhost:8000/?test=123" class="external-link uri">http://localhost:8000/?test=123</a> will return the same results as calling <code><a href="https://rdrr.io/r/base/search.html" class="external-link">search()</a></code>.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb17-1"><a href="#cb17-1"></a><span class="ot">[</span><span class="st">"The q parameter is ''. The pretty parameter is '0'."</span><span class="ot">]</span></span></code></pre></div>
 <p>(Note that the raw query string is available as <code>req$QUERY_STRING</code>.)</p>
 <p>Some web browsers impose limitations on the length of a URL. Internet Explorer, in particular, caps the query string at 2,048 characters. If you need to send large amounts of data from a client to your API, it would likely be a better idea to send it in a <a href="#request-body">request body</a>.</p>
@@ -506,11 +502,11 @@
 <h4 class="hasAnchor">
 <a href="#files-handling-note" class="anchor"></a>Files handling note</h4>
 <p>When dealing with binary parameters, Plumber will return a named list of raw vector. The names in the list are the original uploaded filenames. Raw values are binary content of each file.</p>
-<p>Unfortunately, crafting a request with a message body requires a bit more work than making a <code>GET</code> request with a query string from your web browser, but you can use tools like <code>curl</code> on the command line or the <a href="https://github.com/hadley/httr/">httr R package</a>. We’ll use <code>curl</code> for the examples below.</p>
+<p>Unfortunately, crafting a request with a message body requires a bit more work than making a <code>GET</code> request with a query string from your web browser, but you can use tools like <code>curl</code> on the command line or the <a href="https://github.com/hadley/httr/" class="external-link">httr R package</a>. We’ll use <code>curl</code> for the examples below.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#* @post /user</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">id</span>, <span class="va">name</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
     id <span class="op">=</span> <span class="va">id</span>,
     name <span class="op">=</span> <span class="va">name</span>,
     body <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">body</span>,
@@ -529,7 +525,7 @@
 <span id="cb19-9"><a href="#cb19-9"></a><span class="fu">}</span></span></code></pre></div>
 <p>Alternatively, <code>echo {"id":123, "name": "Jennifer"} &gt; call.json &amp; curl --data @call.json "http://localhost:8000/user" -H "content-type: application/json"</code> (formatting the body as JSON) will have the same effect.</p>
 <p>As demonstrated above, the raw request body is made available as <code>req$bodyRaw</code> and parsed request body is available as <code>req$body</code>.</p>
-<p>If multiple parameters are matched to the endpoint formals, an error will be thrown. Due to the nature of how multiple values can be matched to the same argument, it is recommended that <code>POST</code> endpoints have a function definition that only accepts the formals <code>req</code>, <code>res</code>, and <code>...</code>. If the endpoint arguments are to be processed like a list, they are available at <code>req$argsBody</code>, with all arguments at <code>req$args</code>. <code>req$args</code> is a combination of <code><a href="https://rdrr.io/r/base/list.html">list(req = req, res = res)</a></code>, <code>req$argsPath</code>, <code>req$argsBody</code>, and <code>req$argsQuery</code>.</p>
+<p>If multiple parameters are matched to the endpoint formals, an error will be thrown. Due to the nature of how multiple values can be matched to the same argument, it is recommended that <code>POST</code> endpoints have a function definition that only accepts the formals <code>req</code>, <code>res</code>, and <code>...</code>. If the endpoint arguments are to be processed like a list, they are available at <code>req$argsBody</code>, with all arguments at <code>req$args</code>. <code>req$args</code> is a combination of <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list(req = req, res = res)</a></code>, <code>req$argsPath</code>, <code>req$argsBody</code>, and <code>req$argsQuery</code>.</p>
 </div>
 </div>
 <div id="read-cookies" class="section level3">
@@ -546,7 +542,7 @@
 <code class="sourceCode R"><span class="co">#* Return the value of a custom header</span>
 <span class="co">#* @get /</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span><span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
     val <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">HTTP_CUSTOMHEADER</span>
   <span class="op">)</span>
 <span class="op">}</span></code></pre></div>
@@ -554,7 +550,7 @@
 <div class="sourceCode" id="cb21"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">{</span></span>
 <span id="cb21-2"><a href="#cb21-2"></a>  <span class="dt">"val"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"abc123"</span><span class="ot">]</span></span>
 <span id="cb21-3"><a href="#cb21-3"></a><span class="fu">}</span></span></code></pre></div>
-<p>You can print out the names of all of the properties attached to the request by running <code><a href="https://rdrr.io/r/base/print.html">print(ls(req))</a></code> inside an endpoint.</p>
+<p>You can print out the names of all of the properties attached to the request by running <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print(ls(req))</a></code> inside an endpoint.</p>
 </div>
 </div>
   </div>
@@ -570,11 +566,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="http://schloerke.com/">Barret Schloerke</a>, <a href="https://trestletech.com/">Jeff Allen</a>,  RStudio.</p>
+  <p></p>
+<p>Developed by <a href="http://schloerke.com/" class="external-link external-link">Barret Schloerke</a>, <a href="https://trestletech.com/" class="external-link external-link">Jeff Allen</a>, RStudio.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

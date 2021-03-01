@@ -28,6 +28,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -40,18 +42,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -103,7 +99,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/rstudio/plumber/">
+  <a href="https://github.com/rstudio/plumber/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -130,7 +126,7 @@
       <h1 data-toc-skip>Hosting</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/rstudio/plumber/blob/master/vignettes/hosting.Rmd"><code>vignettes/hosting.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/rstudio/plumber/blob/master/vignettes/hosting.Rmd" class="external-link"><code>vignettes/hosting.Rmd</code></a></small>
       <div class="hidden name"><code>hosting.Rmd</code></div>
 
     </div>
@@ -144,27 +140,31 @@
 <li>If your Plumber process crashes (for instance, due to your server running out of memory), the method of running Plumber will not automatically restart the crashed service for you. This means that your API will be offline until you manually login and restart it. Likewise if your development machine gets rebooted, your API will not automatically be started when the machine comes back online.</li>
 <li>This technique relies on having your clients specify a port number manually. Non-technical users may be tripped up by this; some of the other techniques do not require clients specifying the port for an API.</li>
 <li>This approach will eternally run one R process for your API. Some of the other approaches will allow you to load-balance traffic between multiple R processes to handle more requests. <a href="#rstudio-connect">RStudio Connect</a> will even dynamically scale the number of running processes for you so that your API isn’t consuming more system resources than is necessary.</li>
+<li>Plumber uses the <code><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive()</a></code> function as a heuristic for whether it should behave in a more convenient mode or in a more robust, secure mode. This function is used as the default for some parameters on <code>run()</code> which could pose a security hazard if enabled on a public server.</li>
 <li>Most importantly, serving public requests from your development environment can be a security hazard. Ideally, you should separate your development instances from the servers that are accessible by others.</li>
 </ol>
 <p>For these reasons and more, you should consider setting up a separate server on which you can host your Plumber APIs. There are a variety of options that you can consider.</p>
-<div id="rstudio-connect" class="section level2">
-<h2 class="hasAnchor">
-<a href="#rstudio-connect" class="anchor"></a>RStudio Connect</h2>
-<p><a href="https://rstudio.com/products/connect/">RStudio Connect</a> is an enterprise publishing platform from RStudio. It supports push-button publishing from the RStudio IDE of a variety of R content types including Plumber APIs. Unlike all the other options listed here, RStudio Connect automatically manages the dependent packages and files your API has and recreates an environment closely mimicking your local development environment on the server.</p>
-<p>RStudio Connect automatically manages the number of R processes necessary to handle the current load and balances incoming traffic across all available processes. It can also shut down idle processes when they’re not in use. This allows you to run the appropriate number of R processes to scale your capacity to accommodate the current load.</p>
-</div>
 <div id="digitalocean" class="section level2">
 <h2 class="hasAnchor">
 <a href="#digitalocean" class="anchor"></a>DigitalOcean</h2>
-<p><a href="https://m.do.co/c/add0b50f54c4">DigitalOcean</a> is an easy-to-use Cloud Computing provider. They offer a simple way to spin up a Linux virtual machine and access it remotely. You can choose what size machine you want to run – with options ranging from small machines with 512MB of RAM for a few dollars a month up to large machines with dozens of GB of RAM – and only pay for it while it’s online.</p>
-<p>To deploy your Plumber API to DigitalOcean, please check out the <code>plumber</code> companion package <a href="https://github.com/meztez/plumberDeploy"><code>plumberDeploy</code></a>.</p>
+<p><a href="https://m.do.co/c/add0b50f54c4" class="external-link">DigitalOcean</a> is an easy-to-use Cloud Computing provider. They offer a simple way to spin up a Linux virtual machine and access it remotely. You can choose what size machine you want to run – with options ranging from small machines with 512MB of RAM for a few dollars a month up to large machines with dozens of GB of RAM – and only pay for it while it’s online.</p>
+<p>To deploy your Plumber API to DigitalOcean, please check out the <code>plumber</code> companion package <a href="https://github.com/meztez/plumberDeploy" class="external-link"><code>plumberDeploy</code></a>.</p>
+</div>
+<div id="rstudio-connect" class="section level2">
+<h2 class="hasAnchor">
+<a href="#rstudio-connect" class="anchor"></a>RStudio Connect</h2>
+<p><a href="https://rstudio.com/products/connect/" class="external-link">RStudio Connect</a> is an enterprise publishing platform from RStudio. It supports push-button publishing from the RStudio IDE of a variety of R content types including Plumber APIs. Unlike all the other options listed here, RStudio Connect automatically manages the dependent packages and files your API has and recreates an environment closely mimicking your local development environment on the server.</p>
+<p>RStudio Connect automatically manages the number of R processes necessary to handle the current load and balances incoming traffic across all available processes. It can also shut down idle processes when they’re not in use. This allows you to run the appropriate number of R processes to scale your capacity to accommodate the current load.</p>
+<blockquote>
+<p>Conflict of interest: the primary authors of <code>plumber</code> work for RStudio.</p>
+</blockquote>
 </div>
 <div id="docker" class="section level2">
 <h2 class="hasAnchor">
 <a href="#docker" class="anchor"></a>Docker (Basic)</h2>
-<p><a href="https://docker.io">Docker</a> is a platform built on top of Linux Containers that allow you to run processes in an isolated environment; that environment might have certain resources/software pre-configured or may emulate a particular Linux environment like Ubuntu 14.04 or CentOS 7.3.</p>
-<p>We won’t delve into the details of Docker or how to setup or install everything on your system. Docker provides some <a href="https://docs.docker.com/">great resources</a> for those who are looking to get started. Here we’ll assume that you have Docker installed and you’re familiar with the basic commands required to spin up a container.</p>
-<p>In this article, we’ll take advantage of the <a href="https://hub.docker.com/r/rstudio/plumber/">rstudio/plumber</a> Docker image that bundles a recent version of R with the most recent version of plumber pre-installed (the underlying R image is courtesy of the <a href="https://github.com/rocker-org/rocker">rocker</a> project). You can get this image with a</p>
+<p><a href="https://docker.io" class="external-link">Docker</a> is a platform built on top of Linux Containers that allow you to run processes in an isolated environment; that environment might have certain resources/software pre-configured or may emulate a particular Linux environment like Ubuntu 14.04 or CentOS 7.3.</p>
+<p>We won’t delve into the details of Docker or how to setup or install everything on your system. Docker provides some <a href="https://docs.docker.com/" class="external-link">great resources</a> for those who are looking to get started. Here we’ll assume that you have Docker installed and you’re familiar with the basic commands required to spin up a container.</p>
+<p>In this article, we’ll take advantage of the <a href="https://hub.docker.com/r/rstudio/plumber/" class="external-link">rstudio/plumber</a> Docker image that bundles a recent version of R with the most recent version of plumber pre-installed (the underlying R image is courtesy of the <a href="https://github.com/rocker-org/rocker" class="external-link">rocker</a> project). You can get this image with a</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">docker</span> pull rstudio/plumber</span></code></pre></div>
 <p>Remember that this will get you the current snapshot of Plumber and will continue to use that image until you run <code>pull</code> again.</p>
 <div id="default-dockerfile" class="section level3">
@@ -199,7 +199,7 @@
 <div id="custom-dockerfiles" class="section level3">
 <h3 class="hasAnchor">
 <a href="#custom-dockerfiles" class="anchor"></a>Custom Dockerfiles</h3>
-<p>You can build upon the <code>rstudio/plumber</code> image and build your own Docker image by writing your own Dockerfile. Dockerfiles have a vast array of options and possible configurations, so <a href="https://docs.docker.com/engine/reference/builder/">see the official docs</a> if you want to learn more about any of these options.</p>
+<p>You can build upon the <code>rstudio/plumber</code> image and build your own Docker image by writing your own Dockerfile. Dockerfiles have a vast array of options and possible configurations, so <a href="https://docs.docker.com/engine/reference/builder/" class="external-link">see the official docs</a> if you want to learn more about any of these options.</p>
 <p>A couple of commands that are relevant here:</p>
 <ul>
 <li>
@@ -231,11 +231,11 @@ CMD ["/app/plumber.R"]</code></pre>
 <h2 class="hasAnchor">
 <a href="#docker-advanced" class="anchor"></a>Docker (Advanced)</h2>
 <p>If you already have a <a href="#docker">basic Docker instance</a> running, you may be interested in more advanced configurations capable of hosting multiple plumber applications on a single server and even load-balancing across multiple plumber processes.</p>
-<p>In order to coordinate and run multiple Plumber processes on one server, <strong>you should install <code>docker-compose</code> on your system.</strong> This is not included with some installations of Docker, so you will need to <a href="https://docs.docker.com/compose/install/">follow these instructions</a> if you are not currently able to run <code>docker-compose</code> on the command-line. Docker Compose helps orchestrate multiple Docker containers. If you’re planning to run more than one Plumber process, you’ll want to use Docker Compose to keep them all alive and route traffic between them.</p>
+<p>In order to coordinate and run multiple Plumber processes on one server, <strong>you should install <code>docker-compose</code> on your system.</strong> This is not included with some installations of Docker, so you will need to <a href="https://docs.docker.com/compose/install/" class="external-link">follow these instructions</a> if you are not currently able to run <code>docker-compose</code> on the command-line. Docker Compose helps orchestrate multiple Docker containers. If you’re planning to run more than one Plumber process, you’ll want to use Docker Compose to keep them all alive and route traffic between them.</p>
 <div id="multiple-plumber-applications" class="section level3">
 <h3 class="hasAnchor">
 <a href="#multiple-plumber-applications" class="anchor"></a>Multiple Plumber Applications</h3>
-<p>We’ll use Docker Compose to help us organize multiple Plumber processes. We won’t go into detail about how to use Docker Compose, so if you’re new you should familiarize yourself using the <a href="https://docs.docker.com/compose">official docs</a>.</p>
+<p>We’ll use Docker Compose to help us organize multiple Plumber processes. We won’t go into detail about how to use Docker Compose, so if you’re new you should familiarize yourself using the <a href="https://docs.docker.com/compose" class="external-link">official docs</a>.</p>
 <p>You should define a Docker Compose configuration that defines the behavior of every Plumber application that you want to run. You’ll first want to setup a Dockerfile that defines the desired behavior for each of your applications (as <a href="#custom-dockerfiles">we outlined previously</a>. You could use a <code>docker-compose.yml</code> configuration like the following:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">version</span><span class="kw">:</span><span class="at"> </span><span class="st">'2'</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a><span class="fu">services</span><span class="kw">:</span></span>
@@ -255,7 +255,7 @@ CMD ["/app/plumber.R"]</code></pre>
 <span id="cb7-16"><a href="#cb7-16"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> always</span></span>
 <span id="cb7-17"><a href="#cb7-17"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
 <span id="cb7-18"><a href="#cb7-18"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="st">"7001:8000"</span></span></code></pre></div>
-<p>More detail on what each of these options does and what other options exist can be found <a href="https://docs.docker.com/compose/compose-file/">here</a>. This configuration defines two Docker containers that should run <code>app1</code> and <code>app2</code>. The associated files in this case are laid out on disk as follows:</p>
+<p>More detail on what each of these options does and what other options exist can be found <a href="https://docs.docker.com/compose/compose-file/" class="external-link">here</a>. This configuration defines two Docker containers that should run <code>app1</code> and <code>app2</code>. The associated files in this case are laid out on disk as follows:</p>
 <pre><code>docker-compose.yml
 app1
 ├── Dockerfile
@@ -272,7 +272,7 @@ data
 <h3 class="hasAnchor">
 <a href="#multiple-applications-on-one-port" class="anchor"></a>Multiple Applications on One Port</h3>
 <p>It may desirable to run all of your Plumber services on a standard port like <code>80</code> (for HTTP) or <code>443</code> (for HTTPS). In that case, you’d prefer to have a router running on port <code>80</code> that can send traffic to the appropriate Plumber API by distinguishing based on a path prefix. Requests for <code>myserver.com/app1/</code> could be sent to the <code>app1</code> container, and <code>myserver.org/app2/</code> could target the <code>app2</code> container, but both paths would be available on port 80 on your server.</p>
-<p>In order to do this, we can use another Docker container running <a href="https://www.nginx.com/">nginx</a> which is configured to route traffic between the two Plumber containers. We’d add the following entry to our <code>docker-compose.yml</code> below the app containers we already have defined.</p>
+<p>In order to do this, we can use another Docker container running <a href="https://www.nginx.com/" class="external-link">nginx</a> which is configured to route traffic between the two Plumber containers. We’d add the following entry to our <code>docker-compose.yml</code> below the app containers we already have defined.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1"></a><span class="at">  </span><span class="fu">nginx</span><span class="kw">:</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> nginx:1.9</span></span>
 <span id="cb9-3"><a href="#cb9-3"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
@@ -331,15 +331,15 @@ http {
 <p>If you’re expecting a lot of traffic on one application or have an API that’s particularly computationally complex, you may want to distribute the load across multiple R processes running the same Plumber application. Thankfully, we can use Docker Compose for this, as well.</p>
 <p>First, we’ll want to create multiple instances of the same application. This is easily accomplished with the <code>docker-compose scale</code> command. You simply run <code>docker-compose scale app1=3</code> to run three instances of <code>app1</code>. Now we just need to load balance traffic across these three instances.</p>
 <p>You could setup the nginx configuration that we already have to balance traffic across this pool of workers, but you would need to manually re-configure and update your nginx instance every time that you need to scale the number up or down, which might be a hassle. Luckily, there’s a more elegant solution.</p>
-<p>We can use the <a href="https://github.com/docker/dockercloud-haproxy">dockercloud/haproxy</a> Docker image to automatically balance HTTP traffic across a pool of workers. This image is intelligent enough to listen for workers in your pool arriving or leaving and will automatically remove/add these containers into their pool. Let’s add a new container into our configuration that defines this load balancer</p>
+<p>We can use the <a href="https://github.com/docker/dockercloud-haproxy" class="external-link">dockercloud/haproxy</a> Docker image to automatically balance HTTP traffic across a pool of workers. This image is intelligent enough to listen for workers in your pool arriving or leaving and will automatically remove/add these containers into their pool. Let’s add a new container into our configuration that defines this load balancer</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1"></a><span class="at">  </span><span class="fu">lb</span><span class="kw">:</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> </span><span class="st">'dockercloud/haproxy:1.2.1'</span></span>
 <span id="cb11-3"><a href="#cb11-3"></a><span class="at">    </span><span class="fu">links</span><span class="kw">:</span></span>
 <span id="cb11-4"><a href="#cb11-4"></a><span class="at">     </span><span class="kw">-</span><span class="at"> app1</span></span>
 <span id="cb11-5"><a href="#cb11-5"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
 <span id="cb11-6"><a href="#cb11-6"></a><span class="at">      </span><span class="kw">-</span><span class="at"> /var/run/docker.sock:/var/run/docker.sock</span></span></code></pre></div>
-<p>The trick that allows this image to listen in to our scaling of <code>app1</code> is by passing in the docker socket as a shared volume. Note that this particular arrangement will differ based on your host OS. The above configuration is intended for Linux, but MacOS X users would require a <a href="https://github.com/docker/dockercloud-haproxy#example-of-docker-composeyml-running-in-linux">slightly different config</a>.</p>
-<p>We could export port <code>80</code> of our new load balancer to port <code>80</code> of our host machine if we solely wanted to load-balance a single application. Alternatively, we can actually use both nginx (to handle the routing of various applications) and HAProxy (to handle the load balancing of a particular application). To do that, we’d merely add a new <code>location</code> block to our <code>nginx.conf</code> file that knows how to send traffic to HAproxy, or modify the existing <code>location</code> block to send traffic to the load balancer instead of going directly to the application.</p>
+<p>The trick that allows this image to listen in to our scaling of <code>app1</code> is by passing in the docker socket as a shared volume. Note that this particular arrangement will differ based on your host OS. The above configuration is intended for Linux, but MacOS X users would require a <a href="https://github.com/docker/dockercloud-haproxy#example-of-docker-composeyml-running-in-linux" class="external-link">slightly different config</a>.</p>
+<p>We could export port <code>80</code> of our new load balancer to port <code>80</code> of our host machine if we solely wanted to load-balance a single application. Alternatively, we can actually use both nginx (to handle the routing of various applications) and HAProxy (to handle the load balancing of a particular application). To do that, we’d merely add a new <code>location</code> block to our <code>nginx.conf</code> file that knows how to send traffic to HAProxy, or modify the existing <code>location</code> block to send traffic to the load balancer instead of going directly to the application.</p>
 <p>So the <code>location /app1/</code> block becomes:</p>
 <pre><code>location /app1/ {
   proxy_pass http://lb:8000/;
@@ -359,14 +359,14 @@ http {
 <h2 class="hasAnchor">
 <a href="#pm2" class="anchor"></a>pm2</h2>
 <p>If you don’t have the luxury of running your Plumber instance on a designated server (as is discussed in the <a href="#digitalocean">DigitalOcean section</a>) and you’re not comfortable hosting the API in <a href="#docker">Docker</a>, then you’ll need to find a way to run and manage your Plumber APIs on your server directly.</p>
-<p>There are a variety of tools that were built to help manage web hosting in a single-threaded environment like R. Some of the most compelling tools were developed around Ruby (like <a href="https://www.phusionpassenger.com/">Phusion Passenger</a>) or Node.js (like <a href="https://github.com/petruisfan/node-supervisor">Node Supervisor</a>, <a href="https://github.com/foreverjs/forever">forever</a> or <a href="http://pm2.keymetrics.io/">pm2</a>). Thankfully, many of these tools can be adapted to support managing an R process running a Plumber API.</p>
-<p><a href="http://pm2.keymetrics.io/">pm2</a> is a process manager initially targeting Node.js. Here we’ll show the commands needed to do this in Ubuntu 14.04, but you can use any Operating System or distribution that is supported by pm2. At the end, you’ll have a server that automatically starts your plumber services when booted, restarts them if they ever crash, and even centralizes the logs for your plumber services.</p>
+<p>There are a variety of tools that were built to help manage web hosting in a single-threaded environment like R. Some of the most compelling tools were developed around Ruby (like <a href="https://www.phusionpassenger.com/" class="external-link">Phusion Passenger</a>) or Node.js (like <a href="https://github.com/petruisfan/node-supervisor" class="external-link">Node Supervisor</a>, <a href="https://github.com/foreverjs/forever" class="external-link">forever</a> or <a href="http://pm2.keymetrics.io/" class="external-link">pm2</a>). Thankfully, many of these tools can be adapted to support managing an R process running a Plumber API.</p>
+<p><a href="http://pm2.keymetrics.io/" class="external-link">pm2</a> is a process manager initially targeting Node.js. Here we’ll show the commands needed to do this in Ubuntu 14.04, but you can use any Operating System or distribution that is supported by pm2. At the end, you’ll have a server that automatically starts your plumber services when booted, restarts them if they ever crash, and even centralizes the logs for your plumber services.</p>
 <div id="server-deployment-and-preparation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#server-deployment-and-preparation" class="anchor"></a>Server Deployment and Preparation</h3>
-<p>The first thing you’ll need to do, regardless of which process manager you choose, is to deploy the R files containing your plumber applications to the server where they’ll be hosted. Keep in mind that you’ll also need to include any supplemental R files that are <code><a href="https://rdrr.io/r/base/source.html">source()</a></code>d in your plumber file, and any other datasets or dependencies that your files have.</p>
-<p>You’ll also need to make sure that the R packages you need (and the appropriate versions) are available on the remote server. You can either do this manually by installing those packages or you can consider using a tool like <a href="https://rstudio.github.io/packrat/">Packrat</a> to help with this.</p>
-<p>There are a myriad of features in pm2 that we won’t cover here. It is a good idea to spend some time reading through their documentation to see which features might be of interest to you and to ensure that you understand all the implications of how pm2 hosts services (which user you want to run your processes as, etc.). Their <a href="http://pm2.keymetrics.io/docs/usage/quick-start/">quick-start guide</a> may be especially relevant. For the sake of simplicity, we will do a basic installation here without customizing many of those options.</p>
+<p>The first thing you’ll need to do, regardless of which process manager you choose, is to deploy the R files containing your plumber applications to the server where they’ll be hosted. Keep in mind that you’ll also need to include any supplemental R files that are <code><a href="https://rdrr.io/r/base/source.html" class="external-link">source()</a></code>d in your plumber file, and any other datasets or dependencies that your files have.</p>
+<p>You’ll also need to make sure that the R packages you need (and the appropriate versions) are available on the remote server. You can either do this manually by installing those packages or you can consider using a tool like <a href="https://rstudio.github.io/packrat/" class="external-link">Packrat</a> to help with this.</p>
+<p>There are a myriad of features in pm2 that we won’t cover here. It is a good idea to spend some time reading through their documentation to see which features might be of interest to you and to ensure that you understand all the implications of how pm2 hosts services (which user you want to run your processes as, etc.). Their <a href="http://pm2.keymetrics.io/docs/usage/quick-start/" class="external-link">quick-start guide</a> may be especially relevant. For the sake of simplicity, we will do a basic installation here without customizing many of those options.</p>
 </div>
 <div id="install-pm2" class="section level3">
 <h3 class="hasAnchor">
@@ -468,11 +468,13 @@ sudo systemctl start plumber-api   # start the service right now</code></pre>
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="http://schloerke.com/">Barret Schloerke</a>, <a href="https://trestletech.com/">Jeff Allen</a>,  RStudio.</p>
+  <p></p>
+<p>Developed by <a href="http://schloerke.com/" class="external-link external-link">Barret Schloerke</a>, <a href="https://trestletech.com/" class="external-link external-link">Jeff Allen</a>, RStudio.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

@@ -28,6 +28,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -40,18 +42,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -103,7 +99,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/rstudio/plumber/">
+  <a href="https://github.com/rstudio/plumber/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -130,7 +126,7 @@
       <h1 data-toc-skip>Tips &amp; Tricks</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/rstudio/plumber/blob/master/vignettes/tips-and-tricks.Rmd"><code>vignettes/tips-and-tricks.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/rstudio/plumber/blob/master/vignettes/tips-and-tricks.Rmd" class="external-link"><code>vignettes/tips-and-tricks.Rmd</code></a></small>
       <div class="hidden name"><code>tips-and-tricks.Rmd</code></div>
 
     </div>
@@ -145,7 +141,7 @@
 <div id="print-debugging" class="section level3">
 <h3 class="hasAnchor">
 <a href="#print-debugging" class="anchor"></a>Print Debugging</h3>
-<p>Most programmers first approach debugging by adding print statements to their code in order to inspect the state at some point. In R, <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> or <code><a href="https://rdrr.io/r/base/cat.html">cat()</a></code> can be used to print out some state. For instance, <code><a href="https://rdrr.io/r/base/cat.html">cat("i is currently: ", i)</a></code> could be inserted in your code to help you ensure that the variable <code>i</code> is what it should be at that point in your code.</p>
+<p>Most programmers first approach debugging by adding print statements to their code in order to inspect the state at some point. In R, <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> or <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code> can be used to print out some state. For instance, <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat("i is currently: ", i)</a></code> could be inserted in your code to help you ensure that the variable <code>i</code> is what it should be at that point in your code.</p>
 <p>This approach is equally viable with Plumber. When developing your Plumber API in an interactive environment, this debugging output will be logged to the same terminal where you called <code>run()</code> on your API. In a non-interactive production environment, these messages will be included in the API server logs for later inspection.</p>
 </div>
 <div id="router-stage-debugging" class="section level3">
@@ -159,7 +155,7 @@
   <span class="va">pr</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="../reference/pr_hook.html">pr_hook</a></span><span class="op">(</span><span class="st">"postroute"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">value</span><span class="op">)</span> <span class="op">{</span>
       <span class="co"># Print stage information</span>
-      <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+      <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
         stage <span class="op">=</span> <span class="st">"postroute"</span>,
         type <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">REQUEST_METHOD</span>,
         path <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">PATH_INFO</span>,
@@ -170,7 +166,7 @@
     <span class="op">}</span><span class="op">)</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="../reference/pr_hook.html">pr_hook</a></span><span class="op">(</span><span class="st">"postserialize"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">value</span><span class="op">)</span> <span class="op">{</span>
       <span class="co"># Print stage information</span>
-      <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+      <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
         stage <span class="op">=</span> <span class="st">"postserialize"</span>,
         type <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">REQUEST_METHOD</span>,
         path <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">PATH_INFO</span>,
@@ -184,7 +180,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#* @get /stage_debug</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>, we would expect to see output like:</p>
 <pre><code>List of 4
@@ -206,14 +202,14 @@ List of 4
 <div id="interactive-debugging" class="section level3">
 <h3 class="hasAnchor">
 <a href="#interactive-debugging" class="anchor"></a>Interactive Debugging</h3>
-<p>Print debugging is an obvious starting point, but most developers eventually wish for something more powerful. In R, this capacity is built in to the <code><a href="https://rdrr.io/r/base/browser.html">browser()</a></code> function. If you’re unfamiliar, <code><a href="https://rdrr.io/r/base/browser.html">browser()</a></code> pauses the execution of some function and gives you an interactive session in which you can inspect the current value of internal variables or even proceed through your function one statement at a time.</p>
-<p>You can leverage <code><a href="https://rdrr.io/r/base/browser.html">browser()</a></code> when developing your APIs locally by adding a <code><a href="https://rdrr.io/r/base/browser.html">browser()</a></code> call in one of your filters or endpoints and then visiting your API in a client. This offers a powerful technique to use when you want to inspect multiple different variables or interact with the current state of things inside of your function. This is also a good way to get your hands dirty with Plumber and get better acquainted with how things behave at a low level. Consider the following API endpoint:</p>
+<p>Print debugging is an obvious starting point, but most developers eventually wish for something more powerful. In R, this capacity is built in to the <code><a href="https://rdrr.io/r/base/browser.html" class="external-link">browser()</a></code> function. If you’re unfamiliar, <code><a href="https://rdrr.io/r/base/browser.html" class="external-link">browser()</a></code> pauses the execution of some function and gives you an interactive session in which you can inspect the current value of internal variables or even proceed through your function one statement at a time.</p>
+<p>You can leverage <code><a href="https://rdrr.io/r/base/browser.html" class="external-link">browser()</a></code> when developing your APIs locally by adding a <code><a href="https://rdrr.io/r/base/browser.html" class="external-link">browser()</a></code> call in one of your filters or endpoints and then visiting your API in a client. This offers a powerful technique to use when you want to inspect multiple different variables or interact with the current state of things inside of your function. This is also a good way to get your hands dirty with Plumber and get better acquainted with how things behave at a low level. Consider the following API endpoint:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#* @get /</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span><span class="op">)</span><span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/browser.html">browser</a></span><span class="op">(</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/browser.html" class="external-link">browser</a></span><span class="op">(</span><span class="op">)</span>
 
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">123</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">123</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>If you run this API locally and then visit the API in a web browser, you’ll see your R session switch into debug mode when the request arrives, allowing you to look at the objects contained inside your <code>req</code> and <code>res</code> objects.</p>
 </div>
@@ -228,13 +224,13 @@ List of 4
 <p>You can use [httpuv::randomPort()] to define a range of port for Plumber to pick from when running an API.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># plumber.R</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span><span class="st">"plumber.port"</span> <span class="op">=</span> <span class="fu">httpuv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/httpuv/man/randomPort.html">randomPort</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fl">4000</span>, max <span class="op">=</span> <span class="fl">7000</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"plumber.port"</span> <span class="op">=</span> <span class="fu">httpuv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/httpuv/man/randomPort.html" class="external-link">randomPort</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fl">4000</span>, max <span class="op">=</span> <span class="fl">7000</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">### define the rest of your plumber router...</span></code></pre></div>
 <p>or more programmatically</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span>port <span class="op">=</span> <span class="fu">httpuv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/httpuv/man/randomPort.html">randomPort</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fl">4000</span>, max <span class="op">=</span> <span class="fl">7000</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span>port <span class="op">=</span> <span class="fu">httpuv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/httpuv/man/randomPort.html" class="external-link">randomPort</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fl">4000</span>, max <span class="op">=</span> <span class="fl">7000</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
   </div>
 
@@ -249,11 +245,13 @@ List of 4
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="http://schloerke.com/">Barret Schloerke</a>, <a href="https://trestletech.com/">Jeff Allen</a>,  RStudio.</p>
+  <p></p>
+<p>Developed by <a href="http://schloerke.com/" class="external-link external-link">Barret Schloerke</a>, <a href="https://trestletech.com/" class="external-link external-link">Jeff Allen</a>, RStudio.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

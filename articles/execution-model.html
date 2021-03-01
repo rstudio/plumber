@@ -28,6 +28,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -40,18 +42,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -103,7 +99,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/rstudio/plumber/">
+  <a href="https://github.com/rstudio/plumber/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -130,7 +126,7 @@
       <h1 data-toc-skip>Runtime</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/rstudio/plumber/blob/master/vignettes/execution-model.Rmd"><code>vignettes/execution-model.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/rstudio/plumber/blob/master/vignettes/execution-model.Rmd" class="external-link"><code>vignettes/execution-model.Rmd</code></a></small>
       <div class="hidden name"><code>execution-model.Rmd</code></div>
 
     </div>
@@ -140,7 +136,7 @@
 <div id="execution-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#execution-model" class="anchor"></a>Execution Model</h2>
-<p>When you <code><a href="../reference/plumb.html">plumb()</a></code> a file, Plumber calls <code><a href="https://rdrr.io/r/base/source.html">source()</a></code> on that file which will evaluate any top-level code that you have defined.</p>
+<p>When you <code><a href="../reference/plumb.html">plumb()</a></code> a file, Plumber calls <code><a href="https://rdrr.io/r/base/source.html" class="external-link">source()</a></code> on that file which will evaluate any top-level code that you have defined.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Global code; gets executed at plumb() time.</span>
 <span class="va">counter</span> <span class="op">&lt;-</span> <span class="fl">0</span>
@@ -150,7 +146,7 @@
   <span class="co"># Only gets evaluated when this endpoint is requested.</span>
   <span class="va">counter</span> <span class="op">&lt;&lt;-</span> <span class="va">counter</span> <span class="op">+</span> <span class="fl">1</span>
 <span class="op">}</span></code></pre></div>
-<p>If you call <code><a href="../reference/plumb.html">plumb()</a></code> on this file, the <code>counter</code> variable will be created and will live in the environment created for this API. However, the endpoint defined will not be evaluated until it is invoked in response to an incoming request. Because the endpoint uses <code><a href="https://rdrr.io/r/base/assignOps.html">&lt;&lt;-</a></code>, the “double-assignment” operator, it mutates the <code>counter</code> variable that was previously defined when the file was <code><a href="../reference/plumb.html">plumb()</a></code>d. This technique allows all endpoints and filters to share some data defined at the top-level of your API.</p>
+<p>If you call <code><a href="../reference/plumb.html">plumb()</a></code> on this file, the <code>counter</code> variable will be created and will live in the environment created for this API. However, the endpoint defined will not be evaluated until it is invoked in response to an incoming request. Because the endpoint uses <code><a href="https://rdrr.io/r/base/assignOps.html" class="external-link">&lt;&lt;-</a></code>, the “double-assignment” operator, it mutates the <code>counter</code> variable that was previously defined when the file was <code><a href="../reference/plumb.html">plumb()</a></code>d. This technique allows all endpoints and filters to share some data defined at the top-level of your API.</p>
 </div>
 <div id="environments" class="section level2">
 <h2 class="hasAnchor">
@@ -158,7 +154,7 @@
 <p>By default, when you create a new Plumber router (which happens implicitly when you call <code><a href="../reference/plumb.html">plumb()</a></code> on a file), a new environment is created especially for this router. It is in this environment that all expressions will be evaluated and all endpoints invoked.</p>
 <p>This can become important if you consider mounting routers onto one another. In that case, you may expect that they would be able to share state via their environment, but that will not work by default. If you’re <a href="./execution-model.html#programmatic-usage">creating your routers programmatically</a>, then you can specify an environment when initializing your Plumber router using the <code>envir</code> parameter. This is the environment in which:</p>
 <ul>
-<li>A decorated R script, if provided, will be <code><a href="https://rdrr.io/r/base/source.html">source()</a></code>d.</li>
+<li>A decorated R script, if provided, will be <code><a href="https://rdrr.io/r/base/source.html" class="external-link">source()</a></code>d.</li>
 <li>All expressions will be evaluated.</li>
 <li>All endpoint and filter functions will be executed.</li>
 </ul>
@@ -199,7 +195,7 @@
 <div id="file-system" class="section level3">
 <h3 class="hasAnchor">
 <a href="#file-system" class="anchor"></a>File System</h3>
-<p>Writing to files on disk is often the next most obvious choice for storing state. Plumber APIs could modify a data frame then use <code><a href="https://rdrr.io/r/utils/write.table.html">write.csv()</a></code> to save that data to disk, or use <code><a href="https://rdrr.io/r/base/writeLines.html">writeLines()</a></code> to append some new data to an existing file. These approaches enable your R process to be stateless, but are not always resilient to concurrency issues. For instance, if you’ve horizontally scaled your API to five R processes and two go to <code><a href="https://rdrr.io/r/utils/write.table.html">write.csv()</a></code> simultaneously, you will either see one process’s data get immediately overwritten by the other’s, or – even worse – you may end up with a corrupted CSV file which can’t be read. Unless otherwise stated, it’s safe to assume that any R function that writes data to disk is not resilient to concurrency contention, so you should not rely on the filesystem to coordinate shared state for any more than a single R process running concurrently.</p>
+<p>Writing to files on disk is often the next most obvious choice for storing state. Plumber APIs could modify a data frame then use <code><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv()</a></code> to save that data to disk, or use <code><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines()</a></code> to append some new data to an existing file. These approaches enable your R process to be stateless, but are not always resilient to concurrency issues. For instance, if you’ve horizontally scaled your API to five R processes and two go to <code><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv()</a></code> simultaneously, you will either see one process’s data get immediately overwritten by the other’s, or – even worse – you may end up with a corrupted CSV file which can’t be read. Unless otherwise stated, it’s safe to assume that any R function that writes data to disk is not resilient to concurrency contention, so you should not rely on the filesystem to coordinate shared state for any more than a single R process running concurrently.</p>
 <p>It’s also important to ask whether or not the <a href="./hosting.html">hosting platform</a> you’ll be using supports persistent storage on disk. For instance, Docker may insulate your R process from your hardware and not allow you to write outside of your container. RStudio Connect, too, will provision a new directory every time you deploy an updated version of your API which will discard any data you had written to disk up to that point. So if you’re considering writing your state to disk long-term, be sure that your hosting environment supports persistent on-disk storage and that you’ve considered the concurrency implications of your code.</p>
 </div>
 <div id="state-cookies" class="section level3">
@@ -215,7 +211,7 @@
 <h3 class="hasAnchor">
 <a href="#external-data-store" class="anchor"></a>External Data Store</h3>
 <p>The final option to consider when coordinating state for an API is leveraging an external data store. This could be a relational database (like MySQL or Amazon RedShift), a non-relational database (like MongoDB), or an transactional data store like Redis.</p>
-<p>One important consideration for any of these options is to ensure that they are “transactional,” meaning that two Plumber processes trying to write at the same time won’t overwrite one another. If you’re interested in pursuing this option you should see <a href="http://db.rstudio.com/">db.rstudio.com</a> or looks at <a href="http://shiny.rstudio.com/articles/overview.html">some</a> of the <a href="http://shiny.rstudio.com/articles/sql-injections.html">resources</a> <a href="http://shiny.rstudio.com/articles/pool-basics.html">put together</a> for Shiny as pertains to dealing with databases in a web-accessible R platform.</p>
+<p>One important consideration for any of these options is to ensure that they are “transactional,” meaning that two Plumber processes trying to write at the same time won’t overwrite one another. If you’re interested in pursuing this option you should see <a href="http://db.rstudio.com/" class="external-link">db.rstudio.com</a> or looks at <a href="http://shiny.rstudio.com/articles/overview.html" class="external-link">some</a> of the <a href="http://shiny.rstudio.com/articles/sql-injections.html" class="external-link">resources</a> <a href="http://shiny.rstudio.com/articles/pool-basics.html" class="external-link">put together</a> for Shiny as pertains to dealing with databases in a web-accessible R platform.</p>
 </div>
 </div>
 <div id="exit-handlers" class="section level2">
@@ -225,7 +221,7 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"plumber.R"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/pr_hook.html">pr_hook</a></span><span class="op">(</span><span class="st">"exit"</span>, <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="st">"Bye bye!"</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Bye bye!"</span><span class="op">)</span>
   <span class="op">}</span><span class="op">)</span>
   <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>When you interrupt the API (for instance by pressing the <code>Escape</code> key or <code>Ctrl+C</code>) you’ll see <code>Bye bye!</code> printed to the console. You can even register multiple <code>exit</code> hooks and they’ll be run in the order in which they were registered.</p>
@@ -243,11 +239,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="http://schloerke.com/">Barret Schloerke</a>, <a href="https://trestletech.com/">Jeff Allen</a>,  RStudio.</p>
+  <p></p>
+<p>Developed by <a href="http://schloerke.com/" class="external-link external-link">Barret Schloerke</a>, <a href="https://trestletech.com/" class="external-link external-link">Jeff Allen</a>, RStudio.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

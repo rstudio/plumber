@@ -60,6 +60,8 @@ Static file router" />
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -71,9 +73,15 @@ Static file router" />
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -87,19 +95,13 @@ Static file router" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -195,7 +197,7 @@ Static file router" />
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
-<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Public methods</h3>
+<h3 class='hasAnchor' id='public-methods'><a class='anchor' href='#public-methods'></a>Public methods</h3>
 
 <ul>
 <li><p><a href='#method-new'><code>PlumberStatic$new()</code></a></p></li>
@@ -237,8 +239,8 @@ Static file router" />
 </details>
 
 <hr>
-<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
-<p>Create a new <code>PlumberStatic</code> router</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<a id="method-new"></a></p><h3 class='hasAnchor' id='method-'><a class='anchor' href='#method-'></a>Method <code>new()</code></h3>
+<p>Create a new <code>PlumberStatic</code> router</p><h4 class='hasAnchor' id='usage'><a class='anchor' href='#usage'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>PlumberStatic</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>direc</span>, <span class='va'>options</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -248,11 +250,24 @@ Static file router" />
 <dt><code>options</code></dt><dd><p>options to be evaluated in the <code>PlumberStatic</code> router environment</p></dd>
 
 </dl><p></div></p>
-<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
+<h4 class='hasAnchor' id='returns'><a class='anchor' href='#returns'></a>Returns</h4>
+<p>A new <code>PlumberStatic</code> router</p>
+<h3 class='hasAnchor' id='list-new-'><a class='anchor' href='#list-new-'></a>Method <code>new()</code></h3>
+<p>Create a new <code>PlumberStatic</code> router</p><h4 class='hasAnchor' id='usage'><a class='anchor' href='#usage'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberStatic</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>direc</span>, <span class='va'>options</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>direc</code></dt><dd><p>a path to an asset directory.</p></dd>
+
+<dt><code>options</code></dt><dd><p>options to be evaluated in the <code>PlumberStatic</code> router environment</p></dd>
+
+</dl><p></div></p>
+<h4 class='hasAnchor' id='returns'><a class='anchor' href='#returns'></a>Returns</h4>
 <p>A new <code>PlumberStatic</code> router</p>
 <p><hr>
-<a id="method-print"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></h3>
-<p>Print representation of <code>PlumberStatic()</code> router.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<a id="method-print"></a></p><h3 class='hasAnchor' id='method-'><a class='anchor' href='#method-'></a>Method <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></h3>
+<p>Print representation of <code>PlumberStatic()</code> router.</p><h4 class='hasAnchor' id='usage'><a class='anchor' href='#usage'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>PlumberStatic</span><span class='op'>$</span><span class='fu'>print</span><span class='op'>(</span>prefix <span class='op'>=</span> <span class='st'>""</span>, topLevel <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -265,11 +280,36 @@ router, set to <code>TRUE</code>.</p></dd>
 <dt><code>...</code></dt><dd><p>additional arguments for recursive calls</p></dd>
 
 </dl><p></div></p>
-<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
+<h4 class='hasAnchor' id='returns'><a class='anchor' href='#returns'></a>Returns</h4>
+<p>A terminal friendly representation of a <code>PlumberStatic()</code> router.</p>
+<h3 class='hasAnchor' id='list-print-'><a class='anchor' href='#list-print-'></a>Method <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></h3>
+<p>Print representation of <code>PlumberStatic()</code> router.</p><h4 class='hasAnchor' id='usage'><a class='anchor' href='#usage'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberStatic</span><span class='op'>$</span><span class='fu'>print</span><span class='op'>(</span>prefix <span class='op'>=</span> <span class='st'>""</span>, topLevel <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>prefix</code></dt><dd><p>a character string. Prefix to append to representation.</p></dd>
+
+<dt><code>topLevel</code></dt><dd><p>a logical value. When method executed on top level
+router, set to <code>TRUE</code>.</p></dd>
+
+<dt><code>...</code></dt><dd><p>additional arguments for recursive calls</p></dd>
+
+</dl><p></div></p>
+<h4 class='hasAnchor' id='returns'><a class='anchor' href='#returns'></a>Returns</h4>
 <p>A terminal friendly representation of a <code>PlumberStatic()</code> router.</p>
 <p><hr>
-<a id="method-clone"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>clone()</code></h3>
-<p>The objects of this class are cloneable with this method.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<a id="method-clone"></a></p><h3 class='hasAnchor' id='method-'><a class='anchor' href='#method-'></a>Method <code>clone()</code></h3>
+<p>The objects of this class are cloneable with this method.</p><h4 class='hasAnchor' id='usage'><a class='anchor' href='#usage'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberStatic</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
+
+</dl><p></div></p>
+<h3 class='hasAnchor' id='list-clone-'><a class='anchor' href='#list-clone-'></a>Method <code>clone()</code></h3>
+<p>The objects of this class are cloneable with this method.</p><h4 class='hasAnchor' id='usage'><a class='anchor' href='#usage'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>PlumberStatic</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -291,11 +331,11 @@ router, set to <code>TRUE</code>.</p></dd>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://schloerke.com/'>Barret Schloerke</a>, <a href='https://trestletech.com/'>Jeff Allen</a>,  RStudio.</p>
+  <p><p>Developed by <a href="http://schloerke.com/" class="external-link">Barret Schloerke</a>, <a href="https://trestletech.com/" class="external-link">Jeff Allen</a>, RStudio.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
 </div>
 
       </footer>
@@ -320,6 +360,8 @@ router, set to <code>TRUE</code>.</p></dd>
 </script>
 
 
+
+  
 
   </body>
 </html>
