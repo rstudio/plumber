@@ -1,6 +1,6 @@
 ## Comments
 
-#### 2020-1-12
+#### 2020-3-2
 
 Bug fixes and new features.
 
@@ -53,7 +53,7 @@ Best,
 
 ## revdepcheck results
 
-We checked 10 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+We checked 12 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
  * We saw 0 new problems
  * We failed to check 0 packages

@@ -28,7 +28,7 @@ Run `revdep_details(, "AzureContainers")` for more info
 * GitHub: NA
 * Source code: https://github.com/cran/log
 * Date/Publication: 2021-01-14 09:10:02 UTC
-* Number of recursive dependencies: 61
+* Number of recursive dependencies: 67
 
 Run `revdep_details(, "log")` for more info
 
@@ -50,7 +50,7 @@ Run `revdep_details(, "log")` for more info
 * GitHub: https://github.com/atheriel/openmetrics
 * Source code: https://github.com/cran/openmetrics
 * Date/Publication: 2020-11-09 21:20:02 UTC
-* Number of recursive dependencies: 57
+* Number of recursive dependencies: 63
 
 Run `revdep_details(, "openmetrics")` for more info
 
@@ -61,6 +61,28 @@ Run `revdep_details(, "openmetrics")` for more info
 *   checking dependencies in R code ... NOTE
     ```
     Namespace in Imports field not imported from: ‘R6’
+      All declared Imports should be used.
+    ```
+
+# rapidoc
+
+<details>
+
+* Version: 8.4.3
+* GitHub: https://github.com/meztez/rapidoc
+* Source code: https://github.com/cran/rapidoc
+* Date/Publication: 2021-02-05 10:30:05 UTC
+* Number of recursive dependencies: 19
+
+Run `revdep_details(, "rapidoc")` for more info
+
+</details>
+
+## In both
+
+*   checking dependencies in R code ... NOTE
+    ```
+    Namespace in Imports field not imported from: ‘jsonlite’
       All declared Imports should be used.
     ```
 
