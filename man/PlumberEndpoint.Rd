@@ -128,7 +128,8 @@ Create a new \code{PlumberEndpoint} object
   params,
   comments,
   responses,
-  tags
+  tags,
+  srcref
 )}\if{html}{\out{</div>}}
 }
 
@@ -174,6 +175,8 @@ parsers = c("json", "form", "text", "octet", "multi")
 \item{\code{params}}{Endpoint params}
 
 \item{\code{comments, responses, tags}}{Values to be used within the OpenAPI Spec}
+
+\item{\code{srcref}}{\code{srcref} attribute from block}
 }
 \if{html}{\out{</div>}}
 }
