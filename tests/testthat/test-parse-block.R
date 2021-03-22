@@ -289,4 +289,18 @@ test_that("block respect original order of lines for comments, tags and response
   expect_equal(b$responses, list(`200`=list(description="ok"), `404` = list(description="not ok")))
 })
 
+test_that("srcref values are set while plumbing from a file", {
+
+  withr::local_options(list(keep.source = FALSE))
+
+  root <- plumb_api("plumber", "01-append")
+  endpt <- root$endpoints[[1]][[1]]
+  expect_s3_class(endpt$srcref, "srcref")
+
+  root_with_no_srcref <- pr() %>% pr_get("/", force)
+  endpt_with_no_srcref <- root_with_no_srcref$endpoints[[1]][[1]]
+  expect_equal(endpt_with_no_srcref$srcref, NULL)
+})
+
+
 # TODO: more testing around filter, assets, endpoint, etc.
