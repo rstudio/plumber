@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -182,7 +182,7 @@
 <p>This plot takes a negligible amount of time to create.</p>
 <p>However, plots with more points will take more time to create.</p>
 <p><img src="security_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>This plot, with 10,000 points added, took 0.165 seconds to generate. While that doesn’t sound like much, if we exposed this API publicly on the Internet, an attacker could easily generate enough traffic on this endpoint to overwhelm the Plumber process. Even worse, an attacker could make a request on this endpoint with millions or billions of points which might cause our server to run out of memory or consume so much CPU that it deprives other important system resources. Either case could result in our Plumber process crashing altogether.</p>
+<p>This plot, with 10,000 points added, took 0.156 seconds to generate. While that doesn’t sound like much, if we exposed this API publicly on the Internet, an attacker could easily generate enough traffic on this endpoint to overwhelm the Plumber process. Even worse, an attacker could make a request on this endpoint with millions or billions of points which might cause our server to run out of memory or consume so much CPU that it deprives other important system resources. Either case could result in our Plumber process crashing altogether.</p>
 <p>The solution, in this case, is to ensure that we have reasonable safety guards in place for any user input.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#* This is an example of an safe endpoint which</span>
@@ -256,7 +256,7 @@
 <a href="#security-cookies" class="anchor"></a>Cookies</h2>
 <p>In the <a href="./rendering-output.html#setting-cookies">section on setting cookies</a>, we discussed the mechanics of setting cookies. However, if you intend to use cookies for any security-sensitive purpose, you should be aware of some ways that cookies can be exploited.</p>
 <p>First and foremost, recognize that that the client has the ability to modify or fabricate the cookies that they send to your API. So storing preferences that the user themselves provided in a cookie is not a concern. Storing something with security implications – like the identity of the user making requests – however, would be; a malicious user would just need to modify the user ID saved in their cookie in order to trick your API into thinking that they were someone they’re not.</p>
-<p>There are two common work-arounds to this concern. You can store all session information on the server identified by long, cryptographically random IDs and only rely on the cookie to store the ID. Or you can use signed/encrypted cookies, as detailed in the <a href="./rendering-output.html#encrypted-cookies">section on setting encrypted cookies</a>.</p>
+<p>There are two common workarounds to this concern. You can store all session information on the server identified by long, cryptographically random IDs and only rely on the cookie to store the ID. Or you can use signed/encrypted cookies, as detailed in the <a href="./rendering-output.html#encrypted-cookies">section on setting encrypted cookies</a>.</p>
 <p>You should also be aware of how cookies will be handled and managed by clients. You can manage these properties by providing different parameters to the <code>setCookie()</code> call.</p>
 <ul>
 <li>

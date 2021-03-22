@@ -88,7 +88,7 @@ options_plumber() should not include the plumber. prefix." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -235,7 +235,8 @@ by RStudio to open the docs when then API is ran from the editor. Defaults to op
 that has a matching route with a trailing slash. For example, if set to <code>TRUE</code> and the
 GET route <code>/test/</code> existed, then a GET request of <code>/test?a=1</code> would redirect to
 <code>/test/?a=1</code>. Defaults to <code>FALSE</code>. This option will default to <code>TRUE</code> in a future release.</p></dd>
-<dt><code>plumber.methodNotAllowed</code></dt><dd><p>Logical value which allows the router to notify that an
+<dt><code>plumber.methodNotAllowed</code></dt><dd><p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a>
+Logical value which allows the router to notify that an
 unavailable method was requested, but a different request method is allowed. For example,
 if set to <code>TRUE</code> and the GET route <code>/test</code> existed, then a POST request of <code>/test</code> would
 receive a 405 status and the allowed methods. Defaults to <code>TRUE</code>.</p></dd>
