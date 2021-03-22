@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90002</span>
       </span>
     </div>
 
@@ -339,7 +339,7 @@ http {
 <span id="cb11-5"><a href="#cb11-5"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
 <span id="cb11-6"><a href="#cb11-6"></a><span class="at">      </span><span class="kw">-</span><span class="at"> /var/run/docker.sock:/var/run/docker.sock</span></span></code></pre></div>
 <p>The trick that allows this image to listen in to our scaling of <code>app1</code> is by passing in the docker socket as a shared volume. Note that this particular arrangement will differ based on your host OS. The above configuration is intended for Linux, but MacOS X users would require a <a href="https://github.com/docker/dockercloud-haproxy#example-of-docker-composeyml-running-in-linux">slightly different config</a>.</p>
-<p>We could export port <code>80</code> of our new load balancer to port <code>80</code> of our host machine if we solely wanted to load-balance a single application. Alternatively, we can actually use both nginx (to handle the routing of various applications) and HAProxy (to handle the load balancing of a particular application). To do that, we’d merely add a new <code>location</code> block to our <code>nginx.conf</code> file that knows how to send traffic to HAProxy, or modify the existing <code>location</code> block to send traffic to the load balancer instead of going directly to the application.</p>
+<p>We could export port <code>80</code> of our new load balancer to port <code>80</code> of our host machine if we solely wanted to load-balance a single application. Alternatively, we can actually use both nginx (to handle the routing of various applications) and HAProxy (to handle the load balancing of a particular application). To do that, we’d merely add a new <code>location</code> block to our <code>nginx.conf</code> file that knows how to send traffic to HAproxy, or modify the existing <code>location</code> block to send traffic to the load balancer instead of going directly to the application.</p>
 <p>So the <code>location /app1/</code> block becomes:</p>
 <pre><code>location /app1/ {
   proxy_pass http://lb:8000/;

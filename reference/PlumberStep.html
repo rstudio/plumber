@@ -87,7 +87,7 @@ of a request by a plumber router." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90002</span>
       </span>
     </div>
 
@@ -192,6 +192,8 @@ of a request by a plumber router.</p>
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
     <p><div class="r6-fields"></p><dl>
+<dt><code>srcref</code></dt><dd><p>from step block</p></dd>
+
 <dt><code>lines</code></dt><dd><p>lines from step block</p></dd>
 
 <dt><code>serializer</code></dt><dd><p>step serializer function</p></dd>
@@ -217,7 +219,7 @@ of a request by a plumber router.</p>
 <hr>
 <a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
 <p>Create a new <code>PlumberStep()</code> object</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
-<p><div class="r"></p><pre><span class='va'>PlumberStep</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>expr</span>, <span class='va'>envir</span>, <span class='va'>lines</span>, <span class='va'>serializer</span><span class='op'>)</span></pre><p></div></p>
+<p><div class="r"></p><pre><span class='va'>PlumberStep</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>expr</span>, <span class='va'>envir</span>, <span class='va'>lines</span>, <span class='va'>serializer</span>, <span class='va'>srcref</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
@@ -228,6 +230,8 @@ of a request by a plumber router.</p>
 <dt><code>lines</code></dt><dd><p>step block</p></dd>
 
 <dt><code>serializer</code></dt><dd><p>step serializer</p></dd>
+
+<dt><code>srcref</code></dt><dd><p><code>srcref</code> attribute from block</p></dd>
 
 </dl><p></div></p>
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>

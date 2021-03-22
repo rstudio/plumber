@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90002</span>
       </span>
     </div>
 
@@ -134,7 +134,7 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>Plumber allows you to create a web API by merely decorating your existing R source code with <code>roxygen2</code>-like comments. Take a look at an example.</p>
+<p>Plumber allows you to create a web API by merely decorating your existing R source code with special comments. Take a look at an example.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># plumber.R</span>
 
@@ -160,7 +160,7 @@
 <span class="kw">function</span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<p>These comments allow <code>plumber</code> to make your R functions available as API endpoints. You can use either <code>#*</code> as the prefix or <code>#'</code>, but we recommend the former since <code>#'</code> will collide with <code>roxygen2</code>.</p>
+<p>These comments allow <code>plumber</code> to make your R functions available as API endpoints. You can use either <code>#*</code> as the prefix or <code>#'</code>, but we recommend the former since <code>#'</code> will collide with Roxygen.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.rplumber.io">plumber</a></span><span class="op">)</span>
 <span class="co"># 'plumber.R' is the location of the file shown above</span>
@@ -253,7 +253,7 @@ $ curl "http://localhost:8000/echo?msg=hello"
 <li><a href="https://www.r-pkg.org/pkg/plumber"><img src="https://www.r-pkg.org/badges/version/plumber"></a></li>
 <li><a href="https://www.r-pkg.org/pkg/plumber"><img src="https://cranlogs.r-pkg.org/badges/plumber?color=brightgreen" alt="CRAN RStudio mirror downloads"></a></li>
 <li><a href="https://codecov.io/gh/rstudio/plumber"><img src="https://codecov.io/gh/rstudio/plumber/branch/master/graph/badge.svg" alt="codecov"></a></li>
-<li><a href="https://community.rstudio.com/tag/plumber"><img src="https://img.shields.io/badge/community-plumber-blue?style=social&amp;logo=rstudio&amp;logoColor=75AADB" alt="RStudio community"></a></li>
+<li><a href="https://community.rstudio.com/tags/plumber"><img src="https://img.shields.io/badge/community-plumber-blue?style=social&amp;logo=rstudio&amp;logoColor=75AADB" alt="RStudio community"></a></li>
 </ul>
 </div>
 </div>

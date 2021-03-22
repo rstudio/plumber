@@ -87,7 +87,7 @@ Plumber Endpoint" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.90002</span>
       </span>
     </div>
 
@@ -188,7 +188,7 @@ Plumber Endpoint" />
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Defines a terminal handler in a Plumber router.</p>
+    <p>Defines a terminal handler in a PLumber router.</p>
 <p>Parameters values are obtained from parsing blocks of lines in a plumber file.
 They can also be provided manually for historical reasons.</p>
     <h2 class="hasAnchor" id="super-classes"><a class="anchor" href="#super-classes"></a>Super classes</h2>
@@ -225,6 +225,7 @@ each separate verb/path into its own endpoint, so we just do that.</p></dd>
 <li><p><a href='#method-matchesPath'><code>PlumberEndpoint$matchesPath()</code></a></p></li>
 <li><p><a href='#method-new'><code>PlumberEndpoint$new()</code></a></p></li>
 <li><p><a href='#method-getPathParams'><code>PlumberEndpoint$getPathParams()</code></a></p></li>
+<li><p><a href='#method-getFunc'><code>PlumberEndpoint$getFunc()</code></a></p></li>
 <li><p><a href='#method-getFuncParams'><code>PlumberEndpoint$getFuncParams()</code></a></p></li>
 <li><p><a href='#method-getEndpointParams'><code>PlumberEndpoint$getEndpointParams()</code></a></p></li>
 <li><p><a href='#method-setPath'><code>PlumberEndpoint$setPath()</code></a></p></li>
@@ -281,7 +282,8 @@ each separate verb/path into its own endpoint, so we just do that.</p></dd>
   <span class='va'>params</span>,
   <span class='va'>comments</span>,
   <span class='va'>responses</span>,
-  <span class='va'>tags</span>
+  <span class='va'>tags</span>,
+  <span class='va'>srcref</span>
 <span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -316,6 +318,8 @@ When using a list, parser information already defined will maintain their existi
 
 <dt><code>comments, responses, tags</code></dt><dd><p>Values to be used within the OpenAPI Spec</p></dd>
 
+<dt><code>srcref</code></dt><dd><p><code>srcref</code> attribute from block</p></dd>
+
 </dl><p></div></p>
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>A new <code>PlumberEndpoint</code> object</p>
@@ -329,6 +333,11 @@ When using a list, parser information already defined will maintain their existi
 <dt><code>path</code></dt><dd><p>endpoint path</p></dd>
 
 </dl><p></div></p>
+<p><hr>
+<a id="method-getFunc"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>getFunc()</code></h3>
+<p>retrieve endpoint function</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>PlumberEndpoint</span><span class='op'>$</span><span class='fu'>getFunc</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
+
 <p><hr>
 <a id="method-getFuncParams"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>getFuncParams()</code></h3>
 <p>retrieve endpoint expression parameters</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
