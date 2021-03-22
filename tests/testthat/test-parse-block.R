@@ -291,8 +291,6 @@ test_that("block respect original order of lines for comments, tags and response
 
 test_that("srcref values are set while plumbing from a file", {
 
-  withr::local_options(list(keep.source = FALSE))
-
   root <- plumb_api("plumber", "01-append")
   endpt <- root$endpoints[[1]][[1]]
   expect_s3_class(endpt$srcref, "srcref")
