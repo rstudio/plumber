@@ -100,7 +100,7 @@ Plumber <- R6Class(
 
       # Add in the initial filters
       for (fn in names(filters)){
-        fil <- PlumberFilter$new(fn, filters[[fn]], private$envir, private$default_serializer, NULL)
+        fil <- PlumberFilter$new(fn, filters[[fn]], private$envir, private$default_serializer, NULL, NULL)
         private$filts <- c(private$filts, fil)
       }
 
@@ -122,7 +122,7 @@ Plumber <- R6Class(
         for (i in seq_len(length(private$parsed))) {
           e <- private$parsed[i]
 
-          srcref <- attr(e, "srcref")[[1]][c(1,3)]
+          srcref <- attr(e, "srcref")[[1]]
 
           evaluateBlock(srcref, private$lines, e, private$envir, private$addEndpointInternal,
                         private$addFilterInternal, self)

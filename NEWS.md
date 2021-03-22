@@ -31,6 +31,8 @@ plumber 1.0.0.9999 Development version
 
 * To update a `PlumberEndpoint` path after initialization, call the new `PlumberEndpoint$setPath(path)`. This will update internal path matching meta data. (Active bindings were not used to avoid breaking changes.) (@blairj09 #770)
 
+* `PlumberStep` (and `PlumberEndpoint` and `PlumberFilter`) received a new field `$srcref` and method `$getFunc()`. `$srcref` will contain the corresponding `srcref` information from original source file. `$getFunc()` will return the evaluated function. (#782)
+
 ### Bug fixes
 
 * Fixed bug where `httpuv` would return a status of `500` with body `An exception occurred` if no headers were set on the response object. (#745)
