@@ -29,6 +29,8 @@ plumber 1.1.0
 
 * To update a `PlumberEndpoint` path after initialization, call the new `PlumberEndpoint$setPath(path)`. This will update internal path matching meta data. (Active bindings were not used to avoid breaking changes.) (@blairj09 #770)
 
+* `PlumberStep` (and `PlumberEndpoint` and `PlumberFilter`) received a new field `$srcref` and method `$getFunc()`. `$srcref` will contain the corresponding `srcref` information from original source file. `$getFunc()` will return the evaluated function. (#782)
+
 * Allow for spaces in `@apiTag` and `@tag` when tag is surrounded by single or double quotes. (#685)
 
 ### Bug fixes

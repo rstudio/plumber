@@ -46,6 +46,7 @@ each separate verb/path into its own endpoint, so we just do that.}
 \item \href{#method-matchesPath}{\code{PlumberEndpoint$matchesPath()}}
 \item \href{#method-new}{\code{PlumberEndpoint$new()}}
 \item \href{#method-getPathParams}{\code{PlumberEndpoint$getPathParams()}}
+\item \href{#method-getFunc}{\code{PlumberEndpoint$getFunc()}}
 \item \href{#method-getFuncParams}{\code{PlumberEndpoint$getFuncParams()}}
 \item \href{#method-getEndpointParams}{\code{PlumberEndpoint$getEndpointParams()}}
 \item \href{#method-setPath}{\code{PlumberEndpoint$setPath()}}
@@ -128,7 +129,8 @@ Create a new \code{PlumberEndpoint} object
   params,
   comments,
   responses,
-  tags
+  tags,
+  srcref
 )}\if{html}{\out{</div>}}
 }
 
@@ -174,6 +176,8 @@ parsers = c("json", "form", "text", "octet", "multi")
 \item{\code{params}}{Endpoint params}
 
 \item{\code{comments, responses, tags}}{Values to be used within the OpenAPI Spec}
+
+\item{\code{srcref}}{\code{srcref} attribute from block}
 }
 \if{html}{\out{</div>}}
 }
@@ -197,6 +201,16 @@ retrieve endpoint path parameters
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getFunc"></a>}}
+\if{latex}{\out{\hypertarget{method-getFunc}{}}}
+\subsection{Method \code{getFunc()}}{
+retrieve endpoint function
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$getFunc()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-getFuncParams"></a>}}
