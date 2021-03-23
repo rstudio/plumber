@@ -95,6 +95,10 @@ remotes::install_github("rstudio/plumber")
 library(plumber)
 ```
 
+## Cheatsheet
+
+<a href="https://github.com/rstudio/cheatsheets/blob/master/plumber.pdf"><img src="https://github.com/rstudio/cheatsheets/blob/master/pngs/thumbnails/plumber-cheatsheet-thumbs.png" width="630" height="252"/></a>
+
 ## Hosting
 
 If you're just getting started with hosting cloud servers, the
