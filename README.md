@@ -97,7 +97,7 @@ library(plumber)
 
 ## Cheat Sheet
 
-<a href="https://github.com/rstudio/cheatsheets/blob/master/plumber.pdf"><img src="https://github.com/rstudio/cheatsheets/blob/master/pngs/thumbnails/plumber-cheatsheet-thumbs.png" width="630" height="252"/></a>
+<a href="https://github.com/rstudio/cheatsheets/blob/master/plumber.pdf"><img src="https://raw.githubusercontent.com/rstudio/cheatsheets/master/pngs/thumbnails/plumber-cheatsheet-thumbs.png" width="630" height="252"/></a>
 
 ## Hosting
 
