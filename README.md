@@ -95,7 +95,7 @@ remotes::install_github("rstudio/plumber")
 library(plumber)
 ```
 
-## Cheatsheet
+## Cheat Sheet
 
 <a href="https://github.com/rstudio/cheatsheets/blob/master/plumber.pdf"><img src="https://github.com/rstudio/cheatsheets/blob/master/pngs/thumbnails/plumber-cheatsheet-thumbs.png" width="630" height="252"/></a>
 
