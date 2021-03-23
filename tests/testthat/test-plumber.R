@@ -63,6 +63,9 @@ test_that("plumb accepts a file", {
 
 test_that("plumb gives a good error when passing in a dir instead of a file", {
 
+  # brittle test. Fails on r-devel-windows-x86_64-gcc10-UCRT
+  skip_on_cran()
+
   if (isWindows()) {
     # https://stat.ethz.ch/R-manual/R-devel/library/base/html/files.html
     # "However, directory names must not include a trailing backslash or slash on Windows"
