@@ -42,6 +42,29 @@ Run `revdep_details(, "log")` for more info
       All declared Imports should be used.
     ```
 
+# microservices
+
+<details>
+
+* Version: 0.1.0
+* GitHub: https://github.com/tidylab/microservices
+* Source code: https://github.com/cran/microservices
+* Date/Publication: 2021-03-03 09:20:20 UTC
+* Number of recursive dependencies: 68
+
+Run `revdep_details(, "microservices")` for more info
+
+</details>
+
+## In both
+
+*   checking dependencies in R code ... NOTE
+    ```
+    Namespaces in Imports field not imported from:
+      ‘config’ ‘desc’ ‘dplyr’ ‘glue’ ‘withr’
+      All declared Imports should be used.
+    ```
+
 # openmetrics
 
 <details>
