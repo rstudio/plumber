@@ -47,6 +47,7 @@ Suggests:
     yaml,
     feather,
     future,
+    coro,
     rstudioapi,
     mockery (>= 0.4.2)
 RoxygenNote: 7.1.1
