@@ -1,8 +1,12 @@
 ## Comments
 
-#### 2020-3-2
+#### 2020-3-23
 
 Bug fixes and new features.
+
+CRAN checks:
+* I have disabled the brittle test that is currently failing on https://www.r-project.org/nosvn/R.check/r-devel-windows-x86_64-gcc10-UCRT/plumber-00check.html . Checking this test on windows GHA only.
+* I can not see why this installation is failing: https://www.r-project.org/nosvn/R.check/r-release-windows-ix86+x86_64/plumber-00check.html
 
 Please let me know if there is anything else I can provide.
 
