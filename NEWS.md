@@ -1,9 +1,14 @@
 # plumber (development version)
 
-plumber 1.1.0
---------------------------------------------------------------------------------
+## Breaking changes
 
-### Breaking changes
+## New features
+## Bug fixes
+
+
+# plumber 1.1.0
+
+## Breaking changes
 
 * Force json serialization of endpoint error responses instead of using endpoint serializer. (@meztez, #689)
 
@@ -11,7 +16,7 @@ plumber 1.1.0
 
 * `options_plumber()` now requires that all options are named. If no option name is provided, an error with be thrown. (#746)
 
-### New features
+## New features
 
 * Added option `plumber.trailingSlash`. This option (which is **disabled** by default) allows routes to be redirected to route definitions with a trailing slash. For example, if a `GET` request is submitted to `/test?a=1` with no `/test` route is defined, but a `GET` `/test/` route definition does exist, then the original request will respond with a `307` to reattempt against `GET` `/test/?a=1`. This option will be _enabled_ by default in a future release. This logic executed for before calling the `404` handler. (#746)
 
@@ -35,7 +40,7 @@ plumber 1.1.0
 
 * Allow for spaces in `@apiTag` and `@tag` when tag is surrounded by single or double quotes. (#685)
 
-### Bug fixes
+## Bug fixes
 
 * Ignore regular comments in block parsing. (@meztez #718)
 
@@ -59,12 +64,11 @@ plumber 1.1.0
 
 * Setting options `plumber.docs.callback` to `NULL` will also set deprecated but supported option `plumber.swagger.url`. (#766)
 
-plumber 1.0.0
---------------------------------------------------------------------------------
+# plumber 1.0.0
 
-### New features
+## New features
 
-#### Plumber router
+### Plumber router
 
 * Added support for promises in endpoints, filters, and hooks.  This allows for multi-core execution when paired with `future`. See `plumb_api("plumber", "13-promises")` and `plumb_api("plumber", "14-future")` for example implementations. (#248)
 * Added a Tidy API for more natural usage with magrittr's `%>%`. For example, a plumber object can now be initiated and run with `pr() %>% pr_run(port = 8080)`. For more examples, see [here](https://www.rplumber.io/articles/programmatic-usage.html) (@blairj09, #590)
@@ -80,7 +84,7 @@ plumber 1.0.0
   * Unnamed elements that are added to `req$args` by filters or creating `req$argsBody` will no longer throw an error. They will only be passed through via `...` (#666)
 
 
-#### OpenAPI
+### OpenAPI
 
 * API Documentation is now hosted at `/__docs__`. If `swagger` documentation is being used, `/__swagger__` will redirect to `/__docs__`. (#654)
 
@@ -90,7 +94,7 @@ plumber 1.0.0
 
 * Added `validate_api_spec()` to validate a Plumber API produces a valid OpenAPI Specification. (Experimental!) (#633)
 
-#### Serializers
+### Serializers
 
 * Added `as_attachment(value, filename)` method which allows routes to return a file attachment with a custom name. (#585)
 
@@ -111,7 +115,7 @@ plumber 1.0.0
   * `serializer_headers(header_list)`: Method which sets a list of static headers for each serialized value. Heavily inspired from @ycphs (#455). (#585)
   * `serializer_write_file()`: Method which wraps `serializer_content_type()`, but orchestrates creating, writing serialized content to, reading from, and removing a temp file. (#660)
 
-#### Body parsing
+### Body parsing
 
 * Added support for request body parsing (@meztez, #532)
 
@@ -134,7 +138,7 @@ plumber 1.0.0
 
 * If `multipart/*` content is parsed, `req$body` will contain named output from `webutils::parse_multipart()` and add the parsed value to each part. Look here for access to all provided information (e.g., `name`, `filename`, `content_type`, etc). In addition, `req$argsBody` (which is used for route argument matching) will contain a named reduced form of this information where `parsed` values (and `filename`s) are combined on the same `name`. (#663)
 
-#### Visual Documentation
+### Visual Documentation
 
 * Generalize user interface integration. Plumber can now use other OpenAPI compatible user interfaces like `RapiDoc` (https://github.com/mrin9/RapiDoc) and `Redoc` (https://github.com/Redocly/redoc). Pending CRAN approbations, development R packages are available from https://github.com/meztez/rapidoc/ and https://github.com/meztez/redoc/. (@meztez, #562)
 
@@ -142,7 +146,7 @@ plumber 1.0.0
 
 * Added support for swagger for mounted routers (@bradleyhd, #274).
 
-### Security improvements
+## Security improvements
 
 * Secret session cookies are now encrypted using `sodium`.
   All prior `req$session` information will be lost.
@@ -159,7 +163,7 @@ plumber 1.0.0
   API were using encrypted cookies and an attacker knew the encryption key in
   order to craft arbitrary cookies. (#325)
 
-### Breaking changes
+## Breaking changes
 
 * When `plumb()`ing a file (or `Plumber$new(file)`), the working directory is set to the file's directory before parsing the file. When running the Plumber API, the working directory will be set to file's directory before running.(#631)
 
@@ -183,7 +187,7 @@ plumber 1.0.0
 
 * When creating a `PlumberFilter` or `PlumberEndpoint`, an error will be thrown if `expr` does not evaluate to a function. (#666)
 
-### Deprecations
+## Deprecations
 
 * Shorthand serializers are now deprecated. `@html`, `@json`, `@png`, `@jpeg`, `@svg` should be replaced with the `@serializer` syntax. Ex: `@serializer html` or `@serializer jpeg` (#630)
 
@@ -198,7 +202,7 @@ plumber 1.0.0
 * DigitalOcean helper functions are now defunct (`do_*()`). The functionality and documentation on how to deploy to DigitalOcean has been moved to [`plumberDeploy`](https://github.com/meztez/plumberDeploy) (by @meztez) (#649)
 
 
-### Minor new features and improvements
+## Minor new features and improvements
 
 * Documentation is updated and now presented using `pkgdown` (#570)
 
@@ -236,7 +240,7 @@ plumber 1.0.0
 
 * Endpoints that produce images within a `promises::promise()` will now use the expected graphics device. (#669)
 
-### Bug fixes
+## Bug fixes
 
 * Handle plus signs in URI as space characters instead of actual plus signs (@meztez, #618)
 
@@ -261,8 +265,8 @@ plumber 1.0.0
 
 
 
-plumber 0.4.6
---------------------------------------------------------------------------------
+# plumber 0.4.6
+
 * BUGFIX: Hooks that accept a `value` argument (`postroute`, `preserialize`,
   and `postserialize`) now modify the incoming value as documented.
 * BUGFIX: The `postserialize` hook is now given the serialized data as its
@@ -274,8 +278,8 @@ plumber 0.4.6
 * Add [RStudio Project Template](https://rstudio.github.io/rstudio-extensions/rstudio_project_templates.html) to package.
 
 
-plumber 0.4.4
---------------------------------------------------------------------------------
+# plumber 0.4.4
+
 * Support Expiration, HTTPOnly, and Secure flags on cookies (#87). **EDIT**:
   see #216 which prevented
   expiration from working.
@@ -309,15 +313,15 @@ plumber 0.4.4
 * Support `.` in string path segments
 
 
-plumber 0.4.2
---------------------------------------------------------------------------------
+# plumber 0.4.2
+
 * Development version for 0.4.2. Will be working to move to even/odd release
   cycles, but I had prematurely bumped to 0.4.0 so that one might get skipped,
   making the next CRAN release 0.4.2.
 
 
-plumber 0.4.0
---------------------------------------------------------------------------------
+# plumber 0.4.0
+
 * BREAKING: Listen on localhost instead of listening publicly by default.
 * BREAKING: We no longer set the `Access-Control-Allow-Origin` HTTP header to
   `*`. This was previously done for convenience but we've decided to prioritize
@@ -360,14 +364,14 @@ plumber 0.4.0
   order to get more insight into your API errors.
 
 
-plumber 0.3.3
---------------------------------------------------------------------------------
+# plumber 0.3.3
+
 * `plumb()` now accepts an argument `dir`, referring to a directory containing
   `plumber.R`, which may be provided instead of `file`.
 
 
-plumber 0.3.2
---------------------------------------------------------------------------------
+# plumber 0.3.2
+
 * Introduced the `do_provision()`, `do_deploy_api()`, `do_remove_api()` and
   `do_configure_https()` functions to provision and manage your APIs on a
    cloud server running on DigitalOcean.
@@ -380,14 +384,14 @@ plumber 0.3.2
 * Don't convert `+` character in a query string to a space.
 
 
-plumber 0.3.1
---------------------------------------------------------------------------------
+# plumber 0.3.1
+
 * Add a method to consume JSON on post (you can still send a query string in
   the body of a POST request as well).
 
 
-plumber 0.3.0
---------------------------------------------------------------------------------
+# plumber 0.3.0
+
 * BREAKING CHANGE: serializer factories are now registered instead of the
   serializer themselves. Thus, `addSerializer()` now expects a function that
   returns a serializer, and `Response$new()` now expects a serializer itself
@@ -399,8 +403,8 @@ plumber 0.3.0
   `09-content-type`.
 
 
-plumber 0.2.4
---------------------------------------------------------------------------------
+# plumber 0.2.4
+
 * Add a filter which parses and sets req$cookies to be a list corresponding to
   the cookies provided with the request.
 * Responses can set multiple cookies
@@ -408,15 +412,15 @@ plumber 0.2.4
   encoding.
 
 
-plumber 0.2.3
---------------------------------------------------------------------------------
+# plumber 0.2.3
+
 * Set options(warn=1) during execution of user code so that warnings are
   immediately visible in the console, rather than storing them until the server
   is stopped.
 
 
-plumber 0.2.2
---------------------------------------------------------------------------------
+# plumber 0.2.2
+
 * Add `sessionCookie` function to define a processor that can be used as a
   globalProcessor on a router to encrypt values from req$session and store them
   as an encrypted cookie in on the user's browser.
@@ -428,14 +432,14 @@ plumber 0.2.2
 * Document all public params so CHECK passes
 
 
-plumber 0.2.1
---------------------------------------------------------------------------------
+# plumber 0.2.1
+
 * Add more `roxygen2` documentation for exported functions
 * Remove the warning in the README as the API seems to be stabilizing.
 
 
-plumber 0.2.0
---------------------------------------------------------------------------------
+# plumber 0.2.0
+
 * BREAKING: Changed variable-path routing to use bracketed format instead of
   just a colon.
 * BREAKING: Renamed `PlumberRouter` R6 object to just `Plumber`.
@@ -443,6 +447,6 @@ plumber 0.2.0
 * Added support for the `#*` prefix.
 
 
-plumber 0.1.0
---------------------------------------------------------------------------------
+# plumber 0.1.0
+
 * Initial Release
