@@ -61,14 +61,7 @@ responsesSpecification <- function(endpts){
   }
   for (resp in names(resps)) {
     if (!length(resps[[resp]]$content)) {
-      ctype <- NULL
-      if (is.function(endpts$serializer)) {
-        ctype <- formals(endpts$serializer)$type
-        if (is.null(ctype)) {
-          env <- environment(endpts$serializer)
-          ctype <- env$headers$`Content-Type`
-        }
-      }
+      ctype <- environment(endpts$serializer)$headers$`Content-Type`
       if (isTRUE(nchar(ctype) > 0)) {
         ctype <- stri_split_regex(ctype, "[ ;]")[[1]][1]
         schema <- list(type = ifelse(grepl("^text", ctype), "string", "object"))
