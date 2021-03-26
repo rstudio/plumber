@@ -61,6 +61,7 @@ responsesSpecification <- function(endpts){
   }
   for (resp in names(resps)) {
     if (!length(resps[[resp]]$content)) {
+      ctype <- NULL
       if (is.function(endpts$serializer)) {
         # Must safe-guard against partial name matching 
         # since we are reaching into the function env
