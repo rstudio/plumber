@@ -65,11 +65,8 @@ responsesSpecification <- function(endpts){
       if (is.function(endpts$serializer)) {
         ctype <- formals(endpts$serializer)$type
         if (is.null(ctype)) {
-          ctype <- tryCatch({
-            get("type", envir =
-                  environment(get("serialize_fn", envir =
-                                    environment(endpts$serializer))))},
-            error = function(e) {NULL})
+          env <- environment(endpts$serializer)
+          ctype <- env$headers$`Content-Type`
         }
       }
       if (isTRUE(nchar(ctype) > 0)) {
