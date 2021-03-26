@@ -85,7 +85,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">plumber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0.9000</span>
       </span>
     </div>
 
@@ -176,21 +176,39 @@
       <small>Source: <a href='https://github.com/rstudio/plumber/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="plumber-110" class="section level2">
+    <div id="plumber-development-version" class="section level1">
+<h1 class="page-header" data-toc-text="development version">
+<a href="#plumber-development-version" class="anchor"></a>plumber (development version)<small> Unreleased </small>
+</h1>
+<div id="breaking-changes" class="section level2">
 <h2 class="hasAnchor">
-<a href="#plumber-110" class="anchor"></a>plumber 1.1.0</h2>
-<div id="breaking-changes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#breaking-changes" class="anchor"></a>Breaking changes</h3>
+<a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
+</div>
+<div id="new-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>New features</h2>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+</div>
+</div>
+    <div id="plumber-110" class="section level1">
+<h1 class="page-header" data-toc-text="1.1.0">
+<a href="#plumber-110" class="anchor"></a>plumber 1.1.0<small> 2021-03-24 </small>
+</h1>
+<div id="breaking-changes-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#breaking-changes-1" class="anchor"></a>Breaking changes</h2>
 <ul>
 <li><p>Force json serialization of endpoint error responses instead of using endpoint serializer. (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/689'>#689</a>)</p></li>
 <li><p>When plumbing a Plumber file and using a Plumber router modifier (<code>#* <a href='https://github.com/plumber'>@plumber</a></code>), an error will be thrown if the original router is not returned. (<a href='https://github.com/rstudio/plumber/issues/738'>#738</a>)</p></li>
 <li><p><code><a href="../reference/options_plumber.html">options_plumber()</a></code> now requires that all options are named. If no option name is provided, an error with be thrown. (<a href='https://github.com/rstudio/plumber/issues/746'>#746</a>)</p></li>
 </ul>
 </div>
-<div id="new-features" class="section level3">
-<h3 class="hasAnchor">
-<a href="#new-features" class="anchor"></a>New features</h3>
+<div id="new-features-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features-1" class="anchor"></a>New features</h2>
 <ul>
 <li><p>Added option <code>plumber.trailingSlash</code>. This option (which is <strong>disabled</strong> by default) allows routes to be redirected to route definitions with a trailing slash. For example, if a <code>GET</code> request is submitted to <code>/test?a=1</code> with no <code>/test</code> route is defined, but a <code>GET</code> <code>/test/</code> route definition does exist, then the original request will respond with a <code>307</code> to reattempt against <code>GET</code> <code>/test/?a=1</code>. This option will be <em>enabled</em> by default in a future release. This logic executed for before calling the <code>404</code> handler. (<a href='https://github.com/rstudio/plumber/issues/746'>#746</a>)</p></li>
 <li><p>Added an experimental option <code>plumber.methodNotAllowed</code>. This option (which is enabled by default) allows for a status of <code>405</code> to be returned if an invalid method is used when requesting a valid route. This logic executed for before calling the default <code>404</code> handler. (<a href='https://github.com/rstudio/plumber/issues/746'>#746</a>)</p></li>
@@ -211,9 +229,9 @@
 <li><p>Allow for spaces in <code>@apiTag</code> and <code>@tag</code> when tag is surrounded by single or double quotes. (<a href='https://github.com/rstudio/plumber/issues/685'>#685</a>)</p></li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h3>
+<div id="bug-fixes-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li><p>Ignore regular comments in block parsing. (<a href='https://github.com/meztez'>@meztez</a> <a href='https://github.com/rstudio/plumber/issues/718'>#718</a>)</p></li>
 <li><p>Block parsing comments, tags and responses ordering match plumber api ordering. (<a href='https://github.com/rstudio/plumber/issues/722'>#722</a>)</p></li>
@@ -229,15 +247,16 @@
 </ul>
 </div>
 </div>
-    <div id="plumber-100" class="section level2">
+    <div id="plumber-100" class="section level1">
+<h1 class="page-header" data-toc-text="1.0.0">
+<a href="#plumber-100" class="anchor"></a>plumber 1.0.0<small> 2020-09-14 </small>
+</h1>
+<div id="new-features-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#plumber-100" class="anchor"></a>plumber 1.0.0</h2>
-<div id="new-features-1" class="section level3">
+<a href="#new-features-2" class="anchor"></a>New features</h2>
+<div id="plumber-router" class="section level3">
 <h3 class="hasAnchor">
-<a href="#new-features-1" class="anchor"></a>New features</h3>
-<div id="plumber-router" class="section level4">
-<h4 class="hasAnchor">
-<a href="#plumber-router" class="anchor"></a>Plumber router</h4>
+<a href="#plumber-router" class="anchor"></a>Plumber router</h3>
 <ul>
 <li><p>Added support for promises in endpoints, filters, and hooks. This allows for multi-core execution when paired with <code>future</code>. See <code><a href="../reference/plumb_api.html">plumb_api("plumber", "13-promises")</a></code> and <code><a href="../reference/plumb_api.html">plumb_api("plumber", "14-future")</a></code> for example implementations. (<a href='https://github.com/rstudio/plumber/issues/248'>#248</a>)</p></li>
 <li><p>Added a Tidy API for more natural usage with magrittr’s <code><a href="../reference/%&gt;%.html">%&gt;%</a></code>. For example, a plumber object can now be initiated and run with <code>pr() %&gt;% pr_run(port = 8080)</code>. For more examples, see <a href="https://www.rplumber.io/articles/programmatic-usage.html">here</a> (<a href='https://github.com/blairj09'>@blairj09</a>, <a href='https://github.com/rstudio/plumber/issues/590'>#590</a>)</p></li>
@@ -254,9 +273,9 @@
 </li>
 </ul>
 </div>
-<div id="openapi" class="section level4">
-<h4 class="hasAnchor">
-<a href="#openapi" class="anchor"></a>OpenAPI</h4>
+<div id="openapi" class="section level3">
+<h3 class="hasAnchor">
+<a href="#openapi" class="anchor"></a>OpenAPI</h3>
 <ul>
 <li><p>API Documentation is now hosted at <code>/__docs__</code>. If <code>swagger</code> documentation is being used, <code>/__swagger__</code> will redirect to <code>/__docs__</code>. (<a href='https://github.com/rstudio/plumber/issues/654'>#654</a>)</p></li>
 <li><p>Added OpenAPI support for array parameters using syntax <code>name:[type]</code> and new type <code>list</code> (synonym df, data.frame). (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/532'>#532</a>)</p></li>
@@ -264,9 +283,9 @@
 <li><p>Added <code><a href="../reference/validate_api_spec.html">validate_api_spec()</a></code> to validate a Plumber API produces a valid OpenAPI Specification. (Experimental!) (<a href='https://github.com/rstudio/plumber/issues/633'>#633</a>)</p></li>
 </ul>
 </div>
-<div id="serializers" class="section level4">
-<h4 class="hasAnchor">
-<a href="#serializers" class="anchor"></a>Serializers</h4>
+<div id="serializers" class="section level3">
+<h3 class="hasAnchor">
+<a href="#serializers" class="anchor"></a>Serializers</h3>
 <ul>
 <li><p>Added <code><a href="../reference/as_attachment.html">as_attachment(value, filename)</a></code> method which allows routes to return a file attachment with a custom name. (<a href='https://github.com/rstudio/plumber/issues/585'>#585</a>)</p></li>
 <li><p>Serializer functions can now return <code>PlumberEndpoint</code> <code>preexec</code> and <code>postexec</code> hooks in addition to a <code>serializer</code> function by using <code><a href="../reference/endpoint_serializer.html">endpoint_serializer()</a></code>. This allows for image serializers to turn on their corresponding graphics device before the route executes and turn the graphics device off after the route executes. (<a href='https://github.com/rstudio/plumber/issues/630'>#630</a>)</p></li>
@@ -300,9 +319,9 @@
 </li>
 </ul>
 </div>
-<div id="body-parsing" class="section level4">
-<h4 class="hasAnchor">
-<a href="#body-parsing" class="anchor"></a>Body parsing</h4>
+<div id="body-parsing" class="section level3">
+<h3 class="hasAnchor">
+<a href="#body-parsing" class="anchor"></a>Body parsing</h3>
 <ul>
 <li><p>Added support for request body parsing (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/532'>#532</a>)</p></li>
 <li>
@@ -339,9 +358,9 @@
 <li><p>If <code>multipart/*</code> content is parsed, <code>req$body</code> will contain named output from <code><a href="https://rdrr.io/pkg/webutils/man/parse_multipart.html">webutils::parse_multipart()</a></code> and add the parsed value to each part. Look here for access to all provided information (e.g., <code>name</code>, <code>filename</code>, <code>content_type</code>, etc). In addition, <code>req$argsBody</code> (which is used for route argument matching) will contain a named reduced form of this information where <code>parsed</code> values (and <code>filename</code>s) are combined on the same <code>name</code>. (<a href='https://github.com/rstudio/plumber/issues/663'>#663</a>)</p></li>
 </ul>
 </div>
-<div id="visual-documentation" class="section level4">
-<h4 class="hasAnchor">
-<a href="#visual-documentation" class="anchor"></a>Visual Documentation</h4>
+<div id="visual-documentation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#visual-documentation" class="anchor"></a>Visual Documentation</h3>
 <ul>
 <li><p>Generalize user interface integration. Plumber can now use other OpenAPI compatible user interfaces like <code>RapiDoc</code> (<a href="https://github.com/mrin9/RapiDoc" class="uri">https://github.com/mrin9/RapiDoc</a>) and <code>Redoc</code> (<a href="https://github.com/Redocly/redoc" class="uri">https://github.com/Redocly/redoc</a>). Pending CRAN approbations, development R packages are available from <a href="https://github.com/meztez/rapidoc/" class="uri">https://github.com/meztez/rapidoc/</a> and <a href="https://github.com/meztez/redoc/" class="uri">https://github.com/meztez/redoc/</a>. (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/562'>#562</a>)</p></li>
 <li><p>Changed Swagger UI to use <a href="https://github.com/rstudio/swagger">swagger</a> R package to display the swagger page. (<a href='https://github.com/rstudio/plumber/issues/365'>#365</a>)</p></li>
@@ -349,18 +368,18 @@
 </ul>
 </div>
 </div>
-<div id="security-improvements" class="section level3">
-<h3 class="hasAnchor">
-<a href="#security-improvements" class="anchor"></a>Security improvements</h3>
+<div id="security-improvements" class="section level2">
+<h2 class="hasAnchor">
+<a href="#security-improvements" class="anchor"></a>Security improvements</h2>
 <ul>
 <li><p>Secret session cookies are now encrypted using <code>sodium</code>. All prior <code>req$session</code> information will be lost. Please see <code><a href="../reference/session_cookie.html">?session_cookie</a></code> for more information. (<a href='https://github.com/rstudio/plumber/issues/404'>#404</a>)</p></li>
 <li><p>Session cookies set the <code>HttpOnly</code> flag by default to mitigate cross-site scripting (XSS). Please see <code><a href="../reference/session_cookie.html">?session_cookie</a></code> for more information. (<a href='https://github.com/rstudio/plumber/issues/404'>#404</a>)</p></li>
 <li><p>Wrap <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">jsonlite::fromJSON</a></code> to ensure that <code>jsonlite</code> never reads input as a remote address (such as a file path or URL) and attempts to parse that. The only known way to exploit this behavior in plumber unless an API were using encrypted cookies and an attacker knew the encryption key in order to craft arbitrary cookies. (<a href='https://github.com/rstudio/plumber/issues/325'>#325</a>)</p></li>
 </ul>
 </div>
-<div id="breaking-changes-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#breaking-changes-1" class="anchor"></a>Breaking changes</h3>
+<div id="breaking-changes-2" class="section level2">
+<h2 class="hasAnchor">
+<a href="#breaking-changes-2" class="anchor"></a>Breaking changes</h2>
 <ul>
 <li><p>When <code><a href="../reference/plumb.html">plumb()</a></code>ing a file (or <code>Plumber$new(file)</code>), the working directory is set to the file’s directory before parsing the file. When running the Plumber API, the working directory will be set to file’s directory before running.(<a href='https://github.com/rstudio/plumber/issues/631'>#631</a>)</p></li>
 <li><p>Plumber’s OpenAPI Specification is now defined using <a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md">OpenAPI 3</a>, upgrading from Swagger Specification. (<a href='https://github.com/rstudio/plumber/issues/365'>#365</a>)</p></li>
@@ -376,9 +395,9 @@
 <li><p>When creating a <code>PlumberFilter</code> or <code>PlumberEndpoint</code>, an error will be thrown if <code>expr</code> does not evaluate to a function. (<a href='https://github.com/rstudio/plumber/issues/666'>#666</a>)</p></li>
 </ul>
 </div>
-<div id="deprecations" class="section level3">
-<h3 class="hasAnchor">
-<a href="#deprecations" class="anchor"></a>Deprecations</h3>
+<div id="deprecations" class="section level2">
+<h2 class="hasAnchor">
+<a href="#deprecations" class="anchor"></a>Deprecations</h2>
 <ul>
 <li><p>Shorthand serializers are now deprecated. <code>@html</code>, <code>@json</code>, <code>@png</code>, <code>@jpeg</code>, <code>@svg</code> should be replaced with the <code>@serializer</code> syntax. Ex: <code>@serializer html</code> or <code>@serializer jpeg</code> (<a href='https://github.com/rstudio/plumber/issues/630'>#630</a>)</p></li>
 <li><p><code>plumber</code> R6 object has been deprecated and renamed to <code>Plumber</code>. <code>PlumberStatic</code>’s <code>inherit</code>ed class has been updated to <code>Plumber</code>. (<a href='https://github.com/rstudio/plumber/issues/653'>#653</a>)</p></li>
@@ -390,9 +409,9 @@
 <li><p>DigitalOcean helper functions are now defunct (<code>do_*()</code>). The functionality and documentation on how to deploy to DigitalOcean has been moved to <a href="https://github.com/meztez/plumberDeploy"><code>plumberDeploy</code></a> (by <a href='https://github.com/meztez'>@meztez</a>) (<a href='https://github.com/rstudio/plumber/issues/649'>#649</a>)</p></li>
 </ul>
 </div>
-<div id="minor-new-features-and-improvements" class="section level3">
-<h3 class="hasAnchor">
-<a href="#minor-new-features-and-improvements" class="anchor"></a>Minor new features and improvements</h3>
+<div id="minor-new-features-and-improvements" class="section level2">
+<h2 class="hasAnchor">
+<a href="#minor-new-features-and-improvements" class="anchor"></a>Minor new features and improvements</h2>
 <ul>
 <li><p>Documentation is updated and now presented using <code>pkgdown</code> (<a href='https://github.com/rstudio/plumber/issues/570'>#570</a>)</p></li>
 <li><p>New hex logo! Thank you <a href='https://github.com/allisonhorst'>@allisonhorst</a> ! (<a href='https://github.com/rstudio/plumber/issues/570'>#570</a>)</p></li>
@@ -414,9 +433,9 @@
 <li><p>Endpoints that produce images within a <code><a href="https://rstudio.github.io/promises//reference/promise.html">promises::promise()</a></code> will now use the expected graphics device. (<a href='https://github.com/rstudio/plumber/issues/669'>#669</a>)</p></li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h3>
+<div id="bug-fixes-2" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li><p>Handle plus signs in URI as space characters instead of actual plus signs (<a href='https://github.com/meztez'>@meztez</a>, <a href='https://github.com/rstudio/plumber/issues/618'>#618</a>)</p></li>
 <li><p>Paths that are missing a leading <code><a href="https://rdrr.io/r/base/Arithmetic.html">/</a></code> have a <code><a href="https://rdrr.io/r/base/Arithmetic.html">/</a></code> prepended to the path location. (<a href='https://github.com/rstudio/plumber/issues/656'>#656</a>)</p></li>
@@ -432,9 +451,10 @@
 </ul>
 </div>
 </div>
-    <div id="plumber-046" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plumber-046" class="anchor"></a>plumber 0.4.6</h2>
+    <div id="plumber-046" class="section level1">
+<h1 class="page-header" data-toc-text="0.4.6">
+<a href="#plumber-046" class="anchor"></a>plumber 0.4.6<small> 2018-06-05 </small>
+</h1>
 <ul>
 <li>BUGFIX: Hooks that accept a <code>value</code> argument (<code>postroute</code>, <code>preserialize</code>, and <code>postserialize</code>) now modify the incoming value as documented.</li>
 <li>BUGFIX: The <code>postserialize</code> hook is now given the serialized data as its <code>value</code> parameter.</li>
@@ -444,9 +464,10 @@
 <li>Add <a href="https://rstudio.github.io/rstudio-extensions/rstudio_project_templates.html">RStudio Project Template</a> to package.</li>
 </ul>
 </div>
-    <div id="plumber-044" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plumber-044" class="anchor"></a>plumber 0.4.4</h2>
+    <div id="plumber-044" class="section level1">
+<h1 class="page-header" data-toc-text="0.4.4">
+<a href="#plumber-044" class="anchor"></a>plumber 0.4.4<small> 2017-12-01 </small>
+</h1>
 <ul>
 <li>Support Expiration, HTTPOnly, and Secure flags on cookies (<a href='https://github.com/rstudio/plumber/issues/87'>#87</a>). <strong>EDIT</strong>: see <a href='https://github.com/rstudio/plumber/issues/216'>#216</a> which prevented expiration from working.</li>
 <li>BUGFIX: properly handle named query string and post body arguments in mounted subrouters.</li>
@@ -470,16 +491,18 @@
 <li>Support <code>.</code> in string path segments</li>
 </ul>
 </div>
-    <div id="plumber-042" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plumber-042" class="anchor"></a>plumber 0.4.2</h2>
+    <div id="plumber-042" class="section level1">
+<h1 class="page-header" data-toc-text="0.4.2">
+<a href="#plumber-042" class="anchor"></a>plumber 0.4.2<small> 2017-07-24 </small>
+</h1>
 <ul>
 <li>Development version for 0.4.2. Will be working to move to even/odd release cycles, but I had prematurely bumped to 0.4.0 so that one might get skipped, making the next CRAN release 0.4.2.</li>
 </ul>
 </div>
-    <div id="plumber-040" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plumber-040" class="anchor"></a>plumber 0.4.0</h2>
+    <div id="plumber-040" class="section level1">
+<h1 class="page-header" data-toc-text="0.4.0">
+<a href="#plumber-040" class="anchor"></a>plumber 0.4.0<small> Unreleased </small>
+</h1>
 <ul>
 <li>BREAKING: Listen on localhost instead of listening publicly by default.</li>
 <li>BREAKING: We no longer set the <code>Access-Control-Allow-Origin</code> HTTP header to <code><a href="https://rdrr.io/r/base/Arithmetic.html">*</a></code>. This was previously done for convenience but we’ve decided to prioritize security here by removing this default. You can still add this header to any route you want to be accessible from other origins.</li>
@@ -499,17 +522,19 @@
 <li>Added a <code>debug</code> parameter to the <code>run</code> method which can be set to <code>TRUE</code> in order to get more insight into your API errors.</li>
 </ul>
 </div>
-    <div id="plumber-033" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plumber-033" class="anchor"></a>plumber 0.3.3</h2>
+    <div id="plumber-033" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.3">
+<a href="#plumber-033" class="anchor"></a>plumber 0.3.3<small> Unreleased </small>
+</h1>
 <ul>
 <li>
 <code><a href="../reference/plumb.html">plumb()</a></code> now accepts an argument <code>dir</code>, referring to a directory containing <code>plumber.R</code>, which may be provided instead of <code>file</code>.</li>
 </ul>
 </div>
-    <div id="plumber-032" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plumber-032" class="anchor"></a>plumber 0.3.2</h2>
+    <div id="plumber-032" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.2">
+<a href="#plumber-032" class="anchor"></a>plumber 0.3.2<small> 2017-05-22 </small>
+</h1>
 <ul>
 <li>Introduced the <code><a href="../reference/do_provision.html">do_provision()</a></code>, <code><a href="../reference/do_provision.html">do_deploy_api()</a></code>, <code><a href="../reference/do_provision.html">do_remove_api()</a></code> and <code><a href="../reference/do_provision.html">do_configure_https()</a></code> functions to provision and manage your APIs on a cloud server running on DigitalOcean.</li>
 <li>
@@ -519,40 +544,45 @@
 <li>Don’t convert <code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code> character in a query string to a space.</li>
 </ul>
 </div>
-    <div id="plumber-031" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plumber-031" class="anchor"></a>plumber 0.3.1</h2>
+    <div id="plumber-031" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.1">
+<a href="#plumber-031" class="anchor"></a>plumber 0.3.1<small> 2016-10-04 </small>
+</h1>
 <ul>
 <li>Add a method to consume JSON on post (you can still send a query string in the body of a POST request as well).</li>
 </ul>
 </div>
-    <div id="plumber-030" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plumber-030" class="anchor"></a>plumber 0.3.0</h2>
+    <div id="plumber-030" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.0">
+<a href="#plumber-030" class="anchor"></a>plumber 0.3.0<small> Unreleased </small>
+</h1>
 <ul>
 <li>BREAKING CHANGE: serializer factories are now registered instead of the serializer themselves. Thus, <code><a href="../reference/addSerializer.html">addSerializer()</a></code> now expects a function that returns a serializer, and <code>Response$new()</code> now expects a serializer itself rather than a character string naming a serializer. Internally it is the serializer itself that is attached to the response rather than the name of the serializer. This allows for a serializer to customize its behavior.</li>
 <li>Accept an additional argument on the <code>@serializer</code> annotation – R code that will be passed in as an argument to the serializer factory. See example <code>09-content-type</code>.</li>
 </ul>
 </div>
-    <div id="plumber-024" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plumber-024" class="anchor"></a>plumber 0.2.4</h2>
+    <div id="plumber-024" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.4">
+<a href="#plumber-024" class="anchor"></a>plumber 0.2.4<small> 2016-04-14 </small>
+</h1>
 <ul>
 <li>Add a filter which parses and sets req$cookies to be a list corresponding to the cookies provided with the request.</li>
 <li>Responses can set multiple cookies</li>
 <li>Bug Fix: convert non-character arguments in setCookie to character before URL- encoding.</li>
 </ul>
 </div>
-    <div id="plumber-023" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plumber-023" class="anchor"></a>plumber 0.2.3</h2>
+    <div id="plumber-023" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.3">
+<a href="#plumber-023" class="anchor"></a>plumber 0.2.3<small> Unreleased </small>
+</h1>
 <ul>
 <li>Set options(warn=1) during execution of user code so that warnings are immediately visible in the console, rather than storing them until the server is stopped.</li>
 </ul>
 </div>
-    <div id="plumber-022" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plumber-022" class="anchor"></a>plumber 0.2.2</h2>
+    <div id="plumber-022" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.2">
+<a href="#plumber-022" class="anchor"></a>plumber 0.2.2<small> Unreleased </small>
+</h1>
 <ul>
 <li>Add <code>sessionCookie</code> function to define a processor that can be used as a globalProcessor on a router to encrypt values from req$session and store them as an encrypted cookie in on the user’s browser.</li>
 <li>Added <code>setCookie</code> method to response which (primitively) allows you to set a cookie to be included in the response.</li>
@@ -560,17 +590,19 @@
 <li>Document all public params so CHECK passes</li>
 </ul>
 </div>
-    <div id="plumber-021" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plumber-021" class="anchor"></a>plumber 0.2.1</h2>
+    <div id="plumber-021" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.1">
+<a href="#plumber-021" class="anchor"></a>plumber 0.2.1<small> Unreleased </small>
+</h1>
 <ul>
 <li>Add more <code>roxygen2</code> documentation for exported functions</li>
 <li>Remove the warning in the README as the API seems to be stabilizing.</li>
 </ul>
 </div>
-    <div id="plumber-020" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plumber-020" class="anchor"></a>plumber 0.2.0</h2>
+    <div id="plumber-020" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.0">
+<a href="#plumber-020" class="anchor"></a>plumber 0.2.0<small> Unreleased </small>
+</h1>
 <ul>
 <li>BREAKING: Changed variable-path routing to use bracketed format instead of just a colon.</li>
 <li>BREAKING: Renamed <code>PlumberRouter</code> R6 object to just <code>Plumber</code>.</li>
@@ -578,9 +610,10 @@
 <li>Added support for the <code>#*</code> prefix.</li>
 </ul>
 </div>
-    <div id="plumber-010" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plumber-010" class="anchor"></a>plumber 0.1.0</h2>
+    <div id="plumber-010" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.0">
+<a href="#plumber-010" class="anchor"></a>plumber 0.1.0<small> Unreleased </small>
+</h1>
 <ul>
 <li>Initial Release</li>
 </ul>
