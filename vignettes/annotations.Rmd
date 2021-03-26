@@ -13,7 +13,7 @@ source("_helpers.R")
 
 ## Annotations {#annotations}
 
-Annotations are specially-structured comments used in your plumber file to create an API. A full annotation line starts with `#*` or `#'`, then the annotation keyword `@...`, any number of space characters followed by the content. It is recommended to use `#*` to differentiate them from `Roxygen2` annotations.
+Annotations are specially-structured comments used in your plumber file to create an API. A full annotation line starts with `#*` or `#'`, then the annotation keyword `@...`, any number of space characters followed by the content. It is recommended to use `#*` to differentiate them from `roxygen2` annotations.
 
 ## Global annotations {#global-annotations}
 
@@ -85,9 +85,9 @@ Types are used to define API inputs. You can use most of them in dynamic routes.
 Query parameters currently need to be explicitly converted as they are pushed as is (character) to block expression.
 Only dynamic route parameters are converted to specified `@param` type before being pushed to block expression.
 
-Plumber parameter type to OpenAPI type refenrence. For programmatic use, pick the one with an asterisk.
+Plumber parameter type to OpenAPI type reference. For programmatic use, pick the one with an asterisk.
 
-Type | OpenApi | Availability
+Type | OpenAPI | Availability
 ---------------- | ----------- | ---------
 `bool`, `boolean`*, `logical` | `boolean` | `query`, `path`
 `dbl`, `double`, `float`, `number`*, `numeric` | `number` `format:double` | `query`, `path`

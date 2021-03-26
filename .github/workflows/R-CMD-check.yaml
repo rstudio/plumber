@@ -42,6 +42,7 @@ jobs:
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      _R_CHECK_FORCE_SUGGESTS_: false
       RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
@@ -69,8 +70,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ matrix.config.os }}-${{ steps.install-r.outputs.installed-r-version }}-1-${{ hashFiles('.github/r-depends.rds') }}
-          restore-keys: ${{ matrix.config.os }}-${{ steps.install-r.outputs.installed-r-version }}-1-
+          key: ${{ matrix.config.os }}-${{ steps.install-r.outputs.installed-r-version }}-2-${{ hashFiles('.github/r-depends.rds') }}
+          restore-keys: ${{ matrix.config.os }}-${{ steps.install-r.outputs.installed-r-version }}-2-
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
@@ -91,6 +92,16 @@ jobs:
         shell: Rscript {0}
         run: |
           install.packages("Rcpp", type = "source")
+      - name: Ubuntu 16 xml2
+        if: matrix.config.os == 'ubuntu-16.04'
+        shell: Rscript {0}
+        run: |
+          pak::pkg_system_requirements("withr", execute = TRUE)
+          pak::pkg_install("withr")
+          pak::pkg_system_requirements("xml2", execute = TRUE)
+          # https://github.com/r-lib/xml2/issues/294
+          # always install for now
+          withr::with_makevars(c(CXX = "g++ -std=c++11"), install.packages("xml2", verbose = TRUE))
 
       - name: Install dependencies
         shell: Rscript {0}

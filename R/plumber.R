@@ -1017,7 +1017,7 @@ Plumber <- R6Class(
         }
       private$api_spec_handler <- api_fun
     },
-    #' @description Retrieve openAPI file
+    #' @description Retrieve OpenAPI file
     getApiSpec = function() { #FIXME: test
 
       routerSpec <- private$routerSpecificationInternal(self)
@@ -1093,12 +1093,12 @@ Plumber <- R6Class(
       warning("addGlobalProcessor has been deprecated in v0.4.0 and will be removed in a coming release. Please use `registerHook`(s) instead.")
       self$registerHooks(proc)
     },
-    #' @description Deprecated. Retrieve openAPI file
+    #' @description Deprecated. Retrieve OpenAPI file
     openAPIFile = function() {
       warning("`$openAPIFile()` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$getApiSpec()`.")
       self$getApiSpec()
     },
-    #' @description Deprecated. Retrieve openAPI file
+    #' @description Deprecated. Retrieve OpenAPI file
     swaggerFile = function() {
       warning("`$swaggerFile()` has been deprecated in v1.0.0 and will be removed in a coming release. Please use `$getApiSpec()`.")
       self$getApiSpec()

@@ -1,4 +1,4 @@
-plumber 1.0.0.9999 Development version
+plumber 1.1.0
 --------------------------------------------------------------------------------
 
 ### Breaking changes
@@ -13,17 +13,15 @@ plumber 1.0.0.9999 Development version
 
 * Added option `plumber.trailingSlash`. This option (which is **disabled** by default) allows routes to be redirected to route definitions with a trailing slash. For example, if a `GET` request is submitted to `/test?a=1` with no `/test` route is defined, but a `GET` `/test/` route definition does exist, then the original request will respond with a `307` to reattempt against `GET` `/test/?a=1`. This option will be _enabled_ by default in a future release. This logic executed for before calling the `404` handler. (#746)
 
-* Added option `plumber.methodNotFound`. This option (which is enabled by default) allows for a status of `405` to be returned if an invalid method is used when requesting a valid route. This logic executed for before calling the default `404` handler. (#746)
-
-* Guess OpenApi response content type from serializer. (@meztez #684)
+* Added an experimental option `plumber.methodNotAllowed`. This option (which is enabled by default) allows for a status of `405` to be returned if an invalid method is used when requesting a valid route. This logic executed for before calling the default `404` handler. (#746)
 
 * Passing `edit = TRUE` to `plumb_api()` will open the API source file. (#699)
 
-* Allow for spaces in `@apiTag` and `@tag` when tag is surrended by single or double quotes. (#685)
-
 * OpenAPI Specification can be set using a file path. (@meztez #696)
 
-* Un-deprecated `Plumber$run(debug=, swaggerCallback=)` and added the parameters for `Plumber$run(docs=, quiet=)` and `pr_run(debug=, docs=, swaggerCallback=, quiet=)`. Now, all four parameters will not produce lingering effects on the `Plumber` router. (@jcheng5 #765)
+* Guess OpenAPI response content type from serializer. (@meztez #684)
+
+* Undeprecated `Plumber$run(debug=, swaggerCallback=)` and added the parameters for `Plumber$run(docs=, quiet=)` and `pr_run(debug=, docs=, swaggerCallback=, quiet=)`. Now, all four parameters will not produce lingering effects on the `Plumber` router. (@jcheng5 #765)
   * Setting `quiet = TRUE` will suppress routine startup messages.
   * Setting `debug = TRUE`, will display information when an error occurs. See `pr_set_debug()`.
   * Setting `docs` will update the visual documentation. See `pr_set_docs()`.
@@ -33,19 +31,21 @@ plumber 1.0.0.9999 Development version
 
 * `PlumberStep` (and `PlumberEndpoint` and `PlumberFilter`) received a new field `$srcref` and method `$getFunc()`. `$srcref` will contain the corresponding `srcref` information from original source file. `$getFunc()` will return the evaluated function. (#782)
 
+* Allow for spaces in `@apiTag` and `@tag` when tag is surrounded by single or double quotes. (#685)
+
 ### Bug fixes
+
+* Ignore regular comments in block parsing. (@meztez #718)
+
+* Block parsing comments, tags and responses ordering match plumber api ordering. (#722)
 
 * Fixed bug where `httpuv` would return a status of `500` with body `An exception occurred` if no headers were set on the response object. (#745)
 
 * Fixed bug where all `pr_*()` returned invisibly. Now all `pr_*()` methods will print the router if displayed in the console. (#740)
 
-* Ignore regular comments in block parsing (@meztez #718)
-
-* Block parsing comments, tags and responses ordering match plumber api ordering. (#722)
-
 * When calling `Plumber$handle()` and defining a new `PlumberEndpoint`, `...` will be checked for invalid names. (@meztez, #677)
 
-* `/__swagger__/` now always redirect to `/__docs__/`, even when Swagger isn't the selected interface. Use `options(plumber.legacyRedirects = FALSE)` to disable this behavior. (@blairj09 #694)
+* `/__swagger__/` now always redirects to `/__docs__/`, even when Swagger isn't the selected interface. Use `options(plumber.legacyRedirects = FALSE)` to disable this behavior. (@blairj09 #694)
 
 * Fixed `available_apis()` bug where all packages printed all available APIs. (@meztez #708)
 
@@ -428,7 +428,7 @@ plumber 0.2.2
 
 plumber 0.2.1
 --------------------------------------------------------------------------------
-* Add more Roxygen documentation for exported functions
+* Add more `roxygen2` documentation for exported functions
 * Remove the warning in the README as the API seems to be stabilizing.
 
 

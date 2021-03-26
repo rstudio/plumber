@@ -863,7 +863,7 @@ The value returned will not be validated for OAS compatibility.}
 \if{html}{\out{<a id="method-getApiSpec"></a>}}
 \if{latex}{\out{\hypertarget{method-getApiSpec}{}}}
 \subsection{Method \code{getApiSpec()}}{
-Retrieve openAPI file
+Retrieve OpenAPI file
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Plumber$getApiSpec()}\if{html}{\out{</div>}}
 }
@@ -974,7 +974,7 @@ addAssets has been deprecated in v0.4.0 and will be removed in a coming release.
 \if{html}{\out{<a id="method-openAPIFile"></a>}}
 \if{latex}{\out{\hypertarget{method-openAPIFile}{}}}
 \subsection{Method \code{openAPIFile()}}{
-Deprecated. Retrieve openAPI file
+Deprecated. Retrieve OpenAPI file
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Plumber$openAPIFile()}\if{html}{\out{</div>}}
 }
@@ -984,7 +984,7 @@ Deprecated. Retrieve openAPI file
 \if{html}{\out{<a id="method-swaggerFile"></a>}}
 \if{latex}{\out{\hypertarget{method-swaggerFile}{}}}
 \subsection{Method \code{swaggerFile()}}{
-Deprecated. Retrieve openAPI file
+Deprecated. Retrieve OpenAPI file
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Plumber$swaggerFile()}\if{html}{\out{</div>}}
 }
