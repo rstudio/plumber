@@ -5,6 +5,7 @@
 ## New features
 ## Bug fixes
 
+* OpenAPI response type detection had a scoping issue. Use serializer defined `Content-Type` header instead. (@meztez, #789)
 
 # plumber 1.1.0
 

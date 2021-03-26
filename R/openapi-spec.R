@@ -63,14 +63,9 @@ responsesSpecification <- function(endpts){
     if (!length(resps[[resp]]$content)) {
       ctype <- NULL
       if (is.function(endpts$serializer)) {
-        ctype <- formals(endpts$serializer)$type
-        if (is.null(ctype)) {
-          ctype <- tryCatch({
-            get("type", envir =
-                  environment(get("serialize_fn", envir =
-                                    environment(endpts$serializer))))},
-            error = function(e) {NULL})
-        }
+        # Must safe-guard against partial name matching 
+        # since we are reaching into the function env
+        ctype <- environment(endpts$serializer)[["headers"]][["Content-Type"]]
       }
       if (isTRUE(nchar(ctype) > 0)) {
         ctype <- stri_split_regex(ctype, "[ ;]")[[1]][1]

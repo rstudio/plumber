@@ -336,7 +336,7 @@ test_that("no params plumber router still produces spec when there is a func par
 
 test_that("Response content type set with serializer", {
   a <- pr()
-  pr_get(a, "/json", function() {"OK"}, serializer = serializer_json)
+  pr_get(a, "/json", function() {"OK"}, serializer = serializer_json())
   pr_get(a, "/csv", function() {"OK"}, serializer = serializer_csv())
   spec <- a$getApiSpec()
   expect_equal(spec$paths$`/json`$get$responses$`200`$content, list("application/json" = list(schema = list(type = "object"))))
