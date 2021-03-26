@@ -5,11 +5,11 @@
 [![](https://www.r-pkg.org/badges/version/plumber)](https://www.r-pkg.org/pkg/plumber)
 [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/plumber?color=brightgreen)](https://www.r-pkg.org/pkg/plumber)
 [![codecov](https://codecov.io/gh/rstudio/plumber/branch/master/graph/badge.svg)](https://codecov.io/gh/rstudio/plumber)
-[![RStudio community](https://img.shields.io/badge/community-plumber-blue?style=social&logo=rstudio&logoColor=75AADB)](https://community.rstudio.com/tags/plumber)
+[![RStudio community](https://img.shields.io/badge/community-plumber-blue?style=social&logo=rstudio&logoColor=75AADB)](https://community.rstudio.com/tag/plumber)
 <!-- badges: end -->
 
 Plumber allows you to create a web API by merely decorating your existing R
-source code with special comments. Take a look at an example.
+source code with `roxygen2`-like comments. Take a look at an example.
 
 ```r
 # plumber.R
@@ -40,7 +40,7 @@ function(a, b) {
 
 These comments allow `plumber` to make your R functions available as API
 endpoints. You can use either `#*` as the prefix or `#'`, but we recommend the
-former since `#'` will collide with Roxygen.
+former since `#'` will collide with `roxygen2`.
 
 ```r
 library(plumber)
@@ -95,9 +95,9 @@ remotes::install_github("rstudio/plumber")
 library(plumber)
 ```
 
-## Cheatsheet
+## Cheat Sheet
 
-<a href="https://github.com/rstudio/cheatsheets/blob/master/plumber.pdf"><img src="https://github.com/rstudio/cheatsheets/blob/master/pngs/thumbnails/plumber-cheatsheet-thumbs.png" width="630" height="252"/></a>
+<a href="https://github.com/rstudio/cheatsheets/blob/master/plumber.pdf"><img src="https://raw.githubusercontent.com/rstudio/cheatsheets/master/pngs/thumbnails/plumber-cheatsheet-thumbs.png" width="630" height="252"/></a>
 
 ## Hosting
 
