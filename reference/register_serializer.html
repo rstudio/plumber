@@ -146,8 +146,22 @@ available serializers in plumber is global." />
     </li>
   </ul>
 </li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    News
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Releases</li>
+    <li>
+      <a href="https://blog.rstudio.com/2021/03/29/plumber-v1-1-0/">Version 1.1.0</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="../news/index.html">Changelog</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -237,7 +251,7 @@ See <code><a href='https://rdrr.io/r/base/print.html'>print(serializer_json)</a>
 #&gt;         toJSON(val, ...)
 #&gt;     })
 #&gt; }
-#&gt; &lt;bytecode: 0x557c0c85d090&gt;
+#&gt; &lt;bytecode: 0x5596eaba8eb0&gt;
 #&gt; &lt;environment: namespace:plumber&gt;</div><div class='input'><span class='co'># serializer_content_type() calls `serializer_headers()` and supplies a serialization function</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>serializer_content_type</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; function (type, serialize_fn = identity) 
@@ -250,7 +264,7 @@ See <code><a href='https://rdrr.io/r/base/print.html'>print(serializer_json)</a>
 #&gt;     stopifnot(nchar(type) &gt; 0)
 #&gt;     serializer_headers(list(`Content-Type` = type), serialize_fn)
 #&gt; }
-#&gt; &lt;bytecode: 0x557c0c876ee0&gt;
+#&gt; &lt;bytecode: 0x5596eaba4228&gt;
 #&gt; &lt;environment: namespace:plumber&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
