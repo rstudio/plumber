@@ -114,3 +114,9 @@ reference:
   - 'PlumberStatic'
   - 'PlumberStep'
   - 'Hookable'
+
+
+news:
+  releases:
+  - text: "Version 1.1.0"
+    href: https://blog.rstudio.com/2021/03/29/plumber-v1-1-0/
