@@ -3,8 +3,12 @@
 ## Breaking changes
 
 ## New features
+
+* Static file handler now serves HEAD requests. (#798)
+
 ## Bug fixes
 
+* Static handler returns Last-Modified response header. (#798)
 * OpenAPI response type detection had a scoping issue. Use serializer defined `Content-Type` header instead. (@meztez, #789)
 
 # plumber 1.1.0

@@ -31,6 +31,17 @@ test_that("root requests are routed to index.html", {
   expect_equal(trimws(rawToChar(res$body)), "<html>I am HTML</html>")
 })
 
+test_that("HEAD requests are served correctly", {
+  for (path in c("/", "/index.html", "/test.txt", "/test.txt.zip")) {
+    resg <- PlumberResponse$new()
+    resh <- PlumberResponse$new()
+    pr$route(make_req("GET", path), resg)
+    pr$route(make_req("HEAD", path), resh)
+    expect_equal(resg$headers, resh$headers)
+    expect_type(resg$headers$`Last-Modified`, "character")
+  }
+})
+
 test_that("static binary file is served", {
   res <- PlumberResponse$new()
   pr$route(make_req("GET", "/test.txt.zip"), res)
