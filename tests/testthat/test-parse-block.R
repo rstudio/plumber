@@ -11,6 +11,8 @@ test_that("plumbBlock works", {
     "#* Plumber comment not reached",
     "NULL",
     "#* Plumber comments",
+    "#* Plumber description",
+    "#* second line",
     "",
     "  ",
     "# Normal comments",
@@ -25,6 +27,7 @@ test_that("plumbBlock works", {
   expect_equal(b$paths[[2]], list(verb="POST", path="/"))
   expect_equal(b$filter, "test")
   expect_equal(b$comments, "Plumber comments")
+  expect_equal(b$description, "Plumber description second line")
 
   # due to covr changing some code, the return answer is very strange
   # the tests below should be skipped on covr
@@ -281,10 +284,11 @@ test_that("block respect original order of lines for comments, tags and response
     "#' @tag bbb",
     "#' comments first line",
     "#' comments second line",
+    "#' comments third line",
     "#' @response 200 ok",
     "#' @response 404 not ok")
   b <- plumbBlock(length(lines), lines)
-  expect_equal(b$comments, "comments first line comments second line")
+  expect_equal(b$description, "comments second line comments third line")
   expect_equal(b$tags, c("aaa", "bbb"))
   expect_equal(b$responses, list(`200`=list(description="ok"), `404` = list(description="not ok")))
 })

@@ -27,6 +27,7 @@ endpointSpecification <- function(routerEndpointEntry, path = routerEndpointEntr
 
     endptSpec <- list(
       summary = routerEndpointEntry$comments,
+      description = routerEndpointEntry$description,
       responses = resps,
       parameters = params$parameters,
       requestBody = params$requestBody,

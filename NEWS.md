@@ -2,7 +2,10 @@
 
 ## Breaking changes
 
-## New features
+* First line of endpoint comments interpreted as OpenAPI 'summary' field and subsequent comment lines interpreted as 'description' field.
+
+## New features 
+
 ## Bug fixes
 
 * OpenAPI response type detection had a scoping issue. Use serializer defined `Content-Type` header instead. (@meztez, #789)

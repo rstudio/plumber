@@ -181,6 +181,8 @@ PlumberEndpoint <- R6Class(
     path = NA,
     #' @field comments endpoint comments
     comments = NA,
+    #' @field description endpoint description
+    description = NA,
     #' @field responses endpoint responses
     responses = NA,
     #' @description retrieve endpoint typed parameters
@@ -220,11 +222,11 @@ PlumberEndpoint <- R6Class(
     #' @param srcref `srcref` attribute from block
     #' @param lines Endpoint block
     #' @param params Endpoint params
-    #' @param comments,responses,tags Values to be used within the OpenAPI Spec
+    #' @param comments,description,responses,tags Values to be used within the OpenAPI Spec
     #' @details Parameters values are obtained from parsing blocks of lines in a plumber file.
     #' They can also be provided manually for historical reasons.
     #' @return A new `PlumberEndpoint` object
-    initialize = function(verbs, path, expr, envir, serializer, parsers, lines, params, comments, responses, tags, srcref) {
+    initialize = function(verbs, path, expr, envir, serializer, parsers, lines, params, comments, description, responses, tags, srcref) {
 
       self$verbs <- verbs
 
@@ -257,6 +259,9 @@ PlumberEndpoint <- R6Class(
       }
       if (!missing(comments)){
         self$comments <- comments
+      }
+      if (!missing(description)){
+        self$description <- description
       }
       if (!missing(responses)){
         self$responses <- responses

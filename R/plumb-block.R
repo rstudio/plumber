@@ -250,7 +250,8 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
     parsers = rev(parsers),
     assets = assets,
     params = rev(params),
-    comments = paste0(rev(comments), collapse = " "),
+    comments = paste0(rev(comments)[1], collapse = " "),
+    description = paste0(rev(comments)[-1], collapse = " "),
     responses = rev(responses),
     tags = rev(tags),
     routerModifier = routerModifier
@@ -283,6 +284,7 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr)
         srcref = srcref,
         params = block$params,
         comments = block$comments,
+        description = block$description,
         responses = block$responses,
         tags = block$tags
       )
