@@ -7,6 +7,8 @@
 
 * OpenAPI response type detection had a scoping issue. Use serializer defined `Content-Type` header instead. (@meztez, #789)
 
+* The default shared secret filter returns error responses without throwing an error. (#808)
+
 # plumber 1.1.0
 
 ## Breaking changes
