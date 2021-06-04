@@ -5,13 +5,23 @@ test_that("requests with shared secrets pass, w/o fail", {
 
   pr <- pr()
   pr$handle("GET", "/", function(){ 123 })
+  req <- make_req("GET", "/", pr = pr)
 
   # No shared secret
-  req <- make_req("GET", "/")
   res <- PlumberResponse$new()
   output <- pr$route(req, res)
   expect_equal(res$status, 400)
-  expect_equal(output, list(error = "Shared secret mismatch."))
+  expect_equal(output, list(error = "400 - Bad request"))
+
+  # When debugging, we get additional details in the error.
+  pr$setDebug(TRUE)
+  res <- PlumberResponse$new()
+  output <- pr$route(req, res)
+  expect_equal(res$status, 400)
+  expect_equal(output, list(
+    error = "400 - Bad request",
+    message = "Shared secret mismatch"))
+  pr$setDebug(FALSE)
 
   # Set shared secret
   assign("HTTP_PLUMBER_SHARED_SECRET", "abcdefg", envir=req)
