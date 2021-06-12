@@ -13,7 +13,7 @@ function(req, res){
 }
 
 #* @filter foo2
-function(req, res, type=""){
+function(req, res, type="") {
   if (type == "json"){
     res$serializer <- plumber:::serializer_json()
   }
@@ -34,13 +34,13 @@ function(req, res){
 }
 
 #* @get /short-json
-#* @json
+#* @serializer json
 function(){
   "JSON"
 }
 
 #* @get /short-html
-#* @html
+#* @serializer html
 function(){
   "HTML"
 }

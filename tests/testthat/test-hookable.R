@@ -1,9 +1,9 @@
-context("hookable")
+context("Hookable")
 
 test_that("simple extension works", {
   simpleHook <- R6Class(
     "simplehook",
-    inherit = hookable,
+    inherit = Hookable,
     public = list(
       exercise = function(hookName, args){
         private$runHooks(hookName, args)
@@ -33,7 +33,7 @@ test_that("simple extension works", {
 test_that("registerHooks works", {
   simpleHook <- R6Class(
     "simplehook",
-    inherit = hookable,
+    inherit = Hookable,
     public = list(
       exercise = function(hookName, args){
         private$runHooks(hookName, args)
@@ -62,7 +62,7 @@ test_that("registerHooks works", {
 test_that("overloading extension works", {
   simpleHook <- R6Class(
     "simplehook",
-    inherit = hookable,
+    inherit = Hookable,
     public = list(
       registerHook = function(hook=c("hook1", "hook2"), fun){
         hook <- match.arg(hook)
@@ -95,7 +95,7 @@ test_that("overloading extension works", {
 test_that("value forwarding works across stacked hooks", {
   simpleHook <- R6Class(
     "simplehook",
-    inherit = hookable,
+    inherit = Hookable,
     public = list(
       exercise = function(hookName, args){
         private$runHooks(hookName, args)

@@ -2,19 +2,18 @@ Encoding: UTF-8
 Package: plumber
 Type: Package
 Title: An API Generator for R
-Version: 0.4.7.9000
+Version: 1.1.0.9000
 Roxygen: list(markdown = TRUE)
 Authors@R: c(
-  person(family = "RStudio", role = c("cph", "fnd")),
-  person("Jeff", "Allen", role="cre", email="cran@trestletech.com"),
-  person("Barret", "Schloerke", role="aut", email="barret@rstudio.com"),
-  person("Frans", "van Dunné", role="ctb", email="frans@ixpantia.com"),
-  person("Sebastiaan", "Vandewoude", role="ctb", email="sebastiaanvandewoude@gmail.com"),
-  person(family="SmartBear Software", role=c("ctb", "cph"), comment="swagger-ui"))
+  person("Barret", "Schloerke", role = c("cre", "aut"), email = "barret@rstudio.com", comment = c(ORCID = "0000-0001-9986-114X")),
+  person("Jeff", "Allen", role = c("aut", "ccp"), email = "cran@trestletech.com"),
+  person("Bruno", "Tremblay", role = "ctb", email = "cran@neoxone.com"),
+  person("Frans", "van Dunné", role = "ctb", email = "frans@ixpantia.com"),
+  person("Sebastiaan", "Vandewoude", role="ctb", email = "sebastiaanvandewoude@gmail.com"),
+  person(family = "RStudio", role = c("cph", "fnd")))
 License: MIT + file LICENSE
-BugReports: https://github.com/trestletech/plumber/issues
-URL: https://www.rplumber.io (site)
-    https://github.com/trestletech/plumber (dev)
+BugReports: https://github.com/rstudio/plumber/issues
+URL: https://www.rplumber.io, https://github.com/rstudio/plumber
 Description: Gives the ability to automatically generate and serve an HTTP API
     from R functions using the annotations in the R documentation around your
     functions.
@@ -24,57 +23,71 @@ Imports:
     R6 (>= 2.0.0),
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
-    httpuv (>= 1.4.5.9002),
+    webutils (>= 1.1),
+    httpuv (>= 1.5.0),
     crayon,
-    promises,
+    promises (>= 1.1.0),
     sodium,
-    swagger (> 3.20.3)
+    swagger (>= 3.33.0),
+    magrittr,
+    mime,
+    lifecycle (>= 0.2.0),
+    ellipsis (>= 0.3.0),
+    rlang
 LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
     testthat (>= 0.11.0),
-    XML,
     rmarkdown,
     base64enc,
     htmlwidgets,
     visNetwork,
-    analogsea (>= 0.7.0),
-    later
-Remotes:
-    rstudio/promises,
-    rstudio/swagger,
-    rstudio/httpuv,
-    sckott/analogsea
+    later,
+    readr,
+    yaml,
+    feather,
+    future,
+    rstudioapi,
+    spelling,
+    mockery (>= 0.4.2)
+RoxygenNote: 7.1.1
 Collate:
     'async.R'
     'content-types.R'
-    'cookie-parser.R'
-    'parse-globals.R'
-    'images.R'
-    'parse-block.R'
-    'globals.R'
-    'serializer-json.R'
-    'shared-secret-filter.R'
-    'post-body.R'
-    'query-string.R'
-    'plumber.R'
     'default-handlers.R'
+    'hookable.R'
+    'shared-secret-filter.R'
+    'parser-cookie.R'
+    'parse-body.R'
+    'parse-query.R'
+    'plumber.R'
+    'deprecated-R6.R'
+    'deprecated.R'
     'digital-ocean.R'
     'find-port.R'
+    'globals.R'
     'includes.R'
     'json.R'
     'new-rstudio-project.R'
+    'openapi-spec.R'
+    'openapi-types.R'
+    'options_plumber.R'
     'paths.R'
+    'plumb-block.R'
+    'plumb-globals.R'
+    'plumb.R'
+    'plumber-response.R'
     'plumber-static.R'
     'plumber-step.R'
-    'response.R'
-    'serializer-content-type.R'
-    'serializer-html.R'
-    'serializer-htmlwidget.R'
-    'serializer-rds.R'
-    'serializer-xml.R'
+    'pr.R'
+    'pr_set.R'
     'serializer.R'
     'session-cookie.R'
-    'swagger.R'
+    'ui.R'
     'utf8.R'
-RoxygenNote: 6.1.1
+    'utils-pipe.R'
+    'utils.R'
+    'validate_api_spec.R'
+    'zzz.R'
+RdMacros: lifecycle
+Language: en-US

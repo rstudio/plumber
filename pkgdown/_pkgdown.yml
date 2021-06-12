@@ -1,0 +1,122 @@
+url: https://www.rplumber.io
+
+# development:
+#   mode: auto
+
+template:
+  assets: pkgdown/assets
+  params:
+    docsearch:
+      api_key: 'e8f0e2420e2e9aac7973efb2cc877b06'
+      index_name: 'rplumber'
+
+authors:
+  Barret Schloerke:
+    href: http://schloerke.com/
+  Jeff Allen:
+    href: https://trestletech.com/
+
+
+articles:
+- title: Creating APIs in R with Plumber
+  navbar: ~
+  # desc: description here
+  contents:
+  - 'introduction'
+  - 'quickstart'
+  - 'routing-and-input'
+  - 'rendering-output'
+  - 'execution-model'
+  - 'security'
+  - 'hosting'
+  - 'programmatic-usage'
+  - 'annotations'
+  - 'tips-and-tricks'
+  - 'migration'
+# - title: Examples
+#   navbar: Examples
+#   # desc: description here
+#   contents:
+#   - 'ex-github'
+#   - 'ex-mailgun'
+
+reference:
+- title: Router
+  contents:
+  - 'plumb'
+  - 'plumb_api'
+  - 'pr'
+  - 'pr_run'
+  - 'options_plumber'
+  - 'is_plumber'
+
+- title: Router Methods
+  contents:
+  - 'pr_get'
+  - 'pr_post'
+  - 'pr_put'
+  - 'pr_delete'
+  - 'pr_head'
+  - 'pr_handle'
+  - 'pr_mount'
+  - 'pr_static'
+
+- title: Router Hooks
+  contents:
+  - 'pr_hook'
+  - 'pr_hooks'
+  - 'pr_cookie'
+  - 'pr_filter'
+
+- title: Router Defaults
+  contents:
+  - 'pr_set_api_spec'
+  - 'pr_set_docs'
+  - 'pr_set_serializer'
+  - 'pr_set_parsers'
+  - 'pr_set_404'
+  - 'pr_set_error'
+  - 'pr_set_debug'
+  - 'pr_set_docs_callback'
+
+- title: Visual Documentation Interface
+  contents:
+  - 'pr_set_api_spec'
+  - 'pr_set_docs'
+  - 'register_docs'
+  - 'validate_api_spec'
+
+- title: Body Parsers
+  contents:
+  - 'register_parser'
+  - 'parser_form'
+  - 'get_character_set'
+
+- title: Response
+  contents:
+  - 'as_attachment'
+  - 'register_serializer'
+  - 'serializer_json'
+  - 'endpoint_serializer'
+  - 'include_file'
+
+- title: Cookies and Filters
+  contents:
+  - 'pr_cookie'
+  - 'random_cookie_key'
+  - 'session_cookie'
+  - 'forward'
+
+- title: R6 Constructors
+  contents:
+  - 'Plumber'
+  - 'PlumberEndpoint'
+  - 'PlumberStatic'
+  - 'PlumberStep'
+  - 'Hookable'
+
+
+news:
+  releases:
+  - text: "Version 1.1.0"
+    href: https://blog.rstudio.com/2021/03/29/plumber-v1-1-0/

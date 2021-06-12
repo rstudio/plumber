@@ -4,7 +4,7 @@
 ^\.travis\.yml$
 ^Dockerfile
 ^inst/analog-keys.R
-^inst/examples/03-github/github-key.txt
+^inst/plumber/03-github/github-key.txt
 ^\.httr-oauth
 ^docs
 ^scripts
@@ -16,3 +16,12 @@
 ^package\.json$
 ^\.github
 ^\.httr-oauth$
+^\.github$
+^docs$
+^pkgdown$
+^logo$
+^vignettes$
+^man-roxygen
+rsconnect
+^CRAN-RELEASE$
+^legacy_support.txt$

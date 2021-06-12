@@ -1,14 +1,15 @@
-# plumber
+# `plumber` <a href='https://www.rplumber.io/'><img src='man/figures/logo.svg' align="right" height="138.5" style="margin:10px;" /></a>
 
-[![Build Status](https://travis-ci.org/trestletech/plumber.svg?branch=master)](https://travis-ci.org/trestletech/plumber)
+<!-- badges: start -->
+[![R build status](https://github.com/rstudio/plumber/workflows/R-CMD-check/badge.svg)](https://github.com/rstudio/plumber/actions)
 [![](https://www.r-pkg.org/badges/version/plumber)](https://www.r-pkg.org/pkg/plumber)
 [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/plumber?color=brightgreen)](https://www.r-pkg.org/pkg/plumber)
-[![codecov](https://codecov.io/gh/trestletech/plumber/branch/master/graph/badge.svg)](https://codecov.io/gh/trestletech/plumber)
-
-<img align="right" src="https://www.rplumber.io/components/images/plumber-broken.png" />
+[![codecov](https://codecov.io/gh/rstudio/plumber/branch/master/graph/badge.svg)](https://codecov.io/gh/rstudio/plumber)
+[![RStudio community](https://img.shields.io/badge/community-plumber-blue?style=social&logo=rstudio&logoColor=75AADB)](https://community.rstudio.com/tag/plumber)
+<!-- badges: end -->
 
 Plumber allows you to create a web API by merely decorating your existing R
-source code with special comments. Take a look at an example.
+source code with `roxygen2`-like comments. Take a look at an example.
 
 ```r
 # plumber.R
@@ -16,14 +17,14 @@ source code with special comments. Take a look at an example.
 #* Echo back the input
 #* @param msg The message to echo
 #* @get /echo
-function(msg=""){
+function(msg="") {
   list(msg = paste0("The message is: '", msg, "'"))
 }
 
 #* Plot a histogram
-#* @png
+#* @serializer png
 #* @get /plot
-function(){
+function() {
   rand <- rnorm(100)
   hist(rand)
 }
@@ -32,26 +33,27 @@ function(){
 #* @param a The first number to add
 #* @param b The second number to add
 #* @post /sum
-function(a, b){
+function(a, b) {
   as.numeric(a) + as.numeric(b)
 }
 ```
 
-These comments allow plumber to make your R functions available as API
+These comments allow `plumber` to make your R functions available as API
 endpoints. You can use either `#*` as the prefix or `#'`, but we recommend the
-former since `#'` will collide with Roxygen.
+former since `#'` will collide with `roxygen2`.
 
 ```r
-> library(plumber)
-> r <- plumb("plumber.R")  # Where 'plumber.R' is the location of the file shown above
-> r$run(port=8000)
+library(plumber)
+# 'plumber.R' is the location of the file shown above
+pr("plumber.R") %>%
+  pr_run(port=8000)
 ```
 
 You can visit this URL using a browser or a terminal to run your R function and
 get the results. For instance
-[http://localhost:8000/plot](http://localhost:8000/plot) will show you a
+`http://localhost:8000/plot` will show you a
 histogram, and
-[http://localhost:8000/echo?msg=hello](http://localhost:8000/echo?msg=hello)
+`http://localhost:8000/echo?msg=hello`
 will echo back the 'hello' message you provided.
 
 Here we're using `curl` via a Mac/Linux terminal.
@@ -74,7 +76,7 @@ $ curl --data "a=4&b=3" "http://localhost:8000/sum"
 You can also send your data as JSON:
 
 ```
-$ curl --data '{"a":4, "b":5}' http://localhost:8000/sum
+$ curl -H "Content-Type: application/json" --data '{"a":4, "b":5}' http://localhost:8000/sum
  [9]
 ```
 
@@ -86,33 +88,34 @@ You can install the latest stable version from CRAN using the following command:
 install.packages("plumber")
 ```
 
-If you want to try out the latest development version, you can install it from
-GitHub. The easiest way to do that is by using `devtools`.
+If you want to try out the latest development version, you can install it from GitHub.
 
 ```r
-library(devtools)
-install_github("trestletech/plumber")
+remotes::install_github("rstudio/plumber")
 library(plumber)
 ```
+
+## Cheat Sheet
+
+<a href="https://github.com/rstudio/cheatsheets/blob/master/plumber.pdf"><img src="https://raw.githubusercontent.com/rstudio/cheatsheets/master/pngs/thumbnails/plumber-cheatsheet-thumbs.png" width="630" height="252"/></a>
 
 ## Hosting
 
 If you're just getting started with hosting cloud servers, the
-[DigitalOcean](https://www.digitalocean.com) integration included in plumber
+[DigitalOcean](https://www.digitalocean.com) integration included in `plumber`
 will be the best way to get started. You'll be able to get a server hosting your
-custom API in just two R commands. Full documentation is available at
-https://www.rplumber.io/docs/digitalocean/.
+custom API in just two R commands. To deploy to DigitalOcean, check out the
+`plumber` companion package [`plumberDeploy`](https://github.com/meztez/plumberDeploy).
 
-[RStudio Connect](https://www.rstudio.com/products/connect/) is a commercial
+[RStudio Connect](https://rstudio.com/products/connect/) is a commercial
 publishing platform that enables R developers to easily publish a variety of R
 content types, including Plumber APIs. Additional documentation is available at
-https://www.rplumber.io/docs/hosting.html#rstudio-connect.
+https://www.rplumber.io/articles/hosting.html#rstudio-connect-1.
 
 A couple of other approaches to hosting plumber are also made available:
 
- - PM2 - https://www.rplumber.io/docs/hosting/
- - Docker - https://www.rplumber.io/docs/docker/
- 
+ - PM2 - https://www.rplumber.io/articles/hosting.html#pm2-1
+ - Docker - https://www.rplumber.io/articles/hosting.html#docker-basic-
 ## Related Projects
 
 - [OpenCPU](https://www.opencpu.org/) - A server designed for hosting R APIs
@@ -120,8 +123,3 @@ A couple of other approaches to hosting plumber are also made available:
 - [jug](http://bart6114.github.io/jug/index.html) - *(development discontinued)*
   an R package similar to Plumber but uses a more programmatic approach to
   constructing the API.
-
-## Provenance
-
-plumber was originally released as the `rapier` package and has since been
-renamed (7/13/2015).

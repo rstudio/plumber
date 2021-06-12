@@ -9,7 +9,7 @@
 #' @section Storing secure keys:
 #' While it is very quick to get started with user session cookies using
 #' \code{plumber}, please exercise precaution when storing secure key information.
-#' If a malicious person were to gain access to the secret \code{key}, they woud
+#' If a malicious person were to gain access to the secret \code{key}, they would
 #' be able to eavesdrop on all \code{req$session} information and/or tamper with
 #' \code{req$session} information being processed.
 #'
@@ -29,7 +29,7 @@
 #'
 #' @param key The secret key to use. This must be consistent across all R sessions
 #'   where you want to save/restore encrypted cookies. It should be produced using
-#'   \code{\link{randomCookieKey}}. Please see the "Storing secure keys" section for more details
+#'   \code{\link{random_cookie_key}}. Please see the "Storing secure keys" section for more details
 #'   complex character string to bolster security.
 #' @param name The name of the cookie in the user's browser.
 #' @param expiration A number representing the number of seconds into the future
@@ -40,10 +40,15 @@
 #'   Defaults to \code{TRUE}.
 #' @param secure Boolean that adds the \code{Secure} cookie flag.  This should be set
 #'   when the route is eventually delivered over \href{https://en.wikipedia.org/wiki/HTTPS}{HTTPS}.
+#' @param same_site A character specifying the SameSite policy to attach to the cookie.
+#'   If specified, one of the following values should be given: "Strict", "Lax", or "None".
+#'   If "None" is specified, then the \code{secure} flag MUST also be set for the modern browsers to
+#'   accept the cookie. An error will be returned if \code{same_site = "None"} and \code{secure = FALSE}.
+#'   If not specified or a non-character is given, no SameSite policy is attached to the cookie.
 #' @export
 #' @seealso \itemize{
 #' \item \href{https://github.com/jeroen/sodium}{'sodium'}: R bindings to 'libsodium'
-#' \item \href{https://download.libsodium.org/doc/}{'libsodium'}: A Modern and Easy-to-Use Crypto Library
+#' \item \href{https://doc.libsodium.org/}{'libsodium'}: A Modern and Easy-to-Use Crypto Library
 #' \item \href{https://github.com/r-lib/keyring}{'keyring'}: Access the system credential store from R
 #' \item \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#Directives}{Set-Cookie flags}: Descriptions of different flags for \code{Set-Cookie}
 #' \item \href{https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting}{Cross-site scripting}: A security exploit which allows an attacker to inject into a website malicious client-side code
@@ -52,19 +57,16 @@
 #' \dontrun{
 #'
 #' ## Set secret key using `keyring` (preferred method)
-#' keyring::key_set_with_value("plumber_api", plumber::randomCookieKey())
+#' keyring::key_set_with_value("plumber_api", plumber::random_cookie_key())
 #'
 #'
 #' # Load a plumber API
-#' pr <- plumb(system.file(file.path("examples", "01-append", "plumber.R"), package = "plumber"))
-#'
-#' # Add cookie support and retrieve secret key using `keyring`
-#' pr$registerHooks(
-#'   sessionCookie(
+#' plumb_api("plumber", "01-append") %>%
+#'   # Add cookie support via `keyring`
+#'   pr_cookie(
 #'     keyring::key_get("plumber_api")
-#'   )
-#' )
-#' pr$run()
+#'   ) %>%
+#'   pr_run()
 #'
 #'
 #' #### -------------------------------- ###
@@ -72,39 +74,47 @@
 #'
 #' ## Save key to a local file
 #' pswd_file <- "normal_file.txt"
-#' cat(plumber::randomCookieKey(), file = pswd_file)
+#' cat(plumber::random_cookie_key(), file = pswd_file)
 #' # Make file read-only
 #' Sys.chmod(pswd_file, mode = "0600")
 #'
 #'
 #' # Load a plumber API
-#' pr <- plumb(system.file(file.path("examples", "01-append", "plumber.R"), package = "plumber"))
-#'
-#' # Add cookie support and retrieve secret key from file
-#' pr$registerHooks(
-#'   sessionCookie(
+#' plumb_api("plumber", "01-append") %>%
+#'   # Add cookie support and retrieve secret key from file
+#'   pr_cookie(
 #'     readLines(pswd_file, warn = FALSE)
-#'   )
-#' )
-#' pr$run()
-#'
+#'   ) %>%
+#'   pr_run()
 #' }
-
-sessionCookie <- function(
+session_cookie <- function(
   key,
   name = "plumber",
   expiration = FALSE,
   http = TRUE,
-  secure = FALSE
+  secure = FALSE,
+  same_site = FALSE
 ) {
 
   if (missing(key)) {
-    stop("You must define an encryption key. Please see `?sessionCookie` for more details")
+    stop("You must define an encryption key. Please see `?session_cookie` for more details")
   }
   key <- asCookieKey(key)
 
   # force the args to evaluate
-  list(expiration, http, secure)
+  list(expiration, http, secure, same_site)
+
+  # sanity check the same_site and secure arguments
+  if (is.character(same_site)) {
+    same_site <- match.arg(same_site, c("Strict", "Lax", "None"))
+  } else {
+    same_site <- FALSE
+  }
+  if (identical(same_site, "None")) {
+    if (!secure) {
+      stop("You must set `secure = TRUE` when `same_site = \"None\"`. See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie")
+    }
+  }
 
   # Return a list that can be added to registerHooks()
   list(
@@ -129,13 +139,13 @@ sessionCookie <- function(
       session <- req$session
       # save session in a cookie
       if (!is.null(session)) {
-        res$setCookie(name, encodeCookie(session, key), expiration = expiration, http = http, secure = secure)
+        res$setCookie(name, encodeCookie(session, key), expiration = expiration, http = http, secure = secure, same_site = same_site)
       } else {
         # session is null
         if (!is.null(req$cookies[[name]])) {
           # no session to save, but had session to parse
           # remove cookie session cookie
-          res$removeCookie(name, "", expiration = expiration, http = http, secure = secure)
+          res$removeCookie(name, "", expiration = expiration, http = http, secure = secure, same_site = same_site)
         }
       }
 
@@ -146,14 +156,14 @@ sessionCookie <- function(
 
 #' Random cookie key generator
 #'
-#' Uses a cryptographically secure pseudorandom number generator from \code{sodium::\link[sodium]{random}} to generate a 64 digit hexadecimal string.  \href{https://github.com/jeroen/sodium}{'sodium'} wraps around \href{https://download.libsodium.org/doc/}{'libsodium'}.
+#' Uses a cryptographically secure pseudorandom number generator from [sodium::helpers()] to generate a 64 digit hexadecimal string.  \href{https://github.com/jeroen/sodium}{'sodium'} wraps around \href{https://doc.libsodium.org/}{'libsodium'}.
 #'
-#' Please see \code{\link{sessionCookie}} for more information on how to save the generated key.
+#' Please see \code{\link{session_cookie}} for more information on how to save the generated key.
 #'
 #' @return A 64 digit hexadecimal string to be used as a key for cookie encryption.
 #' @export
-#' @seealso \code{\link{sessionCookie}}
-randomCookieKey <- function() {
+#' @seealso \code{\link{session_cookie}}
+random_cookie_key <- function() {
   sodium::bin2hex(
     sodium::random(32)
   )
@@ -166,7 +176,7 @@ asCookieKey <- function(key) {
       "\n",
       "\n\t!! Cookie secret 'key' is `NULL`. Cookies will not be encrypted.      !!",
       "\n\t!! Support for unencrypted cookies is deprecated and will be removed. !!",
-      "\n\t!! Please see `?sessionCookie` for details.                           !!",
+      "\n\t!! Please see `?session_cookie` for details.                           !!",
       "\n"
     )
     return(NULL)
@@ -175,7 +185,7 @@ asCookieKey <- function(key) {
   if (!is.character(key)) {
     stop(
       "Illegal cookie secret 'key' detected.",
-      "\nPlease see `?sessionCookie` for details."
+      "\nPlease see `?session_cookie` for details."
     )
   }
 
@@ -190,7 +200,7 @@ asCookieKey <- function(key) {
       "\n",
       "\n\t!! Legacy cookie secret 'key' detected!                                         !!",
       "\n\t!! Support for legacy cookie secret 'key' is deprecated and will be removed.    !!",
-      "\n\t!! Please follow the instructions in `?sessionCookie` for creating a new secret key. !!",
+      "\n\t!! Please follow the instructions in `?session_cookie` for creating a new secret key. !!",
       "\n"
     )
 
@@ -212,7 +222,7 @@ encodeCookie <- function(x, key) {
   }
   xRaw <-
     x %>%
-    jsonlite::toJSON() %>%
+    toJSON() %>%
     charToRaw()
 
   if (is.null(key)) {
