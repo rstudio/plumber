@@ -1,3 +1,4 @@
 .globals <- new.env()
+.globals$parsers <- list()
 .globals$serializers <- list()
-.globals$processors <- new.env()
+.globals$docs <- list()

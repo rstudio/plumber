@@ -10,7 +10,7 @@ Before you file an issue, please upgrade to the latest development of plumber fr
 
 # First, restart R.
 # To install latest plumber from GitHub:
-remotes::install_github("trestletech/plumber")
+remotes::install_github("rstudio/plumber")
 
 See Shiny's guide to writing good bug reports for general guidance: https://github.com/rstudio/shiny/wiki/Writing-Good-Bug-Reports. The better your report is, the likelier we are to be able to reproduce and ultimately solve it.
 -->

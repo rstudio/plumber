@@ -14,23 +14,27 @@ test_that("empty contentType errors", {
 
 test_that("contentType works in files", {
 
-  res <- PlumberResponse$new()
-
-  r <- plumber$new(test_path("files/content-type.R"))
-  val <- r$serve(make_req("GET", "/"), res)
+  r <- pr(test_path("files/content-type.R"))
+  val <- r$call(make_req("GET", "/"))
   expect_equal(val$headers$`Content-Type`, "text/plain")
 })
 
 test_that("Parses charset properly", {
-  charset <- getCharacterSet("Content-Type: text/html; charset=latin1")
+  charset <- get_character_set("Content-Type: text/html; charset=latin1")
   expect_equal(charset, "latin1")
-  charset <- getCharacterSet("Content-Type: text/html; charset=greek8")
+  charset <- get_character_set("Content-Type: text/html; charset=greek8")
   expect_equal(charset, "greek8")
 })
 
 test_that("Defaults charset when not there", {
-  charset <- getCharacterSet("Content-Type: text/html")
+  charset <- get_character_set("Content-Type: text/html")
   expect_equal(charset, "UTF-8")
-  charset <- getCharacterSet(NULL)
+  charset <- get_character_set(NULL)
   expect_equal(charset, "UTF-8")
+})
+
+
+test_that("File extensions can be found from the content type", {
+  expect_equal(get_fileext("application/json"), "json")
+  expect_equal(get_fileext("not a match"), NULL)
 })

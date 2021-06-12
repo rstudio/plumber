@@ -10,16 +10,18 @@ make_req_cookie <- function(verb, path, cookie) {
   req <- new.env()
   req$REQUEST_METHOD <- toupper(verb)
   req$PATH_INFO <- path
-  req$rook.input <- list(read_lines = function() { "" })
+  req$rook.input <- list(read_lines = function() { "" },
+                         rewind = function() {},
+                         read = function() { charToRaw("") })
   if (!missing(cookie)){
     req$HTTP_COOKIE <- cookie
   }
   req
 }
 
-test_that("sessionCookie throws missing key", {
+test_that("session_cookie throws missing key", {
   expect_error(
-    sessionCookie(),
+    session_cookie(),
     "You must define an encryption key"
   )
 })
@@ -27,13 +29,13 @@ test_that("sessionCookie throws missing key", {
 test_that("cookies are set", {
   skip_if_no_cookie_support()
 
-  r <- plumber$new()
+  r <- pr()
   expr <- expression(function(req, res){ req$session <- list(abc = 1234); TRUE })
 
   r$handle("GET", "/", expr)
 
-  key <- randomCookieKey()
-  sc <- sessionCookie(
+  key <- random_cookie_key()
+  sc <- session_cookie(
     key,
     name = "plcook"
   )
@@ -52,13 +54,13 @@ test_that("cookies are set", {
 test_that("cookies are unset", {
   skip_if_no_cookie_support()
 
-  r <- plumber$new()
+  r <- pr()
   exprRemoveSession <- expression(function(req, res){ req$session <- NULL; TRUE })
 
   r$handle("GET", "/", exprRemoveSession)
 
-  key <- randomCookieKey()
-  sc <- sessionCookie(
+  key <- random_cookie_key()
+  sc <- session_cookie(
     key,
     name = "plcook"
   )
@@ -83,14 +85,14 @@ test_that("cookies are unset", {
 test_that("cookies are read", {
   skip_if_no_cookie_support()
 
-  r <- plumber$new()
+  r <- pr()
 
   expr <- expression(function(req, res){ req$session$abc })
 
   r$handle("GET", "/", expr)
 
-  key <- randomCookieKey()
-  sc <- sessionCookie(
+  key <- random_cookie_key()
+  sc <- session_cookie(
     key,
     name = "plcook"
   )
@@ -114,14 +116,14 @@ test_that("cookies are read", {
 test_that("invalid cookies/JSON are handled", {
   skip_if_no_cookie_support()
 
-  r <- plumber$new()
+  r <- pr()
 
   expr <- expression(function(req, res){ ifelse(is.null(req$session), "no session", req$session) })
 
   r$handle("GET", "/", expr)
 
-  key <- randomCookieKey()
-  sc <- sessionCookie(
+  key <- random_cookie_key()
+  sc <- session_cookie(
     key,
     name = "plcook"
   )
@@ -129,7 +131,7 @@ test_that("invalid cookies/JSON are handled", {
 
   res <- PlumberResponse$new()
 
-  badKey <- randomCookieKey()
+  badKey <- random_cookie_key()
   x <- list(abc = 1234)
   encodedX <- encodeCookie(x, asCookieKey(badKey))
   expect_silent({
@@ -142,4 +144,38 @@ test_that("invalid cookies/JSON are handled", {
     )
   })
   expect_equal(res$body, jsonlite::toJSON("no session"))
+})
+
+test_that("cookie attributes are set", {
+  skip_if_no_cookie_support()
+
+  r <- pr()
+  expr <- expression(function(req, res){ req$session <- list(abc = 1234); TRUE })
+
+  r$handle("GET", "/", expr)
+
+  key <- random_cookie_key()
+  sc <- session_cookie(
+    key,
+    name = "plcook",
+    expiration = 10,
+    http = TRUE,
+    secure = TRUE,
+    same_site = "None"
+  )
+
+  r$registerHooks(sc)
+
+  res <- PlumberResponse$new()
+  r$serve(make_req_cookie("GET", "/"), res)
+
+  cook <- res$headers[["Set-Cookie"]]
+  expect_match(cook, "^plcook")
+  expect_match(cook, "Expires=[^;]+(?:;|$)")
+  expect_match(cook, "Max-Age=\\s*\\d+(?:;|$)")
+  expect_match(cook, "HttpOnly(?:;|$)")
+  expect_match(cook, "Secure(?:;|$)")
+  expect_match(cook, "SameSite=None(?:;|$)")
+  cook <- parseCookies(cook)$plcook
+  expect_equal(decodeCookie(cook, asCookieKey(key)), list(abc = 1234))
 })

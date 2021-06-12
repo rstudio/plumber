@@ -1,0 +1,85 @@
+on:
+  push:
+    branches:
+      - master
+      - rc-**
+  pull_request:
+    branches: master
+
+name: pkgdown
+
+jobs:
+  pkgdown:
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: ubuntu-18.04,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"}
+    env:
+      RSPM: ${{ matrix.config.rspm }}
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: r-lib/actions/setup-r@master
+        id: install-r
+        with:
+          r-version: ${{ matrix.config.r }}
+
+      - uses: r-lib/actions/setup-pandoc@master
+
+      - name: Install pak and query dependencies
+        shell: Rscript {0}
+        run: |
+          install.packages("pak", repos = "https://r-lib.github.io/p/pak/dev/")
+          saveRDS(pak::pkg_deps_tree("local::.", dependencies = TRUE), ".github/r-depends.rds")
+      - name: Cache R packages
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ matrix.config.os }}-${{ steps.install-r.outputs.installed-r-version }}-1-pkgdown-${{ hashFiles('.github/r-depends.rds') }}
+          restore-keys: |
+            ${{ matrix.config.os }}-${{ steps.install-r.outputs.installed-r-version }}-1-pkgdown-
+            ${{ matrix.config.os }}-${{ steps.install-r.outputs.installed-r-version }}-1-
+
+      - name: Install system dependencies
+        if: runner.os == 'Linux'
+        shell: Rscript {0}
+        run: |
+          pak::local_system_requirements(execute = TRUE)
+          pak::pkg_system_requirements("pkgdown", execute = TRUE)
+
+      - name: Install dependencies
+        shell: Rscript {0}
+        run: |
+          pak::local_install_dev_deps(upgrade = TRUE)
+          pak::pkg_install("pkgdown")
+
+      - name: Install package
+        run: R CMD INSTALL .
+
+      - name: Build Site (PR)
+        if: github.event_name != 'push'
+        shell: Rscript {0}
+        run: |
+          pkgdown::build_site(new_process = FALSE)
+      # Must validate after. Otherwise files are saved and `pkgdown::build_site()` gets mad
+      - name: Validate all topics exist (PR)
+        if: github.event_name != 'push'
+        shell: Rscript {0}
+        run: |
+          pkgdown::build_reference_index()
+          stopifnot(length(warnings()) == 0)
+
+      - name: Git Config
+        if: github.event_name == 'push'
+        run: |
+          git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com" && \
+            git config --local user.name "${GITHUB_ACTOR}"
+
+      - name: Build and Deploy Site
+        if: github.event_name == 'push'
+        shell: Rscript {0}
+        run: |
+          pkgdown::deploy_to_branch(new_process = FALSE)

@@ -7,7 +7,7 @@
 \alias{include_rmd}
 \title{Send File Contents as Response}
 \usage{
-include_file(file, res, content_type)
+include_file(file, res, content_type = getContentType(tools::file_ext(file)))
 
 include_html(file, res)
 
@@ -21,12 +21,13 @@ include_rmd(file, res, format = NULL)
 \item{res}{The response object into which we'll write}
 
 \item{content_type}{If provided, the given value will be sent as the
-\code{Content-type} header in the response.}
+\code{Content-Type} header in the response. Defaults to the contentType of the file extension.
+To disable the \code{Content-Type} header, set \code{content_type = NULL}.}
 
 \item{format}{Passed as the \code{output_format} to \code{rmarkdown::render}}
 }
 \description{
-Returns the file at the given path as the response.
+Returns the file at the given path as the response. If you want an endpoint to return a file as an attachment for user to download see \code{\link[=as_attachment]{as_attachment()}}.
 }
 \details{
 \code{include_html} will merely return the file with the proper

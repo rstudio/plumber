@@ -1,88 +1,63 @@
-# Comments
+## Comments
 
-## 2018-6-4
-This submission is done by Barret Schloerke <barret@rstudio.com> on behalf of Jeff Allen <cran@trestletech.com>. Please submit any changes to be made to <barret@rstudio.com>.
+#### 2020-3-23
+
+Bug fixes and new features.
+
+CRAN checks:
+* I have disabled the brittle test that is currently failing on https://www.r-project.org/nosvn/R.check/r-devel-windows-x86_64-gcc10-UCRT/plumber-00check.html . Checking this test on windows GHA only.
+* I can not see why this installation is failing: https://www.r-project.org/nosvn/R.check/r-release-windows-ix86+x86_64/plumber-00check.html
+
+Please let me know if there is anything else I can provide.
+
+Thank you,
+Barret
+
+
+#### 2020-1-5
+
+These checks have naturally resolved.
 
 - Barret
 
 
+#### 2020-12-13
+
+Dear maintainer,
+
+Please see the problems shown on
+<https://cran.r-project.org/web/checks/check_results_plumber.html>.
+
+Please correct before 2021-01-08 to safely retain your package on CRAN.
+
+Best,
+-k
+
+
+
 ## Test environments
 
-All NOTEs related to invalid URLs http:localhost:8000 are **false positives**.  The URL makes sense when looking at the example within the README.md file.
+* local macOS, R 4.0.2
+* GitHub Actions
+  * macOS
+    * oldrel, release, devel
+  * windows
+    * release, devel
+  * ubuntu18
+    * 3.4, 3.5, oldrel, release, devel
+  * ubuntu16
+    * 3.4, 3.5, oldrel, release, devel
+* devtools::
+  * check_win_devel()
+  * check_win_release()
+  * check_win_oldrelease()
 
-* local OS X install, R 3.5.0, --run-dontcheck
-  * checking CRAN incoming feasibility ... NOTE
-  Found the following (possibly) invalid URLs:
-  URL: http://localhost:8000/echo?msg=hello
-    From: README.md
-    Status: Error
-    Message: libcurl error code 7:
-        Failed to connect to localhost port 8000: Connection refused
-  URL: http://localhost:8000/plot
-    From: README.md
-    Status: Error
-    Message: libcurl error code 7:
-        Failed to connect to localhost port 8000: Connection refused
-  * 0 errors | 0 warnings | 1 notes
-
-* ubuntu 14.04.5 (on travis-ci), R version 3.5.0 (2017-01-27)
-  * 0 errors | 0 warnings | 0 notes
-
-* devtools::build_win()
-  * x86_64-w64-mingw32, R version 3.5.0 (2018-04-23)
-  * x86_64-w64-mingw32, R Under development (unstable) (2018-06-03 r74839)
-    * checking CRAN incoming feasibility ... NOTE
-    Found the following (possibly) invalid URLs:
-      URL: http://localhost:8000/echo?msg=hello
-        From: README.md
-        Status: Error
-        Message: libcurl error code 7:
-          	Failed to connect to localhost port 8000: Connection refused
-      URL: http://localhost:8000/plot
-        From: README.md
-        Status: Error
-        Message: libcurl error code 7:
-          	Failed to connect to localhost port 8000: Connection refused
-    * 0 errors | 0 warnings | 1 note
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
 
-* r-hub
+## revdepcheck results
 
-  * Platform:   Ubuntu Linux 16.04 LTS, R-release, GCC
-    * checked with `_R_CHECK_FORCE_SUGGESTS_=0`
-    http://builder.r-hub.io/status/plumber_0.4.6.tar.gz-7eb7117f2cf74e1b8880c46e7819ab61
-    ❯ checking CRAN incoming feasibility ... NOTE
-      Maintainer: ‘Jeff Allen <cran@trestletech.com>’
+We checked 13 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
-      Found the following (possibly) invalid URLs:
-        URL: http://localhost:8000/echo?msg=hello
-          From: README.md
-          Status: Error
-          Message: libcurl error code 7:
-          	Failed to connect to localhost port 8000: Connection refused
-        URL: http://localhost:8000/plot
-          From: README.md
-          Status: Error
-          Message: libcurl error code 7:
-          	Failed to connect to localhost port 8000: Connection refused
-    0 errors ✔ | 0 warnings ✔ | 1 note ✖
-
-
-  * rhub platform issues not related to code.  These operating systems failed to complete properly and I do not have the ability to fix the error.
-    * Windows Server 2008 R2 SP1, R-release, 32/64 bit
-      * 'stringi' is not available
-    * Windows Server 2008 R2 SP1, R-devel, 32/64 bit
-      * 'stringi' is not available
-    * Fedora Linux, R-devel, clang, gfortran
-      * Has trouble opening a png device
-
-
-## Reverse dependencies
-
-* Revdep maintainers were not contacted as this release is for bug fixes and enhancements from particular maintainers.
-
-* I have run R CMD check on the 3 downstream dependencies.
-  * https://github.com/trestletech/plumber/blob/master/revdep/problems.md
-  * No errors, warnings, or notes were introduced due to changes in leaflet
-
-* All revdeps were able to be tested
+ * We saw 0 new problems
+ * We failed to check 0 packages

@@ -1,7 +1,7 @@
 context("test-query-with-multibytes")
 
 test_that("Support multi-bytes queries", {
-  r <- plumber$new(test_path("files/query-with-multibytes.R"))
+  r <- pr(test_path("files/query-with-multibytes.R"))
   res <- PlumberResponse$new()
 
   req <- make_req("GET", "/msg", "?param1=%E4%B8%AD%E6%96%87&param2=%E4%BD%A0%E5%A5%BD")

@@ -1,22 +1,22 @@
 context("global settings")
 
-test_that("parseOneGlobal parses with various formats", {
+test_that("plumbOneGlobal parses with various formats", {
   fields <- list(info=list())
 
   # No leading space
-  g <- parseOneGlobal(fields, "#'@apiTitle Title")
+  g <- plumbOneGlobal(fields, "#'@apiTitle Title")
   expect_equal(g$info$title, "Title")
 
   # Plumber-style
-  g <- parseOneGlobal(fields, "#* @apiTitle Title")
+  g <- plumbOneGlobal(fields, "#* @apiTitle Title")
   expect_equal(g$info$title, "Title")
 
   #Extra space
-  g <- parseOneGlobal(fields, "#*    @apiTitle     Title   ")
+  g <- plumbOneGlobal(fields, "#*    @apiTitle     Title   ")
   expect_equal(g$info$title, "Title")
 })
 
-test_that("parseGlobals works", {
+test_that("plumbGlobals works", {
   # Test all fields
   lines <- c("#' @apiTitle title",
              "#' @apiDescription description",
@@ -24,15 +24,14 @@ test_that("parseGlobals works", {
              "#' @apiContact contact",
              "#' @apiLicense license",
              "#' @apiVersion version",
-             "#' @apiHost host",
-             "#' @apiBasePath basepath",
-             "#' @apiSchemes schemes",
-             "#' @apiConsumes consumes",
-             "#' @apiProduces produces",
+             "#' @apiTag t d",
              "#' @apiTag tag description",
-             "#' @apiTag tag2 description2")
+             "#' @apiTag tag2 description2",
+             "#' @apiTag tag3 description in part",
+             "#' @apiTag 'tag4 space' spaces",
+             "#' @apiTag \"tag5 space\" spaces")
 
-  fields <- parseGlobals(lines)
+  fields <- plumbGlobals(lines)
 
   expect_equal(fields, list(
     info=list(
@@ -43,17 +42,30 @@ test_that("parseGlobals works", {
       license="license",
       version="version"
     ),
-    host="host",
-    basePath="basepath",
-    schemes="schemes",
-    consumes="consumes",
-    produces="produces",
-    tags=data.frame(name=c("tag","tag2"),description=c("description","description2"), stringsAsFactors = FALSE)
+    tags=list(list(name="t", description="d"),
+              list(name="tag", description="description"),
+              list(name="tag2", description="description2"),
+              list(name="tag3", description="description in part"),
+              list(name="tag4 space", description="spaces"),
+              list(name="tag5 space", description="spaces"))
+  ))
+
+  # Test contact and licence object
+  lines <- c('#* @apiContact list(name = "API Support", url = "http://www.example.com/support", email = "support@example.com")',
+             '#* @apiLicense list(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0.html")')
+
+  fields <- plumbGlobals(lines)
+
+  expect_equal(fields, list(
+    info=list(
+      contact=list(name = "API Support", url = "http://www.example.com/support", email = "support@example.com"),
+      license=list(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0.html")
+    )
   ))
 })
 
 test_that("Globals can't contain duplicate tags", {
   lines <- c("#* @apiTag test description1",
              "#* @apiTag test description2")
-  expect_error(parseGlobals(lines), "Duplicate tag definition specified.")
+  expect_error(plumbGlobals(lines), "Duplicate tag definition specified.")
 })

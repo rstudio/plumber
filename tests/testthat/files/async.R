@@ -54,3 +54,24 @@ function() {
 function() {
   1
 }
+
+
+#' @serializer png
+#' @get /promise_plot1
+function(n = 100) {
+  promises::promise_resolve(runif(n)) %...>%
+  {
+    dt <- .
+    hist(dt)
+  }
+}
+
+#' @serializer png
+#' @get /promise_plot2
+function(n = 100) {
+  promises::promise_resolve(runif(n)) %...>%
+  {
+    dt <- .
+    plot(dt)
+  }
+}

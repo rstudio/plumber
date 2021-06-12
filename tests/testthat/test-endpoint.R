@@ -7,43 +7,73 @@ test_that("Endpoints execute in their environment", {
   foo <- parse(text="foo <- function(){ a }")
 
   r <- PlumberEndpoint$new('verb', 'path', foo, env, 1:2)
-  expect_equal(r$exec(), 5)
+  expect_equal(r$exec(req = list(), res = 2), 5)
 })
 
 test_that("Missing lines are ok", {
   expect_silent({
-    PlumberEndpoint$new('verb', 'path', { 1 }, environment())
+    PlumberEndpoint$new('verb', 'path', { function() { 1 }}, new.env(parent = globalenv()))
   })
 })
 
 test_that("Endpoints are exec'able with named arguments.", {
   foo <- parse(text="foo <- function(x){ x + 1 }")
-  r <- PlumberEndpoint$new('verb', 'path', foo, environment())
-  expect_equal(r$exec(x=3), 4)
+  r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
+  expect_equal(r$exec(req = list(args = list(x = 3)), res = 20), 4)
 })
 
-test_that("Unnamed arguments error", {
-  foo <- parse(text="foo <- function(){ 1 }")
-  r <- PlumberEndpoint$new('verb', 'path', foo, environment())
-  expect_error(r$exec(3))
+test_that("Unnamed arguments do not throw an error", {
+  foo <- parse(text="foo <- function(){ -1 }")
+  r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
+  expect_equal(r$exec(req = list(args = list(3)), res = 100), -1)
 
-  foo <- parse(text="foo <- function(x, ...){ x + 1 }")
-  r <- PlumberEndpoint$new('verb', 'path', foo, environment())
-  expect_error(r$exec(x=1, 3))
+  foo <- parse(text="foo <- function(req, res, x, ...){ x + sum(1, ...) }")
+  r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
+  expect_equal(r$exec(req = list(args = list(x = 3, 1)), res = 100), 5)
 })
 
 test_that("Ellipses allow any named args through", {
-  foo <- parse(text="function(...){ sum(unlist(list(...))) }")
-  r <- PlumberEndpoint$new('verb', 'path', foo, environment())
-  expect_equal(r$exec(a=1, b=2, c=3), 6)
+  foo <- parse(text="function(req, res, ...){ sum(unlist(list(...))) }")
+  r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
+  expect_equal(r$exec(req = list(args = list(a=1, b=2, c=3)), res = 20), 6)
 
-  foo <- parse(text="function(...){ list(...) }")
-  r <- PlumberEndpoint$new('verb', 'path', foo, environment())
-  expect_equal(r$exec(a="aa", b="ba"), list(a="aa", b="ba"))
+  for ( txt in c(
+      "", # with no req or res formals
+      "req, res, "
+  )) {
+    foo <- parse(text=paste0("function(", txt, "...){ ret <- list(...); ret[!names(ret) %in% c('req', 'res')] }"))
+    r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
+    expect_equal(r$exec(req = list(args = list(a="aa", b="ba")), res = 2), list(a="aa", b="ba"))
+    expect_equal(r$exec(req = list(args = list(a="aa1", a="aa2", b = "ba")), res = 2), list(a="aa1", a="aa2", b = "ba"))
+
+    foo <- parse(text=paste0("function(", txt, "a, ...){ ret <- list(a = a, ...); ret[!names(ret) %in% c('req', 'res')] }"))
+    r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
+    expect_equal(r$exec(req = list(args = list(a="aa1", a="aa2", b = "ba")), res = 2), list(a = "aa1", b = "ba"))
+  }
+})
+
+test_that("If only req and res are defined, duplicated arguments do not throw an error", {
+  full_req <- list(args = list(req = 1, req = 2, res = 3, res = 4))
+  full_res <- list(args = list(res = 1, res = 2, res = 3, res = 4))
+  foo <- parse(text="function(req){ req }")
+  r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
+  expect_equal(r$exec(req = full_req, res = full_res), full_req)
+
+  foo <- parse(text="function(res){ res }")
+  r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
+  expect_equal(r$exec(req = full_req, res = full_res), full_res)
+
+  foo <- parse(text="function(req, res){ list(req, res) }")
+  r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
+  expect_equal(r$exec(req = full_req, res = full_res), list(full_req, full_res))
+
+  foo <- parse(text="function(req, res, ...){ list(req, res, ...) }")
+  r <- PlumberEndpoint$new('verb', 'path', foo, new.env(parent = globalenv()))
+  expect_equal(r$exec(req = full_req, res = full_res), list(full_req, full_res))
 })
 
 test_that("Programmatic endpoints work", {
-  r <- plumber$new()
+  r <- Plumber$new()
 
   serializer <- "ser"
   expr <- expression(function(req, res){res$setHeader("expr", TRUE)})
@@ -66,7 +96,7 @@ test_that("Programmatic endpoints work", {
 })
 
 test_that("Programmatic endpoints with functions work", {
-  r <- plumber$new()
+  r <- Plumber$new()
 
   expr <- function(req, res){res$setHeader("expr", TRUE)}
 
@@ -83,4 +113,21 @@ test_that("Programmatic endpoints with functions work", {
 
   h <- res$headers
   expect_true(h$expr)
+})
+
+test_that("Path rewrites correctly", {
+  foo_pr <- pr() %>%
+    pr_get("/foo", function() "foo")
+
+  foo <- foo_pr$endpoints[[1]][[1]]
+
+  expect_true("foo" %in% names(foo_pr$routes))
+  expect_true(foo$matchesPath("/foo"))
+  expect_false(foo$matchesPath("/bar"))
+
+  foo$setPath("bar")
+
+  expect_false("foo" %in% names(foo_pr$routes))
+  expect_false(foo$matchesPath("/foo"))
+  expect_true(foo$matchesPath("/bar"))
 })
