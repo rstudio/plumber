@@ -63,7 +63,7 @@ responsesSpecification <- function(endpts){
     if (!length(resps[[resp]]$content)) {
       ctype <- NULL
       if (is.function(endpts$serializer)) {
-        # Must safe-guard against partial name matching 
+        # Must safe-guard against partial name matching
         # since we are reaching into the function env
         ctype <- environment(endpts$serializer)[["headers"]][["Content-Type"]]
       }
@@ -218,13 +218,17 @@ removeNaOrNulls <- function(x) {
   if (length(x) == 0) {
     return(x)
   }
-  # Prevent example from being wiped out
-  if (!isNaOrNull(x$example)) {
+  # Prevent example/s from being wiped out
+  saveExamples <- FALSE
+  saveExample <- FALSE
+  if (!isNaOrNull(x[["example"]])) {
     saveExample <- TRUE
-    savedExample <- x$example
-    x$example <- NULL
-  } else {
-    saveExample <- FALSE
+    savedExample <- x[["example"]]
+    x[["example"]] <- NULL
+  } else if (!isNaOrNull(x[["examples"]])) {
+    saveExamples <- TRUE
+    savedExamples <- x[["examples"]]
+    x[["examples"]] <- NULL
   }
 
   # remove any `NA` or `NULL` elements
@@ -239,7 +243,9 @@ removeNaOrNulls <- function(x) {
 
   # Put example back in
   if (saveExample) {
-    ret$example <- savedExample
+    ret[["example"]] <- savedExample
+  } else if (saveExamples) {
+    ret[["examples"]] <- savedExamples
   }
 
   ret
