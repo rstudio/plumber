@@ -365,7 +365,7 @@ make_parser <- function(aliases) {
 #' @examples
 #' \dontrun{
 #' # Overwrite `text/json` parsing behavior to not allow JSON vectors to be simplified
-#' #* @parser json simplifyVector = FALSE
+#' #* @parser json list(simplifyVector = FALSE)
 #' # Activate `rds` parser in a multipart request
 #' #* @parser multi
 #' #* @parser rds
