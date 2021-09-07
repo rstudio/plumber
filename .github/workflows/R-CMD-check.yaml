@@ -42,6 +42,8 @@ jobs:
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
 
+    needs:
+      - rversions
     strategy:
       fail-fast: false
       matrix:
