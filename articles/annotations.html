@@ -546,7 +546,7 @@
 <tbody><tr class="odd">
 <td><code>@plumber</code></td>
 <td>None</td>
-<td>Modify plumber router from plumber file. The plumber router provided to the function <strong>must</strong> be returned.</td>
+<td>Modify plumber router from plumber file. The plumber router provided to the function <strong>must</strong> be returned. In most cases, anonymous functions are used following the <code>#* @plumber</code> annotation. However, named functions can also be used. When a named function is used, it must be referenced without parentheses.</td>
 </tr></tbody>
 </table>
 <div id="annotations-example-4" class="section level5">
@@ -558,7 +558,17 @@
   <span class="va">pr</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="../reference/pr_set_debug.html">pr_set_debug</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="../reference/pr_set_docs.html">pr_set_docs</a></span><span class="op">(</span><span class="st">"swagger"</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<span class="op">}</span>
+
+<span class="co"># Named function</span>
+<span class="va">debug_swagger</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pr</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">pr</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/pr_set_debug.html">pr_set_debug</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="../reference/pr_set_docs.html">pr_set_docs</a></span><span class="op">(</span><span class="st">"swagger"</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="co">#* @plumber</span>
+<span class="va">debug_swagger</span></code></pre></div>
 </div>
 <div id="equivalent-programmatic-usage-3" class="section level5">
 <h5 class="hasAnchor">
