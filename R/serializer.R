@@ -231,6 +231,26 @@ serializer_unboxed_json <- function(auto_unbox = TRUE, ..., type = "application/
   serializer_json(auto_unbox = auto_unbox, ..., type = type)
 }
 
+#' @describeIn serializers GeoJSON serializer. See also [geojsonsf::sf_geojson()] and [[geojsonsf::sfc_geojson()]].
+#' @inheritParams geojsonsf::sf_geojson
+#' @inheritParams geojsonsf::sfc_geojson
+#' @export
+serializer_geojson <- function(..., type = "application/geo+json") {
+  serializer_content_type(type, function(val) {
+    if (any(class(val) == "sfc")) {
+
+      geojsonsf::sfc_geojson(val, ...)
+
+    } else if (any(class(val) == "sf")) {
+
+      geojsonsf::sf_geojson(val, ...)
+
+    } else {
+      stop('Object must be of class "sf" or "sfc"', call. = FALSE)
+    }
+
+  })
+}
 
 
 
@@ -603,6 +623,7 @@ add_serializers_onLoad <- function() {
   register_serializer("tsv",         serializer_tsv)
   register_serializer("feather",     serializer_feather)
   register_serializer("yaml",        serializer_yaml)
+  register_serializer("geojson",     serializer_geojson)
 
   # text
   register_serializer("text",   serializer_text)
