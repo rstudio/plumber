@@ -50,7 +50,8 @@ Suggests:
     future,
     rstudioapi,
     spelling,
-    mockery (>= 0.4.2)
+    mockery (>= 0.4.2),
+    geojsonsf
 RoxygenNote: 7.1.1
 Collate:
     'async.R'
