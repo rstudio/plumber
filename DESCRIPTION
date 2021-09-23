@@ -10,7 +10,6 @@ Authors@R: c(
   person("Bruno", "Tremblay", role = "ctb", email = "cran@neoxone.com"),
   person("Frans", "van Dunné", role = "ctb", email = "frans@ixpantia.com"),
   person("Sebastiaan", "Vandewoude", role="ctb", email = "sebastiaanvandewoude@gmail.com"),
-  person("Josiah", "Parry", role = "ctb", email = "josiah.parry@gmail.com", comment = c(ORCID = "0000-0001-9910-865X")),
   person(family = "RStudio", role = c("cph", "fnd")))
 License: MIT + file LICENSE
 BugReports: https://github.com/rstudio/plumber/issues
@@ -51,7 +50,8 @@ Suggests:
     rstudioapi,
     spelling,
     mockery (>= 0.4.2),
-    geojsonsf
+    geojsonsf,
+    sf
 RoxygenNote: 7.1.1
 Collate:
     'async.R'
