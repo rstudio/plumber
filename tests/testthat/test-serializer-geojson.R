@@ -1,5 +1,3 @@
-context("geojson serializer")
-
 test_that("GeoJSON serializes properly", {
   skip_if_not_installed("geojsonsf")
   skip_if_not_installed("sf")
