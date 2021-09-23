@@ -109,6 +109,40 @@ test_that("Test feather parser", {
   expect_equal(parsed, r_object)
 })
 
+test_that("Test geojson parser", {
+  skip_if_not_installed("geojsonsf")
+  skip_if_not_installed("sf")
+
+  # Test sf object w/ fields
+  geojson <- '{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"a":3},"geometry":{"type":"Point","coordinates":[1,2]}},{"type":"Feature","properties":{"a":4},"geometry":{"type":"Point","coordinates":[3,4]}}]}'
+  parsed <- parse_body(geojson, "application/geo+json", make_parser("geojson"))
+  expect_equal(parsed, geojson_sf(geojson))
+
+  # Test sfc
+  geojson <- '[
+  { "type":"Point","coordinates":[0,0]},
+  {"type":"LineString","coordinates":[[0,0],[1,1]]}
+  ]'
+  parsed <- parse_body(geojson, "application/geo+json", make_parser("geojson"))
+  expect_equal(parsed, geojson_sf(geojson))
+
+  # Test simple sf object
+  geojson <- '{ "type" : "Point", "coordinates" : [0, 0] }'
+  parsed <- parse_body(geojson, "application/geo+json", make_parser("geojson"))
+  expect_equal(parsed, geojson_sf(geojson))
+
+  # Test geojson file
+  tmp <- tempfile()
+  on.exit({
+    file.remove(tmp)
+  }, add = TRUE)
+
+  writeLines(geojson, tmp)
+  val <- readBin(tmp, "raw", 1000)
+  parsed <- parse_body(val, "application/geo+json", make_parser("geojson"))
+  expect_equal(parsed, geojson_sf(geojson))
+
+})
 
 test_that("Test multipart output is reduced for argument matching", {
   bin_file <- test_path("files/multipart-file-names.bin")

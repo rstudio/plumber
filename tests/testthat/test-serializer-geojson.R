@@ -6,7 +6,7 @@ test_that("GeoJSON serializes properly", {
 
   # Objects taken from ?st_sf() examples.
   sfc <- sf::st_sfc(sf::st_point(1:2), sf::st_point(3:4))
-  sf <- sf::st_sf(a = 3:4, g)
+  sf <- sf::st_sf(a = 3:4, sfc)
 
   # Test sfc
   val <- serializer_geojson()(sfc, data.frame(), PlumberResponse$new(), stop)
