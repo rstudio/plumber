@@ -116,7 +116,7 @@ test_that("Test geojson parser", {
   # Test sf object w/ fields
   geojson <- '{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"a":3},"geometry":{"type":"Point","coordinates":[1,2]}},{"type":"Feature","properties":{"a":4},"geometry":{"type":"Point","coordinates":[3,4]}}]}'
   parsed <- parse_body(geojson, "application/geo+json", make_parser("geojson"))
-  expect_equal(parsed, geojson_sf(geojson))
+  expect_equal(parsed, geojsonsf::geojson_sf(geojson))
 
   # Test sfc
   geojson <- '[
@@ -124,12 +124,12 @@ test_that("Test geojson parser", {
   {"type":"LineString","coordinates":[[0,0],[1,1]]}
   ]'
   parsed <- parse_body(geojson, "application/geo+json", make_parser("geojson"))
-  expect_equal(parsed, geojson_sf(geojson))
+  expect_equal(parsed, geojsonsf::geojson_sf(geojson))
 
   # Test simple sf object
   geojson <- '{ "type" : "Point", "coordinates" : [0, 0] }'
   parsed <- parse_body(geojson, "application/geo+json", make_parser("geojson"))
-  expect_equal(parsed, geojson_sf(geojson))
+  expect_equal(parsed, geojsonsf::geojson_sf(geojson))
 
   # Test geojson file
   tmp <- tempfile()
@@ -140,7 +140,7 @@ test_that("Test geojson parser", {
   writeLines(geojson, tmp)
   val <- readBin(tmp, "raw", 1000)
   parsed <- parse_body(val, "application/geo+json", make_parser("geojson"))
-  expect_equal(parsed, geojson_sf(geojson))
+  expect_equal(parsed, geojsonsf::geojson_sf(geojson))
 
 })
 

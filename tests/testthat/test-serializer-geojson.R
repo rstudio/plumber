@@ -30,6 +30,6 @@ test_that("Errors call error handler", {
   }
 
   expect_equal(errors, 0)
-  serializer_geojson()(parse(text="hi"), data.frame(), PlumberResponse$new("csv"), errorHandler = errHandler)
+  serializer_geojson()(parse(text="h$534i} {!"), data.frame(), PlumberResponse$new(), errorHandler = errHandler)
   expect_equal(errors, 1)
 })
