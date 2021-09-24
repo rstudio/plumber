@@ -234,12 +234,13 @@ serializer_unboxed_json <- function(auto_unbox = TRUE, ..., type = "application/
 #' @describeIn serializers GeoJSON serializer. See also [geojsonsf::sf_geojson()] and [[geojsonsf::sfc_geojson()]].
 #' @export
 serializer_geojson <- function(..., type = "application/geo+json") {
+  if (!requireNamespace("geojsonsf", quietly = TRUE)) {
+    stop("`geojsonsf` must be installed for `serializer_geojson` to work")
+  }
   serializer_content_type(type, function(val) {
     if (inherits(val, "sfc")) return(geojsonsf::sfc_geojson(val, ...))
     if (inherits(val, "sf"))  return(geojsonsf::sf_geojson(val, ...))
-    if (!requireNamespace("geojsonsf", quietly = TRUE)) {
-      stop("`geojsonsf` must be installed for `serializer_geojson` to work")
-    }
+    stop("Did not receive an `sf` or `sfc` object. ")
   })
 }
 
