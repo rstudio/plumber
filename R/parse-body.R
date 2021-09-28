@@ -386,6 +386,16 @@ parser_json <- function(...) {
   })
 }
 
+#' @describeIn parsers GeoJSON parser. See [geojsonsf::geojson_sf()] for more details.
+#' @export
+parser_geojson <- function(...) {
+  if (!requireNamespace("geojsonsf", quietly = TRUE)) {
+    stop("`geojsonsf` must be installed for `parser_geojson` to work")
+  }
+  parser_text(function(val) {
+    geojsonsf::geojson_sf(val, ...)
+  })
+}
 
 #' @describeIn parsers Helper parser to parse plain text
 #' @param parse_fn function to further decode a text string into an object
@@ -564,6 +574,7 @@ register_parsers_onLoad <- function() {
   # yaml types: https://stackoverflow.com/a/38000954/591574
   register_parser("yaml",    parser_yaml,    fixed = c("text/vnd.yaml", "application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"))
   register_parser("none",    parser_none,    regex = "*")
+  register_parser("geojson", parser_geojson, fixed = c("application/geo+json", "application/vdn.geo+json"))
 
   parser_all <- function() {
     stop("This function should never be called. It should be handled by `make_parser('all')`")

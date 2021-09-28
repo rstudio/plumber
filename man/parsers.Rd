@@ -3,6 +3,7 @@
 \name{parser_form}
 \alias{parser_form}
 \alias{parser_json}
+\alias{parser_geojson}
 \alias{parser_text}
 \alias{parser_yaml}
 \alias{parser_csv}
@@ -18,6 +19,8 @@
 parser_form()
 
 parser_json(...)
+
+parser_geojson(...)
 
 parser_text(parse_fn = identity)
 
@@ -67,6 +70,8 @@ See \code{\link[=registered_parsers]{registered_parsers()}} for a list of regist
 \item \code{parser_form}: Form query string parser
 
 \item \code{parser_json}: JSON parser. See \code{\link[jsonlite:read_json]{jsonlite::parse_json()}} for more details. (Defaults to using \code{simplifyVectors = TRUE})
+
+\item \code{parser_geojson}: GeoJSON parser. See \code{\link[geojsonsf:geojson_sf]{geojsonsf::geojson_sf()}} for more details.
 
 \item \code{parser_text}: Helper parser to parse plain text
 

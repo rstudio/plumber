@@ -8,6 +8,7 @@
 \alias{serializer_html}
 \alias{serializer_json}
 \alias{serializer_unboxed_json}
+\alias{serializer_geojson}
 \alias{serializer_rds}
 \alias{serializer_feather}
 \alias{serializer_yaml}
@@ -39,6 +40,8 @@ serializer_html(type = "text/html; charset=UTF-8")
 serializer_json(..., type = "application/json")
 
 serializer_unboxed_json(auto_unbox = TRUE, ..., type = "application/json")
+
+serializer_geojson(..., type = "application/geo+json")
 
 serializer_rds(version = "2", ascii = FALSE, ..., type = "application/rds")
 
@@ -128,9 +131,11 @@ more details on Plumber serializers and how to customize their behavior.
 
 \item \code{serializer_unboxed_json}: JSON serializer with \code{auto_unbox} defaulting to \code{TRUE}. See also: \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}}
 
+\item \code{serializer_geojson}: GeoJSON serializer. See also \code{\link[geojsonsf:sf_geojson]{geojsonsf::sf_geojson()}} and [\code{\link[geojsonsf:sfc_geojson]{geojsonsf::sfc_geojson()}}].
+
 \item \code{serializer_rds}: RDS serializer. See also: \code{\link[base:serialize]{base::serialize()}}
 
-\item \code{serializer_feather}: feather serializer. See also: \code{\link[feather:read_feather]{feather::write_feather()}}
+\item \code{serializer_feather}: feather serializer. See also: \code{\link[feather:write_feather]{feather::write_feather()}}
 
 \item \code{serializer_yaml}: YAML serializer. See also: \code{\link[yaml:as.yaml]{yaml::as.yaml()}}
 
