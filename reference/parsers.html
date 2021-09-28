@@ -206,6 +206,8 @@ non-default behavior.</p>
 
 <span class='fu'>parser_json</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
 
+<span class='fu'>parser_geojson</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
+
 <span class='fu'>parser_text</span><span class='op'>(</span>parse_fn <span class='op'>=</span> <span class='va'>identity</span><span class='op'>)</span>
 
 <span class='fu'>parser_yaml</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
@@ -257,6 +259,7 @@ trusted source. Do not accept <code>rds</code> files blindly.</p>
 <ul>
 <li><p><code>parser_form</code>: Form query string parser</p></li>
 <li><p><code>parser_json</code>: JSON parser. See <code><a href='https://rdrr.io/pkg/jsonlite/man/read_json.html'>jsonlite::parse_json()</a></code> for more details. (Defaults to using <code>simplifyVectors = TRUE</code>)</p></li>
+<li><p><code>parser_geojson</code>: GeoJSON parser. See <code><a href='https://rdrr.io/pkg/geojsonsf/man/geojson_sf.html'>geojsonsf::geojson_sf()</a></code> for more details.</p></li>
 <li><p><code>parser_text</code>: Helper parser to parse plain text</p></li>
 <li><p><code>parser_yaml</code>: YAML parser. See <code><a href='https://rdrr.io/pkg/yaml/man/yaml.load.html'>yaml::yaml.load()</a></code> for more details.</p></li>
 <li><p><code>parser_csv</code>: CSV parser. See <code><a href='https://readr.tidyverse.org/reference/read_delim.html'>readr::read_csv()</a></code> for more details.</p></li>

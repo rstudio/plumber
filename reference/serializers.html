@@ -216,6 +216,8 @@ more details on Plumber serializers and how to customize their behavior.</p>
 
 <span class='fu'>serializer_unboxed_json</span><span class='op'>(</span>auto_unbox <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"application/json"</span><span class='op'>)</span>
 
+<span class='fu'>serializer_geojson</span><span class='op'>(</span><span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"application/geo+json"</span><span class='op'>)</span>
+
 <span class='fu'>serializer_rds</span><span class='op'>(</span>version <span class='op'>=</span> <span class='st'>"2"</span>, ascii <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span>, type <span class='op'>=</span> <span class='st'>"application/rds"</span><span class='op'>)</span>
 
 <span class='fu'>serializer_feather</span><span class='op'>(</span>type <span class='op'>=</span> <span class='st'>"application/feather"</span><span class='op'>)</span>
@@ -319,6 +321,7 @@ The graphics device <code>dev_on</code> function will receive any arguments supp
 <li><p><code>serializer_html</code>: HTML serializer</p></li>
 <li><p><code>serializer_json</code>: JSON serializer. See also: <code><a href='https://rdrr.io/pkg/jsonlite/man/fromJSON.html'>jsonlite::toJSON()</a></code></p></li>
 <li><p><code>serializer_unboxed_json</code>: JSON serializer with <code>auto_unbox</code> defaulting to <code>TRUE</code>. See also: <code><a href='https://rdrr.io/pkg/jsonlite/man/fromJSON.html'>jsonlite::toJSON()</a></code></p></li>
+<li><p><code>serializer_geojson</code>: GeoJSON serializer. See also <code><a href='https://rdrr.io/pkg/geojsonsf/man/sf_geojson.html'>geojsonsf::sf_geojson()</a></code> and [<code><a href='https://rdrr.io/pkg/geojsonsf/man/sfc_geojson.html'>geojsonsf::sfc_geojson()</a></code>].</p></li>
 <li><p><code>serializer_rds</code>: RDS serializer. See also: <code><a href='https://rdrr.io/r/base/serialize.html'>base::serialize()</a></code></p></li>
 <li><p><code>serializer_feather</code>: feather serializer. See also: <code><a href='https://rdrr.io/pkg/feather/man/read_feather.html'>feather::write_feather()</a></code></p></li>
 <li><p><code>serializer_yaml</code>: YAML serializer. See also: <code><a href='https://rdrr.io/pkg/yaml/man/as.yaml.html'>yaml::as.yaml()</a></code></p></li>
