@@ -4,7 +4,7 @@
 [![R build status](https://github.com/rstudio/plumber/workflows/R-CMD-check/badge.svg)](https://github.com/rstudio/plumber/actions)
 [![](https://www.r-pkg.org/badges/version/plumber)](https://www.r-pkg.org/pkg/plumber)
 [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/plumber?color=brightgreen)](https://www.r-pkg.org/pkg/plumber)
-[![codecov](https://codecov.io/gh/rstudio/plumber/branch/master/graph/badge.svg)](https://codecov.io/gh/rstudio/plumber)
+[![codecov](https://codecov.io/gh/rstudio/plumber/branch/main/graph/badge.svg)](https://codecov.io/gh/rstudio/plumber)
 [![RStudio community](https://img.shields.io/badge/community-plumber-blue?style=social&logo=rstudio&logoColor=75AADB)](https://community.rstudio.com/tag/plumber)
 <!-- badges: end -->
 
@@ -97,7 +97,7 @@ library(plumber)
 
 ## Cheat Sheet
 
-<a href="https://github.com/rstudio/cheatsheets/blob/master/plumber.pdf"><img src="https://raw.githubusercontent.com/rstudio/cheatsheets/master/pngs/thumbnails/plumber-cheatsheet-thumbs.png" width="630" height="252"/></a>
+<a href="https://github.com/rstudio/cheatsheets/blob/main/plumber.pdf"><img src="https://raw.githubusercontent.com/rstudio/cheatsheets/main/pngs/thumbnails/plumber-cheatsheet-thumbs.png" width="630" height="252"/></a>
 
 ## Hosting
 
