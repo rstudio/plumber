@@ -21,5 +21,5 @@
 1. Submit to CRAN.
   1. `devtools::release()` (actually release)
 1. Do any revisions CRAN requests on the release branch
-1. Once accepted to CRAN, merge the release branch to master and tag the release.
-1. Bump the version # in DESCRIPTION to the next odd number on master for development of next release.
+1. Once accepted to CRAN, merge the release branch to main and tag the release.
+1. Bump the version # in DESCRIPTION to the next odd number on main for development of next release.

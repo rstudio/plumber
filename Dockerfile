@@ -19,7 +19,7 @@ RUN install2.r remotes
 ## https://stackoverflow.com/a/55621942/591574
 #ADD https://github.com/rstudio/plumber/commits/ _docker_cache
 
-ARG PLUMBER_REF=master
+ARG PLUMBER_REF=main
 RUN Rscript -e "remotes::install_github('rstudio/plumber@${PLUMBER_REF}')"
 
 EXPOSE 8000

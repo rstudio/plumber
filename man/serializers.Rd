@@ -135,7 +135,7 @@ more details on Plumber serializers and how to customize their behavior.
 
 \item \code{serializer_rds}: RDS serializer. See also: \code{\link[base:serialize]{base::serialize()}}
 
-\item \code{serializer_feather}: feather serializer. See also: \code{\link[feather:write_feather]{feather::write_feather()}}
+\item \code{serializer_feather}: feather serializer. See also: \code{\link[feather:read_feather]{feather::write_feather()}}
 
 \item \code{serializer_yaml}: YAML serializer. See also: \code{\link[yaml:as.yaml]{yaml::as.yaml()}}
 

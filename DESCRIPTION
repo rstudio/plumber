@@ -34,7 +34,6 @@ Imports:
     lifecycle (>= 0.2.0),
     ellipsis (>= 0.3.0),
     rlang
-LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
     testthat (>= 0.11.0),
@@ -52,7 +51,7 @@ Suggests:
     mockery (>= 0.4.2),
     geojsonsf,
     sf
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Collate:
     'async.R'
     'content-types.R'
@@ -93,3 +92,4 @@ Collate:
     'zzz.R'
 RdMacros: lifecycle
 Language: en-US
+Config/Needs/install: Cairo

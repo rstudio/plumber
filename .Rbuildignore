@@ -25,3 +25,4 @@
 rsconnect
 ^CRAN-RELEASE$
 ^legacy_support.txt$
+^codecov\.yml$
