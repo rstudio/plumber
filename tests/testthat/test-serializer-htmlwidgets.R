@@ -22,7 +22,7 @@ test_that("htmlwidgets serialize properly", {
   expect_equal(val$status, 200L)
   expect_equal(val$headers$`Content-Type`, "text/html; charset=UTF-8")
   # Check that content is encoded
-  expect_match(val$body, "url(data:image/png;base64", fixed = TRUE)
+  expect_match(val$body, "url\\(['\"]?data:image\\/png;base64")
 })
 
 test_that("Errors call error handler", {
