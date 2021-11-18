@@ -92,4 +92,4 @@ Collate:
     'zzz.R'
 RdMacros: lifecycle
 Language: en-US
-Config/Needs/install: Cairo
+Config/Needs/check: Cairo
