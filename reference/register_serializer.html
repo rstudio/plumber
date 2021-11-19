@@ -218,7 +218,7 @@ available serializers in plumber is global.</p>
       <td><p>The serializer function to be added.
 This function should accept arguments that can be supplied when <code><a href='plumb.html'>plumb()</a></code>ing a file.
 This function should return a function that accepts four arguments: <code>value</code>, <code>req</code>, <code>res</code>, and <code>errorHandler</code>.
-See <code><a href='https://rdrr.io/r/base/print.html'>print(serializer_json)</a></code> for an example.</p></td>
+See <code>print(serializer_json)</code> for an example.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -243,29 +243,31 @@ See <code><a href='https://rdrr.io/r/base/print.html'>print(serializer_json)</a>
 </ul>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># `serializer_json()` calls `serializer_content_type()` and supplies a serialization function</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>serializer_json</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; function (..., type = "application/json") 
-#&gt; {
-#&gt;     serializer_content_type(type, function(val) {
-#&gt;         toJSON(val, ...)
-#&gt;     })
-#&gt; }
-#&gt; &lt;bytecode: 0x557330bd5678&gt;
-#&gt; &lt;environment: namespace:plumber&gt;</div><div class='input'><span class='co'># serializer_content_type() calls `serializer_headers()` and supplies a serialization function</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>serializer_content_type</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; function (type, serialize_fn = identity) 
-#&gt; {
-#&gt;     if (missing(type)) {
-#&gt;         stop("You must provide the custom content type to the serializer_content_type")
-#&gt;     }
-#&gt;     stopifnot(length(type) == 1)
-#&gt;     stopifnot(is.character(type))
-#&gt;     stopifnot(nchar(type) &gt; 0)
-#&gt;     serializer_headers(list(`Content-Type` = type), serialize_fn)
-#&gt; }
-#&gt; &lt;bytecode: 0x557330bcd678&gt;
-#&gt; &lt;environment: namespace:plumber&gt;</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># `serializer_json()` calls `serializer_content_type()` and supplies a serialization function</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>serializer_json</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> function (..., type = "application/json") </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     serializer_content_type(type, function(val) {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         toJSON(val, ...)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     })</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> }</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;bytecode: 0x5650fb8b5d70&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;environment: namespace:plumber&gt;</span>
+<span class='r-in'><span class='co'># serializer_content_type() calls `serializer_headers()` and supplies a serialization function</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>serializer_content_type</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> function (type, serialize_fn = identity) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     if (missing(type)) {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         stop("You must provide the custom content type to the serializer_content_type")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     }</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     stopifnot(length(type) == 1)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     stopifnot(is.character(type))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     stopifnot(nchar(type) &gt; 0)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     serializer_headers(list(`Content-Type` = type), serialize_fn)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> }</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;bytecode: 0x5650fb8f0c18&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;environment: namespace:plumber&gt;</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

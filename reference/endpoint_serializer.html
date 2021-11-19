@@ -234,66 +234,67 @@ This is useful for graphics device serializers which need a <code>preexec</code>
 These hooks are specific to a single <a href='PlumberEndpoint.html'>PlumberEndpoint</a>'s route calculation.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># The definition of `serializer_device` returns</span>
-<span class='co'># * a `serializer_content_type` serializer</span>
-<span class='co'># * `aroundexec` hook</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>serializer_device</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; function (type, dev_on, dev_off = grDevices::dev.off) 
-#&gt; {
-#&gt;     stopifnot(!missing(type))
-#&gt;     stopifnot(!missing(dev_on))
-#&gt;     stopifnot(is.function(dev_on))
-#&gt;     stopifnot(length(formals(dev_on)) &gt; 0)
-#&gt;     if (!any(c("filename", "...") %in% names(formals(dev_on)))) {
-#&gt;         stop("`dev_on` must contain an arugment called `filename` or have `...`")
-#&gt;     }
-#&gt;     stopifnot(is.function(dev_off))
-#&gt;     endpoint_serializer(serializer = serializer_content_type(type), 
-#&gt;         aroundexec_hook = function(..., .next) {
-#&gt;             tmpfile &lt;- tempfile()
-#&gt;             dev_on(filename = tmpfile)
-#&gt;             device_id &lt;- dev.cur()
-#&gt;             dev_off_once &lt;- once(function() dev_off(device_id))
-#&gt;             success &lt;- function(value) {
-#&gt;                 dev_off_once()
-#&gt;                 if (!file.exists(tmpfile)) {
-#&gt;                   stop("The device output file is missing. Did you produce an image?", 
-#&gt;                     call. = FALSE)
-#&gt;                 }
-#&gt;                 con &lt;- file(tmpfile, "rb")
-#&gt;                 on.exit({
-#&gt;                   close(con)
-#&gt;                 }, add = TRUE)
-#&gt;                 img &lt;- readBin(con, "raw", file.info(tmpfile)$size)
-#&gt;                 img
-#&gt;             }
-#&gt;             cleanup &lt;- function() {
-#&gt;                 dev_off_once()
-#&gt;                 on.exit({
-#&gt;                   unlink(tmpfile)
-#&gt;                 }, add = TRUE)
-#&gt;             }
-#&gt;             async &lt;- FALSE
-#&gt;             on.exit({
-#&gt;                 if (!async) {
-#&gt;                   cleanup()
-#&gt;                 }
-#&gt;             }, add = TRUE)
-#&gt;             result &lt;- promises::with_promise_domain(createGraphicsDevicePromiseDomain(device_id), 
-#&gt;                 {
-#&gt;                   .next(...)
-#&gt;                 })
-#&gt;             if (is.promising(result)) {
-#&gt;                 async &lt;- TRUE
-#&gt;                 result %&gt;% then(success) %&gt;% finally(cleanup)
-#&gt;             }
-#&gt;             else {
-#&gt;                 success(result)
-#&gt;             }
-#&gt;         })
-#&gt; }
-#&gt; &lt;bytecode: 0x557330c14690&gt;
-#&gt; &lt;environment: namespace:plumber&gt;</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># The definition of `serializer_device` returns</span></span>
+<span class='r-in'><span class='co'># * a `serializer_content_type` serializer</span></span>
+<span class='r-in'><span class='co'># * `aroundexec` hook</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>serializer_device</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> function (type, dev_on, dev_off = grDevices::dev.off) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     stopifnot(!missing(type))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     stopifnot(!missing(dev_on))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     stopifnot(is.function(dev_on))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     stopifnot(length(formals(dev_on)) &gt; 0)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     if (!any(c("filename", "...") %in% names(formals(dev_on)))) {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         stop("`dev_on` must contain an arugment called `filename` or have `...`")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     }</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     stopifnot(is.function(dev_off))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     endpoint_serializer(serializer = serializer_content_type(type), </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         aroundexec_hook = function(..., .next) {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             tmpfile &lt;- tempfile()</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             dev_on(filename = tmpfile)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             device_id &lt;- dev.cur()</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             dev_off_once &lt;- once(function() dev_off(device_id))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             success &lt;- function(value) {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 dev_off_once()</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 if (!file.exists(tmpfile)) {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                   stop("The device output file is missing. Did you produce an image?", </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                     call. = FALSE)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 }</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 con &lt;- file(tmpfile, "rb")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 on.exit({</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                   close(con)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 }, add = TRUE)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 img &lt;- readBin(con, "raw", file.info(tmpfile)$size)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 img</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             }</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             cleanup &lt;- function() {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 dev_off_once()</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 on.exit({</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                   unlink(tmpfile)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 }, add = TRUE)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             }</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             async &lt;- FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             on.exit({</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 if (!async) {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                   cleanup()</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 }</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             }, add = TRUE)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             result &lt;- promises::with_promise_domain(createGraphicsDevicePromiseDomain(device_id), </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                   .next(...)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 })</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             if (is.promising(result)) {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 async &lt;- TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 result %&gt;% then(success) %&gt;% finally(cleanup)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             }</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             else {</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 success(result)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             }</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         })</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> }</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;bytecode: 0x5650fb6dc618&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;environment: namespace:plumber&gt;</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

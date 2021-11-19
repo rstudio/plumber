@@ -226,37 +226,37 @@ See the example below.</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='co'># Example from the `swagger` R package</span>
-<span class='fu'>register_docs</span><span class='op'>(</span>
-  name <span class='op'>=</span> <span class='st'>"swagger"</span>,
-  index <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>version</span> <span class='op'>=</span> <span class='st'>"3"</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='fu'>swagger</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/swagger/man/swagger_spec.html'>swagger_spec</a></span><span class='op'>(</span>
-      api_path <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span>
-        <span class='st'>"window.location.origin + "</span>,
-        <span class='st'>"window.location.pathname.replace("</span>,
-          <span class='st'>"/\\(__docs__\\\\/|__docs__\\\\/index.html\\)$/, \"\""</span>,
-        <span class='st'>") + "</span>,
-        <span class='st'>"\"openapi.json\""</span>
-      <span class='op'>)</span>,
-      version <span class='op'>=</span> <span class='va'>version</span>
-    <span class='op'>)</span>
-  <span class='op'>}</span>,
-  static <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>version</span> <span class='op'>=</span> <span class='st'>"3"</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='fu'>swagger</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/swagger/man/swagger_path.html'>swagger_path</a></span><span class='op'>(</span><span class='va'>version</span><span class='op'>)</span>
-  <span class='op'>}</span>
-<span class='op'>)</span>
-
-<span class='co'># When setting the docs, `index` and `static` function arguments can be supplied</span>
-<span class='co'># * via `pr_set_docs()`</span>
-<span class='co'># * or through URL query string variables</span>
-<span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='co'># Set default argument `version = 3` for the swagger `index` and `static` functions</span>
-  <span class='fu'><a href='pr_set_docs.html'>pr_set_docs</a></span><span class='op'>(</span><span class='st'>"swagger"</span>, version <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_handle.html'>pr_get</a></span><span class='op'>(</span><span class='st'>"/plus/&lt;a:int&gt;/&lt;b:int&gt;"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span><span class='op'>)</span> <span class='op'>{</span> <span class='va'>a</span> <span class='op'>+</span> <span class='va'>b</span> <span class='op'>}</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='pr_run.html'>pr_run</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='co'># Example from the `swagger` R package</span></span>
+<span class='r-in'><span class='fu'>register_docs</span><span class='op'>(</span></span>
+<span class='r-in'>  name <span class='op'>=</span> <span class='st'>"swagger"</span>,</span>
+<span class='r-in'>  index <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>version</span> <span class='op'>=</span> <span class='st'>"3"</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='fu'>swagger</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/swagger/man/swagger_spec.html'>swagger_spec</a></span><span class='op'>(</span></span>
+<span class='r-in'>      api_path <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span></span>
+<span class='r-in'>        <span class='st'>"window.location.origin + "</span>,</span>
+<span class='r-in'>        <span class='st'>"window.location.pathname.replace("</span>,</span>
+<span class='r-in'>          <span class='st'>"/\\(__docs__\\\\/|__docs__\\\\/index.html\\)$/, \"\""</span>,</span>
+<span class='r-in'>        <span class='st'>") + "</span>,</span>
+<span class='r-in'>        <span class='st'>"\"openapi.json\""</span></span>
+<span class='r-in'>      <span class='op'>)</span>,</span>
+<span class='r-in'>      version <span class='op'>=</span> <span class='va'>version</span></span>
+<span class='r-in'>    <span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>}</span>,</span>
+<span class='r-in'>  static <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>version</span> <span class='op'>=</span> <span class='st'>"3"</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='fu'>swagger</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/swagger/man/swagger_path.html'>swagger_path</a></span><span class='op'>(</span><span class='va'>version</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>}</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># When setting the docs, `index` and `static` function arguments can be supplied</span></span>
+<span class='r-in'><span class='co'># * via `pr_set_docs()`</span></span>
+<span class='r-in'><span class='co'># * or through URL query string variables</span></span>
+<span class='r-in'><span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='%>%.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='co'># Set default argument `version = 3` for the swagger `index` and `static` functions</span></span>
+<span class='r-in'>  <span class='fu'><a href='pr_set_docs.html'>pr_set_docs</a></span><span class='op'>(</span><span class='st'>"swagger"</span>, version <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='op'><a href='%>%.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='pr_handle.html'>pr_get</a></span><span class='op'>(</span><span class='st'>"/plus/&lt;a:int&gt;/&lt;b:int&gt;"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span><span class='op'>)</span> <span class='op'>{</span> <span class='va'>a</span> <span class='op'>+</span> <span class='va'>b</span> <span class='op'>}</span><span class='op'>)</span> <span class='op'><a href='%>%.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='pr_run.html'>pr_run</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

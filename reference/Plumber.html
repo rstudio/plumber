@@ -603,7 +603,7 @@ pr$setSerializer(serializer_unboxed_json())
 
 <p><hr>
 <a id="method-setParsers"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>setParsers()</code></h3>
-<p>Sets the default parsers of the router. Initialized to <code><a href='https://rdrr.io/r/base/c.html'>c("json", "form", "text", "octet", "multi")</a></code></p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>Sets the default parsers of the router. Initialized to <code>c("json", "form", "text", "octet", "multi")</code></p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Plumber</span><span class='op'>$</span><span class='fu'>setParsers</span><span class='op'>(</span><span class='va'>parsers</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -844,89 +844,89 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'>## ------------------------------------------------</span>
-<span class='co'>## Method `Plumber$mount`</span>
-<span class='co'>## ------------------------------------------------</span>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>root</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='va'>users</span> <span class='op'>&lt;-</span> <span class='va'>Plumber</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"users.R"</span><span class='op'>)</span>
-<span class='va'>root</span><span class='op'>$</span><span class='fu'>mount</span><span class='op'>(</span><span class='st'>"/users"</span>, <span class='va'>users</span><span class='op'>)</span>
-
-<span class='va'>products</span> <span class='op'>&lt;-</span> <span class='va'>Plumber</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"products.R"</span><span class='op'>)</span>
-<span class='va'>root</span><span class='op'>$</span><span class='fu'>mount</span><span class='op'>(</span><span class='st'>"/products"</span>, <span class='va'>products</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='co'>## ------------------------------------------------</span>
-<span class='co'>## Method `Plumber$registerHook`</span>
-<span class='co'>## ------------------------------------------------</span>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>pr</span><span class='op'>$</span><span class='fu'>registerHook</span><span class='op'>(</span><span class='st'>"preroute"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>req</span><span class='op'>)</span><span class='op'>{</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='st'>"Routing a request for"</span>, <span class='va'>req</span><span class='op'>$</span><span class='va'>PATH_INFO</span>, <span class='st'>"...\n"</span><span class='op'>)</span>
-<span class='op'>}</span><span class='op'>)</span>
-<span class='va'>pr</span><span class='op'>$</span><span class='fu'>registerHooks</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-  preserialize<span class='op'>=</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>req</span>, <span class='va'>value</span><span class='op'>)</span><span class='op'>{</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"About to serialize this value:"</span><span class='op'>)</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span>
-
-    <span class='co'># Must return the value since we took one in. Here we're not choosing</span>
-    <span class='co'># to mutate it, but we could.</span>
-    <span class='va'>value</span>
-  <span class='op'>}</span>,
-  postserialize<span class='op'>=</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span><span class='op'>{</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"We serialized the value as:"</span><span class='op'>)</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>$</span><span class='va'>body</span><span class='op'>)</span>
-  <span class='op'>}</span>
-<span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>pr</span><span class='op'>$</span><span class='fu'>handle</span><span class='op'>(</span><span class='st'>"GET"</span>, <span class='st'>"/"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span><span class='op'>{</span> <span class='fl'>123</span> <span class='op'>}</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='co'>## ------------------------------------------------</span>
-<span class='co'>## Method `Plumber$handle`</span>
-<span class='co'>## ------------------------------------------------</span>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>pr</span><span class='op'>$</span><span class='fu'>handle</span><span class='op'>(</span><span class='st'>"GET"</span>, <span class='st'>"/"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span><span class='op'>{</span>
-  <span class='st'>"&lt;html&gt;&lt;h1&gt;Programmatic Plumber!&lt;/h1&gt;&lt;/html&gt;"</span>
-<span class='op'>}</span>, serializer<span class='op'>=</span><span class='fu'>plumber</span><span class='fu'>::</span><span class='fu'><a href='serializer_headers.html'>serializer_html</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='co'>## ------------------------------------------------</span>
-<span class='co'>## Method `Plumber$setSerializer`</span>
-<span class='co'>## ------------------------------------------------</span>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>pr</span><span class='op'>$</span><span class='fu'>setSerializer</span><span class='op'>(</span><span class='fu'><a href='serializer_headers.html'>serializer_unboxed_json</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='co'>## ------------------------------------------------</span>
-<span class='co'>## Method `Plumber$set404Handler`</span>
-<span class='co'>## ------------------------------------------------</span>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>pr</span><span class='op'>$</span><span class='fu'>set404Handler</span><span class='op'>(</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>req</span>, <span class='va'>res</span><span class='op'>)</span> <span class='op'>{</span><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='va'>req</span><span class='op'>$</span><span class='va'>PATH_INFO</span><span class='op'>)</span><span class='op'>}</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='co'>## ------------------------------------------------</span>
-<span class='co'>## Method `Plumber$setErrorHandler`</span>
-<span class='co'>## ------------------------------------------------</span>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>pr</span><span class='op'>$</span><span class='fu'>setErrorHandler</span><span class='op'>(</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>req</span>, <span class='va'>res</span>, <span class='va'>err</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/message.html'>message</a></span><span class='op'>(</span><span class='st'>"Found error: "</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>err</span><span class='op'>)</span>
-<span class='op'>}</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'>## ------------------------------------------------</span></span>
+<span class='r-in'><span class='co'>## Method `Plumber$mount`</span></span>
+<span class='r-in'><span class='co'>## ------------------------------------------------</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>root</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>users</span> <span class='op'>&lt;-</span> <span class='va'>Plumber</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"users.R"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>root</span><span class='op'>$</span><span class='fu'>mount</span><span class='op'>(</span><span class='st'>"/users"</span>, <span class='va'>users</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>products</span> <span class='op'>&lt;-</span> <span class='va'>Plumber</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"products.R"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>root</span><span class='op'>$</span><span class='fu'>mount</span><span class='op'>(</span><span class='st'>"/products"</span>, <span class='va'>products</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## ------------------------------------------------</span></span>
+<span class='r-in'><span class='co'>## Method `Plumber$registerHook`</span></span>
+<span class='r-in'><span class='co'>## ------------------------------------------------</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pr</span><span class='op'>$</span><span class='fu'>registerHook</span><span class='op'>(</span><span class='st'>"preroute"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>req</span><span class='op'>)</span><span class='op'>{</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='st'>"Routing a request for"</span>, <span class='va'>req</span><span class='op'>$</span><span class='va'>PATH_INFO</span>, <span class='st'>"...\n"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pr</span><span class='op'>$</span><span class='fu'>registerHooks</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>  preserialize<span class='op'>=</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>req</span>, <span class='va'>value</span><span class='op'>)</span><span class='op'>{</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"About to serialize this value:"</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>    <span class='co'># Must return the value since we took one in. Here we're not choosing</span></span>
+<span class='r-in'>    <span class='co'># to mutate it, but we could.</span></span>
+<span class='r-in'>    <span class='va'>value</span></span>
+<span class='r-in'>  <span class='op'>}</span>,</span>
+<span class='r-in'>  postserialize<span class='op'>=</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span><span class='op'>{</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"We serialized the value as:"</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>$</span><span class='va'>body</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>}</span></span>
+<span class='r-in'><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>pr</span><span class='op'>$</span><span class='fu'>handle</span><span class='op'>(</span><span class='st'>"GET"</span>, <span class='st'>"/"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span><span class='op'>{</span> <span class='fl'>123</span> <span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## ------------------------------------------------</span></span>
+<span class='r-in'><span class='co'>## Method `Plumber$handle`</span></span>
+<span class='r-in'><span class='co'>## ------------------------------------------------</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pr</span><span class='op'>$</span><span class='fu'>handle</span><span class='op'>(</span><span class='st'>"GET"</span>, <span class='st'>"/"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span><span class='op'>{</span></span>
+<span class='r-in'>  <span class='st'>"&lt;html&gt;&lt;h1&gt;Programmatic Plumber!&lt;/h1&gt;&lt;/html&gt;"</span></span>
+<span class='r-in'><span class='op'>}</span>, serializer<span class='op'>=</span><span class='fu'>plumber</span><span class='fu'>::</span><span class='fu'><a href='serializer_headers.html'>serializer_html</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## ------------------------------------------------</span></span>
+<span class='r-in'><span class='co'>## Method `Plumber$setSerializer`</span></span>
+<span class='r-in'><span class='co'>## ------------------------------------------------</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pr</span><span class='op'>$</span><span class='fu'>setSerializer</span><span class='op'>(</span><span class='fu'><a href='serializer_headers.html'>serializer_unboxed_json</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## ------------------------------------------------</span></span>
+<span class='r-in'><span class='co'>## Method `Plumber$set404Handler`</span></span>
+<span class='r-in'><span class='co'>## ------------------------------------------------</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pr</span><span class='op'>$</span><span class='fu'>set404Handler</span><span class='op'>(</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>req</span>, <span class='va'>res</span><span class='op'>)</span> <span class='op'>{</span><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='va'>req</span><span class='op'>$</span><span class='va'>PATH_INFO</span><span class='op'>)</span><span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## ------------------------------------------------</span></span>
+<span class='r-in'><span class='co'>## Method `Plumber$setErrorHandler`</span></span>
+<span class='r-in'><span class='co'>## ------------------------------------------------</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>pr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pr.html'>pr</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pr</span><span class='op'>$</span><span class='fu'>setErrorHandler</span><span class='op'>(</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>req</span>, <span class='va'>res</span>, <span class='va'>err</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/message.html'>message</a></span><span class='op'>(</span><span class='st'>"Found error: "</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>err</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

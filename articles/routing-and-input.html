@@ -259,7 +259,7 @@
 <span class="co">#* Lookup a user</span>
 <span class="co">#* @get /users/&lt;id&gt;</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span><span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">users</span>, <span class="va">uid</span> <span class="op">%in%</span> <span class="va">id</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">users</span>, <span class="va">uid</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">id</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>This API uses the dynamic path <code>/users/&lt;id&gt;</code> to match any request that is of the form <code>/users/</code> followed by some path element like a number or letters. In this case, it will return information about the user if a user with the associated ID was found, or an empty object if not.</p>
 <p>You can name these dynamic path elements however you’d like, but note that the name used in the dynamic path must match the name of the parameter for the function (in this case, both <code>id</code>).</p>
@@ -341,7 +341,7 @@
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#* @assets ./files/static /static</span>
 <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>would expose the local directory <code>files/static</code> not at <code>/public</code>, but at <code>/static</code>. Likewise, to serve a main <code>index.html</code>, you can also map <code>/files/static</code> to <code><a href="https://rdrr.io/r/base/Arithmetic.html">/</a></code> by using</p>
+<p>would expose the local directory <code>files/static</code> not at <code>/public</code>, but at <code>/static</code>. Likewise, to serve a main <code>index.html</code>, you can also map <code>/files/static</code> to <code>/</code> by using</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#* @assets ./files/static /</span>
 <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
@@ -376,7 +376,7 @@
 </tr>
 <tr class="even">
 <td><code>cookies</code></td>
-<td><code><a href="https://rdrr.io/r/base/list.html">list(cook="abc")</a></code></td>
+<td><code>list(cook="abc")</code></td>
 <td>A list of the cookies as described in <a href="#read-cookies">Cookies</a>
 </td>
 </tr>
@@ -393,33 +393,33 @@
 </tr>
 <tr class="odd">
 <td><code>bodyRaw</code></td>
-<td><code><a href="https://rdrr.io/r/base/rawConversion.html">charToRaw("a=1&amp;b=2")</a></code></td>
+<td><code>charToRaw("a=1&amp;b=2")</code></td>
 <td>The <code><a href="https://rdrr.io/r/base/raw.html">raw()</a></code>, unparsed contents of the body of the request</td>
 </tr>
 <tr class="even">
 <td><code>body</code></td>
-<td><code><a href="https://rdrr.io/r/base/list.html">list(a=1,b=2)</a></code></td>
+<td><code>list(a=1,b=2)</code></td>
 <td>This value will typically be the same as <code>argsBody</code>. However, with content type <code>"multipart/*"</code>, <code>req$body</code> may contain detailed information, such as <code>name</code>, <code>content_type</code>, <code>content_disposition</code>, <code>filename</code>, <code>value</code> (which is a <code><a href="https://rdrr.io/r/base/raw.html">raw()</a></code> vector), and <code>parsed</code> (parsed version of <code>value</code>).</td>
 </tr>
 <tr class="odd">
 <td><code>argsBody</code></td>
-<td><code><a href="https://rdrr.io/r/base/list.html">list(a=1,b=2)</a></code></td>
+<td><code>list(a=1,b=2)</code></td>
 <td>The parsed body output. Typically this is the same as <code>req$body</code> except when type is <code>"multipart/*"</code>.</td>
 </tr>
 <tr class="even">
 <td><code>argsPath</code></td>
-<td><code><a href="https://rdrr.io/r/base/list.html">list(c=3,d=4)</a></code></td>
+<td><code>list(c=3,d=4)</code></td>
 <td>The values of the path arguments.</td>
 </tr>
 <tr class="odd">
 <td><code>argsQuery</code></td>
-<td><code><a href="https://rdrr.io/r/base/list.html">list(e=5,f=6)</a></code></td>
+<td><code>list(e=5,f=6)</code></td>
 <td>The parsed query string output.</td>
 </tr>
 <tr class="even">
 <td><code>args</code></td>
-<td><code><a href="https://rdrr.io/r/base/list.html">list(req=req,res=res,e=5,f=6,c=3,d=4,a=1,b=2)</a></code></td>
-<td>In a route, the combined arguments of <code><a href="https://rdrr.io/r/base/list.html">list(req = req, res = res)</a></code>, <code>req$args</code> (added by filters), <code>req$argsQuery</code>, <code>req$argsPath</code>, and <code>req$argsBody</code>. In a filter, <code>req$args</code> is initialized to an empty list, so when processing filters <code>req$args</code> will only contain arguments set by previously processed filters as the route information will not have been processed yet.</td>
+<td><code>list(req=req,res=res,e=5,f=6,c=3,d=4,a=1,b=2)</code></td>
+<td>In a route, the combined arguments of <code>list(req = req, res = res)</code>, <code>req$args</code> (added by filters), <code>req$argsQuery</code>, <code>req$argsPath</code>, and <code>req$argsBody</code>. In a filter, <code>req$args</code> is initialized to an empty list, so when processing filters <code>req$args</code> will only contain arguments set by previously processed filters as the route information will not have been processed yet.</td>
 </tr>
 <tr class="odd">
 <td><code>QUERY_STRING</code></td>
@@ -494,7 +494,7 @@
 <div id="query-strings" class="section level3">
 <h3 class="hasAnchor">
 <a href="#query-strings" class="anchor"></a>Query Strings</h3>
-<p>A query string may be appended to a URL in order to convey additional information beyond just the request route. Query strings allow for the encoding of character string keys and values. For example, in the URL <code>https://duckduckgo.com/?q=bread&amp;pretty=1</code>, everything following the <code><a href="https://rdrr.io/r/utils/Question.html">?</a></code> constitutes the query string. In this case, two variables (<code>q</code> and <code>pretty</code>) have been set (to <code>bread</code> and <code>1</code>, respectively).</p>
+<p>A query string may be appended to a URL in order to convey additional information beyond just the request route. Query strings allow for the encoding of character string keys and values. For example, in the URL <code>https://duckduckgo.com/?q=bread&amp;pretty=1</code>, everything following the <code>?</code> constitutes the query string. In this case, two variables (<code>q</code> and <code>pretty</code>) have been set (to <code>bread</code> and <code>1</code>, respectively).</p>
 <p>Plumber will automatically forward information from the query string into the function being executed by aligning the name of the query string with the name of the function parameter. The following example defines a search API that mimics the example from <a href="https://duckduckgo.com">DuckDuckGo</a> above but merely prints out what it receives.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#* @get /</span>
@@ -504,7 +504,7 @@
 <span class="op">}</span></code></pre></div>
 <p>Visiting <a href="http://localhost:8000/?q=bread&amp;pretty=1" class="uri">http://localhost:8000/?q=bread&amp;pretty=1</a> will print:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb15-1"><a href="#cb15-1"></a><span class="ot">[</span><span class="st">"The q parameter is 'bread'. The pretty parameter is '1'."</span><span class="ot">]</span></span></code></pre></div>
-<p>This is equivalent to calling <code><a href="https://rdrr.io/r/base/search.html">search(q="bread", pretty="1")</a></code>. If a parameter were not specified in the query string, it would just be omitted from the invocation of the endpoint. For example <a href="http://localhost:8000/?q=cereal" class="uri">http://localhost:8000/?q=cereal</a> would be equivalent to <code><a href="https://rdrr.io/r/base/search.html">search(q="cereal")</a></code>. The function would fall back to the default value of the <code>pretty</code> parameter (<code>0</code>), since that was defined in the function signature.</p>
+<p>This is equivalent to calling <code>search(q="bread", pretty="1")</code>. If a parameter were not specified in the query string, it would just be omitted from the invocation of the endpoint. For example <a href="http://localhost:8000/?q=cereal" class="uri">http://localhost:8000/?q=cereal</a> would be equivalent to <code>search(q="cereal")</code>. The function would fall back to the default value of the <code>pretty</code> parameter (<code>0</code>), since that was defined in the function signature.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb16-1"><a href="#cb16-1"></a><span class="ot">[</span><span class="st">"The q parameter is 'cereal'. The pretty parameter is '0'."</span><span class="ot">]</span></span></code></pre></div>
 <p>Including additional query string arguments that do not map to a parameter of the function has no effect. For instance <a href="http://localhost:8000/?test=123" class="uri">http://localhost:8000/?test=123</a> will return the same results as calling <code><a href="https://rdrr.io/r/base/search.html">search()</a></code>.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb17-1"><a href="#cb17-1"></a><span class="ot">[</span><span class="st">"The q parameter is ''. The pretty parameter is '0'."</span><span class="ot">]</span></span></code></pre></div>
@@ -543,7 +543,7 @@
 <span id="cb19-9"><a href="#cb19-9"></a><span class="fu">}</span></span></code></pre></div>
 <p>Alternatively, <code>echo {"id":123, "name": "Jennifer"} &gt; call.json &amp; curl --data @call.json "http://localhost:8000/user" -H "content-type: application/json"</code> (formatting the body as JSON) will have the same effect.</p>
 <p>As demonstrated above, the raw request body is made available as <code>req$bodyRaw</code> and parsed request body is available as <code>req$body</code>.</p>
-<p>If multiple parameters are matched to the endpoint formals, an error will be thrown. Due to the nature of how multiple values can be matched to the same argument, it is recommended that <code>POST</code> endpoints have a function definition that only accepts the formals <code>req</code>, <code>res</code>, and <code>...</code>. If the endpoint arguments are to be processed like a list, they are available at <code>req$argsBody</code>, with all arguments at <code>req$args</code>. <code>req$args</code> is a combination of <code><a href="https://rdrr.io/r/base/list.html">list(req = req, res = res)</a></code>, <code>req$argsPath</code>, <code>req$argsBody</code>, and <code>req$argsQuery</code>.</p>
+<p>If multiple parameters are matched to the endpoint formals, an error will be thrown. Due to the nature of how multiple values can be matched to the same argument, it is recommended that <code>POST</code> endpoints have a function definition that only accepts the formals <code>req</code>, <code>res</code>, and <code>...</code>. If the endpoint arguments are to be processed like a list, they are available at <code>req$argsBody</code>, with all arguments at <code>req$args</code>. <code>req$args</code> is a combination of <code>list(req = req, res = res)</code>, <code>req$argsPath</code>, <code>req$argsBody</code>, and <code>req$argsQuery</code>.</p>
 </div>
 </div>
 <div id="read-cookies" class="section level3">
@@ -568,7 +568,7 @@
 <div class="sourceCode" id="cb21"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">{</span></span>
 <span id="cb21-2"><a href="#cb21-2"></a>  <span class="dt">"val"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"abc123"</span><span class="ot">]</span></span>
 <span id="cb21-3"><a href="#cb21-3"></a><span class="fu">}</span></span></code></pre></div>
-<p>You can print out the names of all of the properties attached to the request by running <code><a href="https://rdrr.io/r/base/print.html">print(ls(req))</a></code> inside an endpoint.</p>
+<p>You can print out the names of all of the properties attached to the request by running <code>print(ls(req))</code> inside an endpoint.</p>
 </div>
 </div>
   </div>

@@ -230,7 +230,7 @@
 <h5 class="hasAnchor">
 <a href="#equivalent-programmatic-usage" class="anchor"></a>Equivalent programmatic usage</h5>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/pr_set_api_spec.html">pr_set_api_spec</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">spec</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">spec</span><span class="op">$</span><span class="va">info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
       title <span class="op">=</span> <span class="st">"Sample Pet Store App"</span>,
@@ -426,17 +426,17 @@
 <code class="sourceCode R"><span class="va">text_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span><span class="st">"%s is %i years old"</span>, <span class="va">name</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span> <span class="op">}</span>
 <span class="va">qp_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">{</span> <span class="va">age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span>; <span class="fu">text_handler</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">}</span>
 <span class="va">file_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="../reference/as_attachment.html">as_attachment</a></span><span class="op">(</span><span class="va">file</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">}</span>
-<span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/query/parameters"</span>,
          handler <span class="op">=</span> <span class="va">qp_handler</span>,
          serializer <span class="op">=</span> <span class="fu"><a href="../reference/serializer_headers.html">serializer_text</a></span><span class="op">(</span><span class="op">)</span>,
          params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"name"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"string"</span>, required <span class="op">=</span> <span class="cn">FALSE</span>, isArray <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-                       <span class="st">"age"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"integer"</span>, required <span class="op">=</span> <span class="cn">FALSE</span>, isArray <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+                       <span class="st">"age"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"integer"</span>, required <span class="op">=</span> <span class="cn">FALSE</span>, isArray <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/dyn/&lt;name:str&gt;/&lt;age:[int]&gt;/route"</span>,
          handler <span class="op">=</span> <span class="va">text_handler</span>,
          serializer <span class="op">=</span> <span class="fu"><a href="../reference/serializer_headers.html">serializer_text</a></span><span class="op">(</span><span class="op">)</span>,
          parsers <span class="op">=</span> <span class="st">"none"</span>,
-         responses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"200"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>description <span class="op">=</span> <span class="st">"A sentence"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+         responses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"200"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>description <span class="op">=</span> <span class="st">"A sentence"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/pr_handle.html">pr_post</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/upload_file"</span>,
           handler <span class="op">=</span> <span class="va">file_handler</span>,
           serializer <span class="op">=</span> <span class="fu"><a href="../reference/serializer_headers.html">serializer_rds</a></span><span class="op">(</span><span class="op">)</span>,
@@ -477,7 +477,7 @@
 <h5 class="hasAnchor">
 <a href="#equivalent-programmatic-usage-2" class="anchor"></a>Equivalent programmatic usage</h5>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/pr_filter.html">pr_filter</a></span><span class="op">(</span><span class="st">"logger"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span><span class="op">{</span>
     <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="st">"-"</span>,
       <span class="va">req</span><span class="op">$</span><span class="va">REQUEST_METHOD</span>, <span class="va">req</span><span class="op">$</span><span class="va">PATH_INFO</span>, <span class="st">"-"</span>,
@@ -519,13 +519,13 @@
 <h5 class="hasAnchor">
 <a href="#equivalent-programmatic-usage-note-that-argument-order-is-reversed" class="anchor"></a>Equivalent programmatic usage (note that argument order is reversed)</h5>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/pr_static.html">pr_static</a></span><span class="op">(</span>direc <span class="op">=</span> <span class="st">"./files/static"</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/pr_static.html">pr_static</a></span><span class="op">(</span><span class="st">"/static"</span>, <span class="st">"./files/static"</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/pr_static.html">pr_static</a></span><span class="op">(</span><span class="st">"/"</span>, <span class="st">"./files/static"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
@@ -555,15 +555,15 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#* @plumber</span>
 <span class="kw">function</span><span class="op">(</span><span class="va">pr</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">pr</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="../reference/pr_set_debug.html">pr_set_debug</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="va">pr</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span>
+    <span class="fu"><a href="../reference/pr_set_debug.html">pr_set_debug</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span>
     <span class="fu"><a href="../reference/pr_set_docs.html">pr_set_docs</a></span><span class="op">(</span><span class="st">"swagger"</span><span class="op">)</span>
 <span class="op">}</span>
 
 <span class="co"># Named function</span>
 <span class="va">debug_swagger</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pr</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">pr</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="../reference/pr_set_debug.html">pr_set_debug</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="va">pr</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span>
+    <span class="fu"><a href="../reference/pr_set_debug.html">pr_set_debug</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span>
     <span class="fu"><a href="../reference/pr_set_docs.html">pr_set_docs</a></span><span class="op">(</span><span class="st">"swagger"</span><span class="op">)</span>
 <span class="op">}</span>
 
@@ -574,8 +574,8 @@
 <h5 class="hasAnchor">
 <a href="#equivalent-programmatic-usage-3" class="anchor"></a>Equivalent programmatic usage</h5>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/pr_set_debug.html">pr_set_debug</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/pr_set_debug.html">pr_set_debug</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/pr_set_docs.html">pr_set_docs</a></span><span class="op">(</span><span class="st">"swagger"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>

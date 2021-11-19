@@ -236,11 +236,11 @@ displayed when alias in map are overwritten.</p></td>
 Parser matching is done first by <code>content-type</code> header matching with <code>fixed</code> then by using
 regular expressions with <code>regex</code>. Note that plumber strips <code>; charset*</code> from <code>content-type</code> header before matching.</p>
 <p>Plumber will try to use <code><a href='parser_form.html'>parser_json()</a></code> (if available) when no <code>content-type</code> header is found and
-the request body starts with <code>{</code> or <code><a href='https://rdrr.io/r/base/Extract.html'>[</a></code>.</p>
+the request body starts with <code>{</code> or <code>[</code>.</p>
 <p>Functions signature should include <code>value</code>, <code>...</code> and
 possibly <code>content_type</code>, <code>filename</code>. Other parameters may be provided
 if you want to use the headers from <code><a href='https://rdrr.io/pkg/webutils/man/parse_multipart.html'>webutils::parse_multipart()</a></code>.</p>
-<p>Parser function structure is something like below.<div class="r"></p><pre><span class='kw'>function</span><span class='op'>(</span><span class='va'>parser_arguments_here</span><span class='op'>)</span> <span class='op'>{</span>
+<p>Parser function structure is something like below.<div class="sourceCode r"></p><pre><span class='kw'>function</span><span class='op'>(</span><span class='va'>parser_arguments_here</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='co'># return a function to parse a raw value</span>
   <span class='kw'>function</span><span class='op'>(</span><span class='va'>value</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
     <span class='co'># do something with raw value</span>
@@ -255,26 +255,26 @@ if you want to use the headers from <code><a href='https://rdrr.io/pkg/webutils/
 </ul>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># `content-type` header is mostly used to look up charset and adjust encoding</span>
-<span class='va'>parser_dcf</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='kw'>function</span><span class='op'>(</span><span class='va'>value</span>, <span class='va'>content_type</span> <span class='op'>=</span> <span class='st'>"text/x-dcf"</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='va'>charset</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_character_set.html'>get_character_set</a></span><span class='op'>(</span><span class='va'>content_type</span><span class='op'>)</span>
-    <span class='va'>value</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rawConversion.html'>rawToChar</a></span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/Encoding.html'>Encoding</a></span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>charset</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/dcf.html'>read.dcf</a></span><span class='op'>(</span><span class='va'>value</span>, <span class='va'>...</span><span class='op'>)</span>
-  <span class='op'>}</span>
-<span class='op'>}</span>
-
-<span class='co'># Could also leverage existing parsers</span>
-<span class='va'>parser_dcf</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'><a href='parser_form.html'>parser_read_file</a></span><span class='op'>(</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>tmpfile</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/dcf.html'>read.dcf</a></span><span class='op'>(</span><span class='va'>tmpfile</span>, <span class='va'>...</span><span class='op'>)</span>
-  <span class='op'>}</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='co'># Register the newly created parser</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='fu'>register_parser</span><span class='op'>(</span><span class='st'>"dcf"</span>, <span class='va'>parser_dcf</span>, fixed <span class='op'>=</span> <span class='st'>"text/x-dcf"</span><span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># `content-type` header is mostly used to look up charset and adjust encoding</span></span>
+<span class='r-in'><span class='va'>parser_dcf</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>value</span>, <span class='va'>content_type</span> <span class='op'>=</span> <span class='st'>"text/x-dcf"</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='va'>charset</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_character_set.html'>get_character_set</a></span><span class='op'>(</span><span class='va'>content_type</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='va'>value</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rawConversion.html'>rawToChar</a></span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/base/Encoding.html'>Encoding</a></span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>charset</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/base/dcf.html'>read.dcf</a></span><span class='op'>(</span><span class='va'>value</span>, <span class='va'>...</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>}</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Could also leverage existing parsers</span></span>
+<span class='r-in'><span class='va'>parser_dcf</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='fu'><a href='parser_form.html'>parser_read_file</a></span><span class='op'>(</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>tmpfile</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/base/dcf.html'>read.dcf</a></span><span class='op'>(</span><span class='va'>tmpfile</span>, <span class='va'>...</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Register the newly created parser</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='fu'>register_parser</span><span class='op'>(</span><span class='st'>"dcf"</span>, <span class='va'>parser_dcf</span>, fixed <span class='op'>=</span> <span class='st'>"text/x-dcf"</span><span class='op'>)</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

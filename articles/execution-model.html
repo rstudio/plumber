@@ -164,7 +164,7 @@
   <span class="co"># Only gets evaluated when this endpoint is requested.</span>
   <span class="va">counter</span> <span class="op">&lt;&lt;-</span> <span class="va">counter</span> <span class="op">+</span> <span class="fl">1</span>
 <span class="op">}</span></code></pre></div>
-<p>If you call <code><a href="../reference/plumb.html">plumb()</a></code> on this file, the <code>counter</code> variable will be created and will live in the environment created for this API. However, the endpoint defined will not be evaluated until it is invoked in response to an incoming request. Because the endpoint uses <code><a href="https://rdrr.io/r/base/assignOps.html">&lt;&lt;-</a></code>, the “double-assignment” operator, it mutates the <code>counter</code> variable that was previously defined when the file was <code><a href="../reference/plumb.html">plumb()</a></code>d. This technique allows all endpoints and filters to share some data defined at the top-level of your API.</p>
+<p>If you call <code><a href="../reference/plumb.html">plumb()</a></code> on this file, the <code>counter</code> variable will be created and will live in the environment created for this API. However, the endpoint defined will not be evaluated until it is invoked in response to an incoming request. Because the endpoint uses <code>&lt;&lt;-</code>, the “double-assignment” operator, it mutates the <code>counter</code> variable that was previously defined when the file was <code><a href="../reference/plumb.html">plumb()</a></code>d. This technique allows all endpoints and filters to share some data defined at the top-level of your API.</p>
 </div>
 <div id="environments" class="section level2">
 <h2 class="hasAnchor">
@@ -237,7 +237,7 @@
 <a href="#exit-handlers" class="anchor"></a>Exit Handlers</h2>
 <p>It may be useful to define a function that you want to run as your API is closing – for instance, if you have a pool of database connections that need to be cleaned up when your Plumber process is being terminated. You can use the <code>exit</code> hook to define such a handler.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"plumber.R"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"plumber.R"</span><span class="op">)</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/pr_hook.html">pr_hook</a></span><span class="op">(</span><span class="st">"exit"</span>, <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span>
     <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="st">"Bye bye!"</span><span class="op">)</span>
   <span class="op">}</span><span class="op">)</span>

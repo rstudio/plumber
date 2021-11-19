@@ -402,7 +402,7 @@ http {
 <a href="#wrap-your-plumber-file" class="anchor"></a>Wrap Your Plumber File</h3>
 <p>Once you’ve deployed your Plumber files onto the server, you’ll still need to tell the server <em>how</em> to run your server. You’re probably used to running commands like</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"myfile.R"</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span>port<span class="op">=</span><span class="fl">4500</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"myfile.R"</span><span class="op">)</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span> <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span>port<span class="op">=</span><span class="fl">4500</span><span class="op">)</span></code></pre></div>
 <p>Unfortunately, pm2 doesn’t understand R scripts natively; however, it is possible to specify a custom interpreter. We can use this feature to launch an R-based wrapper for our plumber file using the <code>Rscript</code> scripting front-end that comes with R. The following script will run the two commands listed above.</p>
 <pre><code><a href="https://www.rplumber.io">#!/usr/bin/env Rscript
 

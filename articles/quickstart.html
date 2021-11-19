@@ -186,7 +186,7 @@
 <span class="va">root</span></code></pre></div>
 <p>The <code>pr</code> object now encapsulates all the logic represented in your <code>plumber.R</code> file. The next step is to bring the API to life using the <code><a href="../reference/pr_run.html">pr_run()</a></code> method:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">root</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">root</span> <span class="op"><a href="../reference/%&gt;%.html">%&gt;%</a></span> <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>You should see a message about your API running on your computer on port <code>8000</code>. The API will continue running in your R session until you press the <code>Esc</code> key. If you’re running this code locally on your personal machine, you should be able to open <a href="http://localhost:8000/echo">http://localhost:8000/echo</a> or <a href="http://localhost:8000/plot">http://localhost:8000/plot</a> in a web browser to test your new API endpoints.</p>
 <blockquote>
 <p>If you’re using a tool like RStudio Server to run your R code on a remote machine, you should see the <a href="./security.html#networking">networking section</a> for help with visiting your API.</p>

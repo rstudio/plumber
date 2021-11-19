@@ -274,16 +274,16 @@ This parser should be used when reading from a file is required.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='co'># Overwrite `text/json` parsing behavior to not allow JSON vectors to be simplified</span>
-<span class='co'>#* @parser json list(simplifyVector = FALSE)</span>
-<span class='co'># Activate `rds` parser in a multipart request</span>
-<span class='co'>#* @parser multi</span>
-<span class='co'>#* @parser rds</span>
-<span class='va'>pr</span> <span class='op'>&lt;-</span> <span class='va'><a href='Plumber.html'>Plumber</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>pr</span><span class='op'>$</span><span class='fu'>handle</span><span class='op'>(</span><span class='st'>"GET"</span>, <span class='st'>"/upload"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>rds</span><span class='op'>)</span> <span class='op'>{</span><span class='va'>rds</span><span class='op'>}</span>, parsers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"multi"</span>, <span class='st'>"rds"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='co'># Overwrite `text/json` parsing behavior to not allow JSON vectors to be simplified</span></span>
+<span class='r-in'><span class='co'>#* @parser json list(simplifyVector = FALSE)</span></span>
+<span class='r-in'><span class='co'># Activate `rds` parser in a multipart request</span></span>
+<span class='r-in'><span class='co'>#* @parser multi</span></span>
+<span class='r-in'><span class='co'>#* @parser rds</span></span>
+<span class='r-in'><span class='va'>pr</span> <span class='op'>&lt;-</span> <span class='va'><a href='Plumber.html'>Plumber</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pr</span><span class='op'>$</span><span class='fu'>handle</span><span class='op'>(</span><span class='st'>"GET"</span>, <span class='st'>"/upload"</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>rds</span><span class='op'>)</span> <span class='op'>{</span><span class='va'>rds</span><span class='op'>}</span>, parsers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"multi"</span>, <span class='st'>"rds"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
