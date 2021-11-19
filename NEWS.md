@@ -4,7 +4,7 @@
 
 ## New features
 
-* Introduces new Geojson serializer and parser. Geojson objects are parsed into `sf` objects and `sf` or `sfc` objects will be serialized into geojson. (@josiahparry, #830)
+* Introduces new GeoJSON serializer and parser. GeoJSON objects are parsed into `sf` objects and `sf` or `sfc` objects will be serialized into GeoJSON. (@josiahparry, #830)
 
 ## Bug fixes
 

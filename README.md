@@ -1,7 +1,7 @@
 # `plumber` <a href='https://www.rplumber.io/'><img src='man/figures/logo.svg' align="right" height="138.5" style="margin:10px;" /></a>
 
 <!-- badges: start -->
-[![R build status](https://github.com/rstudio/plumber/workflows/R-CMD-check/badge.svg)](https://github.com/rstudio/plumber/actions)
+[![R build status](https://github.com/rstudio/plumber/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rstudio/plumber/actions)
 [![](https://www.r-pkg.org/badges/version/plumber)](https://www.r-pkg.org/pkg/plumber)
 [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/plumber?color=brightgreen)](https://www.r-pkg.org/pkg/plumber)
 [![codecov](https://codecov.io/gh/rstudio/plumber/branch/main/graph/badge.svg)](https://codecov.io/gh/rstudio/plumber)
