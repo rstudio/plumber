@@ -1,7 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://www.rplumber.io/404.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/CONTRIBUTING.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/PULL_REQUEST_TEMPLATE.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/articles/annotations.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/articles/execution-model.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/articles/hosting.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/articles/introduction.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/articles/migration.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/articles/programmatic-usage.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/articles/quickstart.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/articles/rendering-output.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/articles/routing-and-input.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/articles/security.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/articles/tips-and-tricks.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/authors.html</loc>
+  </url>
+  <url>
     <loc>https://www.rplumber.io/index.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/news/index.html</loc>
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/Hookable.html</loc>
@@ -41,6 +95,9 @@
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/include_file.html</loc>
+  </url>
+  <url>
+    <loc>https://www.rplumber.io/reference/index.html</loc>
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/is_plumber.html</loc>
@@ -128,38 +185,5 @@
   </url>
   <url>
     <loc>https://www.rplumber.io/reference/validate_api_spec.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/annotations.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/execution-model.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/hosting.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/introduction.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/migration.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/programmatic-usage.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/quickstart.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/rendering-output.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/routing-and-input.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/security.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/tips-and-tricks.html</loc>
   </url>
 </urlset>
