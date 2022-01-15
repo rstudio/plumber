@@ -3,6 +3,9 @@
 ## Breaking changes
 
 ## New features
+
+* Introduces new GeoJSON serializer and parser. GeoJSON objects are parsed into `sf` objects and `sf` or `sfc` objects will be serialized into GeoJSON. (@josiahparry, #830)
+
 ## Bug fixes
 
 * OpenAPI response type detection had a scoping issue. Use serializer defined `Content-Type` header instead. (@meztez, #789)
