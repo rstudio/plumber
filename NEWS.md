@@ -5,6 +5,8 @@
 ## New features
 
 * Introduces new GeoJSON serializer and parser. GeoJSON objects are parsed into `sf` objects and `sf` or `sfc` objects will be serialized into GeoJSON. (@josiahparry, #830)
+* Updates feather serializer to use the arrow package
+* Adds parquet serializer by using the arrow package
 
 ## Bug fixes
 
