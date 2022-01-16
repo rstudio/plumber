@@ -43,6 +43,7 @@ knownContentTypes <- c(
   xlam = "application/vnd.ms-excel.addin.macroEnabled.12",
   xlsb = "application/vnd.ms-excel.sheet.binary.macroEnabled.12",
   feather = "application/feather",
+  parquet = "application/parquet",
   rds = "application/rds",
   tsv = "application/tab-separated-values",
   csv = "application/csv",
@@ -74,20 +75,6 @@ cleanup_content_type <- function(type) {
   if (stri_detect_fixed(type, ";")) {
     type <- stri_split_fixed(type, ";")[[1]][1]
   }
-<<<<<<< HEAD
-  charsetStart <- attr(
-    gregexpr(".*charset=(.*)", contentType, perl = T)[[1]],
-    "capture.start"
-  )
-  charsetStart <- as.integer(charsetStart)
-  as.character(
-    ifelse(
-      charsetStart > -1,
-      substr(contentType, charsetStart, nchar(contentType)),
-      default
-    )
-  )
-=======
 
   type
 }
@@ -110,5 +97,4 @@ get_fileext <- function(type) {
 get_character_set <- function(content_type = NULL) {
   if (is.null(content_type)) return("UTF-8")
   stri_match_first_regex(paste(content_type,"; charset=UTF-8"), "charset=([^;\\s]*)")[,2]
->>>>>>> 9e7265d791003ce43ffbb36f65b3543242b65743
 }

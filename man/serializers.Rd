@@ -11,6 +11,7 @@
 \alias{serializer_geojson}
 \alias{serializer_rds}
 \alias{serializer_feather}
+\alias{serializer_parquet}
 \alias{serializer_yaml}
 \alias{serializer_text}
 \alias{serializer_format}
@@ -46,6 +47,8 @@ serializer_geojson(..., type = "application/geo+json")
 serializer_rds(version = "2", ascii = FALSE, ..., type = "application/rds")
 
 serializer_feather(type = "application/feather")
+
+serializer_parquet(type = "application/parquet")
 
 serializer_yaml(..., type = "text/x-yaml; charset=UTF-8")
 
@@ -135,7 +138,9 @@ more details on Plumber serializers and how to customize their behavior.
 
 \item \code{serializer_rds}: RDS serializer. See also: \code{\link[base:serialize]{base::serialize()}}
 
-\item \code{serializer_feather}: feather serializer. See also: \code{\link[feather:read_feather]{feather::write_feather()}}
+\item \code{serializer_feather}: feather serializer. See also: \code{\link[arrow:write_feather]{arrow::write_feather()}}
+
+\item \code{serializer_parquet}: parquet serializer. See also: \code{\link[arrow:write_parquet]{arrow::write_parquet()}}
 
 \item \code{serializer_yaml}: YAML serializer. See also: \code{\link[yaml:as.yaml]{yaml::as.yaml()}}
 

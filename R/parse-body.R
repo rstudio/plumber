@@ -480,18 +480,27 @@ parser_rds <- function(...) {
   })
 }
 
-#' @describeIn parsers feather parser. See [feather::read_feather()] for more details.
+#' @describeIn parsers feather parser. See [arrow::read_feather()] for more details.
 #' @export
 parser_feather <- function(...) {
   parser_read_file(function(tmpfile) {
-    if (!requireNamespace("feather", quietly = TRUE)) {
-      stop("`feather` must be installed for `parser_feather` to work")
+    if (!requireNamespace("arrow", quietly = TRUE)) {
+      stop("`arrow` must be installed for `parser_feather` to work")
     }
-    feather::read_feather(tmpfile, ...)
+    arrow::read_feather(tmpfile, ...)
   })
 }
 
-
+#' @describeIn parsers parquet parser. See [arrow::read_parquet()] for more details.
+#' @export
+parser_parquet <- function(...) {
+  parser_read_file(function(tmpfile) {
+    if (!requireNamespace("arrow", quietly = TRUE)) {
+      stop("`arrow` must be installed for `parser_parquet` to work")
+    }
+    arrow::read_parquet(tmpfile, ...)
+  })
+}
 
 #' @describeIn parsers Octet stream parser. Returns the raw content.
 #' @export
@@ -569,6 +578,7 @@ register_parsers_onLoad <- function() {
   register_parser("form",    parser_form,   fixed = "application/x-www-form-urlencoded")
   register_parser("rds",     parser_rds,     fixed = "application/rds")
   register_parser("feather", parser_feather, fixed = "application/feather")
+  register_parser("parquet", parser_parquet, fixed = "application/parquet")
   register_parser("text",    parser_text,    fixed = "text/plain", regex = "^text/")
   register_parser("tsv",     parser_tsv,     fixed = c("application/tab-separated-values", "text/tab-separated-values"))
   # yaml types: https://stackoverflow.com/a/38000954/591574
