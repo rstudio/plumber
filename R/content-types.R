@@ -42,7 +42,7 @@ knownContentTypes <- c(
   dotx = "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
   xlam = "application/vnd.ms-excel.addin.macroEnabled.12",
   xlsb = "application/vnd.ms-excel.sheet.binary.macroEnabled.12",
-  feather = "application/feather",
+  feather = "application/vnd.apache.arrow.file",
   parquet = "application/parquet",
   rds = "application/rds",
   tsv = "application/tab-separated-values",
