@@ -265,7 +265,7 @@ serializer_rds <- function(version = "2", ascii = FALSE, ..., type = "applicatio
 
 #' @describeIn serializers feather serializer. See also: [arrow::write_feather()]
 #' @export
-serializer_feather <- function(type = "application/feather") {
+serializer_feather <- function(type = "application/vnd.apache.arrow.file") {
   if (!requireNamespace("arrow", quietly = TRUE)) {
     stop("`arrow` must be installed for `serializer_feather` to work")
   }
