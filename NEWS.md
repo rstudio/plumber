@@ -5,8 +5,8 @@
 ## New features
 
 * Introduces new GeoJSON serializer and parser. GeoJSON objects are parsed into `sf` objects and `sf` or `sfc` objects will be serialized into GeoJSON. (@josiahparry, #830)
-* Updates feather serializer to use the arrow package
-* Adds parquet serializer by using the arrow package
+* Update feather serializer to use the arrow package. The new default feather MIME type is `application/vnd.apache.arrow.file`. (@pachadotdev #849)
+* Add parquet serializer and parser by using the arrow package (@pachadotdev #849)
 
 ## Bug fixes
 
