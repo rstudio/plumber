@@ -280,7 +280,7 @@ serializer_feather <- function(type = "application/feather") {
 
 #' @describeIn serializers parquet serializer. See also: [arrow::write_parquet()]
 #' @export
-serializer_parquet <- function(type = "application/parquet") {
+serializer_parquet <- function(type = "application/vnd.apache.parquet") {
   if (!requireNamespace("arrow", quietly = TRUE)) {
     stop("`arrow` must be installed for `serializer_parquet` to work")
   }
