@@ -577,7 +577,7 @@ register_parsers_onLoad <- function() {
   register_parser("octet",   parser_octet,   fixed = "application/octet-stream")
   register_parser("form",    parser_form,   fixed = "application/x-www-form-urlencoded")
   register_parser("rds",     parser_rds,     fixed = "application/rds")
-  register_parser("feather", parser_feather, fixed = "application/feather")
+  register_parser("feather", parser_feather, fixed = c("application/vnd.apache.arrow.file", "application/feather"))
   register_parser("parquet", parser_parquet, fixed = "application/parquet")
   register_parser("text",    parser_text,    fixed = "text/plain", regex = "^text/")
   register_parser("tsv",     parser_tsv,     fixed = c("application/tab-separated-values", "text/tab-separated-values"))
