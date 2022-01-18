@@ -10,7 +10,6 @@ Authors@R: c(
   person("Bruno", "Tremblay", role = "ctb", email = "cran@neoxone.com"),
   person("Frans", "van Dunné", role = "ctb", email = "frans@ixpantia.com"),
   person("Sebastiaan", "Vandewoude", role="ctb", email = "sebastiaanvandewoude@gmail.com"),
-  person("Mauricio", "Vargas Sepulveda", role="ctb", email = "mavargas11@uc.cl"),
   person(family = "RStudio", role = c("cph", "fnd")))
 License: MIT + file LICENSE
 BugReports: https://github.com/rstudio/plumber/issues
