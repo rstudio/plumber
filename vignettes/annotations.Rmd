@@ -217,7 +217,7 @@ pr() %>%
 
 Annotation | Arguments | Description/References
 -----------| --------- | ----------------------
-`@plumber` | None | Modify plumber router from plumber file. The plumber router provided to the function **must** be returned.
+`@plumber` | None | Modify plumber router from plumber file. The plumber router provided to the function **must** be returned. In most cases, anonymous functions are used following the `#* @plumber` annotation. However, named functions can also be used. When a named function is used, it must be referenced without parentheses.
 
 ##### Annotations example
 
@@ -228,6 +228,16 @@ function(pr) {
     pr_set_debug(TRUE) %>%
     pr_set_docs("swagger")
 }
+
+# Named function
+debug_swagger <- function(pr) {
+  pr %>%
+    pr_set_debug(TRUE) %>%
+    pr_set_docs("swagger")
+}
+
+#* @plumber
+debug_swagger
 ```
 
 ##### Equivalent programmatic usage

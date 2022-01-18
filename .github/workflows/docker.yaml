@@ -3,7 +3,8 @@ name: Docker
 on:
   push:
     branches:
-      - "master"
+      - "main"
+      - "rc-v**"
       - "docker**"
   schedule:
     - cron:  '0 0 1 * *' # first of every month
@@ -36,11 +37,11 @@ jobs:
         - name: GitHub
           # 'next' tag signifies the _next_ release
           tags: "next"
-          ref: "master"
+          ref: "main"
 
 
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
 
     # https://github.com/marketplace/actions/publish-docker
     - name: rstudio/plumber
