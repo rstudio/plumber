@@ -1,3 +1,5 @@
+context("parquet serializer")
+
 test_that("Errors call error handler", {
   skip_if_not_installed("arrow")
   errors <- 0

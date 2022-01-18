@@ -46,9 +46,9 @@ serializer_geojson(..., type = "application/geo+json")
 
 serializer_rds(version = "2", ascii = FALSE, ..., type = "application/rds")
 
-serializer_feather(type = "application/feather")
+serializer_feather(type = "application/vnd.apache.arrow.file")
 
-serializer_parquet(type = "application/parquet")
+serializer_parquet(type = "application/vnd.apache.parquet")
 
 serializer_yaml(..., type = "text/x-yaml; charset=UTF-8")
 
