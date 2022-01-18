@@ -9,7 +9,7 @@ test_that("parquet serializes properly", {
   expect_equal(val$headers$`Content-Type`, "application/parquet")
 
   # can test  by doing a full round trip if we believe the parser works via `test-parse-body.R`
-  parsed <- parse_body(val$body, "application/parquet", make_parser("parquet"))
+  parsed <- parse_body(val$body, "application/vnd.apache.parquet", make_parser("parquet"))
   # convert from parquet tibble to data.frame
   parsed <- as.data.frame(parsed, stringsAsFactors = FALSE)
   attr(parsed, "spec") <- NULL
