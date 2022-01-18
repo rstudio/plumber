@@ -121,7 +121,7 @@ test_that("Test parquet parser", {
   arrow::write_parquet(r_object, tmp)
   val <- readBin(tmp, "raw", 10000)
 
-  parsed <- parse_body(val, "application/parquet", make_parser("parquet"))
+  parsed <- parse_body(val, "application/vnd.apache.parquet", make_parser("parquet"))
   # convert from parquet tibble to data.frame
   parsed <- as.data.frame(parsed, stringsAsFactors = FALSE)
   attr(parsed, "spec") <- NULL
