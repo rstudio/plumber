@@ -43,7 +43,7 @@ knownContentTypes <- c(
   xlam = "application/vnd.ms-excel.addin.macroEnabled.12",
   xlsb = "application/vnd.ms-excel.sheet.binary.macroEnabled.12",
   feather = "application/vnd.apache.arrow.file",
-  parquet = "application/parquet",
+  parquet = "application/vnd.apache.parquet",
   rds = "application/rds",
   tsv = "application/tab-separated-values",
   csv = "application/csv",
