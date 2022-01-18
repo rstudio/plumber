@@ -101,7 +101,7 @@ test_that("Test feather parser", {
   arrow::write_feather(r_object, tmp)
   val <- readBin(tmp, "raw", 10000)
 
-  parsed <- parse_body(val, "application/feather", make_parser("feather"))
+  parsed <- parse_body(val, "application/vnd.apache.arrow.file", make_parser("feather"))
   # convert from feather tibble to data.frame
   parsed <- as.data.frame(parsed, stringsAsFactors = FALSE)
   attr(parsed, "spec") <- NULL
