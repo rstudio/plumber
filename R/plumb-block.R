@@ -250,7 +250,7 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
     parsers = rev(parsers),
     assets = assets,
     params = rev(params),
-    comments = paste0(rev(comments)[1], collapse = " "),
+    comments = tail(comments, 1),
     description = paste0(rev(comments)[-1], collapse = "\n"),
     responses = rev(responses),
     tags = rev(tags),
