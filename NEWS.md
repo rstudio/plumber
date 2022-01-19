@@ -2,7 +2,7 @@
 
 ## Breaking changes
 
-* First line of endpoint comments interpreted as OpenAPI 'summary' field and subsequent comment lines interpreted as 'description' field.
+* First line of endpoint comments interpreted as OpenAPI 'summary' field and subsequent comment lines interpreted as 'description' field. (@wkmor1 #805)
 
 ## New features 
 
