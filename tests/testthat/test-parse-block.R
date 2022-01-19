@@ -27,7 +27,7 @@ test_that("plumbBlock works", {
   expect_equal(b$paths[[2]], list(verb="POST", path="/"))
   expect_equal(b$filter, "test")
   expect_equal(b$comments, "Plumber comments")
-  expect_equal(b$description, "Plumber description second line")
+  expect_equal(b$description, "Plumber description\nsecond line")
 
   # due to covr changing some code, the return answer is very strange
   # the tests below should be skipped on covr
