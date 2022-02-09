@@ -4,11 +4,13 @@ url: https://www.rplumber.io
 #   mode: auto
 
 template:
+  package: tidytemplate
+  bootstrap: 5
   assets: pkgdown/assets
-  params:
-    docsearch:
-      api_key: 'e8f0e2420e2e9aac7973efb2cc877b06'
-      index_name: 'rplumber'
+  bslib:
+    primary: "#1f6b5d"
+    navbar-background: "#eefff6"
+  trailing_slash_redirect: true
 
 authors:
   Barret Schloerke:
