@@ -88,8 +88,8 @@ serializer_pdf(..., type = "application/pdf")
 
 \item{...}{extra arguments supplied to respective internal serialization function.}
 
-\item{auto_unbox}{automatically \code{\link[jsonlite]{unbox}} all atomic vectors of length 1. It is usually safer to avoid this and instead use the \code{\link[jsonlite]{unbox}} function to unbox individual elements.
-An exception is that objects of class \code{AsIs} (i.e. wrapped in \code{I()}) are not automatically unboxed. This is a way to mark single values as length-1 arrays.}
+\item{auto_unbox}{automatically \code{\link[jsonlite:unbox]{unbox()}} all atomic vectors of length 1. It is usually safer to avoid this and instead use the \code{\link[jsonlite:unbox]{unbox()}} function to unbox individual elements.
+An exception is that objects of class \code{AsIs} (i.e. wrapped in \code{\link[=I]{I()}}) are not automatically unboxed. This is a way to mark single values as length-1 arrays.}
 
 \item{version}{the workspace format version to use.  \code{NULL}
     specifies the current default version (3). The only other supported
