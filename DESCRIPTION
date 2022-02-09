@@ -93,3 +93,4 @@ Collate:
 RdMacros: lifecycle
 Language: en-US
 Config/Needs/check: Cairo
+Config/Needs/website: tidyverse/tidytemplate
