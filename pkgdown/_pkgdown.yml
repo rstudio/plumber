@@ -13,8 +13,6 @@ template:
   trailing_slash_redirect: true
 
 authors:
-  Barret Schloerke:
-    href: http://schloerke.com/
   Jeff Allen:
     href: https://trestletech.com/
 
