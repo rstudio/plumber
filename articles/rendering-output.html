@@ -239,76 +239,82 @@
 </tr>
 <tr class="even">
 <td><code>@serializer feather</code></td>
-<td><code>application/feather</code></td>
-<td>Object processed with <code><a href="https://rdrr.io/pkg/feather/man/read_feather.html" class="external-link">feather::write_feather()</a></code>
+<td><code>application/vnd.apache.arrow.file</code></td>
+<td>Object processed with <code><a href="https://arrow.apache.org/docs/r/reference/write_feather.html" class="external-link">arrow::write_feather()</a></code>
 </td>
 </tr>
 <tr class="odd">
+<td><code>@serializer parquet</code></td>
+<td><code>application/parquet</code></td>
+<td>Object processed with <code><a href="https://arrow.apache.org/docs/r/reference/write_parquet.html" class="external-link">arrow::write_parquet()</a></code>
+</td>
+</tr>
+<tr class="even">
 <td><code>@serializer yaml</code></td>
 <td><code>text/x-yaml</code></td>
 <td>Object processed with <code>yaml::as_yaml()</code>
 </td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>@serializer htmlwidget</code></td>
 <td><code>text/html; charset=utf-8</code></td>
 <td><code><a href="https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html" class="external-link">htmlwidgets::saveWidget()</a></code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>@serializer text</code></td>
 <td><code>text/plain</code></td>
 <td>Text output processed by <code><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character()</a></code>
 </td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>@serializer format</code></td>
 <td><code>text/plain</code></td>
 <td>Text output processed by <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>@serializer print</code></td>
 <td><code>text/plain</code></td>
 <td>Text output captured from <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>
 </td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>@serializer cat</code></td>
 <td><code>text/plain</code></td>
 <td>Text output captured from <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>@serializer jpeg</code></td>
 <td><code>image/jpeg</code></td>
 <td>Images created with <code><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">jpeg()</a></code>
 </td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>@serializer png</code></td>
 <td><code>image/png</code></td>
 <td>Images created with <code><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">png()</a></code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>@serializer svg</code></td>
 <td><code>image/svg</code></td>
 <td>Images created with <code><a href="https://rdrr.io/r/grDevices/cairo.html" class="external-link">svg()</a></code>
 </td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>@serializer bmp</code></td>
 <td><code>image/bmp</code></td>
 <td>Images created with <code><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">bmp()</a></code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>@serializer tiff</code></td>
 <td><code>image/tiff</code></td>
 <td>Images created with <code><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">tiff()</a></code>
 </td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>@serializer pdf</code></td>
 <td><code>application/pdf</code></td>
 <td>PDF File created with <code><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf()</a></code>
@@ -480,7 +486,7 @@
 <span class="op">}</span></code></pre></div>
 <p>Since this API is using a <code>PUT</code> request to test this API, we’ll use <code>curl</code> on the command line to test it. (There’s nothing about cookies that necessitates <code>PUT</code> requests; you could just as easily modify this API to use a <code>GET</code> request.) We can start by visiting the <code>/letter</code> endpoint and we’ll see that the API defaults to a lower-case alphabet. <code>curl http://localhost:8000/letter</code></p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">{</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a>  <span class="dt">"letter"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"t"</span><span class="ot">]</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="dt">"letter"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"q"</span><span class="ot">]</span></span>
 <span id="cb16-3"><a href="#cb16-3"></a><span class="fu">}</span></span></code></pre></div>
 <p>If we send a <code>PUT</code> request and specify the <code>capital</code> parameter, a cookie will be set on the client which will allow the server to accommodate our preference in future requests. In <code>curl</code>, you need to specify a file in which you want to save these cookies using the <code>-c</code> option. This is a good reminder that clients handle cookies differently – some won’t support them at all – so be sure that the clients you intend to support with your API play nicely with cookies if you want to use them.</p>
 <p>To send a <code>PUT</code> request, setting the parameter <code>capital</code> to <code>1</code>, we could invoke: <code>curl -c cookies.txt -X PUT --data 'capital=1' "http://localhost:8000/preferences"</code>. If you print out the <code>cookies.txt</code> file, you should now see that it contains a single cookie called <code>capitalize</code> with a value of <code>1</code>.</p>

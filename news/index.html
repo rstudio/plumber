@@ -74,6 +74,8 @@
 <div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
 <ul><li>Introduces new GeoJSON serializer and parser. GeoJSON objects are parsed into <code>sf</code> objects and <code>sf</code> or <code>sfc</code> objects will be serialized into GeoJSON. (<a href="https://github.com/josiahparry" class="external-link">@josiahparry</a>, <a href="https://github.com/rstudio/plumber/issues/830" class="external-link">#830</a>)</li>
+<li>Update feather serializer to use the arrow package. The new default feather MIME type is <code>application/vnd.apache.arrow.file</code>. (<a href="https://github.com/pachadotdev" class="external-link">@pachadotdev</a> <a href="https://github.com/rstudio/plumber/issues/849" class="external-link">#849</a>)</li>
+<li>Add parquet serializer and parser by using the arrow package (<a href="https://github.com/pachadotdev" class="external-link">@pachadotdev</a> <a href="https://github.com/rstudio/plumber/issues/849" class="external-link">#849</a>)</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
