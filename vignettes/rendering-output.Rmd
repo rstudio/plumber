@@ -59,7 +59,8 @@ Annotation | Content Type | Description/References
 `@serializer rds` | `application/rds` | Object processed with `base::serialize()`
 `@serializer csv` | `text/csv` | Object processed with `readr::format_csv()`
 `@serializer tsv` | `text/tab-separated-values` | Object processed with `readr::format_tsv()`
-`@serializer feather` | `application/feather` | Object processed with `feather::write_feather()`
+`@serializer feather` | `application/vnd.apache.arrow.file` | Object processed with `arrow::write_feather()`
+`@serializer parquet` | `application/parquet` | Object processed with `arrow::write_parquet()`
 `@serializer yaml` | `text/x-yaml` | Object processed with `yaml::as_yaml()`
 `@serializer htmlwidget` | `text/html; charset=utf-8` | `htmlwidgets::saveWidget()`
 `@serializer text` | `text/plain` | Text output processed by `as.character()`

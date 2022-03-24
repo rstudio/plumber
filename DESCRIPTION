@@ -44,7 +44,7 @@ Suggests:
     later,
     readr,
     yaml,
-    feather,
+    arrow,
     future,
     rstudioapi,
     spelling,
