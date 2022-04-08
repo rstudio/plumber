@@ -455,8 +455,10 @@ parser_tsv <- function(...) {
 #' @describeIn parsers Helper parser that writes the binary body to a file and reads it back again using `read_fn`.
 #'   This parser should be used when reading from a file is required.
 #' @param read_fn function used to read a the content of a file. Ex: [readRDS()]
+#' @param write_fn function used to write the body content to a file. Defaults to writeBin(), the main alternative is 
+#' readr::write_file(). This can help with some (rare) issues with using writeBin(), and might be faster for larger files.
 #' @export
-parser_read_file <- function(read_fn = readLines) {
+parser_read_file <- function(read_fn = readLines, write_fn = writeBin) {
   stopifnot(is.function(read_fn))
   function(value, filename = "", ...) {
     tmp <- tempfile("plumb", fileext = paste0("_", basename(filename)))
@@ -465,7 +467,7 @@ parser_read_file <- function(read_fn = readLines) {
         file.remove(tmp)
       }
     }, add = TRUE)
-    writeBin(value, tmp)
+    write_fn(value, tmp)
     read_fn(tmp)
   }
 }
@@ -483,23 +485,39 @@ parser_rds <- function(...) {
 #' @describeIn parsers feather parser. See [arrow::read_feather()] for more details.
 #' @export
 parser_feather <- function(...) {
-  parser_read_file(function(tmpfile) {
-    if (!requireNamespace("arrow", quietly = TRUE)) {
-      stop("`arrow` must be installed for `parser_feather` to work")
+  parser_read_file(
+    function(tmpfile) {
+      if (!requireNamespace("arrow", quietly = TRUE)) {
+        stop("`arrow` must be installed for `parser_feather` to work")
+      }
+      arrow::read_feather(tmpfile, ...)
+    },
+    function(value, tmpfile) {
+      if (!requireNamespace("readr", quietly = TRUE)) {
+        stop("`readr` must be installed for `parser_parquet` to work")
+      }
+      readr::write_file(value, tmpfile)
     }
-    arrow::read_feather(tmpfile, ...)
-  })
+  )
 }
 
 #' @describeIn parsers parquet parser. See [arrow::read_parquet()] for more details.
 #' @export
 parser_parquet <- function(...) {
-  parser_read_file(function(tmpfile) {
-    if (!requireNamespace("arrow", quietly = TRUE)) {
-      stop("`arrow` must be installed for `parser_parquet` to work")
+  parser_read_file(
+    function(tmpfile) {
+      if (!requireNamespace("arrow", quietly = TRUE)) {
+        stop("`arrow` must be installed for `parser_parquet` to work")
+      }
+      arrow::read_parquet(tmpfile, ...)
+    },
+    function(value, tmpfile) {
+      if (!requireNamespace("readr", quietly = TRUE)) {
+        stop("`readr` must be installed for `parser_parquet` to work")
+      }
+      readr::write_file(value, tmpfile)
     }
-    arrow::read_parquet(tmpfile, ...)
-  })
+  )
 }
 
 #' @describeIn parsers Octet stream parser. Returns the raw content.
