@@ -494,7 +494,7 @@ parser_feather <- function(...) {
     },
     function(value, tmpfile) {
       if (!requireNamespace("readr", quietly = TRUE)) {
-        stop("`readr` must be installed for `parser_parquet` to work")
+        stop("`readr` must be installed for `parser_feather` to work")
       }
       readr::write_file(value, tmpfile)
     }
