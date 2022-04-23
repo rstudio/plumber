@@ -31,7 +31,7 @@ parser_csv(...)
 
 parser_tsv(...)
 
-parser_read_file(read_fn = readLines)
+parser_read_file(read_fn = readLines, write_fn = writeBin)
 
 parser_rds(...)
 
@@ -51,6 +51,9 @@ parser_none()
 \item{parse_fn}{function to further decode a text string into an object}
 
 \item{read_fn}{function used to read a the content of a file. Ex: \code{\link[=readRDS]{readRDS()}}}
+
+\item{write_fn}{function used to write the body content to a file. Defaults to writeBin(), the main alternative is
+readr::write_file(). This can help with some (rare) issues with using writeBin(), and might be faster for larger files.}
 }
 \description{
 Parsers are used in Plumber to transform request body received
