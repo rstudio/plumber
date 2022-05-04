@@ -32,6 +32,9 @@
 #'   \code{\link{random_cookie_key}}. Please see the "Storing secure keys" section for more details
 #'   complex character string to bolster security.
 #' @param name The name of the cookie in the user's browser.
+#' @param path The uri path that the cookie will be available in future requests.
+#'    Defaults to the request URI. Set to \code{"/"} to make cookie available to
+#'    all requests at the host.
 #' @param expiration A number representing the number of seconds into the future
 #'   before the cookie expires or a \code{POSIXt} date object of when the cookie expires.
 #'   Defaults to the end of the user's browser session.
@@ -90,6 +93,7 @@
 session_cookie <- function(
   key,
   name = "plumber",
+  path = FALSE,
   expiration = FALSE,
   http = TRUE,
   secure = FALSE,
@@ -139,13 +143,13 @@ session_cookie <- function(
       session <- req$session
       # save session in a cookie
       if (!is.null(session)) {
-        res$setCookie(name, encodeCookie(session, key), expiration = expiration, http = http, secure = secure, same_site = same_site)
+        res$setCookie(name, encodeCookie(session, key), path = path, expiration = expiration, http = http, secure = secure, same_site = same_site)
       } else {
         # session is null
         if (!is.null(req$cookies[[name]])) {
           # no session to save, but had session to parse
           # remove cookie session cookie
-          res$removeCookie(name, "", expiration = expiration, http = http, secure = secure, same_site = same_site)
+          res$removeCookie(name, path = path, expiration = expiration, http = http, secure = secure, same_site = same_site)
         }
       }
 

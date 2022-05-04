@@ -34,7 +34,7 @@ PlumberResponse <- R6Class(
       )
     },
     # TODO if name and value are a vector of same length, call set cookie many times
-    setCookie = function(name, value, path, expiration = FALSE, http = FALSE, secure = FALSE, same_site = FALSE) {
+    setCookie = function(name, value, path = FALSE, expiration = FALSE, http = FALSE, secure = FALSE, same_site = FALSE) {
       self$setHeader("Set-Cookie", cookieToStr(
         name = name,
         value = value,
@@ -59,7 +59,7 @@ PlumberResponse <- R6Class(
 
 removeCookieStr <- function(name, path, http = FALSE, secure = FALSE, same_site = FALSE) {
   str <- paste0(name, "=; ")
-  if (!missing(path)){
+  if (!missing(path) && is.character(path)){
     str <- paste0(str, "Path=", path, "; ")
   }
   if (!missing(http) && http){
@@ -91,7 +91,7 @@ cookieToStr <- function(
   val <- httpuv::encodeURIComponent(as.character(value))
   str <- paste0(name, "=", val, "; ")
 
-  if (!missing(path)){
+  if (!missing(path) && is.character(path)){
     str <- paste0(str, "Path=", path, "; ")
   }
 
