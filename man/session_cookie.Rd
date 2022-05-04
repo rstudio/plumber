@@ -7,7 +7,7 @@
 session_cookie(
   key,
   name = "plumber",
-  path = FALSE,
+  path = "",
   expiration = FALSE,
   http = TRUE,
   secure = FALSE,

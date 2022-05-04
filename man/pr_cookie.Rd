@@ -8,7 +8,7 @@ pr_cookie(
   pr,
   key,
   name = "plumber",
-  path = FALSE,
+  path = "",
   expiration = FALSE,
   http = TRUE,
   secure = FALSE,

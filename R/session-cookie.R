@@ -93,7 +93,7 @@
 session_cookie <- function(
   key,
   name = "plumber",
-  path = FALSE,
+  path = "",
   expiration = FALSE,
   http = TRUE,
   secure = FALSE,

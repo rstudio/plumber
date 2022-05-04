@@ -91,7 +91,7 @@ cookieToStr <- function(
   val <- httpuv::encodeURIComponent(as.character(value))
   str <- paste0(name, "=", val, "; ")
 
-  if (!missing(path) && is.character(path)){
+  if (!missing(path) && is.character(path) && nchar(path)>0){
     str <- paste0(str, "Path=", path, "; ")
   }
 
