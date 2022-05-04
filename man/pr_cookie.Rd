@@ -8,6 +8,7 @@ pr_cookie(
   pr,
   key,
   name = "plumber",
+  path = FALSE,
   expiration = FALSE,
   http = TRUE,
   secure = FALSE,
@@ -23,6 +24,10 @@ where you want to save/restore encrypted cookies. It should be produced using
 complex character string to bolster security.}
 
 \item{name}{The name of the cookie in the user's browser.}
+
+\item{path}{The uri path that the cookie will be available in future requests.
+Defaults to the request URI. Set to \code{"/"} to make cookie available to
+all requests at the host.}
 
 \item{expiration}{A number representing the number of seconds into the future
 before the cookie expires or a \code{POSIXt} date object of when the cookie expires.
