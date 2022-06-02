@@ -231,6 +231,18 @@ serializer_unboxed_json <- function(auto_unbox = TRUE, ..., type = "application/
   serializer_json(auto_unbox = auto_unbox, ..., type = type)
 }
 
+#' @describeIn serializers GeoJSON serializer. See also [geojsonsf::sf_geojson()] and [[geojsonsf::sfc_geojson()]].
+#' @export
+serializer_geojson <- function(..., type = "application/geo+json") {
+  if (!requireNamespace("geojsonsf", quietly = TRUE)) {
+    stop("`geojsonsf` must be installed for `serializer_geojson` to work")
+  }
+  serializer_content_type(type, function(val) {
+    if (inherits(val, "sfc")) return(geojsonsf::sfc_geojson(val, ...))
+    if (inherits(val, "sf"))  return(geojsonsf::sf_geojson(val, ...))
+    stop("Did not receive an `sf` or `sfc` object. ")
+  })
+}
 
 
 
@@ -251,17 +263,32 @@ serializer_rds <- function(version = "2", ascii = FALSE, ..., type = "applicatio
   })
 }
 
-#' @describeIn serializers feather serializer. See also: [feather::write_feather()]
+#' @describeIn serializers feather serializer. See also: [arrow::write_feather()]
 #' @export
-serializer_feather <- function(type = "application/feather") {
-  if (!requireNamespace("feather", quietly = TRUE)) {
-    stop("`feather` must be installed for `serializer_feather` to work")
+serializer_feather <- function(type = "application/vnd.apache.arrow.file") {
+  if (!requireNamespace("arrow", quietly = TRUE)) {
+    stop("`arrow` must be installed for `serializer_feather` to work")
   }
   serializer_write_file(
     fileext = ".feather",
     type = type,
     write_fn = function(val, tmpfile) {
-      feather::write_feather(val, tmpfile)
+      arrow::write_feather(val, tmpfile)
+    }
+  )
+}
+
+#' @describeIn serializers parquet serializer. See also: [arrow::write_parquet()]
+#' @export
+serializer_parquet <- function(type = "application/vnd.apache.parquet") {
+  if (!requireNamespace("arrow", quietly = TRUE)) {
+    stop("`arrow` must be installed for `serializer_parquet` to work")
+  }
+  serializer_write_file(
+    fileext = ".parquet",
+    type = type,
+    write_fn = function(val, tmpfile) {
+      arrow::write_parquet(val, tmpfile)
     }
   )
 }
@@ -602,7 +629,9 @@ add_serializers_onLoad <- function() {
   register_serializer("csv",         serializer_csv)
   register_serializer("tsv",         serializer_tsv)
   register_serializer("feather",     serializer_feather)
+  register_serializer("parquet",     serializer_parquet)
   register_serializer("yaml",        serializer_yaml)
+  register_serializer("geojson",     serializer_geojson)
 
   # text
   register_serializer("text",   serializer_text)

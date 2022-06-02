@@ -15,7 +15,8 @@
 #' that has a matching route with a trailing slash. For example, if set to `TRUE` and the
 #' GET route `/test/` existed, then a GET request of `/test?a=1` would redirect to
 #' `/test/?a=1`. Defaults to `FALSE`. This option will default to `TRUE` in a future release.}
-#' \item{`plumber.methodNotAllowed`}{Logical value which allows the router to notify that an
+#' \item{`plumber.methodNotAllowed`}{`r lifecycle::badge("experimental")`
+#' Logical value which allows the router to notify that an
 #' unavailable method was requested, but a different request method is allowed. For example,
 #' if set to `TRUE` and the GET route `/test` existed, then a POST request of `/test` would
 #' receive a 405 status and the allowed methods. Defaults to `TRUE`.}
@@ -66,6 +67,11 @@ options_plumber <- function(
   legacyRedirects      = getOption("plumber.legacyRedirects")
 ) {
   ellipsis::check_dots_empty()
+
+  # Make sure all fallback options are disabled
+  if (!missing(docs.callback) && is.null(docs.callback)) {
+    options("plumber.swagger.url" = NULL)
+  }
 
   options(
     plumber.port                 =   port,

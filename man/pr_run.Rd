@@ -4,7 +4,16 @@
 \alias{pr_run}
 \title{Start a server using \code{plumber} object}
 \usage{
-pr_run(pr, host = "127.0.0.1", port = getOption("plumber.port", NULL))
+pr_run(
+  pr,
+  host = "127.0.0.1",
+  port = getOption("plumber.port", NULL),
+  ...,
+  debug = missing_arg(),
+  docs = missing_arg(),
+  swaggerCallback = missing_arg(),
+  quiet = FALSE
+)
 }
 \arguments{
 \item{pr}{A Plumber API. Note: The supplied Plumber API object will also be updated in place as well as returned by the function.}
@@ -16,6 +25,24 @@ all IPv4 addresses and "::/0" represents all IPv6 addresses.}
 \item{port}{A number or integer that indicates the server port that should
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.}
+
+\item{...}{Should be empty.}
+
+\item{debug}{If \code{TRUE}, it will provide more insight into your API errors.
+Using this value will only last for the duration of the run.
+If \code{\link[=pr_set_debug]{pr_set_debug()}} has not been called, \code{debug} will default to \code{interactive()} at \code{\link[=pr_run]{pr_run()}} time}
+
+\item{docs}{Visual documentation value to use while running the API.
+This value will only be used while running the router.
+If missing, defaults to information previously set with \code{\link[=pr_set_docs]{pr_set_docs()}}.
+For more customization, see \code{\link[=pr_set_docs]{pr_set_docs()}} for examples.}
+
+\item{swaggerCallback}{An optional single-argument function that is called
+back with the URL to an OpenAPI user interface when one becomes ready. If
+missing, defaults to information set with \code{\link[=pr_set_docs_callback]{pr_set_docs_callback()}}.
+This value will only be used while running the router.}
+
+\item{quiet}{If \code{TRUE}, don't print routine startup messages.}
 }
 \description{
 \code{port} does not need to be explicitly assigned.
@@ -26,7 +53,14 @@ pr() \%>\%
   pr_run()
 
 pr() \%>\%
-  pr_run(port = 5762)
+  pr_run(
+    # manually set port
+    port = 5762,
+    # turn off visual documentation
+    docs = FALSE,
+    # do not display startup messages
+    quiet = TRUE
+  )
 }
 
 }

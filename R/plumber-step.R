@@ -27,6 +27,8 @@ PlumberStep <- R6Class(
   "PlumberStep",
   inherit=Hookable,
   public = list(
+    #' @field srcref from step block
+    srcref = NULL,
     #' @field lines lines from step block
     lines = NA,
     #' @field serializer step serializer function
@@ -36,8 +38,9 @@ PlumberStep <- R6Class(
     #' @param envir step environment
     #' @param lines step block
     #' @param serializer step serializer
+    #' @param srcref `srcref` attribute from block
     #' @return A new `PlumberStep` object
-    initialize = function(expr, envir, lines, serializer){
+    initialize = function(expr, envir, lines, serializer, srcref){
       private$expr <- expr
       if (is.expression(expr)) {
         private$func <- eval(expr, envir)
@@ -47,6 +50,9 @@ PlumberStep <- R6Class(
       throw_if_func_is_not_a_function(private$func)
       private$envir <- envir
 
+      if (!missing(srcref)) {
+        self$srcref <- srcref
+      }
       if (!missing(lines)){
         self$lines <- lines
       }
@@ -160,7 +166,7 @@ getRelevantArgs <- function(args, func) {
 
 #' Plumber Endpoint
 #'
-#' Defines a terminal handler in a PLumber router.
+#' Defines a terminal handler in a Plumber router.
 #'
 #' @export
 PlumberEndpoint <- R6Class(
@@ -211,20 +217,16 @@ PlumberEndpoint <- R6Class(
     #' @param envir Endpoint environment
     #' @param serializer Endpoint serializer. Ex: [serializer_json()]
     #' @template pr_setParsers__parsers
+    #' @param srcref `srcref` attribute from block
     #' @param lines Endpoint block
     #' @param params Endpoint params
     #' @param comments,responses,tags Values to be used within the OpenAPI Spec
     #' @details Parameters values are obtained from parsing blocks of lines in a plumber file.
     #' They can also be provided manually for historical reasons.
     #' @return A new `PlumberEndpoint` object
-    initialize = function(verbs, path, expr, envir, serializer, parsers, lines, params, comments, responses, tags) {
-
-      if (substr(path, 1,1) != "/") {
-        path <- paste0("/", path)
-      }
+    initialize = function(verbs, path, expr, envir, serializer, parsers, lines, params, comments, responses, tags, srcref) {
 
       self$verbs <- verbs
-      self$path <- path
 
       private$expr <- expr
       if (is.expression(expr)){
@@ -235,7 +237,7 @@ PlumberEndpoint <- R6Class(
       throw_if_func_is_not_a_function(private$func)
       private$envir <- envir
 
-      private$regex <- createPathRegex(path, self$getFuncParams())
+      self$setPath(path)
 
       if (!missing(serializer) && !is.null(serializer)){
         self_set_serializer(self, serializer)
@@ -243,6 +245,9 @@ PlumberEndpoint <- R6Class(
 
       if (!missing(parsers) && !is.null(parsers)) {
         self$parsers <- make_parser(parsers)
+      }
+      if (!missing(srcref)) {
+        self$srcref <- srcref
       }
       if (!missing(lines)){
         self$lines <- lines
@@ -268,6 +273,10 @@ PlumberEndpoint <- R6Class(
     getPathParams = function(path){
       extractPathParams(private$regex, path)
     },
+    #' @description retrieve endpoint function
+    getFunc = function() {
+      private$func
+    },
     #' @description retrieve endpoint expression parameters
     getFuncParams = function() {
       getArgsMetadata(private$func)
@@ -281,6 +290,18 @@ PlumberEndpoint <- R6Class(
         return(list())
       }
       self$params
+    },
+    # It would not make sense to have `$getPath()` and deprecate `$path`
+    #' @description Updates `$path` with a sanitized `path` and updates the internal path meta-data
+    #' @param path Path to set `$path`. If missing a beginning slash, one will be added.
+    setPath = function(path) {
+      if (substr(path, 1,1) != "/") {
+        path <- paste0("/", path)
+      }
+      # private$func is not updated after initialization
+      self$path <- path
+      private$regex <- createPathRegex(path, self$getFuncParams())
+      path
     }
   ),
   private = list(
@@ -293,7 +314,7 @@ PlumberFilter <- R6Class(
   inherit = PlumberStep,
   public = list(
     name = NA,
-    initialize = function(name, expr, envir, serializer, lines){
+    initialize = function(name, expr, envir, serializer, lines, srcref){
       self$name <- name
       private$expr <- expr
       if (is.expression(expr)){
@@ -306,6 +327,9 @@ PlumberFilter <- R6Class(
 
       if (!missing(serializer)){
         self_set_serializer(self, serializer)
+      }
+      if (!missing(srcref)) {
+        self$srcref <- srcref
       }
       if (!missing(lines)){
         self$lines <- lines

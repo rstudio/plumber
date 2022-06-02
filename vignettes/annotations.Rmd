@@ -13,7 +13,7 @@ source("_helpers.R")
 
 ## Annotations {#annotations}
 
-Annotations are specially-structured comments used in your plumber file to create an API. A full annotation line starts with `#*` or `#'`, then the annotation keyword `@...`, any number of space characters followed by the content. It is recommended to use `#*` to differentiate them from `Roxygen2` annotations.
+Annotations are specially-structured comments used in your plumber file to create an API. A full annotation line starts with `#*` or `#'`, then the annotation keyword `@...`, any number of space characters followed by the content. It is recommended to use `#*` to differentiate them from `roxygen2` annotations.
 
 ## Global annotations {#global-annotations}
 
@@ -74,7 +74,7 @@ Annotation | Argument | Description/References
 `@parser` | `Alias` `[Args list]` | Some parsers accept arguments. See [parsers reference](https://www.rplumber.io/reference/parsers.html). Can be repeated to allow multiple parsers on the same endpoint. Aliases : `r paste0("<code>", registered_parsers(), "</code>", collapse = ", ")` from [`registered_parsers()`](https://www.rplumber.io/reference/register_parser.html).
 `@param` | `Name`[`:Type` `Description`] | Enclose `Type` between square brackets `[]` to indicate it is an array. Can be repeated to define different parameters.
 `@response` | `Name` `Description` | Simple [Response object](http://spec.openapis.org/oas/v3.0.3#response-object). Can be repeated to define different responses.
-`@tags` | `Tag` | Can be repeated to add multiple tags. Quote with " or ' to use non word character (like spaces) in `Tag`. [Tag field](http://spec.openapis.org/oas/v3.0.3#operation-object)
+`@tag` | `Tag` | Can be repeated to add multiple tags. Quote with " or ' to use non word character (like spaces) in `Tag`. [Tag field](http://spec.openapis.org/oas/v3.0.3#operation-object)
 `@preempt` | `Filter` | Specify that this endpoint has to execute before `Filter`. [Filters](./programmatic-usage.html#defining-filters)
 None | `Comments` | Lines without annotation will be mapped to [Summary field](http://spec.openapis.org/oas/v3.0.3#fixed-fields-6).
 
@@ -82,9 +82,12 @@ None | `Comments` | Lines without annotation will be mapped to [Summary field](h
 #### More details on `@param`
 Types are used to define API inputs. You can use most of them in dynamic routes. Note that Plumber first look in block expression to set endpoint parameters names, types and default value. Then `@param` annotations and dynamic route/path defined parameters will override Plumber guesses from block expression.
 
-Plumber parameter type to OpenAPI type refenrence. For programmatic use, pick the one with an asterisk.
+Query parameters currently need to be explicitly converted as they are pushed as is (character) to block expression.
+Only dynamic route parameters are converted to specified `@param` type before being pushed to block expression.
 
-Type | OpenApi | Availability
+Plumber parameter type to OpenAPI type reference. For programmatic use, pick the one with an asterisk.
+
+Type | OpenAPI | Availability
 ---------------- | ----------- | ---------
 `bool`, `boolean`*, `logical` | `boolean` | `query`, `path`
 `dbl`, `double`, `float`, `number`*, `numeric` | `number` `format:double` | `query`, `path`
@@ -96,6 +99,16 @@ Type | OpenApi | Availability
 ##### Annotations example
 
 ```{r, eval = FALSE, echo = TRUE}
+#* @get /query/parameters
+#* @serializer text
+#* @param name:str
+#* @param age:[int]
+function(name, age) {
+  # Explicit conversion is required for query parameters
+  age <- as.integer(age)
+  sprintf("%s is %i years old", name, max(age))
+}
+
 #* @get /dyn/<name:str>/<age:[int]>/route
 #* @serializer text
 #* @parser none
@@ -117,9 +130,15 @@ function(f) {
 
 ##### Equivalent programmatic usage
 ```{r, eval = FALSE, echo = TRUE}
-text_handler <- function(name, age) { sprintf("%s is %i years old", name, age) }
+text_handler <- function(name, age) { sprintf("%s is %i years old", name, max(age)) }
+qp_handler <- function(name, age) { age <- as.integer(age); text_handler(name, age) }
 file_handler <- function(file) { as_attachment(file[[1]], names(file)[1]) }
 pr() %>%
+  pr_get(path = "/query/parameters",
+         handler = qp_handler,
+         serializer = serializer_text(),
+         params = list("name" = list(type = "string", required = FALSE, isArray = FALSE),
+                       "age" = list(type = "integer", required = FALSE, isArray = TRUE))) %>%
   pr_get(path = "/dyn/<name:str>/<age:[int]>/route",
          handler = text_handler,
          serializer = serializer_text(),
@@ -198,7 +217,7 @@ pr() %>%
 
 Annotation | Arguments | Description/References
 -----------| --------- | ----------------------
-`@plumber` | None | Modify plumber router from plumber file. The plumber router provided to the function **must** be returned.
+`@plumber` | None | Modify plumber router from plumber file. The plumber router provided to the function **must** be returned. In most cases, anonymous functions are used following the `#* @plumber` annotation. However, named functions can also be used. When a named function is used, it must be referenced without parentheses.
 
 ##### Annotations example
 
@@ -209,6 +228,16 @@ function(pr) {
     pr_set_debug(TRUE) %>%
     pr_set_docs("swagger")
 }
+
+# Named function
+debug_swagger <- function(pr) {
+  pr %>%
+    pr_set_debug(TRUE) %>%
+    pr_set_docs("swagger")
+}
+
+#* @plumber
+debug_swagger
 ```
 
 ##### Equivalent programmatic usage

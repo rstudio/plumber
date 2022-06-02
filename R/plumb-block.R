@@ -260,7 +260,8 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
 #' Evaluate and activate a "block" of code found in a plumber API file.
 #' @noRd
 evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr) {
-  lineNum <- srcref[1] - 1
+  lines <- srcref[c(1,3)]
+  lineNum <- lines[1] - 1
 
   block <- plumbBlock(lineNum, file, envir)
 
@@ -278,7 +279,8 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr)
         envir = envir,
         serializer = block$serializer,
         parsers = block$parsers,
-        lines = srcref,
+        lines = lines,
+        srcref = srcref,
         params = block$params,
         comments = block$comments,
         responses = block$responses,
@@ -288,7 +290,8 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr)
       addEndpoint(ep, block$preempt)
     })
   } else if (!is.null(block$filter)){
-    filter <- PlumberFilter$new(block$filter, expr, envir, block$serializer, srcref)
+    filter <- PlumberFilter$new(block$filter, expr, envir, block$serializer,
+      lines = lines, srcref = srcref)
     addFilter(filter)
 
   } else if (!is.null(block$assets)){
