@@ -79,6 +79,7 @@
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li><p>OpenAPI response type detection had a scoping issue. Use serializer defined <code>Content-Type</code> header instead. (<a href="https://github.com/meztez" class="external-link">@meztez</a>, <a href="https://github.com/rstudio/plumber/issues/789" class="external-link">#789</a>)</p></li>
 <li><p>The default shared secret filter returns error responses without throwing an error. (<a href="https://github.com/rstudio/plumber/issues/808" class="external-link">#808</a>)</p></li>
+<li><p>Remove response bodies (and therefore the Content-Length header) for status codes which forbid it under the HTTP specification (e.g. 1xx, 204, 304). (<a href="https://github.com/atheriel" class="external-link">@atheriel</a> <a href="https://github.com/rstudio/plumber/issues/758" class="external-link">#758</a>, <a href="https://github.com/meztez" class="external-link">@meztez</a> <a href="https://github.com/rstudio/plumber/issues/760" class="external-link">#760</a>)</p></li>
 <li><p>Decode path URI before attempting to serve static assets (<a href="https://github.com/meztez" class="external-link">@meztez</a> <a href="https://github.com/rstudio/plumber/issues/754" class="external-link">#754</a>).</p></li>
 </ul></div>
 </div>
