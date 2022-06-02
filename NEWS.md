@@ -4,6 +4,7 @@
 
 ## New features
 
+* Static file handler now serves HEAD requests. (#798)
 * Introduces new GeoJSON serializer and parser. GeoJSON objects are parsed into `sf` objects and `sf` or `sfc` objects will be serialized into GeoJSON. (@josiahparry, #830)
 * Update feather serializer to use the arrow package. The new default feather MIME type is `application/vnd.apache.arrow.file`. (@pachadotdev #849)
 * Add parquet serializer and parser by using the arrow package (@pachadotdev #849)
@@ -11,7 +12,9 @@
 
 ## Bug fixes
 
-* OpenAPI specification collision when using `examples`. (#820)
+* OpenAPI specification collision when using `examples`. (@meztez #820)
+
+* Static handler returns Last-Modified response header. (#798)
 
 * OpenAPI response type detection had a scoping issue. Use serializer defined `Content-Type` header instead. (@meztez, #789)
 
