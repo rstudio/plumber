@@ -90,7 +90,7 @@ test_that("Test tsv parser", {
 })
 
 test_that("Test feather parser", {
-  skip_if_not_installed("feather")
+  skip_if_not_installed("arrow")
 
   tmp <- tempfile()
   on.exit({
@@ -98,11 +98,31 @@ test_that("Test feather parser", {
   }, add = TRUE)
 
   r_object <- iris
-  feather::write_feather(r_object, tmp)
+  arrow::write_feather(r_object, tmp)
   val <- readBin(tmp, "raw", 10000)
 
-  parsed <- parse_body(val, "application/feather", make_parser("feather"))
+  parsed <- parse_body(val, "application/vnd.apache.arrow.file", make_parser("feather"))
   # convert from feather tibble to data.frame
+  parsed <- as.data.frame(parsed, stringsAsFactors = FALSE)
+  attr(parsed, "spec") <- NULL
+
+  expect_equal(parsed, r_object)
+})
+
+test_that("Test parquet parser", {
+  skip_if_not_installed("arrow")
+
+  tmp <- tempfile()
+  on.exit({
+    file.remove(tmp)
+  }, add = TRUE)
+
+  r_object <- iris
+  arrow::write_parquet(r_object, tmp)
+  val <- readBin(tmp, "raw", 10000)
+
+  parsed <- parse_body(val, "application/vnd.apache.parquet", make_parser("parquet"))
+  # convert from parquet tibble to data.frame
   parsed <- as.data.frame(parsed, stringsAsFactors = FALSE)
   attr(parsed, "spec") <- NULL
 

@@ -44,14 +44,14 @@ Suggests:
     later,
     readr,
     yaml,
-    feather,
+    arrow,
     future,
     rstudioapi,
     spelling,
     mockery (>= 0.4.2),
     geojsonsf,
     sf
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Collate:
     'async.R'
     'content-types.R'
@@ -93,3 +93,4 @@ Collate:
 RdMacros: lifecycle
 Language: en-US
 Config/Needs/check: Cairo
+Config/Needs/website: tidyverse/tidytemplate

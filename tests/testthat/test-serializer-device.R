@@ -29,7 +29,7 @@ expect_device_output <- function(name, content_type, capability_type = name) {
 
   if (!is.null(capability_type)) {
     if (!capabilities(capability_type)) {
-      testthat::skip("Graphics device type not supported: ", name)
+      testthat::skip(paste0("Graphics device type not supported: ", name))
     }
   }
 
