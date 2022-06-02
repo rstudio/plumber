@@ -288,6 +288,7 @@ test_that("block respect original order of lines for comments, tags and response
     "#' @response 200 ok",
     "#' @response 404 not ok")
   b <- plumbBlock(length(lines), lines)
+  expect_equal(b$comments, "comments first line")
   expect_equal(b$description, "comments second line\ncomments third line")
   expect_equal(b$tags, c("aaa", "bbb"))
   expect_equal(b$responses, list(`200`=list(description="ok"), `404` = list(description="not ok")))
