@@ -14,6 +14,7 @@ DoS
 Dockerfile
 Dockerfiles
 DuckDuckGo
+GeoJSON
 GlobalEnv
 HAProxy
 HSTS
