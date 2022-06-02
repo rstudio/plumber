@@ -125,20 +125,20 @@ each separate verb/path into its own endpoint, so we just do that.</p></dd>
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-getTypedParams"><code>PlumberEndpoint$getTypedParams()</code></a></p></li>
-<li><p><a href="#method-canServe"><code>PlumberEndpoint$canServe()</code></a></p></li>
-<li><p><a href="#method-matchesPath"><code>PlumberEndpoint$matchesPath()</code></a></p></li>
-<li><p><a href="#method-new"><code>PlumberEndpoint$new()</code></a></p></li>
-<li><p><a href="#method-getPathParams"><code>PlumberEndpoint$getPathParams()</code></a></p></li>
-<li><p><a href="#method-getFunc"><code>PlumberEndpoint$getFunc()</code></a></p></li>
-<li><p><a href="#method-getFuncParams"><code>PlumberEndpoint$getFuncParams()</code></a></p></li>
-<li><p><a href="#method-getEndpointParams"><code>PlumberEndpoint$getEndpointParams()</code></a></p></li>
-<li><p><a href="#method-setPath"><code>PlumberEndpoint$setPath()</code></a></p></li>
-<li><p><a href="#method-clone"><code>PlumberEndpoint$clone()</code></a></p></li>
-</ul></div><p><details open><summary>Inherited methods</summary><ul><li><p><span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks"><a href="Hookable.html#method-registerHooks"><code>plumber::Hookable$registerHooks()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="PlumberStep" data-id="exec"><a href="PlumberStep.html#method-exec"><code>plumber::PlumberStep$exec()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="plumber" data-topic="PlumberStep" data-id="registerHook"><a href="PlumberStep.html#method-registerHook"><code>plumber::PlumberStep$registerHook()</code></a></span></p></li>
-</ul></details></p><hr><a id="method-getTypedParams"></a><div class="section">
+<ul><li><p><a href="#method-PlumberEndpoint-getTypedParams"><code>PlumberEndpoint$getTypedParams()</code></a></p></li>
+<li><p><a href="#method-PlumberEndpoint-canServe"><code>PlumberEndpoint$canServe()</code></a></p></li>
+<li><p><a href="#method-PlumberEndpoint-matchesPath"><code>PlumberEndpoint$matchesPath()</code></a></p></li>
+<li><p><a href="#method-PlumberEndpoint-new"><code>PlumberEndpoint$new()</code></a></p></li>
+<li><p><a href="#method-PlumberEndpoint-getPathParams"><code>PlumberEndpoint$getPathParams()</code></a></p></li>
+<li><p><a href="#method-PlumberEndpoint-getFunc"><code>PlumberEndpoint$getFunc()</code></a></p></li>
+<li><p><a href="#method-PlumberEndpoint-getFuncParams"><code>PlumberEndpoint$getFuncParams()</code></a></p></li>
+<li><p><a href="#method-PlumberEndpoint-getEndpointParams"><code>PlumberEndpoint$getEndpointParams()</code></a></p></li>
+<li><p><a href="#method-PlumberEndpoint-setPath"><code>PlumberEndpoint$setPath()</code></a></p></li>
+<li><p><a href="#method-PlumberEndpoint-clone"><code>PlumberEndpoint$clone()</code></a></p></li>
+</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks"><a href="Hookable.html#method-registerHooks"><code>plumber::Hookable$registerHooks()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="PlumberStep" data-id="exec"><a href="PlumberStep.html#method-exec"><code>plumber::PlumberStep$exec()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="PlumberStep" data-id="registerHook"><a href="PlumberStep.html#method-registerHook"><code>plumber::PlumberStep$registerHook()</code></a></span></li>
+</ul></details></p><hr><a id="method-PlumberEndpoint-getTypedParams"></a><div class="section">
 <h3 id="method-gettypedparams-">Method <code>getTypedParams()</code><a class="anchor" aria-label="anchor" href="#method-gettypedparams-"></a></h3>
 <p>retrieve endpoint typed parameters</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
@@ -146,7 +146,7 @@ each separate verb/path into its own endpoint, so we just do that.</p></dd>
 </div>
 
 
-</div><p></p><hr><a id="method-canServe"></a><div class="section">
+</div><p></p><hr><a id="method-PlumberEndpoint-canServe"></a><div class="section">
 <h3 id="method-canserve-">Method <code>canServe()</code><a class="anchor" aria-label="anchor" href="#method-canserve-"></a></h3>
 <p>ability to serve request</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
@@ -166,7 +166,7 @@ each separate verb/path into its own endpoint, so we just do that.</p></dd>
 <p>a logical. <code>TRUE</code> when endpoint can serve request.</p>
 </div>
 
-</div><p></p><hr><a id="method-matchesPath"></a><div class="section">
+</div><p></p><hr><a id="method-PlumberEndpoint-matchesPath"></a><div class="section">
 <h3 id="method-matchespath-">Method <code>matchesPath()</code><a class="anchor" aria-label="anchor" href="#method-matchespath-"></a></h3>
 <p>determines if route matches requested path</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
@@ -186,7 +186,7 @@ each separate verb/path into its own endpoint, so we just do that.</p></dd>
 <p>a logical. <code>TRUE</code> when endpoint matches the requested path.</p>
 </div>
 
-</div><p></p><hr><a id="method-new"></a><div class="section">
+</div><p></p><hr><a id="method-PlumberEndpoint-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Create a new <code>PlumberEndpoint</code> object</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
@@ -235,17 +235,8 @@ each separate verb/path into its own endpoint, so we just do that.</p></dd>
 <li><p>A <code>TRUE</code> value, which will default to combining all parsers. This is great for seeing what is possible, but not great for security purposes</p></li>
 </ul><p>If the parser name <code>"all"</code> is found in any character value or list name, all remaining parsers will be added.
 When using a list, parser information already defined will maintain their existing argument values.  All remaining parsers will use their default arguments.</p>
-<p>Example:</p><div class="sourceCode"><pre><code><span class="co"># provide a character string</span>
-<span class="va">parsers</span> <span class="op">=</span> <span class="st">"json"</span>
-
-<span class="co"># provide a named list with no arguments</span>
-<span class="va">parsers</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>json <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># provide a named list with arguments; include `rds`</span>
-<span class="va">parsers</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>json <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>simplifyVector <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, rds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># default plumber parsers</span>
-<span class="va">parsers</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"json"</span>, <span class="st">"form"</span>, <span class="st">"text"</span>, <span class="st">"octet"</span>, <span class="st">"multi"</span><span class="op">)</span></code></pre></div></dd>
+<p>Example:</p>
+<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div></dd>
 
 
 <dt><code>lines</code></dt>
@@ -271,7 +262,7 @@ When using a list, parser information already defined will maintain their existi
 <p>A new <code>PlumberEndpoint</code> object</p>
 </div>
 
-</div><p></p><hr><a id="method-getPathParams"></a><div class="section">
+</div><p></p><hr><a id="method-PlumberEndpoint-getPathParams"></a><div class="section">
 <h3 id="method-getpathparams-">Method <code>getPathParams()</code><a class="anchor" aria-label="anchor" href="#method-getpathparams-"></a></h3>
 <p>retrieve endpoint path parameters</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
@@ -287,7 +278,7 @@ When using a list, parser information already defined will maintain their existi
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-getFunc"></a><div class="section">
+</div><p></p><hr><a id="method-PlumberEndpoint-getFunc"></a><div class="section">
 <h3 id="method-getfunc-">Method <code>getFunc()</code><a class="anchor" aria-label="anchor" href="#method-getfunc-"></a></h3>
 <p>retrieve endpoint function</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
@@ -295,7 +286,7 @@ When using a list, parser information already defined will maintain their existi
 </div>
 
 
-</div><p></p><hr><a id="method-getFuncParams"></a><div class="section">
+</div><p></p><hr><a id="method-PlumberEndpoint-getFuncParams"></a><div class="section">
 <h3 id="method-getfuncparams-">Method <code>getFuncParams()</code><a class="anchor" aria-label="anchor" href="#method-getfuncparams-"></a></h3>
 <p>retrieve endpoint expression parameters</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
@@ -303,7 +294,7 @@ When using a list, parser information already defined will maintain their existi
 </div>
 
 
-</div><p></p><hr><a id="method-getEndpointParams"></a><div class="section">
+</div><p></p><hr><a id="method-PlumberEndpoint-getEndpointParams"></a><div class="section">
 <h3 id="method-getendpointparams-">Method <code>getEndpointParams()</code><a class="anchor" aria-label="anchor" href="#method-getendpointparams-"></a></h3>
 <p>retrieve endpoint defined parameters</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
@@ -311,7 +302,7 @@ When using a list, parser information already defined will maintain their existi
 </div>
 
 
-</div><p></p><hr><a id="method-setPath"></a><div class="section">
+</div><p></p><hr><a id="method-PlumberEndpoint-setPath"></a><div class="section">
 <h3 id="method-setpath-">Method <code>setPath()</code><a class="anchor" aria-label="anchor" href="#method-setpath-"></a></h3>
 <p>Updates <code>$path</code> with a sanitized <code>path</code> and updates the internal path meta-data</p><div class="section">
 <h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
@@ -327,7 +318,7 @@ When using a list, parser information already defined will maintain their existi
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-PlumberEndpoint-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>

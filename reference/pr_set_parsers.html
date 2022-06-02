@@ -90,17 +90,8 @@ default parsers for any endpoint that does not define their own parsers.</p>
 <li><p>A <code>TRUE</code> value, which will default to combining all parsers. This is great for seeing what is possible, but not great for security purposes</p></li>
 </ul><p>If the parser name <code>"all"</code> is found in any character value or list name, all remaining parsers will be added.
 When using a list, parser information already defined will maintain their existing argument values.  All remaining parsers will use their default arguments.</p>
-<p>Example:</p><div class="sourceCode"><pre><code><span class="co"># provide a character string</span>
-<span class="va">parsers</span> <span class="op">=</span> <span class="st">"json"</span>
-
-<span class="co"># provide a named list with no arguments</span>
-<span class="va">parsers</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>json <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># provide a named list with arguments; include `rds`</span>
-<span class="va">parsers</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>json <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>simplifyVector <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, rds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># default plumber parsers</span>
-<span class="va">parsers</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"json"</span>, <span class="st">"form"</span>, <span class="st">"text"</span>, <span class="st">"octet"</span>, <span class="st">"multi"</span><span class="op">)</span></code></pre></div></dd>
+<p>Example:</p>
+<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

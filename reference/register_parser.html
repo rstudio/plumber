@@ -108,7 +108,8 @@ the request body starts with <code>{</code> or <code>[</code>.</p>
 <p>Functions signature should include <code>value</code>, <code>...</code> and
 possibly <code>content_type</code>, <code>filename</code>. Other parameters may be provided
 if you want to use the headers from <code><a href="https://rdrr.io/pkg/webutils/man/parse_multipart.html" class="external-link">webutils::parse_multipart()</a></code>.</p>
-<p>Parser function structure is something like below.</p><div class="sourceCode r"><pre><code><span class="kw">function</span><span class="op">(</span><span class="va">parser_arguments_here</span><span class="op">)</span> <span class="op">{</span>
+<p>Parser function structure is something like below.</p>
+<p></p><div class="sourceCode r"><pre><code><span class="kw">function</span><span class="op">(</span><span class="va">parser_arguments_here</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># return a function to parse a raw value</span>
   <span class="kw">function</span><span class="op">(</span><span class="va">value</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
     <span class="co"># do something with raw value</span>
