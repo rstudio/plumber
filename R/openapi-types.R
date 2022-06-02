@@ -72,7 +72,7 @@ add_api_info_onLoad <- function() {
   )
   addApiInfo(
     "object",
-    c("list", "data.frame", "df"),
+    c("list", "data.frame", "df", "object"),
     location = "requestBody"
   )
   addApiInfo(

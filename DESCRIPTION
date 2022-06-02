@@ -2,10 +2,10 @@ Encoding: UTF-8
 Package: plumber
 Type: Package
 Title: An API Generator for R
-Version: 1.0.0.90002
+Version: 1.1.0.9000
 Roxygen: list(markdown = TRUE)
 Authors@R: c(
-  person("Barret", "Schloerke", role = c("cre", "aut"), email = "barret@rstudio.com"),
+  person("Barret", "Schloerke", role = c("cre", "aut"), email = "barret@rstudio.com", comment = c(ORCID = "0000-0001-9986-114X")),
   person("Jeff", "Allen", role = c("aut", "ccp"), email = "cran@trestletech.com"),
   person("Bruno", "Tremblay", role = "ctb", email = "cran@neoxone.com"),
   person("Frans", "van Dunné", role = "ctb", email = "frans@ixpantia.com"),
@@ -24,7 +24,7 @@ Imports:
     stringi (>= 0.3.0),
     jsonlite (>= 0.9.16),
     webutils (>= 1.1),
-    httpuv (>= 1.5.0),
+    httpuv (>= 1.5.5),
     crayon,
     promises (>= 1.1.0),
     sodium,
@@ -34,7 +34,6 @@ Imports:
     lifecycle (>= 0.2.0),
     ellipsis (>= 0.3.0),
     rlang
-LazyData: TRUE
 ByteCompile: TRUE
 Suggests:
     testthat (>= 0.11.0),
@@ -45,12 +44,15 @@ Suggests:
     later,
     readr,
     yaml,
-    feather,
+    arrow,
     future,
     coro,
     rstudioapi,
-    mockery (>= 0.4.2)
-RoxygenNote: 7.1.1
+    spelling,
+    mockery (>= 0.4.2),
+    geojsonsf,
+    sf
+RoxygenNote: 7.2.0
 Collate:
     'async.R'
     'content-types.R'
@@ -90,3 +92,6 @@ Collate:
     'validate_api_spec.R'
     'zzz.R'
 RdMacros: lifecycle
+Language: en-US
+Config/Needs/check: Cairo
+Config/Needs/website: tidyverse/tidytemplate

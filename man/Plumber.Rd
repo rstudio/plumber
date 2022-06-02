@@ -141,49 +141,49 @@ pr$setErrorHandler(function(req, res, err) {
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Plumber$new()}}
-\item \href{#method-run}{\code{Plumber$run()}}
-\item \href{#method-mount}{\code{Plumber$mount()}}
-\item \href{#method-unmount}{\code{Plumber$unmount()}}
-\item \href{#method-registerHook}{\code{Plumber$registerHook()}}
-\item \href{#method-handle}{\code{Plumber$handle()}}
-\item \href{#method-removeHandle}{\code{Plumber$removeHandle()}}
-\item \href{#method-print}{\code{Plumber$print()}}
-\item \href{#method-serve}{\code{Plumber$serve()}}
-\item \href{#method-route}{\code{Plumber$route()}}
-\item \href{#method-call}{\code{Plumber$call()}}
-\item \href{#method-onHeaders}{\code{Plumber$onHeaders()}}
-\item \href{#method-onWSOpen}{\code{Plumber$onWSOpen()}}
-\item \href{#method-setSerializer}{\code{Plumber$setSerializer()}}
-\item \href{#method-setParsers}{\code{Plumber$setParsers()}}
-\item \href{#method-set404Handler}{\code{Plumber$set404Handler()}}
-\item \href{#method-setErrorHandler}{\code{Plumber$setErrorHandler()}}
-\item \href{#method-setDocs}{\code{Plumber$setDocs()}}
-\item \href{#method-setDocsCallback}{\code{Plumber$setDocsCallback()}}
-\item \href{#method-setDebug}{\code{Plumber$setDebug()}}
-\item \href{#method-getDebug}{\code{Plumber$getDebug()}}
-\item \href{#method-filter}{\code{Plumber$filter()}}
-\item \href{#method-setApiSpec}{\code{Plumber$setApiSpec()}}
-\item \href{#method-getApiSpec}{\code{Plumber$getApiSpec()}}
-\item \href{#method-addEndpoint}{\code{Plumber$addEndpoint()}}
-\item \href{#method-addAssets}{\code{Plumber$addAssets()}}
-\item \href{#method-addFilter}{\code{Plumber$addFilter()}}
-\item \href{#method-addGlobalProcessor}{\code{Plumber$addGlobalProcessor()}}
-\item \href{#method-openAPIFile}{\code{Plumber$openAPIFile()}}
-\item \href{#method-swaggerFile}{\code{Plumber$swaggerFile()}}
-\item \href{#method-clone}{\code{Plumber$clone()}}
+\item \href{#method-Plumber-new}{\code{Plumber$new()}}
+\item \href{#method-Plumber-run}{\code{Plumber$run()}}
+\item \href{#method-Plumber-mount}{\code{Plumber$mount()}}
+\item \href{#method-Plumber-unmount}{\code{Plumber$unmount()}}
+\item \href{#method-Plumber-registerHook}{\code{Plumber$registerHook()}}
+\item \href{#method-Plumber-handle}{\code{Plumber$handle()}}
+\item \href{#method-Plumber-removeHandle}{\code{Plumber$removeHandle()}}
+\item \href{#method-Plumber-print}{\code{Plumber$print()}}
+\item \href{#method-Plumber-serve}{\code{Plumber$serve()}}
+\item \href{#method-Plumber-route}{\code{Plumber$route()}}
+\item \href{#method-Plumber-call}{\code{Plumber$call()}}
+\item \href{#method-Plumber-onHeaders}{\code{Plumber$onHeaders()}}
+\item \href{#method-Plumber-onWSOpen}{\code{Plumber$onWSOpen()}}
+\item \href{#method-Plumber-setSerializer}{\code{Plumber$setSerializer()}}
+\item \href{#method-Plumber-setParsers}{\code{Plumber$setParsers()}}
+\item \href{#method-Plumber-set404Handler}{\code{Plumber$set404Handler()}}
+\item \href{#method-Plumber-setErrorHandler}{\code{Plumber$setErrorHandler()}}
+\item \href{#method-Plumber-setDocs}{\code{Plumber$setDocs()}}
+\item \href{#method-Plumber-setDocsCallback}{\code{Plumber$setDocsCallback()}}
+\item \href{#method-Plumber-setDebug}{\code{Plumber$setDebug()}}
+\item \href{#method-Plumber-getDebug}{\code{Plumber$getDebug()}}
+\item \href{#method-Plumber-filter}{\code{Plumber$filter()}}
+\item \href{#method-Plumber-setApiSpec}{\code{Plumber$setApiSpec()}}
+\item \href{#method-Plumber-getApiSpec}{\code{Plumber$getApiSpec()}}
+\item \href{#method-Plumber-addEndpoint}{\code{Plumber$addEndpoint()}}
+\item \href{#method-Plumber-addAssets}{\code{Plumber$addAssets()}}
+\item \href{#method-Plumber-addFilter}{\code{Plumber$addFilter()}}
+\item \href{#method-Plumber-addGlobalProcessor}{\code{Plumber$addGlobalProcessor()}}
+\item \href{#method-Plumber-openAPIFile}{\code{Plumber$openAPIFile()}}
+\item \href{#method-Plumber-swaggerFile}{\code{Plumber$swaggerFile()}}
+\item \href{#method-Plumber-clone}{\code{Plumber$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks">}\href{../../plumber/html/Hookable.html#method-registerHooks}{\code{plumber::Hookable$registerHooks()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks"><a href='../../plumber/html/Hookable.html#method-Hookable-registerHooks'><code>plumber::Hookable$registerHooks()</code></a></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Plumber-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{Plumber} router
 
@@ -208,8 +208,8 @@ A new \code{Plumber} router
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-run"></a>}}
-\if{latex}{\out{\hypertarget{method-run}{}}}
+\if{html}{\out{<a id="method-Plumber-run"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-run}{}}}
 \subsection{Method \code{run()}}{
 Start a server using \code{Plumber} object.
 
@@ -262,8 +262,8 @@ For more customization, see \verb{$setDocs()} or \code{\link[=pr_set_docs]{pr_se
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-mount"></a>}}
-\if{latex}{\out{\hypertarget{method-mount}{}}}
+\if{html}{\out{<a id="method-Plumber-mount"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-mount}{}}}
 \subsection{Method \code{mount()}}{
 Mount a Plumber router
 
@@ -303,8 +303,8 @@ root$mount("/products", products)
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-unmount"></a>}}
-\if{latex}{\out{\hypertarget{method-unmount}{}}}
+\if{html}{\out{<a id="method-Plumber-unmount"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-unmount}{}}}
 \subsection{Method \code{unmount()}}{
 Unmount a Plumber router
 \subsection{Usage}{
@@ -320,8 +320,8 @@ Unmount a Plumber router
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-registerHook"></a>}}
-\if{latex}{\out{\hypertarget{method-registerHook}{}}}
+\if{html}{\out{<a id="method-Plumber-registerHook"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-registerHook}{}}}
 \subsection{Method \code{registerHook()}}{
 Register a hook
 
@@ -400,8 +400,8 @@ pr$handle("GET", "/", function(){ 123 })
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-handle"></a>}}
-\if{latex}{\out{\hypertarget{method-handle}{}}}
+\if{html}{\out{<a id="method-Plumber-handle"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-handle}{}}}
 \subsection{Method \code{handle()}}{
 Define endpoints
 
@@ -462,8 +462,8 @@ pr$handle("GET", "/", function(){
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-removeHandle"></a>}}
-\if{latex}{\out{\hypertarget{method-removeHandle}{}}}
+\if{html}{\out{<a id="method-Plumber-removeHandle"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-removeHandle}{}}}
 \subsection{Method \code{removeHandle()}}{
 Remove endpoints
 \subsection{Usage}{
@@ -483,8 +483,8 @@ Remove endpoints
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-Plumber-print"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-print}{}}}
 \subsection{Method \code{print()}}{
 Print representation of plumber router.
 \subsection{Usage}{
@@ -508,8 +508,8 @@ A terminal friendly representation of a plumber router.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-serve"></a>}}
-\if{latex}{\out{\hypertarget{method-serve}{}}}
+\if{html}{\out{<a id="method-Plumber-serve"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-serve}{}}}
 \subsection{Method \code{serve()}}{
 Serve a request
 \subsection{Usage}{
@@ -527,8 +527,8 @@ Serve a request
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-route"></a>}}
-\if{latex}{\out{\hypertarget{method-route}{}}}
+\if{html}{\out{<a id="method-Plumber-route"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-route}{}}}
 \subsection{Method \code{route()}}{
 Route a request
 \subsection{Usage}{
@@ -546,8 +546,8 @@ Route a request
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-call"></a>}}
-\if{latex}{\out{\hypertarget{method-call}{}}}
+\if{html}{\out{<a id="method-Plumber-call"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-call}{}}}
 \subsection{Method \code{call()}}{
 \pkg{httpuv} interface call function. (Required for \pkg{httpuv})
 \subsection{Usage}{
@@ -563,8 +563,8 @@ Route a request
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-onHeaders"></a>}}
-\if{latex}{\out{\hypertarget{method-onHeaders}{}}}
+\if{html}{\out{<a id="method-Plumber-onHeaders"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-onHeaders}{}}}
 \subsection{Method \code{onHeaders()}}{
 httpuv interface onHeaders function. (Required for \pkg{httpuv})
 \subsection{Usage}{
@@ -580,8 +580,8 @@ httpuv interface onHeaders function. (Required for \pkg{httpuv})
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-onWSOpen"></a>}}
-\if{latex}{\out{\hypertarget{method-onWSOpen}{}}}
+\if{html}{\out{<a id="method-Plumber-onWSOpen"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-onWSOpen}{}}}
 \subsection{Method \code{onWSOpen()}}{
 httpuv interface onWSOpen function. (Required for \pkg{httpuv})
 \subsection{Usage}{
@@ -597,8 +597,8 @@ httpuv interface onWSOpen function. (Required for \pkg{httpuv})
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setSerializer"></a>}}
-\if{latex}{\out{\hypertarget{method-setSerializer}{}}}
+\if{html}{\out{<a id="method-Plumber-setSerializer"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-setSerializer}{}}}
 \subsection{Method \code{setSerializer()}}{
 Sets the default serializer of the router.
 
@@ -627,8 +627,8 @@ pr$setSerializer(serializer_unboxed_json())
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setParsers"></a>}}
-\if{latex}{\out{\hypertarget{method-setParsers}{}}}
+\if{html}{\out{<a id="method-Plumber-setParsers"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-setParsers}{}}}
 \subsection{Method \code{setParsers()}}{
 Sets the default parsers of the router. Initialized to \code{c("json", "form", "text", "octet", "multi")}
 \subsection{Usage}{
@@ -649,7 +649,9 @@ Sets the default parsers of the router. Initialized to \code{c("json", "form", "
 If the parser name \code{"all"} is found in any character value or list name, all remaining parsers will be added.
 When using a list, parser information already defined will maintain their existing argument values.  All remaining parsers will use their default arguments.
 
-Example:\preformatted{# provide a character string
+Example:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{# provide a character string
 parsers = "json"
 
 # provide a named list with no arguments
@@ -660,14 +662,14 @@ parsers = list(json = list(simplifyVector = FALSE), rds = list())
 
 # default plumber parsers
 parsers = c("json", "form", "text", "octet", "multi")
-}}
+}\if{html}{\out{</div>}}}
 }
 \if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set404Handler"></a>}}
-\if{latex}{\out{\hypertarget{method-set404Handler}{}}}
+\if{html}{\out{<a id="method-Plumber-set404Handler"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-set404Handler}{}}}
 \subsection{Method \code{set404Handler()}}{
 Sets the handler that gets called if an
 incoming request can’t be served by any filter, endpoint, or sub-router.
@@ -697,8 +699,8 @@ pr$set404Handler(function(req, res) {cat(req$PATH_INFO)})
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setErrorHandler"></a>}}
-\if{latex}{\out{\hypertarget{method-setErrorHandler}{}}}
+\if{html}{\out{<a id="method-Plumber-setErrorHandler"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-setErrorHandler}{}}}
 \subsection{Method \code{setErrorHandler()}}{
 Sets the error handler which gets invoked if any filter or
 endpoint generates an error.
@@ -731,8 +733,8 @@ pr$setErrorHandler(function(req, res, err) {
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setDocs"></a>}}
-\if{latex}{\out{\hypertarget{method-setDocs}{}}}
+\if{html}{\out{<a id="method-Plumber-setDocs"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-setDocs}{}}}
 \subsection{Method \code{setDocs()}}{
 Set visual documentation to use for API
 
@@ -753,8 +755,8 @@ If using \code{\link[=options_plumber]{options_plumber()}}, the value must be se
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setDocsCallback"></a>}}
-\if{latex}{\out{\hypertarget{method-setDocsCallback}{}}}
+\if{html}{\out{<a id="method-Plumber-setDocsCallback"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-setDocsCallback}{}}}
 \subsection{Method \code{setDocsCallback()}}{
 Set a callback to notify where the API's visual documentation is located.
 
@@ -777,8 +779,8 @@ See also: \code{\link[=pr_set_docs_callback]{pr_set_docs_callback()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setDebug"></a>}}
-\if{latex}{\out{\hypertarget{method-setDebug}{}}}
+\if{html}{\out{<a id="method-Plumber-setDebug"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-setDebug}{}}}
 \subsection{Method \code{setDebug()}}{
 Set debug value to include error messages.
 
@@ -796,8 +798,8 @@ See also: \verb{$getDebug()} and \code{\link[=pr_set_debug]{pr_set_debug()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getDebug"></a>}}
-\if{latex}{\out{\hypertarget{method-getDebug}{}}}
+\if{html}{\out{<a id="method-Plumber-getDebug"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-getDebug}{}}}
 \subsection{Method \code{getDebug()}}{
 Retrieve the \code{debug} value. If it has never been set, the result of \code{interactive()} will be used.
 
@@ -808,8 +810,8 @@ See also: \verb{$getDebug()} and \code{\link[=pr_set_debug]{pr_set_debug()}}
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-filter"></a>}}
-\if{latex}{\out{\hypertarget{method-filter}{}}}
+\if{html}{\out{<a id="method-Plumber-filter"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-filter}{}}}
 \subsection{Method \code{filter()}}{
 Add a filter to plumber router
 
@@ -831,8 +833,8 @@ See also: \code{\link[=pr_filter]{pr_filter()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setApiSpec"></a>}}
-\if{latex}{\out{\hypertarget{method-setApiSpec}{}}}
+\if{html}{\out{<a id="method-Plumber-setApiSpec"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-setApiSpec}{}}}
 \subsection{Method \code{setApiSpec()}}{
 Allows to modify router autogenerated OpenAPI Specification
 
@@ -860,18 +862,18 @@ The value returned will not be validated for OAS compatibility.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getApiSpec"></a>}}
-\if{latex}{\out{\hypertarget{method-getApiSpec}{}}}
+\if{html}{\out{<a id="method-Plumber-getApiSpec"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-getApiSpec}{}}}
 \subsection{Method \code{getApiSpec()}}{
-Retrieve openAPI file
+Retrieve OpenAPI file
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Plumber$getApiSpec()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-addEndpoint"></a>}}
-\if{latex}{\out{\hypertarget{method-addEndpoint}{}}}
+\if{html}{\out{<a id="method-Plumber-addEndpoint"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-addEndpoint}{}}}
 \subsection{Method \code{addEndpoint()}}{
 addEndpoint has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{handle()} instead.
 \subsection{Usage}{
@@ -910,8 +912,8 @@ addEndpoint has been deprecated in v0.4.0 and will be removed in a coming releas
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-addAssets"></a>}}
-\if{latex}{\out{\hypertarget{method-addAssets}{}}}
+\if{html}{\out{<a id="method-Plumber-addAssets"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-addAssets}{}}}
 \subsection{Method \code{addAssets()}}{
 addAssets has been deprecated in v0.4.0 and will be removed in a coming release. Please use \code{mount} and \code{PlumberStatic$new()} instead.
 \subsection{Usage}{
@@ -931,8 +933,8 @@ addAssets has been deprecated in v0.4.0 and will be removed in a coming release.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-addFilter"></a>}}
-\if{latex}{\out{\hypertarget{method-addFilter}{}}}
+\if{html}{\out{<a id="method-Plumber-addFilter"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-addFilter}{}}}
 \subsection{Method \code{addFilter()}}{
 \verb{$addFilter()} has been deprecated in v0.4.0 and will be removed in a coming release. Please use \verb{$filter()} instead.
 \subsection{Usage}{
@@ -954,8 +956,8 @@ addAssets has been deprecated in v0.4.0 and will be removed in a coming release.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-addGlobalProcessor"></a>}}
-\if{latex}{\out{\hypertarget{method-addGlobalProcessor}{}}}
+\if{html}{\out{<a id="method-Plumber-addGlobalProcessor"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-addGlobalProcessor}{}}}
 \subsection{Method \code{addGlobalProcessor()}}{
 \verb{$addGlobalProcessor()} has been deprecated in v0.4.0 and will be removed in a coming release. Please use \verb{$registerHook}(s) instead.
 \subsection{Usage}{
@@ -971,28 +973,28 @@ addAssets has been deprecated in v0.4.0 and will be removed in a coming release.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-openAPIFile"></a>}}
-\if{latex}{\out{\hypertarget{method-openAPIFile}{}}}
+\if{html}{\out{<a id="method-Plumber-openAPIFile"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-openAPIFile}{}}}
 \subsection{Method \code{openAPIFile()}}{
-Deprecated. Retrieve openAPI file
+Deprecated. Retrieve OpenAPI file
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Plumber$openAPIFile()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-swaggerFile"></a>}}
-\if{latex}{\out{\hypertarget{method-swaggerFile}{}}}
+\if{html}{\out{<a id="method-Plumber-swaggerFile"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-swaggerFile}{}}}
 \subsection{Method \code{swaggerFile()}}{
-Deprecated. Retrieve openAPI file
+Deprecated. Retrieve OpenAPI file
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Plumber$swaggerFile()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Plumber-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

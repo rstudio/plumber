@@ -128,7 +128,7 @@ test_that("serializers can register all pre,post,aroundexec stages", {
 
 
 test_that("not producing an image produces an error", {
-  skip_on_os("win")
+  skip_on_os("windows")
 
   root <- with_tmp_serializers({
     plumb(test_path("files/endpoint-serializer.R")) %>% pr_set_debug(TRUE)
