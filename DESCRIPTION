@@ -46,6 +46,7 @@ Suggests:
     yaml,
     arrow,
     future,
+    coro,
     rstudioapi,
     spelling,
     mockery (>= 0.4.2),
