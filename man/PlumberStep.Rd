@@ -24,22 +24,22 @@ of a request by a plumber router.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{PlumberStep$new()}}
-\item \href{#method-exec}{\code{PlumberStep$exec()}}
-\item \href{#method-registerHook}{\code{PlumberStep$registerHook()}}
-\item \href{#method-clone}{\code{PlumberStep$clone()}}
+\item \href{#method-PlumberStep-new}{\code{PlumberStep$new()}}
+\item \href{#method-PlumberStep-exec}{\code{PlumberStep$exec()}}
+\item \href{#method-PlumberStep-registerHook}{\code{PlumberStep$registerHook()}}
+\item \href{#method-PlumberStep-clone}{\code{PlumberStep$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks">}\href{../../plumber/html/Hookable.html#method-registerHooks}{\code{plumber::Hookable$registerHooks()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks"><a href='../../plumber/html/Hookable.html#method-Hookable-registerHooks'><code>plumber::Hookable$registerHooks()</code></a></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-PlumberStep-new"></a>}}
+\if{latex}{\out{\hypertarget{method-PlumberStep-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{\link[=PlumberStep]{PlumberStep()}} object
 \subsection{Usage}{
@@ -66,8 +66,8 @@ A new \code{PlumberStep} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-exec"></a>}}
-\if{latex}{\out{\hypertarget{method-exec}{}}}
+\if{html}{\out{<a id="method-PlumberStep-exec"></a>}}
+\if{latex}{\out{\hypertarget{method-PlumberStep-exec}{}}}
 \subsection{Method \code{exec()}}{
 step execution function
 \subsection{Usage}{
@@ -83,8 +83,8 @@ step execution function
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-registerHook"></a>}}
-\if{latex}{\out{\hypertarget{method-registerHook}{}}}
+\if{html}{\out{<a id="method-PlumberStep-registerHook"></a>}}
+\if{latex}{\out{\hypertarget{method-PlumberStep-registerHook}{}}}
 \subsection{Method \code{registerHook()}}{
 step hook registration method
 \subsection{Usage}{
@@ -105,8 +105,8 @@ step hook registration method
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-PlumberStep-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-PlumberStep-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

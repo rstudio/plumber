@@ -51,7 +51,7 @@ Suggests:
     mockery (>= 0.4.2),
     geojsonsf,
     sf
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Collate:
     'async.R'
     'content-types.R'
