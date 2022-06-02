@@ -13,6 +13,8 @@ of a request by a plumber router.
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
+\item{\code{srcref}}{from step block}
+
 \item{\code{lines}}{lines from step block}
 
 \item{\code{serializer}}{step serializer function}
@@ -41,7 +43,7 @@ of a request by a plumber router.
 \subsection{Method \code{new()}}{
 Create a new \code{\link[=PlumberStep]{PlumberStep()}} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PlumberStep$new(expr, envir, lines, serializer)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PlumberStep$new(expr, envir, lines, serializer, srcref)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -54,6 +56,8 @@ Create a new \code{\link[=PlumberStep]{PlumberStep()}} object
 \item{\code{lines}}{step block}
 
 \item{\code{serializer}}{step serializer}
+
+\item{\code{srcref}}{\code{srcref} attribute from block}
 }
 \if{html}{\out{</div>}}
 }

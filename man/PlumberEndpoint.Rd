@@ -9,7 +9,7 @@ Plumber Endpoint
 Plumber Endpoint
 }
 \details{
-Defines a terminal handler in a PLumber router.
+Defines a terminal handler in a Plumber router.
 
 Parameters values are obtained from parsing blocks of lines in a plumber file.
 They can also be provided manually for historical reasons.
@@ -46,8 +46,10 @@ each separate verb/path into its own endpoint, so we just do that.}
 \item \href{#method-matchesPath}{\code{PlumberEndpoint$matchesPath()}}
 \item \href{#method-new}{\code{PlumberEndpoint$new()}}
 \item \href{#method-getPathParams}{\code{PlumberEndpoint$getPathParams()}}
+\item \href{#method-getFunc}{\code{PlumberEndpoint$getFunc()}}
 \item \href{#method-getFuncParams}{\code{PlumberEndpoint$getFuncParams()}}
 \item \href{#method-getEndpointParams}{\code{PlumberEndpoint$getEndpointParams()}}
+\item \href{#method-setPath}{\code{PlumberEndpoint$setPath()}}
 \item \href{#method-clone}{\code{PlumberEndpoint$clone()}}
 }
 }
@@ -127,7 +129,8 @@ Create a new \code{PlumberEndpoint} object
   params,
   comments,
   responses,
-  tags
+  tags,
+  srcref
 )}\if{html}{\out{</div>}}
 }
 
@@ -173,6 +176,8 @@ parsers = c("json", "form", "text", "octet", "multi")
 \item{\code{params}}{Endpoint params}
 
 \item{\code{comments, responses, tags}}{Values to be used within the OpenAPI Spec}
+
+\item{\code{srcref}}{\code{srcref} attribute from block}
 }
 \if{html}{\out{</div>}}
 }
@@ -198,6 +203,16 @@ retrieve endpoint path parameters
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-getFunc"></a>}}
+\if{latex}{\out{\hypertarget{method-getFunc}{}}}
+\subsection{Method \code{getFunc()}}{
+retrieve endpoint function
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$getFunc()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-getFuncParams"></a>}}
 \if{latex}{\out{\hypertarget{method-getFuncParams}{}}}
 \subsection{Method \code{getFuncParams()}}{
@@ -216,6 +231,23 @@ retrieve endpoint defined parameters
 \if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$getEndpointParams()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-setPath"></a>}}
+\if{latex}{\out{\hypertarget{method-setPath}{}}}
+\subsection{Method \code{setPath()}}{
+Updates \verb{$path} with a sanitized \code{path} and updates the internal path meta-data
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$setPath(path)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{path}}{Path to set \verb{$path}. If missing a beginning slash, one will be added.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

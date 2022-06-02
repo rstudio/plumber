@@ -365,7 +365,7 @@ make_parser <- function(aliases) {
 #' @examples
 #' \dontrun{
 #' # Overwrite `text/json` parsing behavior to not allow JSON vectors to be simplified
-#' #* @parser json simplifyVector = FALSE
+#' #* @parser json list(simplifyVector = FALSE)
 #' # Activate `rds` parser in a multipart request
 #' #* @parser multi
 #' #* @parser rds
@@ -386,6 +386,16 @@ parser_json <- function(...) {
   })
 }
 
+#' @describeIn parsers GeoJSON parser. See [geojsonsf::geojson_sf()] for more details.
+#' @export
+parser_geojson <- function(...) {
+  if (!requireNamespace("geojsonsf", quietly = TRUE)) {
+    stop("`geojsonsf` must be installed for `parser_geojson` to work")
+  }
+  parser_text(function(val) {
+    geojsonsf::geojson_sf(val, ...)
+  })
+}
 
 #' @describeIn parsers Helper parser to parse plain text
 #' @param parse_fn function to further decode a text string into an object
@@ -470,18 +480,27 @@ parser_rds <- function(...) {
   })
 }
 
-#' @describeIn parsers feather parser. See [feather::read_feather()] for more details.
+#' @describeIn parsers feather parser. See [arrow::read_feather()] for more details.
 #' @export
 parser_feather <- function(...) {
   parser_read_file(function(tmpfile) {
-    if (!requireNamespace("feather", quietly = TRUE)) {
-      stop("`feather` must be installed for `parser_feather` to work")
+    if (!requireNamespace("arrow", quietly = TRUE)) {
+      stop("`arrow` must be installed for `parser_feather` to work")
     }
-    feather::read_feather(tmpfile, ...)
+    arrow::read_feather(tmpfile, ...)
   })
 }
 
-
+#' @describeIn parsers parquet parser. See [arrow::read_parquet()] for more details.
+#' @export
+parser_parquet <- function(...) {
+  parser_read_file(function(tmpfile) {
+    if (!requireNamespace("arrow", quietly = TRUE)) {
+      stop("`arrow` must be installed for `parser_parquet` to work")
+    }
+    arrow::read_parquet(tmpfile, ...)
+  })
+}
 
 #' @describeIn parsers Octet stream parser. Returns the raw content.
 #' @export
@@ -558,12 +577,14 @@ register_parsers_onLoad <- function() {
   register_parser("octet",   parser_octet,   fixed = "application/octet-stream")
   register_parser("form",    parser_form,   fixed = "application/x-www-form-urlencoded")
   register_parser("rds",     parser_rds,     fixed = "application/rds")
-  register_parser("feather", parser_feather, fixed = "application/feather")
+  register_parser("feather", parser_feather, fixed = c("application/vnd.apache.arrow.file", "application/feather"))
+  register_parser("parquet", parser_parquet, fixed = "application/vnd.apache.parquet")
   register_parser("text",    parser_text,    fixed = "text/plain", regex = "^text/")
   register_parser("tsv",     parser_tsv,     fixed = c("application/tab-separated-values", "text/tab-separated-values"))
   # yaml types: https://stackoverflow.com/a/38000954/591574
   register_parser("yaml",    parser_yaml,    fixed = c("text/vnd.yaml", "application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"))
   register_parser("none",    parser_none,    regex = "*")
+  register_parser("geojson", parser_geojson, fixed = c("application/geo+json", "application/vdn.geo+json"))
 
   parser_all <- function() {
     stop("This function should never be called. It should be handled by `make_parser('all')`")

@@ -475,6 +475,19 @@ pr_filter <- function(pr,
 #' @param port A number or integer that indicates the server port that should
 #' be listened on. Note that on most Unix-like systems including Linux and
 #' Mac OS X, port numbers smaller than 1025 require root privileges.
+#' @param ... Should be empty.
+#' @param debug If `TRUE`, it will provide more insight into your API errors.
+#'   Using this value will only last for the duration of the run.
+#'   If [pr_set_debug()] has not been called, `debug` will default to `interactive()` at [pr_run()] time
+#' @param docs Visual documentation value to use while running the API.
+#'   This value will only be used while running the router.
+#'   If missing, defaults to information previously set with [pr_set_docs()].
+#'   For more customization, see [pr_set_docs()] for examples.
+#' @param swaggerCallback An optional single-argument function that is called
+#'   back with the URL to an OpenAPI user interface when one becomes ready. If
+#'   missing, defaults to information set with [pr_set_docs_callback()].
+#'   This value will only be used while running the router.
+#' @param quiet If `TRUE`, don't print routine startup messages.
 #'
 #' @examples
 #' \dontrun{
@@ -482,17 +495,34 @@ pr_filter <- function(pr,
 #'   pr_run()
 #'
 #' pr() %>%
-#'   pr_run(port = 5762)
+#'   pr_run(
+#'     # manually set port
+#'     port = 5762,
+#'     # turn off visual documentation
+#'     docs = FALSE,
+#'     # do not display startup messages
+#'     quiet = TRUE
+#'   )
 #' }
 #'
 #' @export
 pr_run <- function(pr,
                    host = '127.0.0.1',
-                   port = getOption('plumber.port', NULL)
+                   port = getOption('plumber.port', NULL),
+                   ...,
+                   debug = missing_arg(),
+                   docs = missing_arg(),
+                   swaggerCallback = missing_arg(),
+                   quiet = FALSE
 ) {
   validate_pr(pr)
+  ellipsis::check_dots_empty()
   pr$run(host = host,
-         port = port)
+         port = port,
+         debug = debug,
+         docs = docs,
+         swaggerCallback = swaggerCallback,
+         quiet = quiet)
 }
 
 

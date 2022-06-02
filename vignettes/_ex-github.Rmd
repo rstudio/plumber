@@ -33,7 +33,7 @@ At this point, any commits that are pushed to that repository will trigger a POS
 
 In this example, we'll demonstrate how to setup an plumber endpoint that is capable of listening for Webhook notifications from GitHub. The example will simply subscribe to `push` notifications on the <a href="https://github.com/rstudio/plumber/" target="_blank">plumber repository</a> (which are triggered any time a commit is pushed to that repo) and, in response, will install the most up-to-date version of plumber.
 
-We'll add one additional endpoint that enables us to see what version of plumber is installed on the system at that moment. You should find that the `sha1` value of the response matches <a href="https://github.com/rstudio/plumber/commits/master" target="_blank">the latest commit hash in the master branch of plumber</a>.
+We'll add one additional endpoint that enables us to see what version of plumber is installed on the system at that moment. You should find that the `sha1` value of the response matches <a href="https://github.com/rstudio/plumber/commits/main" target="_blank">the latest commit hash in the main branch of plumber</a>.
 
 
 <div class="row">

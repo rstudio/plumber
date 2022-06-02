@@ -2,10 +2,10 @@ Encoding: UTF-8
 Package: plumber
 Type: Package
 Title: An API Generator for R
-Version: 1.0.0.90001
+Version: 1.1.0.9000
 Roxygen: list(markdown = TRUE)
 Authors@R: c(
-  person("Barret", "Schloerke", role = c("cre", "aut"), email = "barret@rstudio.com"),
+  person("Barret", "Schloerke", role = c("cre", "aut"), email = "barret@rstudio.com", comment = c(ORCID = "0000-0001-9986-114X")),
   person("Jeff", "Allen", role = c("aut", "ccp"), email = "cran@trestletech.com"),
   person("Bruno", "Tremblay", role = "ctb", email = "cran@neoxone.com"),
   person("Frans", "van Dunné", role = "ctb", email = "frans@ixpantia.com"),
@@ -32,8 +32,8 @@ Imports:
     magrittr,
     mime,
     lifecycle (>= 0.2.0),
-    ellipsis (>= 0.3.0)
-LazyData: TRUE
+    ellipsis (>= 0.3.0),
+    rlang
 ByteCompile: TRUE
 Suggests:
     testthat (>= 0.11.0),
@@ -44,10 +44,14 @@ Suggests:
     later,
     readr,
     yaml,
-    feather,
+    arrow,
     future,
-    rstudioapi
-RoxygenNote: 7.1.1
+    rstudioapi,
+    spelling,
+    mockery (>= 0.4.2),
+    geojsonsf,
+    sf
+RoxygenNote: 7.1.2
 Collate:
     'async.R'
     'content-types.R'
@@ -87,3 +91,6 @@ Collate:
     'validate_api_spec.R'
     'zzz.R'
 RdMacros: lifecycle
+Language: en-US
+Config/Needs/check: Cairo
+Config/Needs/website: tidyverse/tidytemplate

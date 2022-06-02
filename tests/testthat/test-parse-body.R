@@ -90,7 +90,7 @@ test_that("Test tsv parser", {
 })
 
 test_that("Test feather parser", {
-  skip_if_not_installed("feather")
+  skip_if_not_installed("arrow")
 
   tmp <- tempfile()
   on.exit({
@@ -98,10 +98,10 @@ test_that("Test feather parser", {
   }, add = TRUE)
 
   r_object <- iris
-  feather::write_feather(r_object, tmp)
+  arrow::write_feather(r_object, tmp)
   val <- readBin(tmp, "raw", 10000)
 
-  parsed <- parse_body(val, "application/feather", make_parser("feather"))
+  parsed <- parse_body(val, "application/vnd.apache.arrow.file", make_parser("feather"))
   # convert from feather tibble to data.frame
   parsed <- as.data.frame(parsed, stringsAsFactors = FALSE)
   attr(parsed, "spec") <- NULL
@@ -109,6 +109,60 @@ test_that("Test feather parser", {
   expect_equal(parsed, r_object)
 })
 
+test_that("Test parquet parser", {
+  skip_if_not_installed("arrow")
+
+  tmp <- tempfile()
+  on.exit({
+    file.remove(tmp)
+  }, add = TRUE)
+
+  r_object <- iris
+  arrow::write_parquet(r_object, tmp)
+  val <- readBin(tmp, "raw", 10000)
+
+  parsed <- parse_body(val, "application/vnd.apache.parquet", make_parser("parquet"))
+  # convert from parquet tibble to data.frame
+  parsed <- as.data.frame(parsed, stringsAsFactors = FALSE)
+  attr(parsed, "spec") <- NULL
+
+  expect_equal(parsed, r_object)
+})
+
+test_that("Test geojson parser", {
+  skip_if_not_installed("geojsonsf")
+  skip_if_not_installed("sf")
+
+  # Test sf object w/ fields
+  geojson <- '{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"a":3},"geometry":{"type":"Point","coordinates":[1,2]}},{"type":"Feature","properties":{"a":4},"geometry":{"type":"Point","coordinates":[3,4]}}]}'
+  parsed <- parse_body(geojson, "application/geo+json", make_parser("geojson"))
+  expect_equal(parsed, geojsonsf::geojson_sf(geojson))
+
+  # Test sfc
+  geojson <- '[
+  { "type":"Point","coordinates":[0,0]},
+  {"type":"LineString","coordinates":[[0,0],[1,1]]}
+  ]'
+  parsed <- parse_body(geojson, "application/geo+json", make_parser("geojson"))
+  expect_equal(parsed, geojsonsf::geojson_sf(geojson))
+
+  # Test simple sf object
+  geojson <- '{ "type" : "Point", "coordinates" : [0, 0] }'
+  parsed <- parse_body(geojson, "application/geo+json", make_parser("geojson"))
+  expect_equal(parsed, geojsonsf::geojson_sf(geojson))
+
+  # Test geojson file
+  tmp <- tempfile()
+  on.exit({
+    file.remove(tmp)
+  }, add = TRUE)
+
+  writeLines(geojson, tmp)
+  val <- readBin(tmp, "raw", 1000)
+  parsed <- parse_body(val, "application/geo+json", make_parser("geojson"))
+  expect_equal(parsed, geojsonsf::geojson_sf(geojson))
+
+})
 
 test_that("Test multipart output is reduced for argument matching", {
   bin_file <- test_path("files/multipart-file-names.bin")
