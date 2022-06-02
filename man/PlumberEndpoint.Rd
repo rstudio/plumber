@@ -41,30 +41,30 @@ each separate verb/path into its own endpoint, so we just do that.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-getTypedParams}{\code{PlumberEndpoint$getTypedParams()}}
-\item \href{#method-canServe}{\code{PlumberEndpoint$canServe()}}
-\item \href{#method-matchesPath}{\code{PlumberEndpoint$matchesPath()}}
-\item \href{#method-new}{\code{PlumberEndpoint$new()}}
-\item \href{#method-getPathParams}{\code{PlumberEndpoint$getPathParams()}}
-\item \href{#method-getFunc}{\code{PlumberEndpoint$getFunc()}}
-\item \href{#method-getFuncParams}{\code{PlumberEndpoint$getFuncParams()}}
-\item \href{#method-getEndpointParams}{\code{PlumberEndpoint$getEndpointParams()}}
-\item \href{#method-setPath}{\code{PlumberEndpoint$setPath()}}
-\item \href{#method-clone}{\code{PlumberEndpoint$clone()}}
+\item \href{#method-PlumberEndpoint-getTypedParams}{\code{PlumberEndpoint$getTypedParams()}}
+\item \href{#method-PlumberEndpoint-canServe}{\code{PlumberEndpoint$canServe()}}
+\item \href{#method-PlumberEndpoint-matchesPath}{\code{PlumberEndpoint$matchesPath()}}
+\item \href{#method-PlumberEndpoint-new}{\code{PlumberEndpoint$new()}}
+\item \href{#method-PlumberEndpoint-getPathParams}{\code{PlumberEndpoint$getPathParams()}}
+\item \href{#method-PlumberEndpoint-getFunc}{\code{PlumberEndpoint$getFunc()}}
+\item \href{#method-PlumberEndpoint-getFuncParams}{\code{PlumberEndpoint$getFuncParams()}}
+\item \href{#method-PlumberEndpoint-getEndpointParams}{\code{PlumberEndpoint$getEndpointParams()}}
+\item \href{#method-PlumberEndpoint-setPath}{\code{PlumberEndpoint$setPath()}}
+\item \href{#method-PlumberEndpoint-clone}{\code{PlumberEndpoint$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks">}\href{../../plumber/html/Hookable.html#method-registerHooks}{\code{plumber::Hookable$registerHooks()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="PlumberStep" data-id="exec">}\href{../../plumber/html/PlumberStep.html#method-exec}{\code{plumber::PlumberStep$exec()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="plumber" data-topic="PlumberStep" data-id="registerHook">}\href{../../plumber/html/PlumberStep.html#method-registerHook}{\code{plumber::PlumberStep$registerHook()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks"><a href='../../plumber/html/Hookable.html#method-Hookable-registerHooks'><code>plumber::Hookable$registerHooks()</code></a></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="PlumberStep" data-id="exec"><a href='../../plumber/html/PlumberStep.html#method-PlumberStep-exec'><code>plumber::PlumberStep$exec()</code></a></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="PlumberStep" data-id="registerHook"><a href='../../plumber/html/PlumberStep.html#method-PlumberStep-registerHook'><code>plumber::PlumberStep$registerHook()</code></a></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getTypedParams"></a>}}
-\if{latex}{\out{\hypertarget{method-getTypedParams}{}}}
+\if{html}{\out{<a id="method-PlumberEndpoint-getTypedParams"></a>}}
+\if{latex}{\out{\hypertarget{method-PlumberEndpoint-getTypedParams}{}}}
 \subsection{Method \code{getTypedParams()}}{
 retrieve endpoint typed parameters
 \subsection{Usage}{
@@ -73,8 +73,8 @@ retrieve endpoint typed parameters
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-canServe"></a>}}
-\if{latex}{\out{\hypertarget{method-canServe}{}}}
+\if{html}{\out{<a id="method-PlumberEndpoint-canServe"></a>}}
+\if{latex}{\out{\hypertarget{method-PlumberEndpoint-canServe}{}}}
 \subsection{Method \code{canServe()}}{
 ability to serve request
 \subsection{Usage}{
@@ -93,8 +93,8 @@ a logical. \code{TRUE} when endpoint can serve request.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-matchesPath"></a>}}
-\if{latex}{\out{\hypertarget{method-matchesPath}{}}}
+\if{html}{\out{<a id="method-PlumberEndpoint-matchesPath"></a>}}
+\if{latex}{\out{\hypertarget{method-PlumberEndpoint-matchesPath}{}}}
 \subsection{Method \code{matchesPath()}}{
 determines if route matches requested path
 \subsection{Usage}{
@@ -113,8 +113,8 @@ a logical. \code{TRUE} when endpoint matches the requested path.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-PlumberEndpoint-new"></a>}}
+\if{latex}{\out{\hypertarget{method-PlumberEndpoint-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{PlumberEndpoint} object
 \subsection{Usage}{
@@ -158,7 +158,9 @@ Create a new \code{PlumberEndpoint} object
 If the parser name \code{"all"} is found in any character value or list name, all remaining parsers will be added.
 When using a list, parser information already defined will maintain their existing argument values.  All remaining parsers will use their default arguments.
 
-Example:\preformatted{# provide a character string
+Example:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{# provide a character string
 parsers = "json"
 
 # provide a named list with no arguments
@@ -169,7 +171,7 @@ parsers = list(json = list(simplifyVector = FALSE), rds = list())
 
 # default plumber parsers
 parsers = c("json", "form", "text", "octet", "multi")
-}}
+}\if{html}{\out{</div>}}}
 
 \item{\code{lines}}{Endpoint block}
 
@@ -186,8 +188,8 @@ A new \code{PlumberEndpoint} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getPathParams"></a>}}
-\if{latex}{\out{\hypertarget{method-getPathParams}{}}}
+\if{html}{\out{<a id="method-PlumberEndpoint-getPathParams"></a>}}
+\if{latex}{\out{\hypertarget{method-PlumberEndpoint-getPathParams}{}}}
 \subsection{Method \code{getPathParams()}}{
 retrieve endpoint path parameters
 \subsection{Usage}{
@@ -203,8 +205,8 @@ retrieve endpoint path parameters
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getFunc"></a>}}
-\if{latex}{\out{\hypertarget{method-getFunc}{}}}
+\if{html}{\out{<a id="method-PlumberEndpoint-getFunc"></a>}}
+\if{latex}{\out{\hypertarget{method-PlumberEndpoint-getFunc}{}}}
 \subsection{Method \code{getFunc()}}{
 retrieve endpoint function
 \subsection{Usage}{
@@ -213,8 +215,8 @@ retrieve endpoint function
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getFuncParams"></a>}}
-\if{latex}{\out{\hypertarget{method-getFuncParams}{}}}
+\if{html}{\out{<a id="method-PlumberEndpoint-getFuncParams"></a>}}
+\if{latex}{\out{\hypertarget{method-PlumberEndpoint-getFuncParams}{}}}
 \subsection{Method \code{getFuncParams()}}{
 retrieve endpoint expression parameters
 \subsection{Usage}{
@@ -223,8 +225,8 @@ retrieve endpoint expression parameters
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-getEndpointParams"></a>}}
-\if{latex}{\out{\hypertarget{method-getEndpointParams}{}}}
+\if{html}{\out{<a id="method-PlumberEndpoint-getEndpointParams"></a>}}
+\if{latex}{\out{\hypertarget{method-PlumberEndpoint-getEndpointParams}{}}}
 \subsection{Method \code{getEndpointParams()}}{
 retrieve endpoint defined parameters
 \subsection{Usage}{
@@ -233,8 +235,8 @@ retrieve endpoint defined parameters
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-setPath"></a>}}
-\if{latex}{\out{\hypertarget{method-setPath}{}}}
+\if{html}{\out{<a id="method-PlumberEndpoint-setPath"></a>}}
+\if{latex}{\out{\hypertarget{method-PlumberEndpoint-setPath}{}}}
 \subsection{Method \code{setPath()}}{
 Updates \verb{$path} with a sanitized \code{path} and updates the internal path meta-data
 \subsection{Usage}{
@@ -250,8 +252,8 @@ Updates \verb{$path} with a sanitized \code{path} and updates the internal path 
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-PlumberEndpoint-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-PlumberEndpoint-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

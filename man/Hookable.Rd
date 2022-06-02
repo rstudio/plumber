@@ -12,14 +12,14 @@ Hookable
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-registerHook}{\code{Hookable$registerHook()}}
-\item \href{#method-registerHooks}{\code{Hookable$registerHooks()}}
-\item \href{#method-clone}{\code{Hookable$clone()}}
+\item \href{#method-Hookable-registerHook}{\code{Hookable$registerHook()}}
+\item \href{#method-Hookable-registerHooks}{\code{Hookable$registerHooks()}}
+\item \href{#method-Hookable-clone}{\code{Hookable$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-registerHook"></a>}}
-\if{latex}{\out{\hypertarget{method-registerHook}{}}}
+\if{html}{\out{<a id="method-Hookable-registerHook"></a>}}
+\if{latex}{\out{\hypertarget{method-Hookable-registerHook}{}}}
 \subsection{Method \code{registerHook()}}{
 Register a hook on a router
 \subsection{Usage}{
@@ -37,8 +37,8 @@ Register a hook on a router
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-registerHooks"></a>}}
-\if{latex}{\out{\hypertarget{method-registerHooks}{}}}
+\if{html}{\out{<a id="method-Hookable-registerHooks"></a>}}
+\if{latex}{\out{\hypertarget{method-Hookable-registerHooks}{}}}
 \subsection{Method \code{registerHooks()}}{
 Register hooks on a router
 \subsection{Usage}{
@@ -54,8 +54,8 @@ Register hooks on a router
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Hookable-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Hookable-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
