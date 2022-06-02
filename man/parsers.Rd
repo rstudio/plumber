@@ -3,6 +3,7 @@
 \name{parser_form}
 \alias{parser_form}
 \alias{parser_json}
+\alias{parser_geojson}
 \alias{parser_text}
 \alias{parser_yaml}
 \alias{parser_csv}
@@ -10,6 +11,7 @@
 \alias{parser_read_file}
 \alias{parser_rds}
 \alias{parser_feather}
+\alias{parser_parquet}
 \alias{parser_octet}
 \alias{parser_multi}
 \alias{parser_none}
@@ -18,6 +20,8 @@
 parser_form()
 
 parser_json(...)
+
+parser_geojson(...)
 
 parser_text(parse_fn = identity)
 
@@ -32,6 +36,8 @@ parser_read_file(read_fn = readLines)
 parser_rds(...)
 
 parser_feather(...)
+
+parser_parquet(...)
 
 parser_octet()
 
@@ -68,6 +74,8 @@ See \code{\link[=registered_parsers]{registered_parsers()}} for a list of regist
 
 \item \code{parser_json}: JSON parser. See \code{\link[jsonlite:read_json]{jsonlite::parse_json()}} for more details. (Defaults to using \code{simplifyVectors = TRUE})
 
+\item \code{parser_geojson}: GeoJSON parser. See \code{\link[geojsonsf:geojson_sf]{geojsonsf::geojson_sf()}} for more details.
+
 \item \code{parser_text}: Helper parser to parse plain text
 
 \item \code{parser_yaml}: YAML parser. See \code{\link[yaml:yaml.load]{yaml::yaml.load()}} for more details.
@@ -81,7 +89,9 @@ This parser should be used when reading from a file is required.
 
 \item \code{parser_rds}: RDS parser. See \code{\link[=readRDS]{readRDS()}} for more details.
 
-\item \code{parser_feather}: feather parser. See \code{\link[feather:read_feather]{feather::read_feather()}} for more details.
+\item \code{parser_feather}: feather parser. See \code{\link[arrow:read_feather]{arrow::read_feather()}} for more details.
+
+\item \code{parser_parquet}: parquet parser. See \code{\link[arrow:read_parquet]{arrow::read_parquet()}} for more details.
 
 \item \code{parser_octet}: Octet stream parser. Returns the raw content.
 
@@ -93,7 +103,7 @@ This parser should be used when reading from a file is required.
 \examples{
 \dontrun{
 # Overwrite `text/json` parsing behavior to not allow JSON vectors to be simplified
-#* @parser json simplifyVector = FALSE
+#* @parser json list(simplifyVector = FALSE)
 # Activate `rds` parser in a multipart request
 #* @parser multi
 #* @parser rds
