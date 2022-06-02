@@ -14,6 +14,8 @@
 
 * The default shared secret filter returns error responses without throwing an error. (#808)
 
+* Decode path URI before attempting to serve static assets (@meztez #754).
+
 # plumber 1.1.0
 
 ## Breaking changes
