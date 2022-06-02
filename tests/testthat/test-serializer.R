@@ -4,9 +4,12 @@ test_that("Responses returned directly aren't serialized", {
   res <- PlumberResponse$new("")
 
   r <- pr(test_path("files/router.R"))
-  val <- r$serve(make_req("GET", "/response"), res)
-  expect_equal(val$body, "overridden")
+  val <- r$serve(make_req("GET", "/response123"), res)
+  expect_equal(val$body, NULL)
   expect_equal(val$status, 123)
+  val <- r$serve(make_req("GET", "/response200"), res)
+  expect_equal(val$body, "overridden")
+  expect_equal(val$status, 200)
 })
 
 test_that("JSON is the default serializer", {

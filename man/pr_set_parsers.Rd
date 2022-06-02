@@ -20,7 +20,9 @@ pr_set_parsers(pr, parsers)
 If the parser name \code{"all"} is found in any character value or list name, all remaining parsers will be added.
 When using a list, parser information already defined will maintain their existing argument values.  All remaining parsers will use their default arguments.
 
-Example:\preformatted{# provide a character string
+Example:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{# provide a character string
 parsers = "json"
 
 # provide a named list with no arguments
@@ -31,7 +33,7 @@ parsers = list(json = list(simplifyVector = FALSE), rds = list())
 
 # default plumber parsers
 parsers = c("json", "form", "text", "octet", "multi")
-}}
+}\if{html}{\out{</div>}}}
 }
 \value{
 The Plumber router with the new default \link{PlumberEndpoint} parsers
