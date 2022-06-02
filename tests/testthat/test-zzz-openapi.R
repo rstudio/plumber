@@ -349,6 +349,9 @@ test_that("Api spec can be set using a file path", {
 })
 
 test_that("RemoveNAorNULLs preserve nested examples", {
-  a <- list(schema = list(example = list(a = 5, b = list(NULL))), examples = list(a = 5, b = list(NULL)))
-  expect_identical(a, removeNaOrNulls(a))
+  a <- list(schema = list(example = list(a = 5, b = list(NULL))), examples = list(a = 5, value = list(NULL)))
+  expect_identical(removeNaOrNulls(a), a)
+
+  a <- list(schema = list(value = list(NULL), b = list(NULL)))
+  expect_identical(removeNaOrNulls(a), list(schema = list(value = list(), b = list())))
 })
