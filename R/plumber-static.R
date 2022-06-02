@@ -70,12 +70,17 @@ PlumberStatic <- R6Class(
         ext <- tools::file_ext(abs.path)
         info <- file.info(abs.path)
         contentType <- getContentType(ext)
+        # Similar to: https://github.com/rstudio/httpuv/blob/220319d/src/webapplication.cpp#L617-L623
         res$setHeader("Content-Type", contentType)
         res$setHeader("Content-Length", info$size)
         res$setHeader("Last-Modified", http_date_string(info$mtime))
         res$body <-
-          if (req$REQUEST_METHOD == 'GET')
+          if (req$REQUEST_METHOD == 'GET') {
             readBin(abs.path, 'raw', n = info$size)
+          } else {
+            # HEAD request
+            NULL
+          }
         res$status <- 200
         res
       }
