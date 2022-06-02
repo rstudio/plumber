@@ -6,7 +6,7 @@
 #' @noRd
 http_date_string <- function(time) {
   lt <- as.POSIXlt(time, tz = "GMT")
-  weekdays <- c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+  weekdays <- c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
   months <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
               "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
   weekday <- weekdays[lt$wday + 1]
