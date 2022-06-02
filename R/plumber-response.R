@@ -18,13 +18,14 @@ PlumberResponse <- R6Class(
       h <- self$headers
 
       body <- self$body
-      if (is.null(body)){
-        body <- ""
+
+      if (is.character(body)) {
+        charset <- get_character_set(h$HTTP_CONTENT_TYPE)
+        Encoding(body) <- charset
       }
 
-      charset <- get_character_set(h$HTTP_CONTENT_TYPE)
-      if (is.character(body)) {
-        Encoding(body) <- charset
+      if (self$status %in% c(100:199, 204, 304)) {
+        body <- NULL
       }
 
       list(
