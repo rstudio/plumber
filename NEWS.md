@@ -16,6 +16,8 @@
 
 * The default shared secret filter returns error responses without throwing an error. (#808)
 
+* Remove response bodies (and therefore the Content-Length header) for status codes which forbid it under the HTTP specification (e.g. 1xx, 204, 304). (@atheriel #758, @meztez #760)
+
 * Decode path URI before attempting to serve static assets (@meztez #754).
 
 # plumber 1.1.0
