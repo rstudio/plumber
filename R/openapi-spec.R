@@ -210,7 +210,7 @@ isNaOrNull <- function(x) {
 
 #' Remove na or null
 #' @noRd
-removeNaOrNulls <- function(x) {
+removeNaOrNulls <- function(x, keysToIgnore = "example") {
   # preemptively stop
   if (!is.list(x)) {
     return(x)
@@ -218,37 +218,48 @@ removeNaOrNulls <- function(x) {
   if (length(x) == 0) {
     return(x)
   }
-  # Prevent example/s from being wiped out
-  saveExamples <- FALSE
-  saveExample <- FALSE
-  if (!isNaOrNull(x[["example"]])) {
-    saveExample <- TRUE
-    savedExample <- x[["example"]]
-    x[["example"]] <- NULL
-  } else if (!isNaOrNull(x[["examples"]])) {
-    saveExamples <- TRUE
-    savedExamples <- x[["examples"]]
-    x[["examples"]] <- NULL
-  }
 
   # remove any `NA` or `NULL` elements
-  toRemove <- vapply(x, isNaOrNull, logical(1))
+  toRemove <-
+    vapply(x, isNaOrNull, logical(1)) &
+    # Prevent example/s from being wiped out
+    (!(rlang::names2(x) %in% keysToIgnore))
   if (any(toRemove)) {
     x[toRemove] <- NULL
   }
 
-  # recurse through list
-  ret <- lapply(x, removeNaOrNulls)
-  class(ret) <- class(x)
+  # Recurse through list
+  # Store to `x[]` to not overwrite any classes or attributes
+  x[] <-
+    Map(
+      rlang::names2(x), # Ask again. It has prolly changed
+      x,
+      f = function(key, value) {
+        switch(key,
+          "examples" = {
+            # Remove all NA or NULL values from fields other than `value`
+            # https://spec.openapis.org/oas/v3.1.0.html#example-object
+            removeNaOrNulls(value, keysToIgnore = "value")
+          },
+          {
+            if (
+              # Ignore known values
+              key %in% keysToIgnore ||
+              # Ignore extensions
+              grepl("^x-", key)
+            ) {
+              # Return value as is
+              value
+            } else {
+              # Recurse through list
+              removeNaOrNulls(value)
+            }
+          }
+        )
+      }
+    )
 
-  # Put example back in
-  if (saveExample) {
-    ret[["example"]] <- savedExample
-  } else if (saveExamples) {
-    ret[["examples"]] <- savedExamples
-  }
-
-  ret
+  x
 }
 
 #' For OpenAPI Specification
