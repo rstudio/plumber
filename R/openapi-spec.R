@@ -210,7 +210,7 @@ isNaOrNull <- function(x) {
 
 #' Remove na or null
 #' @noRd
-removeNaOrNulls <- function(x, keysToIgnore = "example") {
+removeNaOrNulls <- function(x) {
   # preemptively stop
   if (!is.list(x)) {
     return(x)
@@ -220,10 +220,7 @@ removeNaOrNulls <- function(x, keysToIgnore = "example") {
   }
 
   # remove any `NA` or `NULL` elements
-  toRemove <-
-    vapply(x, isNaOrNull, logical(1)) &
-    # Prevent example/s from being wiped out
-    (!(rlang::names2(x) %in% keysToIgnore))
+  toRemove <- vapply(x, isNaOrNull, logical(1))
   if (any(toRemove)) {
     x[toRemove] <- NULL
   }
@@ -236,15 +233,20 @@ removeNaOrNulls <- function(x, keysToIgnore = "example") {
       x,
       f = function(key, value) {
         switch(key,
+          "example" = {
+            # Don't do anything
+            value
+          },
           "examples" = {
             # Remove all NA or NULL values from fields other than `value`
             # https://spec.openapis.org/oas/v3.1.0.html#example-object
-            removeNaOrNulls(value, keysToIgnore = "value")
+            ret <- value # Copy val for less confusion in code
+            notValuePos <- rlang::names2(ret) != "value"
+            ret[notValuePos] <- removeNaOrNulls(ret[notValuePos])
+            ret
           },
           {
             if (
-              # Ignore known values
-              key %in% keysToIgnore ||
               # Ignore extensions
               grepl("^x-", key)
             ) {
