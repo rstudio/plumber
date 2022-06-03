@@ -14,7 +14,10 @@
 
 ## Bug fixes
 
+* OpenAPI specification collision when using `examples`. (@meztez #820)
+
 * Static handler returns Last-Modified response header. (#798)
+
 * OpenAPI response type detection had a scoping issue. Use serializer defined `Content-Type` header instead. (@meztez, #789)
 
 * The default shared secret filter returns error responses without throwing an error. (#808)

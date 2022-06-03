@@ -347,3 +347,11 @@ test_that("Api spec can be set using a file path", {
   pr <- pr() %>% pr_set_api_spec(test_path("files/openapi.yaml"))
   expect_equal(pr$getApiSpec()$paths$`/health-check`$get$summary, " Determine if the API is running and listening as expected")
 })
+
+test_that("RemoveNAorNULLs preserve nested examples", {
+  a <- list(schema = list(example = list(a = 5, b = list(NULL))), examples = list(a = 5, value = list(NULL)))
+  expect_identical(removeNaOrNulls(a), a)
+
+  a <- list(schema = list(value = list(NULL), b = list(NULL)))
+  expect_identical(removeNaOrNulls(a), list(schema = list(value = list(), b = list())))
+})

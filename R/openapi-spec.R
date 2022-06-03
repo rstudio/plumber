@@ -64,7 +64,7 @@ responsesSpecification <- function(endpts){
     if (!length(resps[[resp]]$content)) {
       ctype <- NULL
       if (is.function(endpts$serializer)) {
-        # Must safe-guard against partial name matching 
+        # Must safe-guard against partial name matching
         # since we are reaching into the function env
         ctype <- environment(endpts$serializer)[["headers"]][["Content-Type"]]
       }
@@ -219,14 +219,6 @@ removeNaOrNulls <- function(x) {
   if (length(x) == 0) {
     return(x)
   }
-  # Prevent example from being wiped out
-  if (!isNaOrNull(x$example)) {
-    saveExample <- TRUE
-    savedExample <- x$example
-    x$example <- NULL
-  } else {
-    saveExample <- FALSE
-  }
 
   # remove any `NA` or `NULL` elements
   toRemove <- vapply(x, isNaOrNull, logical(1))
@@ -234,16 +226,43 @@ removeNaOrNulls <- function(x) {
     x[toRemove] <- NULL
   }
 
-  # recurse through list
-  ret <- lapply(x, removeNaOrNulls)
-  class(ret) <- class(x)
+  # Recurse through list
+  # Store to `x[]` to not overwrite any classes or attributes
+  x[] <-
+    Map(
+      rlang::names2(x), # Ask again. It has prolly changed
+      x,
+      f = function(key, value) {
+        switch(key,
+          "example" = {
+            # Don't do anything
+            value
+          },
+          "examples" = {
+            # Remove all NA or NULL values from fields other than `value`
+            # https://spec.openapis.org/oas/v3.1.0.html#example-object
+            ret <- value # Copy val for less confusion in code
+            notValuePos <- rlang::names2(ret) != "value"
+            ret[notValuePos] <- removeNaOrNulls(ret[notValuePos])
+            ret
+          },
+          {
+            if (
+              # Ignore extensions
+              grepl("^x-", key)
+            ) {
+              # Return value as is
+              value
+            } else {
+              # Recurse through list
+              removeNaOrNulls(value)
+            }
+          }
+        )
+      }
+    )
 
-  # Put example back in
-  if (saveExample) {
-    ret$example <- savedExample
-  }
-
-  ret
+  x
 }
 
 #' For OpenAPI Specification
