@@ -7,11 +7,11 @@
 session_cookie(
   key,
   name = "plumber",
-  path = "",
   expiration = FALSE,
   http = TRUE,
   secure = FALSE,
-  same_site = FALSE
+  same_site = FALSE,
+  path = NULL
 )
 }
 \arguments{
@@ -21,10 +21,6 @@ where you want to save/restore encrypted cookies. It should be produced using
 complex character string to bolster security.}
 
 \item{name}{The name of the cookie in the user's browser.}
-
-\item{path}{The uri path that the cookie will be available in future requests.
-Defaults to the request URI. Set to \code{"/"} to make cookie available to
-all requests at the host.}
 
 \item{expiration}{A number representing the number of seconds into the future
 before the cookie expires or a \code{POSIXt} date object of when the cookie expires.
@@ -42,6 +38,10 @@ If specified, one of the following values should be given: "Strict", "Lax", or "
 If "None" is specified, then the \code{secure} flag MUST also be set for the modern browsers to
 accept the cookie. An error will be returned if \code{same_site = "None"} and \code{secure = FALSE}.
 If not specified or a non-character is given, no SameSite policy is attached to the cookie.}
+
+\item{path}{The uri path that the cookie will be available in future requests.
+Defaults to the request URI. Set to \code{"/"} to make cookie available to
+all requests at the host.}
 }
 \description{
 \code{plumber} uses the crypto R package \code{sodium}, to encrypt/decrypt

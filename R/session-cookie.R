@@ -93,11 +93,11 @@
 session_cookie <- function(
   key,
   name = "plumber",
-  path = "",
   expiration = FALSE,
   http = TRUE,
   secure = FALSE,
-  same_site = FALSE
+  same_site = FALSE,
+  path = NULL
 ) {
 
   if (missing(key)) {

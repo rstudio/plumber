@@ -420,14 +420,22 @@ pr_hooks <- function(pr,
 pr_cookie <- function(pr,
                       key,
                       name = "plumber",
-                      path = "",
                       expiration = FALSE,
                       http = TRUE,
                       secure = FALSE,
-                      same_site = FALSE) {
+                      same_site = FALSE,
+                      path = NULL) {
   validate_pr(pr)
   pr$registerHooks(
-    session_cookie(key = key, name = name, path = path, expiration = expiration, http = http, secure = secure, same_site = same_site)
+    session_cookie(
+      key = key,
+      name = name,
+      expiration = expiration,
+      http = http,
+      secure = secure,
+      same_site = same_site,
+      path = path
+    )
   )
   pr
 }
