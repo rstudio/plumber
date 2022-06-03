@@ -109,6 +109,37 @@ test_that("pr_cookie adds cookie", {
   expect_match(p$call(req)$headers$`Set-Cookie`, "^counter=")
 })
 
+test_that("pr_cookie adds path in cookie", {
+  p <- pr() %>%
+    pr_cookie(
+      random_cookie_key(),
+      name = "counter",
+      path = "/test"
+    ) %>%
+    pr_get("/test/route", function(req) {
+      count <- 0
+      if (!is.null(req$session$counter)){
+        count <- as.numeric(req$session$counter)
+      }
+      req$session$counter <- count + 1
+      return(paste0("This is visit #", count))
+    }) %>%
+    pr_get("/testing", function(req) {
+      return(paste0("Matching visits #", as.numeric(req$session$counter)))
+    })
+
+  req1 <- make_req("GET", "/test/route")
+  cookie_header1 <- p$call(req1)$headers$`Set-Cookie`
+  expect_match(cookie_header1, "^counter=")
+  expect_match(cookie_header1, "Path=/test")
+
+  req2 <- make_req("GET", "/testing")
+  cookie_header2 <- p$call(req2)$headers$`Set-Cookie`
+  # Path does not match cookie location, so no cookie is set
+  expect_equal(cookie_header2, NULL)
+})
+
+
 test_that("pr default functions perform as expected", {
   # Serializer
   serialized <- function(...) {
