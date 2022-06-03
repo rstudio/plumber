@@ -143,13 +143,28 @@ session_cookie <- function(
       session <- req$session
       # save session in a cookie
       if (!is.null(session)) {
-        res$setCookie(name, encodeCookie(session, key), path = path, expiration = expiration, http = http, secure = secure, same_site = same_site)
+        res$setCookie(
+          name,
+          encodeCookie(session, key),
+          path = path,
+          expiration = expiration,
+          http = http,
+          secure = secure,
+          same_site = same_site
+        )
       } else {
         # session is null
         if (!is.null(req$cookies[[name]])) {
           # no session to save, but had session to parse
           # remove cookie session cookie
-          res$removeCookie(name, path = path, expiration = expiration, http = http, secure = secure, same_site = same_site)
+          res$removeCookie(
+            name,
+            path = path,
+            expiration = expiration,
+            http = http,
+            secure = secure,
+            same_site = same_site
+          )
         }
       }
 
