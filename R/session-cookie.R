@@ -106,7 +106,7 @@ session_cookie <- function(
   key <- asCookieKey(key)
 
   # force the args to evaluate
-  list(expiration, http, secure, same_site)
+  list(expiration, http, secure, same_site, path)
 
   # sanity check the same_site and secure arguments
   if (is.character(same_site)) {
