@@ -76,7 +76,7 @@ Annotation | Argument | Description/References
 `@response` | `Name` `Description` | Simple [Response object](http://spec.openapis.org/oas/v3.0.3#response-object). Can be repeated to define different responses.
 `@tag` | `Tag` | Can be repeated to add multiple tags. Quote with " or ' to use non word character (like spaces) in `Tag`. [Tag field](http://spec.openapis.org/oas/v3.0.3#operation-object)
 `@preempt` | `Filter` | Specify that this endpoint has to execute before `Filter`. [Filters](./programmatic-usage.html#defining-filters)
-None | `Comments` | Lines without annotation will be mapped to [Summary field](http://spec.openapis.org/oas/v3.0.3#fixed-fields-6).
+None | `Comments` | First line without annotation will be mapped to [Summary field](http://spec.openapis.org/oas/v3.0.3#fixed-fields-6) subsequent lines will be mapped to [Description field](http://spec.openapis.org/oas/v3.0.3#fixed-fields-6).
 
 
 #### More details on `@param`

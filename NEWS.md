@@ -2,7 +2,9 @@
 
 ## Breaking changes
 
-## New features
+* First line of endpoint comments interpreted as OpenAPI 'summary' field and subsequent comment lines interpreted as 'description' field. (@wkmor1 #805)
+
+## New features 
 
 * Static file handler now serves HEAD requests. (#798)
 * Introduces new GeoJSON serializer and parser. GeoJSON objects are parsed into `sf` objects and `sf` or `sfc` objects will be serialized into GeoJSON. (@josiahparry, #830)
