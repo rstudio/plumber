@@ -346,6 +346,9 @@ pr_hooks <- function(pr,
 #'   \code{\link{random_cookie_key}}. Please see the "Storing secure keys" section for more details
 #'   complex character string to bolster security.
 #' @param name The name of the cookie in the user's browser.
+#' @param path The uri path that the cookie will be available in future requests.
+#'    Defaults to the request URI. Set to \code{"/"} to make cookie available to
+#'    all requests at the host.
 #' @param expiration A number representing the number of seconds into the future
 #'   before the cookie expires or a \code{POSIXt} date object of when the cookie expires.
 #'   Defaults to the end of the user's browser session.
@@ -420,10 +423,19 @@ pr_cookie <- function(pr,
                       expiration = FALSE,
                       http = TRUE,
                       secure = FALSE,
-                      same_site = FALSE) {
+                      same_site = FALSE,
+                      path = NULL) {
   validate_pr(pr)
   pr$registerHooks(
-    session_cookie(key = key, name = name, expiration = expiration, http = http, secure = secure, same_site = same_site)
+    session_cookie(
+      key = key,
+      name = name,
+      expiration = expiration,
+      http = http,
+      secure = secure,
+      same_site = same_site,
+      path = path
+    )
   )
   pr
 }
