@@ -81,7 +81,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
-<ul><li><p>Static handler returns Last-Modified response header. (<a href="https://github.com/rstudio/plumber/issues/798" class="external-link">#798</a>)</p></li>
+<ul><li><p>OpenAPI specification collision when using <code>examples</code>. (<a href="https://github.com/meztez" class="external-link">@meztez</a> <a href="https://github.com/rstudio/plumber/issues/820" class="external-link">#820</a>)</p></li>
+<li><p>Static handler returns Last-Modified response header. (<a href="https://github.com/rstudio/plumber/issues/798" class="external-link">#798</a>)</p></li>
 <li><p>OpenAPI response type detection had a scoping issue. Use serializer defined <code>Content-Type</code> header instead. (<a href="https://github.com/meztez" class="external-link">@meztez</a>, <a href="https://github.com/rstudio/plumber/issues/789" class="external-link">#789</a>)</p></li>
 <li><p>The default shared secret filter returns error responses without throwing an error. (<a href="https://github.com/rstudio/plumber/issues/808" class="external-link">#808</a>)</p></li>
 <li><p>Remove response bodies (and therefore the Content-Length header) for status codes which forbid it under the HTTP specification (e.g. 1xx, 204, 304). (<a href="https://github.com/atheriel" class="external-link">@atheriel</a> <a href="https://github.com/rstudio/plumber/issues/758" class="external-link">#758</a>, <a href="https://github.com/meztez" class="external-link">@meztez</a> <a href="https://github.com/rstudio/plumber/issues/760" class="external-link">#760</a>)</p></li>
