@@ -8,6 +8,7 @@
 
 * Static file handler now serves HEAD requests. (#798)
 * Introduces new GeoJSON serializer and parser. GeoJSON objects are parsed into `sf` objects and `sf` or `sfc` objects will be serialized into GeoJSON. (@josiahparry, #830)
+* Add new Octet-Stream serializer. This is a wrapper around the Content Type serializer with type `application/octet-stream`. (#864)
 * Update feather serializer to use the arrow package. The new default feather MIME type is `application/vnd.apache.arrow.file`. (@pachadotdev #849)
 * Add parquet serializer and parser by using the arrow package (@pachadotdev #849)
 * Updated example `14-future` to use `promises::future_promise()` and added an endpoint that uses `{coro}` to write _simpler_ async / `{promises}` code (#785)
