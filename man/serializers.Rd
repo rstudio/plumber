@@ -3,6 +3,7 @@
 \name{serializer_headers}
 \alias{serializer_headers}
 \alias{serializer_content_type}
+\alias{serializer_octet}
 \alias{serializer_csv}
 \alias{serializer_tsv}
 \alias{serializer_html}
@@ -31,6 +32,8 @@
 serializer_headers(headers = list(), serialize_fn = identity)
 
 serializer_content_type(type, serialize_fn = identity)
+
+serializer_octet(type = "application/octet-stream")
 
 serializer_csv(..., type = "text/csv; charset=UTF-8")
 
@@ -123,6 +126,8 @@ more details on Plumber serializers and how to customize their behavior.
 \item \code{serializer_headers}: Add a static list of headers to each return value. Will add \code{Content-Disposition} header if a value is the result of \code{as_attachment()}.
 
 \item \code{serializer_content_type}: Adds a \code{Content-Type} header to the response object
+
+\item \code{serializer_octet}: Octet serializer
 
 \item \code{serializer_csv}: CSV serializer. See also: \code{\link[readr:format_delim]{readr::format_csv()}}
 

@@ -182,6 +182,13 @@ serializer_content_type <- function(type, serialize_fn = identity) {
   )
 }
 
+#' @describeIn serializers Octet serializer
+#' @export
+serializer_octet <- function(type = "application/octet-stream") {
+  serializer_content_type(type)
+}
+
+
 #' @describeIn serializers CSV serializer. See also: [readr::format_csv()]
 #' @export
 serializer_csv <- function(..., type = "text/csv; charset=UTF-8") {
@@ -618,6 +625,9 @@ serializer_pdf <- function(..., type = "application/pdf") {
 add_serializers_onLoad <- function() {
   register_serializer("null",        serializer_identity)
   register_serializer("contentType", serializer_content_type)
+
+  # octet-stream
+  register_serializer("octet", serializer_octet)
 
   # html
   register_serializer("html", serializer_html)
