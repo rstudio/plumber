@@ -15,6 +15,8 @@ test_that("postBody is still available", {
 
 test_that("postBody is not enabled by default", {
 
+  skip_on_os("windows") # Windows does not like the null pointer / non-utf8 body
+
   bin_file <- test_path("files/multipart-form.bin")
   bin_body <- readBin(bin_file, "raw", file.info(bin_file)$size)
 
