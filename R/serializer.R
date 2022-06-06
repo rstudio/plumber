@@ -182,10 +182,16 @@ serializer_content_type <- function(type, serialize_fn = identity) {
   )
 }
 
-#' @describeIn serializers Octet serializer
+#' @describeIn serializers Octet serializer. If content is received that does
+#'   not have a `"raw"` type, then an error will be thrown.
 #' @export
-serializer_octet <- function(type = "application/octet-stream") {
-  serializer_content_type(type)
+serializer_octet <- function(..., type = "application/octet-stream") {
+  serializer_content_type(type, function(val) {
+    if (!is.raw(val)) {
+      stop("The Octet-Stream serializer received non-raw data")
+    }
+    val
+  })
 }
 
 

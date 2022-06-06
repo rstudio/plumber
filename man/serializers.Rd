@@ -33,7 +33,7 @@ serializer_headers(headers = list(), serialize_fn = identity)
 
 serializer_content_type(type, serialize_fn = identity)
 
-serializer_octet(type = "application/octet-stream")
+serializer_octet(..., type = "application/octet-stream")
 
 serializer_csv(..., type = "text/csv; charset=UTF-8")
 
@@ -127,7 +127,8 @@ more details on Plumber serializers and how to customize their behavior.
 
 \item \code{serializer_content_type}: Adds a \code{Content-Type} header to the response object
 
-\item \code{serializer_octet}: Octet serializer
+\item \code{serializer_octet}: Octet serializer. If content is received that does
+not have a \code{"raw"} type, then an error will be thrown.
 
 \item \code{serializer_csv}: CSV serializer. See also: \code{\link[readr:format_delim]{readr::format_csv()}}
 
