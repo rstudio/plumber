@@ -42,7 +42,7 @@ If "None" is specified, then the \code{secure} flag MUST also be set for the mod
 accept the cookie. An error will be returned if \code{same_site = "None"} and \code{secure = FALSE}.
 If not specified or a non-character is given, no SameSite policy is attached to the cookie.}
 
-\item{path}{The uri path that the cookie will be available in future requests.
+\item{path}{The URI path that the cookie will be available in future requests.
 Defaults to the request URI. Set to \code{"/"} to make cookie available to
 all requests at the host.}
 }

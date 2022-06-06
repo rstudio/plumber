@@ -346,7 +346,7 @@ pr_hooks <- function(pr,
 #'   \code{\link{random_cookie_key}}. Please see the "Storing secure keys" section for more details
 #'   complex character string to bolster security.
 #' @param name The name of the cookie in the user's browser.
-#' @param path The uri path that the cookie will be available in future requests.
+#' @param path The URI path that the cookie will be available in future requests.
 #'    Defaults to the request URI. Set to \code{"/"} to make cookie available to
 #'    all requests at the host.
 #' @param expiration A number representing the number of seconds into the future
