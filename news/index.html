@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">plumber</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,21 +67,22 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.2.0" id="plumber-120">plumber 1.2.0<a class="anchor" aria-label="anchor" href="#plumber-120"></a></h2>
+<h2 class="pkg-version" data-toc-text="development version" id="plumber-development-version">plumber (development version)<a class="anchor" aria-label="anchor" href="#plumber-development-version"></a></h2>
 <div class="section level3">
-<h3 id="breaking-changes-1-2-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-2-0"></a></h3>
+<h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
 <ul><li>First line of endpoint comments interpreted as OpenAPI ‘summary’ field and subsequent comment lines interpreted as ‘description’ field. (<a href="https://github.com/wkmor1" class="external-link">@wkmor1</a> <a href="https://github.com/rstudio/plumber/issues/805" class="external-link">#805</a>)</li></ul></div>
 <div class="section level3">
-<h3 id="new-features-1-2-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-2-0"></a></h3>
-<ul><li>Static file handler now serves HEAD requests. (<a href="https://github.com/rstudio/plumber/issues/798" class="external-link">#798</a>)</li>
-<li>Introduces new GeoJSON serializer and parser. GeoJSON objects are parsed into <code>sf</code> objects and <code>sf</code> or <code>sfc</code> objects will be serialized into GeoJSON. (<a href="https://github.com/josiahparry" class="external-link">@josiahparry</a>, <a href="https://github.com/rstudio/plumber/issues/830" class="external-link">#830</a>)</li>
-<li>Update feather serializer to use the arrow package. The new default feather MIME type is <code>application/vnd.apache.arrow.file</code>. (<a href="https://github.com/pachadotdev" class="external-link">@pachadotdev</a> <a href="https://github.com/rstudio/plumber/issues/849" class="external-link">#849</a>)</li>
-<li>Add parquet serializer and parser by using the arrow package (<a href="https://github.com/pachadotdev" class="external-link">@pachadotdev</a> <a href="https://github.com/rstudio/plumber/issues/849" class="external-link">#849</a>)</li>
-<li>Updated example <code>14-future</code> to use <code><a href="https://rstudio.github.io/promises//reference/future_promise.html" class="external-link">promises::future_promise()</a></code> and added an endpoint that uses <a href="https://github.com/r-lib/coro" class="external-link">coro</a> to write <em>simpler</em> async / <a href="https://rstudio.github.io/promises/" class="external-link">promises</a> code (<a href="https://github.com/rstudio/plumber/issues/785" class="external-link">#785</a>)</li>
-<li>Add <code>path</code> argument to <code><a href="../reference/pr_cookie.html">pr_cookie()</a></code> allowing Secure cookies to define where they are served (<a href="https://github.com/jtlandis" class="external-link">@jtlandis</a> <a href="https://github.com/rstudio/plumber/issues/850" class="external-link">#850</a>)</li>
+<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li><p>Static file handler now serves HEAD requests. (<a href="https://github.com/rstudio/plumber/issues/798" class="external-link">#798</a>)</p></li>
+<li><p>Introduces new GeoJSON serializer and parser. GeoJSON objects are parsed into <code>sf</code> objects and <code>sf</code> or <code>sfc</code> objects will be serialized into GeoJSON. (<a href="https://github.com/josiahparry" class="external-link">@josiahparry</a>, <a href="https://github.com/rstudio/plumber/issues/830" class="external-link">#830</a>)</p></li>
+<li><p>Add new Octet-Stream serializer. This is a wrapper around the Content Type serializer with type <code>application/octet-stream</code>. (<a href="https://github.com/rstudio/plumber/issues/864" class="external-link">#864</a>)</p></li>
+<li><p>Update feather serializer to use the arrow package. The new default feather MIME type is <code>application/vnd.apache.arrow.file</code>. (<a href="https://github.com/pachadotdev" class="external-link">@pachadotdev</a> <a href="https://github.com/rstudio/plumber/issues/849" class="external-link">#849</a>)</p></li>
+<li><p>Add parquet serializer and parser by using the arrow package (<a href="https://github.com/pachadotdev" class="external-link">@pachadotdev</a> <a href="https://github.com/rstudio/plumber/issues/849" class="external-link">#849</a>)</p></li>
+<li><p>Updated example <code>14-future</code> to use <code><a href="https://rstudio.github.io/promises//reference/future_promise.html" class="external-link">promises::future_promise()</a></code> and added an endpoint that uses <a href="https://github.com/r-lib/coro" class="external-link">coro</a> to write <em>simpler</em> async / <a href="https://rstudio.github.io/promises/" class="external-link">promises</a> code (<a href="https://github.com/rstudio/plumber/issues/785" class="external-link">#785</a>)</p></li>
+<li><p>Add <code>path</code> argument to <code><a href="../reference/pr_cookie.html">pr_cookie()</a></code> allowing Secure cookies to define where they are served (<a href="https://github.com/jtlandis" class="external-link">@jtlandis</a> <a href="https://github.com/rstudio/plumber/issues/850" class="external-link">#850</a>)</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-1-2-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-2-0"></a></h3>
+<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li><p>OpenAPI specification collision when using <code>examples</code>. (<a href="https://github.com/meztez" class="external-link">@meztez</a> <a href="https://github.com/rstudio/plumber/issues/820" class="external-link">#820</a>)</p></li>
 <li><p>Static handler returns Last-Modified response header. (<a href="https://github.com/rstudio/plumber/issues/798" class="external-link">#798</a>)</p></li>
 <li><p>OpenAPI response type detection had a scoping issue. Use serializer defined <code>Content-Type</code> header instead. (<a href="https://github.com/meztez" class="external-link">@meztez</a>, <a href="https://github.com/rstudio/plumber/issues/789" class="external-link">#789</a>)</p></li>

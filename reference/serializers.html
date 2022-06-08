@@ -16,7 +16,7 @@ more details on Plumber serializers and how to customize their behavior."><meta 
     
     <a class="navbar-brand me-2" href="../index.html">plumber</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,6 +85,8 @@ more details on Plumber serializers and how to customize their behavior.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">serializer_headers</span><span class="op">(</span>headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, serialize_fn <span class="op">=</span> <span class="va">identity</span><span class="op">)</span>
 
 <span class="fu">serializer_content_type</span><span class="op">(</span><span class="va">type</span>, serialize_fn <span class="op">=</span> <span class="va">identity</span><span class="op">)</span>
+
+<span class="fu">serializer_octet</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"application/octet-stream"</span><span class="op">)</span>
 
 <span class="fu">serializer_csv</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"text/csv; charset=UTF-8"</span><span class="op">)</span>
 
@@ -174,6 +176,8 @@ The graphics device <code>dev_on</code> function will receive any arguments supp
     
 <ul><li><p><code>serializer_headers</code>: Add a static list of headers to each return value. Will add <code>Content-Disposition</code> header if a value is the result of <code><a href="as_attachment.html">as_attachment()</a></code>.</p></li>
 <li><p><code>serializer_content_type</code>: Adds a <code>Content-Type</code> header to the response object</p></li>
+<li><p><code>serializer_octet</code>: Octet serializer. If content is received that does
+not have a <code>"raw"</code> type, then an error will be thrown.</p></li>
 <li><p><code>serializer_csv</code>: CSV serializer. See also: <code><a href="https://readr.tidyverse.org/reference/format_delim.html" class="external-link">readr::format_csv()</a></code></p></li>
 <li><p><code>serializer_tsv</code>: TSV serializer. See also: <code><a href="https://readr.tidyverse.org/reference/format_delim.html" class="external-link">readr::format_tsv()</a></code></p></li>
 <li><p><code>serializer_html</code>: HTML serializer</p></li>
