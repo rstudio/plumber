@@ -50,7 +50,7 @@
 #'   If not specified or a non-character is given, no SameSite policy is attached to the cookie.
 #' @export
 #' @seealso \itemize{
-#' \item \href{https://github.com/jeroen/sodium}{'sodium'}: R bindings to 'libsodium'
+#' \item \href{https://github.com/r-lib/sodium}{'sodium'}: R bindings to 'libsodium'
 #' \item \href{https://doc.libsodium.org/}{'libsodium'}: A Modern and Easy-to-Use Crypto Library
 #' \item \href{https://github.com/r-lib/keyring}{'keyring'}: Access the system credential store from R
 #' \item \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#Directives}{Set-Cookie flags}: Descriptions of different flags for \code{Set-Cookie}
@@ -175,7 +175,7 @@ session_cookie <- function(
 
 #' Random cookie key generator
 #'
-#' Uses a cryptographically secure pseudorandom number generator from [sodium::helpers()] to generate a 64 digit hexadecimal string.  \href{https://github.com/jeroen/sodium}{'sodium'} wraps around \href{https://doc.libsodium.org/}{'libsodium'}.
+#' Uses a cryptographically secure pseudorandom number generator from [sodium::helpers()] to generate a 64 digit hexadecimal string.  \href{https://github.com/r-lib/sodium}{'sodium'} wraps around \href{https://doc.libsodium.org/}{'libsodium'}.
 #'
 #' Please see \code{\link{session_cookie}} for more information on how to save the generated key.
 #'
