@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">plumber</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,32 +89,47 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>pr</dt>
 <dd><p>A Plumber API. Note: The supplied Plumber API object will also be updated in place as well as returned by the function.</p></dd>
+
+
 <dt>host</dt>
 <dd><p>A string that is a valid IPv4 or IPv6 address that is owned by
 this server, which the application will listen on. "0.0.0.0" represents
 all IPv4 addresses and "::/0" represents all IPv6 addresses.</p></dd>
+
+
 <dt>port</dt>
 <dd><p>A number or integer that indicates the server port that should
 be listened on. Note that on most Unix-like systems including Linux and
 Mac OS X, port numbers smaller than 1025 require root privileges.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Should be empty.</p></dd>
+
+
 <dt>debug</dt>
 <dd><p>If <code>TRUE</code>, it will provide more insight into your API errors.
 Using this value will only last for the duration of the run.
 If <code><a href="pr_set_debug.html">pr_set_debug()</a></code> has not been called, <code>debug</code> will default to <code><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive()</a></code> at <code>pr_run()</code> time</p></dd>
+
+
 <dt>docs</dt>
 <dd><p>Visual documentation value to use while running the API.
 This value will only be used while running the router.
 If missing, defaults to information previously set with <code><a href="pr_set_docs.html">pr_set_docs()</a></code>.
 For more customization, see <code><a href="pr_set_docs.html">pr_set_docs()</a></code> for examples.</p></dd>
+
+
 <dt>swaggerCallback</dt>
 <dd><p>An optional single-argument function that is called
 back with the URL to an OpenAPI user interface when one becomes ready. If
 missing, defaults to information set with <code><a href="pr_set_docs_callback.html">pr_set_docs_callback()</a></code>.
 This value will only be used while running the router.</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>If <code>TRUE</code>, don't print routine startup messages.</p></dd>
+
 </dl></div>
 
     <div class="section level2">
@@ -147,7 +162,7 @@ This value will only be used while running the router.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
   </div></footer></body></html>

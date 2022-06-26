@@ -12,7 +12,7 @@ Package Plumber Router"><meta property="og:image" content="https://www.rplumber.
     
     <a class="navbar-brand me-2" href="../index.html">plumber</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -646,7 +646,17 @@ pr$setSerializer(serializer_unboxed_json())
 </ul><p>If the parser name <code>"all"</code> is found in any character value or list name, all remaining parsers will be added.
 When using a list, parser information already defined will maintain their existing argument values.  All remaining parsers will use their default arguments.</p>
 <p>Example:</p>
-<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div></dd>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># provide a character string</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>parsers =<span class="st"> "json"</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># provide a named list with no arguments</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>parsers =<span class="st"> </span><span class="kw">list</span>(<span class="dt">json =</span> <span class="kw">list</span>())</span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co"># provide a named list with arguments; include `rds`</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>parsers =<span class="st"> </span><span class="kw">list</span>(<span class="dt">json =</span> <span class="kw">list</span>(<span class="dt">simplifyVector =</span> <span class="ot">FALSE</span>), <span class="dt">rds =</span> <span class="kw">list</span>())</span>
+<span id="cb1-9"><a href="#cb1-9"></a></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co"># default plumber parsers</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a>parsers =<span class="st"> </span><span class="kw">c</span>(<span class="st">"json"</span>, <span class="st">"form"</span>, <span class="st">"text"</span>, <span class="st">"octet"</span>, <span class="st">"multi"</span>)</span></code></pre><p></p></div></dd>
 
 
 </dl><p></p></div>
@@ -1086,7 +1096,7 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
   </div></footer></body></html>

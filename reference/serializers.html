@@ -16,7 +16,7 @@ more details on Plumber serializers and how to customize their behavior."><meta 
     
     <a class="navbar-brand me-2" href="../index.html">plumber</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -143,33 +143,54 @@ more details on Plumber serializers and how to customize their behavior.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>headers</dt>
 <dd><p><code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of headers to add to the response object</p></dd>
+
+
 <dt>serialize_fn</dt>
 <dd><p>Function to serialize the data. The result object will be converted to a character string. Ex: <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">jsonlite::toJSON()</a></code>.</p></dd>
+
+
 <dt>type</dt>
 <dd><p>The value to provide for the <code>Content-Type</code> HTTP header.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>extra arguments supplied to respective internal serialization function.</p></dd>
+
+
 <dt>auto_unbox</dt>
 <dd><p>automatically <code><a href="https://rdrr.io/pkg/jsonlite/man/unbox.html" class="external-link">unbox()</a></code> all atomic vectors of length 1. It is usually safer to avoid this and instead use the <code><a href="https://rdrr.io/pkg/jsonlite/man/unbox.html" class="external-link">unbox()</a></code> function to unbox individual elements.
 An exception is that objects of class <code>AsIs</code> (i.e. wrapped in <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I()</a></code>) are not automatically unboxed. This is a way to mark single values as length-1 arrays.</p></dd>
+
+
 <dt>version</dt>
 <dd><p>the workspace format version to use.  <code>NULL</code>
     specifies the current default version (3). The only other supported
     value is 2, the default from <span style="R">R</span> 1.4.0 to <span style="R">R</span> 3.5.0.</p></dd>
+
+
 <dt>ascii</dt>
 <dd><p>a logical.  If <code>TRUE</code> or <code>NA</code>, an ASCII
     representation is written; otherwise (default) a binary one.
     See also the comments in the help for <code><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></code>.</p></dd>
+
+
 <dt>write_fn</dt>
 <dd><p>Function that should write serialized content to the temp file provided. <code>write_fn</code> should have the function signature of <code>function(value, tmp_file){}</code>.</p></dd>
+
+
 <dt>fileext</dt>
 <dd><p>A non-empty character vector giving the file extension. This value will try to be inferred from the content type provided.</p></dd>
+
+
 <dt>dev_on</dt>
 <dd><p>Function to turn on a graphics device.
 The graphics device <code>dev_on</code> function will receive any arguments supplied to the serializer in addition to <code>filename</code>.
 <code>filename</code> points to the temporary file name that should be used when saving content.</p></dd>
+
+
 <dt>dev_off</dt>
 <dd><p>Function to turn off the graphics device. Defaults to <code><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">grDevices::dev.off()</a></code></p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a></h2>
@@ -214,7 +235,7 @@ not have a <code>"raw"</code> type, then an error will be thrown.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
   </div></footer></body></html>
