@@ -111,7 +111,7 @@ plumb_api("plumber", "01-append") \%>\%
 }
 \seealso{
 \itemize{
-\item \href{https://github.com/jeroen/sodium}{'sodium'}: R bindings to 'libsodium'
+\item \href{https://github.com/r-lib/sodium}{'sodium'}: R bindings to 'libsodium'
 \item \href{https://doc.libsodium.org/}{'libsodium'}: A Modern and Easy-to-Use Crypto Library
 \item \href{https://github.com/r-lib/keyring}{'keyring'}: Access the system credential store from R
 \item \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#Directives}{Set-Cookie flags}: Descriptions of different flags for \code{Set-Cookie}
