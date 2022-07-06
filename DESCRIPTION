@@ -51,6 +51,8 @@ Suggests:
     spelling,
     mockery (>= 0.4.2),
     geojsonsf,
+    redoc,
+    rapidoc,
     sf
 RoxygenNote: 7.2.0
 Collate:

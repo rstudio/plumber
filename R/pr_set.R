@@ -153,7 +153,6 @@ pr_set_debug <- function(pr, debug = interactive()) {
 #'
 #' ## View API using Redoc
 #' # Official Website: https://github.com/Redocly/redoc
-#' # remotes::install_github("https://github.com/meztez/redoc/")
 #' if (require(redoc)) {
 #'   pr() %>%
 #'     pr_set_docs("redoc") %>%
@@ -163,7 +162,6 @@ pr_set_debug <- function(pr, debug = interactive()) {
 #'
 #' ## View API using RapiDoc
 #' # Official Website: https://github.com/mrin9/RapiDoc
-#' # remotes::install_github("https://github.com/meztez/rapidoc/")
 #' if (require(rapidoc)) {
 #'   pr() %>%
 #'     pr_set_docs("rapidoc") %>%
