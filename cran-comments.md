@@ -1,5 +1,36 @@
 ## Comments
 
+#### 2022-7-5
+
+No response from CRAN and package is not pending a response. Resubmitting `{plumber}`.
+
+- Barret
+
+
+#### 2022-6-26
+
+Hi CRAN submissions,
+
+I believe the single NOTE for r-devel-windows is a false-positive. I can not reproduce this error locally in R 4.2 or R 4.1.  It looks like devel is failing to clean up a test / script.
+
+If there is a file that I am not cleaning up properly, please let me know and I will remove it and resubmit the package
+
+Thank you,
+Barret
+
+#### 2022-6-26
+
+Dear maintainer,
+
+package plumber_1.2.0.tar.gz does not pass the incoming checks automatically, please see the following pre-tests:
+Windows: <https://win-builder.r-project.org/incoming_pretest/plumber_1.2.0_20220626_055715/Windows/00check.log>
+Status: 1 NOTE
+
+Flavor: r-devel-windows-x86_64
+Check: for detritus in the temp directory, Result: NOTE
+  Found the following files/directories:
+    'Rscript4f84526e1abc' 'Rscriptf3d8526e1aac'
+
 #### 2022-6-25
 
 Bug fixes and new features.
