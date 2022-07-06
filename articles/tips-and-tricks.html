@@ -121,38 +121,38 @@
 <p>Similar to print debugging, we can output what plumber knows at each stage of the processing pipeline. You can do this by adding <a href="./programmatic-usage.html#router-hooks">hooks</a> to two key stages: <code>"postroute"</code> and <code>"postserialize"</code>.</p>
 <p>For example, we can add these lines to our <code>plumber.R</code> file:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#* @plumber</span>
-<span class="kw">function</span><span class="op">(</span><span class="va">pr</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">pr</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="../reference/pr_hook.html">pr_hook</a></span><span class="op">(</span><span class="st">"postroute"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">value</span><span class="op">)</span> <span class="op">{</span>
-      <span class="co"># Print stage information</span>
-      <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-        stage <span class="op">=</span> <span class="st">"postroute"</span>,
-        type <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">REQUEST_METHOD</span>,
-        path <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">PATH_INFO</span>,
-        value <span class="op">=</span> <span class="va">value</span>
-      <span class="op">)</span><span class="op">)</span>
-      <span class="co"># Must return the `value` since we took one in</span>
-      <span class="va">value</span>
-    <span class="op">}</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="../reference/pr_hook.html">pr_hook</a></span><span class="op">(</span><span class="st">"postserialize"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">value</span><span class="op">)</span> <span class="op">{</span>
-      <span class="co"># Print stage information</span>
-      <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-        stage <span class="op">=</span> <span class="st">"postserialize"</span>,
-        type <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">REQUEST_METHOD</span>,
-        path <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">PATH_INFO</span>,
-        value <span class="op">=</span> <span class="va">value</span>
-      <span class="op">)</span><span class="op">)</span>
-      <span class="co"># Must return the `value` since we took one in</span>
-      <span class="va">value</span>
-    <span class="op">}</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#* @plumber</span></span>
+<span><span class="kw">function</span><span class="op">(</span><span class="va">pr</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">pr</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="../reference/pr_hook.html">pr_hook</a></span><span class="op">(</span><span class="st">"postroute"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">value</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="co"># Print stage information</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        stage <span class="op">=</span> <span class="st">"postroute"</span>,</span>
+<span>        type <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">REQUEST_METHOD</span>,</span>
+<span>        path <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">PATH_INFO</span>,</span>
+<span>        value <span class="op">=</span> <span class="va">value</span></span>
+<span>      <span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="co"># Must return the `value` since we took one in</span></span>
+<span>      <span class="va">value</span></span>
+<span>    <span class="op">}</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="../reference/pr_hook.html">pr_hook</a></span><span class="op">(</span><span class="st">"postserialize"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">value</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="co"># Print stage information</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        stage <span class="op">=</span> <span class="st">"postserialize"</span>,</span>
+<span>        type <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">REQUEST_METHOD</span>,</span>
+<span>        path <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">PATH_INFO</span>,</span>
+<span>        value <span class="op">=</span> <span class="va">value</span></span>
+<span>      <span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="co"># Must return the `value` since we took one in</span></span>
+<span>      <span class="va">value</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>If we were to execute a <code>GET</code> request on <code>/stage_debug</code></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#* @get /stage_debug</span>
-<span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#* @get /stage_debug</span></span>
+<span><span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>, we would expect to see output like:</p>
 <pre><code>List of 4
  $ stage: chr "postroute"
@@ -176,12 +176,12 @@ List of 4
 <p>Print debugging is an obvious starting point, but most developers eventually wish for something more powerful. In R, this capacity is built in to the <code><a href="https://rdrr.io/r/base/browser.html" class="external-link">browser()</a></code> function. If you’re unfamiliar, <code><a href="https://rdrr.io/r/base/browser.html" class="external-link">browser()</a></code> pauses the execution of some function and gives you an interactive session in which you can inspect the current value of internal variables or even proceed through your function one statement at a time.</p>
 <p>You can leverage <code><a href="https://rdrr.io/r/base/browser.html" class="external-link">browser()</a></code> when developing your APIs locally by adding a <code><a href="https://rdrr.io/r/base/browser.html" class="external-link">browser()</a></code> call in one of your filters or endpoints and then visiting your API in a client. This offers a powerful technique to use when you want to inspect multiple different variables or interact with the current state of things inside of your function. This is also a good way to get your hands dirty with Plumber and get better acquainted with how things behave at a low level. Consider the following API endpoint:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#* @get /</span>
-<span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span><span class="op">)</span><span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/browser.html" class="external-link">browser</a></span><span class="op">(</span><span class="op">)</span>
-
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">123</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#* @get /</span></span>
+<span><span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/browser.html" class="external-link">browser</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>If you run this API locally and then visit the API in a web browser, you’ll see your R session switch into debug mode when the request arrives, allowing you to look at the objects contained inside your <code>req</code> and <code>res</code> objects.</p>
 </div>
 <div class="section level3">
@@ -194,14 +194,14 @@ List of 4
 </h2>
 <p>You can use [httpuv::randomPort()] to define a range of port for Plumber to pick from when running an API.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># plumber.R</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"plumber.port"</span> <span class="op">=</span> <span class="fu">httpuv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/httpuv/man/randomPort.html" class="external-link">randomPort</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fl">4000</span>, max <span class="op">=</span> <span class="fl">7000</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co">### define the rest of your plumber router...</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># plumber.R</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"plumber.port"</span> <span class="op">=</span> <span class="fu">httpuv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/httpuv/man/randomPort.html" class="external-link">randomPort</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fl">4000</span>, max <span class="op">=</span> <span class="fl">7000</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">### define the rest of your plumber router...</span></span></code></pre></div>
 <p>or more programmatically</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span>port <span class="op">=</span> <span class="fu">httpuv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/httpuv/man/randomPort.html" class="external-link">randomPort</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fl">4000</span>, max <span class="op">=</span> <span class="fl">7000</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span>port <span class="op">=</span> <span class="fu">httpuv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/httpuv/man/randomPort.html" class="external-link">randomPort</a></span><span class="op">(</span>min <span class="op">=</span> <span class="fl">4000</span>, max <span class="op">=</span> <span class="fl">7000</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

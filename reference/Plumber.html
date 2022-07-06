@@ -176,7 +176,7 @@ details on the methods available on this object.</p>
 <p>Create a new <code>Plumber</code> router</p>
 <p>See also <code><a href="plumb.html">plumb()</a></code>, <code><a href="pr.html">pr()</a></code></p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va"><a href="../reference/Plumber.html">Plumber</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>file <span class="op">=</span> <span class="cn">NULL</span>, filters <span class="op">=</span> <span class="va">defaultPlumberFilters</span>, <span class="va">envir</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/Plumber.html">Plumber</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>file <span class="op">=</span> <span class="cn">NULL</span>, filters <span class="op">=</span> <span class="va">defaultPlumberFilters</span>, <span class="va">envir</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -205,16 +205,16 @@ details on the methods available on this object.</p>
 <p>Start a server using <code>Plumber</code> object.</p>
 <p>See also: <code><a href="pr_run.html">pr_run()</a></code></p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">run</span><span class="op">(</span>
-  host <span class="op">=</span> <span class="st">"127.0.0.1"</span>,
-  port <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"plumber.port"</span>, <span class="cn">NULL</span><span class="op">)</span>,
-  swagger <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,
-  debug <span class="op">=</span> <span class="fu">missing_arg</span><span class="op">(</span><span class="op">)</span>,
-  swaggerCallback <span class="op">=</span> <span class="fu">missing_arg</span><span class="op">(</span><span class="op">)</span>,
-  <span class="va">...</span>,
-  docs <span class="op">=</span> <span class="fu">missing_arg</span><span class="op">(</span><span class="op">)</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">run</span><span class="op">(</span></span>
+<span>  host <span class="op">=</span> <span class="st">"127.0.0.1"</span>,</span>
+<span>  port <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"plumber.port"</span>, <span class="cn">NULL</span><span class="op">)</span>,</span>
+<span>  swagger <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  debug <span class="op">=</span> <span class="fu">missing_arg</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  swaggerCallback <span class="op">=</span> <span class="fu">missing_arg</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  docs <span class="op">=</span> <span class="fu">missing_arg</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -273,7 +273,7 @@ using the <code>mount()</code> method. This allows you to compartmentalize your 
 by paths which is a great technique for decomposing large APIs into smaller files.</p>
 <p>See also: <code><a href="pr_mount.html">pr_mount()</a></code></p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">mount</span><span class="op">(</span><span class="va">path</span>, <span class="va">router</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">mount</span><span class="op">(</span><span class="va">path</span>, <span class="va">router</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -307,7 +307,7 @@ root$mount("/products", products)
 <h3 id="method-unmount-">Method <code>unmount()</code><a class="anchor" aria-label="anchor" href="#method-unmount-"></a></h3>
 <p>Unmount a Plumber router</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">unmount</span><span class="op">(</span><span class="va">path</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">unmount</span><span class="op">(</span><span class="va">path</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -345,10 +345,10 @@ which the names are the names of the hooks, and the values are the
 handlers themselves.</p>
 <p>See also: <code><a href="pr_hook.html">pr_hook()</a></code>, <code><a href="pr_hook.html">pr_hooks()</a></code></p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">registerHook</span><span class="op">(</span>
-  stage <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"preroute"</span>, <span class="st">"postroute"</span>, <span class="st">"preserialize"</span>, <span class="st">"postserialize"</span>, <span class="st">"exit"</span><span class="op">)</span>,
-  <span class="va">handler</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">registerHook</span><span class="op">(</span></span>
+<span>  stage <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"preroute"</span>, <span class="st">"postroute"</span>, <span class="st">"preserialize"</span>, <span class="st">"postserialize"</span>, <span class="st">"exit"</span><span class="op">)</span>,</span>
+<span>  <span class="va">handler</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -402,16 +402,16 @@ of the endpoint like which filter it might preempt or which serializer
 it should use.</p>
 <p>See also: <code><a href="pr_handle.html">pr_handle()</a></code>, <code><a href="pr_handle.html">pr_get()</a></code>, <code><a href="pr_handle.html">pr_post()</a></code>, <code><a href="pr_handle.html">pr_put()</a></code>, <code><a href="pr_handle.html">pr_delete()</a></code></p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">handle</span><span class="op">(</span>
-  <span class="va">methods</span>,
-  <span class="va">path</span>,
-  <span class="va">handler</span>,
-  <span class="va">preempt</span>,
-  <span class="va">serializer</span>,
-  <span class="va">parsers</span>,
-  <span class="va">endpoint</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">handle</span><span class="op">(</span></span>
+<span>  <span class="va">methods</span>,</span>
+<span>  <span class="va">path</span>,</span>
+<span>  <span class="va">handler</span>,</span>
+<span>  <span class="va">preempt</span>,</span>
+<span>  <span class="va">serializer</span>,</span>
+<span>  <span class="va">parsers</span>,</span>
+<span>  <span class="va">endpoint</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -466,7 +466,7 @@ pr$handle("GET", "/", function(){
 <h3 id="method-removehandle-">Method <code>removeHandle()</code><a class="anchor" aria-label="anchor" href="#method-removehandle-"></a></h3>
 <p>Remove endpoints</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">removeHandle</span><span class="op">(</span><span class="va">methods</span>, <span class="va">path</span>, preempt <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">removeHandle</span><span class="op">(</span><span class="va">methods</span>, <span class="va">path</span>, preempt <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -490,7 +490,7 @@ pr$handle("GET", "/", function(){
 <h3 id="method-print-">Method <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code><a class="anchor" aria-label="anchor" href="#method-print-"></a></h3>
 <p>Print representation of plumber router.</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">print</span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">""</span>, topLevel <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">print</span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">""</span>, topLevel <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -519,7 +519,7 @@ router, set to <code>TRUE</code>.</p></dd>
 <h3 id="method-serve-">Method <code>serve()</code><a class="anchor" aria-label="anchor" href="#method-serve-"></a></h3>
 <p>Serve a request</p><div class="section">
 <h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">serve</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">serve</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -539,7 +539,7 @@ router, set to <code>TRUE</code>.</p></dd>
 <h3 id="method-route-">Method <code>route()</code><a class="anchor" aria-label="anchor" href="#method-route-"></a></h3>
 <p>Route a request</p><div class="section">
 <h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">route</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">route</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -559,7 +559,7 @@ router, set to <code>TRUE</code>.</p></dd>
 <h3 id="method-call-">Method <code><a href="https://rdrr.io/r/base/call.html" class="external-link">call()</a></code><a class="anchor" aria-label="anchor" href="#method-call-"></a></h3>
 <p><span class="pkg">httpuv</span> interface call function. (Required for <span class="pkg">httpuv</span>)</p><div class="section">
 <h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">call</span><span class="op">(</span><span class="va">req</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">call</span><span class="op">(</span><span class="va">req</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -575,7 +575,7 @@ router, set to <code>TRUE</code>.</p></dd>
 <h3 id="method-onheaders-">Method <code>onHeaders()</code><a class="anchor" aria-label="anchor" href="#method-onheaders-"></a></h3>
 <p>httpuv interface onHeaders function. (Required for <span class="pkg">httpuv</span>)</p><div class="section">
 <h4 id="usage-11">Usage<a class="anchor" aria-label="anchor" href="#usage-11"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">onHeaders</span><span class="op">(</span><span class="va">req</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">onHeaders</span><span class="op">(</span><span class="va">req</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -591,7 +591,7 @@ router, set to <code>TRUE</code>.</p></dd>
 <h3 id="method-onwsopen-">Method <code>onWSOpen()</code><a class="anchor" aria-label="anchor" href="#method-onwsopen-"></a></h3>
 <p>httpuv interface onWSOpen function. (Required for <span class="pkg">httpuv</span>)</p><div class="section">
 <h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">onWSOpen</span><span class="op">(</span><span class="va">ws</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">onWSOpen</span><span class="op">(</span><span class="va">ws</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -608,7 +608,7 @@ router, set to <code>TRUE</code>.</p></dd>
 <p>Sets the default serializer of the router.</p>
 <p>See also: <code><a href="pr_set_serializer.html">pr_set_serializer()</a></code></p><div class="section">
 <h4 id="usage-13">Usage<a class="anchor" aria-label="anchor" href="#usage-13"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">setSerializer</span><span class="op">(</span><span class="va">serializer</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">setSerializer</span><span class="op">(</span><span class="va">serializer</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -633,7 +633,7 @@ pr$setSerializer(serializer_unboxed_json())
 <h3 id="method-setparsers-">Method <code>setParsers()</code><a class="anchor" aria-label="anchor" href="#method-setparsers-"></a></h3>
 <p>Sets the default parsers of the router. Initialized to <code>c("json", "form", "text", "octet", "multi")</code></p><div class="section">
 <h4 id="usage-14">Usage<a class="anchor" aria-label="anchor" href="#usage-14"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">setParsers</span><span class="op">(</span><span class="va">parsers</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">setParsers</span><span class="op">(</span><span class="va">parsers</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -668,7 +668,7 @@ When using a list, parser information already defined will maintain their existi
 incoming request can’t be served by any filter, endpoint, or sub-router.</p>
 <p>See also: <code><a href="pr_set_404.html">pr_set_404()</a></code></p><div class="section">
 <h4 id="usage-15">Usage<a class="anchor" aria-label="anchor" href="#usage-15"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">set404Handler</span><span class="op">(</span><span class="va">fun</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">set404Handler</span><span class="op">(</span><span class="va">fun</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -695,7 +695,7 @@ pr$set404Handler(function(req, res) {cat(req$PATH_INFO)})
 endpoint generates an error.</p>
 <p>See also: <code><a href="pr_set_404.html">pr_set_404()</a></code></p><div class="section">
 <h4 id="usage-16">Usage<a class="anchor" aria-label="anchor" href="#usage-16"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">setErrorHandler</span><span class="op">(</span><span class="va">fun</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">setErrorHandler</span><span class="op">(</span><span class="va">fun</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -724,7 +724,7 @@ pr$setErrorHandler(function(req, res, err) {
 <p>Set visual documentation to use for API</p>
 <p>See also: <code><a href="pr_set_docs.html">pr_set_docs()</a></code>, <code><a href="register_docs.html">register_docs()</a></code>, <code><a href="register_docs.html">registered_docs()</a></code></p><div class="section">
 <h4 id="usage-17">Usage<a class="anchor" aria-label="anchor" href="#usage-17"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">setDocs</span><span class="op">(</span>docs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"plumber.docs"</span>, <span class="cn">TRUE</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">setDocs</span><span class="op">(</span>docs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"plumber.docs"</span>, <span class="cn">TRUE</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -749,7 +749,7 @@ to the API docs url. This allows RStudio to locate visual documentation.</p>
 <p>If using <code><a href="options_plumber.html">options_plumber()</a></code>, the value must be set before initializing your Plumber router.</p>
 <p>See also: <code><a href="pr_set_docs_callback.html">pr_set_docs_callback()</a></code></p><div class="section">
 <h4 id="usage-18">Usage<a class="anchor" aria-label="anchor" href="#usage-18"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">setDocsCallback</span><span class="op">(</span>callback <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"plumber.docs.callback"</span>, <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">setDocsCallback</span><span class="op">(</span>callback <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"plumber.docs.callback"</span>, <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -766,7 +766,7 @@ to the API docs url. This allows RStudio to locate visual documentation.</p>
 <p>Set debug value to include error messages.</p>
 <p>See also: <code>$getDebug()</code> and <code><a href="pr_set_debug.html">pr_set_debug()</a></code></p><div class="section">
 <h4 id="usage-19">Usage<a class="anchor" aria-label="anchor" href="#usage-19"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">setDebug</span><span class="op">(</span>debug <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">setDebug</span><span class="op">(</span>debug <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -783,7 +783,7 @@ to the API docs url. This allows RStudio to locate visual documentation.</p>
 <p>Retrieve the <code>debug</code> value. If it has never been set, the result of <code><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive()</a></code> will be used.</p>
 <p>See also: <code>$getDebug()</code> and <code><a href="pr_set_debug.html">pr_set_debug()</a></code></p><div class="section">
 <h4 id="usage-20">Usage<a class="anchor" aria-label="anchor" href="#usage-20"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">getDebug</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">getDebug</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
@@ -792,7 +792,7 @@ to the API docs url. This allows RStudio to locate visual documentation.</p>
 <p>Add a filter to plumber router</p>
 <p>See also: <code><a href="pr_filter.html">pr_filter()</a></code></p><div class="section">
 <h4 id="usage-21">Usage<a class="anchor" aria-label="anchor" href="#usage-21"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="va">name</span>, <span class="va">expr</span>, <span class="va">serializer</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">filter</span><span class="op">(</span><span class="va">name</span>, <span class="va">expr</span>, <span class="va">serializer</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -819,7 +819,7 @@ to the API docs url. This allows RStudio to locate visual documentation.</p>
 To force a vector to serialize to an array of size 1, be sure to call <code><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list()</a></code> on your value. <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> objects are always serialized to an array value.</p>
 <p>See also: <code><a href="pr_set_api_spec.html">pr_set_api_spec()</a></code></p><div class="section">
 <h4 id="usage-22">Usage<a class="anchor" aria-label="anchor" href="#usage-22"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">setApiSpec</span><span class="op">(</span>api <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">setApiSpec</span><span class="op">(</span>api <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -838,7 +838,7 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 <h3 id="method-getapispec-">Method <code>getApiSpec()</code><a class="anchor" aria-label="anchor" href="#method-getapispec-"></a></h3>
 <p>Retrieve OpenAPI file</p><div class="section">
 <h4 id="usage-23">Usage<a class="anchor" aria-label="anchor" href="#usage-23"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">getApiSpec</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">getApiSpec</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
@@ -846,16 +846,16 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 <h3 id="method-addendpoint-">Method <code>addEndpoint()</code><a class="anchor" aria-label="anchor" href="#method-addendpoint-"></a></h3>
 <p>addEndpoint has been deprecated in v0.4.0 and will be removed in a coming release. Please use <code>handle()</code> instead.</p><div class="section">
 <h4 id="usage-24">Usage<a class="anchor" aria-label="anchor" href="#usage-24"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">addEndpoint</span><span class="op">(</span>
-  <span class="va">verbs</span>,
-  <span class="va">path</span>,
-  <span class="va">expr</span>,
-  <span class="va">serializer</span>,
-  <span class="va">processors</span>,
-  preempt <span class="op">=</span> <span class="cn">NULL</span>,
-  params <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">comments</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">addEndpoint</span><span class="op">(</span></span>
+<span>  <span class="va">verbs</span>,</span>
+<span>  <span class="va">path</span>,</span>
+<span>  <span class="va">expr</span>,</span>
+<span>  <span class="va">serializer</span>,</span>
+<span>  <span class="va">processors</span>,</span>
+<span>  preempt <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  params <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">comments</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -899,7 +899,7 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 <h3 id="method-addassets-">Method <code>addAssets()</code><a class="anchor" aria-label="anchor" href="#method-addassets-"></a></h3>
 <p>addAssets has been deprecated in v0.4.0 and will be removed in a coming release. Please use <code>mount</code> and <code>PlumberStatic$new()</code> instead.</p><div class="section">
 <h4 id="usage-25">Usage<a class="anchor" aria-label="anchor" href="#usage-25"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">addAssets</span><span class="op">(</span><span class="va">dir</span>, path <span class="op">=</span> <span class="st">"/public"</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">addAssets</span><span class="op">(</span><span class="va">dir</span>, path <span class="op">=</span> <span class="st">"/public"</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -923,7 +923,7 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 <h3 id="method-addfilter-">Method <code>addFilter()</code><a class="anchor" aria-label="anchor" href="#method-addfilter-"></a></h3>
 <p><code>$addFilter()</code> has been deprecated in v0.4.0 and will be removed in a coming release. Please use <code>$filter()</code> instead.</p><div class="section">
 <h4 id="usage-26">Usage<a class="anchor" aria-label="anchor" href="#usage-26"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">addFilter</span><span class="op">(</span><span class="va">name</span>, <span class="va">expr</span>, <span class="va">serializer</span>, <span class="va">processors</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">addFilter</span><span class="op">(</span><span class="va">name</span>, <span class="va">expr</span>, <span class="va">serializer</span>, <span class="va">processors</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -951,7 +951,7 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 <h3 id="method-addglobalprocessor-">Method <code>addGlobalProcessor()</code><a class="anchor" aria-label="anchor" href="#method-addglobalprocessor-"></a></h3>
 <p><code>$addGlobalProcessor()</code> has been deprecated in v0.4.0 and will be removed in a coming release. Please use <code>$registerHook</code>(s) instead.</p><div class="section">
 <h4 id="usage-27">Usage<a class="anchor" aria-label="anchor" href="#usage-27"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">addGlobalProcessor</span><span class="op">(</span><span class="va">proc</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">addGlobalProcessor</span><span class="op">(</span><span class="va">proc</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -967,7 +967,7 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 <h3 id="method-openapifile-">Method <code>openAPIFile()</code><a class="anchor" aria-label="anchor" href="#method-openapifile-"></a></h3>
 <p>Deprecated. Retrieve OpenAPI file</p><div class="section">
 <h4 id="usage-28">Usage<a class="anchor" aria-label="anchor" href="#usage-28"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">openAPIFile</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">openAPIFile</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
@@ -975,7 +975,7 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 <h3 id="method-swaggerfile-">Method <code>swaggerFile()</code><a class="anchor" aria-label="anchor" href="#method-swaggerfile-"></a></h3>
 <p>Deprecated. Retrieve OpenAPI file</p><div class="section">
 <h4 id="usage-29">Usage<a class="anchor" aria-label="anchor" href="#usage-29"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">swaggerFile</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">swaggerFile</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
@@ -983,7 +983,7 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-30">Usage<a class="anchor" aria-label="anchor" href="#usage-30"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">Plumber</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -1001,88 +1001,88 @@ To force a vector to serialize to an array of size 1, be sure to call <code><a h
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co">## ------------------------------------------------</span></span>
-<span class="r-in"><span class="co">## Method `Plumber$mount`</span></span>
-<span class="r-in"><span class="co">## ------------------------------------------------</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">root</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr.html">pr</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">users</span> <span class="op">&lt;-</span> <span class="va">Plumber</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"users.R"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">root</span><span class="op">$</span><span class="fu">mount</span><span class="op">(</span><span class="st">"/users"</span>, <span class="va">users</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">products</span> <span class="op">&lt;-</span> <span class="va">Plumber</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"products.R"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">root</span><span class="op">$</span><span class="fu">mount</span><span class="op">(</span><span class="st">"/products"</span>, <span class="va">products</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## ------------------------------------------------</span></span>
-<span class="r-in"><span class="co">## Method `Plumber$registerHook`</span></span>
-<span class="r-in"><span class="co">## ------------------------------------------------</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr.html">pr</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">pr</span><span class="op">$</span><span class="fu">registerHook</span><span class="op">(</span><span class="st">"preroute"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span><span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Routing a request for"</span>, <span class="va">req</span><span class="op">$</span><span class="va">PATH_INFO</span>, <span class="st">"...\n"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">pr</span><span class="op">$</span><span class="fu">registerHooks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">  preserialize<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">value</span><span class="op">)</span><span class="op">{</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"About to serialize this value:"</span><span class="op">)</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">    <span class="co"># Must return the value since we took one in. Here we're not choosing</span></span>
-<span class="r-in">    <span class="co"># to mutate it, but we could.</span></span>
-<span class="r-in">    <span class="va">value</span></span>
-<span class="r-in">  <span class="op">}</span>,</span>
-<span class="r-in">  postserialize<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">{</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"We serialized the value as:"</span><span class="op">)</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">body</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">}</span></span>
-<span class="r-in"><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">pr</span><span class="op">$</span><span class="fu">handle</span><span class="op">(</span><span class="st">"GET"</span>, <span class="st">"/"</span>, <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span> <span class="fl">123</span> <span class="op">}</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## ------------------------------------------------</span></span>
-<span class="r-in"><span class="co">## Method `Plumber$handle`</span></span>
-<span class="r-in"><span class="co">## ------------------------------------------------</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr.html">pr</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">pr</span><span class="op">$</span><span class="fu">handle</span><span class="op">(</span><span class="st">"GET"</span>, <span class="st">"/"</span>, <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span></span>
-<span class="r-in">  <span class="st">"&lt;html&gt;&lt;h1&gt;Programmatic Plumber!&lt;/h1&gt;&lt;/html&gt;"</span></span>
-<span class="r-in"><span class="op">}</span>, serializer<span class="op">=</span><span class="fu">plumber</span><span class="fu">::</span><span class="fu"><a href="serializers.html">serializer_html</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## ------------------------------------------------</span></span>
-<span class="r-in"><span class="co">## Method `Plumber$setSerializer`</span></span>
-<span class="r-in"><span class="co">## ------------------------------------------------</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr.html">pr</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">pr</span><span class="op">$</span><span class="fu">setSerializer</span><span class="op">(</span><span class="fu"><a href="serializers.html">serializer_unboxed_json</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## ------------------------------------------------</span></span>
-<span class="r-in"><span class="co">## Method `Plumber$set404Handler`</span></span>
-<span class="r-in"><span class="co">## ------------------------------------------------</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr.html">pr</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">pr</span><span class="op">$</span><span class="fu">set404Handler</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">req</span><span class="op">$</span><span class="va">PATH_INFO</span><span class="op">)</span><span class="op">}</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## ------------------------------------------------</span></span>
-<span class="r-in"><span class="co">## Method `Plumber$setErrorHandler`</span></span>
-<span class="r-in"><span class="co">## ------------------------------------------------</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr.html">pr</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">pr</span><span class="op">$</span><span class="fu">setErrorHandler</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span>, <span class="va">err</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Found error: "</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">err</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co">## Method `Plumber$mount`</span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">root</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr.html">pr</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">users</span> <span class="op">&lt;-</span> <span class="va">Plumber</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"users.R"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">root</span><span class="op">$</span><span class="fu">mount</span><span class="op">(</span><span class="st">"/users"</span>, <span class="va">users</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">products</span> <span class="op">&lt;-</span> <span class="va">Plumber</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"products.R"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">root</span><span class="op">$</span><span class="fu">mount</span><span class="op">(</span><span class="st">"/products"</span>, <span class="va">products</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co">## Method `Plumber$registerHook`</span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr.html">pr</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pr</span><span class="op">$</span><span class="fu">registerHook</span><span class="op">(</span><span class="st">"preroute"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span><span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Routing a request for"</span>, <span class="va">req</span><span class="op">$</span><span class="va">PATH_INFO</span>, <span class="st">"...\n"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pr</span><span class="op">$</span><span class="fu">registerHooks</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  preserialize<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">value</span><span class="op">)</span><span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"About to serialize this value:"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="co"># Must return the value since we took one in. Here we're not choosing</span></span></span>
+<span class="r-in"><span>    <span class="co"># to mutate it, but we could.</span></span></span>
+<span class="r-in"><span>    <span class="va">value</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span>,</span></span>
+<span class="r-in"><span>  postserialize<span class="op">=</span><span class="kw">function</span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"We serialized the value as:"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">body</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pr</span><span class="op">$</span><span class="fu">handle</span><span class="op">(</span><span class="st">"GET"</span>, <span class="st">"/"</span>, <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span> <span class="fl">123</span> <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co">## Method `Plumber$handle`</span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr.html">pr</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pr</span><span class="op">$</span><span class="fu">handle</span><span class="op">(</span><span class="st">"GET"</span>, <span class="st">"/"</span>, <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="st">"&lt;html&gt;&lt;h1&gt;Programmatic Plumber!&lt;/h1&gt;&lt;/html&gt;"</span></span></span>
+<span class="r-in"><span><span class="op">}</span>, serializer<span class="op">=</span><span class="fu">plumber</span><span class="fu">::</span><span class="fu"><a href="serializers.html">serializer_html</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co">## Method `Plumber$setSerializer`</span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr.html">pr</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pr</span><span class="op">$</span><span class="fu">setSerializer</span><span class="op">(</span><span class="fu"><a href="serializers.html">serializer_unboxed_json</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co">## Method `Plumber$set404Handler`</span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr.html">pr</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pr</span><span class="op">$</span><span class="fu">set404Handler</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">req</span><span class="op">$</span><span class="va">PATH_INFO</span><span class="op">)</span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span><span class="co">## Method `Plumber$setErrorHandler`</span></span></span>
+<span class="r-in"><span><span class="co">## ------------------------------------------------</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr.html">pr</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pr</span><span class="op">$</span><span class="fu">setErrorHandler</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">req</span>, <span class="va">res</span>, <span class="va">err</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Found error: "</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">err</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

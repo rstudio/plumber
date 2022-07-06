@@ -79,12 +79,12 @@ This is useful for graphics device serializers which need a <code>preexec</code>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">endpoint_serializer</span><span class="op">(</span>
-  <span class="va">serializer</span>,
-  preexec_hook <span class="op">=</span> <span class="cn">NULL</span>,
-  postexec_hook <span class="op">=</span> <span class="cn">NULL</span>,
-  aroundexec_hook <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">endpoint_serializer</span><span class="op">(</span></span>
+<span>  <span class="va">serializer</span>,</span>
+<span>  preexec_hook <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  postexec_hook <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  aroundexec_hook <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -113,10 +113,10 @@ These hooks are specific to a single <a href="PlumberEndpoint.html">PlumberEndpo
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># The definition of `serializer_device` returns</span></span>
-<span class="r-in"><span class="co"># * a `serializer_content_type` serializer</span></span>
-<span class="r-in"><span class="co"># * `aroundexec` hook</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">serializer_device</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># The definition of `serializer_device` returns</span></span></span>
+<span class="r-in"><span><span class="co"># * a `serializer_content_type` serializer</span></span></span>
+<span class="r-in"><span><span class="co"># * `aroundexec` hook</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">serializer_device</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (type, dev_on, dev_off = grDevices::dev.off) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     stopifnot(!missing(type))</span>
@@ -171,7 +171,7 @@ These hooks are specific to a single <a href="PlumberEndpoint.html">PlumberEndpo
 <span class="r-out co"><span class="r-pr">#&gt;</span>             }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         })</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560c4be10e48&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x564d96e07458&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:plumber&gt;</span>
 </code></pre></div>
     </div>

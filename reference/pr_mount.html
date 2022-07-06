@@ -85,7 +85,7 @@ returns the updated router.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">pr_mount</span><span class="op">(</span><span class="va">pr</span>, <span class="va">path</span>, <span class="va">router</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pr_mount</span><span class="op">(</span><span class="va">pr</span>, <span class="va">path</span>, <span class="va">router</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -111,16 +111,16 @@ returns the updated router.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">pr1</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="pr_handle.html">pr_get</a></span><span class="op">(</span><span class="st">"/hello"</span>, <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="st">"Hello"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="pr_handle.html">pr_get</a></span><span class="op">(</span><span class="st">"/goodbye"</span>, <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="st">"Goodbye"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">pr_mount</span><span class="op">(</span><span class="st">"/hi"</span>, <span class="va">pr1</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="pr_run.html">pr_run</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">pr1</span> <span class="op">&lt;-</span> <span class="fu"><a href="pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="pr_handle.html">pr_get</a></span><span class="op">(</span><span class="st">"/hello"</span>, <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="st">"Hello"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="pr_handle.html">pr_get</a></span><span class="op">(</span><span class="st">"/goodbye"</span>, <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="st">"Goodbye"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">pr_mount</span><span class="op">(</span><span class="st">"/hi"</span>, <span class="va">pr1</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="pr_run.html">pr_run</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

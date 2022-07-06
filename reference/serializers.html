@@ -82,61 +82,61 @@ more details on Plumber serializers and how to customize their behavior.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">serializer_headers</span><span class="op">(</span>headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, serialize_fn <span class="op">=</span> <span class="va">identity</span><span class="op">)</span>
-
-<span class="fu">serializer_content_type</span><span class="op">(</span><span class="va">type</span>, serialize_fn <span class="op">=</span> <span class="va">identity</span><span class="op">)</span>
-
-<span class="fu">serializer_octet</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"application/octet-stream"</span><span class="op">)</span>
-
-<span class="fu">serializer_csv</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"text/csv; charset=UTF-8"</span><span class="op">)</span>
-
-<span class="fu">serializer_tsv</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"text/tab-separated-values; charset=UTF-8"</span><span class="op">)</span>
-
-<span class="fu">serializer_html</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"text/html; charset=UTF-8"</span><span class="op">)</span>
-
-<span class="fu">serializer_json</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"application/json"</span><span class="op">)</span>
-
-<span class="fu">serializer_unboxed_json</span><span class="op">(</span>auto_unbox <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span>, type <span class="op">=</span> <span class="st">"application/json"</span><span class="op">)</span>
-
-<span class="fu">serializer_geojson</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"application/geo+json"</span><span class="op">)</span>
-
-<span class="fu">serializer_rds</span><span class="op">(</span>version <span class="op">=</span> <span class="st">"2"</span>, ascii <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span>, type <span class="op">=</span> <span class="st">"application/rds"</span><span class="op">)</span>
-
-<span class="fu">serializer_feather</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"application/vnd.apache.arrow.file"</span><span class="op">)</span>
-
-<span class="fu">serializer_parquet</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"application/vnd.apache.parquet"</span><span class="op">)</span>
-
-<span class="fu">serializer_yaml</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"text/x-yaml; charset=UTF-8"</span><span class="op">)</span>
-
-<span class="fu">serializer_text</span><span class="op">(</span>
-  <span class="va">...</span>,
-  serialize_fn <span class="op">=</span> <span class="va">as.character</span>,
-  type <span class="op">=</span> <span class="st">"text/plain; charset=UTF-8"</span>
-<span class="op">)</span>
-
-<span class="fu">serializer_format</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"text/plain; charset=UTF-8"</span><span class="op">)</span>
-
-<span class="fu">serializer_print</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"text/plain; charset=UTF-8"</span><span class="op">)</span>
-
-<span class="fu">serializer_cat</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"text/plain; charset=UTF-8"</span><span class="op">)</span>
-
-<span class="fu">serializer_write_file</span><span class="op">(</span><span class="va">type</span>, <span class="va">write_fn</span>, fileext <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="fu">serializer_htmlwidget</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"text/html; charset=UTF-8"</span><span class="op">)</span>
-
-<span class="fu">serializer_device</span><span class="op">(</span><span class="va">type</span>, <span class="va">dev_on</span>, dev_off <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">)</span>
-
-<span class="fu">serializer_jpeg</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"image/jpeg"</span><span class="op">)</span>
-
-<span class="fu">serializer_png</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"image/png"</span><span class="op">)</span>
-
-<span class="fu">serializer_svg</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"image/svg+xml"</span><span class="op">)</span>
-
-<span class="fu">serializer_bmp</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"image/bmp"</span><span class="op">)</span>
-
-<span class="fu">serializer_tiff</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"image/tiff"</span><span class="op">)</span>
-
-<span class="fu">serializer_pdf</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"application/pdf"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">serializer_headers</span><span class="op">(</span>headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, serialize_fn <span class="op">=</span> <span class="va">identity</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_content_type</span><span class="op">(</span><span class="va">type</span>, serialize_fn <span class="op">=</span> <span class="va">identity</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_octet</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"application/octet-stream"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_csv</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"text/csv; charset=UTF-8"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_tsv</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"text/tab-separated-values; charset=UTF-8"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_html</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"text/html; charset=UTF-8"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_json</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"application/json"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_unboxed_json</span><span class="op">(</span>auto_unbox <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span>, type <span class="op">=</span> <span class="st">"application/json"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_geojson</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"application/geo+json"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_rds</span><span class="op">(</span>version <span class="op">=</span> <span class="st">"2"</span>, ascii <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span>, type <span class="op">=</span> <span class="st">"application/rds"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_feather</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"application/vnd.apache.arrow.file"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_parquet</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"application/vnd.apache.parquet"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_yaml</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"text/x-yaml; charset=UTF-8"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_text</span><span class="op">(</span></span>
+<span>  <span class="va">...</span>,</span>
+<span>  serialize_fn <span class="op">=</span> <span class="va">as.character</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"text/plain; charset=UTF-8"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_format</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"text/plain; charset=UTF-8"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_print</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"text/plain; charset=UTF-8"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_cat</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"text/plain; charset=UTF-8"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_write_file</span><span class="op">(</span><span class="va">type</span>, <span class="va">write_fn</span>, fileext <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_htmlwidget</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"text/html; charset=UTF-8"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_device</span><span class="op">(</span><span class="va">type</span>, <span class="va">dev_on</span>, dev_off <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_jpeg</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"image/jpeg"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_png</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"image/png"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_svg</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"image/svg+xml"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_bmp</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"image/bmp"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_tiff</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"image/tiff"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">serializer_pdf</span><span class="op">(</span><span class="va">...</span>, type <span class="op">=</span> <span class="st">"application/pdf"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">

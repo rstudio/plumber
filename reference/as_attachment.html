@@ -76,7 +76,7 @@ To make sure the attachment is used, be sure your serializer eventually calls <c
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">as_attachment</span><span class="op">(</span><span class="va">value</span>, filename <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_attachment</span><span class="op">(</span><span class="va">value</span>, filename <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -101,16 +101,16 @@ If no <code>filename</code> is provided, the <code>value</code> will be treated 
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># plumber.R</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#' @get /data</span></span>
-<span class="r-in"><span class="co">#' @serializer csv</span></span>
-<span class="r-in"><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="co"># will cause the file to be saved as `iris.csv`, not `data` or `data.csv`</span></span>
-<span class="r-in">  <span class="fu">as_attachment</span><span class="op">(</span><span class="va">iris</span>, <span class="st">"iris.csv"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># plumber.R</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#' @get /data</span></span></span>
+<span class="r-in"><span><span class="co">#' @serializer csv</span></span></span>
+<span class="r-in"><span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="co"># will cause the file to be saved as `iris.csv`, not `data` or `data.csv`</span></span></span>
+<span class="r-in"><span>  <span class="fu">as_attachment</span><span class="op">(</span><span class="va">iris</span>, <span class="st">"iris.csv"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

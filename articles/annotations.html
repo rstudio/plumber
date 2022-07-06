@@ -169,33 +169,33 @@
 <h5 id="annotations-example">Annotations example<a class="anchor" aria-label="anchor" href="#annotations-example"></a>
 </h5>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#* @apiTitle Sample Pet Store App</span>
-<span class="co">#* @apiDescription This is a sample server for a pet store.</span>
-<span class="co">#* @apiTOS http://example.com/terms/</span>
-<span class="co">#* @apiContact list(name = "API Support", url = "http://www.example.com/support", email = "support@example.com")</span>
-<span class="co">#* @apiLicense list(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0.html")</span>
-<span class="co">#* @apiVersion 1.0.1</span>
-<span class="co">#* @apiTag pet Pets operations</span>
-<span class="co">#* @apiTag toy Toys operations</span>
-<span class="co">#* @apiTag "toy space" Toys operations</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#* @apiTitle Sample Pet Store App</span></span>
+<span><span class="co">#* @apiDescription This is a sample server for a pet store.</span></span>
+<span><span class="co">#* @apiTOS http://example.com/terms/</span></span>
+<span><span class="co">#* @apiContact list(name = "API Support", url = "http://www.example.com/support", email = "support@example.com")</span></span>
+<span><span class="co">#* @apiLicense list(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0.html")</span></span>
+<span><span class="co">#* @apiVersion 1.0.1</span></span>
+<span><span class="co">#* @apiTag pet Pets operations</span></span>
+<span><span class="co">#* @apiTag toy Toys operations</span></span>
+<span><span class="co">#* @apiTag "toy space" Toys operations</span></span></code></pre></div>
 </div>
 <div class="section level5">
 <h5 id="equivalent-programmatic-usage">Equivalent programmatic usage<a class="anchor" aria-label="anchor" href="#equivalent-programmatic-usage"></a>
 </h5>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/pr_set_api_spec.html">pr_set_api_spec</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">spec</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">spec</span><span class="op">$</span><span class="va">info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-      title <span class="op">=</span> <span class="st">"Sample Pet Store App"</span>,
-      description <span class="op">=</span> <span class="st">"This is a sample server for a pet store."</span>,
-      termsOfService <span class="op">=</span> <span class="st">"http://example.com/terms/"</span>,
-      contact <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"API Support"</span>, url <span class="op">=</span> <span class="st">"http://www.example.com/support"</span>, email <span class="op">=</span> <span class="st">"support@example.com"</span><span class="op">)</span>,
-      license <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Apache 2.0"</span>, url <span class="op">=</span> <span class="st">"https://www.apache.org/licenses/LICENSE-2.0.html"</span><span class="op">)</span>,
-      version <span class="op">=</span> <span class="st">"1.0.1"</span>
-    <span class="op">)</span>
-    <span class="va">spec</span><span class="op">$</span><span class="va">tags</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"pet"</span>, description <span class="op">=</span> <span class="st">"Pets operations"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"toy"</span>, description <span class="op">=</span> <span class="st">"Toys operations"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"toy space"</span>, description <span class="op">=</span> <span class="st">"Toys operations"</span><span class="op">)</span><span class="op">)</span>
-    <span class="va">spec</span>
-  <span class="op">}</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/pr_set_api_spec.html">pr_set_api_spec</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">spec</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">spec</span><span class="op">$</span><span class="va">info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      title <span class="op">=</span> <span class="st">"Sample Pet Store App"</span>,</span>
+<span>      description <span class="op">=</span> <span class="st">"This is a sample server for a pet store."</span>,</span>
+<span>      termsOfService <span class="op">=</span> <span class="st">"http://example.com/terms/"</span>,</span>
+<span>      contact <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"API Support"</span>, url <span class="op">=</span> <span class="st">"http://www.example.com/support"</span>, email <span class="op">=</span> <span class="st">"support@example.com"</span><span class="op">)</span>,</span>
+<span>      license <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Apache 2.0"</span>, url <span class="op">=</span> <span class="st">"https://www.apache.org/licenses/LICENSE-2.0.html"</span><span class="op">)</span>,</span>
+<span>      version <span class="op">=</span> <span class="st">"1.0.1"</span></span>
+<span>    <span class="op">)</span></span>
+<span>    <span class="va">spec</span><span class="op">$</span><span class="va">tags</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"pet"</span>, description <span class="op">=</span> <span class="st">"Pets operations"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"toy"</span>, description <span class="op">=</span> <span class="st">"Toys operations"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"toy space"</span>, description <span class="op">=</span> <span class="st">"Toys operations"</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">spec</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -343,58 +343,58 @@
 <h5 id="annotations-example-1">Annotations example<a class="anchor" aria-label="anchor" href="#annotations-example-1"></a>
 </h5>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#* @get /query/parameters</span>
-<span class="co">#* @serializer text</span>
-<span class="co">#* @param name:str</span>
-<span class="co">#* @param age:[int]</span>
-<span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">{</span>
-  <span class="co"># Explicit conversion is required for query parameters</span>
-  <span class="va">age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s is %i years old"</span>, <span class="va">name</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="co">#* @get /dyn/&lt;name:str&gt;/&lt;age:[int]&gt;/route</span>
-<span class="co">#* @serializer text</span>
-<span class="co">#* @parser none</span>
-<span class="co">#* @response 200 A sentence</span>
-<span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s is %i years old"</span>, <span class="va">name</span>, <span class="va">age</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="co">#* @post /upload_file</span>
-<span class="co">#* @serializer rds</span>
-<span class="co">#* @parser multi</span>
-<span class="co">#* @parser rds</span>
-<span class="co">#* @param f:file A file</span>
-<span class="co">#* Upload an rds file and return the object</span>
-<span class="kw">function</span><span class="op">(</span><span class="va">f</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="../reference/as_attachment.html">as_attachment</a></span><span class="op">(</span><span class="va">f</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#* @get /query/parameters</span></span>
+<span><span class="co">#* @serializer text</span></span>
+<span><span class="co">#* @param name:str</span></span>
+<span><span class="co">#* @param age:[int]</span></span>
+<span><span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Explicit conversion is required for query parameters</span></span>
+<span>  <span class="va">age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s is %i years old"</span>, <span class="va">name</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#* @get /dyn/&lt;name:str&gt;/&lt;age:[int]&gt;/route</span></span>
+<span><span class="co">#* @serializer text</span></span>
+<span><span class="co">#* @parser none</span></span>
+<span><span class="co">#* @response 200 A sentence</span></span>
+<span><span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s is %i years old"</span>, <span class="va">name</span>, <span class="va">age</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#* @post /upload_file</span></span>
+<span><span class="co">#* @serializer rds</span></span>
+<span><span class="co">#* @parser multi</span></span>
+<span><span class="co">#* @parser rds</span></span>
+<span><span class="co">#* @param f:file A file</span></span>
+<span><span class="co">#* Upload an rds file and return the object</span></span>
+<span><span class="kw">function</span><span class="op">(</span><span class="va">f</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/as_attachment.html">as_attachment</a></span><span class="op">(</span><span class="va">f</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level5">
 <h5 id="equivalent-programmatic-usage-1">Equivalent programmatic usage<a class="anchor" aria-label="anchor" href="#equivalent-programmatic-usage-1"></a>
 </h5>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">text_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s is %i years old"</span>, <span class="va">name</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span> <span class="op">}</span>
-<span class="va">qp_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">{</span> <span class="va">age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span>; <span class="fu">text_handler</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">}</span>
-<span class="va">file_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="../reference/as_attachment.html">as_attachment</a></span><span class="op">(</span><span class="va">file</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">}</span>
-<span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/query/parameters"</span>,
-         handler <span class="op">=</span> <span class="va">qp_handler</span>,
-         serializer <span class="op">=</span> <span class="fu"><a href="../reference/serializers.html">serializer_text</a></span><span class="op">(</span><span class="op">)</span>,
-         params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"name"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"string"</span>, required <span class="op">=</span> <span class="cn">FALSE</span>, isArray <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-                       <span class="st">"age"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"integer"</span>, required <span class="op">=</span> <span class="cn">FALSE</span>, isArray <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/dyn/&lt;name:str&gt;/&lt;age:[int]&gt;/route"</span>,
-         handler <span class="op">=</span> <span class="va">text_handler</span>,
-         serializer <span class="op">=</span> <span class="fu"><a href="../reference/serializers.html">serializer_text</a></span><span class="op">(</span><span class="op">)</span>,
-         parsers <span class="op">=</span> <span class="st">"none"</span>,
-         responses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"200"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>description <span class="op">=</span> <span class="st">"A sentence"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/pr_handle.html">pr_post</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/upload_file"</span>,
-          handler <span class="op">=</span> <span class="va">file_handler</span>,
-          serializer <span class="op">=</span> <span class="fu"><a href="../reference/serializers.html">serializer_rds</a></span><span class="op">(</span><span class="op">)</span>,
-          parsers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"multi"</span>, <span class="st">"rds"</span><span class="op">)</span>,
-          params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"file"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"file"</span>, desc <span class="op">=</span> <span class="st">"A file"</span>, required <span class="op">=</span> <span class="cn">FALSE</span>, isArray <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>,
-          comments <span class="op">=</span> <span class="st">"Upload an rds file and return the object"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">text_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s is %i years old"</span>, <span class="va">name</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span> <span class="op">}</span></span>
+<span><span class="va">qp_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">{</span> <span class="va">age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span>; <span class="fu">text_handler</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">}</span></span>
+<span><span class="va">file_handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="../reference/as_attachment.html">as_attachment</a></span><span class="op">(</span><span class="va">file</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">}</span></span>
+<span><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/query/parameters"</span>,</span>
+<span>         handler <span class="op">=</span> <span class="va">qp_handler</span>,</span>
+<span>         serializer <span class="op">=</span> <span class="fu"><a href="../reference/serializers.html">serializer_text</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>         params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"name"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"string"</span>, required <span class="op">=</span> <span class="cn">FALSE</span>, isArray <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>                       <span class="st">"age"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"integer"</span>, required <span class="op">=</span> <span class="cn">FALSE</span>, isArray <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/dyn/&lt;name:str&gt;/&lt;age:[int]&gt;/route"</span>,</span>
+<span>         handler <span class="op">=</span> <span class="va">text_handler</span>,</span>
+<span>         serializer <span class="op">=</span> <span class="fu"><a href="../reference/serializers.html">serializer_text</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>         parsers <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>         responses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"200"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>description <span class="op">=</span> <span class="st">"A sentence"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/pr_handle.html">pr_post</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/upload_file"</span>,</span>
+<span>          handler <span class="op">=</span> <span class="va">file_handler</span>,</span>
+<span>          serializer <span class="op">=</span> <span class="fu"><a href="../reference/serializers.html">serializer_rds</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>          parsers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"multi"</span>, <span class="st">"rds"</span><span class="op">)</span>,</span>
+<span>          params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"file"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"file"</span>, desc <span class="op">=</span> <span class="st">"A file"</span>, required <span class="op">=</span> <span class="cn">FALSE</span>, isArray <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>          comments <span class="op">=</span> <span class="st">"Upload an rds file and return the object"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -417,25 +417,25 @@
 <h5 id="annotations-example-2">Annotations example<a class="anchor" aria-label="anchor" href="#annotations-example-2"></a>
 </h5>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#* @filter logger</span>
-<span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span><span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="st">"-"</span>,
-    <span class="va">req</span><span class="op">$</span><span class="va">REQUEST_METHOD</span>, <span class="va">req</span><span class="op">$</span><span class="va">PATH_INFO</span>, <span class="st">"-"</span>,
-    <span class="va">req</span><span class="op">$</span><span class="va">HTTP_USER_AGENT</span>, <span class="st">"@"</span>, <span class="va">req</span><span class="op">$</span><span class="va">REMOTE_ADDR</span>, <span class="st">"\n"</span><span class="op">)</span>
-  <span class="fu">plumber</span><span class="fu">::</span><span class="fu"><a href="../reference/forward.html">forward</a></span><span class="op">(</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#* @filter logger</span></span>
+<span><span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="st">"-"</span>,</span>
+<span>    <span class="va">req</span><span class="op">$</span><span class="va">REQUEST_METHOD</span>, <span class="va">req</span><span class="op">$</span><span class="va">PATH_INFO</span>, <span class="st">"-"</span>,</span>
+<span>    <span class="va">req</span><span class="op">$</span><span class="va">HTTP_USER_AGENT</span>, <span class="st">"@"</span>, <span class="va">req</span><span class="op">$</span><span class="va">REMOTE_ADDR</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span>  <span class="fu">plumber</span><span class="fu">::</span><span class="fu"><a href="../reference/forward.html">forward</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level5">
 <h5 id="equivalent-programmatic-usage-2">Equivalent programmatic usage<a class="anchor" aria-label="anchor" href="#equivalent-programmatic-usage-2"></a>
 </h5>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/pr_filter.html">pr_filter</a></span><span class="op">(</span><span class="st">"logger"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span><span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="st">"-"</span>,
-      <span class="va">req</span><span class="op">$</span><span class="va">REQUEST_METHOD</span>, <span class="va">req</span><span class="op">$</span><span class="va">PATH_INFO</span>, <span class="st">"-"</span>,
-      <span class="va">req</span><span class="op">$</span><span class="va">HTTP_USER_AGENT</span>, <span class="st">"@"</span>, <span class="va">req</span><span class="op">$</span><span class="va">REMOTE_ADDR</span>, <span class="st">"\n"</span><span class="op">)</span>
-    <span class="fu">plumber</span><span class="fu">::</span><span class="fu"><a href="../reference/forward.html">forward</a></span><span class="op">(</span><span class="op">)</span>
-  <span class="op">}</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/pr_filter.html">pr_filter</a></span><span class="op">(</span><span class="st">"logger"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span><span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="st">"-"</span>,</span>
+<span>      <span class="va">req</span><span class="op">$</span><span class="va">REQUEST_METHOD</span>, <span class="va">req</span><span class="op">$</span><span class="va">PATH_INFO</span>, <span class="st">"-"</span>,</span>
+<span>      <span class="va">req</span><span class="op">$</span><span class="va">HTTP_USER_AGENT</span>, <span class="st">"@"</span>, <span class="va">req</span><span class="op">$</span><span class="va">REMOTE_ADDR</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span>    <span class="fu">plumber</span><span class="fu">::</span><span class="fu"><a href="../reference/forward.html">forward</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -458,27 +458,27 @@
 <h5 id="annotations-example-3">Annotations example<a class="anchor" aria-label="anchor" href="#annotations-example-3"></a>
 </h5>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#* @assets ./files/static</span>
-<span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="co">#* @assets ./files/static /static</span>
-<span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="co">#* @assets ./files/static /</span>
-<span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#* @assets ./files/static</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#* @assets ./files/static /static</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#* @assets ./files/static /</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level5">
 <h5 id="equivalent-programmatic-usage-note-that-argument-order-is-reversed">Equivalent programmatic usage (note that argument order is reversed)<a class="anchor" aria-label="anchor" href="#equivalent-programmatic-usage-note-that-argument-order-is-reversed"></a>
 </h5>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/pr_static.html">pr_static</a></span><span class="op">(</span>direc <span class="op">=</span> <span class="st">"./files/static"</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/pr_static.html">pr_static</a></span><span class="op">(</span><span class="st">"/static"</span>, <span class="st">"./files/static"</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/pr_static.html">pr_static</a></span><span class="op">(</span><span class="st">"/"</span>, <span class="st">"./files/static"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/pr_static.html">pr_static</a></span><span class="op">(</span>direc <span class="op">=</span> <span class="st">"./files/static"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/pr_static.html">pr_static</a></span><span class="op">(</span><span class="st">"/static"</span>, <span class="st">"./files/static"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/pr_static.html">pr_static</a></span><span class="op">(</span><span class="st">"/"</span>, <span class="st">"./files/static"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -505,30 +505,30 @@
 <h5 id="annotations-example-4">Annotations example<a class="anchor" aria-label="anchor" href="#annotations-example-4"></a>
 </h5>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#* @plumber</span>
-<span class="kw">function</span><span class="op">(</span><span class="va">pr</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">pr</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="../reference/pr_set_debug.html">pr_set_debug</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="../reference/pr_set_docs.html">pr_set_docs</a></span><span class="op">(</span><span class="st">"swagger"</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="co"># Named function</span>
-<span class="va">debug_swagger</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pr</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">pr</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="../reference/pr_set_debug.html">pr_set_debug</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="../reference/pr_set_docs.html">pr_set_docs</a></span><span class="op">(</span><span class="st">"swagger"</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="co">#* @plumber</span>
-<span class="va">debug_swagger</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#* @plumber</span></span>
+<span><span class="kw">function</span><span class="op">(</span><span class="va">pr</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">pr</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="../reference/pr_set_debug.html">pr_set_debug</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="../reference/pr_set_docs.html">pr_set_docs</a></span><span class="op">(</span><span class="st">"swagger"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Named function</span></span>
+<span><span class="va">debug_swagger</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pr</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">pr</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="../reference/pr_set_debug.html">pr_set_debug</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="../reference/pr_set_docs.html">pr_set_docs</a></span><span class="op">(</span><span class="st">"swagger"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#* @plumber</span></span>
+<span><span class="va">debug_swagger</span></span></code></pre></div>
 </div>
 <div class="section level5">
 <h5 id="equivalent-programmatic-usage-3">Equivalent programmatic usage<a class="anchor" aria-label="anchor" href="#equivalent-programmatic-usage-3"></a>
 </h5>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/pr_set_debug.html">pr_set_debug</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/pr_set_docs.html">pr_set_docs</a></span><span class="op">(</span><span class="st">"swagger"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/pr_set_debug.html">pr_set_debug</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/pr_set_docs.html">pr_set_docs</a></span><span class="op">(</span><span class="st">"swagger"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 </div>

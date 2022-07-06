@@ -355,15 +355,15 @@ http {
 </h3>
 <p>Once you’ve deployed your Plumber files onto the server, you’ll still need to tell the server <em>how</em> to run your server. You’re probably used to running commands like</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"myfile.R"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span>port<span class="op">=</span><span class="fl">4500</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"myfile.R"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span>port<span class="op">=</span><span class="fl">4500</span><span class="op">)</span></span></code></pre></div>
 <p>Unfortunately, pm2 doesn’t understand R scripts natively; however, it is possible to specify a custom interpreter. We can use this feature to launch an R-based wrapper for our plumber file using the <code>Rscript</code> scripting front-end that comes with R. The following script will run the two commands listed above.</p>
-<pre><code><span class="co">#!/usr/bin/env Rscript</span>
-
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.rplumber.io">plumber</a></span><span class="op">)</span>
-<span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"myfile.R"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span>port<span class="op">=</span><span class="fl">4000</span>, host<span class="op">=</span><span class="st">"0.0.0.0"</span><span class="op">)</span>
-<span class="co"># Setting the host option on a VM instance ensures the application can be accessed externally.</span>
-<span class="co"># (This may be only true for Linux users.)</span></code></pre>
+<pre><code><span><span class="co">#!/usr/bin/env Rscript</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.rplumber.io">plumber</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"myfile.R"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span>port<span class="op">=</span><span class="fl">4000</span>, host<span class="op">=</span><span class="st">"0.0.0.0"</span><span class="op">)</span></span>
+<span><span class="co"># Setting the host option on a VM instance ensures the application can be accessed externally.</span></span>
+<span><span class="co"># (This may be only true for Linux users.)</span></span></code></pre>
 <p>Save this R script on your server as something like <code>run-myfile.R</code>. You should also make it executable by changing the permissions on the file using a command like <code>chmod 755 run-myfile.R</code>. You should now execute that file to make sure that it runs the service like you expect. You should be able to make requests to your server on the appropriate port and have the plumber service respond. You can kill the process using <code>Ctrl-c</code> when you’re convinced that it’s working. Make sure the shell script is in a permanent location so that it won’t be erased or modified accidentally. You can consider creating a designated directory for all your plumber services in some directory like <code>/usr/local/plumber</code>, then put all services and their associated Rscript-runners in their own subdirectory like <code>/usr/local/plumber/myfile/</code>.</p>
 </div>
 <div class="section level3">

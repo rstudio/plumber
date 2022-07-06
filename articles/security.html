@@ -136,33 +136,33 @@
 <p>Denial of service (DoS) attacks are employed in order to temporarily shut down a server or service by overwhelming it with traffic. A DoS scenario could be caused by a single ignorant user unintentionally making a request that could ask the server to do some impossible task, or could be intentionally introduced by a malicious actor leveraging a vast number of machines to repeatedly make requests that are expensive for the server to respond to. The later form is often called a distributed denial of service attack (or DDoS) and typically requires special infrastructure and network capacity that is beyond the scope of what we’ll discuss here.</p>
 <p>However, there are practices that you should employ when designing your Plumber API to put safety guards around the work that an API request might instigate.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#* This is an example of an UNSAFE endpoint which</span>
-<span class="co">#* is vulnerable to a DOS attack.</span>
-<span class="co">#* @get /</span>
-<span class="co">#* @serializer png</span>
-<span class="kw">function</span><span class="op">(</span><span class="va">pts</span><span class="op">=</span><span class="fl">10</span><span class="op">)</span> <span class="op">{</span>
-  <span class="co"># An example of an UNSAFE endpoint.</span>
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">pts</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#* This is an example of an UNSAFE endpoint which</span></span>
+<span><span class="co">#* is vulnerable to a DOS attack.</span></span>
+<span><span class="co">#* @get /</span></span>
+<span><span class="co">#* @serializer png</span></span>
+<span><span class="kw">function</span><span class="op">(</span><span class="va">pts</span><span class="op">=</span><span class="fl">10</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># An example of an UNSAFE endpoint.</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">pts</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>The expected output here is a harmless plot.</p>
 <p><img src="security_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 <p>This plot takes a negligible amount of time to create.</p>
 <p>However, plots with more points will take more time to create.</p>
 <p><img src="security_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>This plot, with 10,000 points added, took 0.218 seconds to generate. While that doesn’t sound like much, if we exposed this API publicly on the Internet, an attacker could easily generate enough traffic on this endpoint to overwhelm the Plumber process. Even worse, an attacker could make a request on this endpoint with millions or billions of points which might cause our server to run out of memory or consume so much CPU that it deprives other important system resources. Either case could result in our Plumber process crashing altogether.</p>
+<p>This plot, with 10,000 points added, took 0.209 seconds to generate. While that doesn’t sound like much, if we exposed this API publicly on the Internet, an attacker could easily generate enough traffic on this endpoint to overwhelm the Plumber process. Even worse, an attacker could make a request on this endpoint with millions or billions of points which might cause our server to run out of memory or consume so much CPU that it deprives other important system resources. Either case could result in our Plumber process crashing altogether.</p>
 <p>The solution, in this case, is to ensure that we have reasonable safety guards in place for any user input.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#* This is an example of an safe endpoint which</span>
-<span class="co">#* checks user input to avoid a DOS attack</span>
-<span class="co">#* @get /</span>
-<span class="co">#* @serializer png</span>
-<span class="kw">function</span><span class="op">(</span><span class="va">pts</span><span class="op">=</span><span class="fl">10</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw">if</span> <span class="op">(</span><span class="va">pts</span> <span class="op">&gt;</span> <span class="fl">1000</span> <span class="op">&amp;</span> <span class="va">pts</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">{</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"pts must be between 1 and 1,000"</span><span class="op">)</span>
-  <span class="op">}</span>
-
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">pts</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#* This is an example of an safe endpoint which</span></span>
+<span><span class="co">#* checks user input to avoid a DOS attack</span></span>
+<span><span class="co">#* @get /</span></span>
+<span><span class="co">#* @serializer png</span></span>
+<span><span class="kw">function</span><span class="op">(</span><span class="va">pts</span><span class="op">=</span><span class="fl">10</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">pts</span> <span class="op">&gt;</span> <span class="fl">1000</span> <span class="op">&amp;</span> <span class="va">pts</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"pts must be between 1 and 1,000"</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">pts</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>Here you can see that we only allow the user to request a graph with up to 1,000 points. Any requests exceeding that limit will immediately be terminated without any further computation.</p>
 <p>You should be very attentive to the resources that could be consumed by any of your filters or endpoints. Consider the various values that a user could provide for each of your API endpoint’s parameters and ensure that the behavior of the system is reasonable in those cases. For API endpoints that do require extensive computation, consider how you could protect those endpoints (perhaps only exposing them for authenticated users) to prevent a malicious user from abusing the system.</p>
 </div>
@@ -171,28 +171,28 @@
 </h2>
 <p>Any time you accept input from a user in your code, you should plan for the worst-case scenario. If, for example, your API endpoint allows the user to specify the name of a file that should be read out of a particular directory and then returns its contents, you might naively implement it like so.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#* This is an example of an UNSAFE endpoint which</span>
-<span class="co">#* does not sanitize user input</span>
-<span class="co">#* @get /</span>
-<span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span> <span class="op">{</span>
-
-  <span class="co"># An example of an UNSAFE endpoint.</span>
-  <span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"./datasets"</span>, <span class="va">file</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#* This is an example of an UNSAFE endpoint which</span></span>
+<span><span class="co">#* does not sanitize user input</span></span>
+<span><span class="co">#* @get /</span></span>
+<span><span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span> <span class="op">{</span></span>
+<span></span>
+<span>  <span class="co"># An example of an UNSAFE endpoint.</span></span>
+<span>  <span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"./datasets"</span>, <span class="va">file</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>Unfortunately, this API endpoint does not properly sanitize the user input. The user could set the <code>file</code> parameter to <code>../plumber.R</code> and now the endpoint would return the source code of your Plumber API. Of course they could just as easy attempt to read other files that might contain API keys or other sensitive data.</p>
 <p>One solution in this case is to strip all special characters off of the user input which will prevent users from being able to escape into a different directory.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#* This is an example of an endpoint which</span>
-<span class="co">#* checks user input.</span>
-<span class="co">#* @get /</span>
-<span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span> <span class="op">{</span>
-  <span class="co"># Strip all "non-word" characters from user input</span>
-  <span class="va">sanitizedFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"\\W"</span>, <span class="st">""</span>, <span class="va">file</span><span class="op">)</span>
-
-  <span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"./datasets"</span>, <span class="va">sanitizedFile</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#* This is an example of an endpoint which</span></span>
+<span><span class="co">#* checks user input.</span></span>
+<span><span class="co">#* @get /</span></span>
+<span><span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Strip all "non-word" characters from user input</span></span>
+<span>  <span class="va">sanitizedFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"\\W"</span>, <span class="st">""</span>, <span class="va">file</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"./datasets"</span>, <span class="va">sanitizedFile</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>File paths are not the only opportunity for malicious input to do damage to your system, however. Another way in which user input can be dangerous is an attack known as “cross site scripting,” or “XSS.” This attack can be leveraged whenever user input may be rendered in a user’s browser. For instance if you had an endpoint which allows users to comment on a page and then later displays those comments to other users, an attacked could craft a comment such as:</p>
 <pre><code>"This is a comment with JavaScript! &lt;script&gt;alert('I could do something bad here!');&lt;/script&gt;</code></pre>
 <p>As you can see, the comment has JavaScript embedded within it, in this case used to popup a message to the user. Of course JavaScript could be used in other harmful way by redirecting your users to a malicious site, for instance, or uploading data that they have special access to on your server to some other destination. Any user input that might be included on an HTML page should be properly escaped (see <code>htmltools::html_escape</code> for help).</p>
@@ -204,18 +204,18 @@
 </h2>
 <p>By default, the API endpoint forbids “cross-domain” requests, but it’s possible with a workaround to override this behavior creating a custom function that will forward the right headers to the API using a filter such as the following snippet.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#* @filter cors</span>
-<span class="va">cors</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">res</span><span class="op">$</span><span class="fu">setHeader</span><span class="op">(</span><span class="st">"Access-Control-Allow-Origin"</span>, <span class="st">"*"</span><span class="op">)</span>
-    <span class="fu">plumber</span><span class="fu">::</span><span class="fu"><a href="../reference/forward.html">forward</a></span><span class="op">(</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#* @filter cors</span></span>
+<span><span class="va">cors</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">res</span><span class="op">$</span><span class="fu">setHeader</span><span class="op">(</span><span class="st">"Access-Control-Allow-Origin"</span>, <span class="st">"*"</span><span class="op">)</span></span>
+<span>    <span class="fu">plumber</span><span class="fu">::</span><span class="fu"><a href="../reference/forward.html">forward</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>Once this filter is defined, each endpoint will allow “cross-domain” requests. It’s possible to disable it for some, by appending the line <code>#* @preempt cors</code> before the declaration of a function like this :</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#* @preempt cors</span>
-<span class="co">#* @get /sub</span>
-<span class="va">cors_disabled</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span><span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">#* @preempt cors</span></span>
+<span><span class="co">#* @get /sub</span></span>
+<span><span class="va">cors_disabled</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>Understand that, this is a temporary workaround and can constitute critical security issues if some endpoints that shouldn’t be exposed through <code>CORS</code> and have been enabled by default.</p>
 </div>
 <div class="section level2">

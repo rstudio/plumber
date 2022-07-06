@@ -82,9 +82,9 @@ available serializers in plumber is global.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">register_serializer</span><span class="op">(</span><span class="va">name</span>, <span class="va">serializer</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">registered_serializers</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">register_serializer</span><span class="op">(</span><span class="va">name</span>, <span class="va">serializer</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">registered_serializers</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -119,18 +119,18 @@ See <code>print(serializer_json)</code> for an example.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># `serializer_json()` calls `serializer_content_type()` and supplies a serialization function</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">serializer_json</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># `serializer_json()` calls `serializer_content_type()` and supplies a serialization function</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">serializer_json</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (..., type = "application/json") </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     serializer_content_type(type, function(val) {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         toJSON(val, ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     })</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560c4bdce540&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x564d96dc27b8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:plumber&gt;</span>
-<span class="r-in"><span class="co"># serializer_content_type() calls `serializer_headers()` and supplies a serialization function</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">serializer_content_type</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># serializer_content_type() calls `serializer_headers()` and supplies a serialization function</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">serializer_content_type</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (type, serialize_fn = identity) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     if (missing(type)) {</span>
@@ -141,7 +141,7 @@ See <code>print(serializer_json)</code> for an example.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     stopifnot(nchar(type) &gt; 0)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     serializer_headers(list(`Content-Type` = type), serialize_fn)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x560c4bdb7538&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x564d96db5c90&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:plumber&gt;</span>
 </code></pre></div>
     </div>
