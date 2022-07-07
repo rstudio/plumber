@@ -1,8 +1,8 @@
 ## Comments
 
-#### 2022-7-5
+#### 2022-7-7
 
-No response from CRAN and package is not pending a response. Resubmitting `{plumber}`.
+No response from early reply to CRAN. Resubmitting `{plumber}` package.
 
 - Barret
 
@@ -45,19 +45,30 @@ Thank you,
 Barret
 
 
-
 ## Test environments
+
+I believe this is a false positive as I am not running any Rscript calls.
+
+* devtools::
+  * check_win_devel()
+```
+    * checking for detritus in the temp directory ... NOTE
+    Found the following files/directories:
+      'Rscript114b08aee34ea' 'Rscript4b588aee34ea'
+```
+
+0 errors ✔ | 0 warnings ✔ | 1 note
+
+----------------------
 
 * local macOS, R 4.1.3
 * GitHub Actions
   * macOS
-    * oldrel, release, devel
+    * 4.2
   * windows
-    * release, devel
+    * 4.2
   * ubuntu18
-    * 3.5, 3.6, oldrel, release, devel
-  * ubuntu16
-    * 3.5, 3.6, oldrel, release, devel
+    * devel, 4.2, 4.1, 4.0, 3.6, 3.5
 * devtools::
   * check_win_devel()
   * check_win_release()
