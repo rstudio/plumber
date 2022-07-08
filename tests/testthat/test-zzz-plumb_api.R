@@ -68,56 +68,56 @@ test_that("missing args are handled", {
   expect_equal(plumb_api(NULL, NULL), all_apis)
 })
 
-test_that("errors are thrown", {
+# test_that("errors are thrown", {
 
 
-  expect_error(plumb_api(c("plumber", "plumber"), "01-append"))
-  expect_error(plumb_api("plumber", c("01-append", "01-append")))
+#   expect_error(plumb_api(c("plumber", "plumber"), "01-append"))
+#   expect_error(plumb_api("plumber", c("01-append", "01-append")))
 
-  expect_error(plumb_api(TRUE, "01-append"))
-  expect_error(plumb_api("plumber", TRUE))
+#   expect_error(plumb_api(TRUE, "01-append"))
+#   expect_error(plumb_api("plumber", TRUE))
 
-  expect_error(plumb_api("plumber", "not an api"))
+#   expect_error(plumb_api("plumber", "not an api"))
 
-  expect_error(available_apis("not a package"), "No package found with name")
-  expect_error(available_apis("crayon"), "No Plumber APIs found for package")
-})
-
-# test_that("edit opens correct file", {
-#   # Redefine editor so that file.edit doesn't try to open a file
-#   with_options(
-#     list(
-#       editor = function(name, file, title) {
-#         cat(file, " test file attempted to open\n", sep = "")
-#       }
-#     ),
-#     {
-#       apis <- available_apis()
-
-#       selected_api <- apis$package == "plumber" & apis$name == "01-append"
-
-#       expect_warning(
-#         expect_output(
-#           plumb_api("plumber", "01-append", edit = TRUE),
-#           "plumber.R test file attempted to open",
-#           fixed = TRUE
-#         ),
-#         "plumber.R has been opened in the editor"
-#       )
-
-#       selected_api <- apis$package == "plumber" & apis$name == "12-entrypoint"
-
-#       expect_warning(
-#         expect_output(
-#           plumb_api("plumber", "12-entrypoint", edit = TRUE),
-#           "entrypoint.R test file attempted to open",
-#           fixed = TRUE
-#         ),
-#         "entrypoint.R has been opened in the editor"
-#       )
-#     }
-#   )
+#   expect_error(available_apis("not a package"), "No package found with name")
+#   expect_error(available_apis("crayon"), "No Plumber APIs found for package")
 # })
+
+test_that("edit opens correct file", {
+  # Redefine editor so that file.edit doesn't try to open a file
+  with_options(
+    list(
+      editor = function(name, file, title) {
+        cat(file, " test file attempted to open\n", sep = "")
+      }
+    ),
+    {
+      apis <- available_apis()
+
+      selected_api <- apis$package == "plumber" & apis$name == "01-append"
+
+      expect_warning(
+        expect_output(
+          plumb_api("plumber", "01-append", edit = TRUE),
+          "plumber.R test file attempted to open",
+          fixed = TRUE
+        ),
+        "plumber.R has been opened in the editor"
+      )
+
+      selected_api <- apis$package == "plumber" & apis$name == "12-entrypoint"
+
+      expect_warning(
+        expect_output(
+          plumb_api("plumber", "12-entrypoint", edit = TRUE),
+          "entrypoint.R test file attempted to open",
+          fixed = TRUE
+        ),
+        "entrypoint.R has been opened in the editor"
+      )
+    }
+  )
+})
 
 # test_that("edit throws a warning", {
 #   with_options(
