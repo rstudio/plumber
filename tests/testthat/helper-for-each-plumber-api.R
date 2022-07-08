@@ -4,6 +4,10 @@ for_each_plumber_api <- function(fn, ...) {
     available_apis(package)$name,
     function(name) {
       if (name == "14-future") {
+        if (isWindows()) {
+          message("Skipping test on 14-future example on Windows")
+          return()
+        }
         if (!require("future", character.only = TRUE, quietly = TRUE)) {
           return()
         }
