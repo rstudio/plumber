@@ -119,15 +119,15 @@ test_that("missing args are handled", {
 #   )
 # })
 
-test_that("edit throws a warning", {
-  with_options(
-    list(editor = function(name, file, title) NULL),
-    expect_warning(plumb_api("plumber", "01-append", edit = TRUE))
-  )
-})
-
-# context("plumb() plumber APIs")
-# test_that("all example plumber apis plumb", {
-#   # plumb each api and validate they return a plumber object
-#   for_each_plumber_api(identity)
+# test_that("edit throws a warning", {
+#   with_options(
+#     list(editor = function(name, file, title) NULL),
+#     expect_warning(plumb_api("plumber", "01-append", edit = TRUE))
+#   )
 # })
+
+context("plumb() plumber APIs")
+test_that("all example plumber apis plumb", {
+  # plumb each api and validate they return a plumber object
+  for_each_plumber_api(identity)
+})
