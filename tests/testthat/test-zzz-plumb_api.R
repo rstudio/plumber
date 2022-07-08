@@ -6,58 +6,58 @@ expect_apis <- function(apis) {
   expect_s3_class(apis, "data.frame")
   expect_true(all(c("package", "name") %in% names(apis)))
 }
-test_that("available_apis() works with no package", {
-  skip_on_cran()
+# test_that("available_apis() works with no package", {
+#   skip_on_cran()
 
-  apis <- available_apis()
-  expect_apis(apis)
-})
-test_that("available_apis() works with a package", {
-  apis <- available_apis("plumber")
-  expect_apis(apis)
-})
-# test_that("available_apis() print method works", {
-#   apis_output <- capture.output({
-#     available_apis("plumber")
-#   })
-
-#   expected_apis_output <- c(
-#     "Available Plumber APIs:",
-#     "* plumber",
-#     paste0("  - ", dir(system.file("plumber", package = "plumber")))
-#   )
-
-#   expect_equal(
-#     apis_output,
-#     expected_apis_output
-#   )
+#   apis <- available_apis()
+#   expect_apis(apis)
 # })
-# test_that("available_apis() print method works with two packages", {
-#   top <- available_apis("plumber")
-#   bottom <- top
-#   top$package <- "top"
-#   bottom$package <- "bottom"
-
-#   apis_output <- capture.output({
-#     rbind(top, bottom)
-#   })
-
-#   plumber_apis <- paste0("  - ", dir(system.file("plumber", package = "plumber")))
-
-#   # printed in alpha order
-#   expected_apis_output <- c(
-#     "Available Plumber APIs:",
-#     "* bottom",
-#     plumber_apis,
-#     "* top",
-#     plumber_apis
-#   )
-
-#   expect_equal(
-#     apis_output,
-#     expected_apis_output
-#   )
+# test_that("available_apis() works with a package", {
+#   apis <- available_apis("plumber")
+#   expect_apis(apis)
 # })
+test_that("available_apis() print method works", {
+  apis_output <- capture.output({
+    available_apis("plumber")
+  })
+
+  expected_apis_output <- c(
+    "Available Plumber APIs:",
+    "* plumber",
+    paste0("  - ", dir(system.file("plumber", package = "plumber")))
+  )
+
+  expect_equal(
+    apis_output,
+    expected_apis_output
+  )
+})
+test_that("available_apis() print method works with two packages", {
+  top <- available_apis("plumber")
+  bottom <- top
+  top$package <- "top"
+  bottom$package <- "bottom"
+
+  apis_output <- capture.output({
+    rbind(top, bottom)
+  })
+
+  plumber_apis <- paste0("  - ", dir(system.file("plumber", package = "plumber")))
+
+  # printed in alpha order
+  expected_apis_output <- c(
+    "Available Plumber APIs:",
+    "* bottom",
+    plumber_apis,
+    "* top",
+    plumber_apis
+  )
+
+  expect_equal(
+    apis_output,
+    expected_apis_output
+  )
+})
 
 # test_that("missing args are handled", {
 #   expect_equal(plumb_api("plumber", NULL), available_apis("plumber"))
