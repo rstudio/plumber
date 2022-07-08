@@ -1,4 +1,4 @@
 library(testthat)
 library(plumber)
 
-# test_check("plumber")
+test_check("plumber")
