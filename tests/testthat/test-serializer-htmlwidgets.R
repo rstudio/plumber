@@ -16,6 +16,8 @@ renderWidget <- function(){
 test_that("htmlwidgets serialize properly", {
   # Solaris doesn't have htmlwidgets available for some reason.
   skip_on_cran()
+  # Too many moving parts on an inconsistent os
+  skip_on_os("windows")
 
   w <- renderWidget()
   val <- serializer_htmlwidget()(w, list(), PlumberResponse$new(), stop)
