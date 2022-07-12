@@ -3,6 +3,7 @@ ARG R_VERSION=latest
 
 FROM rocker/r-ver:${R_VERSION}
 LABEL maintainer="barret@rstudio.com"
+LABEL org.opencontainers.image.authors="barret@rstudio.com"
 
 # BEGIN rstudio/plumber layers
 RUN apt-get update -qq && apt-get install -y --no-install-recommends \
@@ -11,9 +12,12 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
   libcurl4-gnutls-dev \
   curl \
   libsodium-dev \
-  libxml2-dev
+  libxml2-dev \
+  && rm -rf /var/lib/apt/lists/*
 
-RUN install2.r remotes
+RUN install2.r --error --skipinstalled --ncpus -1 \
+  remotes \
+  && rm -rf /tmp/downloaded_packages
 
 ## Remove this comment to always bust the Docker cache at this step
 ## https://stackoverflow.com/a/55621942/591574
