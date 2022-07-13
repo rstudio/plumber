@@ -23,14 +23,13 @@ jobs:
           - "latest"
 
         config:
-        # - name: "v1.2.0"
-        #   # always overwrite the latest version with the CRAN version
-        #   tags: "v1.2.0,latest"
-        #   ref: "v1.2.0"
+        - name: "v1.2.0"
+          # always overwrite the latest version with the CRAN version
+          tags: "v1.2.0,latest"
+          ref: "v1.2.0"
 
         - name: "v1.1.0"
-          # always overwrite the latest version with the CRAN version
-          tags: "v1.1.0,latest"
+          tags: "v1.1.0"
           ref: "v1.1.0"
 
         - name: "v1.0.0"
