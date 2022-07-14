@@ -106,7 +106,7 @@ So your custom Dockerfile could be as simple as:
 
 ```
 FROM rstudio/plumber
-MAINTAINER Docker User <docker@user.org>
+LABEL org.opencontainers.image.authors="Docker User <docker@user.org>"
 
 RUN R -e "install.packages('broom')"
 
@@ -138,7 +138,6 @@ We'll use Docker Compose to help us organize multiple Plumber processes. We won'
 You should define a Docker Compose configuration that defines the behavior of every Plumber application that you want to run. You'll first want to setup a Dockerfile that defines the desired behavior for each of your applications (as [we outlined previously](#custom-dockerfiles). You could use a `docker-compose.yml` configuration like the following:
 
 ```yaml
-version: '2'
 services:
   app1:
     build: ./app1/
