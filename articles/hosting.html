@@ -178,7 +178,7 @@
 </ul>
 <p>So your custom Dockerfile could be as simple as:</p>
 <pre><code>FROM rstudio/plumber
-MAINTAINER Docker User &lt;docker@user.org&gt;
+LABEL org.opencontainers.image.authors="Docker User &lt;docker@user.org&gt;"
 
 RUN R -e "install.packages('broom')"
 
@@ -204,24 +204,23 @@ CMD ["/app/plumber.R"]</code></pre>
 </h3>
 <p>We’ll use Docker Compose to help us organize multiple Plumber processes. We won’t go into detail about how to use Docker Compose, so if you’re new you should familiarize yourself using the <a href="https://docs.docker.com/compose" class="external-link">official docs</a>.</p>
 <p>You should define a Docker Compose configuration that defines the behavior of every Plumber application that you want to run. You’ll first want to setup a Dockerfile that defines the desired behavior for each of your applications (as <a href="#custom-dockerfiles">we outlined previously</a>. You could use a <code>docker-compose.yml</code> configuration like the following:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">version</span><span class="kw">:</span><span class="at"> </span><span class="st">'2'</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="fu">services</span><span class="kw">:</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="at">  </span><span class="fu">app1</span><span class="kw">:</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="at">    </span><span class="fu">build</span><span class="kw">:</span><span class="at"> ./app1/</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="at">     </span><span class="kw">-</span><span class="at"> ./data:/data</span></span>
-<span id="cb7-7"><a href="#cb7-7"></a><span class="at">     </span><span class="kw">-</span><span class="at"> ./app1:/app</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> always</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
-<span id="cb7-10"><a href="#cb7-10"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="st">"7000:8000"</span></span>
-<span id="cb7-11"><a href="#cb7-11"></a><span class="at">  </span><span class="fu">app2</span><span class="kw">:</span></span>
-<span id="cb7-12"><a href="#cb7-12"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> rstudio/plumber</span></span>
-<span id="cb7-13"><a href="#cb7-13"></a><span class="at">    </span><span class="fu">command</span><span class="kw">:</span><span class="at"> /app/plumber.R</span></span>
-<span id="cb7-14"><a href="#cb7-14"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
-<span id="cb7-15"><a href="#cb7-15"></a><span class="at">     </span><span class="kw">-</span><span class="at"> ../app2:/app</span></span>
-<span id="cb7-16"><a href="#cb7-16"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> always</span></span>
-<span id="cb7-17"><a href="#cb7-17"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
-<span id="cb7-18"><a href="#cb7-18"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="st">"7001:8000"</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">services</span><span class="kw">:</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="at">  </span><span class="fu">app1</span><span class="kw">:</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="at">    </span><span class="fu">build</span><span class="kw">:</span><span class="at"> ./app1/</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="at">     </span><span class="kw">-</span><span class="at"> ./data:/data</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="at">     </span><span class="kw">-</span><span class="at"> ./app1:/app</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> always</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="st">"7000:8000"</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="at">  </span><span class="fu">app2</span><span class="kw">:</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> rstudio/plumber</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="at">    </span><span class="fu">command</span><span class="kw">:</span><span class="at"> /app/plumber.R</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="at">     </span><span class="kw">-</span><span class="at"> ../app2:/app</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> always</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="st">"7001:8000"</span></span></code></pre></div>
 <p>More detail on what each of these options does and what other options exist can be found <a href="https://docs.docker.com/compose/compose-file/" class="external-link">here</a>. This configuration defines two Docker containers that should run <code>app1</code> and <code>app2</code>. The associated files in this case are laid out on disk as follows:</p>
 <pre><code>docker-compose.yml
 app1
