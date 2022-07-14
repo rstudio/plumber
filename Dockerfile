@@ -2,7 +2,6 @@
 ARG R_VERSION=latest
 
 FROM rocker/r-ver:${R_VERSION}
-LABEL maintainer="barret@rstudio.com"
 LABEL org.opencontainers.image.authors="barret@rstudio.com"
 
 # BEGIN rstudio/plumber layers
