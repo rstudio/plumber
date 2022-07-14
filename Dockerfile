@@ -5,6 +5,8 @@ FROM rocker/r-ver:${R_VERSION}
 LABEL org.opencontainers.image.authors="barret@rstudio.com"
 
 # BEGIN rstudio/plumber layers
+
+# `rm` call removes `apt` cache
 RUN apt-get update -qq && apt-get install -y --no-install-recommends \
   git-core \
   libssl-dev \
@@ -14,6 +16,7 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
   libxml2-dev \
   && rm -rf /var/lib/apt/lists/*
 
+# `rm` call removes install2.r's cache
 RUN install2.r --error --skipinstalled --ncpus -1 \
   remotes \
   && rm -rf /tmp/downloaded_packages
