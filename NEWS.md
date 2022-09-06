@@ -1,3 +1,8 @@
+# plumber 1.2.1
+
+* Update docs for CRAN (#878)
+
+
 # plumber 1.2.0
 
 ## Breaking changes
