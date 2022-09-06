@@ -113,8 +113,8 @@ See <code>print(serializer_json)</code> for an example.</p></dd>
     <div class="section level2">
     <h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a></h2>
     
-<ul><li><p><code>register_serializer</code>: Register a serializer with a name</p></li>
-<li><p><code>registered_serializers</code>: Return a list of all registered serializers</p></li>
+<ul><li><p><code>register_serializer()</code>: Register a serializer with a name</p></li>
+<li><p><code>registered_serializers()</code>: Return a list of all registered serializers</p></li>
 </ul></div>
 
     <div class="section level2">
@@ -127,7 +127,7 @@ See <code>print(serializer_json)</code> for an example.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         toJSON(val, ...)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     })</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5591364ce448&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55c839454670&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:plumber&gt;</span>
 <span class="r-in"><span><span class="co"># serializer_content_type() calls `serializer_headers()` and supplies a serialization function</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">serializer_content_type</span><span class="op">)</span></span></span>
@@ -141,7 +141,7 @@ See <code>print(serializer_json)</code> for an example.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     stopifnot(nchar(type) &gt; 0)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     serializer_headers(list(`Content-Type` = type), serialize_fn)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5591364e4e30&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55c839468d80&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:plumber&gt;</span>
 </code></pre></div>
     </div>

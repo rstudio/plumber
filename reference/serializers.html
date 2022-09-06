@@ -195,33 +195,33 @@ The graphics device <code>dev_on</code> function will receive any arguments supp
     <div class="section level2">
     <h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a></h2>
     
-<ul><li><p><code>serializer_headers</code>: Add a static list of headers to each return value. Will add <code>Content-Disposition</code> header if a value is the result of <code><a href="as_attachment.html">as_attachment()</a></code>.</p></li>
-<li><p><code>serializer_content_type</code>: Adds a <code>Content-Type</code> header to the response object</p></li>
-<li><p><code>serializer_octet</code>: Octet serializer. If content is received that does
+<ul><li><p><code>serializer_headers()</code>: Add a static list of headers to each return value. Will add <code>Content-Disposition</code> header if a value is the result of <code><a href="as_attachment.html">as_attachment()</a></code>.</p></li>
+<li><p><code>serializer_content_type()</code>: Adds a <code>Content-Type</code> header to the response object</p></li>
+<li><p><code>serializer_octet()</code>: Octet serializer. If content is received that does
 not have a <code>"raw"</code> type, then an error will be thrown.</p></li>
-<li><p><code>serializer_csv</code>: CSV serializer. See also: <code><a href="https://readr.tidyverse.org/reference/format_delim.html" class="external-link">readr::format_csv()</a></code></p></li>
-<li><p><code>serializer_tsv</code>: TSV serializer. See also: <code><a href="https://readr.tidyverse.org/reference/format_delim.html" class="external-link">readr::format_tsv()</a></code></p></li>
-<li><p><code>serializer_html</code>: HTML serializer</p></li>
-<li><p><code>serializer_json</code>: JSON serializer. See also: <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">jsonlite::toJSON()</a></code></p></li>
-<li><p><code>serializer_unboxed_json</code>: JSON serializer with <code>auto_unbox</code> defaulting to <code>TRUE</code>. See also: <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">jsonlite::toJSON()</a></code></p></li>
-<li><p><code>serializer_geojson</code>: GeoJSON serializer. See also <code><a href="https://rdrr.io/pkg/geojsonsf/man/sf_geojson.html" class="external-link">geojsonsf::sf_geojson()</a></code> and [<code><a href="https://rdrr.io/pkg/geojsonsf/man/sfc_geojson.html" class="external-link">geojsonsf::sfc_geojson()</a></code>].</p></li>
-<li><p><code>serializer_rds</code>: RDS serializer. See also: <code><a href="https://rdrr.io/r/base/serialize.html" class="external-link">base::serialize()</a></code></p></li>
-<li><p><code>serializer_feather</code>: feather serializer. See also: <code><a href="https://arrow.apache.org/docs/r/reference/write_feather.html" class="external-link">arrow::write_feather()</a></code></p></li>
-<li><p><code>serializer_parquet</code>: parquet serializer. See also: <code><a href="https://arrow.apache.org/docs/r/reference/write_parquet.html" class="external-link">arrow::write_parquet()</a></code></p></li>
-<li><p><code>serializer_yaml</code>: YAML serializer. See also: <code><a href="https://rdrr.io/pkg/yaml/man/as.yaml.html" class="external-link">yaml::as.yaml()</a></code></p></li>
-<li><p><code>serializer_text</code>: Text serializer. See also: <code><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character()</a></code></p></li>
-<li><p><code>serializer_format</code>: Text serializer. See also: <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code></p></li>
-<li><p><code>serializer_print</code>: Text serializer. Captures the output of <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code></p></li>
-<li><p><code>serializer_cat</code>: Text serializer. Captures the output of <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code></p></li>
-<li><p><code>serializer_write_file</code>: Write output to a temp file whose contents are read back as a serialized response. <code>serializer_write_file()</code> creates (and cleans up) a temp file, calls the serializer (which should write to the temp file), and then reads the contents back as the serialized value.  If the content <code>type</code> starts with <code>"text"</code>, the return result will be read into a character string, otherwise the result will be returned as a raw vector.</p></li>
-<li><p><code>serializer_htmlwidget</code>: htmlwidget serializer. See also: <code><a href="https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html" class="external-link">htmlwidgets::saveWidget()</a></code></p></li>
-<li><p><code>serializer_device</code>: Helper method to create graphics device serializers, such as <code>serializer_png()</code>. See also: <code><a href="endpoint_serializer.html">endpoint_serializer()</a></code></p></li>
-<li><p><code>serializer_jpeg</code>: JPEG image serializer. See also: <code><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">grDevices::jpeg()</a></code></p></li>
-<li><p><code>serializer_png</code>: PNG image serializer. See also: <code><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">grDevices::png()</a></code></p></li>
-<li><p><code>serializer_svg</code>: SVG image serializer. See also: <code><a href="https://rdrr.io/r/grDevices/cairo.html" class="external-link">grDevices::svg()</a></code></p></li>
-<li><p><code>serializer_bmp</code>: BMP image serializer. See also: <code><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">grDevices::bmp()</a></code></p></li>
-<li><p><code>serializer_tiff</code>: TIFF image serializer. See also: <code><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">grDevices::tiff()</a></code></p></li>
-<li><p><code>serializer_pdf</code>: PDF image serializer. See also: <code><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">grDevices::pdf()</a></code></p></li>
+<li><p><code>serializer_csv()</code>: CSV serializer. See also: <code><a href="https://readr.tidyverse.org/reference/format_delim.html" class="external-link">readr::format_csv()</a></code></p></li>
+<li><p><code>serializer_tsv()</code>: TSV serializer. See also: <code><a href="https://readr.tidyverse.org/reference/format_delim.html" class="external-link">readr::format_tsv()</a></code></p></li>
+<li><p><code>serializer_html()</code>: HTML serializer</p></li>
+<li><p><code>serializer_json()</code>: JSON serializer. See also: <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">jsonlite::toJSON()</a></code></p></li>
+<li><p><code>serializer_unboxed_json()</code>: JSON serializer with <code>auto_unbox</code> defaulting to <code>TRUE</code>. See also: <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">jsonlite::toJSON()</a></code></p></li>
+<li><p><code>serializer_geojson()</code>: GeoJSON serializer. See also <code><a href="https://rdrr.io/pkg/geojsonsf/man/sf_geojson.html" class="external-link">geojsonsf::sf_geojson()</a></code> and [<code><a href="https://rdrr.io/pkg/geojsonsf/man/sfc_geojson.html" class="external-link">geojsonsf::sfc_geojson()</a></code>].</p></li>
+<li><p><code>serializer_rds()</code>: RDS serializer. See also: <code><a href="https://rdrr.io/r/base/serialize.html" class="external-link">base::serialize()</a></code></p></li>
+<li><p><code>serializer_feather()</code>: feather serializer. See also: <code><a href="https://arrow.apache.org/docs/r/reference/write_feather.html" class="external-link">arrow::write_feather()</a></code></p></li>
+<li><p><code>serializer_parquet()</code>: parquet serializer. See also: <code><a href="https://arrow.apache.org/docs/r/reference/write_parquet.html" class="external-link">arrow::write_parquet()</a></code></p></li>
+<li><p><code>serializer_yaml()</code>: YAML serializer. See also: <code><a href="https://rdrr.io/pkg/yaml/man/as.yaml.html" class="external-link">yaml::as.yaml()</a></code></p></li>
+<li><p><code>serializer_text()</code>: Text serializer. See also: <code><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character()</a></code></p></li>
+<li><p><code>serializer_format()</code>: Text serializer. See also: <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code></p></li>
+<li><p><code>serializer_print()</code>: Text serializer. Captures the output of <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code></p></li>
+<li><p><code>serializer_cat()</code>: Text serializer. Captures the output of <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code></p></li>
+<li><p><code>serializer_write_file()</code>: Write output to a temp file whose contents are read back as a serialized response. <code>serializer_write_file()</code> creates (and cleans up) a temp file, calls the serializer (which should write to the temp file), and then reads the contents back as the serialized value.  If the content <code>type</code> starts with <code>"text"</code>, the return result will be read into a character string, otherwise the result will be returned as a raw vector.</p></li>
+<li><p><code>serializer_htmlwidget()</code>: htmlwidget serializer. See also: <code><a href="https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html" class="external-link">htmlwidgets::saveWidget()</a></code></p></li>
+<li><p><code>serializer_device()</code>: Helper method to create graphics device serializers, such as <code>serializer_png()</code>. See also: <code><a href="endpoint_serializer.html">endpoint_serializer()</a></code></p></li>
+<li><p><code>serializer_jpeg()</code>: JPEG image serializer. See also: <code><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">grDevices::jpeg()</a></code></p></li>
+<li><p><code>serializer_png()</code>: PNG image serializer. See also: <code><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">grDevices::png()</a></code></p></li>
+<li><p><code>serializer_svg()</code>: SVG image serializer. See also: <code><a href="https://rdrr.io/r/grDevices/cairo.html" class="external-link">grDevices::svg()</a></code></p></li>
+<li><p><code>serializer_bmp()</code>: BMP image serializer. See also: <code><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">grDevices::bmp()</a></code></p></li>
+<li><p><code>serializer_tiff()</code>: TIFF image serializer. See also: <code><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">grDevices::tiff()</a></code></p></li>
+<li><p><code>serializer_pdf()</code>: PDF image serializer. See also: <code><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">grDevices::pdf()</a></code></p></li>
 </ul></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
