@@ -114,7 +114,7 @@ pr$setErrorHandler(function(req, res, err) {
 \code{\link[=pr_set_docs_callback]{pr_set_docs_callback()}}
 }
 \section{Super class}{
-\code{\link[plumber:Hookable]{plumber::Hookable}} -> \code{Plumber}
+\code{plumber::Hookable} -> \code{Plumber}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -177,7 +177,7 @@ pr$setErrorHandler(function(req, res, err) {
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks"><a href='../../plumber/html/Hookable.html#method-Hookable-registerHooks'><code>plumber::Hookable$registerHooks()</code></a></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks"><a href='../../plumber/html/Hookable.html#method-Hookable-registerHooks'><code>plumber::Hookable$registerHooks()</code></a></span></li>
 </ul>
 </details>
 }}
