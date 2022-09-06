@@ -25,35 +25,35 @@ Creates a router that is backed by a directory of files on disk.
 \if{html}{\out{
 <details><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks"><a href='../../plumber/html/Hookable.html#method-Hookable-registerHooks'><code>plumber::Hookable$registerHooks()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="addAssets"><a href='../../plumber/html/Plumber.html#method-Plumber-addAssets'><code>plumber::Plumber$addAssets()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="addEndpoint"><a href='../../plumber/html/Plumber.html#method-Plumber-addEndpoint'><code>plumber::Plumber$addEndpoint()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="addFilter"><a href='../../plumber/html/Plumber.html#method-Plumber-addFilter'><code>plumber::Plumber$addFilter()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="addGlobalProcessor"><a href='../../plumber/html/Plumber.html#method-Plumber-addGlobalProcessor'><code>plumber::Plumber$addGlobalProcessor()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="call"><a href='../../plumber/html/Plumber.html#method-Plumber-call'><code>plumber::Plumber$call()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="filter"><a href='../../plumber/html/Plumber.html#method-Plumber-filter'><code>plumber::Plumber$filter()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="getApiSpec"><a href='../../plumber/html/Plumber.html#method-Plumber-getApiSpec'><code>plumber::Plumber$getApiSpec()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="getDebug"><a href='../../plumber/html/Plumber.html#method-Plumber-getDebug'><code>plumber::Plumber$getDebug()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="handle"><a href='../../plumber/html/Plumber.html#method-Plumber-handle'><code>plumber::Plumber$handle()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="mount"><a href='../../plumber/html/Plumber.html#method-Plumber-mount'><code>plumber::Plumber$mount()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="onHeaders"><a href='../../plumber/html/Plumber.html#method-Plumber-onHeaders'><code>plumber::Plumber$onHeaders()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="onWSOpen"><a href='../../plumber/html/Plumber.html#method-Plumber-onWSOpen'><code>plumber::Plumber$onWSOpen()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="openAPIFile"><a href='../../plumber/html/Plumber.html#method-Plumber-openAPIFile'><code>plumber::Plumber$openAPIFile()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="registerHook"><a href='../../plumber/html/Plumber.html#method-Plumber-registerHook'><code>plumber::Plumber$registerHook()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="removeHandle"><a href='../../plumber/html/Plumber.html#method-Plumber-removeHandle'><code>plumber::Plumber$removeHandle()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="route"><a href='../../plumber/html/Plumber.html#method-Plumber-route'><code>plumber::Plumber$route()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="run"><a href='../../plumber/html/Plumber.html#method-Plumber-run'><code>plumber::Plumber$run()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="serve"><a href='../../plumber/html/Plumber.html#method-Plumber-serve'><code>plumber::Plumber$serve()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set404Handler"><a href='../../plumber/html/Plumber.html#method-Plumber-set404Handler'><code>plumber::Plumber$set404Handler()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setApiSpec"><a href='../../plumber/html/Plumber.html#method-Plumber-setApiSpec'><code>plumber::Plumber$setApiSpec()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setDebug"><a href='../../plumber/html/Plumber.html#method-Plumber-setDebug'><code>plumber::Plumber$setDebug()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setDocs"><a href='../../plumber/html/Plumber.html#method-Plumber-setDocs'><code>plumber::Plumber$setDocs()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setDocsCallback"><a href='../../plumber/html/Plumber.html#method-Plumber-setDocsCallback'><code>plumber::Plumber$setDocsCallback()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setErrorHandler"><a href='../../plumber/html/Plumber.html#method-Plumber-setErrorHandler'><code>plumber::Plumber$setErrorHandler()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setParsers"><a href='../../plumber/html/Plumber.html#method-Plumber-setParsers'><code>plumber::Plumber$setParsers()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setSerializer"><a href='../../plumber/html/Plumber.html#method-Plumber-setSerializer'><code>plumber::Plumber$setSerializer()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="swaggerFile"><a href='../../plumber/html/Plumber.html#method-Plumber-swaggerFile'><code>plumber::Plumber$swaggerFile()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="unmount"><a href='../../plumber/html/Plumber.html#method-Plumber-unmount'><code>plumber::Plumber$unmount()</code></a></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks"><a href='../../plumber/html/Hookable.html#method-Hookable-registerHooks'><code>plumber::Hookable$registerHooks()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="addAssets"><a href='../../plumber/html/Plumber.html#method-Plumber-addAssets'><code>plumber::Plumber$addAssets()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="addEndpoint"><a href='../../plumber/html/Plumber.html#method-Plumber-addEndpoint'><code>plumber::Plumber$addEndpoint()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="addFilter"><a href='../../plumber/html/Plumber.html#method-Plumber-addFilter'><code>plumber::Plumber$addFilter()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="addGlobalProcessor"><a href='../../plumber/html/Plumber.html#method-Plumber-addGlobalProcessor'><code>plumber::Plumber$addGlobalProcessor()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="call"><a href='../../plumber/html/Plumber.html#method-Plumber-call'><code>plumber::Plumber$call()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="filter"><a href='../../plumber/html/Plumber.html#method-Plumber-filter'><code>plumber::Plumber$filter()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="getApiSpec"><a href='../../plumber/html/Plumber.html#method-Plumber-getApiSpec'><code>plumber::Plumber$getApiSpec()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="getDebug"><a href='../../plumber/html/Plumber.html#method-Plumber-getDebug'><code>plumber::Plumber$getDebug()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="handle"><a href='../../plumber/html/Plumber.html#method-Plumber-handle'><code>plumber::Plumber$handle()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="mount"><a href='../../plumber/html/Plumber.html#method-Plumber-mount'><code>plumber::Plumber$mount()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="onHeaders"><a href='../../plumber/html/Plumber.html#method-Plumber-onHeaders'><code>plumber::Plumber$onHeaders()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="onWSOpen"><a href='../../plumber/html/Plumber.html#method-Plumber-onWSOpen'><code>plumber::Plumber$onWSOpen()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="openAPIFile"><a href='../../plumber/html/Plumber.html#method-Plumber-openAPIFile'><code>plumber::Plumber$openAPIFile()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="registerHook"><a href='../../plumber/html/Plumber.html#method-Plumber-registerHook'><code>plumber::Plumber$registerHook()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="removeHandle"><a href='../../plumber/html/Plumber.html#method-Plumber-removeHandle'><code>plumber::Plumber$removeHandle()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="route"><a href='../../plumber/html/Plumber.html#method-Plumber-route'><code>plumber::Plumber$route()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="run"><a href='../../plumber/html/Plumber.html#method-Plumber-run'><code>plumber::Plumber$run()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="serve"><a href='../../plumber/html/Plumber.html#method-Plumber-serve'><code>plumber::Plumber$serve()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="set404Handler"><a href='../../plumber/html/Plumber.html#method-Plumber-set404Handler'><code>plumber::Plumber$set404Handler()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setApiSpec"><a href='../../plumber/html/Plumber.html#method-Plumber-setApiSpec'><code>plumber::Plumber$setApiSpec()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setDebug"><a href='../../plumber/html/Plumber.html#method-Plumber-setDebug'><code>plumber::Plumber$setDebug()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setDocs"><a href='../../plumber/html/Plumber.html#method-Plumber-setDocs'><code>plumber::Plumber$setDocs()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setDocsCallback"><a href='../../plumber/html/Plumber.html#method-Plumber-setDocsCallback'><code>plumber::Plumber$setDocsCallback()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setErrorHandler"><a href='../../plumber/html/Plumber.html#method-Plumber-setErrorHandler'><code>plumber::Plumber$setErrorHandler()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setParsers"><a href='../../plumber/html/Plumber.html#method-Plumber-setParsers'><code>plumber::Plumber$setParsers()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="setSerializer"><a href='../../plumber/html/Plumber.html#method-Plumber-setSerializer'><code>plumber::Plumber$setSerializer()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="swaggerFile"><a href='../../plumber/html/Plumber.html#method-Plumber-swaggerFile'><code>plumber::Plumber$swaggerFile()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="unmount"><a href='../../plumber/html/Plumber.html#method-Plumber-unmount'><code>plumber::Plumber$unmount()</code></a></span></li>
 </ul>
 </details>
 }}

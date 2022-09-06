@@ -50,9 +50,9 @@ Parser function structure is something like below.
 }
 \section{Functions}{
 \itemize{
-\item \code{registered_parsers}: Return all registered parsers
-}}
+\item \code{registered_parsers()}: Return all registered parsers
 
+}}
 \examples{
 # `content-type` header is mostly used to look up charset and adjust encoding
 parser_dcf <- function(...) {

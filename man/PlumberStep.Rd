@@ -33,7 +33,7 @@ of a request by a plumber router.
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks"><a href='../../plumber/html/Hookable.html#method-Hookable-registerHooks'><code>plumber::Hookable$registerHooks()</code></a></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks"><a href='../../plumber/html/Hookable.html#method-Hookable-registerHooks'><code>plumber::Hookable$registerHooks()</code></a></span></li>
 </ul>
 </details>
 }}

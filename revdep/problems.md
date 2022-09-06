@@ -6,7 +6,7 @@
 * GitHub: https://github.com/ModelOriented/ArenaR
 * Source code: https://github.com/cran/arenar
 * Date/Publication: 2020-10-01 08:00:06 UTC
-* Number of recursive dependencies: 110
+* Number of recursive dependencies: 109
 
 Run `revdep_details(, "arenar")` for more info
 
@@ -27,7 +27,7 @@ Run `revdep_details(, "arenar")` for more info
 * GitHub: https://github.com/Azure/AzureContainers
 * Source code: https://github.com/cran/AzureContainers
 * Date/Publication: 2021-07-09 06:00:02 UTC
-* Number of recursive dependencies: 74
+* Number of recursive dependencies: 75
 
 Run `revdep_details(, "AzureContainers")` for more info
 
@@ -49,7 +49,7 @@ Run `revdep_details(, "AzureContainers")` for more info
 * GitHub: https://github.com/schloerke/gqlr
 * Source code: https://github.com/cran/gqlr
 * Date/Publication: 2019-12-02 16:20:03 UTC
-* Number of recursive dependencies: 57
+* Number of recursive dependencies: 58
 
 Run `revdep_details(, "gqlr")` for more info
 
@@ -165,7 +165,7 @@ Run `revdep_details(, "openmetrics")` for more info
 * GitHub: https://github.com/rstudio/plumbertableau
 * Source code: https://github.com/cran/plumbertableau
 * Date/Publication: 2021-08-06 08:00:02 UTC
-* Number of recursive dependencies: 68
+* Number of recursive dependencies: 69
 
 Run `revdep_details(, "plumbertableau")` for more info
 
@@ -247,27 +247,6 @@ Run `revdep_details(, "rjsonapi")` for more info
     ```
     Namespace in Imports field not imported from: ‘crul’
       All declared Imports should be used.
-    ```
-
-# rsconnect
-
-<details>
-
-* Version: 0.8.26
-* GitHub: https://github.com/rstudio/rsconnect
-* Source code: https://github.com/cran/rsconnect
-* Date/Publication: 2022-05-31 21:10:08 UTC
-* Number of recursive dependencies: 75
-
-Run `revdep_details(, "rsconnect")` for more info
-
-</details>
-
-## In both
-
-*   checking Rd cross-references ... NOTE
-    ```
-    Packages unavailable to check Rd xrefs: ‘keras’, ‘tensorflow’
     ```
 
 # swagger

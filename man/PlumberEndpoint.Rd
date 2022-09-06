@@ -58,9 +58,9 @@ each separate verb/path into its own endpoint, so we just do that.}
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks"><a href='../../plumber/html/Hookable.html#method-Hookable-registerHooks'><code>plumber::Hookable$registerHooks()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="PlumberStep" data-id="exec"><a href='../../plumber/html/PlumberStep.html#method-PlumberStep-exec'><code>plumber::PlumberStep$exec()</code></a></li>
-<li><span class="pkg-link" data-pkg="plumber" data-topic="PlumberStep" data-id="registerHook"><a href='../../plumber/html/PlumberStep.html#method-PlumberStep-registerHook'><code>plumber::PlumberStep$registerHook()</code></a></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Hookable" data-id="registerHooks"><a href='../../plumber/html/Hookable.html#method-Hookable-registerHooks'><code>plumber::Hookable$registerHooks()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="PlumberStep" data-id="exec"><a href='../../plumber/html/PlumberStep.html#method-PlumberStep-exec'><code>plumber::PlumberStep$exec()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="PlumberStep" data-id="registerHook"><a href='../../plumber/html/PlumberStep.html#method-PlumberStep-registerHook'><code>plumber::PlumberStep$registerHook()</code></a></span></li>
 </ul>
 </details>
 }}

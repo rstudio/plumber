@@ -70,36 +70,36 @@ See \code{\link[=registered_parsers]{registered_parsers()}} for a list of regist
 }
 \section{Functions}{
 \itemize{
-\item \code{parser_form}: Form query string parser
+\item \code{parser_form()}: Form query string parser
 
-\item \code{parser_json}: JSON parser. See \code{\link[jsonlite:read_json]{jsonlite::parse_json()}} for more details. (Defaults to using \code{simplifyVectors = TRUE})
+\item \code{parser_json()}: JSON parser. See \code{\link[jsonlite:read_json]{jsonlite::parse_json()}} for more details. (Defaults to using \code{simplifyVectors = TRUE})
 
-\item \code{parser_geojson}: GeoJSON parser. See \code{\link[geojsonsf:geojson_sf]{geojsonsf::geojson_sf()}} for more details.
+\item \code{parser_geojson()}: GeoJSON parser. See \code{\link[geojsonsf:geojson_sf]{geojsonsf::geojson_sf()}} for more details.
 
-\item \code{parser_text}: Helper parser to parse plain text
+\item \code{parser_text()}: Helper parser to parse plain text
 
-\item \code{parser_yaml}: YAML parser. See \code{\link[yaml:yaml.load]{yaml::yaml.load()}} for more details.
+\item \code{parser_yaml()}: YAML parser. See \code{\link[yaml:yaml.load]{yaml::yaml.load()}} for more details.
 
-\item \code{parser_csv}: CSV parser. See \code{\link[readr:read_delim]{readr::read_csv()}} for more details.
+\item \code{parser_csv()}: CSV parser. See \code{\link[readr:read_delim]{readr::read_csv()}} for more details.
 
-\item \code{parser_tsv}: TSV parser. See \code{\link[readr:read_delim]{readr::read_tsv()}} for more details.
+\item \code{parser_tsv()}: TSV parser. See \code{\link[readr:read_delim]{readr::read_tsv()}} for more details.
 
-\item \code{parser_read_file}: Helper parser that writes the binary body to a file and reads it back again using \code{read_fn}.
+\item \code{parser_read_file()}: Helper parser that writes the binary body to a file and reads it back again using \code{read_fn}.
 This parser should be used when reading from a file is required.
 
-\item \code{parser_rds}: RDS parser. See \code{\link[=readRDS]{readRDS()}} for more details.
+\item \code{parser_rds()}: RDS parser. See \code{\link[=readRDS]{readRDS()}} for more details.
 
-\item \code{parser_feather}: feather parser. See \code{\link[arrow:read_feather]{arrow::read_feather()}} for more details.
+\item \code{parser_feather()}: feather parser. See \code{\link[arrow:read_feather]{arrow::read_feather()}} for more details.
 
-\item \code{parser_parquet}: parquet parser. See \code{\link[arrow:read_parquet]{arrow::read_parquet()}} for more details.
+\item \code{parser_parquet()}: parquet parser. See \code{\link[arrow:read_parquet]{arrow::read_parquet()}} for more details.
 
-\item \code{parser_octet}: Octet stream parser. Returns the raw content.
+\item \code{parser_octet()}: Octet stream parser. Returns the raw content.
 
-\item \code{parser_multi}: Multi part parser. This parser will then parse each individual body with its respective parser.  When this parser is used, \code{req$body} will contain the updated output from \code{\link[webutils:parse_multipart]{webutils::parse_multipart()}} by adding the \code{parsed} output to each part.  Each part may contain detailed information, such as \code{name} (required), \code{content_type}, \code{content_disposition}, \code{filename}, (raw, original) \code{value}, and \code{parsed} (parsed \code{value}).  When performing Plumber route argument matching, each multipart part will match its \code{name} to the \code{parsed} content.
+\item \code{parser_multi()}: Multi part parser. This parser will then parse each individual body with its respective parser.  When this parser is used, \code{req$body} will contain the updated output from \code{\link[webutils:parse_multipart]{webutils::parse_multipart()}} by adding the \code{parsed} output to each part.  Each part may contain detailed information, such as \code{name} (required), \code{content_type}, \code{content_disposition}, \code{filename}, (raw, original) \code{value}, and \code{parsed} (parsed \code{value}).  When performing Plumber route argument matching, each multipart part will match its \code{name} to the \code{parsed} content.
 
-\item \code{parser_none}: No parser. Will not process the postBody.
+\item \code{parser_none()}: No parser. Will not process the postBody.
+
 }}
-
 \examples{
 \dontrun{
 # Overwrite `text/json` parsing behavior to not allow JSON vectors to be simplified

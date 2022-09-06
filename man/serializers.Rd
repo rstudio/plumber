@@ -123,57 +123,57 @@ more details on Plumber serializers and how to customize their behavior.
 }
 \section{Functions}{
 \itemize{
-\item \code{serializer_headers}: Add a static list of headers to each return value. Will add \code{Content-Disposition} header if a value is the result of \code{as_attachment()}.
+\item \code{serializer_headers()}: Add a static list of headers to each return value. Will add \code{Content-Disposition} header if a value is the result of \code{as_attachment()}.
 
-\item \code{serializer_content_type}: Adds a \code{Content-Type} header to the response object
+\item \code{serializer_content_type()}: Adds a \code{Content-Type} header to the response object
 
-\item \code{serializer_octet}: Octet serializer. If content is received that does
+\item \code{serializer_octet()}: Octet serializer. If content is received that does
 not have a \code{"raw"} type, then an error will be thrown.
 
-\item \code{serializer_csv}: CSV serializer. See also: \code{\link[readr:format_delim]{readr::format_csv()}}
+\item \code{serializer_csv()}: CSV serializer. See also: \code{\link[readr:format_delim]{readr::format_csv()}}
 
-\item \code{serializer_tsv}: TSV serializer. See also: \code{\link[readr:format_delim]{readr::format_tsv()}}
+\item \code{serializer_tsv()}: TSV serializer. See also: \code{\link[readr:format_delim]{readr::format_tsv()}}
 
-\item \code{serializer_html}: HTML serializer
+\item \code{serializer_html()}: HTML serializer
 
-\item \code{serializer_json}: JSON serializer. See also: \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}}
+\item \code{serializer_json()}: JSON serializer. See also: \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}}
 
-\item \code{serializer_unboxed_json}: JSON serializer with \code{auto_unbox} defaulting to \code{TRUE}. See also: \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}}
+\item \code{serializer_unboxed_json()}: JSON serializer with \code{auto_unbox} defaulting to \code{TRUE}. See also: \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}}
 
-\item \code{serializer_geojson}: GeoJSON serializer. See also \code{\link[geojsonsf:sf_geojson]{geojsonsf::sf_geojson()}} and [\code{\link[geojsonsf:sfc_geojson]{geojsonsf::sfc_geojson()}}].
+\item \code{serializer_geojson()}: GeoJSON serializer. See also \code{\link[geojsonsf:sf_geojson]{geojsonsf::sf_geojson()}} and [\code{\link[geojsonsf:sfc_geojson]{geojsonsf::sfc_geojson()}}].
 
-\item \code{serializer_rds}: RDS serializer. See also: \code{\link[base:serialize]{base::serialize()}}
+\item \code{serializer_rds()}: RDS serializer. See also: \code{\link[base:serialize]{base::serialize()}}
 
-\item \code{serializer_feather}: feather serializer. See also: \code{\link[arrow:write_feather]{arrow::write_feather()}}
+\item \code{serializer_feather()}: feather serializer. See also: \code{\link[arrow:write_feather]{arrow::write_feather()}}
 
-\item \code{serializer_parquet}: parquet serializer. See also: \code{\link[arrow:write_parquet]{arrow::write_parquet()}}
+\item \code{serializer_parquet()}: parquet serializer. See also: \code{\link[arrow:write_parquet]{arrow::write_parquet()}}
 
-\item \code{serializer_yaml}: YAML serializer. See also: \code{\link[yaml:as.yaml]{yaml::as.yaml()}}
+\item \code{serializer_yaml()}: YAML serializer. See also: \code{\link[yaml:as.yaml]{yaml::as.yaml()}}
 
-\item \code{serializer_text}: Text serializer. See also: \code{\link[=as.character]{as.character()}}
+\item \code{serializer_text()}: Text serializer. See also: \code{\link[=as.character]{as.character()}}
 
-\item \code{serializer_format}: Text serializer. See also: \code{\link[=format]{format()}}
+\item \code{serializer_format()}: Text serializer. See also: \code{\link[=format]{format()}}
 
-\item \code{serializer_print}: Text serializer. Captures the output of \code{\link[=print]{print()}}
+\item \code{serializer_print()}: Text serializer. Captures the output of \code{\link[=print]{print()}}
 
-\item \code{serializer_cat}: Text serializer. Captures the output of \code{\link[=cat]{cat()}}
+\item \code{serializer_cat()}: Text serializer. Captures the output of \code{\link[=cat]{cat()}}
 
-\item \code{serializer_write_file}: Write output to a temp file whose contents are read back as a serialized response. \code{serializer_write_file()} creates (and cleans up) a temp file, calls the serializer (which should write to the temp file), and then reads the contents back as the serialized value.  If the content \code{type} starts with \code{"text"}, the return result will be read into a character string, otherwise the result will be returned as a raw vector.
+\item \code{serializer_write_file()}: Write output to a temp file whose contents are read back as a serialized response. \code{serializer_write_file()} creates (and cleans up) a temp file, calls the serializer (which should write to the temp file), and then reads the contents back as the serialized value.  If the content \code{type} starts with \code{"text"}, the return result will be read into a character string, otherwise the result will be returned as a raw vector.
 
-\item \code{serializer_htmlwidget}: htmlwidget serializer. See also: \code{\link[htmlwidgets:saveWidget]{htmlwidgets::saveWidget()}}
+\item \code{serializer_htmlwidget()}: htmlwidget serializer. See also: \code{\link[htmlwidgets:saveWidget]{htmlwidgets::saveWidget()}}
 
-\item \code{serializer_device}: Helper method to create graphics device serializers, such as \code{\link[=serializer_png]{serializer_png()}}. See also: \code{\link[=endpoint_serializer]{endpoint_serializer()}}
+\item \code{serializer_device()}: Helper method to create graphics device serializers, such as \code{\link[=serializer_png]{serializer_png()}}. See also: \code{\link[=endpoint_serializer]{endpoint_serializer()}}
 
-\item \code{serializer_jpeg}: JPEG image serializer. See also: \code{\link[grDevices:png]{grDevices::jpeg()}}
+\item \code{serializer_jpeg()}: JPEG image serializer. See also: \code{\link[grDevices:png]{grDevices::jpeg()}}
 
-\item \code{serializer_png}: PNG image serializer. See also: \code{\link[grDevices:png]{grDevices::png()}}
+\item \code{serializer_png()}: PNG image serializer. See also: \code{\link[grDevices:png]{grDevices::png()}}
 
-\item \code{serializer_svg}: SVG image serializer. See also: \code{\link[grDevices:cairo]{grDevices::svg()}}
+\item \code{serializer_svg()}: SVG image serializer. See also: \code{\link[grDevices:cairo]{grDevices::svg()}}
 
-\item \code{serializer_bmp}: BMP image serializer. See also: \code{\link[grDevices:png]{grDevices::bmp()}}
+\item \code{serializer_bmp()}: BMP image serializer. See also: \code{\link[grDevices:png]{grDevices::bmp()}}
 
-\item \code{serializer_tiff}: TIFF image serializer. See also: \code{\link[grDevices:png]{grDevices::tiff()}}
+\item \code{serializer_tiff()}: TIFF image serializer. See also: \code{\link[grDevices:png]{grDevices::tiff()}}
 
-\item \code{serializer_pdf}: PDF image serializer. See also: \code{\link[grDevices:pdf]{grDevices::pdf()}}
+\item \code{serializer_pdf()}: PDF image serializer. See also: \code{\link[grDevices:pdf]{grDevices::pdf()}}
+
 }}
-

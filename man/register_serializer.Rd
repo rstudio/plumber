@@ -35,11 +35,11 @@ There are three main building-block serializers:
 }
 \section{Functions}{
 \itemize{
-\item \code{register_serializer}: Register a serializer with a name
+\item \code{register_serializer()}: Register a serializer with a name
 
-\item \code{registered_serializers}: Return a list of all registered serializers
+\item \code{registered_serializers()}: Return a list of all registered serializers
+
 }}
-
 \examples{
 # `serializer_json()` calls `serializer_content_type()` and supplies a serialization function
 print(serializer_json)

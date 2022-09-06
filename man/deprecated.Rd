@@ -24,11 +24,11 @@ Deprecated functions
 }
 \section{Functions}{
 \itemize{
-\item \code{addSerializer}: See \code{\link[=register_serializer]{register_serializer()}}
+\item \code{addSerializer()}: See \code{\link[=register_serializer]{register_serializer()}}
 
-\item \code{getCharacterSet}: See \code{\link[=get_character_set]{get_character_set()}}
+\item \code{getCharacterSet()}: See \code{\link[=get_character_set]{get_character_set()}}
 
-\item \code{sessionCookie}: See \code{\link[=session_cookie]{session_cookie()}}
+\item \code{sessionCookie()}: See \code{\link[=session_cookie]{session_cookie()}}
+
 }}
-
 \keyword{internal}

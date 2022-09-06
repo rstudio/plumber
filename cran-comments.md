@@ -1,18 +1,25 @@
 ## Comments
 
-#### 2022-7-9
+#### 2022-09-06
 
-Bug fixes and new features.
+Releasing a patch to `{plumber}` which has documentation by the latest version of `{roxygen2}`.
 
-CRAN checks:
-* I have disabled the brittle test that is currently failing on r-oldrel-windows-ix86+x86_64 for windows platforms only
-* `LazyData` field in DESCRIPTION has been removed
-* I have disabled a test on windows involving `{future}` as I am running into https://stat.ethz.ch/pipermail/r-devel/2021-June/080830.html
-
-Please let me know if there is anything else I can provide.
-
-Thank you,
+Best,
 Barret
+
+#### 2022-08-19
+
+....
+R 4.2.0 switched to use HTML5 for documentation pages.  Now validation
+using HTML Tidy finds problems in the HTML generated from your Rd
+files.
+
+To fix, in most cases it suffices to re-generate the Rd files using the
+current CRAN version of roxygen2.
+....
+
+Best,
+-k
 
 
 ## Test environments
@@ -27,8 +34,8 @@ Barret
     * devel, 4.2, 4.1, 4.0, 3.6, 3.5
 * devtools::
   * check_win_devel()
-  * check_win_release()
-  * check_win_oldrelease()
+
+## R CMD check results
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
