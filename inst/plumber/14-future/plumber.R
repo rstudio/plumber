@@ -60,7 +60,7 @@ calc_using_promise <- function() {
 async(function() {
 
   # (a)wait for the promised value and use as a regular value
-  # No neeed for a followup promise when using `await(p)`
+  # No need for a followup promise when using `await(p)`
   pids <- await(calc_using_promise())
 
   # Write code with the finalized async value as if it was synchronously found
