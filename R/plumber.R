@@ -269,6 +269,8 @@ Plumber <- R6Class(
           quiet = quiet
         )
         # Unmount the docs before restoring the wd
+        # Unmount needs to happen after exit hooks
+        # No guarantee that new exit hooks are not added after running API
         on.exit(unmount_docs(self, docs_info), add = TRUE)
       }
 
