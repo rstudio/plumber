@@ -255,6 +255,9 @@ Plumber <- R6Class(
         old_wd <- setwd(dirname(private$filename))
       }
 
+      # Run user exit hooks given docs and wd are still set
+      on.exit(private$runHooks("exit"), add = TRUE)
+
       if (isTRUE(docs_info$enabled)) {
         mount_docs(
           pr = self,
@@ -265,12 +268,14 @@ Plumber <- R6Class(
           callback = swaggerCallback,
           quiet = quiet
         )
+        # Unmount the docs before restoring the wd
         on.exit(unmount_docs(self, docs_info), add = TRUE)
-        on.exit({
-        }, add = TRUE)
       }
 
       # Restore the prior working directory after exit hooks have run
+      if (!is.null(old_wd)) {
+        on.exit(setwd(old_wd), add = TRUE)
+      }
 
       httpuv::runServer(host, port, self)
     },
@@ -302,6 +307,8 @@ Plumber <- R6Class(
         path <- paste0(path, "/")
       }
 
+      # Mount order matters
+      # Append a mounted router
       private$mnts[[path]] <- router
     },
     #' @description Unmount a Plumber router
