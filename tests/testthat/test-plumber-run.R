@@ -1,10 +1,4 @@
 
-with_interrupt <- function(expr) {
-  # Causes pr_run() to immediately exit
-  later::later(httpuv::interrupt)
-  force(expr)
-}
-
 test_that("quiet=TRUE suppresses startup messages", {
   with_interrupt({
     expect_message(pr() %>% pr_run(quiet = TRUE), NA)
