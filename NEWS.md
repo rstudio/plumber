@@ -1,5 +1,7 @@
 # plumber (development version)
 
+* Always mount OpenAPI documentation at `/__docs__/` as the first mount to have preference when using conflicting mount locations (e.g. a static mount at `/`). (#882)
+
 
 # plumber 1.2.1
 
