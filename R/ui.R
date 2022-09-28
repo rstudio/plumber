@@ -1,8 +1,9 @@
 #' @include globals.R
+docs_root <- paste0("/__docs__/")
 
 # Mount OpenAPI and Docs
 #' @noRd
-mount_docs <- function(pr, host, port, docs_info, callback, quiet = FALSE) {
+mount_docs <- function(pr, pr_private, host, port, docs_info, callback, quiet = FALSE) {
 
   # return early if not enabled
   if (!isTRUE(docs_info$enabled)) {
@@ -34,7 +35,17 @@ mount_docs <- function(pr, host, port, docs_info, callback, quiet = FALSE) {
 
   if (is_docs_available(docs_info$docs)) {
     docs_mount <- .globals$docs[[docs_info$docs]]$mount
+    current_mnt_names <- names(pr_private$mnts)
     docs_url <- do.call(docs_mount, c(list(pr, api_url), docs_info$args))
+    # Mount order matters
+    # Move new & ordered docs mounts to the front to be processed first
+    post_mnt_names <- names(pr_private$mnts)
+    doc_paths <- setdiff(post_mnt_names, current_mnt_names)
+    pr_private$mnts <- c(
+      pr_private$mnts[doc_paths],
+      pr_private$mnts[setdiff(post_mnt_names, doc_paths)]
+    )
+
     if (!isTRUE(quiet)) {
       message("Running ", docs_info$docs, " Docs at ", docs_url, sep = "")
     }
@@ -184,7 +195,6 @@ register_docs <- function(name, index, static = NULL) {
   stopifnot(is.function(index))
   if (!is.null(static)) stopifnot(is.function(static))
 
-  docs_root <- paste0("/__docs__/")
   docs_paths <- c("/index.html", "/")
   mount_docs_func <- function(pr, api_url, ...) {
     # Save initial extra argument values
