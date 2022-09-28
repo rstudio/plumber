@@ -22,7 +22,7 @@ Deprecated R6 functions
 }}
 \keyword{internal}
 \section{Super class}{
-\code{\link[plumber:Hookable]{plumber::Hookable}} -> \code{hookable}
+\code{plumber::Hookable} -> \code{hookable}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -68,7 +68,7 @@ The objects of this class are cloneable with this method.
 }
 }
 \section{Super classes}{
-\code{\link[plumber:Hookable]{plumber::Hookable}} -> \code{\link[plumber:Plumber]{plumber::Plumber}} -> \code{plumber}
+\code{plumber::Hookable} -> \code{plumber::Plumber} -> \code{plumber}
 }
 \section{Methods}{
 \subsection{Public methods}{

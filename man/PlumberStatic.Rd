@@ -12,7 +12,7 @@ Static file router
 Creates a router that is backed by a directory of files on disk.
 }
 \section{Super classes}{
-\code{\link[plumber:Hookable]{plumber::Hookable}} -> \code{\link[plumber:Plumber]{plumber::Plumber}} -> \code{PlumberStatic}
+\code{plumber::Hookable} -> \code{plumber::Plumber} -> \code{PlumberStatic}
 }
 \section{Methods}{
 \subsection{Public methods}{

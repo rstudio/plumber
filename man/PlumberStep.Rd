@@ -8,7 +8,7 @@ an object representing a step in the lifecycle of the treatment
 of a request by a plumber router.
 }
 \section{Super class}{
-\code{\link[plumber:Hookable]{plumber::Hookable}} -> \code{PlumberStep}
+\code{plumber::Hookable} -> \code{PlumberStep}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
