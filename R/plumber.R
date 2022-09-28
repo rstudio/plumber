@@ -250,9 +250,9 @@ Plumber <- R6Class(
       }
 
       # Set and restore the wd to make it appear that the proc is running local to the file's definition.
+      old_wd <- NULL
       if (!is.null(private$filename)) {
         old_wd <- setwd(dirname(private$filename))
-        on.exit({setwd(old_wd)}, add = TRUE)
       }
 
       if (isTRUE(docs_info$enabled)) {
@@ -266,9 +266,11 @@ Plumber <- R6Class(
           quiet = quiet
         )
         on.exit(unmount_docs(self, docs_info), add = TRUE)
+        on.exit({
+        }, add = TRUE)
       }
 
-      on.exit(private$runHooks("exit"), add = TRUE)
+      # Restore the prior working directory after exit hooks have run
 
       httpuv::runServer(host, port, self)
     },
