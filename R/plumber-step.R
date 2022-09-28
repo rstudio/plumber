@@ -20,6 +20,14 @@ resetForward <- function() {
   exec$forward <- FALSE
 }
 
+# Handle mounted routes not being found
+routeNotFound <- function() {
+  structure(list(), class = "plumber_route_not_found")
+}
+isRouteNotFound <- function(x) {
+  inherits(x, "plumber_route_not_found")
+}
+
 #' plumber step R6 class
 #' @description an object representing a step in the lifecycle of the treatment
 #' of a request by a plumber router.
