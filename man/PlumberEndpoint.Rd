@@ -15,7 +15,7 @@ Parameters values are obtained from parsing blocks of lines in a plumber file.
 They can also be provided manually for historical reasons.
 }
 \section{Super classes}{
-\code{plumber::Hookable} -> \code{plumber::PlumberStep} -> \code{PlumberEndpoint}
+\code{\link[plumber:Hookable]{plumber::Hookable}} -> \code{\link[plumber:PlumberStep]{plumber::PlumberStep}} -> \code{PlumberEndpoint}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

@@ -114,7 +114,7 @@ pr$setErrorHandler(function(req, res, err) {
 \code{\link[=pr_set_docs_callback]{pr_set_docs_callback()}}
 }
 \section{Super class}{
-\code{plumber::Hookable} -> \code{Plumber}
+\code{\link[plumber:Hookable]{plumber::Hookable}} -> \code{Plumber}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
