@@ -778,17 +778,24 @@ Plumber <- R6Class(
           if (nchar(path) >= nchar(mountPath) && substr(path, 0, nchar(mountPath)) == mountPath) {
             # This is a prefix match or exact match. Let mount attempt handle.
 
-            # Mark that the route is within a mount. Allows for the mount to forward instead of 404.
-            req$`_MOUNT_COUNT` <- req$`_MOUNT_COUNT` + 1
+            # Mark that the route is being handled within a mount.
+            # Allows for the mount to forward to the next mount instead of 404.
+            prev_mount_status <- req$`_IS_MOUNT`
+            req$`_IS_MOUNT` <- TRUE
+
             # First trim the prefix off of the PATH_INFO element
-            curPathInfo <- req$PATH_INFO
+            cur_path_info <- req$PATH_INFO
             req$PATH_INFO <- substr(req$PATH_INFO, nchar(mountPath), nchar(req$PATH_INFO))
+
+            # Handle route
             ret <- private$mnts[[mountPath]]$route(req, res)
-            # Undo path info changes and mark that we are no longer mounted
-            req$PATH_INFO <- curPathInfo
-            req$`_MOUNT_COUNT` <- req$`_MOUNT_COUNT` - 1
+
+            # Undo path info and mount status changes
+            req$PATH_INFO <- cur_path_info
+            req$`_IS_MOUNT` <- prev_mount_status
+
             if (isRouteNotFound(ret)) {
-              # Forward to the parent router if mounted router can't handle
+              # Forward to the parent router if mounted router can't handle route
               return(forward())
             }
             # Return the regular value from the mounted router
@@ -844,8 +851,8 @@ Plumber <- R6Class(
         }
 
         # Notify that there is no route found
-        mount_count <- req$`_MOUNT_COUNT`
-        if (!is.null(mount_count) && mount_count > 0) {
+        is_mount <- req$`_IS_MOUNT`
+        if (isTRUE(is_mount)) {
           # If this is a mounted router, we need to forward to the parent router
           # This value is used above when retrieving values from a mount
           # Do not change this value without updating the recursive mount code above
