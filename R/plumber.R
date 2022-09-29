@@ -767,14 +767,6 @@ Plumber <- R6Class(
         function(...) {
           resetForward()
           # TODO: support globbing?
-
-          # Keep track of how many mount levels deep we are.
-          # Can not use a boolean as a nested mount will unwrap before the parent mount is done.
-          # Using a counter allows us to know when we are at the top level router (0).
-          if (is.null(req$`_MOUNT_COUNT`)) {
-            req$`_MOUNT_COUNT` <- 0
-          }
-
           if (nchar(path) >= nchar(mountPath) && substr(path, 0, nchar(mountPath)) == mountPath) {
             # This is a prefix match or exact match. Let mount attempt handle.
 
