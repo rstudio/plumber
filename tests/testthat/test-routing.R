@@ -20,6 +20,15 @@ test_that("Routing to errors and 404s works", {
   expect_equal(r$route(make_req("GET", "/path1"), res), "dual path")
   expect_equal(r$route(make_req("GET", "/path2"), res), "dual path")
 
+  ### Won't work yet
+  ## Mounts fall back to parent router when route is not found
+  # # Mount at `/say` with route `/hello`
+  # expect_equal(r$route(make_req("GET", "/say/hello"), res), "say hello")
+  # # Mount at `/say/hello` with route `/world`
+  # expect_equal(r$route(make_req("GET", "/say/hello/world"), res), "say hello world")
+
+  expect_equal(names(r$mounts), c("/first/", "/say/", "/say/hello/"))
+
   expect_equal(errors, 0)
   expect_equal(notFounds, 0)
 

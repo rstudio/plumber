@@ -61,3 +61,21 @@ function(res){
 function(){
   "dual path"
 }
+
+#* @plumber
+function(pr) {
+  mnt_1 <-
+    pr() %>%
+    pr_get("/hello", function() "say hello")
+  mnt_2 <-
+    pr() %>%
+    pr_get("/world", function() "say hello world")
+  mnt_0 <-
+    pr() %>%
+    pr_get("/world", function() "say hello world")
+
+  pr %>%
+    pr_mount("/say", mnt_1) %>%
+    pr_mount("/say/hello", mnt_2) %>%
+    pr_mount("/first", mnt_0, after = 0)
+}
