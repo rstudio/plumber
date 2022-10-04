@@ -280,8 +280,13 @@ Plumber <- R6Class(
     #' by paths which is a great technique for decomposing large APIs into smaller files.
     #'
     #' See also: [pr_mount()]
-    #' @param path a character string. Where to mount router.
-    #' @param router a Plumber router. Router to be mounted.
+    #' @param path a character string. Where to mount the sub router.
+    #' @param router a Plumber router. Sub router to be mounted.
+    #' @param ... Ignored. Used for possible parameter expansion.
+    #' @param after If `NULL` (default), the router will be appended to the end
+    #'   of the mounts. If a number, the router will be inserted at the given
+    #'   index. E.g. `after = 0` will prepend the sub router, giving it
+    #'   preference over other mounted routers.
     #' @examples
     #' \dontrun{
     #' root <- pr()
@@ -292,7 +297,9 @@ Plumber <- R6Class(
     #' products <- Plumber$new("products.R")
     #' root$mount("/products", products)
     #' }
-    mount = function(path, router) {
+    mount = function(path, router, ..., after = NULL) {
+      ellipsis::check_dots_empty()
+
       # Ensure that the path has both a leading and trailing slash.
       if (!grepl("^/", path)) {
         path <- paste0("/", path)
@@ -302,8 +309,10 @@ Plumber <- R6Class(
       }
 
       # Mount order matters
-      # Append a mounted router
-      private$mnts[[path]] <- router
+      after <- after %||% length(private$mnts)
+      mntList <- list()
+      mntList[[path]] <- router
+      private$mnts <- append(private$mnts, mntList, after = after)
     },
     #' @description Unmount a Plumber router
     #' @param path a character string. Where to unmount router.
