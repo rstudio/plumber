@@ -4,14 +4,21 @@
 \alias{pr_mount}
 \title{Mount a Plumber router}
 \usage{
-pr_mount(pr, path, router)
+pr_mount(pr, path, router, ..., after = NULL)
 }
 \arguments{
 \item{pr}{The host Plumber router.}
 
-\item{path}{A character string. Where to mount router.}
+\item{path}{a character string. Where to mount the sub router.}
 
-\item{router}{A Plumber router. Router to be mounted.}
+\item{router}{a Plumber router. Sub router to be mounted.}
+
+\item{...}{Ignored. Used for possible parameter expansion.}
+
+\item{after}{If \code{NULL} (default), the router will be appended to the end
+of the mounts. If a number, the router will be inserted at the given
+index. E.g. \code{after = 0} will prepend the sub router, giving it
+preference over other mounted routers.}
 }
 \value{
 A Plumber router with the supplied router mounted
