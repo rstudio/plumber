@@ -250,13 +250,10 @@ Plumber <- R6Class(
       }
 
       # Set and restore the wd to make it appear that the proc is running local to the file's definition.
-      old_wd <- NULL
       if (!is.null(private$filename)) {
         old_wd <- setwd(dirname(private$filename))
+        on.exit(setwd(old_wd), add = TRUE, after = FALSE)
       }
-
-      # Run user exit hooks given docs and wd are still set
-      on.exit(private$runHooks("exit"), add = TRUE)
 
       if (isTRUE(docs_info$enabled)) {
         mount_docs(
@@ -268,16 +265,11 @@ Plumber <- R6Class(
           callback = swaggerCallback,
           quiet = quiet
         )
-        # Unmount the docs before restoring the wd
-        # Unmount needs to happen after exit hooks
-        # No guarantee that new exit hooks are not added after running API
-        on.exit(unmount_docs(self, docs_info), add = TRUE)
+        on.exit(unmount_docs(self, docs_info), add = TRUE, after = FALSE)
       }
 
-      # Restore the prior working directory after exit hooks have run
-      if (!is.null(old_wd)) {
-        on.exit(setwd(old_wd), add = TRUE)
-      }
+      # Run user exit hooks given docs and working directory
+      on.exit(private$runHooks("exit"), add = TRUE, after = FALSE)
 
       httpuv::runServer(host, port, self)
     },

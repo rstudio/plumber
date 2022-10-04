@@ -18,7 +18,7 @@ Description: Gives the ability to automatically generate and serve an HTTP API
     from R functions using the annotations in the R documentation around your
     functions.
 Depends:
-    R (>= 3.0.0)
+    R (>= 3.5.0)
 Imports:
     R6 (>= 2.0.0),
     stringi (>= 0.3.0),
