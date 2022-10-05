@@ -1,6 +1,14 @@
 # plumber (development version)
 
+## Breaking changes
+
+## New features
+
+* Added support for `pr_mount(after=)` / `Plumber$mount(after=)` which allows for mounts to be added in non-sequential order (#882)
+
 * Always mount OpenAPI documentation at `/__docs__/` as the first mount to have preference when using conflicting mount locations (e.g. a static mount at `/`). (#882)
+
+## Bug fixes
 
 
 # plumber 1.2.1
