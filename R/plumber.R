@@ -571,6 +571,54 @@ Plumber <- R6Class(
         private$runHooks("postroute", list(data = hookEnv, req = req, res = res, value = value))
       }
 
+      # No endpoint could handle this request. 404
+      notFoundStep <- function(...) {
+
+        if (isTRUE(getOption("plumber.trailingSlash", FALSE))) {
+          # Redirect to the slash route, if it exists
+          path <- req$PATH_INFO
+          # If the path does not end in a slash,
+          if (!grepl("/$", path)) {
+            new_path <- paste0(path, "/")
+            # and a route with a slash exists...
+            if (router_has_route(self, new_path, req$REQUEST_METHOD)) {
+
+              # Temp redirect with same REQUEST_METHOD
+              # Add on the query string manually. They do not auto transfer
+              # The POST body will be reissued by caller
+              new_location <- paste0(new_path, req$QUERY_STRING)
+              res$status <- 307
+              res$setHeader(
+                name = "Location",
+                value = new_location
+              )
+              res$serializer <- serializer_unboxed_json()
+              return(
+                list(message = "307 - Redirecting with trailing slash")
+              )
+            }
+          }
+        }
+
+        # No trailing-slash route exists...
+        # Try allowed verbs
+
+        if (isTRUE(getOption("plumber.methodNotAllowed", TRUE))) {
+          # Notify about allowed verbs
+          if (is_405(req$pr, req$PATH_INFO, req$REQUEST_METHOD)) {
+            res$status <- 405L
+            # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Allow
+            res$setHeader("Allow", paste(req$verbsAllowed, collapse = ", "))
+            res$serializer <- serializer_unboxed_json()
+            return(list(error = "405 - Method Not Allowed"))
+          }
+        }
+
+        # Notify that there is no route found
+        private$notFoundHandler(req = req, res = res)
+      }
+      steps <- append(steps, list(notFoundStep))
+
       serializeSteps <- function(value, ...) {
         if ("PlumberResponse" %in% class(value)) {
           return(res$toResponse())
@@ -615,6 +663,7 @@ Plumber <- R6Class(
           prerouteStep,
           routeStep,
           postrouteStep,
+          notFoundStep,
           serializeSteps
         )
       )
@@ -770,11 +819,6 @@ Plumber <- R6Class(
           if (nchar(path) >= nchar(mountPath) && substr(path, 0, nchar(mountPath)) == mountPath) {
             # This is a prefix match or exact match. Let mount attempt handle.
 
-            # Mark that the route is being handled within a mount.
-            # Allows for the mount to forward to the next mount instead of 404.
-            prev_mount_status <- req$`_IS_MOUNT`
-            req$`_IS_MOUNT` <- TRUE
-
             # First trim the prefix off of the PATH_INFO element
             cur_path_info <- req$PATH_INFO
             req$PATH_INFO <- substr(req$PATH_INFO, nchar(mountPath), nchar(req$PATH_INFO))
@@ -784,7 +828,6 @@ Plumber <- R6Class(
 
             # Undo path info and mount status changes
             req$PATH_INFO <- cur_path_info
-            req$`_IS_MOUNT` <- prev_mount_status
 
             if (isRouteNotFound(ret)) {
               # Forward to the parent router if mounted router can't handle route
@@ -798,62 +841,6 @@ Plumber <- R6Class(
         }
       })
       steps <- append(steps, mountSteps)
-
-      # No endpoint could handle this request. 404
-      notFoundStep <- function(...) {
-
-        if (isTRUE(getOption("plumber.trailingSlash", FALSE))) {
-          # Redirect to the slash route, if it exists
-          path <- req$PATH_INFO
-          # If the path does not end in a slash,
-          if (!grepl("/$", path)) {
-            new_path <- paste0(path, "/")
-            # and a route with a slash exists...
-            if (router_has_route(req$pr, new_path, req$REQUEST_METHOD)) {
-
-              # Temp redirect with same REQUEST_METHOD
-              # Add on the query string manually. They do not auto transfer
-              # The POST body will be reissued by caller
-              new_location <- paste0(new_path, req$QUERY_STRING)
-              res$status <- 307
-              res$setHeader(
-                name = "Location",
-                value = new_location
-              )
-              res$serializer <- serializer_unboxed_json()
-              return(
-                list(message = "307 - Redirecting with trailing slash")
-              )
-            }
-          }
-        }
-
-        # No trailing-slash route exists...
-        # Try allowed verbs
-
-        if (isTRUE(getOption("plumber.methodNotAllowed", TRUE))) {
-          # Notify about allowed verbs
-          if (is_405(req$pr, req$PATH_INFO, req$REQUEST_METHOD)) {
-            res$status <- 405L
-            # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Allow
-            res$setHeader("Allow", paste(req$verbsAllowed, collapse = ", "))
-            res$serializer <- serializer_unboxed_json()
-            return(list(error = "405 - Method Not Allowed"))
-          }
-        }
-
-        # Notify that there is no route found
-        is_mount <- req$`_IS_MOUNT`
-        if (isTRUE(is_mount)) {
-          # If this is a mounted router, we need to forward to the parent router
-          # This value is used above when retrieving values from a mount
-          # Do not change this value without updating the recursive mount code above
-          return(routeNotFound())
-        } else {
-          private$notFoundHandler(req = req, res = res)
-        }
-      }
-      steps <- append(steps, list(notFoundStep))
 
       errorHandlerStep <- function(error, ...) {
         private$errorHandler(req, res, error)
