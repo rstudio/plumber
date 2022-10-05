@@ -1,6 +1,7 @@
 
 library(promises)
 library(coro)
+library(fastmap)
 future::plan("multisession") # a worker for each core
 # future::plan(future::multisession(workers = 2)) # only two workers
 
