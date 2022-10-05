@@ -497,7 +497,7 @@ pr_filter <- function(pr,
 #' @param ... Should be empty.
 #' @param debug If `TRUE`, it will provide more insight into your API errors.
 #'   Using this value will only last for the duration of the run.
-#'   If [pr_set_debug()] has not been called, `debug` will default to `interactive()` at [pr_run()] time
+#'   If [pr_set_debug()] has not been called, `debug` will default to [`rlang::is_interactive()`] at [pr_run()] time
 #' @param docs Visual documentation value to use while running the API.
 #'   This value will only be used while running the router.
 #'   If missing, defaults to information previously set with [pr_set_docs()].

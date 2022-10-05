@@ -143,7 +143,7 @@ Plumber <- R6Class(
     #' Mac OS X, port numbers smaller than 1025 require root privileges.
     #'
     #' This value does not need to be explicitly assigned. To explicitly set it, see [options_plumber()].
-    #' @param debug If `TRUE`, it will provide more insight into your API errors. Using this value will only last for the duration of the run. If a `$setDebug()` has not been called, `debug` will default to `interactive()` at `$run()` time. See `$setDebug()` for more details.
+    #' @param debug If `TRUE`, it will provide more insight into your API errors. Using this value will only last for the duration of the run. If a `$setDebug()` has not been called, `debug` will default to [`rlang::is_interactive()`] at `$run()` time. See `$setDebug()` for more details.
     #' @param swagger Deprecated. Please use `docs` instead. See `$setDocs(docs)` or `$setApiSpec()` for more customization.
     #' @param swaggerCallback An optional single-argument function that is
     #'   called back with the URL to an OpenAPI user interface when one becomes
@@ -232,7 +232,7 @@ Plumber <- R6Class(
       }, add = TRUE)
       # Fix the debug value while running.
       self$setDebug(
-        # Order: Run method param, internally set value, is interactive()
+        # Order: Run method param, internally set value, `is_interactive()`
         # `$getDebug()` is dynamic given `setDebug()` has never been called.
         rlang::maybe_missing(debug, self$getDebug())
       )
@@ -979,11 +979,11 @@ Plumber <- R6Class(
     #'
     #' See also: `$getDebug()` and [pr_set_debug()]
     #' @param debug `TRUE` provides more insight into your API errors.
-    setDebug = function(debug = interactive()) {
+    setDebug = function(debug = is_interactive()) {
       stopifnot(length(debug) == 1)
       private$debug <- isTRUE(debug)
     },
-    #' @description Retrieve the `debug` value. If it has never been set, the result of `interactive()` will be used.
+    #' @description Retrieve the `debug` value. If it has never been set, the result of [`rlang::is_interactive()`] will be used.
     #'
     #' See also: `$getDebug()` and [pr_set_debug()]
     getDebug = function() {
@@ -1351,8 +1351,10 @@ upgrade_docs_parameter <- function(docs, ...) {
 
 
 
+#' @importFrom rlang is_interactive
+# Method needed for testing mocking
 default_debug <- function() {
-  interactive()
+  is_interactive()
 }
 
 

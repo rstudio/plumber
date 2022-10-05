@@ -4,6 +4,8 @@
 
 * When mounting a router at an existing location, the old mounted router is removed and the router to be mounted is added to the end of the mount list (default; `after = NULL`). This makes it so prior mount calls do not affect current mount calls. (#882)
 
+* The default value of `debug` has been changed from `base::interactive()` to `rlang::is_interactive()`. This allows for tests to be consistent when run interactively or in batch mode. (#882)
+
 ## New features
 
 * Added support for `pr_mount(after=)` / `Plumber$mount(after=)` which allows for mounts to be added in non-sequential order (#882)
