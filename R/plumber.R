@@ -587,7 +587,7 @@ Plumber <- R6Class(
           if (!grepl("/$", path)) {
             new_path <- paste0(path, "/")
             # and a route with a slash exists...
-            if (router_has_route(self, new_path, req$REQUEST_METHOD)) {
+            if (router_has_route(req$pr, new_path, req$REQUEST_METHOD)) {
 
               # Temp redirect with same REQUEST_METHOD
               # Add on the query string manually. They do not auto transfer
@@ -608,7 +608,6 @@ Plumber <- R6Class(
 
         # No trailing-slash route exists...
         # Try allowed verbs
-
         if (isTRUE(getOption("plumber.methodNotAllowed", TRUE))) {
           # Notify about allowed verbs
           if (is_405(req$pr, req$PATH_INFO, req$REQUEST_METHOD)) {
