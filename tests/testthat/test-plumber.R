@@ -225,9 +225,10 @@ test_that("mounts work", {
 
   pr$mount("/subpath", sub)
 
+  # `/` mount should not stop `/nested/path` from being found
   res <- PlumberResponse$new()
   pr$route(make_req("GET", "/nested/path"), res)
-  expect_equal(res$status, 404)
+  expect_equal(res$status, 200)
 
   val <- pr$route(make_req("GET", "/subpath/nested/path", qs="?a=123"), PlumberResponse$new())
   expect_equal(val, "123")

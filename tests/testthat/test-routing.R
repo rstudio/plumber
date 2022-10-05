@@ -11,7 +11,7 @@ test_that("Routing to errors and 404s works", {
   r$setErrorHandler(function(req, res, err){ errors <<- errors + 1; errRes })
   r$set404Handler(function(req, res){ notFounds <<- notFounds + 1; notFoundRes })
 
-  res <- PlumberResponse$new()
+  res <- PlumberResponse$new(serializer = serializer_identity())
 
   expect_equal(r$route(make_req("GET", "/"), res), "first")
   expect_equal(r$route(make_req("GET", "/abc"), res), "abc get")
@@ -29,13 +29,15 @@ test_that("Routing to errors and 404s works", {
   expect_equal(errors, 0)
   expect_equal(notFounds, 0)
 
-  nf <- r$route(make_req("GET", "/something-crazy"), res)
-  expect_equal(res$serializer, serializer_json())
-  expect_equal(nf, notFoundRes)
+  res <- PlumberResponse$new(serializer = serializer_identity())
+  nf <- r$serve(make_req("GET", "/something-crazy"), res)
+  expect_equal(res$serializer, serializer_identity())
+  expect_equal(nf$body, notFoundRes)
   expect_equal(notFounds, 1)
 
-  er <- r$route(make_req("GET", "/error"), res)
-  expect_equal(res$serializer, serializer_json())
-  expect_equal(er, errRes)
+  res <- PlumberResponse$new(serializer = serializer_identity())
+  er <- r$serve(make_req("GET", "/error"), res)
+  expect_equal(res$serializer, serializer_identity())
+  expect_equal(er$body, errRes)
   expect_equal(errors, 1)
 })

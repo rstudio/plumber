@@ -102,15 +102,19 @@ test_that("integration of path parsing works", {
   expect_equal(r$route(make_req("GET", "/car/ratio/-1.5"), PlumberResponse$new()), -1.5)
   expect_equal(r$route(make_req("GET", "/car/ratio/-.5"), PlumberResponse$new()), -.5)
   expect_equal(r$route(make_req("GET", "/car/ratio/.5"), PlumberResponse$new()), .5)
-  expect_equal(r$route(make_req("GET", "/car/ratio/a"), PlumberResponse$new()),
-               list(error = "404 - Resource Not Found"))
-  expect_equal(r$route(make_req("GET", "/car/ratio/"), PlumberResponse$new()),
-               list(error = "404 - Resource Not Found"))
-  expect_equal(r$route(make_req("GET", "/car/ratio/."), PlumberResponse$new()),
-               list(error = "404 - Resource Not Found"))
-  expect_equal(r$route(make_req("GET", "/car/sold/true"), PlumberResponse$new()), TRUE)
-  expect_match(r$call(make_req("POST", "/car/sold/true"))$body,
-               "405 - Method Not Allowed")
+
+  expect_body <- function(method, path, status, body, auto_unbox = TRUE) {
+    res <- r$call(make_req(method, path))
+    expect_equal(res$status, status)
+    expect_equal(
+      res$body,
+      toJSON(body, auto_unbox = auto_unbox)
+    )
+  }
+  expect_body("GET", "/car/ratio/", 404L, list(error = "404 - Resource Not Found"))
+  expect_body("GET", "/car/ratio/.", 404L, list(error = "404 - Resource Not Found"))
+  expect_body("GET", "/car/sold/true", 200L, TRUE, auto_unbox = FALSE)
+  expect_body("POST", "/car/sold/true", 405L, list(error = "405 - Method Not Allowed"))
 })
 
 test_that("multiple variations in path works nicely with function args detection", {
