@@ -572,7 +572,13 @@ Plumber <- R6Class(
       }
 
       # No endpoint could handle this request. 404
-      notFoundStep <- function(...) {
+      notFoundStep <- function(value, ...) {
+        if (!isRouteNotFound(value)) {
+          # This router handled the request
+          # Go to the next step
+          return(value)
+        }
+
 
         if (isTRUE(getOption("plumber.trailingSlash", FALSE))) {
           # Redirect to the slash route, if it exists
@@ -617,7 +623,6 @@ Plumber <- R6Class(
         # Notify that there is no route found
         private$notFoundHandler(req = req, res = res)
       }
-      steps <- append(steps, list(notFoundStep))
 
       serializeSteps <- function(value, ...) {
         if ("PlumberResponse" %in% class(value)) {
