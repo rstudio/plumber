@@ -307,6 +307,10 @@ Plumber <- R6Class(
         path <- paste0(path, "/")
       }
 
+      # Remove prior mount if it exists
+      self$unmount(path)
+
+      # Add new mount
       # Mount order matters
       after <- after %||% length(private$mnts)
       mntList <- list()
