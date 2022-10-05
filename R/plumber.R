@@ -815,37 +815,76 @@ Plumber <- R6Class(
       # If we still haven't found a match, check the un-preempt'd endpoints.
       steps <- append(steps, list(makeHandleStep("__no-preempt__")))
 
-      # We aren't going to serve this endpoint; see if any mounted routers will
-      mountSteps <- lapply(names(private$mnts), function(mountPath) {
-        # (make step function)
-        function(...) {
-          resetForward()
+
+      ## We aren't going to serve this endpoint; see if any mounted routers will
+
+      # Capture the path info so it can be reset before/after executing the mount
+      curPathInfo <- req$PATH_INFO
+
+      # Dynamically add mount steps to avoid wasting time on mounts that don't match
+      mountSteps <- list()
+      Map(
+        mountPath = names(private$mnts),
+        mount = private$mnts,
+        f = function(mountPath, mount) {
           # TODO: support globbing?
-          if (nchar(path) >= nchar(mountPath) && substr(path, 0, nchar(mountPath)) == mountPath) {
-            # This is a prefix match or exact match. Let mount attempt handle.
+          mountSupportsPath <-
+            nchar(path) >= nchar(mountPath) &&
+            substr(path, 0, nchar(mountPath)) == mountPath
+          if (!mountSupportsPath) {
+            # This router does not support this path
+            # Do not add to mountSteps
+            return()
+          }
 
-            # First trim the prefix off of the PATH_INFO element
-            cur_path_info <- req$PATH_INFO
-            req$PATH_INFO <- substr(req$PATH_INFO, nchar(mountPath), nchar(req$PATH_INFO))
+          mountSteps[[length(mountSteps) + 1]] <<- function(...) {
+            mountExecStep <- function(...) {
+              resetForward() # Doesn't hurt to reset here
+              ## First trim the prefix off of the PATH_INFO element
+              # Reset the path info for each mount
+              req$PATH_INFO <- curPathInfo
+              req$PATH_INFO <- substr(req$PATH_INFO, nchar(mountPath), nchar(req$PATH_INFO))
 
-            # Handle route
-            ret <- private$mnts[[mountPath]]$route(req, res)
-
-            # Undo path info and mount status changes
-            req$PATH_INFO <- cur_path_info
-
-            if (isRouteNotFound(ret)) {
-              # Forward to the parent router if mounted router can't handle route
-              return(forward())
+              # str(list(mountPath = mountPath, curPathInfo = curPathInfo, req_path_info = req$PATH_INFO))
+              # Handle mount asynchronously
+              private$mnts[[mountPath]]$route(req, res)
             }
-            # Return the regular value from the mounted router
-            return(ret)
-          } else {
-            return(forward())
+            postMountExecStep <- function(mountRes, ...) {
+              # Don't know what happened in the mount. Reset again.
+              resetForward()
+
+              # Reset the req path info
+              req$PATH_INFO <- curPathInfo
+
+              # Only move on to the next mount if a `routeNotFound()` was returned
+              if (isRouteNotFound(mountRes)) {
+                # This router did not support this path
+                # `forward()` to the next router
+                return(forward())
+              }
+
+              # Regular response, return it
+              return(mountRes)
+            }
+
+            runSteps(
+              NULL,
+              stop,
+              list(
+                mountExecStep,
+                postMountExecStep
+              )
+            )
           }
         }
-      })
+      )
       steps <- append(steps, mountSteps)
+
+      routeNotFoundStep <- function(...) {
+        # If we still haven't found a match, return a routeNotFound object
+        routeNotFound()
+      }
+      steps <- append(steps, list(routeNotFoundStep))
 
       errorHandlerStep <- function(error, ...) {
         private$errorHandler(req, res, error)
