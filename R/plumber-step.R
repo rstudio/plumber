@@ -11,6 +11,8 @@ forward_class <- "plumber_forward"
 forward <- function() {
   exec <- getCurrentExec()
   exec$forward <- TRUE
+  # Currently not used. Would prefer this structure in future versions
+  structure(list(), class = "plumber_forward")
 }
 hasForwarded <- function() {
   getCurrentExec()$forward
