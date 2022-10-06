@@ -91,7 +91,7 @@ Plumber <- R6Class(
       # Default parsers to maintain legacy features
       self$setParsers(c("json", "form", "text", "octet", "multi"))
       self$setErrorHandler(defaultErrorHandler())
-      self$set404Handler(defaultRouteNotFound) # Allows for fall through to next router
+      self$set404Handler(NULL) # Allows for fall through to next router
       self$setDocs(TRUE)
       private$docs_info$has_not_been_set <- TRUE # set to know if `$setDocs()` has been called before `$run()`
       private$docs_callback <- rlang::missing_arg()
@@ -567,64 +567,29 @@ Plumber <- R6Class(
       routeStep <- function(...) {
         self$route(req, res)
       }
-      postrouteStep <- function(value, ...) {
-        private$runHooks("postroute", list(data = hookEnv, req = req, res = res, value = value))
-      }
-
-      # No endpoint could handle this request. 404
-      notFoundStep <- function(value, ...) {
+      # No endpoint could handle this request. 307, 405, 404
+      routeNotFoundStep <- function(value, ...) {
         if (!isRouteNotFound(value)) {
           # This router handled the request
           # Go to the next step
           return(value)
         }
 
-        # Try trailing slash route
-        if (isTRUE(getOption("plumber.trailingSlash", FALSE))) {
-          # Redirect to the slash route, if it exists
-          path <- req$PATH_INFO
-          # If the path does not end in a slash,
-          if (!grepl("/$", path)) {
-            new_path <- paste0(path, "/")
-            # and a route with a slash exists...
-            if (router_has_route(self, new_path, req$REQUEST_METHOD)) {
-
-              # Temp redirect with same REQUEST_METHOD
-              # Add on the query string manually. They do not auto transfer
-              # The POST body will be reissued by caller
-              new_location <- paste0(new_path, req$QUERY_STRING)
-              res$status <- 307
-              res$setHeader(
-                name = "Location",
-                value = new_location
-              )
-              res$serializer <- serializer_unboxed_json()
-              return(
-                list(message = "307 - Redirecting with trailing slash")
-              )
-            }
-          }
-        }
-
-        # No trailing-slash route exists...
-        # Try allowed verbs
-        if (isTRUE(getOption("plumber.methodNotAllowed", TRUE))) {
-          # Notify about allowed verbs
-          if (is_405(req$pr, req$PATH_INFO, req$REQUEST_METHOD)) {
-            res$status <- 405L
-            # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Allow
-            res$setHeader("Allow", paste(req$verbsAllowed, collapse = ", "))
-            res$serializer <- serializer_unboxed_json()
-            return(list(error = "405 - Method Not Allowed"))
-          }
-        }
-
-        # Handle 404 logic
-        # At this point, `self$route()` has already tried to call `private$notFoundHandler()`
-        # Calling `private$notFoundHandler()` again is redundant
-        # Instead, we can execute the default 404 logic
-        default404Handler(req = req, res = res)
+        # No endpoint could handle this request.
+        lastChanceRouteNotFound(
+          req = req,
+          res = res,
+          pr = self,
+          # `$route()` already had a chance to call `private$notFoundHandler()`
+          # Using `default404Handler()` as `private$notFoundHandler()` would be missing
+          handle404 = default404Handler
+        )
       }
+
+      postrouteStep <- function(value, ...) {
+        private$runHooks("postroute", list(data = hookEnv, req = req, res = res, value = value))
+      }
+
 
       serializeSteps <- function(value, ...) {
         if ("PlumberResponse" %in% class(value)) {
@@ -669,8 +634,8 @@ Plumber <- R6Class(
         list(
           prerouteStep,
           routeStep,
+          routeNotFoundStep,
           postrouteStep,
-          notFoundStep,
           serializeSteps
         )
       )
@@ -883,9 +848,20 @@ Plumber <- R6Class(
       steps <- append(steps, mountSteps)
 
       routeNotFoundStep <- function(...) {
-        # If we still haven't found a match, call 404 method
-        # Defaults to `defaultRouteNotFound()`
-        private$notFoundHandler(req, res)
+        if (is.function(private$notFoundHandler)) {
+          # Terminate the route handling using the local 404 method
+          return(
+            lastChanceRouteNotFound(
+              req = req,
+              res = res,
+              pr = self,
+              handle404 = private$notFoundHandler
+            )
+          )
+        }
+
+        # Let the next mount or `$serve()` handle it
+        return(routeNotFound())
       }
       steps <- append(steps, list(routeNotFoundStep))
 
