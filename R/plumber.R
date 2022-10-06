@@ -821,6 +821,7 @@ Plumber <- R6Class(
               resetForward()
 
               # Reset the req path info
+              # TODO-future; this should really be in a `finally()` after `mountExecStep`.
               req$PATH_INFO <- curPathInfo
 
               # Only move on to the next mount if a `routeNotFound()` was returned
