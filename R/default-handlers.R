@@ -1,3 +1,6 @@
+defaultRouteNotFound <- function(...) {
+  routeNotFound()
+}
 default404Handler <- function(req, res) {
   res$status <- 404
   res$serializer <- serializer_unboxed_json()

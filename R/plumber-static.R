@@ -62,9 +62,8 @@ PlumberStatic <- R6Class(
         path <- httpuv::decodeURIComponent(path)
         abs.path <- resolve_path(direc, path)
         if (is.null(abs.path)) {
-          # If the file doesn't exist and isn't mounted,
-          # the 404 handler will be called anyways.
-          # So, we can always `forward()` here when the file isn't found.
+          # If the file doesn't exist, forward on to the router 404 handler
+          # (Default 404 handler calls `routeNotFound()` which will move on to next mount).
           return(forward())
         }
 

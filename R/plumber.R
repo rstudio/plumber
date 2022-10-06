@@ -91,7 +91,7 @@ Plumber <- R6Class(
       # Default parsers to maintain legacy features
       self$setParsers(c("json", "form", "text", "octet", "multi"))
       self$setErrorHandler(defaultErrorHandler())
-      self$set404Handler(default404Handler)
+      self$set404Handler(defaultRouteNotFound) # Allows for fall through to next router
       self$setDocs(TRUE)
       private$docs_info$has_not_been_set <- TRUE # set to know if `$setDocs()` has been called before `$run()`
       private$docs_callback <- rlang::missing_arg()
@@ -579,7 +579,7 @@ Plumber <- R6Class(
           return(value)
         }
 
-
+        # Try trailing slash route
         if (isTRUE(getOption("plumber.trailingSlash", FALSE))) {
           # Redirect to the slash route, if it exists
           path <- req$PATH_INFO
@@ -608,7 +608,6 @@ Plumber <- R6Class(
 
         # No trailing-slash route exists...
         # Try allowed verbs
-
         if (isTRUE(getOption("plumber.methodNotAllowed", TRUE))) {
           # Notify about allowed verbs
           if (is_405(req$pr, req$PATH_INFO, req$REQUEST_METHOD)) {
@@ -620,8 +619,11 @@ Plumber <- R6Class(
           }
         }
 
-        # Notify that there is no route found
-        private$notFoundHandler(req = req, res = res)
+        # Handle 404 logic
+        # At this point, `self$route()` has already tried to call `private$notFoundHandler()`
+        # Calling `private$notFoundHandler()` again is redundant
+        # Instead, we can execute the default 404 logic
+        default404Handler(req = req, res = res)
       }
 
       serializeSteps <- function(value, ...) {
@@ -881,8 +883,9 @@ Plumber <- R6Class(
       steps <- append(steps, mountSteps)
 
       routeNotFoundStep <- function(...) {
-        # If we still haven't found a match, return a routeNotFound object
-        routeNotFound()
+        # If we still haven't found a match, call 404 method
+        # Defaults to `defaultRouteNotFound()`
+        private$notFoundHandler(req, res)
       }
       steps <- append(steps, list(routeNotFoundStep))
 
