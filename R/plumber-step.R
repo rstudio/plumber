@@ -323,14 +323,43 @@ PlumberEndpoint <- R6Class(
         return(args)
       }
 
+      if (is.null(args)) {
+        # no args to convert
+        return(args)
+      }
+
+      if (length(args) == 0) {
+        # no args to convert
+        return(args)
+      }
+
+      args_names <- names(args)
+      if (is.null(args_names)) {
+        # no names - won't be able to dp any conversions
+        return(args)
+      }
+
       params <- self$getEndpointParams()
+
+      if (length(params) == 0) {
+        # no information to convert by
+        return(args)
+      }
 
       # TODO - I suspect someone with more base-R could turn this
       # for into some wonderful s/lapply thing...
       converted_args <- list()
-      for (i in names(args)) {
+
+      for (i in 1:length(args)) {
+        key <- args_names[[i]]
         arg <- args[[i]]
-        param <- params[[i]]
+        if (key == "") {
+          # not sure why... but we allow unnamed arguments through
+          converted_args <- c(converted_args, arg)
+          next;
+        }
+
+        param <- params[[key]]
         converter <- identity
         if (!is.null(param)) {
           # NOTE: areArrays is FALSE here as we do not want to parse comma
@@ -342,7 +371,9 @@ PlumberEndpoint <- R6Class(
             converter <- converter[[1]]
           }
         }
-        converted_args[[i]] <- converter(arg)
+        new_args <- list()
+        new_args[[key]] <- converter(arg)
+        converted_args <- c(converted_args, new_args)
       }
 
       converted_args
