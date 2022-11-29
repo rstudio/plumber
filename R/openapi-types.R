@@ -18,7 +18,7 @@ add_api_info_onLoad <- function() {
         converter = converter,
         format = format,
         location = location,
-        realType = realType,
+        realType = ifelse(is.null(realType), apiType, realType),
         # Q: Do we need to safe guard against special characters, such as `,`?
         # https://github.com/rstudio/plumber/pull/532#discussion_r439584727
         # A: https://swagger.io/docs/specification/serialization/
@@ -69,6 +69,24 @@ add_api_info_onLoad <- function() {
     "[^/]+",
     as.character,
     location = c("query", "path")
+  )
+  addApiInfo(
+    "date-time",
+    c("POSIXct", "POSIXt"),
+    "[^/]+",
+    lubridate::as_datetime,
+    format = "date-time",
+    location = c("query", "path"),
+    realType = "string"
+  )
+  addApiInfo(
+    "date",
+    c("Date"),
+    "[^/]+",
+    lubridate::as_date,
+    format = "date",
+    location = c("query", "path"),
+    realType = "string"
   )
   addApiInfo(
     "object",

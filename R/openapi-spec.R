@@ -152,7 +152,7 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
       }
       if (isArray) {
         property$items <- list(
-          type = property$type,
+          type = apiTypesInfo[[type]]$realType,
           format = property$format,
           example = property$example
         )
@@ -170,7 +170,7 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
         `in` = location,
         required = required,
         schema = list(
-          type = type,
+          type = apiTypesInfo[[type]]$realType,
           format = apiTypesInfo[[type]]$format,
           default = funcParams[[p]]$default
         )
@@ -179,7 +179,7 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
         paramList$schema <- list(
           type = "array",
           items = list(
-            type = type,
+            type = apiTypesInfo[[type]]$realType,
             format = apiTypesInfo[[type]]$format
           ),
           default = funcParams[[p]]$default
