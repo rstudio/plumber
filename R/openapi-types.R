@@ -18,7 +18,7 @@ add_api_info_onLoad <- function() {
         converter = converter,
         format = format,
         location = location,
-        realType = ifelse(is.null(realType), apiType, realType),
+        realType = apiType %||% realType,
         # Q: Do we need to safe guard against special characters, such as `,`?
         # https://github.com/rstudio/plumber/pull/532#discussion_r439584727
         # A: https://swagger.io/docs/specification/serialization/
