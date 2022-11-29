@@ -28,7 +28,8 @@ test_that("all options used are `options_plumber()` parameters", {
     file_content <- paste0(readLines(r_file, warn = F), collapse = "")
     match <- stringi::stri_match_all_regex(file_content, "getOption\\([^,\\)]+,?\\)?")[[1]][,1]
     match <- gsub("\\s", "", match)
-    if (length(match) > 0 && !is.na(match)) {
+    match <- match[!is.na(match)]
+    if (length(match) > 0) {
       matches <- c(matches, match)
     }
   }
@@ -76,7 +77,7 @@ test_that("docs.callback sync plumber.swagger.url", {
       options("plumber.swagger.url" = function(api_url) {cat(api_url)})
       opt <- options_plumber(docs.callback = NULL)
       expect_null(getOption("plumber.swagger.url"))
-      expect_null(opt$plumber.docs.callback)
+      expect_null(getOption("plumber.docs.callback"))
     }
   )
 })
