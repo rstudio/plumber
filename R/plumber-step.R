@@ -335,7 +335,7 @@ PlumberEndpoint <- R6Class(
 
       args_names <- names(args)
       if (is.null(args_names)) {
-        # no names - won't be able to dp any conversions
+        # no names - won't be able to do any conversions
         return(args)
       }
 
