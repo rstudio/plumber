@@ -346,35 +346,24 @@ PlumberEndpoint <- R6Class(
         return(args)
       }
 
-      # TODO - I suspect someone with more base-R could turn this
-      # for into some wonderful s/lapply thing...
-      converted_args <- list()
-
-      for (i in 1:length(args)) {
-        key <- args_names[[i]]
-        arg <- args[[i]]
-        if (key == "") {
-          # not sure why... but we allow unnamed arguments through
-          converted_args <- c(converted_args, arg)
-          next;
-        }
-
-        param <- params[[key]]
-        converter <- identity
-        if (!is.null(param)) {
-          # NOTE: areArrays is FALSE here as we do not want to parse comma
-          #    separated strings (or do we?)
-          converter <- typesToConverters(param$type, areArrays = FALSE)
-          if (is.null(converter)) {
-            converter <- identity
-          } else {
-            converter <- converter[[1]]
+      converted_args <-
+        Map(
+          key = args_names,
+          arg = args,
+          param = params[args_names],
+          f = function(key, arg, param) {
+            # not sure why... but we allow unnamed arguments through
+            if (key == "") return(arg)
+            if (is.null(param)) return(arg)
+            
+            # NOTE: areArrays is FALSE here as we do not want to parse comma
+            #    separated strings (or do we?)
+            converter <- typesToConverters(param$type, areArrays = FALSE)[[1]]
+            if (is.null(converter)) return(arg)
+            converter(arg)
           }
-        }
-        new_args <- list()
-        new_args[[key]] <- converter(arg)
-        converted_args <- c(converted_args, new_args)
-      }
+        )
+      names(converted_args) <- args_names
 
       converted_args
     }
