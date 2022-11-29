@@ -61,6 +61,13 @@ PlumberStep <- R6Class(
         self$serializer <- serializer
       }
     },
+    #' @description convert args to specific types
+    #' @param args List of args to convert
+    convertArgs = function(args) {
+      # a general step doesn't convert args
+      # but a subclass can choose to override and convert
+      args
+    },
     #' @description step execution function
     #' @param req,res Request and response objects created by a Plumber request
     exec = function(req, res) {
@@ -81,7 +88,8 @@ PlumberStep <- R6Class(
       execStep <- function(...) {
         private$runHooksAround("aroundexec", args_for_formal_matching(), .next = function(...) {
           relevant_args <- getRelevantArgs(list(...), func = private$func)
-          do.call(private$func, relevant_args, envir = private$envir)
+          converted_args <- self$convertArgs(relevant_args)
+          do.call(private$func, converted_args, envir = private$envir)
         })
       }
       postexecStep <- function(value, ...) {
@@ -307,6 +315,37 @@ PlumberEndpoint <- R6Class(
       self$path <- path
       private$regex <- createPathRegex(path, self$getFuncParams())
       path
+    },
+    #' @description convert args to specific types
+    #' @param args List of args to convert
+    convertArgs = function(args) {
+      if (!isTRUE(getOption("plumber.typedParameters", TRUE))) {
+        return(args)
+      }
+
+      params <- self$getEndpointParams()
+
+      # TODO - I suspect someone with more base-R could turn this
+      # for into some wonderful s/lapply thing...
+      converted_args <- list()
+      for (i in names(args)) {
+        arg <- args[[i]]
+        param <- params[[i]]
+        converter <- identity
+        if (!is.null(param)) {
+          # NOTE: areArrays is FALSE here as we do not want to parse comma
+          #    separated strings (or do we?)
+          converter <- typesToConverters(param$type, areArrays = FALSE)
+          if (is.null(converter)) {
+            converter <- identity
+          } else {
+            converter <- converter[[1]]
+          }
+        }
+        converted_args[[i]] <- converter(arg)
+      }
+
+      converted_args
     }
   ),
   private = list(

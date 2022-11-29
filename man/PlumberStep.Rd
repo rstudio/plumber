@@ -25,6 +25,7 @@ of a request by a plumber router.
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-PlumberStep-new}{\code{PlumberStep$new()}}
+\item \href{#method-PlumberStep-convertArgs}{\code{PlumberStep$convertArgs()}}
 \item \href{#method-PlumberStep-exec}{\code{PlumberStep$exec()}}
 \item \href{#method-PlumberStep-registerHook}{\code{PlumberStep$registerHook()}}
 \item \href{#method-PlumberStep-clone}{\code{PlumberStep$clone()}}
@@ -63,6 +64,23 @@ Create a new \code{\link[=PlumberStep]{PlumberStep()}} object
 }
 \subsection{Returns}{
 A new \code{PlumberStep} object
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PlumberStep-convertArgs"></a>}}
+\if{latex}{\out{\hypertarget{method-PlumberStep-convertArgs}{}}}
+\subsection{Method \code{convertArgs()}}{
+convert args to specific types
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PlumberStep$convertArgs(args)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{args}}{List of args to convert}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
