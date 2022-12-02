@@ -72,7 +72,7 @@ createPathRegex <- function(pathDef, funcParams = NULL){
         names = character(),
         types = NULL,
         regex = paste0("^", pathDef, "$"),
-        converters = NULL,
+        parsers = NULL,
         areArrays = NULL
       )
     )
@@ -108,7 +108,7 @@ createPathRegex <- function(pathDef, funcParams = NULL){
     names = names,
     types = apiTypes,
     regex = paste0("^", pathRegex, "$"),
-    converters = typesToConverters(apiTypes, areArrays),
+    parsers = typesToParsers(apiTypes, areArrays),
     areArrays = areArrays
   )
 }
@@ -119,18 +119,18 @@ typesToRegexps <- function(apiTypes, areArrays = FALSE) {
   mapply(
     function(x, y) {x[[y]]},
     apiTypesInfo[apiTypes],
-    ifelse(areArrays, "regexArray", "regex"),
+    ifelse(areArrays, "openApiRegexArray", "openApiRegex"),
     USE.NAMES = FALSE
   )
 }
 
 
-typesToConverters <- function(apiTypes, areArrays = FALSE) {
+typesToParsers <- function(apiTypes, areArrays = FALSE) {
   # return list of functions
   mapply(
     function(x, y) {x[[y]]},
     apiTypesInfo[apiTypes],
-    ifelse(areArrays, "converterArray", "converter"),
+    ifelse(areArrays, "openApiParserArray", "openApiParser"),
     USE.NAMES = FALSE
   )
 }
@@ -142,10 +142,10 @@ extractPathParams <- function(def, path){
   vals <- as.list(stri_match(path, regex = def$regex)[,-1])
   names(vals) <- def$names
 
-  if (!is.null(def$converters)){
-    # Run each value through its converter
+  if (!is.null(def$parsers)){
+    # Run each value through its parser
     for (i in 1:length(vals)){
-      vals[[i]] <- def$converters[[i]](vals[[i]])
+      vals[[i]] <- def$parsers[[i]](vals[[i]])
     }
   }
 
