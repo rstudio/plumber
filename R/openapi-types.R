@@ -2,23 +2,25 @@
 
 # calculate all OpenAPI Type information at once and use created information throughout package
 apiTypesInfo <- list()
-plumberToApiTypeMap <- list()
 defaultApiType <- structure("string", default = TRUE)
 defaultIsArray <- structure(FALSE, default = TRUE)
 
 add_api_info_onLoad <- function() {
   addApiInfo <- function(
     keys,
-    location = c("body", "route", "query"),
-    openApiType = c("string", "number", "integer", "boolean", "object"),
+    location = NULL, #c("body", "route", "query"),
+    openApiType = NULL, # c("string", "number", "integer", "boolean", "object"),
     # note that openApiFormat is extensible - so match.arg should not be used on openApiFormat
-    openApiFormat = c("float", "double", "int32", "int64", "date", "date-time", "password", "byte", "binary"),
+    openApiFormat = NULL, #c("float", "double", "int32", "int64", "date", "date-time", "password", "byte", "binary"),
     openApiRegex  = NULL,
     parser = function(input) { input; }) {
 
     # TODO  - some match.arg stuff?
 
+    preferredKey <- head(keys, 1)
+
     entry <- list(
+      preferredKey = preferredKey,
       location = location,
       openApiType = openApiType,
       openApiFormat = openApiFormat,
@@ -80,7 +82,7 @@ add_api_info_onLoad <- function() {
   )
 
   addApiInfo(
-    c("dbl", "double"),
+    c("double", "dbl"),
     openApiType = "number",
     openApiFormat = "double",
     openApiRegex = "-?\\\\d*\\\\.?\\\\d+",
@@ -107,8 +109,9 @@ add_api_info_onLoad <- function() {
   )
 
   addApiInfo(
-    c("string", "str"),
+    c("string", "str", "chr", "character"),
     openApiType = "string",
+    openApiRegex = "[^/]+",
     parser = as.character,
     location = c("query", "path")
   )
@@ -133,21 +136,18 @@ add_api_info_onLoad <- function() {
     location = c("query", "path")
   )
 
-  # TODO - needs revisiting
-  # # c("list", "data.frame", "df", "object"),
-  # addApiInfo(
-  #   "object",
-  #   openApiType = "string",
-  #   location = "requestBody"
-  # )
-  #
-  # addApiInfo(
-  #   "file",
-  #   c("file", "binary"),
-  #   location = "requestBody",
-  #   format = "binary",
-  #   realType = "string"
-  # )
+  addApiInfo(
+    c("object", "list", "data.frame", "df", "object"),
+    openApiType = "string",
+    location = c("requestBody")
+  )
+
+  addApiInfo(
+    c("file", "binary"),
+    openApiType = "string",
+    openApiFormat = "binary",
+    location = c("requestBody")
+  )
 }
 
 
@@ -171,13 +171,14 @@ plumberToApiType <- function(type, inPath = FALSE) {
       call. = FALSE
     )
     apiType <- defaultApiType
-  }
-  if (inPath && !"path" %in% info$location) {
+  }  else  if (inPath && !"path" %in% info$location) {
     warning(
       "Unsupported path parameter type: ", type, ". Using type: ", defaultApiType,
       call. = FALSE
     )
     apiType <- defaultApiType
+  } else {
+    apiType <- info$preferredKey
   }
 
   return(apiType)

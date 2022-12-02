@@ -4,7 +4,7 @@ test_that("plumberToApiType works", {
   expect_equal(plumberToApiType("bool"), "boolean")
   expect_equal(plumberToApiType("logical"), "boolean")
 
-  expect_equal(plumberToApiType("double"), "number")
+  expect_equal(plumberToApiType("double"), "double")
   expect_equal(plumberToApiType("numeric"), "number")
 
   expect_equal(plumberToApiType("int"), "integer")
@@ -145,7 +145,7 @@ test_that("parametersSpecification works", {
   ep <- list(id=list(desc="Description", type="integer", required=FALSE),
              id2=list(desc="Description2", required=FALSE), # No redundant type specification
              make=list(desc="Make description", type="string", required=FALSE),
-             prices=list(desc="Historic sell prices", type="numeric", required = FALSE, isArray = TRUE),
+             prices=list(desc="Historic sell prices", type="double", required = FALSE, isArray = TRUE),
              claims=list(desc="Insurance claims", type="object", required = FALSE))
   pp <- data.frame(name=c("id", "id2", "owners"), type=c("int", "int", "chr"), isArray = c(FALSE, FALSE, TRUE), stringsAsFactors = FALSE)
 

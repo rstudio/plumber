@@ -63,7 +63,7 @@ test_that("variables are typed", {
   expect_equal(p$names, "id")
   expect_equal(p$regex, paste0("^/car/", "((?:(?:[^/]+),?)+)", "$"))
   expect_equal(p$areArrays, TRUE)
-  expect_equal(p$converters[[1]]("BOB,LUKE,GUY"), c("BOB", "LUKE", "GUY"))
+  expect_equal(p$parsers[[1]]("BOB,LUKE,GUY"), c("BOB", "LUKE", "GUY"))
 
   #Check that warnings happen on typo or unsupported type
   expect_warning(createPathRegex("/car/<id:motor>"),

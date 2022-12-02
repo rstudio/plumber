@@ -81,7 +81,7 @@ createPathRegex <- function(pathDef, funcParams = NULL){
   plumberTypes <- stri_replace_all(match[,3], "$1", regex = "^\\[([^\\]]*)\\]$")
   if (length(funcParams) > 0) {
     # Override with detection of function args if type not found in map
-    idx <- !(plumberTypes %in% names(plumberToApiTypeMap))
+    idx <- !(plumberTypes %in% names(apiTypesInfo))
     plumberTypes[idx] <- sapply(funcParams, `[[`, "type")[names[idx]]
   }
   apiTypes <- plumberToApiType(plumberTypes, inPath = TRUE)
@@ -130,7 +130,7 @@ typesToParsers <- function(apiTypes, areArrays = FALSE) {
   mapply(
     function(x, y) {x[[y]]},
     apiTypesInfo[apiTypes],
-    ifelse(areArrays, "openApiParserArray", "openApiParser"),
+    ifelse(areArrays, "parserArray", "parser"),
     USE.NAMES = FALSE
   )
 }
