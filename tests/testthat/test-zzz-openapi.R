@@ -281,7 +281,9 @@ test_that("multiple variations in function extract correct metadata", {
                     var5 = FALSE,
                     var6 = list(name = c("luke", "bob"), lastname = c("skywalker", "ross")),
                     var7 = new.env(parent = .GlobalEnv),
-                    var8 = list(a = 2, b = mean, c = new.env(parent = .GlobalEnv))) {}
+                    var8 = list(a = 2, b = mean, c = new.env(parent = .GlobalEnv)),
+                    var9 = lubridate::ymd("2022-12-03"),
+                    var10 = lubridate::ymd_hms("2022-12-03T10:11:12")) {}
   funcParams <- getArgsMetadata(dummy)
   expect_identical(sapply(funcParams, `[[`, "required"),
                    c(var0 = FALSE, var1 = TRUE, var2 = FALSE, var3 = FALSE, var4 = FALSE,
