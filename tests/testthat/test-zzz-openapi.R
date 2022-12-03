@@ -298,7 +298,7 @@ test_that("multiple variations in function extract correct metadata", {
                         var5 = defaultIsArray, var6 = TRUE,
                         var7 = defaultIsArray, var8 = defaultIsArray))
   expect_identical(lapply(funcParams, `[[`, "type"),
-                   list(var0 = "number", var1 = defaultApiType, var2 = "integer", var3 = defaultApiType, var4 = defaultApiType,
+                   list(var0 = "double", var1 = defaultApiType, var2 = "integer", var3 = defaultApiType, var4 = defaultApiType,
                         var5 = "boolean", var6 = "object", var7 = defaultApiType, var8 = defaultApiType))
 
 })
