@@ -1,4 +1,16 @@
 
+objectSpecification <- function(object) {
+  spec <- list(type = "object")
+
+  if (length(object$props) > 0) {
+    properties <- propertiesSpecification(object$props)
+    spec$properties <- properties
+  }
+
+  ret <- list()
+  ret[[object$name]] <- spec
+  ret
+}
 
 #' Convert the endpoints as they exist on the Plumber object to a list which can
 #' be converted into a OpenAPI Specification for these endpoints
@@ -18,7 +30,18 @@ endpointSpecification <- function(routerEndpointEntry, path = routerEndpointEntr
   # Get the plumber decoration defined endpoint params
   endpointParams <- routerEndpointEntry$getEndpointParams()
   for (verb in routerEndpointEntry$verbs) {
+
     params <- parametersSpecification(endpointParams, pathParams, funcParams)
+
+    if (!is.null(routerEndpointEntry$requestBodyObjectName)) {
+      if (length(params$requestBody) != 0L) {
+        # TODO - what sort of warning or stop to fire?
+        warning("params$requestBody already set - ignoring the requestBodyObjectName ", routerEndpointEntry$requestBodyObjectName)
+      } else {
+        params$requestBody$content$`application/json`[["schema"]][["$ref"]] <-
+          paste0("#/components/schemas/", routerEndpointEntry$requestBodyObjectName)
+      }
+    }
 
     # If we haven't already documented a path param, we should add it here.
     # FIXME: warning("Undocumented path parameters: ", paste0())
@@ -52,6 +75,7 @@ defaultResponse <- list(
     description = "Default response."
   )
 )
+
 responsesSpecification <- function(endpts){
   if (!inherits(endpts, "PlumberEndpoint")) {
     return(defaultResponse)
@@ -78,8 +102,57 @@ responsesSpecification <- function(endpts){
   resps
 }
 
+#' Extract the OpenAPI properties Specification from the object
+#' properties.
+#' @noRd
+propertiesSpecification <- function(props) {
+  output <- list()
+
+  for (key in unique(names(props))) {
+    prop <- props[[key]]
+    type <- prop$type
+
+    if (is.null(apiTypesInfo[[type]])) {
+      warning("Unknown property type ", type, " for ", key," - defaulting to ", defaultApiType)
+      type <- defaultApiType
+    }
+
+    typeInfo <- apiTypesInfo[[type]]
+
+    property <- list(
+      type = type,
+      format = typeInfo$format,
+      description = prop$desc,
+      required = prop$required
+    )
+
+    objectName <- prop$objectName
+    if (type == "object" && !is.null(objectName)) {
+      property$type <- NULL
+      property$format <- NULL
+      property[["$ref"]] <- paste0("#/components/schemas/", objectName)
+    }
+
+    if (prop$isArray) {
+      property$items <- list(
+        type = property$type,
+        format = property$format,
+        properties = property$properties,
+        "$ref" =  property[["$ref"]]
+      )
+      property$type <- "array"
+      property$format <- NULL
+      property$properties <- NULL
+      property[["$ref"]] <- NULL
+    }
+    output[[key]] = property
+  }
+
+  output
+}
+
 #' Extract the OpenAPI parameters Specification from the endpoint
-#' paramters.
+#' parameters.
 #' @noRd
 parametersSpecification <- function(endpointParams, pathParams, funcParams = NULL){
 

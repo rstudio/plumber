@@ -475,6 +475,43 @@ pr_filter <- function(pr,
   pr
 }
 
+#' Add an object to Plumber router
+#'
+#' Objects can be used to provide schema definitions for request and response bodies
+#'
+#' @template param_pr
+#' @param name A character string. Name of object
+#' @param props List of properties in the object
+#'
+#' @return The Plumber router with the defined object added
+#'
+#' @examples
+#' \dontrun{
+#' pr() %>%
+#'   pr_object(
+#'      "Car",
+#'      list(
+#'         Id = list(type="int", required=TRUE),
+#'         Manufacturer = list(type="string", required=TRUE),
+#'         Variants = list(type="string", required=FALSE, isArray=TRUE)
+#'      )
+#'   ) %>%
+#'   # TODO - unfinished here
+#'   # TODO - work on how responseBody and requestBody will get passed in to these:
+#'   pr_post("/car/update", function() "Hello") %>%
+#'   pr_get("/car/<id>", function(id) "Hello") %>%
+#'   pr_run()
+#' }
+#'
+#' @export
+pr_object <-  function(pr,
+                       name,
+                       props) {
+  validate_pr(pr)
+  pr$object(name = name, props = props)
+  pr
+}
+
 #' Start a server using `plumber` object
 #'
 #' `port` does not need to be explicitly assigned.
