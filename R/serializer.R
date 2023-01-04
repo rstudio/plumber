@@ -681,20 +681,24 @@ serializer_svg <- function(..., type = "image/svg+xml") {
     serializer_params = serializer_param_list(all_except = c("res"))
   )
 }
+
 #' @describeIn serializers BMP image serializer. See also: [grDevices::bmp()]
 #' @export
 serializer_bmp <- function(..., type = "image/bmp") {
   serializer_device(
     type = type,
-    dev_on = serializer_image_dev_on_func(grDevices::bmp, ...)
+    dev_on = serializer_image_dev_on_func(grDevices::bmp, ...),
+    serializer_params = serializer_param_list()
   )
 }
+
 #' @describeIn serializers TIFF image serializer. See also: [grDevices::tiff()]
 #' @export
 serializer_tiff <- function(..., type = "image/tiff") {
   serializer_device(
     type = type,
-    dev_on = serializer_image_dev_on_func(grDevices::tiff, ...)
+    dev_on = serializer_image_dev_on_func(grDevices::tiff, ...),
+    serializer_params = serializer_param_list()
   )
 }
 
