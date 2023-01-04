@@ -18,7 +18,8 @@ options_plumber(
   apiPath = getOption("plumber.apiPath"),
   maxRequestSize = getOption("plumber.maxRequestSize"),
   sharedSecret = getOption("plumber.sharedSecret"),
-  legacyRedirects = getOption("plumber.legacyRedirects")
+  legacyRedirects = getOption("plumber.legacyRedirects"),
+  staticSerializers = getOption("plumber.staticSerializers")
 )
 }
 \arguments{
@@ -74,5 +75,8 @@ When \code{NULL}, secret is not validated. Otherwise, Plumber compares secret wi
 \item{\code{plumber.legacyRedirects}}{Plumber will redirect legacy route \verb{/__swagger__/} and
 \verb{/__swagger__/index.html} to \verb{../__docs__/} and \verb{../__docs__/index.html}. You can disable this
 by settings this option to \code{FALSE}. Defaults to \code{TRUE}}
+\item{\code{plumber.staticSerializers}}{Plumber will use fixed serializers and
+will not interpret e.g. plot_width and plot_height parameters as plot image
+size instructions}
 }
 }

@@ -41,6 +41,9 @@
 #' \item{`plumber.legacyRedirects`}{Plumber will redirect legacy route `/__swagger__/` and
 #' `/__swagger__/index.html` to `../__docs__/` and `../__docs__/index.html`. You can disable this
 #' by settings this option to `FALSE`. Defaults to `TRUE`}
+#' \item{`plumber.staticSerializers`}{Plumber will use fixed serializers and
+#' will not interpret e.g. plot_width and plot_height parameters as plot image
+#' size instructions}
 #' }
 #'
 #' @param ... Ignored. Should be empty
@@ -64,7 +67,8 @@ options_plumber <- function(
   apiPath              = getOption("plumber.apiPath"),
   maxRequestSize       = getOption("plumber.maxRequestSize"),
   sharedSecret         = getOption("plumber.sharedSecret"),
-  legacyRedirects      = getOption("plumber.legacyRedirects")
+  legacyRedirects      = getOption("plumber.legacyRedirects"),
+  staticSerializers    = getOption("plumber.staticSerializers")
 ) {
   ellipsis::check_dots_empty()
 
@@ -86,6 +90,7 @@ options_plumber <- function(
     plumber.apiPath              =   apiPath,
     plumber.maxRequestSize       =   maxRequestSize,
     plumber.sharedSecret         =   sharedSecret,
-    plumber.legacyRedirects      =   legacyRedirects
+    plumber.legacyRedirects      =   legacyRedirects,
+    plumber.staticSerializers    =   staticSerializers
   )
 }
