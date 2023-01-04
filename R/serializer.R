@@ -446,6 +446,7 @@ serializer_xml <- function() {
 #' @param preexec_hook Function to be run directly before a [PlumberEndpoint] calls its route method.
 #' @param postexec_hook Function to be run directly after a [PlumberEndpoint] calls its route method.
 #' @param aroundexec_hook Function to be run around a [PlumberEndpoint] call. Must handle a `.next` argument to continue execution. \lifecycle{experimental}
+#' @param serializer_params Dynamic serializer parameters. More docs needed here!
 #'
 #' @export
 #' @examples
@@ -457,7 +458,8 @@ endpoint_serializer <- function(
   serializer,
   preexec_hook = NULL,
   postexec_hook = NULL,
-  aroundexec_hook = NULL
+  aroundexec_hook = NULL,
+  serializer_params = list()
 ) {
 
   stopifnot(is.function(serializer))
@@ -466,7 +468,8 @@ endpoint_serializer <- function(
       serializer = serializer,
       preexec_hook = preexec_hook,
       postexec_hook = postexec_hook,
-      aroundexec_hook = aroundexec_hook
+      aroundexec_hook = aroundexec_hook,
+      serializer_params = serializer_params
     ),
     class = "plumber_endpoint_serializer"
   )
@@ -475,6 +478,7 @@ endpoint_serializer <- function(
 self_set_serializer <- function(self, serializer) {
   if (inherits(serializer, "plumber_endpoint_serializer")) {
     self$serializer <- serializer$serializer
+    self$serializer_params <- serializer$serializer_params
     if (!is.null(serializer$preexec_hook)) {
       self$registerHook("preexec", serializer$preexec_hook)
     }
@@ -497,8 +501,10 @@ self_set_serializer <- function(self, serializer) {
 #' The graphics device `dev_on` function will receive any arguments supplied to the serializer in addition to `filename`.
 #' `filename` points to the temporary file name that should be used when saving content.
 #' @param dev_off Function to turn off the graphics device. Defaults to [grDevices::dev.off()]
+#' @param serializer_params More docs needed here
+#'
 #' @export
-serializer_device <- function(type, dev_on, dev_off = grDevices::dev.off) {
+serializer_device <- function(type, dev_on, dev_off = grDevices::dev.off, serializer_params = list()) {
 
   stopifnot(!missing(type))
 
@@ -506,8 +512,10 @@ serializer_device <- function(type, dev_on, dev_off = grDevices::dev.off) {
   stopifnot(is.function(dev_on))
   stopifnot(length(formals(dev_on)) > 0)
   if (!any(c("filename", "...") %in% names(formals(dev_on)))) {
-    stop("`dev_on` must contain an arugment called `filename` or have `...`")
+    stop("`dev_on` must contain an argument called `filename` or have `...`")
   }
+
+  dev_requires_req <- "req" %in% names(formals(dev_on))
 
   stopifnot(is.function(dev_off))
 
@@ -516,7 +524,14 @@ serializer_device <- function(type, dev_on, dev_off = grDevices::dev.off) {
     aroundexec_hook = function(..., .next) {
       tmpfile <- tempfile()
 
-      dev_on(filename = tmpfile)
+      if (dev_requires_req) {
+        dyn_args <- list(...)
+        req <- dyn_args[["req"]]
+        dev_on(filename = tmpfile, req = req)
+      } else {
+        dev_on(filename = tmpfile)
+      }
+
       device_id <- dev.cur()
       dev_off_once <- once(function() dev_off(device_id))
 
@@ -558,38 +573,112 @@ serializer_device <- function(type, dev_on, dev_off = grDevices::dev.off) {
       } else {
         success(result)
       }
-    }
+    },
+    serializer_params = serializer_params
   )
 }
+
+serializer_param_width <- function() {
+  list(plot_width = list(desc="Width of plot image in units", type="number", required=FALSE, isArray=FALSE))
+}
+serializer_param_height <- function() {
+  list(plot_height = list(desc="Height of plot image in units", type="number", required=FALSE, isArray=FALSE))
+}
+serializer_param_res <- function() {
+  list(plot_res = list(desc="Resolution of plot image", type="number", required=FALSE, isArray=FALSE))
+}
+serializer_param_units <- function() {
+  list(plot_units = list(desc="Units of plot image", type="string", required=FALSE, isArray=FALSE))
+}
+serializer_param_pointsize <- function() {
+  list(plot_pointsize = list(desc="Point size of plot image - TODO - better desc", type="number", required=FALSE, isArray=FALSE))
+}
+serializer_param_bg <- function() {
+  list(plot_bg = list(desc="Background colour of plot image", type="string", required=FALSE, isArray=FALSE))
+}
+
+serializer_param_list <- function(all_except = character()) {
+  params <- c(
+    serializer_param_width(),
+    serializer_param_height(),
+    serializer_param_res(),
+    serializer_param_units(),
+    serializer_param_pointsize(),
+    serializer_param_bg()
+  )
+
+  # oh I wish I had purrr!
+  ignored <- Map(function(x) {
+    params[[x]] <<- NULL
+  }, all_except)
+
+  params
+}
+
+
+serialize_dimensions_args_preparer <- function(req, ...) {
+
+  # if legacy plumber.staticSerializers is specified then ignore all req
+  # based parameters
+  if (getOption("staticSerializers", default="FALSE") == "TRUE") {
+    return(list(...))
+  }
+
+  as_numeric_nullable <- function(preferred, alternative) {
+    option <- preferred %||% alternative
+    if (is.null(option)) {
+      NULL
+    } else {
+      as.numeric(option)
+    }
+  }
+
+  doc_args <- list(...)
+  doc_args$width <- as_numeric_nullable(req$args$plot_width, doc_args$width)
+  doc_args$height <- as_numeric_nullable(req$args$plot_height, doc_args$height)
+  doc_args$units <- req$args$plot_units %||% doc_args$units
+  doc_args$res <- as_numeric_nullable(req$args$plot_res, doc_args$res)
+  doc_args$pointsize <- as_numeric_nullable(req$args$plot_pointsize, doc_args$pointsize)
+  doc_args$bg <- req$args$plot_bg %||% doc_args$bg
+
+  return(doc_args)
+}
+
+serializer_image_dev_on_func <- function(grFunc, ...) {
+  function(filename, req) {
+    dimension_args <- serialize_dimensions_args_preparer(req, ...)
+    rlang::exec(grFunc, filename, !!!dimension_args)
+  }
+}
+
 
 #' @describeIn serializers JPEG image serializer. See also: [grDevices::jpeg()]
 #' @export
 serializer_jpeg <- function(..., type = "image/jpeg") {
   serializer_device(
     type = type,
-    dev_on = function(filename) {
-      grDevices::jpeg(filename, ...)
-    }
+    dev_on = serializer_image_dev_on_func(grDevices::jpeg, ...),
+    serializer_params = serializer_param_list()
   )
 }
+
 #' @describeIn serializers PNG image serializer. See also: [grDevices::png()]
 #' @export
 serializer_png <- function(..., type = "image/png") {
   serializer_device(
     type = type,
-    dev_on = function(filename) {
-      grDevices::png(filename, ...)
-    }
+    dev_on = serializer_image_dev_on_func(grDevices::png, ...),
+    serializer_params = serializer_param_list()
   )
 }
+
 #' @describeIn serializers SVG image serializer. See also: [grDevices::svg()]
 #' @export
 serializer_svg <- function(..., type = "image/svg+xml") {
   serializer_device(
     type = type,
-    dev_on = function(filename) {
-      grDevices::svg(filename, ...)
-    }
+    dev_on = serializer_image_dev_on_func(grDevices::svg, ...),
+    serializer_params = serializer_param_list(all_except = c("res"))
   )
 }
 #' @describeIn serializers BMP image serializer. See also: [grDevices::bmp()]
@@ -597,9 +686,7 @@ serializer_svg <- function(..., type = "image/svg+xml") {
 serializer_bmp <- function(..., type = "image/bmp") {
   serializer_device(
     type = type,
-    dev_on = function(filename) {
-      grDevices::bmp(filename, ...)
-    }
+    dev_on = serializer_image_dev_on_func(grDevices::bmp, ...)
   )
 }
 #' @describeIn serializers TIFF image serializer. See also: [grDevices::tiff()]
@@ -607,19 +694,17 @@ serializer_bmp <- function(..., type = "image/bmp") {
 serializer_tiff <- function(..., type = "image/tiff") {
   serializer_device(
     type = type,
-    dev_on = function(filename) {
-      grDevices::tiff(filename, ...)
-    }
+    dev_on = serializer_image_dev_on_func(grDevices::tiff, ...)
   )
 }
+
 #' @describeIn serializers PDF image serializer. See also: [grDevices::pdf()]
 #' @export
 serializer_pdf <- function(..., type = "application/pdf") {
   serializer_device(
     type = type,
-    dev_on = function(filename) {
-      grDevices::pdf(filename, ...)
-    }
+    dev_on = serializer_image_dev_on_func(grDevices::pdf, ...),
+    serializer_params = serializer_param_list(all_except = c("pointsize", "res", "units"))
   )
 }
 
