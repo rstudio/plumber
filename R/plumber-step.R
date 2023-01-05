@@ -352,7 +352,7 @@ PlumberEndpoint <- R6Class(
           arg = args,
           param = params[args_names],
           f = function(key, arg, param) {
-            # not sure why... but we allow unnamed arguments through
+            # Early return on unnamed args or `NULL` values
             if (key == "") return(arg)
             if (is.null(param)) return(arg)
             
