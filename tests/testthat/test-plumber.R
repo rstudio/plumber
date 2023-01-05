@@ -2,10 +2,7 @@ context("Plumber")
 
 exec_endpoint <- function(pr, ep_pos, subset = 1) {
   # This is a poor setup of `req` and `res`. But it works for testing purposes
-  pr$endpoints[[subset]][[ep_pos]]$exec(
-    as.list(make_req()),
-    PlumberResponse$new()
-  )
+  pr$endpoints[[subset]][[ep_pos]]$exec(make_req(), PlumberResponse$new())
 }
 
 test_that("Endpoints are properly identified", {
