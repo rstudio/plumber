@@ -272,7 +272,7 @@ So the `location /app1/` block becomes:
 
 ```
 location /app1/ {
-  proxy_pass http://lb:8000/;
+  proxy_pass http://lb/;
   proxy_set_header Host $host;
 }
 ```
