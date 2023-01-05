@@ -11,7 +11,7 @@ test_that("requests with shared secrets pass, w/o fail", {
   res <- PlumberResponse$new()
   output <- pr$route(req, res)
   expect_equal(res$status, 400)
-  expect_equal(output, list(error = "400 - Bad request", message = "Shared secret mismatch"))
+  expect_equal(output, list(error = "400 - Bad request")
 
   # When debugging, we get additional details in the error.
   pr$setDebug(TRUE)
