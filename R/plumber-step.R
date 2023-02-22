@@ -234,6 +234,7 @@ PlumberEndpoint <- R6Class(
     #' @param srcref `srcref` attribute from block
     #' @param lines Endpoint block
     #' @param params Endpoint params
+    #' @param requestBodyObjectName schema name for object used in endpoint request body
     #' @param comments,description,responses,tags Values to be used within the OpenAPI Spec
     #' @details Parameters values are obtained from parsing blocks of lines in a plumber file.
     #' They can also be provided manually for historical reasons.

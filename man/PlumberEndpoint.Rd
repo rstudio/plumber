@@ -36,6 +36,8 @@ each separate verb/path into its own endpoint, so we just do that.}
 
 \item{\code{serializer_params}}{serializer parameters}
 
+\item{\code{requestBodyObjectName}}{schema name for object used in endpoint request body}
+
 \item{\code{tags}}{endpoint tags}
 
 \item{\code{parsers}}{step allowed parsers}
@@ -136,6 +138,7 @@ Create a new \code{PlumberEndpoint} object
   comments,
   description,
   responses,
+  requestBodyObjectName,
   tags,
   srcref
 )}\if{html}{\out{</div>}}

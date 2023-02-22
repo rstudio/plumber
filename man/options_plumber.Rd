@@ -19,13 +19,14 @@ options_plumber(
   maxRequestSize = getOption("plumber.maxRequestSize"),
   sharedSecret = getOption("plumber.sharedSecret"),
   legacyRedirects = getOption("plumber.legacyRedirects"),
-  typedParameters = getOption("plumber.typedParameters")
+  typedParameters = getOption("plumber.typedParameters"),
+  staticSerializers = getOption("plumber.staticSerializers")
 )
 }
 \arguments{
 \item{...}{Ignored. Should be empty}
 
-\item{port, docs, docs.callback, trailingSlash, methodNotAllowed, apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, sharedSecret, legacyRedirects, typedParameters}{See details}
+\item{port, docs, docs.callback, trailingSlash, methodNotAllowed, apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, sharedSecret, legacyRedirects, typedParameters, staticSerializers}{See details}
 }
 \value{
 The complete, prior set of \code{\link[=options]{options()}} values.
@@ -77,5 +78,8 @@ When \code{NULL}, secret is not validated. Otherwise, Plumber compares secret wi
 by settings this option to \code{FALSE}. Defaults to \code{TRUE}}
 \item{\code{plumber.typedParameters}}{Plumber will convert all parameters according to openApi
 supplied type hints.  Defaults to\code{TRUE}}
+\item{\code{plumber.staticSerializers}}{Plumber will use fixed serializers and
+will not interpret e.g. plot_width and plot_height parameters as plot image
+size instructions}
 }
 }

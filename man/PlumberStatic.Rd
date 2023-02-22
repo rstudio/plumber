@@ -36,6 +36,7 @@ Creates a router that is backed by a directory of files on disk.
 <li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="getDebug"><a href='../../plumber/html/Plumber.html#method-Plumber-getDebug'><code>plumber::Plumber$getDebug()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="handle"><a href='../../plumber/html/Plumber.html#method-Plumber-handle'><code>plumber::Plumber$handle()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="mount"><a href='../../plumber/html/Plumber.html#method-Plumber-mount'><code>plumber::Plumber$mount()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="object"><a href='../../plumber/html/Plumber.html#method-Plumber-object'><code>plumber::Plumber$object()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="onHeaders"><a href='../../plumber/html/Plumber.html#method-Plumber-onHeaders'><code>plumber::Plumber$onHeaders()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="onWSOpen"><a href='../../plumber/html/Plumber.html#method-Plumber-onWSOpen'><code>plumber::Plumber$onWSOpen()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="plumber" data-topic="Plumber" data-id="openAPIFile"><a href='../../plumber/html/Plumber.html#method-Plumber-openAPIFile'><code>plumber::Plumber$openAPIFile()</code></a></span></li>
