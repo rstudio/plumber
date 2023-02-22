@@ -206,6 +206,8 @@ PlumberEndpoint <- R6Class(
     params = NA,
     #' @field serializer_params serializer parameters
     serializer_params = NULL,
+    #' @field requestBodyObjectName schema name for object used in endpoint request body
+    requestBodyObjectName = NULL,
     #' @field tags endpoint tags
     tags = NA,
     #' @field parsers step allowed parsers
@@ -236,7 +238,7 @@ PlumberEndpoint <- R6Class(
     #' @details Parameters values are obtained from parsing blocks of lines in a plumber file.
     #' They can also be provided manually for historical reasons.
     #' @return A new `PlumberEndpoint` object
-    initialize = function(verbs, path, expr, envir, serializer, parsers, lines, params, comments, description, responses, tags, srcref) {
+    initialize = function(verbs, path, expr, envir, serializer, parsers, lines, params, comments, description, responses, requestBodyObjectName, tags, srcref) {
 
       self$verbs <- verbs
 
@@ -281,6 +283,9 @@ PlumberEndpoint <- R6Class(
         # single tags should be converted to json as:
         # tags: ["tagName"] and not tags: "tagName"
         self$tags <- I(tags)
+      }
+      if (!missing(requestBodyObjectName) && !is.null(requestBodyObjectName)) {
+        self$requestBodyObjectName = requestBodyObjectName
       }
     },
     #' @description retrieve endpoint path parameters

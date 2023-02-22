@@ -26,6 +26,10 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
   responses <- NULL
   tags <- NULL
   routerModifier <- NULL
+  object <- NULL
+  props <- NULL
+  requestBodyObjectName <- NULL
+
   while (lineNum > 0 && (stri_detect_regex(file[lineNum], pattern="^#['\\*]?|^\\s*$") || stri_trim_both(file[lineNum]) == "")){
 
     line <- file[lineNum]
@@ -196,10 +200,19 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
       parsers[[parser_alias]] <- arg_list
     }
 
-    responseMat <- stri_match(line, regex="^#['\\*]\\s*@response\\s+(\\w+)\\s+(\\S.*)\\s*$")
+    # testing: line <- "#* @response 200 Just a description"
+    # line <- "#* @response 200 @body AThing Just a description"
+    responseMat <- stri_match(line, regex="^#['\\*]\\s*@response\\s+(\\w+)(?:\\s+@body\\s+([^\\s]*))?\\s+(\\S.*)\\s*$")
     if (!is.na(responseMat[1,1])){
       resp <- list()
-      resp[[responseMat[1,2]]] <- list(description=responseMat[1,3])
+      resp[[responseMat[1,2]]] <- list(
+        description = responseMat[1,4]
+      )
+      bodyObjectName <- responseMat[1,3]
+      if (!is.na(bodyObjectName)) {
+        resp[[responseMat[1,2]]]$content$`application/json`$schema$`$ref` <-
+          paste0("#/components/schemas/", bodyObjectName)
+      }
       responses <- c(responses, resp)
     }
 
@@ -240,6 +253,73 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
       routerModifier <- TRUE
     }
 
+    # example: line <- "#* @requestBody life"
+    requestBodyMat <- stri_match(line, regex="^#['\\*]\\s*@requestBody\\s*(.*)\\s*$")
+    if (!is.na(requestBodyMat[1,1])){
+      rb <- stri_trim_both(requestBodyMat[1,2])
+
+      if (is.na(rb) || rb == ""){
+        stopOnLine(lineNum, line, "No @requestBody object name specified.")
+      }
+
+      if (!is.null(requestBodyObjectName)){
+        # Must have already assigned.
+        stopOnLine(lineNum, line, "Multiple @requestBody's specified for one function.")
+      }
+
+      requestBodyObjectName <- rb
+    }
+
+    objectMat <- stri_match(line, regex="^#['\\*]\\s*@object(\\s+(.*)$)?$")
+    if (!is.na(objectMat[1,1])){
+      o <- stri_trim_both(objectMat[1,3])
+
+      if (is.na(o) || o == ""){
+        stopOnLine(lineNum, line, "No @object name specified.")
+      }
+
+      if (!is.null(object)){
+        # Must have already assigned.
+        stopOnLine(lineNum, line, "Multiple @object's specified for one block.")
+      }
+
+      object <- o
+    }
+
+    # testing line <- "#* @prop One:string The Description"
+    # testing line <- "#* @prop One:object:foo The Description"
+    # testing line <- "#* @prop One:[string] The Description"
+    # testing line <- "#* @prop One:[object]:foo The Description"
+    # testing line <- "#* @prop One:[object]:foo* The Description"
+    propMat <- stri_match(line, regex="^#['\\*]\\s*@prop(\\s+([^\\s:]+):?([^[\\s:]*]+)?(?::([^\\s*]+))?(\\*)?(?:\\s+(.*))?\\s*$)?")
+    if (!is.na(propMat[1,2])){
+      name <- propMat[1,3]
+      if (is.na(name)){
+        stopOnLine(lineNum, line, "No property specified.")
+      }
+      plumberType <- stri_replace_all(propMat[1,4], "$1", regex = "^\\[([^\\]]*)\\]$")
+      apiType <- plumberToApiType(plumberType)
+      isArray <- stri_detect_regex(propMat[1,4], "^\\[[^\\]]*\\]$")
+      isArray[is.na(isArray)] <- defaultIsArray
+      objectName <- propMat[1,5]
+      if (!is.na(objectName)) {
+        if (apiType != "object") {
+          warning("Wasn't expecting an objectName ", objectName, " for apiType ", apiType," - removing it")
+          objectName <- NULL
+        }
+      } else {
+        objectName <- NULL
+      }
+      required <- identical(propMat[1,6], "*")
+
+      props[[name]] <- list(
+        desc=propMat[1,7],
+        type=apiType,
+        required=required,
+        isArray=isArray,
+        objectName=objectName
+      )
+    }
     lineNum <- lineNum - 1
   }
 
@@ -255,20 +335,31 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
     description = paste0(rev(comments)[-1], collapse = "\n"),
     responses = rev(responses),
     tags = rev(tags),
-    routerModifier = routerModifier
+    routerModifier = routerModifier,
+    requestBodyObjectName = requestBodyObjectName,
+    object = object,
+    props = rev(props)
   )
 }
 
 #' Evaluate and activate a "block" of code found in a plumber API file.
 #' @noRd
-evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr) {
+evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, addObject, pr) {
   lines <- srcref[c(1,3)]
   lineNum <- lines[1] - 1
 
   block <- plumbBlock(lineNum, file, envir)
 
-  if (sum(!is.null(block$filter), !is.null(block$paths), !is.null(block$assets), !is.null(block$routerModifier)) > 1){
-    stopOnLine(lineNum, file[lineNum], "A single function can only be a filter, an API endpoint, an asset or a Plumber object modifier (@filter AND @get, @post, @assets, @plumber, etc.)")
+  if (sum(
+        !is.null(block$filter),
+        !is.null(block$paths),
+        !is.null(block$assets),
+        !is.null(block$routerModifier),
+        !is.null(block$object)) > 1){
+    stopOnLine(lineNum, file[lineNum],
+               "A single function can only be a filter, an API endpoint, ",
+               "an asset, an object or a Plumber object modifier (@filter AND @get, ",
+               "@post, @assets, @plumber, etc.)")
   }
 
   # ALL if statements possibilities must eventually call eval(expr, envir)
@@ -287,11 +378,16 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, pr)
         comments = block$comments,
         description = block$description,
         responses = block$responses,
-        tags = block$tags
+        tags = block$tags,
+        requestBodyObjectName = block$requestBodyObjectName
       )
 
       addEndpoint(ep, block$preempt)
     })
+  } else if (!is.null(block$object)){
+
+    addObject(block$object, block$props)
+
   } else if (!is.null(block$filter)){
     filter <- PlumberFilter$new(block$filter, expr, envir, block$serializer,
       lines = lines, srcref = srcref)
