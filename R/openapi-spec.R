@@ -17,8 +17,18 @@ endpointSpecification <- function(routerEndpointEntry, path = routerEndpointEntr
   funcParams <- routerEndpointEntry$getFuncParams()
   # Get the plumber decoration defined endpoint params
   endpointParams <- routerEndpointEntry$getEndpointParams()
+
+  # if legacy plumber.staticSerializers is specified then ignore all req serializer
+  # based parameters
+  if (getOption("plumber.staticSerializers", default="FALSE") == "TRUE") {
+    serializerParams <- list()
+  } else {
+    # Get the plumber serializer defined endpoint params
+    serializerParams <- routerEndpointEntry$getSerializerParams()
+  }
+
   for (verb in routerEndpointEntry$verbs) {
-    params <- parametersSpecification(endpointParams, pathParams, funcParams)
+    params <- parametersSpecification(endpointParams, pathParams, funcParams, serializerParams)
 
     # If we haven't already documented a path param, we should add it here.
     # FIXME: warning("Undocumented path parameters: ", paste0())
@@ -81,7 +91,7 @@ responsesSpecification <- function(endpts){
 #' Extract the OpenAPI parameters Specification from the endpoint
 #' paramters.
 #' @noRd
-parametersSpecification <- function(endpointParams, pathParams, funcParams = NULL){
+parametersSpecification <- function(endpointParams, pathParams, funcParams = NULL, serializerParams = NULL){
 
   params <- list(
     parameters = list(),
@@ -89,7 +99,7 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
   )
   inBody <- filterApiTypes("requestBody", "location")
   inRaw <- filterApiTypes("binary", "format")
-  for (p in unique(c(names(endpointParams), pathParams$name, names(funcParams)))) {
+  for (p in unique(c(names(endpointParams), pathParams$name, names(funcParams), names(serializerParams)))) {
 
     # Dealing with priorities endpointParams > pathParams > funcParams
     # For each p, find out which source to trust for :
@@ -112,26 +122,33 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
       type <- priorizeProperty(defaultApiType,
                                pathParams[pathParams$name == p,]$type,
                                endpointParams[[p]]$type,
-                               funcParams[[p]]$type)
+                               funcParams[[p]]$type,
+                               serializerParams[[p]]$type)
       type <- plumberToApiType(type, inPath = TRUE)
       isArray <- priorizeProperty(defaultIsArray,
                                   pathParams[pathParams$name == p,]$isArray,
                                   endpointParams[[p]]$isArray,
-                                  funcParams[[p]]$isArray)
+                                  funcParams[[p]]$isArray,
+                                  serializerParams[[p]]$isArray)
     } else {
       location <- "query"
       style <- "form"
       explode <- TRUE
       type <- priorizeProperty(defaultApiType,
                                endpointParams[[p]]$type,
-                               funcParams[[p]]$type)
+                               funcParams[[p]]$type,
+                               serializerParams[[p]]$type)
       type <- plumberToApiType(type)
       isArray <- priorizeProperty(defaultIsArray,
                                   endpointParams[[p]]$isArray,
-                                  funcParams[[p]]$isArray)
+                                  funcParams[[p]]$isArray,
+                                  serializerParams[[p]]$isArray)
       required <- priorizeProperty(funcParams[[p]]$required,
-                                   endpointParams[[p]]$required)
+                                   endpointParams[[p]]$required,
+                                   serializerParams[[p]]$required)
     }
+
+    desc <- endpointParams[[p]]$desc %||% serializerParams[[p]]$desc
 
     # Building OpenAPI Specification
     if (type %in% inBody) {
@@ -143,7 +160,7 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
         type = type,
         format = apiTypesInfo[[type]]$format,
         example = funcParams[[p]]$example,
-        description = endpointParams[[p]]$desc
+        description = desc
       )
       if (type %in% inRaw) {
         names(params$requestBody$content) <- "multipart/form-data"
@@ -167,7 +184,7 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
     } else {
       paramList <- list(
         name = p,
-        description = endpointParams[[p]]$desc,
+        description = desc,
         `in` = location,
         required = required,
         schema = list(

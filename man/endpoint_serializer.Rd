@@ -8,7 +8,8 @@ endpoint_serializer(
   serializer,
   preexec_hook = NULL,
   postexec_hook = NULL,
-  aroundexec_hook = NULL
+  aroundexec_hook = NULL,
+  serializer_params = list()
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ endpoint_serializer(
 \item{postexec_hook}{Function to be run directly after a \link{PlumberEndpoint} calls its route method.}
 
 \item{aroundexec_hook}{Function to be run around a \link{PlumberEndpoint} call. Must handle a \code{.next} argument to continue execution. \lifecycle{experimental}}
+
+\item{serializer_params}{Dynamic serializer parameters. More docs needed here!}
 }
 \description{
 This method allows serializers to return \code{preexec}, \code{postexec}, and \code{aroundexec} (\lifecycle{experimental}) hooks in addition to a serializer.

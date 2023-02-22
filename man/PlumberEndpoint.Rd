@@ -34,6 +34,8 @@ each separate verb/path into its own endpoint, so we just do that.}
 
 \item{\code{params}}{endpoint parameters}
 
+\item{\code{serializer_params}}{serializer parameters}
+
 \item{\code{tags}}{endpoint tags}
 
 \item{\code{parsers}}{step allowed parsers}
@@ -51,6 +53,7 @@ each separate verb/path into its own endpoint, so we just do that.}
 \item \href{#method-PlumberEndpoint-getFunc}{\code{PlumberEndpoint$getFunc()}}
 \item \href{#method-PlumberEndpoint-getFuncParams}{\code{PlumberEndpoint$getFuncParams()}}
 \item \href{#method-PlumberEndpoint-getEndpointParams}{\code{PlumberEndpoint$getEndpointParams()}}
+\item \href{#method-PlumberEndpoint-getSerializerParams}{\code{PlumberEndpoint$getSerializerParams()}}
 \item \href{#method-PlumberEndpoint-setPath}{\code{PlumberEndpoint$setPath()}}
 \item \href{#method-PlumberEndpoint-convertArgs}{\code{PlumberEndpoint$convertArgs()}}
 \item \href{#method-PlumberEndpoint-clone}{\code{PlumberEndpoint$clone()}}
@@ -235,6 +238,16 @@ retrieve endpoint expression parameters
 retrieve endpoint defined parameters
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$getEndpointParams()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PlumberEndpoint-getSerializerParams"></a>}}
+\if{latex}{\out{\hypertarget{method-PlumberEndpoint-getSerializerParams}{}}}
+\subsection{Method \code{getSerializerParams()}}{
+retrieve serializer endpoint parameters
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$getSerializerParams()}\if{html}{\out{</div>}}
 }
 
 }

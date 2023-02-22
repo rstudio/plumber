@@ -204,6 +204,8 @@ PlumberEndpoint <- R6Class(
     },
     #' @field params endpoint parameters
     params = NA,
+    #' @field serializer_params serializer parameters
+    serializer_params = NULL,
     #' @field tags endpoint tags
     tags = NA,
     #' @field parsers step allowed parsers
@@ -303,6 +305,13 @@ PlumberEndpoint <- R6Class(
         return(list())
       }
       self$params
+    },
+    #' @description retrieve serializer endpoint parameters
+    getSerializerParams = function() {
+      if (is.null(self$serializer_params)) {
+        return(list())
+      }
+      return(self$serializer_params)
     },
     # It would not make sense to have `$getPath()` and deprecate `$path`
     #' @description Updates `$path` with a sanitized `path` and updates the internal path meta-data

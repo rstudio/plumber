@@ -43,10 +43,13 @@
 #' by settings this option to `FALSE`. Defaults to `TRUE`}
 #' \item{`plumber.typedParameters`}{Plumber will convert all parameters according to openApi
 #' supplied type hints.  Defaults to`TRUE`}
+#' \item{`plumber.staticSerializers`}{Plumber will use fixed serializers and
+#' will not interpret e.g. plot_width and plot_height parameters as plot image
+#' size instructions}
 #' }
 #'
 #' @param ... Ignored. Should be empty
-#' @param port,docs,docs.callback,trailingSlash,methodNotAllowed,apiScheme,apiHost,apiPort,apiPath,apiURL,maxRequestSize,sharedSecret,legacyRedirects,typedParameters See details
+#' @param port,docs,docs.callback,trailingSlash,methodNotAllowed,apiScheme,apiHost,apiPort,apiPath,apiURL,maxRequestSize,sharedSecret,legacyRedirects,typedParameters,staticSerializers See details
 #' @return
 #' The complete, prior set of [options()] values.
 #' If a particular parameter is not supplied, it will return the current value.
@@ -67,7 +70,8 @@ options_plumber <- function(
   maxRequestSize       = getOption("plumber.maxRequestSize"),
   sharedSecret         = getOption("plumber.sharedSecret"),
   legacyRedirects      = getOption("plumber.legacyRedirects"),
-  typedParameters      = getOption("plumber.typedParameters")
+  typedParameters      = getOption("plumber.typedParameters"),
+  staticSerializers    = getOption("plumber.staticSerializers")
 ) {
   ellipsis::check_dots_empty()
 
@@ -90,6 +94,7 @@ options_plumber <- function(
     plumber.maxRequestSize       =   maxRequestSize,
     plumber.sharedSecret         =   sharedSecret,
     plumber.legacyRedirects      =   legacyRedirects,
-    plumber.typedParameters      =   typedParameters
+    plumber.typedParameters      =   typedParameters,
+    plumber.staticSerializers    =   staticSerializers
   )
 }
