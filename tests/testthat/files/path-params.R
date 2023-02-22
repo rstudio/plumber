@@ -32,3 +32,13 @@ function(req){
 function(id, price){
   list(id=id, price=price)
 }
+
+#* @get /yearend/<when:date>
+function(req){
+  req$args$when
+}
+
+#* @get /closing/<when:datetime>
+function(req){
+  req$args$when
+}

@@ -147,12 +147,13 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
       )
       if (type %in% inRaw) {
         names(params$requestBody$content) <- "multipart/form-data"
-        property$type <- apiTypesInfo[[type]]$realType
+        property$type <- apiTypesInfo[[type]]$openApiType
+        property$format <- apiTypesInfo[[type]]$openApiFormat
         property$example <- NULL
       }
       if (isArray) {
         property$items <- list(
-          type = property$type,
+          type = apiTypesInfo[[type]]$openApiType,
           format = property$format,
           example = property$example
         )
@@ -170,8 +171,8 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
         `in` = location,
         required = required,
         schema = list(
-          type = type,
-          format = apiTypesInfo[[type]]$format,
+          type = apiTypesInfo[[type]]$openApiType,
+          format = apiTypesInfo[[type]]$openApiFormat,
           default = funcParams[[p]]$default
         )
       )
@@ -179,8 +180,8 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
         paramList$schema <- list(
           type = "array",
           items = list(
-            type = type,
-            format = apiTypesInfo[[type]]$format
+            type = apiTypesInfo[[type]]$openApiType,
+            format = apiTypesInfo[[type]]$openApiFormat
           ),
           default = funcParams[[p]]$default
         )
