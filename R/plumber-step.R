@@ -355,10 +355,10 @@ PlumberEndpoint <- R6Class(
             # Early return on unnamed args or `NULL` values
             if (key == "") return(arg)
             if (is.null(param)) return(arg)
-            
+
             # NOTE: areArrays is FALSE here as we do not want to parse comma
             #    separated strings (or do we?)
-            converter <- typesToConverters(param$type, areArrays = FALSE)[[1]]
+            converter <- typesToParsers(param$type, areArrays = FALSE)[[1]]
             if (is.null(converter)) return(arg)
             converter(arg)
           }
