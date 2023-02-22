@@ -270,17 +270,17 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
       requestBodyObjectName <- rb
     }
 
-    objectMat <- stri_match(line, regex="^#['\\*]\\s*@object(\\s+(.*)$)?$")
+    objectMat <- stri_match(line, regex="^#['\\*]\\s*@schema(\\s+(.*)$)?$")
     if (!is.na(objectMat[1,1])){
       o <- stri_trim_both(objectMat[1,3])
 
       if (is.na(o) || o == ""){
-        stopOnLine(lineNum, line, "No @object name specified.")
+        stopOnLine(lineNum, line, "No @schema name specified.")
       }
 
       if (!is.null(object)){
         # Must have already assigned.
-        stopOnLine(lineNum, line, "Multiple @object's specified for one block.")
+        stopOnLine(lineNum, line, "Multiple @schema's specified for one block.")
       }
 
       object <- o
