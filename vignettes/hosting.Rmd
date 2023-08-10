@@ -17,17 +17,17 @@ Once you have developed your Plumber API, the next step is to find a way to host
 1. Networks may leverage firewalls to block incoming traffic to certain networks and machines. Again, it may appear that everything is working for you locally, but other users elsewhere in the network or external clients may not be able to connect to your development machine.
 1. If your Plumber process crashes (for instance, due to your server running out of memory), the method of running Plumber will not automatically restart the crashed service for you. This means that your API will be offline until you manually login and restart it. Likewise if your development machine gets rebooted, your API will not automatically be started when the machine comes back online.
 1. This technique relies on having your clients specify a port number manually. Non-technical users may be tripped up by this; some of the other techniques do not require clients specifying the port for an API.
-1. This approach will eternally run one R process for your API. Some of the other approaches will allow you to load-balance traffic between multiple R processes to handle more requests. [RStudio Connect](#rstudio-connect) will even dynamically scale the number of running processes for you so that your API isn't consuming more system resources than is necessary.
+1. This approach will eternally run one R process for your API. Some of the other approaches will allow you to load-balance traffic between multiple R processes to handle more requests. [Posit Connect](#posit-connect) will even dynamically scale the number of running processes for you so that your API isn't consuming more system resources than is necessary.
 1. Most importantly, serving public requests from your development environment can be a security hazard. Ideally, you should separate your development instances from the servers that are accessible by others.
 
 
 For these reasons and more, you should consider setting up a separate server on which you can host your Plumber APIs. There are a variety of options that you can consider.
 
-## RStudio Connect {#rstudio-connect}
+## Posit Connect {#posit-connect}
 
-[RStudio Connect](https://rstudio.com/products/connect/) is an enterprise publishing platform from RStudio. It supports push-button publishing from the RStudio IDE of a variety of R content types including Plumber APIs. Unlike all the other options listed here, RStudio Connect automatically manages the dependent packages and files your API has and recreates an environment closely mimicking your local development environment on the server.
+[Posit Connect](https://posit.co/products/enterprise/connect/) is an enterprise publishing platform from Posit. It supports push-button publishing from the RStudio IDE of a variety of R content types including Plumber APIs. Unlike all the other options listed here, Posit Connect automatically manages the dependent packages and files your API has and recreates an environment closely mimicking your local development environment on the server.
 
-RStudio Connect automatically manages the number of R processes necessary to handle the current load and balances incoming traffic across all available processes. It can also shut down idle processes when they're not in use. This allows you to run the appropriate number of R processes to scale your capacity to accommodate the current load.
+Posit Connect automatically manages the number of R processes necessary to handle the current load and balances incoming traffic across all available processes. It can also shut down idle processes when they're not in use. This allows you to run the appropriate number of R processes to scale your capacity to accommodate the current load.
 
 
 ## DigitalOcean {#digitalocean}
