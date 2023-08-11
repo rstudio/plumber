@@ -15,8 +15,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.5/font.css" rel="stylesheet">
-<link href="../deps/Source_Code_Pro-0.4.5/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.7/font.css" rel="stylesheet">
+<link href="../deps/Source_Code_Pro-0.4.7/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Rendering Output">
@@ -93,7 +93,8 @@
 
 
 
-<script src="rendering-output_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Rendering Output</h1>
             
@@ -108,7 +109,9 @@
 <div class="section level2">
 <h2 id="response-object">The Response Object<a class="anchor" aria-label="anchor" href="#response-object"></a>
 </h2>
-<p>The plumber response object is stored as an environment, much like <a href="./routing-and-input.html#the-request-object-1">the request object</a>. The response object, which is accessible as <code>res</code> from within plumber functions, contains the following objects:</p>
+<p>The plumber response object is stored as an environment, much like <a href="./routing-and-input.html#the-request-object-1">the request
+object</a>. The response object, which is accessible as <code>res</code>
+from within plumber functions, contains the following objects:</p>
 <table class="table">
 <colgroup>
 <col width="11%">
@@ -129,16 +132,19 @@
 <tr class="even">
 <td><code>body</code></td>
 <td><code>NULL</code></td>
-<td>This is set to the serialized output of the handler <em>unless</em> the response object is directly returned from the handler (see <a href="#bypassing-serialization">bypassing serialization</a>)</td>
+<td>This is set to the serialized output of the handler <em>unless</em>
+the response object is directly returned from the handler (see <a href="#bypassing-serialization">bypassing serialization</a>)</td>
 </tr>
 <tr class="odd">
 <td><code>status</code></td>
 <td><code>200</code></td>
-<td>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status" class="external-link">HTTP status code</a> included in the response</td>
+<td>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status" class="external-link">HTTP
+status code</a> included in the response</td>
 </tr>
 </tbody>
 </table>
-<p>The response object also contains the following methods that can be invoked:</p>
+<p>The response object also contains the following methods that can be
+invoked:</p>
 <table class="table">
 <colgroup>
 <col width="11%">
@@ -169,22 +175,38 @@
 <tr class="even">
 <td><code>toResponse</code></td>
 <td><code>res$toResponse()</code></td>
-<td>Renders the response object as a list containing <code>status</code>, <code>headers</code>, and <code>body</code>.</td>
+<td>Renders the response object as a list containing
+<code>status</code>, <code>headers</code>, and <code>body</code>.</td>
 </tr>
 </tbody>
 </table>
-<p>The other methods (<code>clone</code>, <code>initialize</code>, and <code>serializer</code>) should not be directly invoked on the response object.</p>
+<p>The other methods (<code>clone</code>, <code>initialize</code>, and
+<code>serializer</code>) should not be directly invoked on the response
+object.</p>
 </div>
 <div class="section level2">
 <h2 id="serializers">Serializers<a class="anchor" aria-label="anchor" href="#serializers"></a>
 </h2>
-<p>In order to send a response from R to an API client, the object must be “serialized” into some format that the client can understand. JavaScript Object Notation (JSON) is one standard which is commonly used by web APIs. JSON serialization translates R objects like <code>list(a=123, b="hi!")</code> to JSON text resembling <code>{a: 123, b: "hi!"}</code>.</p>
-<p>JSON is not appropriate for every situation, however. If you want your API to render an HTML page that might be viewed in a browser, for instance, you will need a different serializer. Likewise, if you want to return an image rendered in R, you likely want to use a standard image format like PNG or JPEG rather than JSON.</p>
-<p>By default, Plumber serializes objects into JSON via the <code>jsonlite</code> R package. However, there are a variety of other serializers that are built in to the package.</p>
-<p>You can also pass arguments to certain serializers to modify their behavior like in the example below.</p>
+<p>In order to send a response from R to an API client, the object must
+be “serialized” into some format that the client can understand.
+JavaScript Object Notation (JSON) is one standard which is commonly used
+by web APIs. JSON serialization translates R objects like
+<code>list(a=123, b="hi!")</code> to JSON text resembling
+<code>{a: 123, b: "hi!"}</code>.</p>
+<p>JSON is not appropriate for every situation, however. If you want
+your API to render an HTML page that might be viewed in a browser, for
+instance, you will need a different serializer. Likewise, if you want to
+return an image rendered in R, you likely want to use a standard image
+format like PNG or JPEG rather than JSON.</p>
+<p>By default, Plumber serializes objects into JSON via the
+<code>jsonlite</code> R package. However, there are a variety of other
+serializers that are built in to the package.</p>
+<p>You can also pass arguments to certain serializers to modify their
+behavior like in the example below.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#* @serializer json list(na="string")</span></span></code></pre></div>
-<p>See the <a href="https://www.rplumber.io/reference/serializers.html">Serialization</a> article for details.</p>
+<p>See the <a href="https://www.rplumber.io/reference/serializers.html">Serialization</a>
+article for details.</p>
 <table class="table">
 <colgroup>
 <col width="23%">
@@ -200,7 +222,8 @@
 <tr class="odd">
 <td><code>@serializer contentType</code></td>
 <td>(user supplied)</td>
-<td>Send response with a particular <code>Content-Type</code> header</td>
+<td>Send response with a particular <code>Content-Type</code>
+header</td>
 </tr>
 <tr class="even">
 <td><code>@serializer html</code></td>
@@ -216,7 +239,8 @@
 <tr class="even">
 <td><code>@serializer unboxedJSON</code></td>
 <td><code>application/json</code></td>
-<td>Object processed with <code>jsonlite::toJSON(auto_unbox=TRUE)</code>
+<td>Object processed with
+<code>jsonlite::toJSON(auto_unbox=TRUE)</code>
 </td>
 </tr>
 <tr class="odd">
@@ -325,12 +349,19 @@
 <div class="section level3">
 <h3 id="boxed-vs-unboxed-json">Boxed vs Unboxed JSON<a class="anchor" aria-label="anchor" href="#boxed-vs-unboxed-json"></a>
 </h3>
-<p>You may have noticed that API responses generated from Plumber render singular values (or “scalars”) as arrays. For instance:</p>
+<p>You may have noticed that API responses generated from Plumber render
+singular values (or “scalars”) as arrays. For instance:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">toJSON</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; {"a":[5]}</span></span></code></pre>
-<p>The value of the <code>a</code> element, though it’s singular, is still rendered as an array. This may surprise you initially, but this is done to keep the output consistent. While JSON differentiates scalar from vector objects, R does not. This creates ambiguity when serializing an R object to JSON since it is unclear whether a particular element should be rendered as an atomic value or a JSON array.</p>
-<p>Consider the following API which returns all the letters lexicographically “higher” than the given letter.</p>
+<p>The value of the <code>a</code> element, though it’s singular, is
+still rendered as an array. This may surprise you initially, but this is
+done to keep the output consistent. While JSON differentiates scalar
+from vector objects, R does not. This creates ambiguity when serializing
+an R object to JSON since it is unclear whether a particular element
+should be rendered as an atomic value or a JSON array.</p>
+<p>Consider the following API which returns all the letters
+lexicographically “higher” than the given letter.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#* Get letters after a given letter</span></span>
 <span><span class="co">#* @get /boxed</span></span>
@@ -344,23 +375,51 @@
 <span><span class="kw">function</span><span class="op">(</span><span class="va">letter</span><span class="op">=</span><span class="st">"A"</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">LETTERS</span><span class="op">[</span><span class="va">LETTERS</span> <span class="op">&gt;</span> <span class="va">letter</span><span class="op">]</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>This is an example of an API that, in some instance, produces a scalar, and in other instances produces a vector.</p>
-<p>Visiting <a href="http://localhost:8000/boxed?letter=U" class="external-link uri">http://localhost:8000/boxed?letter=U</a> or <a href="http://localhost:8000/unboxed?letter=U" class="external-link uri">http://localhost:8000/unboxed?letter=U</a> will return identical responses:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1"></a><span class="ot">[</span><span class="st">"V"</span><span class="ot">,</span> <span class="st">"W"</span><span class="ot">,</span> <span class="st">"X"</span><span class="ot">,</span> <span class="st">"Y"</span><span class="ot">,</span> <span class="st">"Z"</span><span class="ot">]</span></span></code></pre></div>
+<p>This is an example of an API that, in some instance, produces a
+scalar, and in other instances produces a vector.</p>
+<p>Visiting <a href="http://localhost:8000/boxed?letter=U" class="external-link uri">http://localhost:8000/boxed?letter=U</a> or <a href="http://localhost:8000/unboxed?letter=U" class="external-link uri">http://localhost:8000/unboxed?letter=U</a> will return
+identical responses:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ot">[</span><span class="st">"V"</span><span class="ot">,</span> <span class="st">"W"</span><span class="ot">,</span> <span class="st">"X"</span><span class="ot">,</span> <span class="st">"Y"</span><span class="ot">,</span> <span class="st">"Z"</span><span class="ot">]</span></span></code></pre></div>
 <p>However, <a href="http://localhost:8000/boxed?letter=Y" class="external-link uri">http://localhost:8000/boxed?letter=Y</a> will produce:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1"></a><span class="ot">[</span><span class="st">"Z"</span><span class="ot">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ot">[</span><span class="st">"Z"</span><span class="ot">]</span></span></code></pre></div>
 <p>while <a href="http://localhost:8000/unboxed?letter=Y" class="external-link uri">http://localhost:8000/unboxed?letter=Y</a> will produce:</p>
 <pre><code><span><span class="st">"Z"</span></span></code></pre>
-<p>The <code>/boxed</code> endpoint, as the name implies, produces “boxed” JSON output in which length-1 vectors are still rendered as an array. Conversely, the <code>/unboxed</code> endpoint sets <code>auto_unbox=TRUE</code> in its call to <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">jsonlite::toJSON</a></code>, causing length-1 R vectors to be rendered as JSON scalars.</p>
-<p>While R doesn’t distinguish between scalars and vectors, API clients may respond very differently when encountering a JSON array versus an atomic value. You may find that your API clients will not respond gracefully when an object that they expected to be a vector becomes a scalar in one call.</p>
-<p>For this reason, Plumber inherits the <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">jsonlite::toJSON</a></code> default of setting <code>auto_unbox=FALSE</code> which will result in all length-1 vectors still being rendered as JSON arrays. You can configure an endpoint to use the <code>unboxedJSON</code> serializer (as shown above) if you want to alter this behavior for a particular endpoint.</p>
-<p>There are a couple of functions to be aware of around this feature set. If using boxed JSON serialization, <code><a href="https://rdrr.io/pkg/jsonlite/man/unbox.html" class="external-link">jsonlite::unbox()</a></code> can be used to force a length-1 object in R to be presented in JSON as a scalar. If using unboxed JSON serialization, <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I()</a></code> will cause a length-1 R object to present as a JSON array.</p>
+<p>The <code>/boxed</code> endpoint, as the name implies, produces
+“boxed” JSON output in which length-1 vectors are still rendered as an
+array. Conversely, the <code>/unboxed</code> endpoint sets
+<code>auto_unbox=TRUE</code> in its call to
+<code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">jsonlite::toJSON</a></code>, causing length-1 R vectors to be rendered
+as JSON scalars.</p>
+<p>While R doesn’t distinguish between scalars and vectors, API clients
+may respond very differently when encountering a JSON array versus an
+atomic value. You may find that your API clients will not respond
+gracefully when an object that they expected to be a vector becomes a
+scalar in one call.</p>
+<p>For this reason, Plumber inherits the <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">jsonlite::toJSON</a></code>
+default of setting <code>auto_unbox=FALSE</code> which will result in
+all length-1 vectors still being rendered as JSON arrays. You can
+configure an endpoint to use the <code>unboxedJSON</code> serializer (as
+shown above) if you want to alter this behavior for a particular
+endpoint.</p>
+<p>There are a couple of functions to be aware of around this feature
+set. If using boxed JSON serialization, <code><a href="https://rdrr.io/pkg/jsonlite/man/unbox.html" class="external-link">jsonlite::unbox()</a></code>
+can be used to force a length-1 object in R to be presented in JSON as a
+scalar. If using unboxed JSON serialization, <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I()</a></code> will cause
+a length-1 R object to present as a JSON array.</p>
 </div>
 <div class="section level3">
 <h3 id="customizing-image-serializers">Customizing Image Serializers<a class="anchor" aria-label="anchor" href="#customizing-image-serializers"></a>
 </h3>
-<p>The <code>@serializer jpeg</code> and <code>@serializer png</code> annotations cause the graphical output of an endpoint to be written to a file then returned to the client using the <code><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">jpeg()</a></code> or <code><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">png()</a></code> functions, respectively. These functions both accept a variety of additional options that customize the output including <code>width</code>, <code>height</code>, and <code>bg</code> among others.</p>
-<p>As of version 0.4.3 of plumber, these annotations now accept additional arguments that will be passed into these functions. This enables the creation of endpoints like:</p>
+<p>The <code>@serializer jpeg</code> and <code>@serializer png</code>
+annotations cause the graphical output of an endpoint to be written to a
+file then returned to the client using the <code><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">jpeg()</a></code> or
+<code><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">png()</a></code> functions, respectively. These functions both accept
+a variety of additional options that customize the output including
+<code>width</code>, <code>height</code>, and <code>bg</code> among
+others.</p>
+<p>As of version 0.4.3 of plumber, these annotations now accept
+additional arguments that will be passed into these functions. This
+enables the creation of endpoints like:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#* Example of customizing graphical output</span></span>
 <span><span class="co">#* @serializer png list(width = 400, height = 500)</span></span>
@@ -368,13 +427,27 @@
 <span><span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>At a lower level, the arguments inside the parentheses will be used as the arguments to a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> call. Meaning that any R code that can be prefixed by <code>list</code> to form a valid R expression can be used. For example, <code>#' @serializer png (width=2^10 + 1)</code> would be a valid annotation. This code is evaluated once when your API is <code><a href="../reference/plumb.html">plumb()</a></code>d.</p>
-<p>While this approach can be used to statically define the size of an image, it will not work for dynamic sizing of an image. If you wish to dynamically size images, you will need render and capture the graphical output yourself and return the contents with the appropriate <code>Content-Type</code> header. See the existing image renderers as a model of how to do this.</p>
+<p>At a lower level, the arguments inside the parentheses will be used
+as the arguments to a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> call. Meaning that any R code
+that can be prefixed by <code>list</code> to form a valid R expression
+can be used. For example,
+<code>#' @serializer png (width=2^10 + 1)</code> would be a valid
+annotation. This code is evaluated once when your API is
+<code><a href="../reference/plumb.html">plumb()</a></code>d.</p>
+<p>While this approach can be used to statically define the size of an
+image, it will not work for dynamic sizing of an image. If you wish to
+dynamically size images, you will need render and capture the graphical
+output yourself and return the contents with the appropriate
+<code>Content-Type</code> header. See the existing image renderers as a
+model of how to do this.</p>
 </div>
 <div class="section level3">
 <h3 id="bypassing-serialization">Bypassing Serialization<a class="anchor" aria-label="anchor" href="#bypassing-serialization"></a>
 </h3>
-<p>In some instances it may be desirable to return a value directly from R without serialization. You can bypass serialization by returning the <a href="#response-object">response object</a> from an endpoint. For example, consider the following API.</p>
+<p>In some instances it may be desirable to return a value directly from
+R without serialization. You can bypass serialization by returning the
+<a href="#response-object">response object</a> from an endpoint. For
+example, consider the following API.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#* Endpoint that bypasses serialization</span></span>
 <span><span class="co">#* @get /</span></span>
@@ -383,8 +456,13 @@
 <span></span>
 <span>  <span class="va">res</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>The response that is returned from this endpoint would contain the body <code>Literal text here!</code> with no <code>Content-Type</code> header and without any additional serialization.</p>
-<p>Similarly, you can leverage the <code>@serializer contentType</code> annotation which does no serialization of the response but specifies the contentType header. You can use this annotation when you want more control over the response that you send.</p>
+<p>The response that is returned from this endpoint would contain the
+body <code>Literal text here!</code> with no <code>Content-Type</code>
+header and without any additional serialization.</p>
+<p>Similarly, you can leverage the <code>@serializer contentType</code>
+annotation which does no serialization of the response but specifies the
+contentType header. You can use this annotation when you want more
+control over the response that you send.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#* @serializer contentType list(type="application/pdf")</span></span>
 <span><span class="co">#* @get /pdf</span></span>
@@ -398,13 +476,16 @@
 <span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/readBin.html" class="external-link">readBin</a></span><span class="op">(</span><span class="va">tmp</span>, <span class="st">"raw"</span>, n<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/file.info.html" class="external-link">file.info</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">)</span><span class="op">$</span><span class="va">size</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>Running this API and visiting <a href="http://localhost:8000/pdf" class="external-link uri">http://localhost:8000/pdf</a> will download the PDF generated from R (or display the PDF natively, if your client supports it).</p>
+<p>Running this API and visiting <a href="http://localhost:8000/pdf" class="external-link uri">http://localhost:8000/pdf</a> will download the PDF
+generated from R (or display the PDF natively, if your client supports
+it).</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="error-handling">Error Handling<a class="anchor" aria-label="anchor" href="#error-handling"></a>
 </h2>
-<p>Plumber wraps each endpoint invocation so that it can gracefully capture errors.</p>
+<p>Plumber wraps each endpoint invocation so that it can gracefully
+capture errors.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#* Example of throwing an error</span></span>
 <span><span class="co">#* @get /simple</span></span>
@@ -419,17 +500,27 @@
 <span>  <span class="va">res</span><span class="op">$</span><span class="va">status</span> <span class="op">&lt;-</span> <span class="fl">400</span> <span class="co"># Bad request</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>error<span class="op">=</span><span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/unbox.html" class="external-link">unbox</a></span><span class="op">(</span><span class="va">msg</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>If you run this API and visit <a href="http://localhost:8000/simple" class="external-link uri">http://localhost:8000/simple</a>, you’ll notice two things:</p>
+<p>If you run this API and visit <a href="http://localhost:8000/simple" class="external-link uri">http://localhost:8000/simple</a>, you’ll notice two
+things:</p>
 <ol style="list-style-type: decimal">
-<li>An HTTP response with a status code of <code>500</code> (“internal server error”) is sent to the client. You should see an error message resembling: <code>{"error":["500 - Internal server error"],"message":["Error in (function () : I'm an error!\n"]}</code>
+<li>An HTTP response with a status code of <code>500</code> (“internal
+server error”) is sent to the client. You should see an error message
+resembling:
+<code>{"error":["500 - Internal server error"],"message":["Error in (function () : I'm an error!\n"]}</code>
 </li>
-<li>A similar error is printed in the terminal where you’re running your Plumber API.</li>
+<li>A similar error is printed in the terminal where you’re running your
+Plumber API.</li>
 </ol>
-<p>This means that it is possible for you to intentionally <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code> in an endpoint or a filter as a way to communicate a problem to your user. However, it may be preferable to render errors from your API in a consistent format with more helpful error messages.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">{</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="dt">"error"</span><span class="fu">:</span> <span class="st">"Your request did not include a required parameter."</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="fu">}</span></span></code></pre></div>
-<p>A custom error handler can be set using the <code>setErrorHandler()</code> method:</p>
+<p>This means that it is possible for you to intentionally
+<code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code> in an endpoint or a filter as a way to communicate a
+problem to your user. However, it may be preferable to render errors
+from your API in a consistent format with more helpful error
+messages.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="dt">"error"</span><span class="fu">:</span> <span class="st">"Your request did not include a required parameter."</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>A custom error handler can be set using the
+<code>setErrorHandler()</code> method:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span><span class="st">"/simple"</span>, <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"I'm an error!"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -438,7 +529,11 @@
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>error <span class="op">=</span> <span class="st">"An error occurred. Please contact your administrator."</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>If you run this API and visit <a href="http://localhost:8000/simple" class="external-link uri">http://localhost:8000/simple</a>, you’ll notice that the custom error message provided in the error handler is included in the browser. Since we didn’t do anything with the actual error message, nothing is printed to the console. If we wanted to include the error in the console, we could do the following:</p>
+<p>If you run this API and visit <a href="http://localhost:8000/simple" class="external-link uri">http://localhost:8000/simple</a>, you’ll notice that the
+custom error message provided in the error handler is included in the
+browser. Since we didn’t do anything with the actual error message,
+nothing is printed to the console. If we wanted to include the error in
+the console, we could do the following:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span><span class="st">"/simple"</span>, <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"I'm an error!"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -448,17 +543,31 @@
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>error <span class="op">=</span> <span class="st">"An error occurred. Please contact your administrator."</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>The function passed to <code>setErrorHandler</code> will be invoked anytime R execution fails with an error.</p>
+<p>The function passed to <code>setErrorHandler</code> will be invoked
+anytime R execution fails with an error.</p>
 </div>
 <div class="section level2">
 <h2 id="setting-cookies">Setting Cookies<a class="anchor" aria-label="anchor" href="#setting-cookies"></a>
 </h2>
-<p>As part of fulfilling a request, a Plumber API can choose to set HTTP cookies on the client. HTTP APIs don’t implicitly contain a notion of a “session.” Without some additional information, Plumber has no way of ascertaining whether or not two HTTP requests that come in are associated with the same user. Cookies offer a way to commission the client to store some state on your behalf so that selected data can outlive a single HTTP request; the full implications of using cookies to track state in your API are discussed <a href="./execution-model.html#state-cookies">here</a>. The two forms of Plumber cookies – plain-text and encrypted – are discussed in the following sections.</p>
-<p>Before you make cookies an important part of your API’s security model, be sure to understand the section on the <a href="./security.html#security-cookies">security considerations when working with cookies</a>.</p>
+<p>As part of fulfilling a request, a Plumber API can choose to set HTTP
+cookies on the client. HTTP APIs don’t implicitly contain a notion of a
+“session.” Without some additional information, Plumber has no way of
+ascertaining whether or not two HTTP requests that come in are
+associated with the same user. Cookies offer a way to commission the
+client to store some state on your behalf so that selected data can
+outlive a single HTTP request; the full implications of using cookies to
+track state in your API are discussed <a href="./execution-model.html#state-cookies">here</a>. The two forms of
+Plumber cookies – plain-text and encrypted – are discussed in the
+following sections.</p>
+<p>Before you make cookies an important part of your API’s security
+model, be sure to understand the section on the <a href="./security.html#security-cookies">security considerations when
+working with cookies</a>.</p>
 <div class="section level3">
 <h3 id="setting-unencrypted-cookies">Setting Unencrypted Cookies<a class="anchor" aria-label="anchor" href="#setting-unencrypted-cookies"></a>
 </h3>
-<p>Plumber can both set and receive plaint-text cookies. The API endpoint below will return a random letter, but it remembers your preferences on whether you like capitalized or lower-case letters.</p>
+<p>Plumber can both set and receive plaint-text cookies. The API
+endpoint below will return a random letter, but it remembers your
+preferences on whether you like capitalized or lower-case letters.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#* @put /preferences</span></span>
 <span><span class="kw">function</span><span class="op">(</span><span class="va">res</span>, <span class="va">capital</span><span class="op">)</span><span class="op">{</span></span>
@@ -484,29 +593,91 @@
 <span>    letter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">alphabet</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>Since this API is using a <code>PUT</code> request to test this API, we’ll use <code>curl</code> on the command line to test it. (There’s nothing about cookies that necessitates <code>PUT</code> requests; you could just as easily modify this API to use a <code>GET</code> request.) We can start by visiting the <code>/letter</code> endpoint and we’ll see that the API defaults to a lower-case alphabet. <code>curl http://localhost:8000/letter</code></p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">{</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a>  <span class="dt">"letter"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"o"</span><span class="ot">]</span></span>
-<span id="cb16-3"><a href="#cb16-3"></a><span class="fu">}</span></span></code></pre></div>
-<p>If we send a <code>PUT</code> request and specify the <code>capital</code> parameter, a cookie will be set on the client which will allow the server to accommodate our preference in future requests. In <code>curl</code>, you need to specify a file in which you want to save these cookies using the <code>-c</code> option. This is a good reminder that clients handle cookies differently – some won’t support them at all – so be sure that the clients you intend to support with your API play nicely with cookies if you want to use them.</p>
-<p>To send a <code>PUT</code> request, setting the parameter <code>capital</code> to <code>1</code>, we could invoke: <code>curl -c cookies.txt -X PUT --data 'capital=1' "http://localhost:8000/preferences"</code>. If you print out the <code>cookies.txt</code> file, you should now see that it contains a single cookie called <code>capitalize</code> with a value of <code>1</code>.</p>
-<p>We can make another <code>GET</code> request to <code>/letter</code> to see if it accommodates our preferences. But we’ll need to tell <code>curl</code> to use the cookies file we just created when sending this request using the <code>-b</code> switch: <code>curl -b cookies.txt http://localhost:8000/letter</code>. You should now see that the API is returning a random capitalized letter.</p>
-<p>The <code>setCookie</code> method accepts a variety of additional options to customize how the cookie should be handled by the client. By default, cookies are set with a <code>session</code> lifetime, meaning that the cookie will persist in the user’s browser until the client closes the tab at which point the cookie will be deleted. You can customize this by setting the <code>expiration</code> parameter in <code>setCookie</code> using either a number of seconds in the future in which this cookie should expire. Alternatively, you can provide an object of class <code>POSIXt</code>, in which case that will be interpreted as the time at which the cookie should expire.</p>
-<p>Other options that can be set on the cookie include <code>path</code> (the path on your domain at which the cookie should be installed on the client); <code>http</code> (controls whether or not the cookie should be accessible to JavaScript running on this domain – where <code>TRUE</code> means that the cookie is HTTP-only, and not accessible from JavaScript); and <code>secure</code> (if <code>TRUE</code>, instructs the browser to only send the cookie over HTTPS, not insecure HTTP.</p>
-<p>If you’re using cookies to infer any security-sensitive properties (such as to identify a user, or determine what resources this client should have access to), be sure to see the <a href="./security.html">Security article</a> – in particular <a href="./security.html#security-cookies">the section on the security implications of cookies</a>.</p>
+<p>Since this API is using a <code>PUT</code> request to test this API,
+we’ll use <code>curl</code> on the command line to test it. (There’s
+nothing about cookies that necessitates <code>PUT</code> requests; you
+could just as easily modify this API to use a <code>GET</code> request.)
+We can start by visiting the <code>/letter</code> endpoint and we’ll see
+that the API defaults to a lower-case alphabet.
+<code>curl http://localhost:8000/letter</code></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>  <span class="dt">"letter"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"e"</span><span class="ot">]</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>If we send a <code>PUT</code> request and specify the
+<code>capital</code> parameter, a cookie will be set on the client which
+will allow the server to accommodate our preference in future requests.
+In <code>curl</code>, you need to specify a file in which you want to
+save these cookies using the <code>-c</code> option. This is a good
+reminder that clients handle cookies differently – some won’t support
+them at all – so be sure that the clients you intend to support with
+your API play nicely with cookies if you want to use them.</p>
+<p>To send a <code>PUT</code> request, setting the parameter
+<code>capital</code> to <code>1</code>, we could invoke:
+<code>curl -c cookies.txt -X PUT --data 'capital=1' "http://localhost:8000/preferences"</code>.
+If you print out the <code>cookies.txt</code> file, you should now see
+that it contains a single cookie called <code>capitalize</code> with a
+value of <code>1</code>.</p>
+<p>We can make another <code>GET</code> request to <code>/letter</code>
+to see if it accommodates our preferences. But we’ll need to tell
+<code>curl</code> to use the cookies file we just created when sending
+this request using the <code>-b</code> switch:
+<code>curl -b cookies.txt http://localhost:8000/letter</code>. You
+should now see that the API is returning a random capitalized
+letter.</p>
+<p>The <code>setCookie</code> method accepts a variety of additional
+options to customize how the cookie should be handled by the client. By
+default, cookies are set with a <code>session</code> lifetime, meaning
+that the cookie will persist in the user’s browser until the client
+closes the tab at which point the cookie will be deleted. You can
+customize this by setting the <code>expiration</code> parameter in
+<code>setCookie</code> using either a number of seconds in the future in
+which this cookie should expire. Alternatively, you can provide an
+object of class <code>POSIXt</code>, in which case that will be
+interpreted as the time at which the cookie should expire.</p>
+<p>Other options that can be set on the cookie include <code>path</code>
+(the path on your domain at which the cookie should be installed on the
+client); <code>http</code> (controls whether or not the cookie should be
+accessible to JavaScript running on this domain – where
+<code>TRUE</code> means that the cookie is HTTP-only, and not accessible
+from JavaScript); and <code>secure</code> (if <code>TRUE</code>,
+instructs the browser to only send the cookie over HTTPS, not insecure
+HTTP.</p>
+<p>If you’re using cookies to infer any security-sensitive properties
+(such as to identify a user, or determine what resources this client
+should have access to), be sure to see the <a href="./security.html">Security article</a> – in particular <a href="./security.html#security-cookies">the section on the security
+implications of cookies</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="encrypted-cookies">Setting Encrypted Cookies<a class="anchor" aria-label="anchor" href="#encrypted-cookies"></a>
 </h3>
-<p>In addition to storing plain-text cookies, Plumber also supports handling cookies that are encrypted. Encrypted cookies prevent your users from seeing what is stored inside of them and also sign their contents so that users can’t modify what is stored.</p>
-<p>To use this feature, you must explicitly add it to your router after constructing it. For example, you could run the following sequence of commands to create a router that supports encrypted session cookies.</p>
+<p>In addition to storing plain-text cookies, Plumber also supports
+handling cookies that are encrypted. Encrypted cookies prevent your
+users from seeing what is stored inside of them and also sign their
+contents so that users can’t modify what is stored.</p>
+<p>To use this feature, you must explicitly add it to your router after
+constructing it. For example, you could run the following sequence of
+commands to create a router that supports encrypted session cookies.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"myfile.R"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/pr_cookie.html">pr_cookie</a></span><span class="op">(</span><span class="st">"mySecretHere"</span>, <span class="st">"cookieName"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>You’ll notice the above example is using the <code>session_cookie</code> hooks that come with Plumber. By adding registering these hooks on your router, you’ll ensure that the <code>req$session</code> object is made available on incoming requests and is persisted to the cookie named <code>cookieName</code> when the response is ready to be sent to the user. In this example, the key used to encrypt the data is <code>"mySecretHere"</code>, which is obviously a very weak secret key.</p>
-<p>Unlike <code>res$setHeader()</code>, the values attached to <code>req$session</code> <em>are</em> serialized via <code>jsonlite</code>; so you’re free to use more complex data structures like lists in your session. Also unlike <code>res$setHeaders()</code>, <code>req$session</code> encrypts the data using the secret key you provide as the first argument to the <code><a href="../reference/session_cookie.html">session_cookie()</a></code> function.</p>
-<p>As an example, we’ll store an encrypted cookie that counts how many times this client has visited a particular endpoint:</p>
+<p>You’ll notice the above example is using the
+<code>session_cookie</code> hooks that come with Plumber. By adding
+registering these hooks on your router, you’ll ensure that the
+<code>req$session</code> object is made available on incoming requests
+and is persisted to the cookie named <code>cookieName</code> when the
+response is ready to be sent to the user. In this example, the key used
+to encrypt the data is <code>"mySecretHere"</code>, which is obviously a
+very weak secret key.</p>
+<p>Unlike <code>res$setHeader()</code>, the values attached to
+<code>req$session</code> <em>are</em> serialized via
+<code>jsonlite</code>; so you’re free to use more complex data
+structures like lists in your session. Also unlike
+<code>res$setHeaders()</code>, <code>req$session</code> encrypts the
+data using the secret key you provide as the first argument to the
+<code><a href="../reference/session_cookie.html">session_cookie()</a></code> function.</p>
+<p>As an example, we’ll store an encrypted cookie that counts how many
+times this client has visited a particular endpoint:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#* @get /sessionCounter</span></span>
 <span><span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span><span class="op">{</span></span>
@@ -517,8 +688,12 @@
 <span>  <span class="va">req</span><span class="op">$</span><span class="va">session</span><span class="op">$</span><span class="va">counter</span> <span class="op">&lt;-</span> <span class="va">count</span> <span class="op">+</span> <span class="fl">1</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"This is visit #"</span>, <span class="va">count</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>Again, you would need to register the <code><a href="../reference/session_cookie.html">session_cookie()</a></code> hooks on your router before this code would work.</p>
-<p>If you inspect the cookie being set in your browser, you’ll find that its value is encrypted by the time it gets to the client. But by the time it arrives in Plumber, your cookie is available as a regular R list and can be read or modified.</p>
+<p>Again, you would need to register the <code><a href="../reference/session_cookie.html">session_cookie()</a></code>
+hooks on your router before this code would work.</p>
+<p>If you inspect the cookie being set in your browser, you’ll find that
+its value is encrypted by the time it gets to the client. But by the
+time it arrives in Plumber, your cookie is available as a regular R list
+and can be read or modified.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

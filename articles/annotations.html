@@ -15,8 +15,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.5/font.css" rel="stylesheet">
-<link href="../deps/Source_Code_Pro-0.4.5/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.7/font.css" rel="stylesheet">
+<link href="../deps/Source_Code_Pro-0.4.7/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Annotations reference">
@@ -93,7 +93,8 @@
 
 
 
-<script src="annotations_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Annotations reference</h1>
             
@@ -107,12 +108,19 @@
 <div class="section level2">
 <h2 id="annotations">Annotations<a class="anchor" aria-label="anchor" href="#annotations"></a>
 </h2>
-<p>Annotations are specially-structured comments used in your plumber file to create an API. A full annotation line starts with <code>#*</code> or <code>#'</code>, then the annotation keyword <code>@...</code>, any number of space characters followed by the content. It is recommended to use <code>#*</code> to differentiate them from <code>roxygen2</code> annotations.</p>
+<p>Annotations are specially-structured comments used in your plumber
+file to create an API. A full annotation line starts with
+<code>#*</code> or <code>#'</code>, then the annotation keyword
+<code>@...</code>, any number of space characters followed by the
+content. It is recommended to use <code>#*</code> to differentiate them
+from <code>roxygen2</code> annotations.</p>
 </div>
 <div class="section level2">
 <h2 id="global-annotations">Global annotations<a class="anchor" aria-label="anchor" href="#global-annotations"></a>
 </h2>
-<p>Global annotations can be used anywhere in your plumber file. They are independent from other annotations and do not require an expression.</p>
+<p>Global annotations can be used anywhere in your plumber file. They
+are independent from other annotations and do not require an
+expression.</p>
 <table class="table">
 <colgroup>
 <col width="26%">
@@ -128,39 +136,47 @@
 <tr class="odd">
 <td><code>@apiTitle</code></td>
 <td><code>Title</code></td>
-<td><a href="http://spec.openapis.org/oas/v3.0.3#info-object" class="external-link">Info Object</a></td>
+<td><a href="http://spec.openapis.org/oas/v3.0.3#info-object" class="external-link">Info
+Object</a></td>
 </tr>
 <tr class="even">
 <td><code>@apiDescription</code></td>
 <td><code>Description</code></td>
-<td><a href="http://spec.openapis.org/oas/v3.0.3#info-object" class="external-link">Info Object</a></td>
+<td><a href="http://spec.openapis.org/oas/v3.0.3#info-object" class="external-link">Info
+Object</a></td>
 </tr>
 <tr class="odd">
 <td><code>@apiTOS</code></td>
 <td><code>TOS link</code></td>
-<td><a href="http://spec.openapis.org/oas/v3.0.3#info-object" class="external-link">Info Object</a></td>
+<td><a href="http://spec.openapis.org/oas/v3.0.3#info-object" class="external-link">Info
+Object</a></td>
 </tr>
 <tr class="even">
 <td><code>@apiContact</code></td>
 <td><code>Contact object</code></td>
-<td><a href="http://spec.openapis.org/oas/v3.0.3#contact-object" class="external-link">Contact Object</a></td>
+<td><a href="http://spec.openapis.org/oas/v3.0.3#contact-object" class="external-link">Contact
+Object</a></td>
 </tr>
 <tr class="odd">
 <td><code>@apiLicense</code></td>
 <td><code>License object</code></td>
-<td><a href="http://spec.openapis.org/oas/v3.0.3#license-object" class="external-link">License Object</a></td>
+<td><a href="http://spec.openapis.org/oas/v3.0.3#license-object" class="external-link">License
+Object</a></td>
 </tr>
 <tr class="even">
 <td><code>@apiVersion</code></td>
 <td><code>Version</code></td>
-<td><a href="http://spec.openapis.org/oas/v3.0.3#info-object" class="external-link">Info Object</a></td>
+<td><a href="http://spec.openapis.org/oas/v3.0.3#info-object" class="external-link">Info
+Object</a></td>
 </tr>
 <tr class="odd">
 <td><code>@apiTag</code></td>
 <td>
 <code>Tag</code> <code>Description</code>
 </td>
-<td>Can be repeated to add multiple tags. Quote with " or ’ to use non word character (like spaces) in <code>Tag</code>. <a href="http://spec.openapis.org/oas/v3.0.3#tag-object" class="external-link">Tag Object</a>
+<td>Can be repeated to add multiple tags. Quote with ” or ’ to use non
+word character (like spaces) in <code>Tag</code>. <a href="http://spec.openapis.org/oas/v3.0.3#tag-object" class="external-link">Tag
+Object</a>
 </td>
 </tr>
 </tbody>
@@ -201,7 +217,11 @@
 <div class="section level2">
 <h2 id="block-annotations">Block annotations<a class="anchor" aria-label="anchor" href="#block-annotations"></a>
 </h2>
-<p>A block of annotations is a combination of annotations that create either an <a href="./routing-and-input.html#endpoints">endpoint</a>, a <a href="./routing-and-input.html#filters">filter</a>, a <a href="./routing-and-input.html#static-file-handler">static file handler</a> or a Plumber object modifier. Block annotations are always followed by an expression.</p>
+<p>A block of annotations is a combination of annotations that create
+either an <a href="./routing-and-input.html#endpoints">endpoint</a>, a
+<a href="./routing-and-input.html#filters">filter</a>, a <a href="./routing-and-input.html#static-file-handler">static file
+handler</a> or a Plumber object modifier. Block annotations are always
+followed by an expression.</p>
 <div class="section level3">
 <h3 id="endpoint-block-annotations">Endpoint<a class="anchor" aria-label="anchor" href="#endpoint-block-annotations"></a>
 </h3>
@@ -219,65 +239,105 @@
 <tbody>
 <tr class="odd">
 <td>
-<code>@get</code>, <code>@post</code>, <code>@put</code>, <code>@use</code>, <code>@delete</code>, <code>@head</code>, <code>@options</code>, <code>@patch</code>
+<code>@get</code>, <code>@post</code>, <code>@put</code>,
+<code>@use</code>, <code>@delete</code>, <code>@head</code>,
+<code>@options</code>, <code>@patch</code>
 </td>
 <td><code>Path</code></td>
 <td>
-<a href="./routing-and-input.html#endpoints">Endpoints</a>, <a href="./routing-and-input.html#dynamic-routes">Dynamic Routes</a>, <a href="./routing-and-input.html#typed-dynamic-routes">Typed Dynamic Routes</a>
+<a href="./routing-and-input.html#endpoints">Endpoints</a>, <a href="./routing-and-input.html#dynamic-routes">Dynamic Routes</a>, <a href="./routing-and-input.html#typed-dynamic-routes">Typed Dynamic
+Routes</a>
 </td>
 </tr>
 <tr class="even">
 <td><code>@serializer</code></td>
 <td>
 <code>Alias</code> [<code>Args list]</code>]</td>
-<td>Some serializers accept arguments. See <a href="./rendering-output.html#serializers">serializers article</a> and <a href="https://www.rplumber.io/reference/serializers.html">serializers reference</a>. Aliases : <code>bmp</code>, <code>cat</code>, <code>contentType</code>, <code>csv</code>, <code>device</code>, <code>feather</code>, <code>format</code>, <code>geojson</code>, <code>html</code>, <code>htmlwidget</code>, <code>jpeg</code>, <code>json</code>, <code>null</code>, <code>octet</code>, <code>parquet</code>, <code>pdf</code>, <code>png</code>, <code>print</code>, <code>rds</code>, <code>svg</code>, <code>text</code>, <code>tiff</code>, <code>tsv</code>, <code>unboxedJSON</code>, <code>yaml</code> from <a href="https://www.rplumber.io/reference/register_serializer.html"><code>registered_serializers()</code></a>.</td>
+<td>Some serializers accept arguments. See <a href="./rendering-output.html#serializers">serializers article</a> and
+<a href="https://www.rplumber.io/reference/serializers.html">serializers
+reference</a>. Aliases : <code>bmp</code>, <code>cat</code>,
+<code>contentType</code>, <code>csv</code>, <code>device</code>,
+<code>feather</code>, <code>format</code>, <code>geojson</code>,
+<code>html</code>, <code>htmlwidget</code>, <code>jpeg</code>,
+<code>json</code>, <code>null</code>, <code>octet</code>,
+<code>parquet</code>, <code>pdf</code>, <code>png</code>,
+<code>print</code>, <code>rds</code>, <code>svg</code>,
+<code>text</code>, <code>tiff</code>, <code>tsv</code>,
+<code>unboxedJSON</code>, <code>yaml</code> from <a href="https://www.rplumber.io/reference/register_serializer.html"><code>registered_serializers()</code></a>.</td>
 </tr>
 <tr class="odd">
 <td><code>@parser</code></td>
 <td>
 <code>Alias</code> <code>[Args list]</code>
 </td>
-<td>Some parsers accept arguments. See <a href="https://www.rplumber.io/reference/parsers.html">parsers reference</a>. Can be repeated to allow multiple parsers on the same endpoint. Aliases : <code>all</code>, <code>csv</code>, <code>feather</code>, <code>form</code>, <code>geojson</code>, <code>json</code>, <code>multi</code>, <code>none</code>, <code>octet</code>, <code>parquet</code>, <code>rds</code>, <code>text</code>, <code>tsv</code>, <code>yaml</code> from <a href="https://www.rplumber.io/reference/register_parser.html"><code>registered_parsers()</code></a>.</td>
+<td>Some parsers accept arguments. See <a href="https://www.rplumber.io/reference/parsers.html">parsers
+reference</a>. Can be repeated to allow multiple parsers on the same
+endpoint. Aliases : <code>all</code>, <code>csv</code>,
+<code>feather</code>, <code>form</code>, <code>geojson</code>,
+<code>json</code>, <code>multi</code>, <code>none</code>,
+<code>octet</code>, <code>parquet</code>, <code>rds</code>,
+<code>text</code>, <code>tsv</code>, <code>yaml</code> from <a href="https://www.rplumber.io/reference/register_parser.html"><code>registered_parsers()</code></a>.</td>
 </tr>
 <tr class="even">
 <td><code>@param</code></td>
 <td>
 <code>Name</code>[<code>:Type</code> <code>Description</code>]</td>
-<td>Enclose <code>Type</code> between square brackets <code>[]</code> to indicate it is an array. Can be repeated to define different parameters.</td>
+<td>Enclose <code>Type</code> between square brackets <code>[]</code> to
+indicate it is an array. Can be repeated to define different
+parameters.</td>
 </tr>
 <tr class="odd">
 <td><code>@response</code></td>
 <td>
 <code>Name</code> <code>Description</code>
 </td>
-<td>Simple <a href="http://spec.openapis.org/oas/v3.0.3#response-object" class="external-link">Response object</a>. Can be repeated to define different responses.</td>
+<td>Simple <a href="http://spec.openapis.org/oas/v3.0.3#response-object" class="external-link">Response
+object</a>. Can be repeated to define different responses.</td>
 </tr>
 <tr class="even">
 <td><code>@tag</code></td>
 <td><code>Tag</code></td>
-<td>Can be repeated to add multiple tags. Quote with " or ’ to use non word character (like spaces) in <code>Tag</code>. <a href="http://spec.openapis.org/oas/v3.0.3#operation-object" class="external-link">Tag field</a>
+<td>Can be repeated to add multiple tags. Quote with ” or ’ to use non
+word character (like spaces) in <code>Tag</code>. <a href="http://spec.openapis.org/oas/v3.0.3#operation-object" class="external-link">Tag
+field</a>
 </td>
 </tr>
 <tr class="odd">
 <td><code>@preempt</code></td>
 <td><code>Filter</code></td>
-<td>Specify that this endpoint has to execute before <code>Filter</code>. <a href="./programmatic-usage.html#defining-filters">Filters</a>
+<td>Specify that this endpoint has to execute before
+<code>Filter</code>. <a href="./programmatic-usage.html#defining-filters">Filters</a>
 </td>
 </tr>
 <tr class="even">
 <td>None</td>
 <td><code>Comments</code></td>
-<td>First line without annotation will be mapped to <a href="http://spec.openapis.org/oas/v3.0.3#fixed-fields-6" class="external-link">Summary field</a> subsequent lines will be mapped to <a href="http://spec.openapis.org/oas/v3.0.3#fixed-fields-6" class="external-link">Description field</a>.</td>
+<td>First line without annotation will be mapped to <a href="http://spec.openapis.org/oas/v3.0.3#fixed-fields-6" class="external-link">Summary
+field</a> subsequent lines will be mapped to <a href="http://spec.openapis.org/oas/v3.0.3#fixed-fields-6" class="external-link">Description
+field</a>.</td>
 </tr>
 </tbody>
 </table>
 <div class="section level4">
 <h4 id="more-details-on-param">More details on <code>@param</code><a class="anchor" aria-label="anchor" href="#more-details-on-param"></a>
 </h4>
-<p>Types are used to define API inputs. You can use most of them in dynamic routes. Note that Plumber first look in block expression to set endpoint parameters names, types and default value. Then <code>@param</code> annotations and dynamic route/path defined parameters will override Plumber guesses from block expression.</p>
-<p>Query parameters currently need to be explicitly converted as they are pushed as is (character) to block expression. Only dynamic route parameters are converted to specified <code>@param</code> type before being pushed to block expression.</p>
-<p>Plumber parameter type to OpenAPI type reference. For programmatic use, pick the one with an asterisk.</p>
+<p>Types are used to define API inputs. You can use most of them in
+dynamic routes. Note that Plumber first look in block expression to set
+endpoint parameters names, types and default value. Then
+<code>@param</code> annotations and dynamic route/path defined
+parameters will override Plumber guesses from block expression.</p>
+<p>Query parameters currently need to be explicitly converted as they
+are pushed as is (character) to block expression. Only dynamic route
+parameters are converted to specified <code>@param</code> type before
+being pushed to block expression.</p>
+<p>Plumber parameter type to OpenAPI type reference. For programmatic
+use, pick the one with an asterisk.</p>
 <table class="table">
+<colgroup>
+<col width="44%">
+<col width="30%">
+<col width="25%">
+</colgroup>
 <thead><tr class="header">
 <th>Type</th>
 <th>OpenAPI</th>
@@ -295,7 +355,8 @@
 </tr>
 <tr class="even">
 <td>
-<code>dbl</code>, <code>double</code>, <code>float</code>, <code>number</code>*, <code>numeric</code>
+<code>dbl</code>, <code>double</code>, <code>float</code>,
+<code>number</code>*, <code>numeric</code>
 </td>
 <td>
 <code>number</code> <code>format:double</code>
@@ -316,7 +377,8 @@
 </tr>
 <tr class="even">
 <td>
-<code>chr</code>, <code>str</code>, <code>character</code>, <code>string</code>*</td>
+<code>chr</code>, <code>str</code>, <code>character</code>,
+<code>string</code>*</td>
 <td><code>string</code></td>
 <td>
 <code>query</code>, <code>path</code>
@@ -324,7 +386,8 @@
 </tr>
 <tr class="odd">
 <td>
-<code>list</code>, <code>data.frame</code>, <code>df</code>, <code>object</code>*</td>
+<code>list</code>, <code>data.frame</code>, <code>df</code>,
+<code>object</code>*</td>
 <td><code>object</code></td>
 <td><code>body</code></td>
 </tr>
@@ -402,6 +465,11 @@
 <h3 id="filter-block-annotations">Filter<a class="anchor" aria-label="anchor" href="#filter-block-annotations"></a>
 </h3>
 <table class="table">
+<colgroup>
+<col width="26%">
+<col width="19%">
+<col width="53%">
+</colgroup>
 <thead><tr class="header">
 <th>Annotation</th>
 <th>Argument</th>
@@ -442,6 +510,11 @@
 <h3 id="static-block-annotations">Static File Handler<a class="anchor" aria-label="anchor" href="#static-block-annotations"></a>
 </h3>
 <table class="table">
+<colgroup>
+<col width="26%">
+<col width="21%">
+<col width="52%">
+</colgroup>
 <thead><tr class="header">
 <th>Annotation</th>
 <th>Arguments</th>
@@ -451,7 +524,8 @@
 <td><code>@assets</code></td>
 <td>
 <code>Directory</code> [<code>Mount path</code>]</td>
-<td><a href="./routing-and-input.html#static-file-handler">Static files</a></td>
+<td><a href="./routing-and-input.html#static-file-handler">Static
+files</a></td>
 </tr></tbody>
 </table>
 <div class="section level5">
@@ -468,7 +542,8 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level5">
-<h5 id="equivalent-programmatic-usage-note-that-argument-order-is-reversed">Equivalent programmatic usage (note that argument order is reversed)<a class="anchor" aria-label="anchor" href="#equivalent-programmatic-usage-note-that-argument-order-is-reversed"></a>
+<h5 id="equivalent-programmatic-usage-note-that-argument-order-is-reversed">Equivalent programmatic usage (note that argument order is
+reversed)<a class="anchor" aria-label="anchor" href="#equivalent-programmatic-usage-note-that-argument-order-is-reversed"></a>
 </h5>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -498,7 +573,11 @@
 <tbody><tr class="odd">
 <td><code>@plumber</code></td>
 <td>None</td>
-<td>Modify plumber router from plumber file. The plumber router provided to the function <strong>must</strong> be returned. In most cases, anonymous functions are used following the <code>#* @plumber</code> annotation. However, named functions can also be used. When a named function is used, it must be referenced without parentheses.</td>
+<td>Modify plumber router from plumber file. The plumber router provided
+to the function <strong>must</strong> be returned. In most cases,
+anonymous functions are used following the <code>#* @plumber</code>
+annotation. However, named functions can also be used. When a named
+function is used, it must be referenced without parentheses.</td>
 </tr></tbody>
 </table>
 <div class="section level5">

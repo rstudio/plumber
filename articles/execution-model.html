@@ -15,8 +15,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.5/font.css" rel="stylesheet">
-<link href="../deps/Source_Code_Pro-0.4.5/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.7/font.css" rel="stylesheet">
+<link href="../deps/Source_Code_Pro-0.4.7/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Runtime">
@@ -93,7 +93,8 @@
 
 
 
-<script src="execution-model_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Runtime</h1>
             
@@ -107,7 +108,9 @@
 <div class="section level2">
 <h2 id="execution-model">Execution Model<a class="anchor" aria-label="anchor" href="#execution-model"></a>
 </h2>
-<p>When you <code><a href="../reference/plumb.html">plumb()</a></code> a file, Plumber calls <code><a href="https://rdrr.io/r/base/source.html" class="external-link">source()</a></code> on that file which will evaluate any top-level code that you have defined.</p>
+<p>When you <code><a href="../reference/plumb.html">plumb()</a></code> a file, Plumber calls
+<code><a href="https://rdrr.io/r/base/source.html" class="external-link">source()</a></code> on that file which will evaluate any top-level
+code that you have defined.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Global code; gets executed at plumb() time.</span></span>
 <span><span class="va">counter</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
@@ -117,40 +120,97 @@
 <span>  <span class="co"># Only gets evaluated when this endpoint is requested.</span></span>
 <span>  <span class="va">counter</span> <span class="op">&lt;&lt;-</span> <span class="va">counter</span> <span class="op">+</span> <span class="fl">1</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>If you call <code><a href="../reference/plumb.html">plumb()</a></code> on this file, the <code>counter</code> variable will be created and will live in the environment created for this API. However, the endpoint defined will not be evaluated until it is invoked in response to an incoming request. Because the endpoint uses <code>&lt;&lt;-</code>, the “double-assignment” operator, it mutates the <code>counter</code> variable that was previously defined when the file was <code><a href="../reference/plumb.html">plumb()</a></code>d. This technique allows all endpoints and filters to share some data defined at the top-level of your API.</p>
+<p>If you call <code><a href="../reference/plumb.html">plumb()</a></code> on this file, the
+<code>counter</code> variable will be created and will live in the
+environment created for this API. However, the endpoint defined will not
+be evaluated until it is invoked in response to an incoming request.
+Because the endpoint uses <code>&lt;&lt;-</code>, the
+“double-assignment” operator, it mutates the <code>counter</code>
+variable that was previously defined when the file was
+<code><a href="../reference/plumb.html">plumb()</a></code>d. This technique allows all endpoints and filters
+to share some data defined at the top-level of your API.</p>
 </div>
 <div class="section level2">
 <h2 id="environments">Environments<a class="anchor" aria-label="anchor" href="#environments"></a>
 </h2>
-<p>By default, when you create a new Plumber router (which happens implicitly when you call <code><a href="../reference/plumb.html">plumb()</a></code> on a file), a new environment is created especially for this router. It is in this environment that all expressions will be evaluated and all endpoints invoked.</p>
-<p>This can become important if you consider mounting routers onto one another. In that case, you may expect that they would be able to share state via their environment, but that will not work by default. If you’re <a href="./execution-model.html#programmatic-usage">creating your routers programmatically</a>, then you can specify an environment when initializing your Plumber router using the <code>envir</code> parameter. This is the environment in which:</p>
+<p>By default, when you create a new Plumber router (which happens
+implicitly when you call <code><a href="../reference/plumb.html">plumb()</a></code> on a file), a new
+environment is created especially for this router. It is in this
+environment that all expressions will be evaluated and all endpoints
+invoked.</p>
+<p>This can become important if you consider mounting routers onto one
+another. In that case, you may expect that they would be able to share
+state via their environment, but that will not work by default. If
+you’re <a href="./execution-model.html#programmatic-usage">creating your
+routers programmatically</a>, then you can specify an environment when
+initializing your Plumber router using the <code>envir</code> parameter.
+This is the environment in which:</p>
 <ul>
-<li>A decorated R script, if provided, will be <code><a href="https://rdrr.io/r/base/source.html" class="external-link">source()</a></code>d.</li>
+<li>A decorated R script, if provided, will be
+<code><a href="https://rdrr.io/r/base/source.html" class="external-link">source()</a></code>d.</li>
 <li>All expressions will be evaluated.</li>
 <li>All endpoint and filter functions will be executed.</li>
 </ul>
-<p>It is important to be aware that subrouters, by default, would each have their own environment. If you want multiple Plumber routers to share an environment, you will need to provide a single, shared environment when you create the routers.</p>
+<p>It is important to be aware that subrouters, by default, would each
+have their own environment. If you want multiple Plumber routers to
+share an environment, you will need to provide a single, shared
+environment when you create the routers.</p>
 </div>
 <div class="section level2">
 <h2 id="performance-request-processing">Performance &amp; Request Processing<a class="anchor" aria-label="anchor" href="#performance-request-processing"></a>
 </h2>
-<p>R is a single-threaded programming language, meaning that it can only do one task at a time. This is still true when serving APIs using Plumber, so if you have a single endpoint that takes two seconds to generate a response, then every time that endpoint is requested, your R process will be unable to respond to any additional incoming requests for those two seconds.</p>
-<p>Incoming HTTP requests are serviced in the order in which they appeared, but if requests are coming in more quickly than they can be processed by the API, a backlog of requests will accrue. The common solutions to this problem are to do either or both of:</p>
+<p>R is a single-threaded programming language, meaning that it can only
+do one task at a time. This is still true when serving APIs using
+Plumber, so if you have a single endpoint that takes two seconds to
+generate a response, then every time that endpoint is requested, your R
+process will be unable to respond to any additional incoming requests
+for those two seconds.</p>
+<p>Incoming HTTP requests are serviced in the order in which they
+appeared, but if requests are coming in more quickly than they can be
+processed by the API, a backlog of requests will accrue. The common
+solutions to this problem are to do either or both of:</p>
 <ol style="list-style-type: decimal">
-<li>Keep your API performant. All filters and endpoints should complete very quickly and any long-running or complicated tasks should be done outside of the API process.</li>
-<li>Run multiple R processes to redundantly host a single Plumber API and load-balance incoming requests between all available processes. See the <a href="./hosting.html">hosting section</a> for details on which hosting environments support this feature.</li>
+<li>Keep your API performant. All filters and endpoints should complete
+very quickly and any long-running or complicated tasks should be done
+outside of the API process.</li>
+<li>Run multiple R processes to redundantly host a single Plumber API
+and load-balance incoming requests between all available processes. See
+the <a href="./hosting.html">hosting section</a> for details on which
+hosting environments support this feature.</li>
 </ol>
 </div>
 <div class="section level2">
 <h2 id="managing-state">Managing State<a class="anchor" aria-label="anchor" href="#managing-state"></a>
 </h2>
-<p>Often, Plumber APIs will require coordination of some state. This state may need to be shared between multiple endpoints in the same API (e.g. a counter that increments every time an endpoint is invoked). Alternatively, it could be information that needs to be persisted across requests from a single client (e.g. storing a preference or setting for some user). Lastly, it might require coordinating between multiple Plumber processes running independently behind a load-balancer. Each of these scenarios have unique properties that determine which solution might be appropriate.</p>
-<p>As previously discussed, R is single-threaded. Therefore it’s important that you consider the fact that you may eventually need multiple R processes running in parallel to handle the incoming traffic of your API. While this may not seem important initially, you may thank yourself later for designing a “horizontally scalable” API (or one that can be scaled by adding more R processes in parallel).</p>
-<p>The key to building a horizontally scalable API is to ensure that each Plumber process is “stateless,” meaning that any persistent state lives outside of the Plumber process. In any of the hosting environments that exist today, it is not guaranteed that two subsequent requests from a single client will be served by the same process. Thus it’s never safe to assume that information stored in-memory will be available between requests for a horizontally scaled app. Below are a few options to consider to coordinate state for a Plumber API.</p>
+<p>Often, Plumber APIs will require coordination of some state. This
+state may need to be shared between multiple endpoints in the same API
+(e.g. a counter that increments every time an endpoint is invoked).
+Alternatively, it could be information that needs to be persisted across
+requests from a single client (e.g. storing a preference or setting for
+some user). Lastly, it might require coordinating between multiple
+Plumber processes running independently behind a load-balancer. Each of
+these scenarios have unique properties that determine which solution
+might be appropriate.</p>
+<p>As previously discussed, R is single-threaded. Therefore it’s
+important that you consider the fact that you may eventually need
+multiple R processes running in parallel to handle the incoming traffic
+of your API. While this may not seem important initially, you may thank
+yourself later for designing a “horizontally scalable” API (or one that
+can be scaled by adding more R processes in parallel).</p>
+<p>The key to building a horizontally scalable API is to ensure that
+each Plumber process is “stateless,” meaning that any persistent state
+lives outside of the Plumber process. In any of the hosting environments
+that exist today, it is not guaranteed that two subsequent requests from
+a single client will be served by the same process. Thus it’s never safe
+to assume that information stored in-memory will be available between
+requests for a horizontally scaled app. Below are a few options to
+consider to coordinate state for a Plumber API.</p>
 <div class="section level3">
 <h3 id="in-memory">In-Memory<a class="anchor" aria-label="anchor" href="#in-memory"></a>
 </h3>
-<p>As shown previous in the <a href="#execution-model">Execution Model section</a>, it is possible to share state using the environment associated with the Plumber router.</p>
+<p>As shown previous in the <a href="#execution-model">Execution Model
+section</a>, it is possible to share state using the environment
+associated with the Plumber router.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Global code; gets executed at plumb() time.</span></span>
 <span><span class="va">counter</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
@@ -160,42 +220,119 @@
 <span>  <span class="co"># Only gets evaluated when this endpoint is requested.</span></span>
 <span>  <span class="va">counter</span> <span class="op">&lt;&lt;-</span> <span class="va">counter</span> <span class="op">+</span> <span class="fl">1</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>This is the one approach presented that does not allow your Plumber process to be stateless. The approach is sufficient for coordinating state within a single process, but as you scale your API by adding processes, this state will no longer be coordinated between them.</p>
-<p>Therefore this approach can be effective for “read-only” data – such as if you were to load a single, large dataset into memory when the API starts, then allow all filters and endpoints to reference that dataset moving forward – but it will not allow you to share state across multiple processes as you scale. If you want to build a scalable, stateless application, you should avoid relying on the in-memory R environment to coordinate state between the pieces of your API.</p>
+<p>This is the one approach presented that does not allow your Plumber
+process to be stateless. The approach is sufficient for coordinating
+state within a single process, but as you scale your API by adding
+processes, this state will no longer be coordinated between them.</p>
+<p>Therefore this approach can be effective for “read-only” data – such
+as if you were to load a single, large dataset into memory when the API
+starts, then allow all filters and endpoints to reference that dataset
+moving forward – but it will not allow you to share state across
+multiple processes as you scale. If you want to build a scalable,
+stateless application, you should avoid relying on the in-memory R
+environment to coordinate state between the pieces of your API.</p>
 </div>
 <div class="section level3">
 <h3 id="file-system">File System<a class="anchor" aria-label="anchor" href="#file-system"></a>
 </h3>
-<p>Writing to files on disk is often the next most obvious choice for storing state. Plumber APIs could modify a data frame then use <code><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv()</a></code> to save that data to disk, or use <code><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines()</a></code> to append some new data to an existing file. These approaches enable your R process to be stateless, but are not always resilient to concurrency issues. For instance, if you’ve horizontally scaled your API to five R processes and two go to <code><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv()</a></code> simultaneously, you will either see one process’s data get immediately overwritten by the other’s, or – even worse – you may end up with a corrupted CSV file which can’t be read. Unless otherwise stated, it’s safe to assume that any R function that writes data to disk is not resilient to concurrency contention, so you should not rely on the filesystem to coordinate shared state for any more than a single R process running concurrently.</p>
-<p>It’s also important to ask whether or not the <a href="./hosting.html">hosting platform</a> you’ll be using supports persistent storage on disk. For instance, Docker may insulate your R process from your hardware and not allow you to write outside of your container. RStudio Connect, too, will provision a new directory every time you deploy an updated version of your API which will discard any data you had written to disk up to that point. So if you’re considering writing your state to disk long-term, be sure that your hosting environment supports persistent on-disk storage and that you’ve considered the concurrency implications of your code.</p>
+<p>Writing to files on disk is often the next most obvious choice for
+storing state. Plumber APIs could modify a data frame then use
+<code><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv()</a></code> to save that data to disk, or use
+<code><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines()</a></code> to append some new data to an existing file.
+These approaches enable your R process to be stateless, but are not
+always resilient to concurrency issues. For instance, if you’ve
+horizontally scaled your API to five R processes and two go to
+<code><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv()</a></code> simultaneously, you will either see one
+process’s data get immediately overwritten by the other’s, or – even
+worse – you may end up with a corrupted CSV file which can’t be read.
+Unless otherwise stated, it’s safe to assume that any R function that
+writes data to disk is not resilient to concurrency contention, so you
+should not rely on the filesystem to coordinate shared state for any
+more than a single R process running concurrently.</p>
+<p>It’s also important to ask whether or not the <a href="./hosting.html">hosting platform</a> you’ll be using supports
+persistent storage on disk. For instance, Docker may insulate your R
+process from your hardware and not allow you to write outside of your
+container. RStudio Connect, too, will provision a new directory every
+time you deploy an updated version of your API which will discard any
+data you had written to disk up to that point. So if you’re considering
+writing your state to disk long-term, be sure that your hosting
+environment supports persistent on-disk storage and that you’ve
+considered the concurrency implications of your code.</p>
 </div>
 <div class="section level3">
 <h3 id="state-cookies">Cookies<a class="anchor" aria-label="anchor" href="#state-cookies"></a>
 </h3>
-<p>HTTP cookies are a convention that allow web servers to send some state to a client with the expectation that the client would then include that state in future requests. See the <a href="./rendering-output.html#setting-cookies">Setting Cookies section</a> for details on how to leverage cookies in Plumber.</p>
-<p>All modern web browsers support cookies (unless configured not to) and many other clients do, as well, though some clients require additional configuration in order to do so. If you’re confident that the intended clients for your API support cookies then you could consider storing some state in cookies. This approach mitigates concerns about horizontal scalability, as the state is written to each client independently and then included in subsequent requests from that client. This also minimizes the infrastructure requirements for hosting your Plumber APIs since you don’t need to setup a system capable of storing all of this state; instead, you’ve commissioned your clients to store their own state.</p>
-<p>One issue with maintaining state in cookies is that their size should be kept to a minimum. Clients impose restrictions differently, but you should not plan to store more than 4kB of information in a cookie. And realize that whatever information gets placed in the cookie must be retransmitted by the client with <em>every</em> request. This can significantly increase the size of each HTTP request that your clients make.</p>
-<p>The most notable concern when considering using cookies to store state is that since your clients are responsible for storing and sending their state, you cannot expect that the state has not been tampered with. Thus, while it may be acceptable to store user preferences like <code>preferredColor="blue"</code>, you should <em>not</em> store authentication information like <code>userID=1493</code>, since the user could trivially change that cookie to another user’s ID to impersonate them.</p>
-<p>If you’d like to use cookies to store information with guarantees that the user cannot either read or modify the state, see the <a href="./rendering-output.html#encrypted-cookies">Encrypted Cookies section</a>).</p>
+<p>HTTP cookies are a convention that allow web servers to send some
+state to a client with the expectation that the client would then
+include that state in future requests. See the <a href="./rendering-output.html#setting-cookies">Setting Cookies
+section</a> for details on how to leverage cookies in Plumber.</p>
+<p>All modern web browsers support cookies (unless configured not to)
+and many other clients do, as well, though some clients require
+additional configuration in order to do so. If you’re confident that the
+intended clients for your API support cookies then you could consider
+storing some state in cookies. This approach mitigates concerns about
+horizontal scalability, as the state is written to each client
+independently and then included in subsequent requests from that client.
+This also minimizes the infrastructure requirements for hosting your
+Plumber APIs since you don’t need to setup a system capable of storing
+all of this state; instead, you’ve commissioned your clients to store
+their own state.</p>
+<p>One issue with maintaining state in cookies is that their size should
+be kept to a minimum. Clients impose restrictions differently, but you
+should not plan to store more than 4kB of information in a cookie. And
+realize that whatever information gets placed in the cookie must be
+retransmitted by the client with <em>every</em> request. This can
+significantly increase the size of each HTTP request that your clients
+make.</p>
+<p>The most notable concern when considering using cookies to store
+state is that since your clients are responsible for storing and sending
+their state, you cannot expect that the state has not been tampered
+with. Thus, while it may be acceptable to store user preferences like
+<code>preferredColor="blue"</code>, you should <em>not</em> store
+authentication information like <code>userID=1493</code>, since the user
+could trivially change that cookie to another user’s ID to impersonate
+them.</p>
+<p>If you’d like to use cookies to store information with guarantees
+that the user cannot either read or modify the state, see the <a href="./rendering-output.html#encrypted-cookies">Encrypted Cookies
+section</a>).</p>
 </div>
 <div class="section level3">
 <h3 id="external-data-store">External Data Store<a class="anchor" aria-label="anchor" href="#external-data-store"></a>
 </h3>
-<p>The final option to consider when coordinating state for an API is leveraging an external data store. This could be a relational database (like MySQL or Amazon RedShift), a non-relational database (like MongoDB), or an transactional data store like Redis.</p>
-<p>One important consideration for any of these options is to ensure that they are “transactional,” meaning that two Plumber processes trying to write at the same time won’t overwrite one another. If you’re interested in pursuing this option you should see <a href="https://solutions.rstudio.com/db/" class="external-link">solutions.rstudio.com/db/</a> or look at <a href="http://shiny.rstudio.com/articles/overview.html" class="external-link">some</a> of the <a href="http://shiny.rstudio.com/articles/sql-injections.html" class="external-link">resources</a> <a href="http://shiny.rstudio.com/articles/pool-basics.html" class="external-link">put together</a> for Shiny as pertains to dealing with databases in a web-accessible R platform.</p>
+<p>The final option to consider when coordinating state for an API is
+leveraging an external data store. This could be a relational database
+(like MySQL or Amazon RedShift), a non-relational database (like
+MongoDB), or an transactional data store like Redis.</p>
+<p>One important consideration for any of these options is to ensure
+that they are “transactional,” meaning that two Plumber processes trying
+to write at the same time won’t overwrite one another. If you’re
+interested in pursuing this option you should see <a href="https://solutions.rstudio.com/db/" class="external-link">solutions.rstudio.com/db/</a>
+or look at <a href="http://shiny.rstudio.com/articles/overview.html" class="external-link">some</a> of the
+<a href="http://shiny.rstudio.com/articles/sql-injections.html" class="external-link">resources</a>
+<a href="http://shiny.rstudio.com/articles/pool-basics.html" class="external-link">put
+together</a> for Shiny as pertains to dealing with databases in a
+web-accessible R platform.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="exit-handlers">Exit Handlers<a class="anchor" aria-label="anchor" href="#exit-handlers"></a>
 </h2>
-<p>It may be useful to define a function that you want to run as your API is closing – for instance, if you have a pool of database connections that need to be cleaned up when your Plumber process is being terminated. You can use the <code>exit</code> hook to define such a handler.</p>
+<p>It may be useful to define a function that you want to run as your
+API is closing – for instance, if you have a pool of database
+connections that need to be cleaned up when your Plumber process is
+being terminated. You can use the <code>exit</code> hook to define such
+a handler.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pr.html">pr</a></span><span class="op">(</span><span class="st">"plumber.R"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/pr_hook.html">pr_hook</a></span><span class="op">(</span><span class="st">"exit"</span>, <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Bye bye!"</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/pr_run.html">pr_run</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>When you interrupt the API (for instance by pressing the <code>Escape</code> key or <code>Ctrl+C</code>) you’ll see <code>Bye bye!</code> printed to the console. You can even register multiple <code>exit</code> hooks and they’ll be run in the order in which they were registered.</p>
+<p>When you interrupt the API (for instance by pressing the
+<code>Escape</code> key or <code>Ctrl+C</code>) you’ll see
+<code>Bye bye!</code> printed to the console. You can even register
+multiple <code>exit</code> hooks and they’ll be run in the order in
+which they were registered.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
