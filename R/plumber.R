@@ -143,7 +143,7 @@ Plumber <- R6Class(
     #' Mac OS X, port numbers smaller than 1025 require root privileges.
     #'
     #' This value does not need to be explicitly assigned. To explicitly set it, see [options_plumber()].
-    #' @param debug If `TRUE`, it will provide more insight into your API errors. Using this value will only last for the duration of the run. If a `$setDebug()` has not been called, `debug` will default to `interactive()` at `$run()` time. See `$setDebug()` for more details.
+    #' @param debug If `TRUE`, it will provide more insight into your API errors. Using this value will only last for the duration of the run. If a `$setDebug()` has not been called, `debug` will default to [`rlang::is_interactive()`] at `$run()` time. See `$setDebug()` for more details.
     #' @param swagger Deprecated. Please use `docs` instead. See `$setDocs(docs)` or `$setApiSpec()` for more customization.
     #' @param swaggerCallback An optional single-argument function that is
     #'   called back with the URL to an OpenAPI user interface when one becomes
@@ -232,7 +232,7 @@ Plumber <- R6Class(
       }, add = TRUE)
       # Fix the debug value while running.
       self$setDebug(
-        # Order: Run method param, internally set value, is interactive()
+        # Order: Run method param, internally set value, `is_interactive()`
         # `$getDebug()` is dynamic given `setDebug()` has never been called.
         rlang::maybe_missing(debug, self$getDebug())
       )
@@ -252,7 +252,7 @@ Plumber <- R6Class(
       # Set and restore the wd to make it appear that the proc is running local to the file's definition.
       if (!is.null(private$filename)) {
         old_wd <- setwd(dirname(private$filename))
-        on.exit({setwd(old_wd)}, add = TRUE)
+        on.exit(setwd(old_wd), add = TRUE, after = FALSE)
       }
 
       if (isTRUE(docs_info$enabled)) {
@@ -264,10 +264,11 @@ Plumber <- R6Class(
           callback = swaggerCallback,
           quiet = quiet
         )
-        on.exit(unmount_docs(self, docs_info), add = TRUE)
+        on.exit(unmount_docs(self, docs_info), add = TRUE, after = FALSE)
       }
 
-      on.exit(private$runHooks("exit"), add = TRUE)
+      # Run user exit hooks given docs and working directory
+      on.exit(private$runHooks("exit"), add = TRUE, after = FALSE)
 
       httpuv::runServer(host, port, self)
     },
@@ -278,8 +279,13 @@ Plumber <- R6Class(
     #' by paths which is a great technique for decomposing large APIs into smaller files.
     #'
     #' See also: [pr_mount()]
-    #' @param path a character string. Where to mount router.
-    #' @param router a Plumber router. Router to be mounted.
+    #' @param path a character string. Where to mount the sub router.
+    #' @param router a Plumber router. Sub router to be mounted.
+    #' @param ... Ignored. Used for possible parameter expansion.
+    #' @param after If `NULL` (default), the router will be appended to the end
+    #'   of the mounts. If a number, the router will be inserted at the given
+    #'   index. E.g. `after = 0` will prepend the sub router, giving it
+    #'   preference over other mounted routers.
     #' @examples
     #' \dontrun{
     #' root <- pr()
@@ -290,7 +296,9 @@ Plumber <- R6Class(
     #' products <- Plumber$new("products.R")
     #' root$mount("/products", products)
     #' }
-    mount = function(path, router) {
+    mount = function(path, router, ..., after = NULL) {
+      ellipsis::check_dots_empty()
+
       # Ensure that the path has both a leading and trailing slash.
       if (!grepl("^/", path)) {
         path <- paste0("/", path)
@@ -299,7 +307,15 @@ Plumber <- R6Class(
         path <- paste0(path, "/")
       }
 
-      private$mnts[[path]] <- router
+      # Remove prior mount if it exists
+      self$unmount(path)
+
+      # Add new mount
+      # Mount order matters
+      after <- after %||% length(private$mnts)
+      mntList <- list()
+      mntList[[path]] <- router
+      private$mnts <- append(private$mnts, mntList, after = after)
     },
     #' @description Unmount a Plumber router
     #' @param path a character string. Where to unmount router.
@@ -963,11 +979,11 @@ Plumber <- R6Class(
     #'
     #' See also: `$getDebug()` and [pr_set_debug()]
     #' @param debug `TRUE` provides more insight into your API errors.
-    setDebug = function(debug = interactive()) {
+    setDebug = function(debug = is_interactive()) {
       stopifnot(length(debug) == 1)
       private$debug <- isTRUE(debug)
     },
-    #' @description Retrieve the `debug` value. If it has never been set, the result of `interactive()` will be used.
+    #' @description Retrieve the `debug` value. If it has never been set, the result of [`rlang::is_interactive()`] will be used.
     #'
     #' See also: `$getDebug()` and [pr_set_debug()]
     getDebug = function() {
@@ -1335,8 +1351,10 @@ upgrade_docs_parameter <- function(docs, ...) {
 
 
 
+#' @importFrom rlang is_interactive
+# Method needed for testing mocking
 default_debug <- function() {
-  interactive()
+  is_interactive()
 }
 
 

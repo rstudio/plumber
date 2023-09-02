@@ -273,15 +273,22 @@ by paths which is a great technique for decomposing large APIs into smaller file
 
 See also: \code{\link[=pr_mount]{pr_mount()}}
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Plumber$mount(path, router)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$mount(path, router, ..., after = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{path}}{a character string. Where to mount router.}
+\item{\code{path}}{a character string. Where to mount the sub router.}
 
-\item{\code{router}}{a Plumber router. Router to be mounted.}
+\item{\code{router}}{a Plumber router. Sub router to be mounted.}
+
+\item{\code{...}}{Ignored. Used for possible parameter expansion.}
+
+\item{\code{after}}{If \code{NULL} (default), the router will be appended to the end
+of the mounts. If a number, the router will be inserted at the given
+index. E.g. \code{after = 0} will prepend the sub router, giving it
+preference over other mounted routers.}
 }
 \if{html}{\out{</div>}}
 }

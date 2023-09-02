@@ -210,8 +210,13 @@ pr_head <- function(pr,
 #' returns the updated router.
 #'
 #' @param pr The host Plumber router.
-#' @param path A character string. Where to mount router.
-#' @param router A Plumber router. Router to be mounted.
+#' @param path a character string. Where to mount the sub router.
+#' @param router a Plumber router. Sub router to be mounted.
+#' @param ... Ignored. Used for possible parameter expansion.
+#' @param after If `NULL` (default), the router will be appended to the end
+#'   of the mounts. If a number, the router will be inserted at the given
+#'   index. E.g. `after = 0` will prepend the sub router, giving it
+#'   preference over other mounted routers.
 #'
 #' @return A Plumber router with the supplied router mounted
 #'
@@ -229,9 +234,11 @@ pr_head <- function(pr,
 #' @export
 pr_mount <- function(pr,
                      path,
-                     router) {
+                     router,
+                     ...,
+                     after = NULL) {
   validate_pr(pr)
-  pr$mount(path = path, router = router)
+  pr$mount(path = path, router = router, ..., after = after)
   pr
 }
 
@@ -490,7 +497,7 @@ pr_filter <- function(pr,
 #' @param ... Should be empty.
 #' @param debug If `TRUE`, it will provide more insight into your API errors.
 #'   Using this value will only last for the duration of the run.
-#'   If [pr_set_debug()] has not been called, `debug` will default to `interactive()` at [pr_run()] time
+#'   If [pr_set_debug()] has not been called, `debug` will default to [`rlang::is_interactive()`] at [pr_run()] time
 #' @param docs Visual documentation value to use while running the API.
 #'   This value will only be used while running the router.
 #'   If missing, defaults to information previously set with [pr_set_docs()].

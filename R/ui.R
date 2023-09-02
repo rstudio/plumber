@@ -1,4 +1,5 @@
 #' @include globals.R
+docs_root <- paste0("/__docs__/")
 
 # Mount OpenAPI and Docs
 #' @noRd
@@ -184,7 +185,6 @@ register_docs <- function(name, index, static = NULL) {
   stopifnot(is.function(index))
   if (!is.null(static)) stopifnot(is.function(static))
 
-  docs_root <- paste0("/__docs__/")
   docs_paths <- c("/index.html", "/")
   mount_docs_func <- function(pr, api_url, ...) {
     # Save initial extra argument values
@@ -211,7 +211,7 @@ register_docs <- function(name, index, static = NULL) {
       message("")
     }
 
-    pr$mount(docs_root, docs_router)
+    pr$mount(docs_root, docs_router, after = 0)
 
     # add legacy swagger redirects (RStudio Connect)
     redirect_info <- swagger_redirects()

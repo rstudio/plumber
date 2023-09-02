@@ -98,7 +98,7 @@ pr_set_error <- function(pr, fun) {
 #' Set debug value to include error messages of routes cause an error
 #'
 #' To hide any error messages in production, set the debug value to `FALSE`.
-#' The `debug` value is enabled by default for [interactive()] sessions.
+#' The `debug` value is enabled by default for [`rlang::is_interactive()`] sessions.
 #'
 #' @template param_pr
 #' @param debug `TRUE` provides more insight into your API errors.
@@ -118,7 +118,7 @@ pr_set_error <- function(pr, fun) {
 #'   pr_get("/boom", function() stop("boom")) %>%
 #'   pr_run()
 #' }
-pr_set_debug <- function(pr, debug = interactive()) {
+pr_set_debug <- function(pr, debug = is_interactive()) {
   validate_pr(pr)
   pr$setDebug(debug = debug)
   pr
