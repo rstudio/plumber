@@ -34,6 +34,10 @@ each separate verb/path into its own endpoint, so we just do that.}
 
 \item{\code{params}}{endpoint parameters}
 
+\item{\code{serializer_params}}{serializer parameters}
+
+\item{\code{requestBodyObjectName}}{schema name for object used in endpoint request body}
+
 \item{\code{tags}}{endpoint tags}
 
 \item{\code{parsers}}{step allowed parsers}
@@ -51,7 +55,9 @@ each separate verb/path into its own endpoint, so we just do that.}
 \item \href{#method-PlumberEndpoint-getFunc}{\code{PlumberEndpoint$getFunc()}}
 \item \href{#method-PlumberEndpoint-getFuncParams}{\code{PlumberEndpoint$getFuncParams()}}
 \item \href{#method-PlumberEndpoint-getEndpointParams}{\code{PlumberEndpoint$getEndpointParams()}}
+\item \href{#method-PlumberEndpoint-getSerializerParams}{\code{PlumberEndpoint$getSerializerParams()}}
 \item \href{#method-PlumberEndpoint-setPath}{\code{PlumberEndpoint$setPath()}}
+\item \href{#method-PlumberEndpoint-convertArgs}{\code{PlumberEndpoint$convertArgs()}}
 \item \href{#method-PlumberEndpoint-clone}{\code{PlumberEndpoint$clone()}}
 }
 }
@@ -132,6 +138,7 @@ Create a new \code{PlumberEndpoint} object
   comments,
   description,
   responses,
+  requestBodyObjectName,
   tags,
   srcref
 )}\if{html}{\out{</div>}}
@@ -238,6 +245,16 @@ retrieve endpoint defined parameters
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PlumberEndpoint-getSerializerParams"></a>}}
+\if{latex}{\out{\hypertarget{method-PlumberEndpoint-getSerializerParams}{}}}
+\subsection{Method \code{getSerializerParams()}}{
+retrieve serializer endpoint parameters
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$getSerializerParams()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PlumberEndpoint-setPath"></a>}}
 \if{latex}{\out{\hypertarget{method-PlumberEndpoint-setPath}{}}}
 \subsection{Method \code{setPath()}}{
@@ -250,6 +267,23 @@ Updates \verb{$path} with a sanitized \code{path} and updates the internal path 
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{path}}{Path to set \verb{$path}. If missing a beginning slash, one will be added.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PlumberEndpoint-convertArgs"></a>}}
+\if{latex}{\out{\hypertarget{method-PlumberEndpoint-convertArgs}{}}}
+\subsection{Method \code{convertArgs()}}{
+convert args to specific types
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PlumberEndpoint$convertArgs(args)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{args}}{List of args to convert}
 }
 \if{html}{\out{</div>}}
 }

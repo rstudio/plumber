@@ -56,6 +56,14 @@ test_that("variables are typed", {
   expect_equal(p$names, "id")
   expect_equal(p$regex, paste0("^/car/", "((?:(?:[01tfTF]|true|false|TRUE|FALSE),?)+)", "$"))
 
+  p <- createPathRegex("/price/<when:date>")
+  expect_equal(p$names, "when")
+  expect_equal(p$regex, paste0("^/price/", "(\\d{4}-\\d{2}-\\d{2})", "$"))
+
+  p <- createPathRegex("/price/<before:datetime>")
+  expect_equal(p$names, "before")
+  expect_equal(p$regex, paste0("^/price/", "(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z)", "$"))
+
   p <- createPathRegex("/car/<id:chr>")
   expect_equal(p$names, "id")
   expect_equal(p$regex, paste0("^/car/", "([^/]+)", "$"))
@@ -63,7 +71,7 @@ test_that("variables are typed", {
   expect_equal(p$names, "id")
   expect_equal(p$regex, paste0("^/car/", "((?:(?:[^/]+),?)+)", "$"))
   expect_equal(p$areArrays, TRUE)
-  expect_equal(p$converters[[1]]("BOB,LUKE,GUY"), c("BOB", "LUKE", "GUY"))
+  expect_equal(p$parsers[[1]]("BOB,LUKE,GUY"), c("BOB", "LUKE", "GUY"))
 
   #Check that warnings happen on typo or unsupported type
   expect_warning(createPathRegex("/car/<id:motor>"),
@@ -102,6 +110,10 @@ test_that("integration of path parsing works", {
   expect_equal(r$route(make_req("GET", "/car/ratio/-1.5"), PlumberResponse$new()), -1.5)
   expect_equal(r$route(make_req("GET", "/car/ratio/-.5"), PlumberResponse$new()), -.5)
   expect_equal(r$route(make_req("GET", "/car/ratio/.5"), PlumberResponse$new()), .5)
+
+  expect_equal(r$route(make_req("GET", "/yearend/2022-12-31"), PlumberResponse$new()), lubridate::as_date("2022-12-31"))
+  expect_equal(r$route(make_req("GET", "/closing/2022-12-24T18:30:00Z"), PlumberResponse$new()), lubridate::as_datetime("2022-12-24T18:30:00Z"))
+
   expect_equal(r$route(make_req("GET", "/car/ratio/a"), PlumberResponse$new()),
                list(error = "404 - Resource Not Found"))
   expect_equal(r$route(make_req("GET", "/car/ratio/"), PlumberResponse$new()),

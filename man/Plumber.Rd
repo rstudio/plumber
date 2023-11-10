@@ -128,6 +128,8 @@ pr$setErrorHandler(function(req, res, err) {
 \describe{
 \item{\code{endpoints}}{Plumber router endpoints read-only}
 
+\item{\code{objects}}{Plumber router objects read-only}
+
 \item{\code{filters}}{Plumber router filters read-only}
 
 \item{\code{mounts}}{Plumber router mounts read-only}
@@ -163,6 +165,7 @@ pr$setErrorHandler(function(req, res, err) {
 \item \href{#method-Plumber-setDebug}{\code{Plumber$setDebug()}}
 \item \href{#method-Plumber-getDebug}{\code{Plumber$getDebug()}}
 \item \href{#method-Plumber-filter}{\code{Plumber$filter()}}
+\item \href{#method-Plumber-object}{\code{Plumber$object()}}
 \item \href{#method-Plumber-setApiSpec}{\code{Plumber$setApiSpec()}}
 \item \href{#method-Plumber-getApiSpec}{\code{Plumber$getApiSpec()}}
 \item \href{#method-Plumber-addEndpoint}{\code{Plumber$addEndpoint()}}
@@ -828,6 +831,27 @@ See also: \code{\link[=pr_filter]{pr_filter()}}
 \item{\code{expr}}{an expr that resolve to a filter function or a filter function}
 
 \item{\code{serializer}}{a serializer function}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Plumber-object"></a>}}
+\if{latex}{\out{\hypertarget{method-Plumber-object}{}}}
+\subsection{Method \code{object()}}{
+Add an object definition to plumber router
+
+See also: \code{\link[=pr_object]{pr_object()}}
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$object(name, props)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{name}}{a character string. Name of object}
+
+\item{\code{props}}{list of properties}
 }
 \if{html}{\out{</div>}}
 }

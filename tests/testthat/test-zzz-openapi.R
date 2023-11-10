@@ -4,7 +4,7 @@ test_that("plumberToApiType works", {
   expect_equal(plumberToApiType("bool"), "boolean")
   expect_equal(plumberToApiType("logical"), "boolean")
 
-  expect_equal(plumberToApiType("double"), "number")
+  expect_equal(plumberToApiType("double"), "double")
   expect_equal(plumberToApiType("numeric"), "number")
 
   expect_equal(plumberToApiType("int"), "integer")
@@ -145,7 +145,7 @@ test_that("parametersSpecification works", {
   ep <- list(id=list(desc="Description", type="integer", required=FALSE),
              id2=list(desc="Description2", required=FALSE), # No redundant type specification
              make=list(desc="Make description", type="string", required=FALSE),
-             prices=list(desc="Historic sell prices", type="numeric", required = FALSE, isArray = TRUE),
+             prices=list(desc="Historic sell prices", type="double", required = FALSE, isArray = TRUE),
              claims=list(desc="Insurance claims", type="object", required = FALSE))
   pp <- data.frame(name=c("id", "id2", "owners"), type=c("int", "int", "chr"), isArray = c(FALSE, FALSE, TRUE), stringsAsFactors = FALSE)
 
@@ -281,7 +281,9 @@ test_that("multiple variations in function extract correct metadata", {
                     var5 = FALSE,
                     var6 = list(name = c("luke", "bob"), lastname = c("skywalker", "ross")),
                     var7 = new.env(parent = .GlobalEnv),
-                    var8 = list(a = 2, b = mean, c = new.env(parent = .GlobalEnv))) {}
+                    var8 = list(a = 2, b = mean, c = new.env(parent = .GlobalEnv)),
+                    var9 = lubridate::ymd("2022-12-03"),
+                    var10 = lubridate::ymd_hms("2022-12-03T10:11:12")) {}
   funcParams <- getArgsMetadata(dummy)
   expect_identical(sapply(funcParams, `[[`, "required"),
                    c(var0 = FALSE, var1 = TRUE, var2 = FALSE, var3 = FALSE, var4 = FALSE,
@@ -298,7 +300,7 @@ test_that("multiple variations in function extract correct metadata", {
                         var5 = defaultIsArray, var6 = TRUE,
                         var7 = defaultIsArray, var8 = defaultIsArray))
   expect_identical(lapply(funcParams, `[[`, "type"),
-                   list(var0 = "number", var1 = defaultApiType, var2 = "integer", var3 = defaultApiType, var4 = defaultApiType,
+                   list(var0 = "double", var1 = defaultApiType, var2 = "integer", var3 = defaultApiType, var4 = defaultApiType,
                         var5 = "boolean", var6 = "object", var7 = defaultApiType, var8 = defaultApiType))
 
 })

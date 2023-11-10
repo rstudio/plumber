@@ -61,6 +61,13 @@ PlumberStep <- R6Class(
         self$serializer <- serializer
       }
     },
+    #' @description convert args to specific types
+    #' @param args List of args to convert
+    convertArgs = function(args) {
+      # a general step doesn't convert args
+      # but a subclass can choose to override and convert
+      args
+    },
     #' @description step execution function
     #' @param req,res Request and response objects created by a Plumber request
     exec = function(req, res) {
@@ -81,7 +88,8 @@ PlumberStep <- R6Class(
       execStep <- function(...) {
         private$runHooksAround("aroundexec", args_for_formal_matching(), .next = function(...) {
           relevant_args <- getRelevantArgs(list(...), func = private$func)
-          do.call(private$func, relevant_args, envir = private$envir)
+          converted_args <- self$convertArgs(relevant_args)
+          do.call(private$func, converted_args, envir = private$envir)
         })
       }
       postexecStep <- function(value, ...) {
@@ -196,6 +204,10 @@ PlumberEndpoint <- R6Class(
     },
     #' @field params endpoint parameters
     params = NA,
+    #' @field serializer_params serializer parameters
+    serializer_params = NULL,
+    #' @field requestBodyObjectName schema name for object used in endpoint request body
+    requestBodyObjectName = NULL,
     #' @field tags endpoint tags
     tags = NA,
     #' @field parsers step allowed parsers
@@ -222,11 +234,12 @@ PlumberEndpoint <- R6Class(
     #' @param srcref `srcref` attribute from block
     #' @param lines Endpoint block
     #' @param params Endpoint params
+    #' @param requestBodyObjectName schema name for object used in endpoint request body
     #' @param comments,description,responses,tags Values to be used within the OpenAPI Spec
     #' @details Parameters values are obtained from parsing blocks of lines in a plumber file.
     #' They can also be provided manually for historical reasons.
     #' @return A new `PlumberEndpoint` object
-    initialize = function(verbs, path, expr, envir, serializer, parsers, lines, params, comments, description, responses, tags, srcref) {
+    initialize = function(verbs, path, expr, envir, serializer, parsers, lines, params, comments, description, responses, requestBodyObjectName, tags, srcref) {
 
       self$verbs <- verbs
 
@@ -272,6 +285,9 @@ PlumberEndpoint <- R6Class(
         # tags: ["tagName"] and not tags: "tagName"
         self$tags <- I(tags)
       }
+      if (!missing(requestBodyObjectName) && !is.null(requestBodyObjectName)) {
+        self$requestBodyObjectName = requestBodyObjectName
+      }
     },
     #' @description retrieve endpoint path parameters
     #' @param path endpoint path
@@ -296,6 +312,13 @@ PlumberEndpoint <- R6Class(
       }
       self$params
     },
+    #' @description retrieve serializer endpoint parameters
+    getSerializerParams = function() {
+      if (is.null(self$serializer_params)) {
+        return(list())
+      }
+      return(self$serializer_params)
+    },
     # It would not make sense to have `$getPath()` and deprecate `$path`
     #' @description Updates `$path` with a sanitized `path` and updates the internal path meta-data
     #' @param path Path to set `$path`. If missing a beginning slash, one will be added.
@@ -307,6 +330,57 @@ PlumberEndpoint <- R6Class(
       self$path <- path
       private$regex <- createPathRegex(path, self$getFuncParams())
       path
+    },
+    #' @description convert args to specific types
+    #' @param args List of args to convert
+    convertArgs = function(args) {
+      if (!isTRUE(getOption("plumber.typedParameters", TRUE))) {
+        return(args)
+      }
+
+      if (is.null(args)) {
+        # no args to convert
+        return(args)
+      }
+
+      if (length(args) == 0) {
+        # no args to convert
+        return(args)
+      }
+
+      args_names <- names(args)
+      if (is.null(args_names)) {
+        # no names - won't be able to do any conversions
+        return(args)
+      }
+
+      params <- self$getEndpointParams()
+
+      if (length(params) == 0) {
+        # no information to convert by
+        return(args)
+      }
+
+      converted_args <-
+        Map(
+          key = args_names,
+          arg = args,
+          param = params[args_names],
+          f = function(key, arg, param) {
+            # Early return on unnamed args or `NULL` values
+            if (key == "") return(arg)
+            if (is.null(param)) return(arg)
+
+            # NOTE: areArrays is FALSE here as we do not want to parse comma
+            #    separated strings (or do we?)
+            converter <- typesToParsers(param$type, areArrays = FALSE)[[1]]
+            if (is.null(converter)) return(arg)
+            converter(arg)
+          }
+        )
+      names(converted_args) <- args_names
+
+      converted_args
     }
   ),
   private = list(
