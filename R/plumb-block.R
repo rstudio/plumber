@@ -357,9 +357,9 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, add
         !is.null(block$routerModifier),
         !is.null(block$object)) > 1){
     stopOnLine(lineNum, file[lineNum],
-               "A single function can only be a filter, an API endpoint, ",
+               paste0("A single function can only be a filter, an API endpoint, ", 
                "an asset, an object or a Plumber object modifier (@filter AND @get, ",
-               "@post, @assets, @plumber, etc.)")
+               "@post, @assets, @plumber, etc.)"))
   }
 
   # ALL if statements possibilities must eventually call eval(expr, envir)
