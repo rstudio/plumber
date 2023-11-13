@@ -169,7 +169,7 @@ parametersSpecification <- function(endpointParams, pathParams, funcParams = NUL
     requestBody = NULL
   )
   inBody <- filterApiTypes("requestBody", "location")
-  inRaw <- filterApiTypes("binary", "format")
+  inRaw <- filterApiTypes("binary", "openApiFormat")
   for (p in unique(c(names(endpointParams), pathParams$name, names(funcParams), names(serializerParams)))) {
 
     # Dealing with priorities endpointParams > pathParams > funcParams
