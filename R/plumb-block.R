@@ -30,15 +30,45 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
   props <- NULL
   requestBodyObjectName <- NULL
 
+  verbose_line_building <- TRUE
+  line_carryover <- character()
+
   while (lineNum > 0 && (stri_detect_regex(file[lineNum], pattern="^#['\\*]?|^\\s*$") || stri_trim_both(file[lineNum]) == "")){
 
     line <- file[lineNum]
+    if (verbose_line_building) message("*** line seen: ", line)
+
 
     # If the line does not start with a plumber tag `#*` or `#'`, continue to next line
     if (!stri_detect_regex(line, pattern="^#['\\*]")) {
       lineNum <- lineNum - 1
       next
     }
+
+    if (is.na(stringi::stri_match_first(line, regex="^#['\\*]\\s*@\\w+")[1,1])) {
+      # if the line does not start with "#* @" followed by any alphabetic character
+      # then it is a continuation of the previous line
+
+      # trim the opening "#* " from the line
+      line <- gsub("^#['\\*]\\s*", "", line)
+      line <- trimws(line)
+
+      if (length(line_carryover) > 0 &&
+          stringi::stri_length(line) == 0) {
+        line <- "\n"
+        if (verbose_line_building) message("*** lineend added to carryover")
+      } else {
+        if (verbose_line_building) message("*** carryover added to ", line)
+      }
+      line_carryover <- c(line, line_carryover)
+      lineNum <- lineNum - 1
+      next
+    }
+
+    line <- c(line, line_carryover)
+    line_carryover <- character()
+    line <- paste(line, collapse = " ")
+    if (verbose_line_building) message("*** line for processing: ", line)
 
     epMat <- stri_match(line, regex="^#['\\*]\\s*@(get|put|post|use|delete|head|options|patch)(\\s+(.*)$)?")
     if (!is.na(epMat[1,2])){
@@ -322,6 +352,10 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
     }
     lineNum <- lineNum - 1
   }
+
+  # any excess line_carryover now are comments... but reversed... oh my
+  comments <- rev(line_carryover)
+  line_carryover <- character()
 
   list(
     paths = rev(paths),
