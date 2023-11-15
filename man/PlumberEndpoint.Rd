@@ -189,6 +189,8 @@ parsers = c("json", "form", "text", "octet", "multi")
 
 \item{\code{comments, description, responses, tags}}{Values to be used within the OpenAPI Spec}
 
+\item{\code{requestBodyObjectName}}{schema name for object used in endpoint request body}
+
 \item{\code{srcref}}{\code{srcref} attribute from block}
 }
 \if{html}{\out{</div>}}

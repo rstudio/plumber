@@ -18,6 +18,11 @@ plumbOneGlobal <- function(fields, argument, envir = parent.frame()){
     return(fields)
   }
 
+  verboseParsing <- getOption("plumber.verboseParsing", default="FALSE") == "TRUE"
+  if (verboseParsing) {
+    message("*** Parsing global from ", argument)
+  }
+
   name <- parsedLine[3]
   def <- parsedLine[4]
   def <- gsub("^\\s*|\\s*$", "", def)
@@ -79,7 +84,7 @@ plumbGlobals <- function(lines, envir = parent.frame()){
     if (length(parsedLine) == 4){
       if (nchar(parsedLine[3]) == 0){
         # Not a new argument, continue existing one
-        fullArg <- paste(fullArg, parsedLine[4])
+        fullArg <- paste(fullArg, parsedLine[4], sep="\n")
       } else {
         # New argument, parse the buffer and start a new one
         fields <- plumbOneGlobal(fields, fullArg, envir)
