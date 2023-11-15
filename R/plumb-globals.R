@@ -79,7 +79,7 @@ plumbGlobals <- function(lines, envir = parent.frame()){
     if (length(parsedLine) == 4){
       if (nchar(parsedLine[3]) == 0){
         # Not a new argument, continue existing one
-        fullArg <- paste(fullArg, parsedLine[4])
+        fullArg <- paste(fullArg, parsedLine[4], sep="\n")
       } else {
         # New argument, parse the buffer and start a new one
         fields <- plumbOneGlobal(fields, fullArg, envir)
