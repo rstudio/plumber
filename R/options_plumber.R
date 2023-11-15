@@ -47,9 +47,10 @@
 #' will not interpret e.g. plot_width and plot_height parameters as plot image
 #' size instructions}
 #' }
+#' \item{`plumber.verboseParsing`}{Plumber will output line-by-line messages during parsing.}
 #'
 #' @param ... Ignored. Should be empty
-#' @param port,docs,docs.callback,trailingSlash,methodNotAllowed,apiScheme,apiHost,apiPort,apiPath,apiURL,maxRequestSize,sharedSecret,legacyRedirects,typedParameters,staticSerializers See details
+#' @param port,docs,docs.callback,trailingSlash,methodNotAllowed,apiScheme,apiHost,apiPort,apiPath,apiURL,maxRequestSize,sharedSecret,legacyRedirects,typedParameters,staticSerializers,verboseParsing See details
 #' @return
 #' The complete, prior set of [options()] values.
 #' If a particular parameter is not supplied, it will return the current value.
@@ -71,7 +72,8 @@ options_plumber <- function(
   sharedSecret         = getOption("plumber.sharedSecret"),
   legacyRedirects      = getOption("plumber.legacyRedirects"),
   typedParameters      = getOption("plumber.typedParameters"),
-  staticSerializers    = getOption("plumber.staticSerializers")
+  staticSerializers    = getOption("plumber.staticSerializers"),
+  verboseParsing       = getOption("plumber.verboseParsing")
 ) {
   ellipsis::check_dots_empty()
 
@@ -95,6 +97,7 @@ options_plumber <- function(
     plumber.sharedSecret         =   sharedSecret,
     plumber.legacyRedirects      =   legacyRedirects,
     plumber.typedParameters      =   typedParameters,
-    plumber.staticSerializers    =   staticSerializers
+    plumber.staticSerializers    =   staticSerializers,
+    plumber.verboseParsing       =   verboseParsing
   )
 }
