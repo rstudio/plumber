@@ -38,7 +38,6 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
     line <- file[lineNum]
     if (verbose_line_building) message("*** line seen: ", line)
 
-
     # If the line does not start with a plumber tag `#*` or `#'`, continue to next line
     if (!stri_detect_regex(line, pattern="^#['\\*]")) {
       lineNum <- lineNum - 1
@@ -67,7 +66,7 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
 
     line <- c(line, line_carryover)
     line_carryover <- character()
-    line <- paste(line, collapse = " ")
+    line <- paste(line, collapse = "\n")
     if (verbose_line_building) message("*** line for processing: ", line)
 
     epMat <- stri_match(line, regex="^#['\\*]\\s*@(get|put|post|use|delete|head|options|patch)(\\s+(.*)$)?")
@@ -232,7 +231,7 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
 
     # testing: line <- "#* @response 200 Just a description"
     # line <- "#* @response 200 @body AThing Just a description"
-    responseMat <- stri_match(line, regex="^#['\\*]\\s*@response\\s+(\\w+)(?:\\s+@body\\s+([^\\s]*))?\\s+(\\S.*)\\s*$")
+    responseMat <- stri_match(line, regex="(?s)^#['\\*]\\s*@response\\s+(\\w+)(?:\\s+@body\\s+([^\\s]*))?\\s+(\\S.*)\\s*")
     if (!is.na(responseMat[1,1])){
       resp <- list()
       resp[[responseMat[1,2]]] <- list(
@@ -246,7 +245,7 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
       responses <- c(responses, resp)
     }
 
-    paramMat <- stri_match(line, regex="^#['\\*]\\s*@param(\\s+([^\\s:]+):?([^\\s*]+)?(\\*)?(?:\\s+(.*))?\\s*$)?")
+    paramMat <- stri_match(line, regex="(?s)^#['\\*]\\s*@param(\\s+([^\\s:]+):?([^\\s*]+)?(\\*)?(?:\\s+(.*))?\\s*)?")
     if (!is.na(paramMat[1,2])){
       name <- paramMat[1,3]
       if (is.na(name)){
@@ -261,7 +260,7 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
       params[[name]] <- list(desc=paramMat[1,6], type=apiType, required=required, isArray=isArray)
     }
 
-    tagMat <- stri_match(line, regex="^#['\\*]\\s*@tag\\s+(\"[^\"]+\"|'[^']+'|\\S+)\\s*")
+    tagMat <- stri_match(line, regex="(?s)^#['\\*]\\s*@tag\\s+(\"[^\"]+\"|'[^']+'|\\S+)\\s*")
     if (!is.na(tagMat[1,1])){
       t <- stri_trim_both(tagMat[1,2], pattern = "[[\\P{Wspace}]-[\"']]")
       if (is.na(t) || t == ""){
@@ -273,18 +272,13 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
       tags <- c(tags, t)
     }
 
-    commentMat <- stri_match(line, regex="^#['\\*]\\s*([^@\\s].*$)")
-    if (!is.na(commentMat[1,2])){
-      comments <- c(comments, trimws(commentMat[1,2]))
-    }
-
     routerModifierMat <- stri_match(line, regex="^#['\\*]\\s*@plumber")
     if (!is.na(routerModifierMat[1,1])) {
       routerModifier <- TRUE
     }
 
     # example: line <- "#* @requestBody life"
-    requestBodyMat <- stri_match(line, regex="^#['\\*]\\s*@requestBody\\s*(.*)\\s*$")
+    requestBodyMat <- stri_match(line, regex="(?s)^#['\\*]\\s*@requestBody\\s*(.*)\\s*")
     if (!is.na(requestBodyMat[1,1])){
       rb <- stri_trim_both(requestBodyMat[1,2])
 
@@ -300,7 +294,7 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
       requestBodyObjectName <- rb
     }
 
-    objectMat <- stri_match(line, regex="^#['\\*]\\s*@schema(\\s+(.*)$)?$")
+    objectMat <- stri_match(line, regex="^#['\\*]\\s*@schema(\\s+(.*)$)?")
     if (!is.na(objectMat[1,1])){
       o <- stri_trim_both(objectMat[1,3])
 
@@ -321,7 +315,7 @@ plumbBlock <- function(lineNum, file, envir = parent.frame()){
     # testing line <- "#* @prop One:[string] The Description"
     # testing line <- "#* @prop One:[object]:foo The Description"
     # testing line <- "#* @prop One:[object]:foo* The Description"
-    propMat <- stri_match(line, regex="^#['\\*]\\s*@prop(\\s+([^\\s:]+):?([^[\\s:]*]+)?(?::([^\\s*]+))?(\\*)?(?:\\s+(.*))?\\s*$)?")
+    propMat <- stri_match(line, regex="(?s)^#['\\*]\\s*@prop(\\s+([^\\s:]+):?([^[\\s:]*]+)?(?::([^\\s*]+))?(\\*)?(?:\\s+(.*))?\\s*)?")
     if (!is.na(propMat[1,2])){
       name <- propMat[1,3]
       if (is.na(name)){
@@ -391,7 +385,7 @@ evaluateBlock <- function(srcref, file, expr, envir, addEndpoint, addFilter, add
         !is.null(block$routerModifier),
         !is.null(block$object)) > 1){
     stopOnLine(lineNum, file[lineNum],
-               paste0("A single function can only be a filter, an API endpoint, ", 
+               paste0("A single function can only be a filter, an API endpoint, ",
                "an asset, an object or a Plumber object modifier (@filter AND @get, ",
                "@post, @assets, @plumber, etc.)"))
   }
