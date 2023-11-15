@@ -20,13 +20,14 @@ options_plumber(
   sharedSecret = getOption("plumber.sharedSecret"),
   legacyRedirects = getOption("plumber.legacyRedirects"),
   typedParameters = getOption("plumber.typedParameters"),
-  staticSerializers = getOption("plumber.staticSerializers")
+  staticSerializers = getOption("plumber.staticSerializers"),
+  verboseParsing = getOption("plumber.verboseParsing")
 )
 }
 \arguments{
 \item{...}{Ignored. Should be empty}
 
-\item{port, docs, docs.callback, trailingSlash, methodNotAllowed, apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, sharedSecret, legacyRedirects, typedParameters, staticSerializers}{See details}
+\item{port, docs, docs.callback, trailingSlash, methodNotAllowed, apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, sharedSecret, legacyRedirects, typedParameters, staticSerializers, verboseParsing}{See details}
 }
 \value{
 The complete, prior set of \code{\link[=options]{options()}} values.
@@ -82,4 +83,5 @@ supplied type hints.  Defaults to\code{TRUE}}
 will not interpret e.g. plot_width and plot_height parameters as plot image
 size instructions}
 }
+\item{\code{plumber.verboseParsing}}{Plumber will output line-by-line messages during parsing.}
 }
