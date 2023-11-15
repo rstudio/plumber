@@ -18,6 +18,11 @@ plumbOneGlobal <- function(fields, argument, envir = parent.frame()){
     return(fields)
   }
 
+  verboseParsing <- getOption("plumber.verboseParsing", default="FALSE") == "TRUE"
+  if (verboseParsing) {
+    message("*** Parsing global from ", argument)
+  }
+
   name <- parsedLine[3]
   def <- parsedLine[4]
   def <- gsub("^\\s*|\\s*$", "", def)
