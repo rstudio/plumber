@@ -310,7 +310,21 @@ Alternatively, `echo {"id":123, "name": "Jennifer"} > call.json & curl --data @c
 
 As demonstrated above, the raw request body is made available as `req$bodyRaw` and parsed request body is available as `req$body`.
 
-If multiple parameters are matched to the endpoint formals, an error will be thrown. Due to the nature of how multiple values can be matched to the same argument, it is recommended that `POST` endpoints have a function definition that only accepts the formals `req`, `res`, and `...`. If the endpoint arguments are to be processed like a list, they are available at `req$argsBody`, with all arguments at `req$args`. `req$args` is a combination of `list(req = req, res = res)`, `req$argsPath`, `req$argsBody`, and `req$argsQuery`.
+#### Named parameters collision note
+
+Only the first matched formal arguments are passed automatically to the endpoint during execution. Duplicates are dropped. Query parameters have priority over path parameters, then finally, body parameters are matched last.  
+
+While not required, it is recommended that endpoints have a function definition that only accepts the formals `req`, `res`, and `...` to avoid duplicates. If the endpoint arguments are to be processed like a list, they are available at `req$argsBody`, with all arguments at `req$args`. `req$args` is a combination of `list(req = req, res = res)`, `req$argsPath`, `req$argsBody`, and `req$argsQuery`.
+
+```{r, echo=FALSE, results='asis'}
+function(req[, res, ...]) {
+  ...
+  req$argsQuery
+  req$argsPath
+  req$argsBody
+  ...
+}
+```
 
 ### Cookies {#read-cookies}
 
