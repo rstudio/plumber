@@ -316,7 +316,7 @@ Only the first matched formal arguments are passed automatically to the endpoint
 
 While not required, it is recommended that endpoints have a function definition that only accepts the formals `req`, `res`, and `...` to avoid duplicates. If the endpoint arguments are to be processed like a list, they are available at `req$argsBody`, with all arguments at `req$args`. `req$args` is a combination of `list(req = req, res = res)`, `req$argsPath`, `req$argsBody`, and `req$argsQuery`.
 
-```{r, echo=FALSE, results='asis'}
+``` r
 function(req[, res, ...]) {
   ...
   req$argsQuery
