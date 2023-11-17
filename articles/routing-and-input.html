@@ -702,16 +702,29 @@ will return:</p>
 <p>As demonstrated above, the raw request body is made available as
 <code>req$bodyRaw</code> and parsed request body is available as
 <code>req$body</code>.</p>
-<p>If multiple parameters are matched to the endpoint formals, an error
-will be thrown. Due to the nature of how multiple values can be matched
-to the same argument, it is recommended that <code>POST</code> endpoints
-have a function definition that only accepts the formals
-<code>req</code>, <code>res</code>, and <code>...</code>. If the
+</div>
+<div class="section level4">
+<h4 id="named-parameters-collision-note">Named parameters collision note<a class="anchor" aria-label="anchor" href="#named-parameters-collision-note"></a>
+</h4>
+<p>Only the first matched formal arguments are passed automatically to
+the endpoint during execution. Duplicates are dropped. Query parameters
+have priority over path parameters, then finally, body parameters are
+matched last.</p>
+<p>While not required, it is recommended that endpoints have a function
+definition that only accepts the formals <code>req</code>,
+<code>res</code>, and <code>...</code> to avoid duplicates. If the
 endpoint arguments are to be processed like a list, they are available
 at <code>req$argsBody</code>, with all arguments at
 <code>req$args</code>. <code>req$args</code> is a combination of
 <code>list(req = req, res = res)</code>, <code>req$argsPath</code>,
 <code>req$argsBody</code>, and <code>req$argsQuery</code>.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="cf">function</span>(req[, res, ...]) {</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>  ...</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>  req<span class="sc">$</span>argsQuery</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>  req<span class="sc">$</span>argsPath</span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>  req<span class="sc">$</span>argsBody</span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>  ...</span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -735,7 +748,7 @@ request object. They are prefixed with <code>HTTP_</code>, the name of
 the header is capitalized, and hyphens are substituted for underscores.
 e.g. the <code>Content-Type</code> HTTP header can be found as
 <code>req$HTTP_CONTENT_TYPE</code>.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#* Return the value of a custom header</span></span>
 <span><span class="co">#* @get /</span></span>
 <span><span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span><span class="op">{</span></span>
@@ -746,9 +759,9 @@ e.g. the <code>Content-Type</code> HTTP header can be found as
 <p>Running
 <code>curl --header "customheader: abc123" http://localhost:8000</code>
 will return:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>  <span class="dt">"val"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"abc123"</span><span class="ot">]</span></span>
-<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>  <span class="dt">"val"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"abc123"</span><span class="ot">]</span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <p>You can print out the names of all of the properties attached to the
 request by running <code>print(ls(req))</code> inside an endpoint.</p>
 </div>
