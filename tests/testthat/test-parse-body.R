@@ -261,6 +261,12 @@ test_that("Test multipart parser", {
   expect_true(is.raw(body_args[["img2"]][["ragnarok_small.png"]]))
   expect_gt(length(body_args[["img2"]][["ragnarok_small.png"]]), 100)
   expect_equal(body_args[["json"]], list(a=2,b=4,c=list(w=3,t=5)))
+
+  # Quoted boundary
+  req$HTTP_CONTENT_TYPE = "multipart/form-data; boundary=\"----WebKitFormBoundaryMYdShB9nBc32BUhQ\""
+  req$body <- req_body_parser(req, make_parser(c("multi", "json", "rds", "octet")))
+  expect_equal(names(req$body), c("json", "img1", "img2", "rds"))
+
 })
 
 

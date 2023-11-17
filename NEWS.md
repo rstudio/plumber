@@ -1,5 +1,6 @@
 # plumber (development version)
 
+* Add support for quoted boundary for multipart request parsing. (@meztez #924)
 
 # plumber 1.2.1
 
