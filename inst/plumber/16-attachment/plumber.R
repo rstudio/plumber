@@ -29,18 +29,16 @@ function() {
 function() {
 
   # Create temporary directory structure
-  rnd_dir <- rawToChar(as.raw(sample(65:90, size = 5, replace = TRUE)))
-  tmp_dir <- file.path(tempdir(), rnd_dir)
+  tmp_dir <- tempfile()
   dir.create(tmp_dir, showWarnings = FALSE)
   on.exit(unlink(tmp_dir, recursive = TRUE), add = TRUE)
 
   # Save datasets to csv
-  csv_files <- character()
-  for (dataset in c("mtcars", "iris", "airquality")) {
+  csv_files <- lapply(c("mtcars", "quakes", "airquality"), function(dataset) {
     csv_file <- file.path(tmp_dir, paste0(dataset, ".csv"))
-    csv_files <- c(csv_files, csv_file)
     write.csv(get(dataset), csv_file)
-  }
+    csv_file
+  })
 
   # Create archive
   zip_file <- file.path(tmp_dir, "datasets.zip")
