@@ -6,7 +6,7 @@ default404Handler <- function(req, res) {
 
 defaultErrorHandler <- function(){
   function(req, res, err){
-    print(err)
+    message(err)
 
     li <- list()
 
