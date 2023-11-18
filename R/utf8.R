@@ -66,15 +66,13 @@ parseUTF8 <- function(file) {
   # **can** be encoded natively on Windows (might be a bug in base R); we
   # rewrite the source code in a natively encoded temp file and parse it in this
   # case (the source reference is still pointed to the original file, though)
-  keepsource <- TRUE
   if (isWindows() && enc == 'unknown') {
     file <- tempfile(); on.exit(unlink(file), add = TRUE)
     writeLines(lines, file)
-    keepsource <- FALSE
   }
 
   # keep the source locations within the file while parsing
-  exprs <- try(parse(file, keep.source = keepsource, srcfile = src, encoding = enc))
+  exprs <- try(parse(file, keep.source = FALSE, srcfile = src, encoding = enc))
   if (inherits(exprs, "try-error")) {
     stop("Error sourcing ", file)
   }
