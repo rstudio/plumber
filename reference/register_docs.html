@@ -129,8 +129,8 @@ See the example below.</p></dd>
 <span class="r-in"><span><span class="co"># * via `pr_set_docs()`</span></span></span>
 <span class="r-in"><span><span class="co"># * or through URL query string variables</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="pr.html">pr</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="co"># Set default argument `version = 3` for the swagger `index` and `static` functions</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="pr_set_docs.html">pr_set_docs</a></span><span class="op">(</span><span class="st">"swagger"</span>, version <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="co"># Set default argument `version = "3"` for the swagger `index` and `static` functions</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="pr_set_docs.html">pr_set_docs</a></span><span class="op">(</span><span class="st">"swagger"</span>, version <span class="op">=</span> <span class="st">"3"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="pr_handle.html">pr_get</a></span><span class="op">(</span><span class="st">"/plus/&lt;a:int&gt;/&lt;b:int&gt;"</span>, <span class="kw">function</span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span> <span class="op">{</span> <span class="va">a</span> <span class="op">+</span> <span class="va">b</span> <span class="op">}</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="pr_run.html">pr_run</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
