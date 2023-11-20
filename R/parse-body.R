@@ -518,9 +518,8 @@ parser_multi <- function() {
   function(value, content_type, parsers, ...) {
     if (!stri_detect_fixed(content_type, "boundary=", case_insensitive = TRUE))
       stop("No boundary found in multipart content-type header: ", content_type)
-    boundary <- stri_match_first_regex(content_type, "boundary=([^; ]{2,})", case_insensitive = TRUE)[,2]
-    # Remove surrounding quotes if they exist
-    boundary <- stri_replace_first_regex(boundary, '^"(.*)"$', "$1")
+    # Also remove surrounding quotes if they exist
+    boundary <- stri_match_first_regex(content_type, "boundary=\"?([^; \"]{2,})\"?", case_insensitive = TRUE)[,2]
     toparse <- parse_multipart(value, boundary)
 
     # set the names of the items as the `name` of each item
