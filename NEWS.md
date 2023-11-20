@@ -1,5 +1,6 @@
 # plumber (development version)
 
+* Add support for quoted boundary for multipart request parsing. (@meztez #924)
 * Fix #916, related to `parseUTF8` return value attribute `srcfile` on Windows. (#930) 
 
 # plumber 1.2.1
