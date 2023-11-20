@@ -50,8 +50,8 @@ register_docs(
 # * via `pr_set_docs()`
 # * or through URL query string variables
 pr() \%>\%
-  # Set default argument `version = 3` for the swagger `index` and `static` functions
-  pr_set_docs("swagger", version = 3) \%>\%
+  # Set default argument `version = "3"` for the swagger `index` and `static` functions
+  pr_set_docs("swagger", version = "3") \%>\%
   pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) \%>\%
   pr_run()
 }
