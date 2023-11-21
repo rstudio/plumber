@@ -159,7 +159,7 @@ Plumber wraps each endpoint invocation so that it can gracefully capture errors.
 ```{r, eval = FALSE, code = readLines("files/apis/04-05-error.R")}
 ```
 
-If you run this API and visit http://localhost:8000/simple, you'll notice two things:
+If you run this API in interactive mode and visit http://localhost:8000/simple, you'll notice two things:
 
 1. An HTTP response with a status code of `500` ("internal server error") is sent to the client. You should see an error message resembling: `{"error":["500 - Internal server error"],"message":["Error in (function () : I'm an error!\n"]}`
 2. A similar error is printed in the terminal where you're running your Plumber API.
