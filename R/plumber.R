@@ -91,7 +91,7 @@ Plumber <- R6Class(
       # Default parsers to maintain legacy features
       self$setParsers(c("json", "form", "text", "octet", "multi"))
       self$setErrorHandler(defaultErrorHandler())
-      self$set404Handler(default404Handler)
+      self$set404Handler(NULL) # Allows for fall through to next router
       self$setDocs(TRUE)
       private$docs_info$has_not_been_set <- TRUE # set to know if `$setDocs()` has been called before `$run()`
       private$docs_callback <- rlang::missing_arg()
@@ -567,9 +567,29 @@ Plumber <- R6Class(
       routeStep <- function(...) {
         self$route(req, res)
       }
+      # No endpoint could handle this request. 307, 405, 404
+      routeNotFoundStep <- function(value, ...) {
+        if (!isRouteNotFound(value)) {
+          # This router handled the request
+          # Go to the next step
+          return(value)
+        }
+
+        # No endpoint could handle this request.
+        lastChanceRouteNotFound(
+          req = req,
+          res = res,
+          pr = self,
+          # `$route()` already had a chance to call `private$notFoundHandler()`
+          # Using `default404Handler()` as `private$notFoundHandler()` would be missing
+          handle404 = default404Handler
+        )
+      }
+
       postrouteStep <- function(value, ...) {
         private$runHooks("postroute", list(data = hookEnv, req = req, res = res, value = value))
       }
+
 
       serializeSteps <- function(value, ...) {
         if ("PlumberResponse" %in% class(value)) {
@@ -614,6 +634,7 @@ Plumber <- R6Class(
         list(
           prerouteStep,
           routeStep,
+          routeNotFoundStep,
           postrouteStep,
           serializeSteps
         )
@@ -761,73 +782,89 @@ Plumber <- R6Class(
       # If we still haven't found a match, check the un-preempt'd endpoints.
       steps <- append(steps, list(makeHandleStep("__no-preempt__")))
 
-      # We aren't going to serve this endpoint; see if any mounted routers will
-      mountSteps <- lapply(names(private$mnts), function(mountPath) {
-        # (make step function)
-        function(...) {
-          resetForward()
+
+      ## We aren't going to serve this endpoint; see if any mounted routers will
+
+      # Capture the path info so it can be reset before/after executing the mount
+      curPathInfo <- req$PATH_INFO
+
+      # Dynamically add mount steps to avoid wasting time on mounts that don't match
+      mountSteps <- list()
+      Map(
+        mountPath = names(private$mnts),
+        mount = private$mnts,
+        f = function(mountPath, mount) {
           # TODO: support globbing?
+          mountSupportsPath <-
+            nchar(path) >= nchar(mountPath) &&
+            substr(path, 0, nchar(mountPath)) == mountPath
+          if (!mountSupportsPath) {
+            # This router does not support this path
+            # Do not add to mountSteps
+            return()
+          }
 
-          if (nchar(path) >= nchar(mountPath) && substr(path, 0, nchar(mountPath)) == mountPath) {
-            # This is a prefix match or exact match. Let this router handle.
+          mountSteps[[length(mountSteps) + 1]] <<- function(...) {
+            mountExecStep <- function(...) {
+              resetForward() # Doesn't hurt to reset here
+              ## First trim the prefix off of the PATH_INFO element
+              # Reset the path info for each mount
+              req$PATH_INFO <- curPathInfo
+              req$PATH_INFO <- substr(req$PATH_INFO, nchar(mountPath), nchar(req$PATH_INFO))
 
-            # First trim the prefix off of the PATH_INFO element
-            req$PATH_INFO <- substr(req$PATH_INFO, nchar(mountPath), nchar(req$PATH_INFO))
-            return(private$mnts[[mountPath]]$route(req, res))
-          } else {
-            return(forward())
+              # str(list(mountPath = mountPath, curPathInfo = curPathInfo, req_path_info = req$PATH_INFO))
+              # Handle mount asynchronously
+              private$mnts[[mountPath]]$route(req, res)
+            }
+            postMountExecStep <- function(mountRes, ...) {
+              # Don't know what happened in the mount. Reset again.
+              resetForward()
+
+              # Reset the req path info
+              # TODO-future; this should really be in a `finally()` after `mountExecStep`.
+              req$PATH_INFO <- curPathInfo
+
+              # Only move on to the next mount if a `routeNotFound()` was returned
+              if (isRouteNotFound(mountRes)) {
+                # This router did not support this path
+                # `forward()` to the next router
+                return(forward())
+              }
+
+              # Regular response, return it
+              return(mountRes)
+            }
+
+            runSteps(
+              NULL,
+              stop,
+              list(
+                mountExecStep,
+                postMountExecStep
+              )
+            )
           }
         }
-      })
+      )
       steps <- append(steps, mountSteps)
 
-      # No endpoint could handle this request. 404
-      notFoundStep <- function(...) {
-
-        if (isTRUE(getOption("plumber.trailingSlash", FALSE))) {
-          # Redirect to the slash route, if it exists
-          path <- req$PATH_INFO
-          # If the path does not end in a slash,
-          if (!grepl("/$", path)) {
-            new_path <- paste0(path, "/")
-            # and a route with a slash exists...
-            if (router_has_route(req$pr, new_path, req$REQUEST_METHOD)) {
-
-              # Temp redirect with same REQUEST_METHOD
-              # Add on the query string manually. They do not auto transfer
-              # The POST body will be reissued by caller
-              new_location <- paste0(new_path, req$QUERY_STRING)
-              res$status <- 307
-              res$setHeader(
-                name = "Location",
-                value = new_location
-              )
-              res$serializer <- serializer_unboxed_json()
-              return(
-                list(message = "307 - Redirecting with trailing slash")
-              )
-            }
-          }
+      routeNotFoundStep <- function(...) {
+        if (is.function(private$notFoundHandler)) {
+          # Terminate the route handling using the local 404 method
+          return(
+            lastChanceRouteNotFound(
+              req = req,
+              res = res,
+              pr = self,
+              handle404 = private$notFoundHandler
+            )
+          )
         }
 
-        # No trailing-slash route exists...
-        # Try allowed verbs
-
-        if (isTRUE(getOption("plumber.methodNotAllowed", TRUE))) {
-          # Notify about allowed verbs
-          if (is_405(req$pr, req$PATH_INFO, req$REQUEST_METHOD)) {
-            res$status <- 405L
-            # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Allow
-            res$setHeader("Allow", paste(req$verbsAllowed, collapse = ", "))
-            res$serializer <- serializer_unboxed_json()
-            return(list(error = "405 - Method Not Allowed"))
-          }
-        }
-
-        # Notify that there is no route found
-        private$notFoundHandler(req = req, res = res)
+        # Let the next mount or `$serve()` handle it
+        return(routeNotFound())
       }
-      steps <- append(steps, list(notFoundStep))
+      steps <- append(steps, list(routeNotFoundStep))
 
       errorHandlerStep <- function(error, ...) {
         private$errorHandler(req, res, error)

@@ -55,9 +55,10 @@ expect_route_async <- function(x) {
 }
 
 async_router <- function() {
-  "files/async.R" %>%
-    test_path() %>%
-    pr()
+  root <- pr(test_path("files/async.R"))
+  mnt <- pr(test_path("files/async.R"))
+  # Mount a async router at /mnt
+  pr_mount(root, "/mount", mnt)
 }
 
 serve_route <- function(pr, route) {
@@ -78,9 +79,25 @@ test_that("sync works", {
     expect_route_sync()
 })
 
+test_that("sync works", {
+  async_router() %>%
+    serve_route("/mount/sync") %>%
+    expect_not_promise() %>%
+    get_result() %>%
+    expect_route_sync()
+})
+
 test_that("async works", {
   async_router() %>%
     serve_route("/async") %>%
+    expect_promise() %>%
+    get_result() %>%
+    expect_route_async()
+})
+
+test_that("async works", {
+  async_router() %>%
+    serve_route("/mount/async") %>%
     expect_promise() %>%
     get_result() %>%
     expect_route_async()

@@ -11,6 +11,8 @@ forward_class <- "plumber_forward"
 forward <- function() {
   exec <- getCurrentExec()
   exec$forward <- TRUE
+  # Currently not used. Would prefer this structure in future versions
+  structure(list(), class = "plumber_forward")
 }
 hasForwarded <- function() {
   getCurrentExec()$forward
@@ -18,6 +20,14 @@ hasForwarded <- function() {
 resetForward <- function() {
   exec <- getCurrentExec()
   exec$forward <- FALSE
+}
+
+# Handle mounted routes not being found
+routeNotFound <- function() {
+  structure(list(), class = "plumber_route_not_found")
+}
+isRouteNotFound <- function(x) {
+  inherits(x, "plumber_route_not_found")
 }
 
 #' plumber step R6 class

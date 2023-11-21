@@ -62,9 +62,9 @@ PlumberStatic <- R6Class(
         path <- httpuv::decodeURIComponent(path)
         abs.path <- resolve_path(direc, path)
         if (is.null(abs.path)) {
-          # TODO: Should this be inherited from a parent router?
-          val <- private$notFoundHandler(req=req, res=res)
-          return(val)
+          # If the file doesn't exist, forward on to the router 404 handler
+          # (Default 404 handler calls `routeNotFound()` which will move on to next mount).
+          return(forward())
         }
 
         ext <- tools::file_ext(abs.path)

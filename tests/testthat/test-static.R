@@ -70,8 +70,7 @@ test_that("static binary file is served", {
 })
 
 test_that("404s are handled", {
-  res <- PlumberResponse$new()
-  pr$route(make_req("GET", "/i-dont-exist"), res)
+  res <- pr$call(make_req("GET", "/i-dont-exist"))
   expect_equal(res$status, 404)
 })
 
