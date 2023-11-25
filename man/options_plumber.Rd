@@ -2,6 +2,7 @@
 % Please edit documentation in R/options_plumber.R
 \name{options_plumber}
 \alias{options_plumber}
+\alias{getOption_env_default}
 \title{Plumber options}
 \usage{
 options_plumber(
@@ -20,11 +21,19 @@ options_plumber(
   sharedSecret = getOption("plumber.sharedSecret"),
   legacyRedirects = getOption("plumber.legacyRedirects")
 )
+
+getOption_env_default(x, default = NULL)
 }
 \arguments{
 \item{...}{Ignored. Should be empty}
 
 \item{port, docs, docs.callback, trailingSlash, methodNotAllowed, apiScheme, apiHost, apiPort, apiPath, apiURL, maxRequestSize, sharedSecret, legacyRedirects}{See details}
+
+\item{x}{a character string holding an option name.}
+
+\item{default}{if the specified option is not set in the options list,
+    this value is returned.  This facilitates retrieving an option and
+    checking whether it is set and setting it separately if not.}
 }
 \value{
 The complete, prior set of \code{\link[=options]{options()}} values.
@@ -34,7 +43,9 @@ If no parameters are supplied, all returned values will be the current \code{\li
 \description{
 There are a number of global options that affect Plumber's behavior. These can
 be set globally with \code{\link[=options]{options()}} or with \code{\link[=options_plumber]{options_plumber()}}. Options set using
-\code{\link[=options_plumber]{options_plumber()}} should not include the \code{plumber.} prefix.
+\code{\link[=options_plumber]{options_plumber()}} should not include the \code{plumber.} prefix. Alternatively,
+environment variable can be used to set plumber options using uppercase and
+underscores (i.e. to set \code{plumber.apiHost} you can set environment variable \code{PLUMBER_APIHOST}).
 }
 \details{
 \describe{

@@ -77,8 +77,8 @@ test_that("`swaggerCallback` can be set by option after the pr is created", {
 
   with_options(
     list(
-      plumber.swagger.url = getOption("plumber.swagger.url"),
-      plumber.docs.callback = getOption("plumber.docs.callback")
+      plumber.swagger.url = getOption_env_default("plumber.swagger.url"),
+      plumber.docs.callback = getOption_env_default("plumber.docs.callback")
     ),
     {
       # set option after init
