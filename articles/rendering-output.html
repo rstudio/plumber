@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.7/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.7/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.7/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -500,7 +500,7 @@ capture errors.</p>
 <span>  <span class="va">res</span><span class="op">$</span><span class="va">status</span> <span class="op">&lt;-</span> <span class="fl">400</span> <span class="co"># Bad request</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>error<span class="op">=</span><span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/unbox.html" class="external-link">unbox</a></span><span class="op">(</span><span class="va">msg</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>If you run this API and visit <a href="http://localhost:8000/simple" class="external-link uri">http://localhost:8000/simple</a>, you’ll notice two
+<p>If you run this API in interactive mode and visit <a href="http://localhost:8000/simple" class="external-link uri">http://localhost:8000/simple</a>, you’ll notice two
 things:</p>
 <ol style="list-style-type: decimal">
 <li>An HTTP response with a status code of <code>500</code> (“internal
@@ -601,7 +601,7 @@ We can start by visiting the <code>/letter</code> endpoint and we’ll see
 that the API defaults to a lower-case alphabet.
 <code>curl http://localhost:8000/letter</code></p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>  <span class="dt">"letter"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"x"</span><span class="ot">]</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>  <span class="dt">"letter"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"i"</span><span class="ot">]</span></span>
 <span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <p>If we send a <code>PUT</code> request and specify the
 <code>capital</code> parameter, a cookie will be set on the client which
