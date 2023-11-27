@@ -217,7 +217,7 @@ See also: \code{\link[=pr_run]{pr_run()}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Plumber$run(
   host = "127.0.0.1",
-  port = getOption_env_default("plumber.port", NULL),
+  port = get_option_or_env("plumber.port", NULL),
   swagger = deprecated(),
   debug = missing_arg(),
   swaggerCallback = missing_arg(),
@@ -740,7 +740,7 @@ Set visual documentation to use for API
 
 See also: \code{\link[=pr_set_docs]{pr_set_docs()}}, \code{\link[=register_docs]{register_docs()}}, \code{\link[=registered_docs]{registered_docs()}}
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Plumber$setDocs(docs = getOption_env_default("plumber.docs", TRUE), ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$setDocs(docs = get_option_or_env("plumber.docs", TRUE), ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -768,7 +768,7 @@ If using \code{\link[=options_plumber]{options_plumber()}}, the value must be se
 See also: \code{\link[=pr_set_docs_callback]{pr_set_docs_callback()}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Plumber$setDocsCallback(
-  callback = getOption_env_default("plumber.docs.callback", NULL)
+  callback = get_option_or_env("plumber.docs.callback", NULL)
 )}\if{html}{\out{</div>}}
 }
 

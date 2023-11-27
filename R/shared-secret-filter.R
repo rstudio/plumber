@@ -1,6 +1,6 @@
 #' @noRd
 sharedSecretFilter <- function(req, res){
-  secret <- getOption_env_default("plumber.sharedSecret", NULL)
+  secret <- get_option_or_env("plumber.sharedSecret", NULL)
   if (!is.null(secret)){
     supplied <- req$HTTP_PLUMBER_SHARED_SECRET
     if (!identical(supplied, secret)){

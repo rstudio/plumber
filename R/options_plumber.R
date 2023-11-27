@@ -93,22 +93,21 @@ options_plumber <- function(
 }
 
 #' Get an option value, alternatively look in environment for value
-#' @rdname options_plumber
+#' @describeIn options_plumber DOCS
 #' @inheritParams base::options
 #' @export
-getOption_env_default <- function(x, default = NULL) {
+get_option_or_env <- function(x, default = NULL) {
 
   getOption(x, default = {
     env_name <- toupper(chartr(".", "_", x))
     res <- Sys.getenv(env_name)
     if (res == "") {
-      default
-    } else {
-      if (res %in% c("TRUE", "FALSE")) {
-        return(as.logical(res))
-      }
-      res
+      return(default)
     }
+    if (res %in% c("TRUE", "FALSE")) {
+      return(as.logical(res))
+    }
+    res
   })
 
 }

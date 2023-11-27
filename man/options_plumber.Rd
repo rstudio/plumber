@@ -2,7 +2,7 @@
 % Please edit documentation in R/options_plumber.R
 \name{options_plumber}
 \alias{options_plumber}
-\alias{getOption_env_default}
+\alias{get_option_or_env}
 \title{Plumber options}
 \usage{
 options_plumber(
@@ -22,7 +22,7 @@ options_plumber(
   legacyRedirects = getOption("plumber.legacyRedirects")
 )
 
-getOption_env_default(x, default = NULL)
+get_option_or_env(x, default = NULL)
 }
 \arguments{
 \item{...}{Ignored. Should be empty}
@@ -87,3 +87,8 @@ When \code{NULL}, secret is not validated. Otherwise, Plumber compares secret wi
 by settings this option to \code{FALSE}. Defaults to \code{TRUE}}
 }
 }
+\section{Functions}{
+\itemize{
+\item \code{get_option_or_env()}: DOCS
+
+}}

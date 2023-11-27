@@ -3,18 +3,18 @@ context("Options")
 test_that("Options set and get", {
   with_options(list(plumber.port = NULL), {
     options_plumber(port = FALSE)
-    expect_false(getOption_env_default("plumber.port"))
+    expect_false(get_option_or_env("plumber.port"))
     options_plumber(port = NULL)
-    expect_null(getOption_env_default("plumber.port"))
+    expect_null(get_option_or_env("plumber.port"))
   })
 })
 
 test_that("Options set and get", {
   with_options(list(plumber.port = NULL), {
     Sys.setenv("PLUMBER_PORT" = FALSE)
-    expect_false(getOption_env_default("plumber.port"))
+    expect_false(get_option_or_env("plumber.port"))
     Sys.unsetenv("PLUMBER_PORT")
-    expect_null(getOption_env_default("plumber.port"))
+    expect_null(get_option_or_env("plumber.port"))
   })
 })
 
@@ -63,7 +63,7 @@ test_that("all options used are `options_plumber()` parameters", {
 test_that("Legacy swagger redirect can be disabled", {
   with_options(
     list(
-      plumber.legacyRedirets = getOption_env_default("plumber.legacyRedirects")
+      plumber.legacyRedirets = get_option_or_env("plumber.legacyRedirects")
     ), {
       options_plumber(legacyRedirects = TRUE)
       redirects <- swagger_redirects()
@@ -79,12 +79,12 @@ test_that("Legacy swagger redirect can be disabled", {
 test_that("docs.callback sync plumber.swagger.url", {
   with_options(
     list(
-      plumber.swagger.url = getOption_env_default("plumber.swagger.url"),
-      plumber.docs.callback = getOption_env_default("plumber.docs.callback")
+      plumber.swagger.url = get_option_or_env("plumber.swagger.url"),
+      plumber.docs.callback = get_option_or_env("plumber.docs.callback")
     ), {
       options("plumber.swagger.url" = function(api_url) {cat(api_url)})
       opt <- options_plumber(docs.callback = NULL)
-      expect_null(getOption_env_default("plumber.swagger.url"))
+      expect_null(get_option_or_env("plumber.swagger.url"))
       expect_null(opt$plumber.docs.callback)
     }
   )

@@ -4,7 +4,7 @@
 \alias{pr_set_docs}
 \title{Set the API visual documentation}
 \usage{
-pr_set_docs(pr, docs = getOption_env_default("plumber.docs", TRUE), ...)
+pr_set_docs(pr, docs = get_option_or_env("plumber.docs", TRUE), ...)
 }
 \arguments{
 \item{pr}{A Plumber API. Note: The supplied Plumber API object will also be updated in place as well as returned by the function.}
