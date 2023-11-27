@@ -93,7 +93,7 @@ options_plumber <- function(
 }
 
 #' Get an option value, alternatively look in environment for value
-#' @describeIn options_plumber DOCS
+#' @rdname options_plumber
 #' @inheritParams base::options
 #' @export
 get_option_or_env <- function(x, default = NULL) {
