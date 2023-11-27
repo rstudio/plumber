@@ -1,5 +1,6 @@
 # plumber (development version)
 
+* Allow to set plumber options using environment variables `?options_plumber`. (@meztez #934) 
 * Add support for quoted boundary for multipart request parsing. (@meztez #924)
 * Fix #916, related to `parseUTF8` return value attribute `srcfile` on Windows. (#930) 
 

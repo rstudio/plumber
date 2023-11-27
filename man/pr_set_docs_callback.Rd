@@ -4,7 +4,10 @@
 \alias{pr_set_docs_callback}
 \title{Set the \code{callback} to tell where the API visual documentation is located}
 \usage{
-pr_set_docs_callback(pr, callback = getOption("plumber.docs.callback", NULL))
+pr_set_docs_callback(
+  pr,
+  callback = get_option_or_env("plumber.docs.callback", NULL)
+)
 }
 \arguments{
 \item{pr}{A Plumber API. Note: The supplied Plumber API object will also be updated in place as well as returned by the function.}
