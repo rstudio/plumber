@@ -87,8 +87,3 @@ When \code{NULL}, secret is not validated. Otherwise, Plumber compares secret wi
 by settings this option to \code{FALSE}. Defaults to \code{TRUE}}
 }
 }
-\section{Functions}{
-\itemize{
-\item \code{get_option_or_env()}: DOCS
-
-}}
