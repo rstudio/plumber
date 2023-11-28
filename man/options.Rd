@@ -33,7 +33,7 @@ Invisibly an options list from \code{options::opts(env = "plumber")}.
 \description{
 Internally used, package-specific options. All options will prioritize R options() values, and fall back to environment variables if undefined. If neither the option nor the environment variable is set, a default value is used.
 
-There are a number of global options that change behaviors. These can be set globally with
+Options that change behaviors can be set globally with
 \code{\link[base:options]{options}}, \code{\link[plumber:options_plumber]{options_plumber}}
 or with environment variables.
 }

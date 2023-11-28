@@ -136,7 +136,7 @@ NULL
 
 #' Plumber options
 #'
-#' There are a number of global options that change behaviors. These can be set globally with
+#' Options that change behaviors can be set globally with
 #' \code{\link[base:options]{options}}, \code{\link[plumber:options_plumber]{options_plumber}}
 #' or with environment variables.
 #'
@@ -148,22 +148,21 @@ NULL
 #' @keywords internal
 #' @rdname options
 options_plumber <- function(
-    ...,
-    port                 = getOption("plumber.port"),
-    docs                 = getOption("plumber.docs"),
-    docs.callback        = getOption("plumber.docs.callback"),
-    trailingSlash        = getOption("plumber.trailingSlash"),
-    methodNotAllowed     = getOption("plumber.methodNotAllowed"),
-    apiURL               = getOption("plumber.apiURL"),
-    apiScheme            = getOption("plumber.apiScheme"),
-    apiHost              = getOption("plumber.apiHost"),
-    apiPort              = getOption("plumber.apiPort"),
-    apiPath              = getOption("plumber.apiPath"),
-    maxRequestSize       = getOption("plumber.maxRequestSize"),
-    sharedSecret         = getOption("plumber.sharedSecret"),
-    legacyRedirects      = getOption("plumber.legacyRedirects")
+  ...,
+  port                 = getOption("plumber.port"),
+  docs                 = getOption("plumber.docs"),
+  docs.callback        = getOption("plumber.docs.callback"),
+  trailingSlash        = getOption("plumber.trailingSlash"),
+  methodNotAllowed     = getOption("plumber.methodNotAllowed"),
+  apiURL               = getOption("plumber.apiURL"),
+  apiScheme            = getOption("plumber.apiScheme"),
+  apiHost              = getOption("plumber.apiHost"),
+  apiPort              = getOption("plumber.apiPort"),
+  apiPath              = getOption("plumber.apiPath"),
+  maxRequestSize       = getOption("plumber.maxRequestSize"),
+  sharedSecret         = getOption("plumber.sharedSecret"),
+  legacyRedirects      = getOption("plumber.legacyRedirects")
 ) {
-
   ellipsis::check_dots_empty()
 
   # Make sure all fallback options are disabled
