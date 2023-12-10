@@ -37,12 +37,10 @@ function(req, username=""){
 
 #* Now require that all users must be authenticated.
 #* @filter require-auth
-function(req, res){
+function(req){
   if (is.null(req$user)){
     # User isn't logged in
-
-    res$status <- 401 # Unauthorized
-    list(error="You must login to access this resource.")
+    stop_for_unauthorized("You must login to access this resource.")
   } else {
     # user is logged in. Move on...
     forward()

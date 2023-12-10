@@ -38,8 +38,9 @@ PlumberStatic <- R6Class(
       }
 
       badRequest <- function(res) {
-        res$body <- "<h1>Bad Request</h1>"
+        res$setHeader("Content-Type" = "application/problem+json")
         res$status <- 400
+        res$body <- jsonlite::toJSON(bad_request(), auto_unbox = TRUE)
         res
       }
 
