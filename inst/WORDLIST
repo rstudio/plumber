@@ -82,7 +82,7 @@ haproxy
 htmlwidget
 http
 httpuv
-httr
+httr2
 imposter
 integrations
 interpretable
