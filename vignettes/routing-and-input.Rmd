@@ -293,7 +293,7 @@ Plumber will attempt to parse the request body in one using allowed [parsers](ht
 #### Files handling note
 When dealing with binary parameters, Plumber will return a named list of raw vector. The names in the list are the original uploaded filenames. Raw values are binary content of each file.
 
-Unfortunately, crafting a request with a message body requires a bit more work than making a `GET` request with a query string from your web browser, but you can use tools like `curl` on the command line or the [httr R package](https://github.com/hadley/httr/). We'll use `curl` for the examples below.
+Unfortunately, crafting a request with a message body requires a bit more work than making a `GET` request with a query string from your web browser, but you can use tools like `curl` on the command line or the [httr2 R package](https://httr2.r-lib.org). We'll use `curl` for the examples below.
 
 ```{r, eval = FALSE, code = readLines("files/apis/03-04-body.R")}
 ```
