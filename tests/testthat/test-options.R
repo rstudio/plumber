@@ -3,18 +3,18 @@ context("Options")
 test_that("Options set and get", {
   with_options(list(plumber.port = NULL), {
     options_plumber(port = FALSE)
-    expect_false(get_option_or_env("plumber.port"))
+    expect_false(options::opt("port", env = "plumber"))
     options_plumber(port = NULL)
-    expect_null(get_option_or_env("plumber.port"))
+    expect_null(options::opt("port", env = "plumber"))
   })
 })
 
 test_that("Options set and get", {
   with_options(list(plumber.port = NULL), {
     Sys.setenv("PLUMBER_PORT" = FALSE)
-    expect_false(get_option_or_env("plumber.port"))
+    expect_false(options::opt("port", env = "plumber"))
     Sys.unsetenv("PLUMBER_PORT")
-    expect_null(get_option_or_env("plumber.port"))
+    expect_null(options::opt("port", env = "plumber"))
   })
 })
 
@@ -35,27 +35,27 @@ test_that("all options used are `options_plumber()` parameters", {
   matches <- character()
   for (r_file in dir(r_folder, full.names = T)) {
     file_content <- paste0(readLines(r_file, warn = F), collapse = "")
-    match <- stringi::stri_match_all_regex(file_content, "getOption\\([^,\\)]+,?\\)?")[[1]][,1]
+    match <- stringi::stri_match_all_regex(file_content, "options::opt\\([^,\\)]+,?\\)?")[[1]][,1]
     match <- gsub("\\s", "", match)
     if (length(match) > 0 && !all(is.na(match))) {
       matches <- c(matches, match)
     }
   }
-  options_used <- unique(sort(gsub("getOption|\\(|\"|,|'|\\)", "", matches)))
-  plumber_options_used <- grep("^plumber", options_used, value = TRUE)
-  deprecated_options <-  c("plumber.swagger.url")
-  plumber_options_used <- plumber_options_used[!(plumber_options_used %in% deprecated_options)]
+  options_used <- unique(sort(gsub("options::opt|\\(|\"|,|'|\\)", "", matches)))
   ### code to match formals
   formals_to_match <-
     sort(setdiff(
       names(formals(options_plumber)),
       "..."
     ))
-  options_plumber_formals <- paste0("plumber.", formals_to_match)
 
   expect_equal(
-    plumber_options_used,
-    options_plumber_formals
+    options_used,
+    formals_to_match
+  )
+  expect_equal(
+    sort(names(options::opts(env = "plumber"))),
+    formals_to_match
   )
 })
 
@@ -63,7 +63,7 @@ test_that("all options used are `options_plumber()` parameters", {
 test_that("Legacy swagger redirect can be disabled", {
   with_options(
     list(
-      plumber.legacyRedirets = get_option_or_env("plumber.legacyRedirects")
+      plumber.legacyRedirets = options::opt("legacyRedirects", env = "plumber")
     ), {
       options_plumber(legacyRedirects = TRUE)
       redirects <- swagger_redirects()
@@ -79,13 +79,13 @@ test_that("Legacy swagger redirect can be disabled", {
 test_that("docs.callback sync plumber.swagger.url", {
   with_options(
     list(
-      plumber.swagger.url = get_option_or_env("plumber.swagger.url"),
-      plumber.docs.callback = get_option_or_env("plumber.docs.callback")
+      plumber.swagger.url = getOption("plumber.swagger.url"),
+      plumber.docs.callback = options::opt("docs.callback", env = "plumber")
     ), {
       options("plumber.swagger.url" = function(api_url) {cat(api_url)})
       opt <- options_plumber(docs.callback = NULL)
-      expect_null(get_option_or_env("plumber.swagger.url"))
-      expect_null(opt$plumber.docs.callback)
+      expect_null(getOption("plumber.swagger.url"))
+      expect_null(options::opt("docs.callback", env = "plumber"))
     }
   )
 })

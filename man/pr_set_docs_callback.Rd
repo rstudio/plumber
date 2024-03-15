@@ -6,7 +6,7 @@
 \usage{
 pr_set_docs_callback(
   pr,
-  callback = get_option_or_env("plumber.docs.callback", NULL)
+  callback = options::opt("docs.callback", env = "plumber")
 )
 }
 \arguments{

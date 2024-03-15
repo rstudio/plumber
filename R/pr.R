@@ -520,7 +520,7 @@ pr_filter <- function(pr,
 #' @export
 pr_run <- function(pr,
                    host = '127.0.0.1',
-                   port = get_option_or_env('plumber.port', NULL),
+                   port = options::opt("port", env = "plumber"),
                    ...,
                    debug = missing_arg(),
                    docs = missing_arg(),

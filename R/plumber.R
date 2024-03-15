@@ -159,7 +159,7 @@ Plumber <- R6Class(
     #' @importFrom rlang missing_arg
     run = function(
       host = '127.0.0.1',
-      port = get_option_or_env('plumber.port', NULL),
+      port = options::opt("port", env = "plumber"),
       swagger = deprecated(),
       debug = missing_arg(),
       swaggerCallback = missing_arg(),
@@ -211,7 +211,7 @@ Plumber <- R6Class(
       port <- findPort(port)
 
       # Delay setting max size option. It could be set in `plumber.R`, which is after initialization
-      private$maxSize <- get_option_or_env('plumber.maxRequestSize', 0) #0  Unlimited
+      private$maxSize <- options::opt("maxRequestSize", env = "plumber") #0  Unlimited
 
       # Delay the setting of swaggerCallback as long as possible.
       # An option could be set in `plumber.R`, which is after initialization
@@ -219,7 +219,7 @@ Plumber <- R6Class(
       swaggerCallback <-
         rlang::maybe_missing(swaggerCallback,
           rlang::maybe_missing(private$docs_callback,
-            get_option_or_env('plumber.docs.callback', get_option_or_env('plumber.swagger.url', NULL))
+             options::opt("docs.callback", default = getOption("plumber.swagger.url", NULL), env = "plumber")
           )
         )
 
@@ -784,7 +784,7 @@ Plumber <- R6Class(
       # No endpoint could handle this request. 404
       notFoundStep <- function(...) {
 
-        if (isTRUE(get_option_or_env("plumber.trailingSlash", FALSE))) {
+        if (isTRUE(options::opt("trailingSlash", env = "plumber"))) {
           # Redirect to the slash route, if it exists
           path <- req$PATH_INFO
           # If the path does not end in a slash,
@@ -813,7 +813,7 @@ Plumber <- R6Class(
         # No trailing-slash route exists...
         # Try allowed verbs
 
-        if (isTRUE(get_option_or_env("plumber.methodNotAllowed", TRUE))) {
+        if (isTRUE(options::opt("methodNotAllowed", env = "plumber"))) {
           # Notify about allowed verbs
           if (is_405(req$pr, req$PATH_INFO, req$REQUEST_METHOD)) {
             res$status <- 405L
@@ -933,7 +933,7 @@ Plumber <- R6Class(
     #'  If using [options_plumber()], the value must be set before initializing your Plumber router.
     #' @param ... Arguments for the visual documentation. See each visual documentation package for further details.
     setDocs = function(
-      docs = get_option_or_env("plumber.docs", TRUE),
+      docs = options::opt("docs", env = "plumber"),
       ...
     ) {
       private$docs_info <- upgrade_docs_parameter(docs, ...)
@@ -948,7 +948,7 @@ Plumber <- R6Class(
     #' See also: [pr_set_docs_callback()]
     #' @param callback a callback function for taking action on the docs url. (Also accepts `NULL` values to disable the `callback`.)
     setDocsCallback = function(
-      callback = get_option_or_env('plumber.docs.callback', NULL)
+      callback = options::opt("docs.callback", env = "plumber")
     ) {
       # Use callback when defined
       if (!length(callback) || !is.function(callback)) {

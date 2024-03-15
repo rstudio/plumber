@@ -177,7 +177,7 @@ pr_set_debug <- function(pr, debug = interactive()) {
 #' }
 pr_set_docs <- function(
   pr,
-  docs = get_option_or_env("plumber.docs", TRUE),
+  docs = options::opt("docs", env = "plumber"),
   ...
 ) {
   validate_pr(pr)
@@ -206,7 +206,7 @@ pr_set_docs <- function(
 #' }
 pr_set_docs_callback <- function(
   pr,
-  callback = get_option_or_env('plumber.docs.callback', NULL)
+  callback = options::opt("docs.callback", env = "plumber")
 ) {
   validate_pr(pr)
   pr$setDocsCallback(callback = callback)
