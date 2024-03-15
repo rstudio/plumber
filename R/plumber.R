@@ -90,8 +90,8 @@ Plumber <- R6Class(
       self$setSerializer(serializer_json())
       # Default parsers to maintain legacy features
       self$setParsers(c("json", "form", "text", "octet", "multi"))
-      self$setErrorHandler(defaultErrorHandler())
-      self$set404Handler(default404Handler)
+      self$setErrorHandler(http_problem_response)
+      self$set404Handler(not_found_response)
       self$setDocs(TRUE)
       private$docs_info$has_not_been_set <- TRUE # set to know if `$setDocs()` has been called before `$run()`
       private$docs_callback <- rlang::missing_arg()
@@ -816,11 +816,9 @@ Plumber <- R6Class(
         if (isTRUE(get_option_or_env("plumber.methodNotAllowed", TRUE))) {
           # Notify about allowed verbs
           if (is_405(req$pr, req$PATH_INFO, req$REQUEST_METHOD)) {
-            res$status <- 405L
             # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Allow
             res$setHeader("Allow", paste(req$verbsAllowed, collapse = ", "))
-            res$serializer <- serializer_unboxed_json()
-            return(list(error = "405 - Method Not Allowed"))
+            return(http_problem_response(req, res, 405L))
           }
         }
 

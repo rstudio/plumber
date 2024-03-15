@@ -23,7 +23,8 @@ error
 \dontrun{
 handler_error <- function(req, res, err){
   res$status <- 500
-  list(error = "Custom Error Message")
+  res$serializer <- serializer_unboxed_json(type = "application/problem+json")
+  internal_server_error("Custom Error Message")
 }
 
 pr() \%>\%

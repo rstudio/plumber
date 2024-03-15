@@ -49,7 +49,8 @@ pr_set_parsers <- function(pr, parsers) {
 #' \dontrun{
 #' handler_404 <- function(req, res) {
 #'   res$status <- 404
-#'   res$body <- "Oops"
+#'   res$serializer <- serializer_unboxed_json(type = "application/problem+json")
+#'   not_found("Oops")
 #' }
 #'
 #' pr() %>%
@@ -77,7 +78,8 @@ pr_set_404 <- function(pr, fun) {
 #' \dontrun{
 #' handler_error <- function(req, res, err){
 #'   res$status <- 500
-#'   list(error = "Custom Error Message")
+#'   res$serializer <- serializer_unboxed_json(type = "application/problem+json")
+#'   internal_server_error("Custom Error Message")
 #' }
 #'
 #' pr() %>%

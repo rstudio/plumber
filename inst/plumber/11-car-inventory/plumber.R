@@ -18,10 +18,10 @@ listCars <- function(){
 #* @get /car/<id:int>
 #* @response 404 No car with the given ID was found in the inventory.
 #* @tag cars
-getCar <- function(id, res){
+getCar <- function(id){
   car <- inventory[inventory$id == id,]
   if (nrow(car) == 0){
-    res$status <- 404
+    stop_for_not_found()
   }
   car
 }
@@ -49,13 +49,12 @@ validateCar <- function(make, model, year){
 #* @param price:numeric The price of the car in USD
 #* @response 400 Invalid user input provided
 #* @tag cars
-addCar <- function(make, model, edition, year, miles, price, res){
+addCar <- function(make, model, edition, year, miles, price){
   newId <- max(inventory$id) + 1
 
   valid <- validateCar(make, model, year)
   if (!is.null(valid)){
-    res$status <- 400
-    return(list(errors=paste0("Invalid car: ", valid)))
+    stop_for_bad_request(paste0("Invalid car: ", valid))
   }
 
   car <- list(
@@ -82,12 +81,11 @@ addCar <- function(make, model, edition, year, miles, price, res){
 #* @param price:numeric The price of the car in USD
 #* @put /car/<id:int>
 #* @tag cars
-updateCar <- function(id, make, model, edition, year, miles, price, res){
+updateCar <- function(id, make, model, edition, year, miles, price){
 
   valid <- validateCar(make, model, year)
   if (!is.null(valid)){
-    res$status <- 400
-    return(list(errors=paste0("Invalid car: ", valid)))
+    stop_for_bad_request(paste0("Invalid car: ", valid))
   }
 
   updated <- list(
@@ -101,7 +99,7 @@ updateCar <- function(id, make, model, edition, year, miles, price, res){
   )
 
   if (!(id %in% inventory$id)){
-    stop("No such ID: ", id)
+    stop_for_bad_request(paste0("No such ID: ", id))
   }
 
   inventory[inventory$id == id, ] <<- updated
@@ -112,10 +110,9 @@ updateCar <- function(id, make, model, edition, year, miles, price, res){
 #* @param id:int The ID of the car to delete
 #* @delete /car/<id:int>
 #* @tag cars
-deleteCar <- function(id, res){
+deleteCar <- function(id){
   if (!(id %in% inventory$id)){
-    res$status <- 400
-    return(list(errors=paste0("No such ID: ", id)))
+    stop_for_bad_request(paste0("No such ID: ", id))
   }
   inventory <<- inventory[inventory$id != id,]
 }

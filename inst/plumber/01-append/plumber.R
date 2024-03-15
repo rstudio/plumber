@@ -4,11 +4,10 @@ MAX_VALS <- 50
 
 #* Append to our values
 #* @post /append
-function(val, res){
+function(val){
   v <- as.numeric(val)
   if (is.na(v)){
-    res$status <- 400
-    res$body <- "val parameter must be a number"
+    stop_for_bad_request("val parameter must be a number")
   }
   values <<- c(values, val)
 
@@ -21,11 +20,10 @@ function(val, res){
 
 #* Get the last few values
 #* @get /tail
-function(n="10", res){
+function(n="10"){
   n <- as.numeric(n)
   if (is.na(n) || n < 1 || n > MAX_VALS){
-    res$status <- 400
-    res$body <- "parameter 'n' must be a number between 1 and 100"
+    stop_for_bad_request("parameter 'n' must be a number between 1 and 100")
   }
 
   list(val=tail(values, n=n))

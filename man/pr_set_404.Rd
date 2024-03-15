@@ -22,7 +22,8 @@ cannot be served by an existing endpoint or filter.
 \dontrun{
 handler_404 <- function(req, res) {
   res$status <- 404
-  res$body <- "Oops"
+  res$serializer <- serializer_unboxed_json(type = "application/problem+json")
+  not_found("Oops")
 }
 
 pr() \%>\%

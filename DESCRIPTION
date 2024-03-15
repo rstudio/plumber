@@ -33,7 +33,8 @@ Imports:
     mime,
     lifecycle (>= 0.2.0),
     ellipsis (>= 0.3.0),
-    rlang
+    rlang,
+    httpproblems
 ByteCompile: TRUE
 Suggests:
     testthat (>= 0.11.0),
@@ -85,6 +86,7 @@ Collate:
     'plumber-step.R'
     'pr.R'
     'pr_set.R'
+    'reexport-httpproblems.R'
     'serializer.R'
     'session-cookie.R'
     'ui.R'

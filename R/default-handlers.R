@@ -4,6 +4,9 @@ default404Handler <- function(req, res) {
   list(error="404 - Resource Not Found")
 }
 
+# This do not need to be a function that returns a function
+# since it does not take a debug arg anymore. Do something?
+# https://github.com/rstudio/plumber/commit/813f1b656784729eefeca2e7bb32c061e7af33d1
 defaultErrorHandler <- function(){
   function(req, res, err){
     print(err)
@@ -25,7 +28,10 @@ defaultErrorHandler <- function(){
 
 
     # Don't overly leak data unless they opt-in
-    if (is.function(req$pr$getDebug) && isTRUE(req$pr$getDebug())) {
+    # Simplified condition since debug is not an arg anymore.
+    # Unless private$debug unlocked and replaced, can only be logical from isTRUE
+    # in setDebug (plumber.R)
+    if (req$pr$getDebug()) {
       li["message"] <- as.character(err)
     }
 
