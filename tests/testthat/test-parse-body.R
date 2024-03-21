@@ -118,7 +118,12 @@ test_that("Test parquet parser", {
   }, add = TRUE)
 
   r_object <- iris
-  arrow::write_parquet(r_object, tmp)
+  res <- try(arrow::write_parquet(r_object, tmp))
+  skip_if(
+    inherits(res, "try-error"),
+    "arrow::write_parquet() isn't working."
+  )
+
   val <- readBin(tmp, "raw", 10000)
 
   parsed <- parse_body(val, "application/vnd.apache.parquet", make_parser("parquet"))
