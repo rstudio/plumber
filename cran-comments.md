@@ -4,6 +4,8 @@
 
 Releasing a patch to `{plumber}` to resolve a test error on CRAN.
 
+I have changed my email from `barret@rstudio.com` to `barret@posit.co` causing a NOTE in the CRAN checks.
+
 Best,
 Barret
 
@@ -20,7 +22,14 @@ The CRAN Team
 
 ## R CMD check results
 
-0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+0 errors ✔ | 0 warnings ✔ | 1 note ✔
+
+> Maintainer: ‘Barret Schloerke <barret@posit.co>’
+>
+> New maintainer:
+>   Barret Schloerke <barret@posit.co>
+> Old maintainer(s):
+>   Barret Schloerke <barret@rstudio.com>
 
 
 ## revdepcheck results
