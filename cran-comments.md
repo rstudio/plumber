@@ -1,43 +1,35 @@
 ## Comments
 
-#### 2022-09-06
+#### 2024-03-22
 
-Releasing a patch to `{plumber}` which has documentation by the latest version of `{roxygen2}`.
+Releasing a patch to `{plumber}` to resolve a test error on CRAN.
+
+I have changed my email from `barret@rstudio.com` to `barret@posit.co` causing a NOTE in the CRAN checks.
 
 Best,
 Barret
 
-#### 2022-08-19
+#### 2024-03-08
 
-....
-R 4.2.0 switched to use HTML5 for documentation pages.  Now validation
-using HTML Tidy finds problems in the HTML generated from your Rd
-files.
+Dear maintainer,
 
-To fix, in most cases it suffices to re-generate the Rd files using the
-current CRAN version of roxygen2.
-....
+Please see the problems shown on
+<https://cran.r-project.org/web/checks/check_results_plumber.html>.
 
-Best,
--k
+Please correct before 2024-03-22 to safely retain your package on CRAN.
 
-
-## Test environments
-
-* local macOS, R 4.1.3
-* GitHub Actions
-  * macOS
-    * 4.2
-  * windows
-    * 4.2
-  * ubuntu18
-    * devel, 4.2, 4.1, 4.0, 3.6, 3.5
-* devtools::
-  * check_win_devel()
+The CRAN Team
 
 ## R CMD check results
 
-0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+0 errors ✔ | 0 warnings ✔ | 1 note ✔
+
+> Maintainer: ‘Barret Schloerke <barret@posit.co>’
+>
+> New maintainer:
+>   Barret Schloerke <barret@posit.co>
+> Old maintainer(s):
+>   Barret Schloerke <barret@rstudio.com>
 
 
 ## revdepcheck results

@@ -1,5 +1,6 @@
 checks
 library
+cloud.noindex
 checks.noindex
 library.noindex
 data.sqlite

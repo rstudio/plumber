@@ -27,7 +27,7 @@ test_that("Includes work", {
 
     res <- PlumberResponse$new()
     val <- r$route(make_req("GET", "/rmd"), res)
-    expect_match(val$body, "<html.*<img src=\"data:image/png;base64.*</html>\\s*$")
+    expect_match(val$body, "<html.*<img (role=\"img\" )?src=\"data:image/png;base64.*</html>\\s*$")
     expect_equal(val$headers$`Content-Type`, "text/html; charset=UTF-8")
   }
 })
