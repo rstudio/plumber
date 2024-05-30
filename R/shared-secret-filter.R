@@ -4,17 +4,10 @@ sharedSecretFilter <- function(req, res){
   if (!is.null(secret)){
     supplied <- req$HTTP_PLUMBER_SHARED_SECRET
     if (!identical(supplied, secret)){
-      res$status <- 400
-      # Force the route to return as unboxed json
-      res$serializer <- serializer_unboxed_json()
-      # Using output similar to `defaultErrorHandler()`
-      li <- list(error = "400 - Bad request")
-
       # Don't overly leak data unless they opt-in
-      if (is.function(req$pr$getDebug) && isTRUE(req$pr$getDebug())) {
-        li$message <- "Shared secret mismatch"
-      }
-      return(li)
+      msg <- if (req$pr$getDebug()) "Shared secret mismatch"
+
+      return(http_problem_response(req, res, bad_request(msg)))
     }
   }
 

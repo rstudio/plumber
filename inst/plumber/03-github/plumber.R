@@ -17,14 +17,12 @@ function(){
 #* Give GitHub Webhook a way to alert us about new pushes to the repo
 #* https://developer.github.com/webhooks/
 #* @post /update
-function(req, res){
+function(req){
   secret <- readLines("./github-key.txt")[1]
   hm <- digest::hmac(secret, req$body, algo="sha1")
   hm <- paste0("sha1=", hm)
   if (!identical(hm, req$HTTP_X_HUB_SIGNATURE)){
-    res$status <- 400
-    res$body <- "invalid GitHub signature."
-    return(res)
+    stop_for_bad_request("invalid GitHub signature.")
   }
 
   # DO...
