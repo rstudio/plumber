@@ -68,7 +68,7 @@ options_plumber <- function(
   sharedSecret         = getOption("plumber.sharedSecret"),
   legacyRedirects      = getOption("plumber.legacyRedirects")
 ) {
-  ellipsis::check_dots_empty()
+  rlang::check_dots_empty()
 
   # Make sure all fallback options are disabled
   if (!missing(docs.callback) && is.null(docs.callback)) {
