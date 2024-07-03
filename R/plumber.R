@@ -173,7 +173,7 @@ Plumber <- R6Class(
         stop("Plumber router `$run()` method should not be called while `plumb()`ing a file")
       }
 
-      ellipsis::check_dots_empty()
+      rlang::check_dots_empty()
 
       # Legacy support for RStudio pro products.
       # Checks must be kept for >= 2 yrs after plumber v1.0.0 release date
