@@ -107,7 +107,7 @@ will be the best way to get started. You'll be able to get a server hosting your
 custom API in just two R commands. To deploy to DigitalOcean, check out the
 `plumber` companion package [`plumberDeploy`](https://github.com/meztez/plumberDeploy).
 
-[RStudio Connect](https://posit.co/products/enterprise/connect/) is a commercial
+[Posit Connect](https://posit.co/products/enterprise/connect/) is a commercial
 publishing platform that enables R developers to easily publish a variety of R
 content types, including Plumber APIs. Additional documentation is available at
 https://www.rplumber.io/articles/hosting.html#rstudio-connect-1.

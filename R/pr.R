@@ -528,7 +528,7 @@ pr_run <- function(pr,
                    quiet = FALSE
 ) {
   validate_pr(pr)
-  ellipsis::check_dots_empty()
+  rlang::check_dots_empty()
   pr$run(host = host,
          port = port,
          debug = debug,

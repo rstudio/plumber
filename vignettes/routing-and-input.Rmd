@@ -228,15 +228,15 @@ HTTP requests in Plumber are stored as environments and satisfy the [Rook interf
 Name | Example | Description
 ---- | ------- | -----------------------
 `pr` | `plumber::pr()` | The Plumber router that is processing the request
-`cookies` | `list(cook="abc")` | A list of the cookies as described in [Cookies](#read-cookies)
+`cookies` | `list(cook = "abc")` | A list of the cookies as described in [Cookies](#read-cookies)
 `httpuv.version` | `"1.3.3"` | The version of the underlying [`httpuv` package](https://github.com/rstudio/httpuv)
 `PATH_INFO` | `"/"` | The path of the incoming HTTP request
 `bodyRaw` | `charToRaw("a=1&b=2")` | The `raw()`, unparsed contents of the body of the request
-`body` | `list(a=1,b=2)` | This value will typically be the same as `argsBody`.  However, with content type `"multipart/*"`, `req$body` may contain detailed information, such as `name`, `content_type`, `content_disposition`, `filename`, `value` (which is a `raw()` vector), and `parsed` (parsed version of `value`).
-`argsBody` | `list(a=1,b=2)` | The parsed body output. Typically this is the same as `req$body` except when type is `"multipart/*"`.
-`argsPath` | `list(c=3,d=4)` | The values of the path arguments.
-`argsQuery` | `list(e=5,f=6)` | The parsed query string output.
-`args` | `list(req=req,res=res,e=5,f=6,c=3,d=4,a=1,b=2)` | In a route, the combined arguments of `list(req = req, res = res)`, `req$args` (added by filters), `req$argsQuery`, `req$argsPath`, and `req$argsBody`. In a filter, `req$args` is initialized to an empty list, so when processing filters `req$args` will only contain arguments set by previously processed filters as the route information will not have been processed yet.
+`body` | `list(a = 1, b = 2)` | This value will typically be the same as `argsBody`.  However, with content type `"multipart/*"`, `req$body` may contain detailed information, such as `name`, `content_type`, `content_disposition`, `filename`, `value` (which is a `raw()` vector), and `parsed` (parsed version of `value`).
+`argsBody` | `list(a = 1, b = 2)` | The parsed body output. Typically this is the same as `req$body` except when type is `"multipart/*"`.
+`argsPath` | `list(c = 3, d = 4)` | The values of the path arguments.
+`argsQuery` | `list(e = 5, f = 6)` | The parsed query string output.
+`args` | `list(req = req, res = res, e = 5, f = 6, c = 3, d = 4, a = 1, b = 2)` | In a route, the combined arguments of `list(req = req, res = res)`, `req$args` (added by filters), `req$argsQuery`, `req$argsPath`, and `req$argsBody`. In a filter, `req$args` is initialized to an empty list, so when processing filters `req$args` will only contain arguments set by previously processed filters as the route information will not have been processed yet.
 `QUERY_STRING` | `"?a=123&b=abc"` | The query-string portion of the HTTP request
 `REMOTE_ADDR` | `"1.2.3.4"` | The IP address of the client making the request
 `REMOTE_PORT` | `"62108"` | The client port from which the request originated
@@ -303,7 +303,7 @@ Running `curl --data "id=123&name=Jennifer" "http://localhost:8000/user"` will r
 ```{r, echo=FALSE, results='asis'}
 r <- plumber::plumb("files/apis/03-04-body.R")
 e <- r$endpoints[[1]][[1]]
-code_chunk(json_serialize(e$exec(req=list(bodyRaw = charToRaw("id=123&name=Jennifer"), body=list(id = 123, name = "Jennifer"), args = list(id = 123, name = "Jennifer")), res = NULL)), "json")
+code_chunk(json_serialize(e$exec(req = list(bodyRaw = charToRaw("id=123&name=Jennifer"), body = list(id = 123, name = "Jennifer"), args = list(id = 123, name = "Jennifer")), res = NULL)), "json")
 ```
 
 Alternatively, `echo {"id":123, "name": "Jennifer"} > call.json & curl --data @call.json "http://localhost:8000/user" -H "content-type: application/json"` (formatting the body as JSON) will have the same effect.
@@ -342,7 +342,7 @@ HTTP headers attached to the incoming request are attached to the request object
 Running `curl --header "customheader: abc123" http://localhost:8000` will return:
 
 ```{r, echo=FALSE, results='asis'}
-code_chunk(json_serialize(list(val="abc123")), "json")
+code_chunk(json_serialize(list(val = "abc123")), "json")
 ```
 
 You can print out the names of all of the properties attached to the request by running `print(ls(req))` inside an endpoint.
