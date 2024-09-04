@@ -1,189 +1,65 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://www.rplumber.io/404.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/PULL_REQUEST_TEMPLATE.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/annotations.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/execution-model.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/hosting.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/introduction.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/migration.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/programmatic-usage.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/quickstart.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/rendering-output.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/routing-and-input.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/security.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/articles/tips-and-tricks.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/index.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/Hookable.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/Plumber.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/PlumberEndpoint.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/PlumberStatic.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/PlumberStep.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/as_attachment.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/deprecated.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/deprecated_r6.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/digitalocean.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/endpoint_serializer.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/forward.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/get_character_set.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/include_file.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/is_plumber.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/options_plumber.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/parsers.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/plumb.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/plumb_api.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/pr.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/pr_cookie.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/pr_filter.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/pr_handle.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/pr_hook.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/pr_mount.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/pr_run.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/pr_set_404.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/pr_set_api_spec.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/pr_set_debug.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/pr_set_docs.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/pr_set_docs_callback.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/pr_set_error.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/pr_set_parsers.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/pr_set_serializer.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/pr_static.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/random_cookie_key.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/register_docs.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/register_parser.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/register_serializer.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/serializers.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/session_cookie.html</loc>
-  </url>
-  <url>
-    <loc>https://www.rplumber.io/reference/validate_api_spec.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://www.rplumber.io/404.html</loc></url>
+<url><loc>https://www.rplumber.io/CONTRIBUTING.html</loc></url>
+<url><loc>https://www.rplumber.io/LICENSE-text.html</loc></url>
+<url><loc>https://www.rplumber.io/PULL_REQUEST_TEMPLATE.html</loc></url>
+<url><loc>https://www.rplumber.io/articles/annotations.html</loc></url>
+<url><loc>https://www.rplumber.io/articles/execution-model.html</loc></url>
+<url><loc>https://www.rplumber.io/articles/hosting.html</loc></url>
+<url><loc>https://www.rplumber.io/articles/index.html</loc></url>
+<url><loc>https://www.rplumber.io/articles/introduction.html</loc></url>
+<url><loc>https://www.rplumber.io/articles/migration.html</loc></url>
+<url><loc>https://www.rplumber.io/articles/programmatic-usage.html</loc></url>
+<url><loc>https://www.rplumber.io/articles/quickstart.html</loc></url>
+<url><loc>https://www.rplumber.io/articles/rendering-output.html</loc></url>
+<url><loc>https://www.rplumber.io/articles/routing-and-input.html</loc></url>
+<url><loc>https://www.rplumber.io/articles/security.html</loc></url>
+<url><loc>https://www.rplumber.io/articles/tips-and-tricks.html</loc></url>
+<url><loc>https://www.rplumber.io/authors.html</loc></url>
+<url><loc>https://www.rplumber.io/index.html</loc></url>
+<url><loc>https://www.rplumber.io/news/index.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/Hookable.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/Plumber.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/PlumberEndpoint.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/PlumberStatic.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/PlumberStep.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/as_attachment.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/deprecated.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/deprecated_r6.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/digitalocean.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/endpoint_serializer.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/forward.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/get_character_set.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/include_file.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/index.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/is_plumber.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/options_plumber.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/parsers.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/pipe.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/plumb.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/plumb_api.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/pr.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/pr_cookie.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/pr_filter.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/pr_handle.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/pr_hook.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/pr_mount.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/pr_run.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/pr_set_404.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/pr_set_api_spec.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/pr_set_debug.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/pr_set_docs.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/pr_set_docs_callback.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/pr_set_error.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/pr_set_parsers.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/pr_set_serializer.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/pr_static.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/random_cookie_key.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/register_docs.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/register_parser.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/register_serializer.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/serializers.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/session_cookie.html</loc></url>
+<url><loc>https://www.rplumber.io/reference/validate_api_spec.html</loc></url>
 </urlset>
+
