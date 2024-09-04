@@ -2,15 +2,15 @@ Encoding: UTF-8
 Package: plumber
 Type: Package
 Title: An API Generator for R
-Version: 1.2.1.9000
+Version: 1.2.2
 Roxygen: list(markdown = TRUE)
 Authors@R: c(
-  person("Barret", "Schloerke", role = c("cre", "aut"), email = "barret@rstudio.com", comment = c(ORCID = "0000-0001-9986-114X")),
+  person("Barret", "Schloerke", role = c("cre", "aut"), email = "barret@posit.co", comment = c(ORCID = "0000-0001-9986-114X")),
   person("Jeff", "Allen", role = c("aut", "ccp"), email = "cran@trestletech.com"),
   person("Bruno", "Tremblay", role = "ctb", email = "cran@neoxone.com"),
   person("Frans", "van Dunné", role = "ctb", email = "frans@ixpantia.com"),
   person("Sebastiaan", "Vandewoude", role="ctb", email = "sebastiaanvandewoude@gmail.com"),
-  person(family = "RStudio", role = c("cph", "fnd")))
+  person("Posit Software, PBC", role = c("cph", "fnd")))
 License: MIT + file LICENSE
 BugReports: https://github.com/rstudio/plumber/issues
 URL: https://www.rplumber.io, https://github.com/rstudio/plumber

@@ -1,4 +1,4 @@
-# plumber (development version)
+# plumber 1.2.2
 
 * Allow to set plumber options using environment variables `?options_plumber`. (@meztez #934) 
 * Add support for quoted boundary for multipart request parsing. (@meztez #924)
