@@ -44,5 +44,5 @@ findPort <- function(port){
     stop("Unable to start a Plumber server. Either the port specified was unavailable or we were unable to find a free port.")
   }
 
-  port
+  as.integer(port)
 }

@@ -21,6 +21,10 @@ test_that("global port used if available", {
   rm("port", envir = .globals)
 })
 
+test_that("integer type is returned", {
+  expect_type(findPort(), "integer")
+})
+
 test_that("finds a good port and persists it", {
   testthat::skip_on_cran()
 
