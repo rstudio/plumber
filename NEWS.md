@@ -1,3 +1,7 @@
+# plumber (development version)
+
+* Fixes #956, allowing a port to be specified as an environment variable. (@shikokuchuo #963)
+
 # plumber 1.2.2
 
 * Allow to set plumber options using environment variables `?options_plumber`. (@meztez #934) 
