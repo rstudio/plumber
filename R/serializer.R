@@ -716,7 +716,7 @@ add_serializers_onLoad <- function() {
   register_serializer("agg_jpeg", serializer_agg_jpeg)
   register_serializer("agg_png",  serializer_agg_png)
   register_serializer("agg_tiff", serializer_agg_tiff)
-  register_serializer("svglite",  serializer_agg_svg)
+  register_serializer("svglite",  serializer_svglite)
 
 
   ## Do not register until implemented
