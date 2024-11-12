@@ -110,12 +110,12 @@ custom API in just two R commands. To deploy to DigitalOcean, check out the
 [Posit Connect](https://posit.co/products/enterprise/connect/) is a commercial
 publishing platform that enables R developers to easily publish a variety of R
 content types, including Plumber APIs. Additional documentation is available at
-https://www.rplumber.io/articles/hosting.html#rstudio-connect-1.
+<https://www.rplumber.io/articles/hosting.html#rstudio-connect-1>.
 
 A couple of other approaches to hosting plumber are also made available:
 
- - PM2 - https://www.rplumber.io/articles/hosting.html#pm2-1
- - Docker - https://www.rplumber.io/articles/hosting.html#docker
+- PM2 - <https://www.rplumber.io/articles/hosting.html#pm2-1>
+- Docker - <https://www.rplumber.io/articles/hosting.html#docker>
 
 ## Related Projects
 
