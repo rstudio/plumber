@@ -31,7 +31,7 @@ Imports:
     swagger (>= 3.33.0),
     magrittr,
     mime,
-    lifecycle (>= 0.2.0),
+    lifecycle (>= 1.0.0),
     rlang (>= 1.0.0)
 ByteCompile: TRUE
 Suggests:
