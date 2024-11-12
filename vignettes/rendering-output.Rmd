@@ -73,6 +73,10 @@ Annotation | Content Type | Description/References
 `@serializer bmp` | `image/bmp` | Images created with `bmp()`
 `@serializer tiff` | `image/tiff` | Images created with `tiff()`
 `@serializer pdf` | `application/pdf` | PDF File created with `pdf()`
+`@serializer agg_jpeg` | `image/jpeg` | Images created with `ragg::agg_jpeg()`
+`@serializer agg_png` | `image/png` | Images created with `ragg::agg_png()`
+`@serializer agg_tiff` | `image/tiff` | Images created with `ragg::agg_tiff()`
+`@serializer svglite` | `image/svg` | Images created with `svglite::svglite()`
 
 
 ### Boxed vs Unboxed JSON
