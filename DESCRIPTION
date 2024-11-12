@@ -92,7 +92,6 @@ Collate:
     'utils.R'
     'validate_api_spec.R'
     'zzz.R'
-RdMacros: lifecycle
 Language: en-US
 Config/Needs/check: Cairo
 Config/Needs/website: tidyverse/tidytemplate

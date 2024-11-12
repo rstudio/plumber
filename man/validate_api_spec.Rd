@@ -17,7 +17,7 @@ Validate an OpenAPI Spec using \href{https://github.com/APIDevTools/swagger-cli}
 \details{
 If the api is deemed invalid, an error will be thrown.
 
-This function is VERY \lifecycle{experimental} and may be altered, changed, or removed in the future.
+This function is VERY \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} and may be altered, changed, or removed in the future.
 }
 \examples{
 \dontrun{
