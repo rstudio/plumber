@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: plumber
 Type: Package
 Title: An API Generator for R
-Version: 1.2.2
+Version: 1.2.2.9000
 Roxygen: list(markdown = TRUE)
 Authors@R: c(
   person("Barret", "Schloerke", role = c("cre", "aut"), email = "barret@posit.co", comment = c(ORCID = "0000-0001-9986-114X")),
