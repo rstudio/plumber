@@ -436,7 +436,7 @@ serializer_xml <- function() {
 
 #' Endpoint Serializer with Hooks
 #'
-#' This method allows serializers to return `preexec`, `postexec`, and `aroundexec` (\lifecycle{experimental}) hooks in addition to a serializer.
+#' This method allows serializers to return `preexec`, `postexec`, and `aroundexec` (`r lifecycle::badge("experimental")`) hooks in addition to a serializer.
 #' This is useful for graphics device serializers which need a `preexec` and `postexec` hook to capture the graphics output.
 #'
 #' `preexec` and `postexec` hooks happened directly before and after a route is executed.
@@ -445,7 +445,7 @@ serializer_xml <- function() {
 #' @param serializer Serializer method to be used.  This method should already have its initialization arguments applied.
 #' @param preexec_hook Function to be run directly before a [PlumberEndpoint] calls its route method.
 #' @param postexec_hook Function to be run directly after a [PlumberEndpoint] calls its route method.
-#' @param aroundexec_hook Function to be run around a [PlumberEndpoint] call. Must handle a `.next` argument to continue execution. \lifecycle{experimental}
+#' @param aroundexec_hook Function to be run around a [PlumberEndpoint] call. Must handle a `.next` argument to continue execution. `r lifecycle::badge("experimental")`
 #'
 #' @export
 #' @examples
