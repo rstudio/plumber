@@ -52,7 +52,9 @@ Suggests:
     geojsonsf,
     redoc,
     rapidoc,
-    sf
+    sf,
+    ragg,
+    svglite
 RoxygenNote: 7.3.2
 Collate:
     'async.R'

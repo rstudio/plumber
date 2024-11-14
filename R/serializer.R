@@ -623,9 +623,56 @@ serializer_pdf <- function(..., type = "application/pdf") {
   )
 }
 
+# ragg -------------------------------------------------------------------------
 
+#' @describeIn serializers JPEG image serializer using ragg. See also: [ragg::agg_jpeg()]
+#' @export
+serializer_agg_jpeg <- function(..., type = "image/jpeg") {
+  rlang::check_installed("ragg")
+  serializer_device(
+    type = type,
+    dev_on = function(filename) {
+      ragg::agg_jpeg(filename, ...)
+    }
+  )
+}
+#' @describeIn serializers PNG image serializer using ragg. See also: [ragg::agg_png()]
+#' @export
+serializer_agg_png <- function(..., type = "image/png") {
+  rlang::check_installed("ragg")
+  serializer_device(
+    type = type,
+    dev_on = function(filename) {
+      ragg::agg_png(filename, ...)
+    }
+  )
+}
+#' @describeIn serializers TIFF image serializer using ragg. See also: [ragg::agg_tiff()]
+#' @export
+serializer_agg_tiff <- function(..., type = "image/tiff") {
+  rlang::check_installed("ragg")
+  serializer_device(
+    type = type,
+    dev_on = function(filename) {
+      ragg::agg_tiff(filename, ...)
+    }
+  )
+}
 
+# svglite ----------------------------------------------------------------------
 
+#' @describeIn serializers SVG image serializer using svglite. See also: [svglite::svglite()]
+#' @export
+serializer_svglite <- function(..., type = "image/svg+xml") {
+  rlang::check_installed("svglite")
+
+  serializer_device(
+    type = type,
+    dev_on = function(filename) {
+      svglite::svglite(filename, ...)
+    }
+  )
+}
 
 
 add_serializers_onLoad <- function() {
@@ -659,13 +706,17 @@ add_serializers_onLoad <- function() {
   register_serializer("htmlwidget", serializer_htmlwidget)
 
   # devices
-  register_serializer("device", serializer_device)
-  register_serializer("jpeg",   serializer_jpeg)
-  register_serializer("png",    serializer_png)
-  register_serializer("svg",    serializer_svg)
-  register_serializer("bmp",    serializer_bmp)
-  register_serializer("tiff",   serializer_tiff)
-  register_serializer("pdf",    serializer_pdf)
+  register_serializer("device",   serializer_device)
+  register_serializer("jpeg",     serializer_jpeg)
+  register_serializer("png",      serializer_png)
+  register_serializer("svg",      serializer_svg)
+  register_serializer("bmp",      serializer_bmp)
+  register_serializer("tiff",     serializer_tiff)
+  register_serializer("pdf",      serializer_pdf)
+  register_serializer("agg_jpeg", serializer_agg_jpeg)
+  register_serializer("agg_png",  serializer_agg_png)
+  register_serializer("agg_tiff", serializer_agg_tiff)
+  register_serializer("svglite",  serializer_svglite)
 
 
   ## Do not register until implemented

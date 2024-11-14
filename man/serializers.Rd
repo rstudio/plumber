@@ -27,6 +27,10 @@
 \alias{serializer_bmp}
 \alias{serializer_tiff}
 \alias{serializer_pdf}
+\alias{serializer_agg_jpeg}
+\alias{serializer_agg_png}
+\alias{serializer_agg_tiff}
+\alias{serializer_svglite}
 \title{Plumber Serializers}
 \usage{
 serializer_headers(headers = list(), serialize_fn = identity)
@@ -84,6 +88,14 @@ serializer_bmp(..., type = "image/bmp")
 serializer_tiff(..., type = "image/tiff")
 
 serializer_pdf(..., type = "application/pdf")
+
+serializer_agg_jpeg(..., type = "image/jpeg")
+
+serializer_agg_png(..., type = "image/png")
+
+serializer_agg_tiff(..., type = "image/tiff")
+
+serializer_svglite(..., type = "image/svg+xml")
 }
 \arguments{
 \item{headers}{\code{list()} of headers to add to the response object}
@@ -175,5 +187,13 @@ not have a \code{"raw"} type, then an error will be thrown.
 \item \code{serializer_tiff()}: TIFF image serializer. See also: \code{\link[grDevices:png]{grDevices::tiff()}}
 
 \item \code{serializer_pdf()}: PDF image serializer. See also: \code{\link[grDevices:pdf]{grDevices::pdf()}}
+
+\item \code{serializer_agg_jpeg()}: JPEG image serializer using ragg. See also: \code{\link[ragg:agg_jpeg]{ragg::agg_jpeg()}}
+
+\item \code{serializer_agg_png()}: PNG image serializer using ragg. See also: \code{\link[ragg:agg_png]{ragg::agg_png()}}
+
+\item \code{serializer_agg_tiff()}: TIFF image serializer using ragg. See also: \code{\link[ragg:agg_tiff]{ragg::agg_tiff()}}
+
+\item \code{serializer_svglite()}: SVG image serializer using svglite. See also: \code{\link[svglite:svglite]{svglite::svglite()}}
 
 }}
