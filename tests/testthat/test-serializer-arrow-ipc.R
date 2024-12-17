@@ -1,15 +1,15 @@
-context("feather serializer")
+context("Arrow IPC serializer")
 
-test_that("feather serializes properly", {
+test_that("Arrow IPC serializes properly", {
   skip_if_not_installed("arrow")
 
   d <- data.frame(a=1, b=2, c="hi")
-  val <- serializer_feather()(d, data.frame(), PlumberResponse$new(), stop)
+  val <- serializer_arrow_ipc()(d, data.frame(), PlumberResponse$new(), stop)
   expect_equal(val$status, 200L)
-  expect_equal(val$headers$`Content-Type`, "application/vnd.apache.arrow.file")
+  expect_equal(val$headers$`Content-Type`, "application/vnd.apache.arrow.stream")
 
   # can test  by doing a full round trip if we believe the parser works via `test-parse-body.R`
-  parsed <- parse_body(val$body, "application/vnd.apache.arrow.file", make_parser("feather"))
+  parsed <- parse_body(val$body, "application/vnd.apache.arrow.stream", make_parser("arrow_ipc"))
   # convert from feather tibble to data.frame
   parsed <- as.data.frame(parsed, stringsAsFactors = FALSE)
   attr(parsed, "spec") <- NULL

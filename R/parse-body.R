@@ -491,6 +491,17 @@ parser_feather <- function(...) {
   })
 }
 
+#' @describeIn parsers Arrow IPC parser. See [arrow::read_ipc_stream()] for more details.
+#' @export
+parser_arrow_ipc <- function(...) {
+  parser_read_file(function(tmpfile) {
+    if (!requireNamespace("arrow", quietly = TRUE)) {
+      stop("`arrow` must be installed for `parser_arrow_ipc` to work")
+    }
+    arrow::read_ipc_stream(tmpfile, ...)
+  })
+}
+
 #' @describeIn parsers parquet parser. See [arrow::read_parquet()] for more details.
 #' @export
 parser_parquet <- function(...) {
@@ -572,20 +583,21 @@ parser_none <- function() {
 
 register_parsers_onLoad <- function() {
   # parser alias names for plumbing
-  register_parser("csv",     parser_csv,     fixed = c("application/csv", "application/x-csv", "text/csv", "text/x-csv"))
-  register_parser("json",    parser_json,    fixed = c("application/json", "text/json"))
-  register_parser("multi",   parser_multi,   fixed = "multipart/form-data", regex = "^multipart/")
-  register_parser("octet",   parser_octet,   fixed = "application/octet-stream")
-  register_parser("form",    parser_form,   fixed = "application/x-www-form-urlencoded")
-  register_parser("rds",     parser_rds,     fixed = "application/rds")
-  register_parser("feather", parser_feather, fixed = c("application/vnd.apache.arrow.file", "application/feather"))
-  register_parser("parquet", parser_parquet, fixed = "application/vnd.apache.parquet")
-  register_parser("text",    parser_text,    fixed = "text/plain", regex = "^text/")
-  register_parser("tsv",     parser_tsv,     fixed = c("application/tab-separated-values", "text/tab-separated-values"))
+  register_parser("csv",       parser_csv,     fixed = c("application/csv", "application/x-csv", "text/csv", "text/x-csv"))
+  register_parser("json",      parser_json,    fixed = c("application/json", "text/json"))
+  register_parser("multi",     parser_multi,   fixed = "multipart/form-data", regex = "^multipart/")
+  register_parser("octet",     parser_octet,   fixed = "application/octet-stream")
+  register_parser("form",      parser_form,    fixed = "application/x-www-form-urlencoded")
+  register_parser("rds",       parser_rds,     fixed = "application/rds")
+  register_parser("feather",   parser_feather, fixed = c("application/vnd.apache.arrow.file", "application/feather"))
+  register_parser("arrow_ipc", parser_arrow_ipc, fixed = c("application/vnd.apache.arrow.stream"))
+  register_parser("parquet",   parser_parquet, fixed = "application/vnd.apache.parquet")
+  register_parser("text",      parser_text,    fixed = "text/plain", regex = "^text/")
+  register_parser("tsv",       parser_tsv,     fixed = c("application/tab-separated-values", "text/tab-separated-values"))
   # yaml types: https://stackoverflow.com/a/38000954/591574
-  register_parser("yaml",    parser_yaml,    fixed = c("text/vnd.yaml", "application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"))
-  register_parser("none",    parser_none,    regex = "*")
-  register_parser("geojson", parser_geojson, fixed = c("application/geo+json", "application/vdn.geo+json"))
+  register_parser("yaml",      parser_yaml,    fixed = c("text/vnd.yaml", "application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"))
+  register_parser("none",      parser_none,    regex = "*")
+  register_parser("geojson",   parser_geojson, fixed = c("application/geo+json", "application/vdn.geo+json"))
 
   parser_all <- function() {
     stop("This function should never be called. It should be handled by `make_parser('all')`")

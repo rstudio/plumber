@@ -291,6 +291,21 @@ serializer_feather <- function(type = "application/vnd.apache.arrow.file") {
   )
 }
 
+#' @describeIn serializers Arrow IPC serializer. See also: [arrow::write_ipc_stream()]
+#' @export
+serializer_arrow_ipc <- function(type = "application/vnd.apache.arrow.stream") {
+  if (!requireNamespace("arrow", quietly = TRUE)) {
+    stop("`arrow` must be installed for `serializer_arrow_ipc` to work")
+  }
+  serializer_write_file(
+    fileext = "",
+    type = type,
+    write_fn = function(val, tmpfile) {
+      arrow::write_ipc_stream(val, tmpfile)
+    }
+  )
+}
+
 #' @describeIn serializers parquet serializer. See also: [arrow::write_parquet()]
 #' @export
 serializer_parquet <- function(type = "application/vnd.apache.parquet") {
@@ -692,6 +707,7 @@ add_serializers_onLoad <- function() {
   register_serializer("csv",         serializer_csv)
   register_serializer("tsv",         serializer_tsv)
   register_serializer("feather",     serializer_feather)
+  register_serializer("arrow_ipc",   serializer_arrow_ipc)
   register_serializer("parquet",     serializer_parquet)
   register_serializer("yaml",        serializer_yaml)
   register_serializer("geojson",     serializer_geojson)

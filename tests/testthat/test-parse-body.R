@@ -109,6 +109,26 @@ test_that("Test feather parser", {
   expect_equal(parsed, r_object)
 })
 
+test_that("Test Arrow IPC parser", {
+  skip_if_not_installed("arrow")
+
+  tmp <- tempfile()
+  on.exit({
+    file.remove(tmp)
+  }, add = TRUE)
+
+  r_object <- iris
+  arrow::write_ipc_stream(r_object, tmp)
+  val <- readBin(tmp, "raw", 10000)
+
+  parsed <- parse_body(val, "application/vnd.apache.arrow.stream", make_parser("arrow_ipc"))
+  # convert from feather tibble to data.frame
+  parsed <- as.data.frame(parsed, stringsAsFactors = FALSE)
+  attr(parsed, "spec") <- NULL
+
+  expect_equal(parsed, r_object)
+})
+
 test_that("Test parquet parser", {
   skip_if_not_installed("arrow")
 
