@@ -11,6 +11,7 @@
 \alias{parser_read_file}
 \alias{parser_rds}
 \alias{parser_feather}
+\alias{parser_arrow_ipc}
 \alias{parser_parquet}
 \alias{parser_octet}
 \alias{parser_multi}
@@ -36,6 +37,8 @@ parser_read_file(read_fn = readLines)
 parser_rds(...)
 
 parser_feather(...)
+
+parser_arrow_ipc(...)
 
 parser_parquet(...)
 
@@ -90,6 +93,8 @@ This parser should be used when reading from a file is required.
 \item \code{parser_rds()}: RDS parser. See \code{\link[=readRDS]{readRDS()}} for more details.
 
 \item \code{parser_feather()}: feather parser. See \code{\link[arrow:read_feather]{arrow::read_feather()}} for more details.
+
+\item \code{parser_arrow_ipc()}: Arrow IPC parser. See \code{\link[arrow:read_ipc_stream]{arrow::read_ipc_stream()}} for more details.
 
 \item \code{parser_parquet()}: parquet parser. See \code{\link[arrow:read_parquet]{arrow::read_parquet()}} for more details.
 

@@ -12,6 +12,7 @@
 \alias{serializer_geojson}
 \alias{serializer_rds}
 \alias{serializer_feather}
+\alias{serializer_arrow_ipc}
 \alias{serializer_parquet}
 \alias{serializer_yaml}
 \alias{serializer_text}
@@ -54,6 +55,8 @@ serializer_geojson(..., type = "application/geo+json")
 serializer_rds(version = "2", ascii = FALSE, ..., type = "application/rds")
 
 serializer_feather(type = "application/vnd.apache.arrow.file")
+
+serializer_arrow_ipc(type = "application/vnd.apache.arrow.stream")
 
 serializer_parquet(type = "application/vnd.apache.parquet")
 
@@ -157,6 +160,8 @@ not have a \code{"raw"} type, then an error will be thrown.
 \item \code{serializer_rds()}: RDS serializer. See also: \code{\link[base:serialize]{base::serialize()}}
 
 \item \code{serializer_feather()}: feather serializer. See also: \code{\link[arrow:write_feather]{arrow::write_feather()}}
+
+\item \code{serializer_arrow_ipc()}: Arrow IPC serializer. See also: \code{\link[arrow:write_ipc_stream]{arrow::write_ipc_stream()}}
 
 \item \code{serializer_parquet()}: parquet serializer. See also: \code{\link[arrow:write_parquet]{arrow::write_parquet()}}
 
