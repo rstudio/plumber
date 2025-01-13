@@ -16,8 +16,8 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.9/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.9/font.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Rendering Output">
 </head>
 <body>
@@ -218,7 +218,7 @@ header</td>
 <tr class="odd">
 <td><code>@serializer json</code></td>
 <td><code>application/json</code></td>
-<td>Object processed with <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">jsonlite::toJSON()</a></code>
+<td>Object processed with <code><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html" class="external-link">jsonlite::toJSON()</a></code>
 </td>
 </tr>
 <tr class="even">
@@ -361,7 +361,7 @@ header</td>
 <p>You may have noticed that API responses generated from Plumber render
 singular values (or “scalars”) as arrays. For instance:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">toJSON</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html" class="external-link">toJSON</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; {"a":[5]}</span></span></code></pre>
 <p>The value of the <code>a</code> element, though it’s singular, is
 still rendered as an array. This may surprise you initially, but this is
@@ -397,21 +397,21 @@ identical responses:</p>
 “boxed” JSON output in which length-1 vectors are still rendered as an
 array. Conversely, the <code>/unboxed</code> endpoint sets
 <code>auto_unbox=TRUE</code> in its call to
-<code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">jsonlite::toJSON</a></code>, causing length-1 R vectors to be rendered
+<code><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html" class="external-link">jsonlite::toJSON</a></code>, causing length-1 R vectors to be rendered
 as JSON scalars.</p>
 <p>While R doesn’t distinguish between scalars and vectors, API clients
 may respond very differently when encountering a JSON array versus an
 atomic value. You may find that your API clients will not respond
 gracefully when an object that they expected to be a vector becomes a
 scalar in one call.</p>
-<p>For this reason, Plumber inherits the <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">jsonlite::toJSON</a></code>
+<p>For this reason, Plumber inherits the <code><a href="https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html" class="external-link">jsonlite::toJSON</a></code>
 default of setting <code>auto_unbox=FALSE</code> which will result in
 all length-1 vectors still being rendered as JSON arrays. You can
 configure an endpoint to use the <code>unboxedJSON</code> serializer (as
 shown above) if you want to alter this behavior for a particular
 endpoint.</p>
 <p>There are a couple of functions to be aware of around this feature
-set. If using boxed JSON serialization, <code><a href="https://rdrr.io/pkg/jsonlite/man/unbox.html" class="external-link">jsonlite::unbox()</a></code>
+set. If using boxed JSON serialization, <code><a href="https://jeroen.r-universe.dev/jsonlite/reference/unbox.html" class="external-link">jsonlite::unbox()</a></code>
 can be used to force a length-1 object in R to be presented in JSON as a
 scalar. If using unboxed JSON serialization, <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I()</a></code> will cause
 a length-1 R object to present as a JSON array.</p>
@@ -507,7 +507,7 @@ capture errors.</p>
 <span><span class="kw">function</span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">msg</span> <span class="op">&lt;-</span> <span class="st">"Your request did not include a required parameter."</span></span>
 <span>  <span class="va">res</span><span class="op">$</span><span class="va">status</span> <span class="op">&lt;-</span> <span class="fl">400</span> <span class="co"># Bad request</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>error<span class="op">=</span><span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/unbox.html" class="external-link">unbox</a></span><span class="op">(</span><span class="va">msg</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>error<span class="op">=</span><span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://jeroen.r-universe.dev/jsonlite/reference/unbox.html" class="external-link">unbox</a></span><span class="op">(</span><span class="va">msg</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>If you run this API in interactive mode and visit <a href="http://localhost:8000/simple" class="external-link uri">http://localhost:8000/simple</a>, you’ll notice two
 things:</p>
