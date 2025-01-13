@@ -51,8 +51,8 @@ findRandomPort <- function() {
 #' Find a port either using the assigned port or randomly search 10 times for an available
 #' port. If a port was manually assigned, just return it and assume it will work.
 #' @noRd
-findPort <- function(port) {
-  if (missing(port) || is.null(port)) {
+findPort <- function(port = NULL) {
+  if (is.null(port)) {
     return(findRandomPort())
   }
 
