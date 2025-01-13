@@ -33,6 +33,13 @@ test_that("throws if provided non-integerish port", {
   expect_error(findPort(8000:8002))
 })
 
+test_that("throws for invalid ports", {
+  expect_error(findPort(800)) # in 0-1024
+  expect_error(findPort(123456)) # out of range
+  expect_error(findPort(0)) # unsafe
+  expect_error(findPort(6666)) # unsafe
+})
+
 test_that("finds a good port and persists it", {
   testthat::skip_on_cran()
 

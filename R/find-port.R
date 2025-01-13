@@ -1,14 +1,13 @@
-
 # Exclude unsafe ports from Chrome https://src.chromium.org/viewvc/chrome/trunk/src/net/base/net_util.cc?view=markup#l127
-portBlacklist <- c(0, 3659, 4045, 6000, 6665, 6666, 6667, 6668, 6669)
+unsafePortList <- c(0, asNamespace("httpuv")[["unsafe_ports"]])
 
 #' Get a random port between 3k and 10k, excluding the blacklist. If a preferred port
 #' has already been registered in .globals, use that instead.
 #' @importFrom stats runif
 #' @noRd
-getRandomPort <- function(){
+getRandomPort <- function() {
   port <- 0
-  while (port %in% portBlacklist){
+  while (port %in% unsafePortList) {
     port <- round(runif(1, 3000, 10000))
   }
   port
@@ -66,5 +65,17 @@ findPort <- function(port = NULL) {
     stop("Port must be an integer value, not '", port_og, "'.")
   }
 
-  as.integer(port)
+  port <- as.integer(port)
+
+  # Ports must be in [1024-49151]
+  # https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml
+  if (port < 1024 || port > 49151) {
+    stop("Port must be an integer in the range 1024 to 49151 (inclusive).")
+  }
+
+  if (port %in% unsafePortList) {
+    stop("Port ", port, " is an unsafe port. Please choose another port.")
+  }
+
+  port
 }
