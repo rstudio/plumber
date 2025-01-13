@@ -1,51 +1,33 @@
-# Exclude unsafe ports from Chrome https://src.chromium.org/viewvc/chrome/trunk/src/net/base/net_util.cc?view=markup#l127
-unsafePortList <- c(0, asNamespace("httpuv")[["unsafe_ports"]])
-
-#' Get a random port between 3k and 10k, excluding unsafe ports. If a preferred
-#' port has already been registered in .globals, use that instead.
-#' @importFrom stats runif
-#' @noRd
-getRandomPort <- function() {
-  port <- 0
-  while (port %in% unsafePortList) {
-    port <- round(runif(1, 3000, 10000))
-  }
-  port
+# Ports that are considered unsafe by Chrome
+# http://superuser.com/questions/188058/which-ports-are-considered-unsafe-on-chrome
+# https://github.com/rstudio/shiny/issues/1784
+unsafePorts <- function() {
+  asNamespace("httpuv")[["unsafe_ports"]]
 }
 
-findRandomPort <- function() {
-  port <- 
-    if (!is.null(.globals$port)) {
-      # Start by trying the .globals$port
-      .globals$port
-    } else {
-      getRandomPort()
-    }
 
-  for (i in 1:10) {
-    tryCatch(
-      srv <- httpuv::startServer("127.0.0.1", port, list(), quiet = TRUE),
-      error = function(e) {
-        port <<- 0
-      }
-    )
-    if (port != 0) {
-      # Stop the temporary server, and retain this port number.
-      httpuv::stopServer(srv)
-      .globals$port <- port
-      break
-    }
-    port <- getRandomPort()
-  }
-
-  if (port == 0) {
+randomPort <- function(..., n = 10) {
+  tryCatch({
+    port <- httpuv::randomPort(..., n = n)
+  }, httpuv_unavailable_port = function(e) {
     stop(
       "Unable to start a Plumber server. ",
-      "We were unable to find a free port in 10 tries."
+      paste0("We were unable to find a free port in ", n, " tries.")
     )
-  }
+  })
+  return(port)
+}
 
-  as.integer(port)
+portIsAvailable <- function(port) {
+  tryCatch(
+    {
+      randomPort(min = port, max = port)
+      TRUE
+    },
+    error = function(e) {
+      FALSE
+    }
+  )
 }
 
 #' Find a port either using the assigned port or randomly search 10 times for an
@@ -54,7 +36,20 @@ findRandomPort <- function() {
 #' @noRd
 findPort <- function(port = NULL) {
   if (is.null(port)) {
-    return(findRandomPort())
+    # Try to use the most recently used _random_ port
+    if (
+      (!is.null(.globals$last_random_port)) &&
+        portIsAvailable(.globals$last_random_port)
+    ) {
+      return(.globals$last_random_port)
+    }
+
+    # Find an available port
+    port <- randomPort()
+
+    # Save the random port for future use
+    .globals$last_random_port <- port
+    return(.globals$last_random_port)
   }
 
   port_og <- port
@@ -75,7 +70,7 @@ findPort <- function(port = NULL) {
     stop("Port must be an integer in the range 1024 to 49151 (inclusive).")
   }
 
-  if (port %in% unsafePortList) {
+  if (port == 0 || port %in% unsafePorts()) {
     stop("Port ", port, " is an unsafe port. Please choose another port.")
   }
 
