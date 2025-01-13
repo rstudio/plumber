@@ -25,15 +25,15 @@ test_that("filter passes on content-type", {
     body = "this is a body",
     HTTP_CONTENT_TYPE = "text/html; charset=testset",
   )
-  with_mock(
+  local_mocked_bindings(
     parse_body = function(body, content_type = "unknown", parsers = NULL) {
       print(content_type)
       body
-    },
-    {
-      expect_output(req_body_parser(req, make_parser("text")), "text/html; charset=testset")
-    },
-    .env = "plumber"
+    }
+  )
+  expect_output(
+    req_body_parser(req, make_parser("text")),
+    "text/html; charset=testset"
   )
 })
 
