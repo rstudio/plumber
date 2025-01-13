@@ -1,8 +1,8 @@
 # Exclude unsafe ports from Chrome https://src.chromium.org/viewvc/chrome/trunk/src/net/base/net_util.cc?view=markup#l127
 unsafePortList <- c(0, asNamespace("httpuv")[["unsafe_ports"]])
 
-#' Get a random port between 3k and 10k, excluding the blacklist. If a preferred port
-#' has already been registered in .globals, use that instead.
+#' Get a random port between 3k and 10k, excluding unsafe ports. If a preferred
+#' port has already been registered in .globals, use that instead.
 #' @importFrom stats runif
 #' @noRd
 getRandomPort <- function() {
@@ -40,15 +40,17 @@ findRandomPort <- function() {
 
   if (port == 0) {
     stop(
-      "Unable to start a Plumber server. We were unable to find a free port in 10 tries."
+      "Unable to start a Plumber server. ",
+      "We were unable to find a free port in 10 tries."
     )
   }
 
   as.integer(port)
 }
 
-#' Find a port either using the assigned port or randomly search 10 times for an available
-#' port. If a port was manually assigned, just return it and assume it will work.
+#' Find a port either using the assigned port or randomly search 10 times for an
+#' available port. If a port was manually assigned, just return it and assume it
+#' will work.
 #' @noRd
 findPort <- function(port = NULL) {
   if (is.null(port)) {
