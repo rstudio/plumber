@@ -2,11 +2,13 @@
 
 * Fixes #956, allowing a port to be specified as an environment variable. (@shikokuchuo #963)
 
+* Added support for graphic devices provided by ragg and svglite (@thomasp85 #964)
+
 # plumber 1.2.2
 
-* Allow to set plumber options using environment variables `?options_plumber`. (@meztez #934) 
+* Allow to set plumber options using environment variables `?options_plumber`. (@meztez #934)
 * Add support for quoted boundary for multipart request parsing. (@meztez #924)
-* Fix #916, related to `parseUTF8` return value attribute `srcfile` on Windows. (#930) 
+* Fix #916, related to `parseUTF8` return value attribute `srcfile` on Windows. (#930)
 
 # plumber 1.2.1
 
