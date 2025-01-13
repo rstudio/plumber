@@ -23,6 +23,14 @@ test_that("global port used if available", {
 
 test_that("integer type is returned", {
   expect_type(findPort(), "integer")
+  expect_equal(findPort("8000"), 8000L)
+  expect_equal(findPort(8000.00000), 8000L)
+})
+
+test_that("throws if provided non-integerish port", {
+  expect_error(findPort("blue"))
+  expect_error(findPort(8000.0001))
+  expect_error(findPort(8000:8002))
 })
 
 test_that("finds a good port and persists it", {

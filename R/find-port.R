@@ -14,34 +14,55 @@ getRandomPort <- function(){
   port
 }
 
+findRandomPort <- function() {
+  port <- if (!is.null(.globals$port)) {
+    # Start by trying the .globals$port
+    .globals$port
+  } else {
+    getRandomPort()
+  }
+
+  for (i in 1:10) {
+    tryCatch(
+      srv <- httpuv::startServer("127.0.0.1", port, list(), quiet = TRUE),
+      error = function(e) {
+        port <<- 0
+      }
+    )
+    if (port != 0) {
+      # Stop the temporary server, and retain this port number.
+      httpuv::stopServer(srv)
+      .globals$port <- port
+      break
+    }
+    port <- getRandomPort()
+  }
+
+  if (port == 0) {
+    stop(
+      "Unable to start a Plumber server. We were unable to find a free port in 10 tries."
+    )
+  }
+
+  as.integer(port)
+}
+
 #' Find a port either using the assigned port or randomly search 10 times for an available
 #' port. If a port was manually assigned, just return it and assume it will work.
 #' @noRd
-findPort <- function(port){
-  if (missing(port) || is.null(port)){
-    if (!is.null(.globals$port)){
-      # Start by trying the .globals$port
-      port <- .globals$port
-    } else {
-      port <- getRandomPort()
-    }
-
-    for (i in 1:10){
-      tryCatch(srv <- httpuv::startServer("127.0.0.1", port, list(), quiet = TRUE), error=function(e){
-        port <<- 0
-      })
-      if (port != 0){
-        # Stop the temporary server, and retain this port number.
-        httpuv::stopServer(srv)
-        .globals$port <- port
-        break
-      }
-      port <- getRandomPort()
-    }
+findPort <- function(port) {
+  if (missing(port) || is.null(port)) {
+    return(findRandomPort())
   }
 
-  if (port == 0){
-    stop("Unable to start a Plumber server. Either the port specified was unavailable or we were unable to find a free port.")
+  port_og <- port
+
+  if (rlang::is_character(port)) {
+    port <- suppressWarnings(as.integer(port))
+  }
+
+  if (!rlang::is_integerish(port, n = 1, finite = TRUE) || port != port_og) {
+    stop("Port must be an integer value, not '", port_og, "'.")
   }
 
   as.integer(port)
