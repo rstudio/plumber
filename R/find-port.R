@@ -15,12 +15,13 @@ getRandomPort <- function(){
 }
 
 findRandomPort <- function() {
-  port <- if (!is.null(.globals$port)) {
-    # Start by trying the .globals$port
-    .globals$port
-  } else {
-    getRandomPort()
-  }
+  port <- 
+    if (!is.null(.globals$port)) {
+      # Start by trying the .globals$port
+      .globals$port
+    } else {
+      getRandomPort()
+    }
 
   for (i in 1:10) {
     tryCatch(
