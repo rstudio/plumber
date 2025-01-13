@@ -1,6 +1,6 @@
 # plumber (development version)
 
-* Adds support for [Arrow IPC Streams](https://arrow.apache.org/docs/format/Columnar.html#serialization-and-interprocess-communication-ipc) (@josiahparry)
+* Adds support for [Arrow IPC Streams](https://arrow.apache.org/docs/format/Columnar.html#serialization-and-interprocess-communication-ipc) (@josiahparry #968)
 * Added support for graphic devices provided by ragg and svglite (@thomasp85
 #964)
 
