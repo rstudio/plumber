@@ -510,6 +510,38 @@ parser_parquet <- function(...) {
   }
 }
 
+# readxl's default behavior is to read only one worksheet at a time; in order for an endpoint to
+# read multiple worksheets, its documentation suggests to iterate over discovered names (c.f.,
+# https://readxl.tidyverse.org/articles/readxl-workflows.html#iterate-over-multiple-worksheets-in-a-workbook);
+# for this reason, this parser detects an NA in the 'sheet=' argument and replaces it with all
+# worksheet names found in the workbook
+
+#' @describeIn parsers excel parser. See [readxl::read_excel()] for more details. (Defaults to reading in the first worksheet only, use `@parser excel list(sheet=NA)` to read in all worksheets.)
+#' @export
+parser_excel <- function(..., sheet = NULL) {
+  if (!requireNamespace("readxl", quietly = TRUE)) {
+    stop("`readxl` must be installed for `parser_excel` to work")
+  }
+  parse_fn <- parser_read_file(function(tmpfile) {
+    if (is.null(sheet)) {
+      # we have to hard-code this since lapply won't iterate if NULL
+      sheet <- 1L
+    } else if (anyNA(sheet)) {
+      sheet <- readxl::excel_sheets(tmpfile)
+    }
+    if (is.character(sheet)) names(sheet) <- sheet
+    out <- suppressWarnings(
+      lapply(sheet, function(sht) {
+        readxl::read_excel(path = tmpfile, sheet = sht, ...)
+      })
+    )
+    out
+  })
+  function(value, ...) {
+    parse_fn(value)
+  }
+}
+
 #' @describeIn parsers Octet stream parser. Returns the raw content.
 #' @export
 parser_octet <- function() {
@@ -588,6 +620,7 @@ register_parsers_onLoad <- function() {
   register_parser("rds",     parser_rds,     fixed = "application/rds")
   register_parser("feather", parser_feather, fixed = c("application/vnd.apache.arrow.file", "application/feather"))
   register_parser("parquet", parser_parquet, fixed = "application/vnd.apache.parquet")
+  register_parser("excel",   parser_excel,   fixed = c("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel"))
   register_parser("text",    parser_text,    fixed = "text/plain", regex = "^text/")
   register_parser("tsv",     parser_tsv,     fixed = c("application/tab-separated-values", "text/tab-separated-values"))
   # yaml types: https://stackoverflow.com/a/38000954/591574

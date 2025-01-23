@@ -306,6 +306,22 @@ serializer_parquet <- function(type = "application/vnd.apache.parquet") {
   )
 }
 
+#' @describeIn serializers excel serializer. See also: [writexl::write_xlsx()]
+#' @export
+serializer_excel <- function(..., type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+  if (!requireNamespace("writexl", quietly = TRUE)) {
+    stop("The writexl package is not available but is required in order to use the writexl serializer",
+         call. = FALSE)
+  }
+
+  serializer_write_file(
+    fileext = ".xlsx",
+    type = type,
+    write_fn = function(val, tmpfile) {
+      writexl::write_xlsx(x = val, path = tmpfile, ...)
+    }
+  )
+}
 
 #' @describeIn serializers YAML serializer. See also: [yaml::as.yaml()]
 #' @export
@@ -693,6 +709,7 @@ add_serializers_onLoad <- function() {
   register_serializer("tsv",         serializer_tsv)
   register_serializer("feather",     serializer_feather)
   register_serializer("parquet",     serializer_parquet)
+  register_serializer("excel",       serializer_excel)
   register_serializer("yaml",        serializer_yaml)
   register_serializer("geojson",     serializer_geojson)
 
