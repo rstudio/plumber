@@ -56,7 +56,8 @@ Suggests:
     ragg,
     svglite,
     readxl,
-    writexl
+    writexl,
+    utils
 RoxygenNote: 7.3.2
 Collate:
     'async.R'
