@@ -12,6 +12,7 @@
 \alias{parser_rds}
 \alias{parser_feather}
 \alias{parser_parquet}
+\alias{parser_excel}
 \alias{parser_octet}
 \alias{parser_multi}
 \alias{parser_none}
@@ -38,6 +39,8 @@ parser_rds(...)
 parser_feather(...)
 
 parser_parquet(...)
+
+parser_excel(..., sheet = NULL)
 
 parser_octet()
 
@@ -92,6 +95,8 @@ This parser should be used when reading from a file is required.
 \item \code{parser_feather()}: feather parser. See \code{\link[arrow:read_feather]{arrow::read_feather()}} for more details.
 
 \item \code{parser_parquet()}: parquet parser. See \code{\link[arrow:read_parquet]{arrow::read_parquet()}} for more details.
+
+\item \code{parser_excel()}: excel parser. See \code{\link[readxl:read_excel]{readxl::read_excel()}} for more details. (Defaults to reading in the first worksheet only, use \verb{@parser excel list(sheet=NA)} to read in all worksheets.)
 
 \item \code{parser_octet()}: Octet stream parser. Returns the raw content.
 

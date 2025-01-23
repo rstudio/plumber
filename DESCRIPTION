@@ -54,7 +54,9 @@ Suggests:
     rapidoc,
     sf,
     ragg,
-    svglite
+    svglite,
+    readxl,
+    writexl
 RoxygenNote: 7.3.2
 Collate:
     'async.R'
