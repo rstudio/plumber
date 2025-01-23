@@ -474,32 +474,40 @@ parser_read_file <- function(read_fn = readLines) {
 #' @describeIn parsers RDS parser. See [readRDS()] for more details.
 #' @export
 parser_rds <- function(...) {
-  parser_read_file(function(tmpfile) {
-    # `readRDS()` does not work with `rawConnection()`
-    readRDS(tmpfile, ...)
-  })
+  parse_fn <- function(raw_val) {
+    unserialize(memDecompress(raw_val))
+  }
+  function(value, ...) {
+    parse_fn(value)
+  }
 }
 
 #' @describeIn parsers feather parser. See [arrow::read_feather()] for more details.
 #' @export
 parser_feather <- function(...) {
-  parser_read_file(function(tmpfile) {
-    if (!requireNamespace("arrow", quietly = TRUE)) {
-      stop("`arrow` must be installed for `parser_feather` to work")
-    }
-    arrow::read_feather(tmpfile, ...)
-  })
+  if (!requireNamespace("arrow", quietly = TRUE)) {
+    stop("`arrow` must be installed for `parser_feather` to work")
+  }
+  parse_fn <- function(raw_val) {
+    arrow::read_feather(raw_val, ...)
+  }
+  function(value, ...) {
+    parse_fn(value)
+  }
 }
 
 #' @describeIn parsers parquet parser. See [arrow::read_parquet()] for more details.
 #' @export
 parser_parquet <- function(...) {
-  parser_read_file(function(tmpfile) {
-    if (!requireNamespace("arrow", quietly = TRUE)) {
-      stop("`arrow` must be installed for `parser_parquet` to work")
-    }
-    arrow::read_parquet(tmpfile, ...)
-  })
+  if (!requireNamespace("arrow", quietly = TRUE)) {
+    stop("`arrow` must be installed for `parser_feather` to work")
+  }
+  parse_fn <- function(raw_val) {
+    arrow::read_parquet(raw_val, ...)
+  }
+  function(value, ...) {
+    parse_fn(value)
+  }
 }
 
 #' @describeIn parsers Octet stream parser. Returns the raw content.
