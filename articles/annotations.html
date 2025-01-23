@@ -267,10 +267,11 @@ endpoint. Aliases : <code>all</code>, <code>csv</code>,
 <tr class="even">
 <td><code>@param</code></td>
 <td>
-<code>Name</code>[<code>:Type</code> <code>Description</code>]</td>
+<code>Name</code>[<code>:Type</code>(<code>*</code>)
+<code>Description</code>]</td>
 <td>Enclose <code>Type</code> between square brackets <code>[]</code> to
-indicate it is an array. Can be repeated to define different
-parameters.</td>
+indicate it is an array. Adding an asterix indicates that the parameter
+is required. Can be repeated to define different parameters.</td>
 </tr>
 <tr class="odd">
 <td><code>@response</code></td>
@@ -394,11 +395,12 @@ use, pick the one with an asterisk.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#* @get /query/parameters</span></span>
 <span><span class="co">#* @serializer text</span></span>
-<span><span class="co">#* @param name:str</span></span>
+<span><span class="co">#* @param name:str*</span></span>
 <span><span class="co">#* @param age:[int]</span></span>
 <span><span class="kw">function</span><span class="op">(</span><span class="va">name</span>, <span class="va">age</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># Explicit conversion is required for query parameters</span></span>
 <span>  <span class="va">age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span> <span class="va">age</span> <span class="op">&lt;-</span> <span class="fl">0L</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s is %i years old"</span>, <span class="va">name</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
@@ -431,7 +433,7 @@ use, pick the one with an asterisk.</p>
 <span>  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/query/parameters"</span>,</span>
 <span>         handler <span class="op">=</span> <span class="va">qp_handler</span>,</span>
 <span>         serializer <span class="op">=</span> <span class="fu"><a href="../reference/serializers.html">serializer_text</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>         params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"name"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"string"</span>, required <span class="op">=</span> <span class="cn">FALSE</span>, isArray <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>         params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"name"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"string"</span>, required <span class="op">=</span> <span class="cn">TRUE</span>, isArray <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>                       <span class="st">"age"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"integer"</span>, required <span class="op">=</span> <span class="cn">FALSE</span>, isArray <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/pr_handle.html">pr_get</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/dyn/&lt;name:str&gt;/&lt;age:[int]&gt;/route"</span>,</span>
 <span>         handler <span class="op">=</span> <span class="va">text_handler</span>,</span>
