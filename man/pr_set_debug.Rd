@@ -4,7 +4,7 @@
 \alias{pr_set_debug}
 \title{Set debug value to include error messages of routes cause an error}
 \usage{
-pr_set_debug(pr, debug = interactive())
+pr_set_debug(pr, debug = FALSE)
 }
 \arguments{
 \item{pr}{A Plumber API. Note: The supplied Plumber API object will also be updated in place as well as returned by the function.}
@@ -15,8 +15,8 @@ pr_set_debug(pr, debug = interactive())
 The Plumber router with the new debug setting.
 }
 \description{
-To hide any error messages in production, set the debug value to \code{FALSE}.
-The \code{debug} value is enabled by default for \code{\link[=interactive]{interactive()}} sessions.
+By default, error messages from your plumber routes are hidden, but can be
+turned on by setting the debug value to \code{TRUE} using this setter.
 }
 \examples{
 \dontrun{
@@ -32,4 +32,12 @@ pr() \%>\%
   pr_get("/boom", function() stop("boom")) \%>\%
   pr_run()
 }
+
+# Setting within a plumber file
+#* @plumber
+function(pr) {
+  pr \%>\%
+    pr_set_debug(TRUE)
+}
+
 }
