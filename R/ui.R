@@ -117,7 +117,8 @@ mount_openapi <- function(pr, api_url) {
       break
     }
   }
-  pr$handle("GET", "/openapi.json", openapi_fun, serializer = serializer_unboxed_json())
+  path <- get_option_or_env("plumber.apiPath", "")
+  pr$handle("GET", paste0(path, "/openapi.json"), openapi_fun, serializer = serializer_unboxed_json())
 
   invisible()
 }
@@ -184,7 +185,7 @@ register_docs <- function(name, index, static = NULL) {
   stopifnot(is.function(index))
   if (!is.null(static)) stopifnot(is.function(static))
 
-  docs_root <- paste0("/__docs__/")
+  docs_root <- "/__docs__/"
   docs_paths <- c("/index.html", "/")
   mount_docs_func <- function(pr, api_url, ...) {
     # Save initial extra argument values
@@ -210,8 +211,11 @@ register_docs <- function(name, index, static = NULL) {
       message("Overwritting existing `", docs_root, "` mount")
       message("")
     }
-
-    pr$mount(docs_root, docs_router)
+    
+    pr$mount(
+      paste0(get_option_or_env("plumber.apiPath", ""), docs_root),
+      docs_router
+    )
 
     # add legacy swagger redirects (RStudio Connect)
     redirect_info <- swagger_redirects()
