@@ -4,6 +4,7 @@
 
 * Added support for graphic devices provided by ragg and svglite (@thomasp85 #964)
 * `parse_rds()`, `parse_feather()`, and `parse_parquet()` no longer writes data to disk during parsing (@thomasp85, #942)
+* Fixed a bug where setting the `apiPath` option wouldn't be honored when running the app (@thomasp85, #836)
 
 # plumber 1.2.2
 
