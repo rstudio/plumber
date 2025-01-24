@@ -6,8 +6,21 @@ forward_class <- "plumber_forward"
 #' to pass control off to the next handler in the chain. If this is not called
 #' by a filter, the assumption is that the filter fully handled the request
 #' itself and no other filters or endpoints should be evaluated for this
-#' request.
+#' request. `forward()` cannot be used within handlers to trigger the next
+#' matching handler in the router. It only has relevance for filters.
+#'
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' pr() %>%
+#'   pr_filter("foo", function(req, res) {
+#'     print("This is filter foo")
+#'     forward()
+#'   }) %>%
+#'   pr_run()
+#' }
+#'
 forward <- function() {
   exec <- getCurrentExec()
   exec$forward <- TRUE
