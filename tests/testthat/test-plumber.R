@@ -66,11 +66,6 @@ test_that("plumb gives a good error when passing in a dir instead of a file", {
   # brittle test. Fails on r-devel-windows-x86_64-gcc10-UCRT
   skip_on_cran()
 
-  if (isWindows()) {
-    # File paths are hard to work with and are inconsistent
-    skip_on_os("windows")
-  }
-
   expect_error(plumb(test_path("files/")), "Expecting a file but found a directory: 'files/'")
 })
 
