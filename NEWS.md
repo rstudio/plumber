@@ -4,6 +4,7 @@
 
 * Added support for graphic devices provided by ragg and svglite (@thomasp85 #964)
 * `parse_rds()`, `parse_feather()`, and `parse_parquet()` no longer writes data to disk during parsing (@thomasp85, #942)
+* Returning error messages are now turned off by default rather than being turned on if running interactively and turned off if not (@thomasp85, #962)
 
 # plumber 1.2.2
 
