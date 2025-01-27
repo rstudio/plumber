@@ -222,7 +222,7 @@ Mac OS X, port numbers smaller than 1025 require root privileges.</p>
 
 
 <dt><code>debug</code></dt>
-<dd><p>If <code>TRUE</code>, it will provide more insight into your API errors. Using this value will only last for the duration of the run. If a <code>$setDebug()</code> has not been called, <code>debug</code> will default to <code><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive()</a></code> at <code>$run()</code> time. See <code>$setDebug()</code> for more details.</p></dd>
+<dd><p>If <code>TRUE</code>, it will provide more insight into your API errors. Using this value will only last for the duration of the run. If a <code>$setDebug()</code> has not been called, <code>debug</code> will default to <code>FALSE</code> at <code>$run()</code> time. See <code>$setDebug()</code> for more details.</p></dd>
 
 
 <dt><code>swaggerCallback</code></dt>
@@ -753,7 +753,7 @@ to the API docs url. This allows RStudio to locate visual documentation.</p>
 <p>Set debug value to include error messages.</p>
 <p>See also: <code>$getDebug()</code> and <code><a href="pr_set_debug.html">pr_set_debug()</a></code></p><div class="section">
 <h4 id="usage-19">Usage<a class="anchor" aria-label="anchor" href="#usage-19"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">setDebug</span><span class="op">(</span>debug <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">setDebug</span><span class="op">(</span>debug <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -767,7 +767,7 @@ to the API docs url. This allows RStudio to locate visual documentation.</p>
 
 </div><p></p><hr><a id="method-Plumber-getDebug"></a><div class="section">
 <h3 id="method-getdebug-">Method <code>getDebug()</code><a class="anchor" aria-label="anchor" href="#method-getdebug-"></a></h3>
-<p>Retrieve the <code>debug</code> value. If it has never been set, the result of <code><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive()</a></code> will be used.</p>
+<p>Retrieve the <code>debug</code> value. If it has never been set, it will return <code>FALSE</code>.</p>
 <p>See also: <code>$getDebug()</code> and <code><a href="pr_set_debug.html">pr_set_debug()</a></code></p><div class="section">
 <h4 id="usage-20">Usage<a class="anchor" aria-label="anchor" href="#usage-20"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Plumber</span><span class="op">$</span><span class="fu">getDebug</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
