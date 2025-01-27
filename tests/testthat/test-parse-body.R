@@ -134,6 +134,31 @@ test_that("Test parquet parser", {
   expect_equal(parsed, r_object)
 })
 
+test_that("Test excel parser", {
+  skip_if_not_installed(c("readxl", "writexl"))
+
+  tmp <- tempfile(fileext = ".xlsx")
+  on.exit({
+    file.remove(tmp)
+  }, add = TRUE)
+
+  # note: factors will fail the round-trip test
+  r_object <- data.frame(chr = LETTERS[1:3], int = 1:3, num = pi+1:3, lgl = c(TRUET, FALSE, NA))
+  res <- try(writexl::write_xlsx(r_object, tmp), silent = TRUE)
+  skip_if(
+    inherits(res, "try-error"),
+    "writexl::write_xlsx() isn't working."
+  )
+
+  val <- readBin(tmp, "raw", 10000)
+
+  parsed <- parse_body(val, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", make_parser("excel"))
+  # convert from parquet tibble to data.frame
+  parsed <- as.data.frame(parsed[[1]], stringsAsFactors = FALSE)
+
+  expect_equal(parsed, r_object)
+})
+
 test_that("Test geojson parser", {
   skip_if_not_installed("geojsonsf")
   skip_if_not_installed("sf")
