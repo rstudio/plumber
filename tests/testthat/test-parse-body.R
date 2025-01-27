@@ -135,7 +135,8 @@ test_that("Test parquet parser", {
 })
 
 test_that("Test excel parser", {
-  skip_if_not_installed(c("readxl", "writexl"))
+  skip_if_not_installed("readxl")
+  skip_if_not_installed("writexl")
 
   tmp <- tempfile(fileext = ".xlsx")
   on.exit({
