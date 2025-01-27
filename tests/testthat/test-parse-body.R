@@ -143,7 +143,7 @@ test_that("Test excel parser", {
   }, add = TRUE)
 
   # note: factors will fail the round-trip test
-  r_object <- data.frame(chr = LETTERS[1:3], int = 1:3, num = pi+1:3, lgl = c(TRUET, FALSE, NA))
+  r_object <- data.frame(chr = LETTERS[1:3], int = 1:3, num = pi+1:3, lgl = c(TRUE, FALSE, NA))
   res <- try(writexl::write_xlsx(r_object, tmp), silent = TRUE)
   skip_if(
     inherits(res, "try-error"),
