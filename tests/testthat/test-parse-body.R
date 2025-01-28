@@ -154,7 +154,7 @@ test_that("Test excel parser", {
   val <- readBin(tmp, "raw", 10000)
 
   parsed <- parse_body(val, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", make_parser("excel"))
-  # convert from parquet tibble to data.frame
+  # convert from tibble to data.frame
   parsed <- as.data.frame(parsed[[1]], stringsAsFactors = FALSE)
 
   expect_equal(parsed, r_object)
