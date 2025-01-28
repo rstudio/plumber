@@ -517,6 +517,9 @@ parser_parquet <- function(...) {
 # worksheet names found in the workbook
 
 #' @describeIn parsers excel parser. See [readxl::read_excel()] for more details. (Defaults to reading in the first worksheet only, use `@parser excel list(sheet=NA)` to read in all worksheets.)
+#' @param sheet Sheet to read. Either a string (the name of a sheet), or an
+#' integer (the position of the sheet). Defaults to the first sheet. To read all
+#' sheets, use `NA`.
 #' @export
 parser_excel <- function(..., sheet = NULL) {
   if (!requireNamespace("readxl", quietly = TRUE)) {
