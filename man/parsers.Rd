@@ -100,19 +100,11 @@ This parser should be used when reading from a file is required.
 
 \item \code{parser_parquet()}: parquet parser. See \code{\link[arrow:read_parquet]{arrow::read_parquet()}} for more details.
 
-\item \code{parser_excel()}: excel parser. See \code{\link[readxl:read_excel]{readxl::read_excel()}} for more
-details. (Defaults to reading in the first worksheet only, use \verb{@parser excel list(sheet=NA)} to read in all worksheets.)
+\item \code{parser_excel()}: excel parser. See \code{\link[readxl:read_excel]{readxl::read_excel()}} for more details. (Defaults to reading in the first worksheet only, use \verb{@parser excel list(sheet=NA)} to read in all worksheets.)
 
 \item \code{parser_octet()}: Octet stream parser. Returns the raw content.
 
-\item \code{parser_multi()}: Multi part parser. This parser will then parse each
-individual body with its respective parser.  When this parser is used,
-\code{req$body} will contain the updated output from \code{\link[webutils:parse_multipart]{webutils::parse_multipart()}}
-by adding the \code{parsed} output to each part.  Each part may contain detailed
-information, such as \code{name} (required), \code{content_type},
-\code{content_disposition}, \code{filename}, (raw, original) \code{value}, and \code{parsed}
-(parsed \code{value}).  When performing Plumber route argument matching, each
-multipart part will match its \code{name} to the \code{parsed} content.
+\item \code{parser_multi()}: Multi part parser. This parser will then parse each individual body with its respective parser.  When this parser is used, \code{req$body} will contain the updated output from \code{\link[webutils:parse_multipart]{webutils::parse_multipart()}} by adding the \code{parsed} output to each part.  Each part may contain detailed information, such as \code{name} (required), \code{content_type}, \code{content_disposition}, \code{filename}, (raw, original) \code{value}, and \code{parsed} (parsed \code{value}).  When performing Plumber route argument matching, each multipart part will match its \code{name} to the \code{parsed} content.
 
 \item \code{parser_none()}: No parser. Will not process the postBody.
 
