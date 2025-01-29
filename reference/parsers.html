@@ -89,6 +89,8 @@ non-default behavior.</p>
 <span></span>
 <span><span class="fu">parser_parquet</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">parser_excel</span><span class="op">(</span><span class="va">...</span>, sheet <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">parser_octet</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">parser_multi</span><span class="op">(</span><span class="op">)</span></span>
@@ -110,6 +112,12 @@ non-default behavior.</p>
 
 <dt id="arg-read-fn">read_fn<a class="anchor" aria-label="anchor" href="#arg-read-fn"></a></dt>
 <dd><p>function used to read a the content of a file. Ex: <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS()</a></code></p></dd>
+
+
+<dt id="arg-sheet">sheet<a class="anchor" aria-label="anchor" href="#arg-sheet"></a></dt>
+<dd><p>Sheet to read. Either a string (the name of a sheet), or an
+integer (the position of the sheet). Defaults to the first sheet. To read all
+sheets, use <code>NA</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -136,6 +144,7 @@ This parser should be used when reading from a file is required.</p></li>
 <li><p><code>parser_rds()</code>: RDS parser. See <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS()</a></code> for more details.</p></li>
 <li><p><code>parser_feather()</code>: feather parser. See <code><a href="https://arrow.apache.org/docs/r/reference/read_feather.html" class="external-link">arrow::read_feather()</a></code> for more details.</p></li>
 <li><p><code>parser_parquet()</code>: parquet parser. See <code><a href="https://arrow.apache.org/docs/r/reference/read_parquet.html" class="external-link">arrow::read_parquet()</a></code> for more details.</p></li>
+<li><p><code>parser_excel()</code>: excel parser. See <code><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">readxl::read_excel()</a></code> for more details. (Defaults to reading in the first worksheet only, use <code>@parser excel list(sheet=NA)</code> to read in all worksheets.)</p></li>
 <li><p><code>parser_octet()</code>: Octet stream parser. Returns the raw content.</p></li>
 <li><p><code>parser_multi()</code>: Multi part parser. This parser will then parse each individual body with its respective parser.  When this parser is used, <code>req$body</code> will contain the updated output from <code><a href="https://jeroen.r-universe.dev/webutils/reference/parse_multipart.html" class="external-link">webutils::parse_multipart()</a></code> by adding the <code>parsed</code> output to each part.  Each part may contain detailed information, such as <code>name</code> (required), <code>content_type</code>, <code>content_disposition</code>, <code>filename</code>, (raw, original) <code>value</code>, and <code>parsed</code> (parsed <code>value</code>).  When performing Plumber route argument matching, each multipart part will match its <code>name</code> to the <code>parsed</code> content.</p></li>
 <li><p><code>parser_none()</code>: No parser. Will not process the postBody.</p></li>
