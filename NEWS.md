@@ -6,6 +6,12 @@
 * `parse_rds()`, `parse_feather()`, and `parse_parquet()` no longer writes data to disk during parsing (@thomasp85, #942)
 * Returning error messages are now turned off by default rather than being turned on if running interactively and turned off if not (@thomasp85, #962)
 
+* New serializers
+  * `serializer_excel()`: Return an object serialized by `writexl::write_xlsx` (@r2evans, #973).
+
+* New request body parsers
+  * `parser_excel()`: Parse request body as an excel workbook using `readxl::read_excel` (@r2evans, #973). This defaults to loading in the first worksheet only, you can use `@parse excel list(sheet=NA)` to import all worksheets. This always returns a list of frames, even if just one worksheet.
+
 # plumber 1.2.2
 
 * Allow to set plumber options using environment variables `?options_plumber`. (@meztez #934)

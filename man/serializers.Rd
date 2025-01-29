@@ -13,6 +13,7 @@
 \alias{serializer_rds}
 \alias{serializer_feather}
 \alias{serializer_parquet}
+\alias{serializer_excel}
 \alias{serializer_yaml}
 \alias{serializer_text}
 \alias{serializer_format}
@@ -56,6 +57,11 @@ serializer_rds(version = "2", ascii = FALSE, ..., type = "application/rds")
 serializer_feather(type = "application/vnd.apache.arrow.file")
 
 serializer_parquet(type = "application/vnd.apache.parquet")
+
+serializer_excel(
+  ...,
+  type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+)
 
 serializer_yaml(..., type = "text/x-yaml; charset=UTF-8")
 
@@ -159,6 +165,8 @@ not have a \code{"raw"} type, then an error will be thrown.
 \item \code{serializer_feather()}: feather serializer. See also: \code{\link[arrow:write_feather]{arrow::write_feather()}}
 
 \item \code{serializer_parquet()}: parquet serializer. See also: \code{\link[arrow:write_parquet]{arrow::write_parquet()}}
+
+\item \code{serializer_excel()}: excel serializer. See also: \code{\link[writexl:write_xlsx]{writexl::write_xlsx()}}
 
 \item \code{serializer_yaml()}: YAML serializer. See also: \code{\link[yaml:as.yaml]{yaml::as.yaml()}}
 
