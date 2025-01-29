@@ -676,7 +676,6 @@ Plumber <- R6Class(
         return(NULL)
       }
 
-      path <- req$PATH_INFO
       makeHandleStep <- function(name) {
         function(...) {
           resetForward()
@@ -693,7 +692,7 @@ Plumber <- R6Class(
             } else {
               private$default_parsers
             }
-          req$argsPath <- h$getPathParams(path)
+          req$argsPath <- h$getPathParams(req$PATH_INFO)
           # `req_body_parser()` will also set `req$body` with the untouched body value
           req$body <- req_body_parser(req, parsers)
           req$argsBody <- req_body_args(req)
@@ -775,7 +774,7 @@ Plumber <- R6Class(
           resetForward()
           # TODO: support globbing?
 
-          if (nchar(path) >= nchar(mountPath) && substr(path, 0, nchar(mountPath)) == mountPath) {
+          if (nchar(req$PATH_INFO) >= nchar(mountPath) && substr(req$PATH_INFO, 0, nchar(mountPath)) == mountPath) {
             # This is a prefix match or exact match. Let this router handle.
 
             # First trim the prefix off of the PATH_INFO element
