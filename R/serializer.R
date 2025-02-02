@@ -691,7 +691,7 @@ serializer_svglite <- function(..., type = "image/svg+xml") {
 }
 
 
-add_serializers_onLoad <- function() {
+register_serializers_onLoad <- function() {
   register_serializer("null",        serializer_identity)
   register_serializer("contentType", serializer_content_type)
 
