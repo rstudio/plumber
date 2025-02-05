@@ -12,6 +12,8 @@
 * New request body parsers
   * `parser_excel()`: Parse request body as an excel workbook using `readxl::read_excel` (@r2evans, #973). This defaults to loading in the first worksheet only, you can use `@parse excel list(sheet=NA)` to import all worksheets. This always returns a list of frames, even if just one worksheet.
 
+* bug: Mounts now use a `req$PATH_INFO` instead of a pre-computed value. (#888)
+
 # plumber 1.2.2
 
 * Allow to set plumber options using environment variables `?options_plumber`. (@meztez #934)
