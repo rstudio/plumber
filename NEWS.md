@@ -3,8 +3,18 @@
 * Fixes #956, allowing a port to be specified as an environment variable. User-provided ports must be between 1024 and 49151 (following [IANA guidelines](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml)) and may not be a known unsafe port. plumber will now throw an error if an invalid port is requested. (@shikokuchuo @gadenbuie #963)
 
 * Added support for graphic devices provided by ragg and svglite (@thomasp85 #964)
+
 * `parse_rds()`, `parse_feather()`, and `parse_parquet()` no longer writes data to disk during parsing (@thomasp85, #942)
+
 * Fixed a bug where setting the `apiPath` option wouldn't be honored when running the app (@thomasp85, #836)
+
+* Returning error messages are now turned off by default rather than being turned on if running interactively and turned off if not (@thomasp85, #962)
+
+* New serializers
+  * `serializer_excel()`: Return an object serialized by `writexl::write_xlsx` (@r2evans, #973).
+
+* New request body parsers
+  * `parser_excel()`: Parse request body as an excel workbook using `readxl::read_excel` (@r2evans, #973). This defaults to loading in the first worksheet only, you can use `@parse excel list(sheet=NA)` to import all worksheets. This always returns a list of frames, even if just one worksheet.
 
 # plumber 1.2.2
 
