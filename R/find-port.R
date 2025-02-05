@@ -1,47 +1,77 @@
-
-# Exclude unsafe ports from Chrome https://src.chromium.org/viewvc/chrome/trunk/src/net/base/net_util.cc?view=markup#l127
-portBlacklist <- c(0, 3659, 4045, 6000, 6665, 6666, 6667, 6668, 6669)
-
-#' Get a random port between 3k and 10k, excluding the blacklist. If a preferred port
-#' has already been registered in .globals, use that instead.
-#' @importFrom stats runif
-#' @noRd
-getRandomPort <- function(){
-  port <- 0
-  while (port %in% portBlacklist){
-    port <- round(runif(1, 3000, 10000))
-  }
-  port
+# Ports that are considered unsafe by Chrome
+# http://superuser.com/questions/188058/which-ports-are-considered-unsafe-on-chrome
+# https://github.com/rstudio/shiny/issues/1784
+unsafePorts <- function() {
+  asNamespace("httpuv")[["unsafe_ports"]]
 }
 
-#' Find a port either using the assigned port or randomly search 10 times for an available
-#' port. If a port was manually assigned, just return it and assume it will work.
+
+randomPort <- function(..., n = 10) {
+  tryCatch({
+    port <- httpuv::randomPort(..., n = n)
+  }, httpuv_unavailable_port = function(e) {
+    stop(
+      "Unable to start a Plumber server. ",
+      paste0("We were unable to find a free port in ", n, " tries.")
+    )
+  })
+  return(port)
+}
+
+portIsAvailable <- function(port) {
+  tryCatch(
+    {
+      randomPort(min = port, max = port)
+      TRUE
+    },
+    error = function(e) {
+      FALSE
+    }
+  )
+}
+
+#' Find a port either using the assigned port or randomly search 10 times for an
+#' available port. If a port was manually assigned, just return it and assume it
+#' will work.
 #' @noRd
-findPort <- function(port){
-  if (missing(port) || is.null(port)){
-    if (!is.null(.globals$port)){
-      # Start by trying the .globals$port
-      port <- .globals$port
-    } else {
-      port <- getRandomPort()
+findPort <- function(port = NULL) {
+  if (is.null(port)) {
+    # Try to use the most recently used _random_ port
+    if (
+      (!is.null(.globals$last_random_port)) &&
+        portIsAvailable(.globals$last_random_port)
+    ) {
+      return(.globals$last_random_port)
     }
 
-    for (i in 1:10){
-      tryCatch(srv <- httpuv::startServer("127.0.0.1", port, list(), quiet = TRUE), error=function(e){
-        port <<- 0
-      })
-      if (port != 0){
-        # Stop the temporary server, and retain this port number.
-        httpuv::stopServer(srv)
-        .globals$port <- port
-        break
-      }
-      port <- getRandomPort()
-    }
+    # Find an available port
+    port <- randomPort()
+
+    # Save the random port for future use
+    .globals$last_random_port <- port
+    return(.globals$last_random_port)
   }
 
-  if (port == 0){
-    stop("Unable to start a Plumber server. Either the port specified was unavailable or we were unable to find a free port.")
+  port_og <- port
+
+  if (rlang::is_character(port)) {
+    port <- suppressWarnings(as.integer(port))
+  }
+
+  if (!rlang::is_integerish(port, n = 1, finite = TRUE) || port != port_og) {
+    stop("Port must be an integer value, not '", port_og, "'.")
+  }
+
+  port <- as.integer(port)
+
+  # Ports must be in [1024-49151]
+  # https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml
+  if (port < 1024 || port > 49151) {
+    stop("Port must be an integer in the range 1024 to 49151 (inclusive).")
+  }
+
+  if (port == 0 || port %in% unsafePorts()) {
+    stop("Port ", port, " is an unsafe port. Please choose another port.")
   }
 
   port

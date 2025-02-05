@@ -70,9 +70,8 @@ parseUTF8 <- function(file) {
     file <- tempfile(); on.exit(unlink(file), add = TRUE)
     writeLines(lines, file)
   }
-  
-  # keep the source locations within the file while parsing
-  exprs <- try(parse(file, keep.source = TRUE, srcfile = src, encoding = enc))
+
+  exprs <- try(parse(file, keep.source = FALSE, srcfile = src, encoding = enc))
   if (inherits(exprs, "try-error")) {
     stop("Error sourcing ", file)
   }

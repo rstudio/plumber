@@ -77,7 +77,18 @@ test_that("pdf produces an image", {
   expect_device_output("pdf", "application/pdf", NULL)
 })
 
-
+test_that("agg_png produces an image", {
+  expect_device_output("agg_png", "image/png", NULL)
+})
+test_that("agg_jpeg produces an image", {
+  expect_device_output("agg_jpeg", "image/jpeg", NULL)
+})
+test_that("agg_tiff produces an image", {
+  expect_device_output("agg_tiff", "image/tiff", NULL)
+})
+test_that("svglite produces an image", {
+  expect_device_output("svglite", "image/svg+xml", NULL)
+})
 
 
 context("plumb() device serializer")

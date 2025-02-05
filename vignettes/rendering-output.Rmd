@@ -73,6 +73,10 @@ Annotation | Content Type | Description/References
 `@serializer bmp` | `image/bmp` | Images created with `bmp()`
 `@serializer tiff` | `image/tiff` | Images created with `tiff()`
 `@serializer pdf` | `application/pdf` | PDF File created with `pdf()`
+`@serializer agg_jpeg` | `image/jpeg` | Images created with `ragg::agg_jpeg()`
+`@serializer agg_png` | `image/png` | Images created with `ragg::agg_png()`
+`@serializer agg_tiff` | `image/tiff` | Images created with `ragg::agg_tiff()`
+`@serializer svglite` | `image/svg` | Images created with `svglite::svglite()`
 
 
 ### Boxed vs Unboxed JSON
@@ -159,7 +163,7 @@ Plumber wraps each endpoint invocation so that it can gracefully capture errors.
 ```{r, eval = FALSE, code = readLines("files/apis/04-05-error.R")}
 ```
 
-If you run this API and visit http://localhost:8000/simple, you'll notice two things:
+If you run this API in interactive mode and visit http://localhost:8000/simple, you'll notice two things:
 
 1. An HTTP response with a status code of `500` ("internal server error") is sent to the client. You should see an error message resembling: `{"error":["500 - Internal server error"],"message":["Error in (function () : I'm an error!\n"]}`
 2. A similar error is printed in the terminal where you're running your Plumber API.

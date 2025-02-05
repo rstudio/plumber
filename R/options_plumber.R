@@ -2,7 +2,9 @@
 #'
 #' There are a number of global options that affect Plumber's behavior. These can
 #' be set globally with [options()] or with [options_plumber()]. Options set using
-#' [options_plumber()] should not include the `plumber.` prefix.
+#' [options_plumber()] should not include the `plumber.` prefix. Alternatively,
+#' environment variable can be used to set plumber options using uppercase and
+#' underscores (i.e. to set `plumber.apiHost` you can set environment variable `PLUMBER_APIHOST`).
 #'
 #' \describe{
 #' \item{`plumber.port`}{Port Plumber will attempt to use to start http server.
@@ -66,7 +68,7 @@ options_plumber <- function(
   sharedSecret         = getOption("plumber.sharedSecret"),
   legacyRedirects      = getOption("plumber.legacyRedirects")
 ) {
-  ellipsis::check_dots_empty()
+  rlang::check_dots_empty()
 
   # Make sure all fallback options are disabled
   if (!missing(docs.callback) && is.null(docs.callback)) {
@@ -88,4 +90,24 @@ options_plumber <- function(
     plumber.sharedSecret         =   sharedSecret,
     plumber.legacyRedirects      =   legacyRedirects
   )
+}
+
+#' Get an option value, alternatively look in environment for value
+#' @rdname options_plumber
+#' @inheritParams base::options
+#' @export
+get_option_or_env <- function(x, default = NULL) {
+
+  getOption(x, default = {
+    env_name <- toupper(chartr(".", "_", x))
+    res <- Sys.getenv(env_name)
+    if (res == "") {
+      return(default)
+    }
+    if (res %in% c("TRUE", "FALSE")) {
+      return(as.logical(res))
+    }
+    res
+  })
+
 }

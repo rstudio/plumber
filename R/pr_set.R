@@ -97,8 +97,8 @@ pr_set_error <- function(pr, fun) {
 
 #' Set debug value to include error messages of routes cause an error
 #'
-#' To hide any error messages in production, set the debug value to `FALSE`.
-#' The `debug` value is enabled by default for [interactive()] sessions.
+#' By default, error messages from your plumber routes are hidden, but can be
+#' turned on by setting the debug value to `TRUE` using this setter.
 #'
 #' @template param_pr
 #' @param debug `TRUE` provides more insight into your API errors.
@@ -118,7 +118,15 @@ pr_set_error <- function(pr, fun) {
 #'   pr_get("/boom", function() stop("boom")) %>%
 #'   pr_run()
 #' }
-pr_set_debug <- function(pr, debug = interactive()) {
+#'
+#' # Setting within a plumber file
+#' #* @plumber
+#' function(pr) {
+#'   pr %>%
+#'     pr_set_debug(TRUE)
+#' }
+#'
+pr_set_debug <- function(pr, debug = FALSE) {
   validate_pr(pr)
   pr$setDebug(debug = debug)
   pr
@@ -177,7 +185,7 @@ pr_set_debug <- function(pr, debug = interactive()) {
 #' }
 pr_set_docs <- function(
   pr,
-  docs = getOption("plumber.docs", TRUE),
+  docs = get_option_or_env("plumber.docs", TRUE),
   ...
 ) {
   validate_pr(pr)
@@ -206,7 +214,7 @@ pr_set_docs <- function(
 #' }
 pr_set_docs_callback <- function(
   pr,
-  callback = getOption('plumber.docs.callback', NULL)
+  callback = get_option_or_env('plumber.docs.callback', NULL)
 ) {
   validate_pr(pr)
   pr$setDocsCallback(callback = callback)

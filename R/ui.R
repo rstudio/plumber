@@ -10,13 +10,13 @@ mount_docs <- function(pr, host, port, docs_info, callback, quiet = FALSE) {
   }
 
   # Build api url
-  api_url <- getOption(
+  api_url <- get_option_or_env(
     "plumber.apiURL",
     urlHost(
-      scheme = getOption("plumber.apiScheme", "http"),
-      host   = getOption("plumber.apiHost", host),
-      port   = getOption("plumber.apiPort", port),
-      path   = getOption("plumber.apiPath", ""),
+      scheme = get_option_or_env("plumber.apiScheme", "http"),
+      host   = get_option_or_env("plumber.apiHost", host),
+      port   = get_option_or_env("plumber.apiPort", port),
+      path   = get_option_or_env("plumber.apiPath", ""),
       changeHostLocation = TRUE
     )
   )
@@ -91,8 +91,8 @@ mount_openapi <- function(pr, api_url) {
   openapi_fun <- function(req) {
     # use the HTTP_REFERER so RSC can find the Docs location to ask
     ## (can't directly ask for 127.0.0.1)
-    if (is.null(getOption("plumber.apiURL")) &&
-        is.null(getOption("plumber.apiHost"))) {
+    if (is.null(get_option_or_env("plumber.apiURL")) &&
+        is.null(get_option_or_env("plumber.apiHost"))) {
       if (is.null(req$HTTP_REFERER)) {
         # Prevent leaking host and port if option is not set
         api_url <- character(1)
@@ -171,8 +171,8 @@ unmount_openapi <- function(pr) {
 #' # * via `pr_set_docs()`
 #' # * or through URL query string variables
 #' pr() %>%
-#'   # Set default argument `version = 3` for the swagger `index` and `static` functions
-#'   pr_set_docs("swagger", version = 3) %>%
+#'   # Set default argument `version = "3"` for the swagger `index` and `static` functions
+#'   pr_set_docs("swagger", version = "3") %>%
 #'   pr_get("/plus/<a:int>/<b:int>", function(a, b) { a + b }) %>%
 #'   pr_run()
 #' }
@@ -256,7 +256,7 @@ registered_docs <- function() {
 
 
 swagger_redirects <- function() {
-  if (!isTRUE(getOption("plumber.legacyRedirects", TRUE))) {
+  if (!isTRUE(get_option_or_env("plumber.legacyRedirects", TRUE))) {
     return(list())
   }
 

@@ -18,10 +18,10 @@ endpoint_serializer(
 
 \item{postexec_hook}{Function to be run directly after a \link{PlumberEndpoint} calls its route method.}
 
-\item{aroundexec_hook}{Function to be run around a \link{PlumberEndpoint} call. Must handle a \code{.next} argument to continue execution. \lifecycle{experimental}}
+\item{aroundexec_hook}{Function to be run around a \link{PlumberEndpoint} call. Must handle a \code{.next} argument to continue execution. \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}}
 }
 \description{
-This method allows serializers to return \code{preexec}, \code{postexec}, and \code{aroundexec} (\lifecycle{experimental}) hooks in addition to a serializer.
+This method allows serializers to return \code{preexec}, \code{postexec}, and \code{aroundexec} (\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}) hooks in addition to a serializer.
 This is useful for graphics device serializers which need a \code{preexec} and \code{postexec} hook to capture the graphics output.
 }
 \details{

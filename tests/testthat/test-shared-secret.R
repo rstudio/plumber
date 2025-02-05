@@ -3,7 +3,7 @@ context("shared secret")
 test_that("requests with shared secrets pass, w/o fail", {
   options(`plumber.sharedSecret`="abcdefg")
 
-  pr <- pr()
+  pr <- pr() %>% pr_set_debug(FALSE)
   pr$handle("GET", "/", function(){ 123 })
   req <- make_req("GET", "/", pr = pr)
 

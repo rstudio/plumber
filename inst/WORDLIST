@@ -21,6 +21,7 @@ HSTS
 HTTPOnly
 HTTPS
 Hookable
+IANA
 IPs
 IPv
 JSON
@@ -35,6 +36,7 @@ Phusion
 PlumberEndpoint's
 Quickstart
 README
+RStudio
 RedHat
 RedShift
 Rscript
@@ -47,6 +49,7 @@ TLS
 TSV
 UI
 URI
+Undeprecated
 Unencrypted
 Unmount
 WebSocket
@@ -84,6 +87,7 @@ http
 httpuv
 httr
 imposter
+ing
 integrations
 interpretable
 javascript
@@ -114,6 +118,7 @@ proc
 programmatically
 pseudorandom
 pwd
+ragg
 randomPort
 renderers
 repo
@@ -130,6 +135,7 @@ setosa
 ssl
 subfolder
 subrouters
+svglite
 systemd
 transactional
 unmount
@@ -139,6 +145,3 @@ untrusted
 validator
 webhook
 webhook’s
-
-ing
-Undeprecated

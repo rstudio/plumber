@@ -474,32 +474,75 @@ parser_read_file <- function(read_fn = readLines) {
 #' @describeIn parsers RDS parser. See [readRDS()] for more details.
 #' @export
 parser_rds <- function(...) {
-  parser_read_file(function(tmpfile) {
-    # `readRDS()` does not work with `rawConnection()`
-    readRDS(tmpfile, ...)
-  })
+  parse_fn <- function(raw_val) {
+    unserialize(memDecompress(raw_val))
+  }
+  function(value, ...) {
+    parse_fn(value)
+  }
 }
 
 #' @describeIn parsers feather parser. See [arrow::read_feather()] for more details.
 #' @export
 parser_feather <- function(...) {
-  parser_read_file(function(tmpfile) {
-    if (!requireNamespace("arrow", quietly = TRUE)) {
-      stop("`arrow` must be installed for `parser_feather` to work")
-    }
-    arrow::read_feather(tmpfile, ...)
-  })
+  if (!requireNamespace("arrow", quietly = TRUE)) {
+    stop("`arrow` must be installed for `parser_feather` to work")
+  }
+  parse_fn <- function(raw_val) {
+    arrow::read_feather(raw_val, ...)
+  }
+  function(value, ...) {
+    parse_fn(value)
+  }
 }
 
 #' @describeIn parsers parquet parser. See [arrow::read_parquet()] for more details.
 #' @export
 parser_parquet <- function(...) {
-  parser_read_file(function(tmpfile) {
-    if (!requireNamespace("arrow", quietly = TRUE)) {
-      stop("`arrow` must be installed for `parser_parquet` to work")
+  if (!requireNamespace("arrow", quietly = TRUE)) {
+    stop("`arrow` must be installed for `parser_feather` to work")
+  }
+  parse_fn <- function(raw_val) {
+    arrow::read_parquet(raw_val, ...)
+  }
+  function(value, ...) {
+    parse_fn(value)
+  }
+}
+
+# readxl's default behavior is to read only one worksheet at a time; in order for an endpoint to
+# read multiple worksheets, its documentation suggests to iterate over discovered names (c.f.,
+# https://readxl.tidyverse.org/articles/readxl-workflows.html#iterate-over-multiple-worksheets-in-a-workbook);
+# for this reason, this parser detects an NA in the 'sheet=' argument and replaces it with all
+# worksheet names found in the workbook
+
+#' @describeIn parsers excel parser. See [readxl::read_excel()] for more details. (Defaults to reading in the first worksheet only, use `@parser excel list(sheet=NA)` to read in all worksheets.)
+#' @param sheet Sheet to read. Either a string (the name of a sheet), or an
+#' integer (the position of the sheet). Defaults to the first sheet. To read all
+#' sheets, use `NA`.
+#' @export
+parser_excel <- function(..., sheet = NULL) {
+  if (!requireNamespace("readxl", quietly = TRUE)) {
+    stop("`readxl` must be installed for `parser_excel` to work")
+  }
+  parse_fn <- parser_read_file(function(tmpfile) {
+    if (is.null(sheet)) {
+      # we have to hard-code this since lapply won't iterate if NULL
+      sheet <- 1L
+    } else if (anyNA(sheet)) {
+      sheet <- readxl::excel_sheets(tmpfile)
     }
-    arrow::read_parquet(tmpfile, ...)
+    if (is.character(sheet)) names(sheet) <- sheet
+    out <- suppressWarnings(
+      lapply(sheet, function(sht) {
+        readxl::read_excel(path = tmpfile, sheet = sht, ...)
+      })
+    )
+    out
   })
+  function(value, ...) {
+    parse_fn(value)
+  }
 }
 
 #' @describeIn parsers Octet stream parser. Returns the raw content.
@@ -518,7 +561,8 @@ parser_multi <- function() {
   function(value, content_type, parsers, ...) {
     if (!stri_detect_fixed(content_type, "boundary=", case_insensitive = TRUE))
       stop("No boundary found in multipart content-type header: ", content_type)
-    boundary <- stri_match_first_regex(content_type, "boundary=([^; ]{2,})", case_insensitive = TRUE)[,2]
+    # Also remove surrounding quotes if they exist
+    boundary <- stri_match_first_regex(content_type, "boundary=\"?([^; \"]{2,})\"?", case_insensitive = TRUE)[,2]
     toparse <- parse_multipart(value, boundary)
 
     # set the names of the items as the `name` of each item
@@ -579,6 +623,7 @@ register_parsers_onLoad <- function() {
   register_parser("rds",     parser_rds,     fixed = "application/rds")
   register_parser("feather", parser_feather, fixed = c("application/vnd.apache.arrow.file", "application/feather"))
   register_parser("parquet", parser_parquet, fixed = "application/vnd.apache.parquet")
+  register_parser("excel",   parser_excel,   fixed = c("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel"))
   register_parser("text",    parser_text,    fixed = "text/plain", regex = "^text/")
   register_parser("tsv",     parser_tsv,     fixed = c("application/tab-separated-values", "text/tab-separated-values"))
   # yaml types: https://stackoverflow.com/a/38000954/591574

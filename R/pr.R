@@ -520,7 +520,7 @@ pr_filter <- function(pr,
 #' @export
 pr_run <- function(pr,
                    host = '127.0.0.1',
-                   port = getOption('plumber.port', NULL),
+                   port = get_option_or_env('plumber.port', NULL),
                    ...,
                    debug = missing_arg(),
                    docs = missing_arg(),
@@ -528,7 +528,7 @@ pr_run <- function(pr,
                    quiet = FALSE
 ) {
   validate_pr(pr)
-  ellipsis::check_dots_empty()
+  rlang::check_dots_empty()
   pr$run(host = host,
          port = port,
          debug = debug,

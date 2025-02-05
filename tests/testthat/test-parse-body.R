@@ -25,15 +25,15 @@ test_that("filter passes on content-type", {
     body = "this is a body",
     HTTP_CONTENT_TYPE = "text/html; charset=testset",
   )
-  with_mock(
+  local_mocked_bindings(
     parse_body = function(body, content_type = "unknown", parsers = NULL) {
       print(content_type)
       body
-    },
-    {
-      expect_output(req_body_parser(req, make_parser("text")), "text/html; charset=testset")
-    },
-    .env = "plumber"
+    }
+  )
+  expect_output(
+    req_body_parser(req, make_parser("text")),
+    "text/html; charset=testset"
   )
 })
 
@@ -118,13 +118,44 @@ test_that("Test parquet parser", {
   }, add = TRUE)
 
   r_object <- iris
-  arrow::write_parquet(r_object, tmp)
+  res <- try(arrow::write_parquet(r_object, tmp))
+  skip_if(
+    inherits(res, "try-error"),
+    "arrow::write_parquet() isn't working."
+  )
+
   val <- readBin(tmp, "raw", 10000)
 
   parsed <- parse_body(val, "application/vnd.apache.parquet", make_parser("parquet"))
   # convert from parquet tibble to data.frame
   parsed <- as.data.frame(parsed, stringsAsFactors = FALSE)
   attr(parsed, "spec") <- NULL
+
+  expect_equal(parsed, r_object)
+})
+
+test_that("Test excel parser", {
+  skip_if_not_installed("readxl")
+  skip_if_not_installed("writexl")
+
+  tmp <- tempfile(fileext = ".xlsx")
+  on.exit({
+    file.remove(tmp)
+  }, add = TRUE)
+
+  # note: factors will fail the round-trip test
+  r_object <- data.frame(chr = LETTERS[1:3], int = 1:3, num = pi+1:3, lgl = c(TRUE, FALSE, NA))
+  res <- try(writexl::write_xlsx(r_object, tmp), silent = TRUE)
+  skip_if(
+    inherits(res, "try-error"),
+    "writexl::write_xlsx() isn't working."
+  )
+
+  val <- readBin(tmp, "raw", 10000)
+
+  parsed <- parse_body(val, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", make_parser("excel"))
+  # convert from tibble to data.frame
+  parsed <- as.data.frame(parsed[[1]], stringsAsFactors = FALSE)
 
   expect_equal(parsed, r_object)
 })
@@ -261,6 +292,12 @@ test_that("Test multipart parser", {
   expect_true(is.raw(body_args[["img2"]][["ragnarok_small.png"]]))
   expect_gt(length(body_args[["img2"]][["ragnarok_small.png"]]), 100)
   expect_equal(body_args[["json"]], list(a=2,b=4,c=list(w=3,t=5)))
+
+  # Quoted boundary
+  req$HTTP_CONTENT_TYPE = "multipart/form-data; boundary=\"----WebKitFormBoundaryMYdShB9nBc32BUhQ\""
+  req$body <- req_body_parser(req, make_parser(c("multi", "json", "rds", "octet")))
+  expect_equal(names(req$body), c("json", "img1", "img2", "rds"))
+
 })
 
 
