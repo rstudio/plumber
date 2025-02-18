@@ -38,7 +38,7 @@ The annotations that generate an endpoint include:
  - `@delete`
  - `@head`
 
-These map to the HTTP methods that an API client might send along with a request. By default when you open a page in a web browser, that sends a `GET` request to the API. But you can use other API clients (or even JavaScript inside of a web browser) to form HTTP requests using the other methods listed here. There are conventions around when each of these methods should be used which you can read more about [here](http://www.restapitutorial.com/lessons/httpmethods.html). Note that some of these conventions carry with them security implications, so it's a good idea to follow the recommended uses for each method until you fully understand why you might deviate from them.
+These map to the HTTP methods that an API client might send along with a request. By default when you open a page in a web browser, that sends a `GET` request to the API. But you can use other API clients (or even JavaScript inside of a web browser) to form HTTP requests using the other methods listed here. There are conventions around when each of these methods should be used which you can read more about [here](http://www.restapitutorial.com/introduction/httpmethods.html). Note that some of these conventions carry with them security implications, so it's a good idea to follow the recommended uses for each method until you fully understand why you might deviate from them.
 
 Note that a single endpoint can support multiple verbs. The following function would be used to service any incoming `GET`, `POST`, or `PUT` request to `/cars`.
 
