@@ -60,13 +60,14 @@
 <li>
 <p>New serializers</p>
 <ul><li>
-<code><a href="../reference/serializers.html">serializer_excel()</a></code>: Return an object serialized by <code><a href="https://docs.ropensci.org/writexl/reference/write_xlsx.html" class="external-link">writexl::write_xlsx</a></code> (<a href="https://github.com/r2evans" class="external-link">@r2evans</a>, <a href="https://github.com/rstudio/plumber/issues/973" class="external-link">#973</a>).</li>
+<code><a href="../reference/serializers.html">serializer_excel()</a></code>: Return an object serialized by <code><a href="https://docs.ropensci.org/writexl//reference/write_xlsx.html" class="external-link">writexl::write_xlsx</a></code> (<a href="https://github.com/r2evans" class="external-link">@r2evans</a>, <a href="https://github.com/rstudio/plumber/issues/973" class="external-link">#973</a>).</li>
 </ul></li>
 <li>
 <p>New request body parsers</p>
 <ul><li>
 <code><a href="../reference/parsers.html">parser_excel()</a></code>: Parse request body as an excel workbook using <code><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">readxl::read_excel</a></code> (<a href="https://github.com/r2evans" class="external-link">@r2evans</a>, <a href="https://github.com/rstudio/plumber/issues/973" class="external-link">#973</a>). This defaults to loading in the first worksheet only, you can use <code>@parse excel list(sheet=NA)</code> to import all worksheets. This always returns a list of frames, even if just one worksheet.</li>
 </ul></li>
+<li><p>bug: Mounts now use a <code>req$PATH_INFO</code> instead of a pre-computed value. (<a href="https://github.com/rstudio/plumber/issues/888" class="external-link">#888</a>)</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.2" id="plumber-122">plumber 1.2.2<a class="anchor" aria-label="anchor" href="#plumber-122"></a></h2><p class="text-muted">CRAN release: 2024-03-25</p>
