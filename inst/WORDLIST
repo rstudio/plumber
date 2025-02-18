@@ -2,7 +2,6 @@ API's
 Api
 BMP
 BUGFIX
-CLI
 CORS
 CentOS
 Crypto
@@ -33,7 +32,6 @@ OpenCPU
 Packrat
 Parsers
 Phusion
-PlumberEndpoint's
 Quickstart
 README
 RStudio
@@ -125,6 +123,7 @@ repo
 req
 retransmitted
 rstudio
+ruleset
 runnable
 scalability
 scalable
