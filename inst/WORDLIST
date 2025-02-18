@@ -2,7 +2,6 @@ API's
 Api
 BMP
 BUGFIX
-CLI
 CORS
 CentOS
 Crypto
@@ -125,6 +124,7 @@ repo
 req
 retransmitted
 rstudio
+ruleset
 runnable
 scalability
 scalable
