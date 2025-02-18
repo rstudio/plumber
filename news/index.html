@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">plumber</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,22 +52,24 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="plumber-development-version">plumber (development version)<a class="anchor" aria-label="anchor" href="#plumber-development-version"></a></h2>
-<ul><li><p>Fixes <a href="https://github.com/rstudio/plumber/issues/956" class="external-link">#956</a>, allowing a port to be specified as an environment variable. User-provided ports must be between 1024 and 49151 (following <a href="https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml" class="external-link">IANA guidelines</a>) and may not be a known unsafe port. plumber will now throw an error if an invalid port is requested. (<a href="https://github.com/shikokuchuo" class="external-link">@shikokuchuo</a> <a href="https://github.com/gadenbuie" class="external-link">@gadenbuie</a> <a href="https://github.com/rstudio/plumber/issues/963" class="external-link">#963</a>)</p></li>
-<li><p>Added support for graphic devices provided by ragg and svglite (<a href="https://github.com/thomasp85" class="external-link">@thomasp85</a> <a href="https://github.com/rstudio/plumber/issues/964" class="external-link">#964</a>)</p></li>
-<li><p><code>parse_rds()</code>, <code>parse_feather()</code>, and <code>parse_parquet()</code> no longer writes data to disk during parsing (<a href="https://github.com/thomasp85" class="external-link">@thomasp85</a>, <a href="https://github.com/rstudio/plumber/issues/942" class="external-link">#942</a>)</p></li>
-<li><p>Returning error messages are now turned off by default rather than being turned on if running interactively and turned off if not (<a href="https://github.com/thomasp85" class="external-link">@thomasp85</a>, <a href="https://github.com/rstudio/plumber/issues/962" class="external-link">#962</a>)</p></li>
+<h2 class="pkg-version" data-toc-text="1.3.0" id="plumber-130">plumber 1.3.0<a class="anchor" aria-label="anchor" href="#plumber-130"></a></h2>
+<ul><li><p>The port many now be specified as an environment variable. User-provided ports must be between 1024 and 49151 (following <a href="https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml" class="external-link">IANA guidelines</a>) and may not be a known unsafe port. plumber will now throw an error if an invalid port is requested. (<a href="https://github.com/shikokuchuo" class="external-link">@shikokuchuo</a> <a href="https://github.com/gadenbuie" class="external-link">@gadenbuie</a> <a href="https://github.com/rstudio/plumber/issues/963" class="external-link">#963</a>)</p></li>
+<li><p>Added support for graphic devices provided by {ragg} and {svglite} (<a href="https://github.com/thomasp85" class="external-link">@thomasp85</a> <a href="https://github.com/rstudio/plumber/issues/964" class="external-link">#964</a>).</p></li>
+<li><p><code>parse_rds()</code>, <code>parse_feather()</code>, and <code>parse_parquet()</code> no longer writes data to disk during parsing (<a href="https://github.com/thomasp85" class="external-link">@thomasp85</a>, <a href="https://github.com/rstudio/plumber/issues/942" class="external-link">#942</a>).</p></li>
+<li><p>Returning error messages are now turned off by default rather than being turned on if running interactively and turned off if not (<a href="https://github.com/thomasp85" class="external-link">@thomasp85</a>, <a href="https://github.com/rstudio/plumber/issues/962" class="external-link">#962</a>).</p></li>
 <li>
-<p>New serializers</p>
+<p>New serializers:</p>
 <ul><li>
 <code><a href="../reference/serializers.html">serializer_excel()</a></code>: Return an object serialized by <code><a href="https://docs.ropensci.org/writexl//reference/write_xlsx.html" class="external-link">writexl::write_xlsx</a></code> (<a href="https://github.com/r2evans" class="external-link">@r2evans</a>, <a href="https://github.com/rstudio/plumber/issues/973" class="external-link">#973</a>).</li>
 </ul></li>
 <li>
-<p>New request body parsers</p>
+<p>New request body parsers:</p>
 <ul><li>
-<code><a href="../reference/parsers.html">parser_excel()</a></code>: Parse request body as an excel workbook using <code><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">readxl::read_excel</a></code> (<a href="https://github.com/r2evans" class="external-link">@r2evans</a>, <a href="https://github.com/rstudio/plumber/issues/973" class="external-link">#973</a>). This defaults to loading in the first worksheet only, you can use <code>@parse excel list(sheet=NA)</code> to import all worksheets. This always returns a list of frames, even if just one worksheet.</li>
+<code><a href="../reference/parsers.html">parser_excel()</a></code>: Parse request body as an excel workbook using <code><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">readxl::read_excel</a></code> (<a href="https://github.com/r2evans" class="external-link">@r2evans</a>, <a href="https://github.com/rstudio/plumber/issues/973" class="external-link">#973</a>). This defaults to loading in the first worksheet only, you can use <code>@parse excel list(sheet=NA)</code> to import all worksheets. This always returns a list of frames, even if there is just one worksheet.</li>
 </ul></li>
-<li><p>bug: Mounts now use a <code>req$PATH_INFO</code> instead of a pre-computed value. (<a href="https://github.com/rstudio/plumber/issues/888" class="external-link">#888</a>)</p></li>
+<li><p>Mounts now have a dynamic <code>req$PATH_INFO</code> instead of a pre-computed value. (<a href="https://github.com/rstudio/plumber/issues/888" class="external-link">#888</a>)</p></li>
+<li><p><code><a href="../reference/validate_api_spec.html">validate_api_spec()</a></code> now uses <code>@redocly/cli</code> to validate the API spec. (<a href="https://github.com/rstudio/plumber/issues/986" class="external-link">#986</a>)</p></li>
+<li><p>Added <code>operationId</code> to each operation within the auto-generated OpenAPI output. The value is similar to the <code>PATH-VERB</code>, e.g. <code>/users/create-POST</code>. (<a href="https://github.com/rstudio/plumber/issues/986" class="external-link">#986</a>)</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.2" id="plumber-122">plumber 1.2.2<a class="anchor" aria-label="anchor" href="#plumber-122"></a></h2><p class="text-muted">CRAN release: 2024-03-25</p>
