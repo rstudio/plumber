@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">plumber</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,11 +48,14 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/rstudio/plumber/blob/rc-v1.3.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/rstudio/plumber/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.3.0" id="plumber-130">plumber 1.3.0<a class="anchor" aria-label="anchor" href="#plumber-130"></a></h2>
+<h2 class="pkg-version" data-toc-text="development version" id="plumber-development-version">plumber (development version)<a class="anchor" aria-label="anchor" href="#plumber-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.0" id="plumber-130">plumber 1.3.0<a class="anchor" aria-label="anchor" href="#plumber-130"></a></h2><p class="text-muted">CRAN release: 2025-02-19</p>
 <ul><li><p>The port many now be specified as an environment variable. User-provided ports must be between 1024 and 49151 (following <a href="https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml" class="external-link">IANA guidelines</a>) and may not be a known unsafe port. plumber will now throw an error if an invalid port is requested. (<a href="https://github.com/shikokuchuo" class="external-link">@shikokuchuo</a> <a href="https://github.com/gadenbuie" class="external-link">@gadenbuie</a> <a href="https://github.com/rstudio/plumber/issues/963" class="external-link">#963</a>)</p></li>
 <li><p>Added support for graphic devices provided by {ragg} and {svglite} (<a href="https://github.com/thomasp85" class="external-link">@thomasp85</a> <a href="https://github.com/rstudio/plumber/issues/964" class="external-link">#964</a>).</p></li>
 <li><p><code>parse_rds()</code>, <code>parse_feather()</code>, and <code>parse_parquet()</code> no longer writes data to disk during parsing (<a href="https://github.com/thomasp85" class="external-link">@thomasp85</a>, <a href="https://github.com/rstudio/plumber/issues/942" class="external-link">#942</a>).</p></li>
