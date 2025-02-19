@@ -1,40 +1,21 @@
 ## Comments
 
-#### 2024-03-22
+#### 2025-02-18
 
-Releasing a patch to `{plumber}` to resolve a test error on CRAN.
+Releasing a minor update to `{plumber}`. Added a couple new features and some bug fixes.
 
-I have changed my email from `barret@rstudio.com` to `barret@posit.co` causing a NOTE in the CRAN checks.
+Please let me know if I can provide any additional information or assistance. Thank you!
 
 Best,
 Barret
 
-#### 2024-03-08
-
-Dear maintainer,
-
-Please see the problems shown on
-<https://cran.r-project.org/web/checks/check_results_plumber.html>.
-
-Please correct before 2024-03-22 to safely retain your package on CRAN.
-
-The CRAN Team
-
 ## R CMD check results
 
-0 errors ✔ | 0 warnings ✔ | 1 note ✔
-
-> Maintainer: ‘Barret Schloerke <barret@posit.co>’
->
-> New maintainer:
->   Barret Schloerke <barret@posit.co>
-> Old maintainer(s):
->   Barret Schloerke <barret@rstudio.com>
-
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
 ## revdepcheck results
 
-We checked 18 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+We checked 19 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
  * We saw 0 new problems
  * We failed to check 0 packages
