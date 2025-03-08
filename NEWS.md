@@ -24,7 +24,6 @@
 
 * Added support for graphic devices provided by ragg and svglite (@thomasp85 #964)
 
-
 # plumber 1.2.2
 
 * Allow to set plumber options using environment variables `?options_plumber`. (@meztez #934)

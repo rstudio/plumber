@@ -101,7 +101,6 @@ parser_picker <- function(content_type, first_byte, filename = NULL, parsers = N
     # fast default to json when first byte is 7b (ascii {) or 5b (ascii [)
     if (looks_like_json(first_byte)) {
       return(parsers$alias$json)
-      
     }
 
     return(parsers$alias$form)
@@ -640,9 +639,9 @@ register_parsers_onLoad <- function() {
   register_parser("text",    parser_text,    fixed = "text/plain", regex = "^text/")
   register_parser("tsv",     parser_tsv,     fixed = c("application/tab-separated-values", "text/tab-separated-values"))
   # yaml types: https://stackoverflow.com/a/38000954/591574
-  register_parser("yaml",      parser_yaml,    fixed = c("text/vnd.yaml", "application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"))
-  register_parser("none",      parser_none,    regex = "*")
-  register_parser("geojson",   parser_geojson, fixed = c("application/geo+json", "application/vdn.geo+json"))
+  register_parser("yaml",    parser_yaml,    fixed = c("text/vnd.yaml", "application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"))
+  register_parser("none",    parser_none,    regex = "*")
+  register_parser("geojson", parser_geojson, fixed = c("application/geo+json", "application/vdn.geo+json"))
 
   parser_all <- function() {
     stop("This function should never be called. It should be handled by `make_parser('all')`")
