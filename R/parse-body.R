@@ -493,10 +493,10 @@ parser_feather <- function(...) {
 
 #' @describeIn parsers Arrow IPC parser. See [arrow::read_ipc_stream()] for more details.
 #' @export
-parser_arrow_ipc <- function(...) {
+parser_arrow_ipc_stream <- function(...) {
   parser_read_file(function(tmpfile) {
     if (!requireNamespace("arrow", quietly = TRUE)) {
-      stop("`arrow` must be installed for `parser_arrow_ipc` to work")
+      stop("`arrow` must be installed for `parser_arrow_ipc_stream` to work")
     }
     arrow::read_ipc_stream(tmpfile, ...)
   })
@@ -590,7 +590,7 @@ register_parsers_onLoad <- function() {
   register_parser("form",      parser_form,    fixed = "application/x-www-form-urlencoded")
   register_parser("rds",       parser_rds,     fixed = "application/rds")
   register_parser("feather",   parser_feather, fixed = c("application/vnd.apache.arrow.file", "application/feather"))
-  register_parser("arrow_ipc", parser_arrow_ipc, fixed = c("application/vnd.apache.arrow.stream"))
+  register_parser("arrow_ipc_stream", parser_arrow_ipc_stream, fixed = c("application/vnd.apache.arrow.stream"))
   register_parser("parquet",   parser_parquet, fixed = "application/vnd.apache.parquet")
   register_parser("text",      parser_text,    fixed = "text/plain", regex = "^text/")
   register_parser("tsv",       parser_tsv,     fixed = c("application/tab-separated-values", "text/tab-separated-values"))

@@ -121,7 +121,7 @@ test_that("Test Arrow IPC parser", {
   arrow::write_ipc_stream(r_object, tmp)
   val <- readBin(tmp, "raw", 10000)
 
-  parsed <- parse_body(val, "application/vnd.apache.arrow.stream", make_parser("arrow_ipc"))
+  parsed <- parse_body(val, "application/vnd.apache.arrow.stream", make_parser("arrow_ipc_stream"))
   # convert from feather tibble to data.frame
   parsed <- as.data.frame(parsed, stringsAsFactors = FALSE)
   attr(parsed, "spec") <- NULL
