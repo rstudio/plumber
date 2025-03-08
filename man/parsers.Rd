@@ -13,6 +13,7 @@
 \alias{parser_feather}
 \alias{parser_arrow_ipc_stream}
 \alias{parser_parquet}
+\alias{parser_excel}
 \alias{parser_octet}
 \alias{parser_multi}
 \alias{parser_none}
@@ -42,6 +43,8 @@ parser_arrow_ipc_stream(...)
 
 parser_parquet(...)
 
+parser_excel(..., sheet = NULL)
+
 parser_octet()
 
 parser_multi()
@@ -54,6 +57,10 @@ parser_none()
 \item{parse_fn}{function to further decode a text string into an object}
 
 \item{read_fn}{function used to read a the content of a file. Ex: \code{\link[=readRDS]{readRDS()}}}
+
+\item{sheet}{Sheet to read. Either a string (the name of a sheet), or an
+integer (the position of the sheet). Defaults to the first sheet. To read all
+sheets, use \code{NA}.}
 }
 \description{
 Parsers are used in Plumber to transform request body received
@@ -97,6 +104,8 @@ This parser should be used when reading from a file is required.
 \item \code{parser_arrow_ipc_stream()}: Arrow IPC parser. See \code{\link[arrow:read_ipc_stream]{arrow::read_ipc_stream()}} for more details.
 
 \item \code{parser_parquet()}: parquet parser. See \code{\link[arrow:read_parquet]{arrow::read_parquet()}} for more details.
+
+\item \code{parser_excel()}: excel parser. See \code{\link[readxl:read_excel]{readxl::read_excel()}} for more details. (Defaults to reading in the first worksheet only, use \verb{@parser excel list(sheet=NA)} to read in all worksheets.)
 
 \item \code{parser_octet()}: Octet stream parser. Returns the raw content.
 

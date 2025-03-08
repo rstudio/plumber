@@ -242,7 +242,7 @@ This value does not need to be explicitly assigned. To explicitly set it, see \c
 
 \item{\code{swagger}}{Deprecated. Please use \code{docs} instead. See \verb{$setDocs(docs)} or \verb{$setApiSpec()} for more customization.}
 
-\item{\code{debug}}{If \code{TRUE}, it will provide more insight into your API errors. Using this value will only last for the duration of the run. If a \verb{$setDebug()} has not been called, \code{debug} will default to \code{interactive()} at \verb{$run()} time. See \verb{$setDebug()} for more details.}
+\item{\code{debug}}{If \code{TRUE}, it will provide more insight into your API errors. Using this value will only last for the duration of the run. If a \verb{$setDebug()} has not been called, \code{debug} will default to \code{FALSE} at \verb{$run()} time. See \verb{$setDebug()} for more details.}
 
 \item{\code{swaggerCallback}}{An optional single-argument function that is
 called back with the URL to an OpenAPI user interface when one becomes
@@ -788,7 +788,7 @@ Set debug value to include error messages.
 
 See also: \verb{$getDebug()} and \code{\link[=pr_set_debug]{pr_set_debug()}}
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Plumber$setDebug(debug = interactive())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Plumber$setDebug(debug = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -803,7 +803,7 @@ See also: \verb{$getDebug()} and \code{\link[=pr_set_debug]{pr_set_debug()}}
 \if{html}{\out{<a id="method-Plumber-getDebug"></a>}}
 \if{latex}{\out{\hypertarget{method-Plumber-getDebug}{}}}
 \subsection{Method \code{getDebug()}}{
-Retrieve the \code{debug} value. If it has never been set, the result of \code{interactive()} will be used.
+Retrieve the \code{debug} value. If it has never been set, it will return \code{FALSE}.
 
 See also: \verb{$getDebug()} and \code{\link[=pr_set_debug]{pr_set_debug()}}
 \subsection{Usage}{

@@ -1,57 +1,16 @@
-
-#' @include globals.R
-validate_api_spec_folder <- function() {
-  file.path(tempdir(), "plumber_validate_api_spec")
-}
-
-
-validate_api_spec__install_node_modules <- function() {
-
-  if (!nzchar(Sys.which("node"))) {
-    stop("node not installed")
-  }
-  if (!nzchar(Sys.which("npm"))) {
-    stop("npm not installed")
-  }
-
-  if (dir.exists(validate_api_spec_folder())) {
-    # assume npm install has completed
-    return(invisible(TRUE))
-  }
-
-  dir.create(validate_api_spec_folder(), recursive = TRUE, showWarnings = FALSE)
-
-  file.copy(
-    system.file(file.path("validate_api_spec", "package.json"), package = "plumber"),
-    file.path(validate_api_spec_folder(), "package.json")
-  )
-
-  old_wd <- setwd(validate_api_spec_folder())
-  on.exit({
-    setwd(old_wd)
-  }, add = TRUE)
-
-  # install everything. Ignore regular output
-  status <- system2("npm", c("install", "--loglevel", "warn"), stdout = FALSE)
-  if (status != 0) {
-      # delete the folder if it didn't work
-      unlink(validate_api_spec_folder(), recursive = TRUE)
-      stop("Could not install npm dependencies required for plumber::validate_api_spec()")
-  }
-
-  invisible(TRUE)
-}
-
-
 #' Validate OpenAPI Spec
 #'
-#' Validate an OpenAPI Spec using [Swagger CLI](https://github.com/APIDevTools/swagger-cli) which calls [Swagger Parser](https://github.com/APIDevTools/swagger-parser).
+#' Validate an OpenAPI Spec using [`@redocly/cli`](https://redocly.com/docs/cli/commands/lint).
 #'
-#' If the api is deemed invalid, an error will be thrown.
+#' If any warning or error is presented, an error will be thrown.
 #'
-#' This function is VERY `r lifecycle::badge("experimental")` and may be altered, changed, or removed in the future.
+#' This function is `r lifecycle::badge("experimental")` and may be altered, changed, or removed in the future.
 #'
 #' @param pr A Plumber API
+#' @param ... Ignored
+#' @param ruleset Character that determines the ruleset to use for validation. Can be one of "minimal", "recommended",
+#' or "recommended-strict". Defaults to "minimal". See [`@redocly/cli`
+#' options](https://redocly.com/docs/cli/commands/lint#options) for more details.
 #' @param verbose Logical that determines if a "is valid" statement is displayed. Defaults to `TRUE`
 #' @export
 #' @examples
@@ -59,15 +18,17 @@ validate_api_spec__install_node_modules <- function() {
 #' pr <- plumb_api("plumber", "01-append")
 #' validate_api_spec(pr)
 #' }
-validate_api_spec <- function(pr, verbose = TRUE) {
+validate_api_spec <- function(pr, ..., ruleset = c("minimal", "recommended", "recommended-strict"), verbose = TRUE) {
 
-  validate_api_spec__install_node_modules()
-
+  ruleset <- match.arg(ruleset, several.ok = FALSE)
+  if (!nzchar(Sys.which("node"))) {
+    stop("`node` command not found. Please install Node.js")
+  }
+  if (!nzchar(Sys.which("npx"))) {
+    stop("`npx` not installed. Please install Node.js w/ `npx` command available.")
+  }
+  
   spec <- jsonlite::toJSON(pr$getApiSpec(), auto_unbox = TRUE, pretty = TRUE)
-  old_wd <- setwd(validate_api_spec_folder())
-  on.exit({
-    setwd(old_wd)
-  }, add = TRUE)
 
   tmpfile <- tempfile(fileext = ".json")
   on.exit({
@@ -76,26 +37,30 @@ validate_api_spec <- function(pr, verbose = TRUE) {
   cat(spec, file = tmpfile)
 
   output <- system2(
-    "node_modules/.bin/swagger-cli",
+    "npx",
     c(
-      "validate",
+      "--yes", # auto install `@redocly/cli`
+      "-p", "@redocly/cli",
+      "redocly",
+      "lint",
+      "--extends", ruleset,
+      "--skip-rule", "no-empty-servers", # We don't know the end servers by default
+      "--skip-rule", "security-defined", # We don't know the security by default
+      "--skip-rule", "operation-summary", # operation summary values are optional. Not required
+      "--skip-rule", "operation-operationId-url-safe", # By default, it wants to have all operationId values be URL safe. This does not work with path parameters that want to use `{``}`.
+      "--skip-rule", "no-path-trailing-slash", # This is OK
       tmpfile
     ),
     stdout = TRUE,
     stderr = TRUE
   )
-
+  
   output <- paste0(output, collapse = "\n")
 
-  # using expect_equal vs a regex test to have a better error message
-  is_equal <- sub(tmpfile, "", output, fixed = TRUE) == " is valid"
-  if (!isTRUE(is_equal)) {
-    cat("Plumber Spec: \n", as.character(spec), "\nOutput:\n", output)
+  has_warn_or_error <- grepl("\n[1] ", output, fixed = TRUE)
+  if (has_warn_or_error) {
+    cat("Plumber Spec: \n", as.character(spec), "\n\nOutput:\n", output, sep = "")
     stop("Plumber OpenAPI Spec is not valid")
-  }
-
-  if (isTRUE(verbose)) {
-    cat(crayon::green("\u2714"), crayon::silver(": Plumber OpenAPI Spec is valid"), "\n", sep = "")
   }
 
   invisible(TRUE)

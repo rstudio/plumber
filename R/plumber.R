@@ -143,7 +143,7 @@ Plumber <- R6Class(
     #' Mac OS X, port numbers smaller than 1025 require root privileges.
     #'
     #' This value does not need to be explicitly assigned. To explicitly set it, see [options_plumber()].
-    #' @param debug If `TRUE`, it will provide more insight into your API errors. Using this value will only last for the duration of the run. If a `$setDebug()` has not been called, `debug` will default to `interactive()` at `$run()` time. See `$setDebug()` for more details.
+    #' @param debug If `TRUE`, it will provide more insight into your API errors. Using this value will only last for the duration of the run. If a `$setDebug()` has not been called, `debug` will default to `FALSE` at `$run()` time. See `$setDebug()` for more details.
     #' @param swagger Deprecated. Please use `docs` instead. See `$setDocs(docs)` or `$setApiSpec()` for more customization.
     #' @param swaggerCallback An optional single-argument function that is
     #'   called back with the URL to an OpenAPI user interface when one becomes
@@ -223,17 +223,16 @@ Plumber <- R6Class(
           )
         )
 
-      # Delay the setting of debug as long as possible.
-      # The router could be made in an interactive setting and used in background process.
-      # Do not determine if interactive until run time
+      # Temporarily set the debug value
       prev_debug <- private$debug
       on.exit({
         private$debug <- prev_debug
       }, add = TRUE)
-      # Fix the debug value while running.
+      # Determine if the user should be informed about default behavior
+      inform_debug <- is.null(prev_debug) && rlang::is_missing(debug)
+
+      # Set debug value, defaulting to already set value (which returns FALSE if not set)
       self$setDebug(
-        # Order: Run method param, internally set value, is interactive()
-        # `$getDebug()` is dynamic given `setDebug()` has never been called.
         rlang::maybe_missing(debug, self$getDebug())
       )
 
@@ -265,6 +264,14 @@ Plumber <- R6Class(
           quiet = quiet
         )
         on.exit(unmount_docs(self, docs_info), add = TRUE)
+      }
+
+      if (!isTRUE(quiet) && inform_debug && rlang::is_interactive()) {
+        rlang::inform(
+          "Error reporting has been turned off by default. See `pr_set_debug()` for more details.\nTo disable this message, set a debug value.",
+          .frequency="once",
+          .frequency_id="pr_set_debug_message"
+        )
       }
 
       on.exit(private$runHooks("exit"), add = TRUE)
@@ -669,7 +676,6 @@ Plumber <- R6Class(
         return(NULL)
       }
 
-      path <- req$PATH_INFO
       makeHandleStep <- function(name) {
         function(...) {
           resetForward()
@@ -686,7 +692,7 @@ Plumber <- R6Class(
             } else {
               private$default_parsers
             }
-          req$argsPath <- h$getPathParams(path)
+          req$argsPath <- h$getPathParams(req$PATH_INFO)
           # `req_body_parser()` will also set `req$body` with the untouched body value
           req$body <- req_body_parser(req, parsers)
           req$argsBody <- req_body_args(req)
@@ -768,7 +774,7 @@ Plumber <- R6Class(
           resetForward()
           # TODO: support globbing?
 
-          if (nchar(path) >= nchar(mountPath) && substr(path, 0, nchar(mountPath)) == mountPath) {
+          if (nchar(req$PATH_INFO) >= nchar(mountPath) && substr(req$PATH_INFO, 0, nchar(mountPath)) == mountPath) {
             # This is a prefix match or exact match. Let this router handle.
 
             # First trim the prefix off of the PATH_INFO element
@@ -963,15 +969,15 @@ Plumber <- R6Class(
     #'
     #' See also: `$getDebug()` and [pr_set_debug()]
     #' @param debug `TRUE` provides more insight into your API errors.
-    setDebug = function(debug = interactive()) {
+    setDebug = function(debug = FALSE) {
       stopifnot(length(debug) == 1)
       private$debug <- isTRUE(debug)
     },
-    #' @description Retrieve the `debug` value. If it has never been set, the result of `interactive()` will be used.
+    #' @description Retrieve the `debug` value. If it has never been set, it will return `FALSE`.
     #'
     #' See also: `$getDebug()` and [pr_set_debug()]
     getDebug = function() {
-      private$debug %||% default_debug()
+      private$debug %||% FALSE
     },
     #' @description Add a filter to plumber router
     #'
@@ -1332,13 +1338,6 @@ upgrade_docs_parameter <- function(docs, ...) {
     has_not_been_set = FALSE
   )
 }
-
-
-
-default_debug <- function() {
-  interactive()
-}
-
 
 urlHost <- function(scheme = "http", host, port, path = "", changeHostLocation = FALSE) {
   if (isTRUE(changeHostLocation)) {

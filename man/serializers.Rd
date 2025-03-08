@@ -14,6 +14,7 @@
 \alias{serializer_feather}
 \alias{serializer_arrow_ipc_stream}
 \alias{serializer_parquet}
+\alias{serializer_excel}
 \alias{serializer_yaml}
 \alias{serializer_text}
 \alias{serializer_format}
@@ -59,6 +60,11 @@ serializer_feather(type = "application/vnd.apache.arrow.file")
 serializer_arrow_ipc_stream(type = "application/vnd.apache.arrow.stream")
 
 serializer_parquet(type = "application/vnd.apache.parquet")
+
+serializer_excel(
+  ...,
+  type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+)
 
 serializer_yaml(..., type = "text/x-yaml; charset=UTF-8")
 
@@ -164,6 +170,8 @@ not have a \code{"raw"} type, then an error will be thrown.
 \item \code{serializer_arrow_ipc_stream()}: Arrow IPC serializer. See also: \code{\link[arrow:write_ipc_stream]{arrow::write_ipc_stream()}}
 
 \item \code{serializer_parquet()}: parquet serializer. See also: \code{\link[arrow:write_parquet]{arrow::write_parquet()}}
+
+\item \code{serializer_excel()}: excel serializer. See also: \code{\link[writexl:write_xlsx]{writexl::write_xlsx()}}
 
 \item \code{serializer_yaml()}: YAML serializer. See also: \code{\link[yaml:as.yaml]{yaml::as.yaml()}}
 

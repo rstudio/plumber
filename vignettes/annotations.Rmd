@@ -72,7 +72,7 @@ Annotation | Argument | Description/References
 `@get`, `@post`, `@put`, `@use`, `@delete`, `@head`, `@options`, `@patch` | `Path` | [Endpoints](./routing-and-input.html#endpoints), [Dynamic Routes](./routing-and-input.html#dynamic-routes), [Typed Dynamic Routes](./routing-and-input.html#typed-dynamic-routes)
 `@serializer` | `Alias` [`Args list]`] | Some serializers accept arguments. See [serializers article](./rendering-output.html#serializers) and [serializers reference](https://www.rplumber.io/reference/serializers.html). Aliases : `r paste0("<code>", registered_serializers(), "</code>", collapse = ", ")` from [`registered_serializers()`](https://www.rplumber.io/reference/register_serializer.html).
 `@parser` | `Alias` `[Args list]` | Some parsers accept arguments. See [parsers reference](https://www.rplumber.io/reference/parsers.html). Can be repeated to allow multiple parsers on the same endpoint. Aliases : `r paste0("<code>", registered_parsers(), "</code>", collapse = ", ")` from [`registered_parsers()`](https://www.rplumber.io/reference/register_parser.html).
-`@param` | `Name`[`:Type` `Description`] | Enclose `Type` between square brackets `[]` to indicate it is an array. Can be repeated to define different parameters.
+`@param` | `Name`[`:Type`(`*`) `Description`] | Enclose `Type` between square brackets `[]` to indicate it is an array. Adding an asterisk indicates that the parameter is required. Can be repeated to define different parameters.
 `@response` | `Name` `Description` | Simple [Response object](http://spec.openapis.org/oas/v3.0.3#response-object). Can be repeated to define different responses.
 `@tag` | `Tag` | Can be repeated to add multiple tags. Quote with " or ' to use non word character (like spaces) in `Tag`. [Tag field](http://spec.openapis.org/oas/v3.0.3#operation-object)
 `@preempt` | `Filter` | Specify that this endpoint has to execute before `Filter`. [Filters](./programmatic-usage.html#defining-filters)
@@ -101,11 +101,12 @@ Type | OpenAPI | Availability
 ```{r, eval = FALSE, echo = TRUE}
 #* @get /query/parameters
 #* @serializer text
-#* @param name:str
+#* @param name:str*
 #* @param age:[int]
 function(name, age) {
   # Explicit conversion is required for query parameters
   age <- as.integer(age)
+  if (is.na(age)) age <- 0L
   sprintf("%s is %i years old", name, max(age))
 }
 
@@ -137,7 +138,7 @@ pr() %>%
   pr_get(path = "/query/parameters",
          handler = qp_handler,
          serializer = serializer_text(),
-         params = list("name" = list(type = "string", required = FALSE, isArray = FALSE),
+         params = list("name" = list(type = "string", required = TRUE, isArray = FALSE),
                        "age" = list(type = "integer", required = FALSE, isArray = TRUE))) %>%
   pr_get(path = "/dyn/<name:str>/<age:[int]>/route",
          handler = text_handler,
