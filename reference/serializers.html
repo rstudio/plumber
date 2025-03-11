@@ -89,6 +89,8 @@ more details on Plumber serializers and how to customize their behavior.</p>
 <span></span>
 <span><span class="fu">serializer_feather</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"application/vnd.apache.arrow.file"</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">serializer_arrow_ipc_stream</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"application/vnd.apache.arrow.stream"</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">serializer_parquet</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"application/vnd.apache.parquet"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">serializer_excel</span><span class="op">(</span></span>
@@ -207,6 +209,7 @@ not have a <code>"raw"</code> type, then an error will be thrown.</p></li>
 <li><p><code>serializer_geojson()</code>: GeoJSON serializer. See also <code><a href="https://rdrr.io/pkg/geojsonsf/man/sf_geojson.html" class="external-link">geojsonsf::sf_geojson()</a></code> and [<code><a href="https://rdrr.io/pkg/geojsonsf/man/sfc_geojson.html" class="external-link">geojsonsf::sfc_geojson()</a></code>].</p></li>
 <li><p><code>serializer_rds()</code>: RDS serializer. See also: <code><a href="https://rdrr.io/r/base/serialize.html" class="external-link">base::serialize()</a></code></p></li>
 <li><p><code>serializer_feather()</code>: feather serializer. See also: <code><a href="https://arrow.apache.org/docs/r/reference/write_feather.html" class="external-link">arrow::write_feather()</a></code></p></li>
+<li><p><code>serializer_arrow_ipc_stream()</code>: Arrow IPC serializer. See also: <code><a href="https://arrow.apache.org/docs/r/reference/write_ipc_stream.html" class="external-link">arrow::write_ipc_stream()</a></code></p></li>
 <li><p><code>serializer_parquet()</code>: parquet serializer. See also: <code><a href="https://arrow.apache.org/docs/r/reference/write_parquet.html" class="external-link">arrow::write_parquet()</a></code></p></li>
 <li><p><code>serializer_excel()</code>: excel serializer. See also: <code><a href="https://docs.ropensci.org/writexl//reference/write_xlsx.html" class="external-link">writexl::write_xlsx()</a></code></p></li>
 <li><p><code>serializer_yaml()</code>: YAML serializer. See also: <code><a href="https://rdrr.io/pkg/yaml/man/as.yaml.html" class="external-link">yaml::as.yaml()</a></code></p></li>

@@ -87,6 +87,8 @@ non-default behavior.</p>
 <span></span>
 <span><span class="fu">parser_feather</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">parser_arrow_ipc_stream</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">parser_parquet</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">parser_excel</span><span class="op">(</span><span class="va">...</span>, sheet <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
@@ -143,6 +145,7 @@ trusted source. Do not accept <code>rds</code> files blindly.</p>
 This parser should be used when reading from a file is required.</p></li>
 <li><p><code>parser_rds()</code>: RDS parser. See <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS()</a></code> for more details.</p></li>
 <li><p><code>parser_feather()</code>: feather parser. See <code><a href="https://arrow.apache.org/docs/r/reference/read_feather.html" class="external-link">arrow::read_feather()</a></code> for more details.</p></li>
+<li><p><code>parser_arrow_ipc_stream()</code>: Arrow IPC parser. See <code><a href="https://arrow.apache.org/docs/r/reference/read_ipc_stream.html" class="external-link">arrow::read_ipc_stream()</a></code> for more details.</p></li>
 <li><p><code>parser_parquet()</code>: parquet parser. See <code><a href="https://arrow.apache.org/docs/r/reference/read_parquet.html" class="external-link">arrow::read_parquet()</a></code> for more details.</p></li>
 <li><p><code>parser_excel()</code>: excel parser. See <code><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">readxl::read_excel()</a></code> for more details. (Defaults to reading in the first worksheet only, use <code>@parser excel list(sheet=NA)</code> to read in all worksheets.)</p></li>
 <li><p><code>parser_octet()</code>: Octet stream parser. Returns the raw content.</p></li>
