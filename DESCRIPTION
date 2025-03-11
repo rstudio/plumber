@@ -98,5 +98,5 @@ Collate:
     'validate_api_spec.R'
     'zzz.R'
 Language: en-US
-Config/Needs/check: Cairo
+Config/Needs/check: Cairo, r-quantities/units
 Config/Needs/website: tidyverse/tidytemplate

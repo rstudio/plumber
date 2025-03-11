@@ -1,5 +1,7 @@
 # plumber (development version)
 
+* Added support for [Arrow IPC Streams](https://arrow.apache.org/docs/format/Columnar.html#serialization-and-interprocess-communication-ipc) (@josiahparry #968)
+
 # plumber 1.3.0
 
 * The port many now be specified as an environment variable. User-provided ports must be between 1024 and 49151 (following [IANA guidelines](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml)) and may not be a known unsafe port. plumber will now throw an error if an invalid port is requested. (@shikokuchuo @gadenbuie #963)
@@ -20,6 +22,7 @@
 
 * Added `operationId` to each operation within the auto-generated OpenAPI output. The value is similar to the `PATH-VERB`, e.g. `/users/create-POST`. (#986)
 
+* Added support for graphic devices provided by ragg and svglite (@thomasp85 #964)
 
 # plumber 1.2.2
 
