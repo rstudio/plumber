@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.1.1
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   annotations: annotations.html
@@ -13,7 +13,7 @@ articles:
   routing-and-input: routing-and-input.html
   security: security.html
   tips-and-tricks: tips-and-tricks.html
-last_built: 2025-03-11T18:32Z
+last_built: 2025-07-11T00:12Z
 urls:
   reference: https://www.rplumber.io/reference
   article: https://www.rplumber.io/articles
