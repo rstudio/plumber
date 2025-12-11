@@ -110,6 +110,6 @@ print(serializer_device)
 #>             }
 #>         })
 #> }
-#> <bytecode: 0x562ebc2cd6f8>
+#> <bytecode: 0x560c6c161dc0>
 #> <environment: namespace:plumber>
 ```
