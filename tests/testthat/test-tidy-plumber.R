@@ -7,9 +7,11 @@ test_that("pr creates new router", {
 
 test_that("pr_handle functions add routes", {
   p <- pr() %>%
-    pr_handle(c("GET", "POST"),
-              "/foo",
-              function() "bar")
+    pr_handle(
+      c("GET", "POST"),
+      "/foo",
+      function() "bar"
+    )
   ep <- p$endpoints[[1]][[1]]
   expect_equal(ep$verbs, c("GET", "POST"))
   expect_equal(ep$path, "/foo")
@@ -91,6 +93,8 @@ test_that("pr_hooks registers hooks", {
 })
 
 test_that("pr_cookie adds cookie", {
+  skip_if_no_cookie_support()
+
   p <- pr() %>%
     pr_cookie(
       random_cookie_key(),
@@ -98,7 +102,7 @@ test_that("pr_cookie adds cookie", {
     ) %>%
     pr_get("/sessionCounter", function(req) {
       count <- 0
-      if (!is.null(req$session$counter)){
+      if (!is.null(req$session$counter)) {
         count <- as.numeric(req$session$counter)
       }
       req$session$counter <- count + 1
@@ -110,6 +114,8 @@ test_that("pr_cookie adds cookie", {
 })
 
 test_that("pr_cookie adds path in cookie", {
+  skip_if_no_cookie_support()
+
   p <- pr() %>%
     pr_cookie(
       random_cookie_key(),
@@ -118,7 +124,7 @@ test_that("pr_cookie adds path in cookie", {
     ) %>%
     pr_get("/test/route", function(req) {
       count <- 0
-      if (!is.null(req$session$counter)){
+      if (!is.null(req$session$counter)) {
         count <- as.numeric(req$session$counter)
       }
       req$session$counter <- count + 1
@@ -176,7 +182,7 @@ test_that("pr default functions perform as expected", {
   expect_equal(res$body, jsonlite::toJSON("Oops"))
 
   # Error handler
-  handler_error <- function(req, res, err){
+  handler_error <- function(req, res, err) {
     res$status <- 500
     list(error = "Custom Error Message")
   }

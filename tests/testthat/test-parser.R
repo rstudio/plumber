@@ -1,7 +1,9 @@
 context("Parsers tag")
 
-test_that("parsers can be combined", {
+skip_if_not_installed("readxl")
 
+
+test_that("parsers can be combined", {
   expect_parsers <- function(names, target_names, sort_items = TRUE) {
     aliases <- names(make_parser(names)$alias)
     if (sort_items) {
@@ -20,15 +22,14 @@ test_that("parsers can be combined", {
   expect_parsers(TRUE, setdiff(registered_parsers(), c("all", "none")))
 
 
-
   # make sure parameters are not overwritten even when including all
   parsers_plain <- make_parser(list(all = list(), json = list(simplifyVector = FALSE)))
   json_input <- parsers_plain$alias$json(charToRaw(jsonlite::toJSON(1:3)))
-  expect_equal(json_input, list(1,2,3))
+  expect_equal(json_input, list(1, 2, 3))
 
   parsers_guess <- make_parser(list(all = list(), json = list(simplifyVector = TRUE)))
   json_input <- parsers_guess$alias$json(charToRaw(jsonlite::toJSON(1:3)))
-  expect_equal(json_input, c(1,2,3))
+  expect_equal(json_input, c(1, 2, 3))
 
   # check that parsers return already combined parsers
   expect_equal(make_parser(parsers_plain), parsers_plain)
@@ -38,13 +39,13 @@ test_that("parsers work", {
   r <- pr(test_path("files/parsers.R"))
   res <- PlumberResponse$new()
 
-  expect_identical(r$route(make_req("POST", "/default", body='{"a":1}'), res), structure(list(1L), names = "a"))
-  expect_identical(r$route(make_req("POST", "/none", body='{"a":1}'), res), structure(list(), names = character()))
-  expect_identical(r$route(make_req("POST", "/all", body='{"a":1}'), res), structure(list(1L), names = "a"))
+  expect_identical(r$route(make_req("POST", "/default", body = '{"a":1}'), res), structure(list(1L), names = "a"))
+  expect_identical(r$route(make_req("POST", "/none", body = '{"a":1}'), res), structure(list(), names = character()))
+  expect_identical(r$route(make_req("POST", "/all", body = '{"a":1}'), res), structure(list(1L), names = "a"))
   bin_file <- test_path("files/multipart-ctype.bin")
   bin_body <- readBin(bin_file, "raw", file.info(bin_file)$size)
-  expect_identical(r$route(make_req("POST", "/none", body=rawToChar(bin_body)), res), structure(list(), names = character()))
-  expect_message(r$route(make_req("POST", "/json", body=rawToChar(bin_body)), res), "No suitable parser found")
+  expect_identical(r$route(make_req("POST", "/none", body = rawToChar(bin_body)), res), structure(list(), names = character()))
+  expect_message(r$route(make_req("POST", "/json", body = rawToChar(bin_body)), res), "No suitable parser found")
 
   bin_file <- test_path("files/multipart-form.bin")
   bin_body <- readBin(bin_file, "raw", file.info(bin_file)$size)
@@ -55,15 +56,23 @@ test_that("parsers work", {
   req$PATH_INFO <- "/all"
   req$QUERY_STRING <- ""
   req$HTTP_CONTENT_TYPE <- "multipart/form-data; boundary=----WebKitFormBoundaryMYdShB9nBc32BUhQ"
-  req$rook.input <- list(read_lines = function(){ stop("should not be executed") },
-                         read = function(){ bin_body },
-                         rewind = function(){ length(bin_body) })
+  req$rook.input <- list(
+    read_lines = function() {
+      stop("should not be executed")
+    },
+    read = function() {
+      bin_body
+    },
+    rewind = function() {
+      length(bin_body)
+    }
+  )
 
   parsed_body <- r$route(req, PlumberResponse$new())
   expect_equal(names(parsed_body), c("json", "img1", "img2", "rds"))
   expect_equal(parsed_body[["rds"]], list("women.rds" = women))
   expect_true(is.raw(parsed_body[["img1"]][["avatar2-small.png"]]))
-  expect_equal(parsed_body[["json"]], list(a=2,b=4,c=list(w=3,t=5)))
+  expect_equal(parsed_body[["json"]], list(a = 2, b = 4, c = list(w = 3, t = 5)))
 
 
   # expect parsers match
