@@ -1,0 +1,495 @@
+# Rendering Output
+
+![](files/images/plumber_output.png)
+
+## The Response Object
+
+The plumber response object is stored as an environment, much like [the
+request
+object](https://www.rplumber.io/articles/routing-and-input.html#the-request-object-1).
+The response object, which is accessible as `res` from within plumber
+functions, contains the following objects:
+
+| Name      | Example                | Description                                                                                                                                                                      |
+|-----------|------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `headers` | `list(header = "abc")` | A list of HTTP headers to include in the response                                                                                                                                |
+| `body`    | `NULL`                 | This is set to the serialized output of the handler *unless* the response object is directly returned from the handler (see [bypassing serialization](#bypassing-serialization)) |
+| `status`  | `200`                  | The [HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) included in the response                                                                        |
+
+The response object also contains the following methods that can be
+invoked:
+
+| Name           | Example                       | Description                                                                       |
+|----------------|-------------------------------|-----------------------------------------------------------------------------------|
+| `setCookie`    | `res$setCookie("foo", "bar")` | Sets an HTTP cookie on the client                                                 |
+| `removeCookie` | `res$removeCookie("foo")`     | Removes an HTTP cookie                                                            |
+| `setHeader`    | `res$setHeader("foo", "bar")` | Sets an HTTP header                                                               |
+| `toResponse`   | `res$toResponse()`            | Renders the response object as a list containing `status`, `headers`, and `body`. |
+
+The other methods (`clone`, `initialize`, and `serializer`) should not
+be directly invoked on the response object.
+
+## Serializers
+
+In order to send a response from R to an API client, the object must be
+“serialized” into some format that the client can understand. JavaScript
+Object Notation (JSON) is one standard which is commonly used by web
+APIs. JSON serialization translates R objects like
+`list(a=123, b="hi!")` to JSON text resembling `{a: 123, b: "hi!"}`.
+
+JSON is not appropriate for every situation, however. If you want your
+API to render an HTML page that might be viewed in a browser, for
+instance, you will need a different serializer. Likewise, if you want to
+return an image rendered in R, you likely want to use a standard image
+format like PNG or JPEG rather than JSON.
+
+By default, Plumber serializes objects into JSON via the `jsonlite` R
+package. However, there are a variety of other serializers that are
+built in to the package.
+
+You can also pass arguments to certain serializers to modify their
+behavior like in the example below.
+
+``` r
+#* @serializer json list(na="string")
+```
+
+See the
+[Serialization](https://www.rplumber.io/reference/serializers.html)
+article for details.
+
+| Annotation                | Content Type                        | Description/References                                                                                         |
+|---------------------------|-------------------------------------|----------------------------------------------------------------------------------------------------------------|
+| `@serializer contentType` | (user supplied)                     | Send response with a particular `Content-Type` header                                                          |
+| `@serializer html`        | `text/html; charset=UTF-8`          | Passes response through without any additional serialization                                                   |
+| `@serializer json`        | `application/json`                  | Object processed with [`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)   |
+| `@serializer unboxedJSON` | `application/json`                  | Object processed with `jsonlite::toJSON(auto_unbox=TRUE)`                                                      |
+| `@serializer rds`         | `application/rds`                   | Object processed with [`base::serialize()`](https://rdrr.io/r/base/serialize.html)                             |
+| `@serializer csv`         | `text/csv`                          | Object processed with [`readr::format_csv()`](https://readr.tidyverse.org/reference/format_delim.html)         |
+| `@serializer tsv`         | `text/tab-separated-values`         | Object processed with [`readr::format_tsv()`](https://readr.tidyverse.org/reference/format_delim.html)         |
+| `@serializer feather`     | `application/vnd.apache.arrow.file` | Object processed with [`arrow::write_feather()`](https://arrow.apache.org/docs/r/reference/write_feather.html) |
+| `@serializer parquet`     | `application/parquet`               | Object processed with [`arrow::write_parquet()`](https://arrow.apache.org/docs/r/reference/write_parquet.html) |
+| `@serializer yaml`        | `text/x-yaml`                       | Object processed with `yaml::as_yaml()`                                                                        |
+| `@serializer htmlwidget`  | `text/html; charset=utf-8`          | [`htmlwidgets::saveWidget()`](https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html)                             |
+| `@serializer text`        | `text/plain`                        | Text output processed by [`as.character()`](https://rdrr.io/r/base/character.html)                             |
+| `@serializer format`      | `text/plain`                        | Text output processed by [`format()`](https://rdrr.io/r/base/format.html)                                      |
+| `@serializer print`       | `text/plain`                        | Text output captured from [`print()`](https://rdrr.io/r/base/print.html)                                       |
+| `@serializer cat`         | `text/plain`                        | Text output captured from [`cat()`](https://rdrr.io/r/base/cat.html)                                           |
+| `@serializer jpeg`        | `image/jpeg`                        | Images created with [`jpeg()`](https://rdrr.io/r/grDevices/png.html)                                           |
+| `@serializer png`         | `image/png`                         | Images created with [`png()`](https://rdrr.io/r/grDevices/png.html)                                            |
+| `@serializer svg`         | `image/svg`                         | Images created with [`svg()`](https://rdrr.io/r/grDevices/cairo.html)                                          |
+| `@serializer bmp`         | `image/bmp`                         | Images created with [`bmp()`](https://rdrr.io/r/grDevices/png.html)                                            |
+| `@serializer tiff`        | `image/tiff`                        | Images created with [`tiff()`](https://rdrr.io/r/grDevices/png.html)                                           |
+| `@serializer pdf`         | `application/pdf`                   | PDF File created with [`pdf()`](https://rdrr.io/r/grDevices/pdf.html)                                          |
+| `@serializer agg_jpeg`    | `image/jpeg`                        | Images created with [`ragg::agg_jpeg()`](https://ragg.r-lib.org/reference/agg_jpeg.html)                       |
+| `@serializer agg_png`     | `image/png`                         | Images created with [`ragg::agg_png()`](https://ragg.r-lib.org/reference/agg_png.html)                         |
+| `@serializer agg_tiff`    | `image/tiff`                        | Images created with [`ragg::agg_tiff()`](https://ragg.r-lib.org/reference/agg_tiff.html)                       |
+| `@serializer svglite`     | `image/svg`                         | Images created with [`svglite::svglite()`](https://svglite.r-lib.org/reference/svglite.html)                   |
+
+### Boxed vs Unboxed JSON
+
+You may have noticed that API responses generated from Plumber render
+singular values (or “scalars”) as arrays. For instance:
+
+``` r
+jsonlite::toJSON(list(a=5))
+```
+
+    #> {"a":[5]}
+
+The value of the `a` element, though it’s singular, is still rendered as
+an array. This may surprise you initially, but this is done to keep the
+output consistent. While JSON differentiates scalar from vector objects,
+R does not. This creates ambiguity when serializing an R object to JSON
+since it is unclear whether a particular element should be rendered as
+an atomic value or a JSON array.
+
+Consider the following API which returns all the letters
+lexicographically “higher” than the given letter.
+
+``` r
+#* Get letters after a given letter
+#* @get /boxed
+function(letter="A"){
+  LETTERS[LETTERS > letter]
+}
+
+#* Get letters after a given letter
+#* @serializer unboxedJSON
+#* @get /unboxed
+function(letter="A"){
+  LETTERS[LETTERS > letter]
+}
+```
+
+This is an example of an API that, in some instance, produces a scalar,
+and in other instances produces a vector.
+
+Visiting <http://localhost:8000/boxed?letter=U> or
+<http://localhost:8000/unboxed?letter=U> will return identical
+responses:
+
+``` json
+["V", "W", "X", "Y", "Z"]
+```
+
+However, <http://localhost:8000/boxed?letter=Y> will produce:
+
+``` json
+["Z"]
+```
+
+while <http://localhost:8000/unboxed?letter=Y> will produce:
+
+    "Z"
+
+The `/boxed` endpoint, as the name implies, produces “boxed” JSON output
+in which length-1 vectors are still rendered as an array. Conversely,
+the `/unboxed` endpoint sets `auto_unbox=TRUE` in its call to
+[`jsonlite::toJSON`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html),
+causing length-1 R vectors to be rendered as JSON scalars.
+
+While R doesn’t distinguish between scalars and vectors, API clients may
+respond very differently when encountering a JSON array versus an atomic
+value. You may find that your API clients will not respond gracefully
+when an object that they expected to be a vector becomes a scalar in one
+call.
+
+For this reason, Plumber inherits the
+[`jsonlite::toJSON`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)
+default of setting `auto_unbox=FALSE` which will result in all length-1
+vectors still being rendered as JSON arrays. You can configure an
+endpoint to use the `unboxedJSON` serializer (as shown above) if you
+want to alter this behavior for a particular endpoint.
+
+There are a couple of functions to be aware of around this feature set.
+If using boxed JSON serialization,
+[`jsonlite::unbox()`](https://jeroen.r-universe.dev/jsonlite/reference/unbox.html)
+can be used to force a length-1 object in R to be presented in JSON as a
+scalar. If using unboxed JSON serialization,
+[`I()`](https://rdrr.io/r/base/AsIs.html) will cause a length-1 R object
+to present as a JSON array.
+
+### Customizing Image Serializers
+
+The `@serializer jpeg` and `@serializer png` annotations cause the
+graphical output of an endpoint to be written to a file then returned to
+the client using the [`jpeg()`](https://rdrr.io/r/grDevices/png.html) or
+[`png()`](https://rdrr.io/r/grDevices/png.html) functions, respectively.
+These functions both accept a variety of additional options that
+customize the output including `width`, `height`, and `bg` among others.
+
+As of version 0.4.3 of plumber, these annotations now accept additional
+arguments that will be passed into these functions. This enables the
+creation of endpoints like:
+
+``` r
+#* Example of customizing graphical output
+#* @serializer png list(width = 400, height = 500)
+#* @get /
+function(){
+  plot(1:10)
+}
+```
+
+At a lower level, the arguments inside the parentheses will be used as
+the arguments to a [`list()`](https://rdrr.io/r/base/list.html) call.
+Meaning that any R code that can be prefixed by `list` to form a valid R
+expression can be used. For example,
+`#' @serializer png (width=2^10 + 1)` would be a valid annotation. This
+code is evaluated once when your API is
+[`plumb()`](https://www.rplumber.io/reference/plumb.md)d.
+
+While this approach can be used to statically define the size of an
+image, it will not work for dynamic sizing of an image. If you wish to
+dynamically size images, you will need render and capture the graphical
+output yourself and return the contents with the appropriate
+`Content-Type` header. See the existing image renderers as a model of
+how to do this.
+
+### Bypassing Serialization
+
+In some instances it may be desirable to return a value directly from R
+without serialization. You can bypass serialization by returning the
+[response object](#response-object) from an endpoint. For example,
+consider the following API.
+
+``` r
+#* Endpoint that bypasses serialization
+#* @get /
+function(res){
+  res$body <- "Literal text here!"
+
+  res
+}
+```
+
+The response that is returned from this endpoint would contain the body
+`Literal text here!` with no `Content-Type` header and without any
+additional serialization.
+
+Similarly, you can leverage the `@serializer contentType` annotation
+which does no serialization of the response but specifies the
+contentType header. You can use this annotation when you want more
+control over the response that you send.
+
+``` r
+#* @serializer contentType list(type="application/pdf")
+#* @get /pdf
+function(){
+  tmp <- tempfile()
+  pdf(tmp)
+  plot(1:10, type="b")
+  text(4, 8, "PDF from plumber!")
+  text(6, 2, paste("The time is", Sys.time()))
+  dev.off()
+
+  readBin(tmp, "raw", n=file.info(tmp)$size)
+}
+```
+
+Running this API and visiting <http://localhost:8000/pdf> will download
+the PDF generated from R (or display the PDF natively, if your client
+supports it).
+
+## Error Handling
+
+Plumber wraps each endpoint invocation so that it can gracefully capture
+errors.
+
+``` r
+#* Example of throwing an error
+#* @get /simple
+function(){
+  stop("I'm an error!")
+}
+
+#* Generate a friendly error
+#* @get /friendly
+function(res){
+  msg <- "Your request did not include a required parameter."
+  res$status <- 400 # Bad request
+  list(error=jsonlite::unbox(msg))
+}
+```
+
+If you run this API in interactive mode and visit
+<http://localhost:8000/simple>, you’ll notice two things:
+
+1.  An HTTP response with a status code of `500` (“internal server
+    error”) is sent to the client. You should see an error message
+    resembling:
+    `{"error":["500 - Internal server error"],"message":["Error in (function () : I'm an error!\n"]}`
+2.  A similar error is printed in the terminal where you’re running your
+    Plumber API.
+
+This means that it is possible for you to intentionally
+[`stop()`](https://rdrr.io/r/base/stop.html) in an endpoint or a filter
+as a way to communicate a problem to your user. However, it may be
+preferable to render errors from your API in a consistent format with
+more helpful error messages.
+
+``` json
+{
+  "error": "Your request did not include a required parameter."
+}
+```
+
+A custom error handler can be set using the `setErrorHandler()` method:
+
+``` r
+pr() %>%
+  pr_get("/simple", function() stop("I'm an error!")) %>%
+  pr_set_error(function(req, res, err){
+    res$status <- 500
+    list(error = "An error occurred. Please contact your administrator.")
+  }) %>%
+  pr_run()
+```
+
+If you run this API and visit <http://localhost:8000/simple>, you’ll
+notice that the custom error message provided in the error handler is
+included in the browser. Since we didn’t do anything with the actual
+error message, nothing is printed to the console. If we wanted to
+include the error in the console, we could do the following:
+
+``` r
+pr() %>%
+  pr_get("/simple", function() stop("I'm an error!")) %>%
+  pr_set_error(function(req, res, err){
+    print(err)
+    res$status <- 500
+    list(error = "An error occurred. Please contact your administrator.")
+  }) %>%
+  pr_run()
+```
+
+The function passed to `setErrorHandler` will be invoked anytime R
+execution fails with an error.
+
+## Setting Cookies
+
+As part of fulfilling a request, a Plumber API can choose to set HTTP
+cookies on the client. HTTP APIs don’t implicitly contain a notion of a
+“session.” Without some additional information, Plumber has no way of
+ascertaining whether or not two HTTP requests that come in are
+associated with the same user. Cookies offer a way to commission the
+client to store some state on your behalf so that selected data can
+outlive a single HTTP request; the full implications of using cookies to
+track state in your API are discussed
+[here](https://www.rplumber.io/articles/execution-model.html#state-cookies).
+The two forms of Plumber cookies – plain-text and encrypted – are
+discussed in the following sections.
+
+Before you make cookies an important part of your API’s security model,
+be sure to understand the section on the [security considerations when
+working with
+cookies](https://www.rplumber.io/articles/security.html#security-cookies).
+
+### Setting Unencrypted Cookies
+
+Plumber can both set and receive plaint-text cookies. The API endpoint
+below will return a random letter, but it remembers your preferences on
+whether you like capitalized or lower-case letters.
+
+``` r
+#* @put /preferences
+function(res, capital){
+  if (missing(capital)){
+    stop("You must specify a value for the 'capital' preference.")
+  }
+  res$setCookie("capitalize", capital)
+}
+
+#* @get /letter
+function(req) {
+  capitalize <- req$cookies$capitalize
+
+  # Default to lower-case unless user preference is capitalized
+  alphabet <- letters
+
+  # The capitalize cookie will initially be empty (NULL)
+  if (!is.null(capitalize) && capitalize == "1"){
+    alphabet <- LETTERS
+  }
+
+  list(
+    letter = sample(alphabet, 1)
+  )
+}
+```
+
+Since this API is using a `PUT` request to test this API, we’ll use
+`curl` on the command line to test it. (There’s nothing about cookies
+that necessitates `PUT` requests; you could just as easily modify this
+API to use a `GET` request.) We can start by visiting the `/letter`
+endpoint and we’ll see that the API defaults to a lower-case alphabet.
+`curl http://localhost:8000/letter`
+
+``` json
+{
+  "letter": ["m"]
+}
+```
+
+If we send a `PUT` request and specify the `capital` parameter, a cookie
+will be set on the client which will allow the server to accommodate our
+preference in future requests. In `curl`, you need to specify a file in
+which you want to save these cookies using the `-c` option. This is a
+good reminder that clients handle cookies differently – some won’t
+support them at all – so be sure that the clients you intend to support
+with your API play nicely with cookies if you want to use them.
+
+To send a `PUT` request, setting the parameter `capital` to `1`, we
+could invoke:
+`curl -c cookies.txt -X PUT --data 'capital=1' "http://localhost:8000/preferences"`.
+If you print out the `cookies.txt` file, you should now see that it
+contains a single cookie called `capitalize` with a value of `1`.
+
+We can make another `GET` request to `/letter` to see if it accommodates
+our preferences. But we’ll need to tell `curl` to use the cookies file
+we just created when sending this request using the `-b` switch:
+`curl -b cookies.txt http://localhost:8000/letter`. You should now see
+that the API is returning a random capitalized letter.
+
+The `setCookie` method accepts a variety of additional options to
+customize how the cookie should be handled by the client. By default,
+cookies are set with a `session` lifetime, meaning that the cookie will
+persist in the user’s browser until the client closes the tab at which
+point the cookie will be deleted. You can customize this by setting the
+`expiration` parameter in `setCookie` using either a number of seconds
+in the future in which this cookie should expire. Alternatively, you can
+provide an object of class `POSIXt`, in which case that will be
+interpreted as the time at which the cookie should expire.
+
+Other options that can be set on the cookie include `path` (the path on
+your domain at which the cookie should be installed on the client);
+`http` (controls whether or not the cookie should be accessible to
+JavaScript running on this domain – where `TRUE` means that the cookie
+is HTTP-only, and not accessible from JavaScript); and `secure` (if
+`TRUE`, instructs the browser to only send the cookie over HTTPS, not
+insecure HTTP.
+
+If you’re using cookies to infer any security-sensitive properties (such
+as to identify a user, or determine what resources this client should
+have access to), be sure to see the [Security
+article](https://www.rplumber.io/articles/security.md) – in particular
+[the section on the security implications of
+cookies](https://www.rplumber.io/articles/security.html#security-cookies).
+
+### Setting Encrypted Cookies
+
+In addition to storing plain-text cookies, Plumber also supports
+handling cookies that are encrypted. Encrypted cookies prevent your
+users from seeing what is stored inside of them and also sign their
+contents so that users can’t modify what is stored.
+
+To use this feature, you must explicitly add it to your router after
+constructing it. For example, you could run the following sequence of
+commands to create a router that supports encrypted session cookies.
+
+``` r
+pr("myfile.R") %>%
+  pr_cookie("mySecretHere", "cookieName") %>%
+  pr_run()
+```
+
+You’ll notice the above example is using the `session_cookie` hooks that
+come with Plumber. By adding registering these hooks on your router,
+you’ll ensure that the `req$session` object is made available on
+incoming requests and is persisted to the cookie named `cookieName` when
+the response is ready to be sent to the user. In this example, the key
+used to encrypt the data is `"mySecretHere"`, which is obviously a very
+weak secret key.
+
+Unlike `res$setHeader()`, the values attached to `req$session` *are*
+serialized via `jsonlite`; so you’re free to use more complex data
+structures like lists in your session. Also unlike `res$setHeaders()`,
+`req$session` encrypts the data using the secret key you provide as the
+first argument to the
+[`session_cookie()`](https://www.rplumber.io/reference/session_cookie.md)
+function.
+
+As an example, we’ll store an encrypted cookie that counts how many
+times this client has visited a particular endpoint:
+
+``` r
+#* @get /sessionCounter
+function(req){
+  count <- 0
+  if (!is.null(req$session$counter)){
+    count <- as.numeric(req$session$counter)
+  }
+  req$session$counter <- count + 1
+  return(paste0("This is visit #", count))
+}
+```
+
+Again, you would need to register the
+[`session_cookie()`](https://www.rplumber.io/reference/session_cookie.md)
+hooks on your router before this code would work.
+
+If you inspect the cookie being set in your browser, you’ll find that
+its value is encrypted by the time it gets to the client. But by the
+time it arrives in Plumber, your cookie is available as a regular R list
+and can be read or modified.
