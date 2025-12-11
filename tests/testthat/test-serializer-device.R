@@ -9,7 +9,6 @@ test_that("graphics device promise domains must have a device", {
 })
 
 test_that("you should not call `dev_set()` with a null device", {
-
   expect_warning(
     # send in a value that is returned for a null device
     dev_set(c(`null device` = 1L)),
@@ -18,15 +17,10 @@ test_that("you should not call `dev_set()` with a null device", {
 })
 
 
-
-
-
-
 # Only test on CI
 skip_on_cran()
 
 expect_device_output <- function(name, content_type, capability_type = name) {
-
   if (!is.null(capability_type)) {
     if (!capabilities(capability_type)) {
       testthat::skip(paste0("Graphics device type not supported: ", name))
@@ -42,8 +36,10 @@ expect_device_output <- function(name, content_type, capability_type = name) {
     expr = function() {
       plot(1:10)
     },
-    envir = new.env(parent=globalenv()),
-    addEndpoint = function(a, b, ...) { pr$handle(endpoint = a) },
+    envir = new.env(parent = globalenv()),
+    addEndpoint = function(a, b, ...) {
+      pr$handle(endpoint = a)
+    },
     addFilter = as.null,
     pr = pr
   )
@@ -55,7 +51,6 @@ expect_device_output <- function(name, content_type, capability_type = name) {
   expect_true(is.raw(ret$body))
   expect_gt(length(ret$body), 1000)
 }
-
 
 
 test_that("jpeg produces an image", {
@@ -78,15 +73,19 @@ test_that("pdf produces an image", {
 })
 
 test_that("agg_png produces an image", {
+  skip_if_not_installed("ragg")
   expect_device_output("agg_png", "image/png", NULL)
 })
 test_that("agg_jpeg produces an image", {
+  skip_if_not_installed("ragg")
   expect_device_output("agg_jpeg", "image/jpeg", NULL)
 })
 test_that("agg_tiff produces an image", {
+  skip_if_not_installed("ragg")
   expect_device_output("agg_tiff", "image/tiff", NULL)
 })
 test_that("svglite produces an image", {
+  skip_if_not_installed("svglite")
   expect_device_output("svglite", "image/svg+xml", NULL)
 })
 
@@ -94,7 +93,7 @@ test_that("svglite produces an image", {
 context("plumb() device serializer")
 
 test_device <- local({
-    r <- pr(test_path("files/device.R"))
+  r <- pr(test_path("files/device.R"))
 
   function(name, content_type, capability_type = name, test_little = TRUE) {
     if (!capabilities(capability_type)) {
