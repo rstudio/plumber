@@ -15,9 +15,12 @@ test_that("plumberToApiType works", {
   expect_equal(plumberToApiType("list"), "object")
   expect_equal(plumberToApiType("data.frame"), "object")
 
-  expect_warning({
-    expect_equal(plumberToApiType("flargdarg"),  defaultApiType)
-  }, "Unrecognized type:")
+  expect_warning(
+    {
+      expect_equal(plumberToApiType("flargdarg"), defaultApiType)
+    },
+    "Unrecognized type:"
+  )
 })
 
 test_that("response attributes are parsed", {
@@ -26,13 +29,14 @@ test_that("response attributes are parsed", {
     "#' @response 201 This is response 201",
     "#' @response 202 Here's second",
     "#' @response 203 Here's third",
-    "#' @response default And default")
+    "#' @response default And default"
+  )
   b <- plumbBlock(length(lines), lines)
   expect_length(b$responses, 4)
-  expect_equal(b$responses$`201`, list(description="This is response 201"))
-  expect_equal(b$responses$`202`, list(description="Here's second"))
-  expect_equal(b$responses$`203`, list(description="Here's third"))
-  expect_equal(b$responses$default, list(description="And default"))
+  expect_equal(b$responses$`201`, list(description = "This is response 201"))
+  expect_equal(b$responses$`202`, list(description = "Here's second"))
+  expect_equal(b$responses$`203`, list(description = "Here's third"))
+  expect_equal(b$responses$default, list(description = "And default"))
 
   b <- plumbBlock(1, "")
   expect_null(b$responses)
@@ -44,51 +48,52 @@ test_that("params are parsed", {
     "#' @param test Test docs",
     "#' @param required:character* Required param",
     "#' @param another:int Another docs",
-    "#' @param multi:[int]* Required array param")
+    "#' @param multi:[int]* Required array param"
+  )
   b <- plumbBlock(length(lines), lines)
   expect_length(b$params, 4)
-  expect_equal(b$params$another, list(desc="Another docs", type="integer", required=FALSE, isArray = FALSE))
-  expect_equal(b$params$test, list(desc="Test docs", type=defaultApiType, required=FALSE, isArray = FALSE))
-  expect_equal(b$params$required, list(desc="Required param", type="string", required=TRUE, isArray = FALSE))
-  expect_equal(b$params$multi, list(desc="Required array param", type="integer", required=TRUE, isArray = TRUE))
+  expect_equal(b$params$another, list(desc = "Another docs", type = "integer", required = FALSE, isArray = FALSE))
+  expect_equal(b$params$test, list(desc = "Test docs", type = defaultApiType, required = FALSE, isArray = FALSE))
+  expect_equal(b$params$required, list(desc = "Required param", type = "string", required = TRUE, isArray = FALSE))
+  expect_equal(b$params$multi, list(desc = "Required array param", type = "integer", required = TRUE, isArray = TRUE))
 
   b <- plumbBlock(1, "")
   expect_null(b$params)
 })
 
 # TODO
-#test_that("endpointSpecification works", {
-#})
+# test_that("endpointSpecification works", {
+# })
 
 test_that("getApiSpec works with mounted routers", {
   # parameter in path
   pr1 <- pr()
-  pr1$handle("GET", "/nested/:path/here", function(){})
-  pr1$handle("POST", "/nested/:path/here", function(){})
+  pr1$handle("GET", "/nested/:path/here", function() {})
+  pr1$handle("POST", "/nested/:path/here", function() {})
 
-    # static file handler
+  # static file handler
   stat <- PlumberStatic$new(".")
 
   # multiple entries
   pr2 <- pr()
-  pr2$handle("GET", "/something", function(){})
-  pr2$handle("POST", "/something", function(){})
-  pr2$handle("GET", "/", function(){})
+  pr2$handle("GET", "/something", function() {})
+  pr2$handle("POST", "/something", function() {})
+  pr2$handle("GET", "/", function() {})
 
   # test with a filter
   pr3 <- pr()
-  pr3$filter("filter1", function(){})
-  pr3$handle("POST", "/else", function(){}, "filter1")
-  pr3$handle("PUT", "/else", function(){})
-  pr3$handle("GET", "/", function(){})
+  pr3$filter("filter1", function() {})
+  pr3$handle("POST", "/else", function() {}, "filter1")
+  pr3$handle("PUT", "/else", function() {})
+  pr3$handle("GET", "/", function() {})
 
   # nested mount
   pr4 <- pr()
-  pr4$handle("GET", "/completely", function(){})
+  pr4$handle("GET", "/completely", function() {})
 
   # trailing slash in route
   pr5 <- pr()
-  pr5$handle("GET", "/trailing_slash/", function(){})
+  pr5$handle("GET", "/trailing_slash/", function() {})
 
   # ├──/nested
   # │  ├──/:path
@@ -112,7 +117,8 @@ test_that("getApiSpec works with mounted routers", {
 
   paths <- names(pr1$getApiSpec()$paths)
   expect_length(paths, 7)
-  expect_equal(paths, c("/nested/:path/here", "/sub2/something",
+  expect_equal(paths, c(
+    "/nested/:path/here", "/sub2/something",
     "/sub2/", "/sub2/sub3/else", "/sub2/sub3/", "/sub4/completely",
     "/sub4/trailing_slash/"
   ))
@@ -134,7 +140,8 @@ test_that("responsesSpecification works", {
     responses = customResps,
     verbs = "GET",
     expr = function() {},
-    envir = new.env(parent = globalenv()))
+    envir = new.env(parent = globalenv())
+  )
   r <- responsesSpecification(endpts)
   expect_length(r, 4)
   expect_equal(r$default, defaultResponse$default)
@@ -142,78 +149,114 @@ test_that("responsesSpecification works", {
 })
 
 test_that("parametersSpecification works", {
-  ep <- list(id=list(desc="Description", type="integer", required=FALSE),
-             id2=list(desc="Description2", required=FALSE), # No redundant type specification
-             make=list(desc="Make description", type="string", required=FALSE),
-             prices=list(desc="Historic sell prices", type="numeric", required = FALSE, isArray = TRUE),
-             claims=list(desc="Insurance claims", type="object", required = FALSE))
-  pp <- data.frame(name=c("id", "id2", "owners"), type=c("int", "int", "chr"), isArray = c(FALSE, FALSE, TRUE), stringsAsFactors = FALSE)
+  ep <- list(
+    id = list(desc = "Description", type = "integer", required = FALSE),
+    id2 = list(desc = "Description2", required = FALSE), # No redundant type specification
+    make = list(desc = "Make description", type = "string", required = FALSE),
+    prices = list(desc = "Historic sell prices", type = "numeric", required = FALSE, isArray = TRUE),
+    claims = list(desc = "Insurance claims", type = "object", required = FALSE)
+  )
+  pp <- data.frame(name = c("id", "id2", "owners"), type = c("int", "int", "chr"), isArray = c(FALSE, FALSE, TRUE), stringsAsFactors = FALSE)
 
   params <- parametersSpecification(ep, pp)
-  expect_equal(params$parameters[[1]],
-               list(name="id",
-                    description="Description",
-                    `in`="path",
-                    required=TRUE, # Made required b/c path arg
-                    schema = list(
-                      type="integer",
-                      format="int64",
-                      default=NULL)))
-  expect_equal(params$parameters[[2]],
-               list(name="id2",
-                    description="Description2",
-                    `in`="path",
-                    required=TRUE, # Made required b/c path arg
-                    schema = list(
-                      type="integer",
-                      format="int64",
-                      default=NULL)))
-  expect_equal(params$parameters[[3]],
-               list(name="make",
-                    description="Make description",
-                    `in`="query",
-                    required=FALSE,
-                    schema = list(
-                      type="string",
-                      format=NULL,
-                      default=NULL)))
-  expect_equal(params$parameters[[4]],
-               list(name="prices",
-                    description="Historic sell prices",
-                    `in`="query",
-                    required=FALSE,
-                    schema = list(
-                      type="array",
-                      items= list(
-                        type="number",
-                        format="double"),
-                      default = NULL),
-                    style="form",
-                    explode=TRUE))
-  expect_equal(params$parameters[[5]],
-               list(name="owners",
-                    description=NULL,
-                    `in`="path",
-                    required=TRUE,
-                    schema = list(
-                      type="array",
-                      items= list(
-                        type="string",
-                        format=NULL),
-                      default = NULL),
-                    style="simple",
-                    explode=FALSE))
-  expect_equal(params$requestBody,
-               list(content = list(
-                 `application/json` = list(
-                   schema = list(
-                     type = "object",
-                     properties = list(
-                       claims = list(
-                         type = "object",
-                         format = NULL,
-                         example = NULL,
-                         description = "Insurance claims")))))))
+  expect_equal(
+    params$parameters[[1]],
+    list(
+      name = "id",
+      description = "Description",
+      `in` = "path",
+      required = TRUE, # Made required b/c path arg
+      schema = list(
+        type = "integer",
+        format = "int64",
+        default = NULL
+      )
+    )
+  )
+  expect_equal(
+    params$parameters[[2]],
+    list(
+      name = "id2",
+      description = "Description2",
+      `in` = "path",
+      required = TRUE, # Made required b/c path arg
+      schema = list(
+        type = "integer",
+        format = "int64",
+        default = NULL
+      )
+    )
+  )
+  expect_equal(
+    params$parameters[[3]],
+    list(
+      name = "make",
+      description = "Make description",
+      `in` = "query",
+      required = FALSE,
+      schema = list(
+        type = "string",
+        format = NULL,
+        default = NULL
+      )
+    )
+  )
+  expect_equal(
+    params$parameters[[4]],
+    list(
+      name = "prices",
+      description = "Historic sell prices",
+      `in` = "query",
+      required = FALSE,
+      schema = list(
+        type = "array",
+        items = list(
+          type = "number",
+          format = "double"
+        ),
+        default = NULL
+      ),
+      style = "form",
+      explode = TRUE
+    )
+  )
+  expect_equal(
+    params$parameters[[5]],
+    list(
+      name = "owners",
+      description = NULL,
+      `in` = "path",
+      required = TRUE,
+      schema = list(
+        type = "array",
+        items = list(
+          type = "string",
+          format = NULL
+        ),
+        default = NULL
+      ),
+      style = "simple",
+      explode = FALSE
+    )
+  )
+  expect_equal(
+    params$requestBody,
+    list(content = list(
+      `application/json` = list(
+        schema = list(
+          type = "object",
+          properties = list(
+            claims = list(
+              type = "object",
+              format = NULL,
+              example = NULL,
+              description = "Insurance claims"
+            )
+          )
+        )
+      )
+    ))
+  )
 
   # If id were not a path param it should not be promoted to required
   params <- parametersSpecification(ep, NULL)
@@ -230,27 +273,32 @@ test_that("parametersSpecification works", {
   }
 
   # Check if we can pass a single path parameter without a @param line match
-  params <- parametersSpecification(NULL, pp[3,])
-  expect_equal(params$parameters[[1]],
-               list(name="owners",
-                    description=NULL,
-                    `in`="path",
-                    required=TRUE,
-                    schema = list(
-                      type="array",
-                      items= list(
-                        type="string",
-                        format=NULL),
-                      default=NULL),
-                    style="simple",
-                    explode=FALSE))
+  params <- parametersSpecification(NULL, pp[3, ])
+  expect_equal(
+    params$parameters[[1]],
+    list(
+      name = "owners",
+      description = NULL,
+      `in` = "path",
+      required = TRUE,
+      schema = list(
+        type = "array",
+        items = list(
+          type = "string",
+          format = NULL
+        ),
+        default = NULL
+      ),
+      style = "simple",
+      explode = FALSE
+    )
+  )
 
   params <- parametersSpecification(NULL, NULL)
   expect_equal(sum(sapply(params, length)), 0)
 })
 
 test_that("api kitchen sink", {
-
   skip_on_cran()
   skip_on_bioc()
   skip_on_os(setdiff(c("windows", "mac", "linux", "solaris"), c("mac", "linux")))
@@ -283,24 +331,43 @@ test_that("multiple variations in function extract correct metadata", {
                     var7 = new.env(parent = .GlobalEnv),
                     var8 = list(a = 2, b = mean, c = new.env(parent = .GlobalEnv))) {}
   funcParams <- getArgsMetadata(dummy)
-  expect_identical(sapply(funcParams, `[[`, "required"),
-                   c(var0 = FALSE, var1 = TRUE, var2 = FALSE, var3 = FALSE, var4 = FALSE,
-                     var5 = FALSE, var6 = FALSE, var7 = FALSE, var8 = FALSE))
-  expect_identical(lapply(funcParams, `[[`, "default"),
-                   list(var0 = 420.69, var1 = NA, var2 = 1L:2L, var3 = NA, var4 = NA, var5 = FALSE,
-                        var6 = list(name = c("luke", "bob"), lastname = c("skywalker", "ross")), var7 = NA, var8 = NA))
-  expect_identical(lapply(funcParams, `[[`, "example"),
-                   list(var0 = 420.69, var1 = NA, var2 = 1L:2L, var3 = NA, var4 = NA, var5 = FALSE,
-                        var6 = list(name = c("luke", "bob"), lastname = c("skywalker", "ross")), var7 = NA, var8 = NA))
-  expect_identical(lapply(funcParams, `[[`, "isArray"),
-                   list(var0 = defaultIsArray, var1 = defaultIsArray, var2 = TRUE,
-                        var3 = defaultIsArray, var4 = defaultIsArray,
-                        var5 = defaultIsArray, var6 = TRUE,
-                        var7 = defaultIsArray, var8 = defaultIsArray))
-  expect_identical(lapply(funcParams, `[[`, "type"),
-                   list(var0 = "number", var1 = defaultApiType, var2 = "integer", var3 = defaultApiType, var4 = defaultApiType,
-                        var5 = "boolean", var6 = "object", var7 = defaultApiType, var8 = defaultApiType))
-
+  expect_identical(
+    sapply(funcParams, `[[`, "required"),
+    c(
+      var0 = FALSE, var1 = TRUE, var2 = FALSE, var3 = FALSE, var4 = FALSE,
+      var5 = FALSE, var6 = FALSE, var7 = FALSE, var8 = FALSE
+    )
+  )
+  expect_identical(
+    lapply(funcParams, `[[`, "default"),
+    list(
+      var0 = 420.69, var1 = NA, var2 = 1L:2L, var3 = NA, var4 = NA, var5 = FALSE,
+      var6 = list(name = c("luke", "bob"), lastname = c("skywalker", "ross")), var7 = NA, var8 = NA
+    )
+  )
+  expect_identical(
+    lapply(funcParams, `[[`, "example"),
+    list(
+      var0 = 420.69, var1 = NA, var2 = 1L:2L, var3 = NA, var4 = NA, var5 = FALSE,
+      var6 = list(name = c("luke", "bob"), lastname = c("skywalker", "ross")), var7 = NA, var8 = NA
+    )
+  )
+  expect_identical(
+    lapply(funcParams, `[[`, "isArray"),
+    list(
+      var0 = defaultIsArray, var1 = defaultIsArray, var2 = TRUE,
+      var3 = defaultIsArray, var4 = defaultIsArray,
+      var5 = defaultIsArray, var6 = TRUE,
+      var7 = defaultIsArray, var8 = defaultIsArray
+    )
+  )
+  expect_identical(
+    lapply(funcParams, `[[`, "type"),
+    list(
+      var0 = "number", var1 = defaultApiType, var2 = "integer", var3 = defaultApiType, var4 = defaultApiType,
+      var5 = "boolean", var6 = "object", var7 = defaultApiType, var8 = defaultApiType
+    )
+  )
 })
 
 test_that("priorize works as expected", {
@@ -312,9 +379,9 @@ test_that("priorize works as expected", {
 
 test_that("custom spec works", {
   pr <- pr()
-  pr$handle("POST", "/func1", function(){})
-  pr$handle("GET", "/func2", function(){})
-  pr$handle("GET", "/func3", function(){})
+  pr$handle("POST", "/func1", function() {})
+  pr$handle("GET", "/func2", function() {})
+  pr$handle("GET", "/func3", function() {})
   customSpec <- function(spec) {
     custom <- list(info = list(description = "My Custom Spec", title = "This is only a test"))
     return(utils::modifyList(spec, custom))
@@ -328,22 +395,32 @@ test_that("custom spec works", {
 
 test_that("no params plumber router still produces spec when there is a func params", {
   pr <- pr()
-  handler <- function(num) { sum(as.integer(num)) }
+  handler <- function(num) {
+    sum(as.integer(num))
+  }
   pr$handle("GET", "/sum", handler, serializer = serializer_json())
   spec <- pr$getApiSpec()
   expect_equal(spec$paths$`/sum`$get$parameters[[1]]$name, "num")
 })
 
 test_that("Response content type set with serializer", {
+  skip_if_not_installed("readr")
+
   a <- pr()
-  pr_get(a, "/json", function() {"OK"}, serializer = serializer_json())
-  pr_get(a, "/csv", function() {"OK"}, serializer = serializer_csv())
+  pr_get(a, "/json", function() {
+    "OK"
+  }, serializer = serializer_json())
+  pr_get(a, "/csv", function() {
+    "OK"
+  }, serializer = serializer_csv())
   spec <- a$getApiSpec()
   expect_equal(spec$paths$`/json`$get$responses$`200`$content, list("application/json" = list(schema = list(type = "object"))))
   expect_equal(spec$paths$`/csv`$get$responses$`200`$content, list("text/csv" = list(schema = list(type = "string"))))
 })
 
 test_that("Api spec can be set using a file path", {
+  skip_if_not_installed("yaml")
+
   pr <- pr() %>% pr_set_api_spec(test_path("files/openapi.yaml"))
   expect_equal(pr$getApiSpec()$paths$`/health-check`$get$summary, " Determine if the API is running and listening as expected")
 })
