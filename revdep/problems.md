@@ -6,7 +6,7 @@
 * GitHub: https://github.com/ModelOriented/ArenaR
 * Source code: https://github.com/cran/arenar
 * Date/Publication: 2020-10-01 08:00:06 UTC
-* Number of recursive dependencies: 110
+* Number of recursive dependencies: 117
 
 Run `revdepcheck::revdep_details(, "arenar")` for more info
 
@@ -64,19 +64,14 @@ Run `revdepcheck::revdep_details(, "arenar")` for more info
     checkRd: (-1) get_variable_distribution.Rd:15: Lost braces in \itemize; meant \describe ?
     ```
 
-*   checking LazyData ... NOTE
-    ```
-      'LazyData' is specified without a 'data' directory
-    ```
-
 # AzureContainers
 
 <details>
 
-* Version: 1.3.2
+* Version: 1.3.3
 * GitHub: https://github.com/Azure/AzureContainers
 * Source code: https://github.com/cran/AzureContainers
-* Date/Publication: 2021-07-09 06:00:02 UTC
+* Date/Publication: 2025-04-12 08:30:08 UTC
 * Number of recursive dependencies: 69
 
 Run `revdepcheck::revdep_details(, "AzureContainers")` for more info
@@ -99,13 +94,36 @@ Run `revdepcheck::revdep_details(, "AzureContainers")` for more info
 * GitHub: https://github.com/FrankPortman/bayesAB
 * Source code: https://github.com/cran/bayesAB
 * Date/Publication: 2021-06-25 00:50:02 UTC
-* Number of recursive dependencies: 73
+* Number of recursive dependencies: 63
 
 Run `revdepcheck::revdep_details(, "bayesAB")` for more info
 
 </details>
 
 ## In both
+
+*   checking tests ...
+    ```
+      Running ‘testthat.R’
+     ERROR
+    Running the tests in ‘tests/testthat.R’ failed.
+    Last 13 lines of output:
+      > 
+      > test_check("bayesAB")
+      Saving _problems/test-dists-34.R
+      [ FAIL 1 | WARN 5 | SKIP 0 | PASS 140 ]
+      
+      ══ Failed tests ════════════════════════════════════════════════════════════════
+      ── Failure ('test-dists.R:34:3'): Success ──────────────────────────────────────
+      Expected `plotNormalInvGamma(3, 1, 1, 1)$labels$y` to equal "sig_sq".
+      Differences:
+      target is NULL, current is character
+      
+      [ FAIL 1 | WARN 5 | SKIP 0 | PASS 140 ]
+      Error:
+      ! Test failures.
+      Execution halted
+    ```
 
 *   checking Rd files ... NOTE
     ```
@@ -114,25 +132,40 @@ Run `revdepcheck::revdep_details(, "bayesAB")` for more info
            |     ^
     ```
 
-# gqlr
+# gaawr2
 
 <details>
 
-* Version: 0.0.2
-* GitHub: https://github.com/schloerke/gqlr
-* Source code: https://github.com/cran/gqlr
-* Date/Publication: 2019-12-02 16:20:03 UTC
-* Number of recursive dependencies: 54
+* Version: 0.0.3
+* GitHub: https://github.com/jinghuazhao/gaawr2
+* Source code: https://github.com/cran/gaawr2
+* Date/Publication: 2025-03-24 15:00:09 UTC
+* Number of recursive dependencies: 233
 
-Run `revdepcheck::revdep_details(, "gqlr")` for more info
+Run `revdepcheck::revdep_details(, "gaawr2")` for more info
 
 </details>
 
 ## In both
 
-*   checking LazyData ... NOTE
+*   checking running R code from vignettes ...
     ```
-      'LazyData' is specified without a 'data' directory
+      ‘gaawr2.Rmd’ using ‘UTF-8’... failed
+      ‘web.Rmd’ using ‘UTF-8’... OK
+     ERROR
+    Errors in running code in vignettes:
+    when running code in ‘gaawr2.Rmd’
+      ...
+    +     n.chains = 1, n.iter = 80)
+    
+      When sourcing 'gaawr2.R':
+    Error: .onLoad failed in loadNamespace() for 'rjags', details:
+      call: dyn.load(file, DLLpath = DLLpath, ...)
+      error: unable to load shared object '/Users/barret/Documents/git/rstudio/plumber/plumber.nosync/revdep/library.noindex/gaawr2/rjags/libs/rjags.so':
+      dlopen(/Users/barret/Documents/git/rstudio/plumber/plumber.nosync/revdep/library.noindex/gaawr2/rjags/libs/rjags.so, 0x000A): Library not loaded: /usr/local/lib/libjags.4.dylib
+      Referenced from: <337070A2-BC15-3117-B643-96612554E437> /Users/barret/Documents/git/rstudio/plumber/plumber.nosync/revdep/library.noindex/gaawr2/rjags/libs/rjags.so
+      Reason: tried: '/usr/local/lib/libjags.4.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/usr/local/lib/libjags.4.dylib' (no such file), '/usr/local/lib/libjags.4.dylib' (no such file), '/Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libjags.4.dylib' (no such file), '/Library/Java/JavaVirtualMachines/jdk-11.0.18+10/Contents/Home/lib/server/libjags.4.dylib' (no
+    Execution halted
     ```
 
 # log
@@ -151,56 +184,42 @@ Run `revdepcheck::revdep_details(, "log")` for more info
 
 ## In both
 
+*   checking DESCRIPTION meta-information ... NOTE
+    ```
+      Missing dependency on R >= 4.1.0 because package code uses the pipe
+      |> or function shorthand \(...) syntax added in R 4.1.0.
+      File(s) using such syntax:
+        ‘logger.R’
+    ```
+
 *   checking dependencies in R code ... NOTE
     ```
     Namespace in Imports field not imported from: ‘R6’
       All declared Imports should be used.
     ```
 
-# occupationMeasurement
+# microCRAN
 
 <details>
 
-* Version: 0.3.2
-* GitHub: https://github.com/occupationMeasurement/occupationMeasurement
-* Source code: https://github.com/cran/occupationMeasurement
-* Date/Publication: 2023-09-27 13:40:02 UTC
-* Number of recursive dependencies: 125
+* Version: 0.9.0-1
+* GitHub: NA
+* Source code: https://github.com/cran/microCRAN
+* Date/Publication: 2023-11-03 22:00:02 UTC
+* Number of recursive dependencies: 54
 
-Run `revdepcheck::revdep_details(, "occupationMeasurement")` for more info
+Run `revdepcheck::revdep_details(, "microCRAN")` for more info
 
 </details>
 
-## Newly fixed
-
-*   checking tests ...
-    ```
-      Running ‘testthat.R’
-     ERROR
-    Running the tests in ‘tests/testthat.R’ failed.
-    Last 13 lines of output:
-      file.exists(log_file) is not TRUE
-      
-      `actual`:   FALSE
-      `expected`: TRUE 
-      ── Error ('test-api.R:369:3'): API logging is working ──────────────────────────
-      Error in `file(file, "rt")`: cannot open the connection
-      Backtrace:
-          ▆
-       1. └─utils::read.csv(log_file) at test-api.R:369:3
-       2.   └─utils::read.table(...)
-       3.     └─base::file(file, "rt")
-      
-      [ FAIL 13 | WARN 1 | SKIP 10 | PASS 23 ]
-      Error: Test failures
-      Execution halted
-    ```
-
 ## In both
 
-*   checking data for non-ASCII characters ... NOTE
+*   checking DESCRIPTION meta-information ... NOTE
     ```
-      Note: found 6986 marked UTF-8 strings
+      Missing dependency on R >= 4.1.0 because package code uses the pipe
+      |> or function shorthand \(...) syntax added in R 4.1.0.
+      File(s) using such syntax:
+        ‘api.R’ ‘handlers-static.R’ ‘static-assets.Rd’
     ```
 
 # openmetrics
@@ -225,11 +244,6 @@ Run `revdepcheck::revdep_details(, "openmetrics")` for more info
       All declared Imports should be used.
     ```
 
-*   checking LazyData ... NOTE
-    ```
-      'LazyData' is specified without a 'data' directory
-    ```
-
 # plumbertableau
 
 <details>
@@ -238,7 +252,7 @@ Run `revdepcheck::revdep_details(, "openmetrics")` for more info
 * GitHub: https://github.com/rstudio/plumbertableau
 * Source code: https://github.com/cran/plumbertableau
 * Date/Publication: 2023-12-19 02:20:03 UTC
-* Number of recursive dependencies: 64
+* Number of recursive dependencies: 65
 
 Run `revdepcheck::revdep_details(, "plumbertableau")` for more info
 
@@ -271,29 +285,41 @@ Run `revdepcheck::revdep_details(, "plumbertableau")` for more info
     Execution halted
     ```
 
-# swagger
+# starsTileServer
 
 <details>
 
-* Version: 5.17.14.1
-* GitHub: https://github.com/rstudio/swagger
-* Source code: https://github.com/cran/swagger
-* Date/Publication: 2024-06-28 17:10:02 UTC
-* Number of recursive dependencies: 36
+* Version: 0.1.1
+* GitHub: NA
+* Source code: https://github.com/cran/starsTileServer
+* Date/Publication: 2022-08-22 21:50:02 UTC
+* Number of recursive dependencies: 114
 
-Run `revdepcheck::revdep_details(, "swagger")` for more info
+Run `revdepcheck::revdep_details(, "starsTileServer")` for more info
 
 </details>
 
 ## In both
 
-*   checking installed package size ... NOTE
+*   checking running R code from vignettes ...
     ```
-      installed size is  6.2Mb
-      sub-directories of 1Mb or more:
-        dist3   2.0Mb
-        dist4   1.7Mb
-        dist5   2.1Mb
+      ‘upscaling.Rmd’ using ‘UTF-8’... OK
+      ‘using_functions.Rmd’ using ‘UTF-8’... OK
+      ‘using_shiny.Rmd’ using ‘UTF-8’... failed
+     ERROR
+    Errors in running code in vignettes:
+    when running code in ‘using_shiny.Rmd’
+      ...
+    +     function(grid, colFun) {
+    +         starsTileServer::starsTileServer$new(grid, co .... [TRUNCATED] 
+    
+    > Sys.sleep(3)
+    
+    > stopifnot(rp$is_alive())
+    
+      When sourcing ‘using_shiny.R’:
+    Error: rp$is_alive() is not TRUE
+    Execution halted
     ```
 
 # tgver
@@ -304,7 +330,7 @@ Run `revdepcheck::revdep_details(, "swagger")` for more info
 * GitHub: https://github.com/tgve/tgver
 * Source code: https://github.com/cran/tgver
 * Date/Publication: 2022-09-30 15:20:03 UTC
-* Number of recursive dependencies: 156
+* Number of recursive dependencies: 154
 
 Run `revdepcheck::revdep_details(, "tgver")` for more info
 
@@ -331,5 +357,44 @@ Run `revdepcheck::revdep_details(, "tgver")` for more info
       When sourcing ‘r-and-js.R’:
     Error: invalid font type
     Execution halted
+    ```
+
+# vetiver
+
+<details>
+
+* Version: 0.2.6
+* GitHub: https://github.com/rstudio/vetiver-r
+* Source code: https://github.com/cran/vetiver
+* Date/Publication: 2025-10-28 15:50:02 UTC
+* Number of recursive dependencies: 225
+
+Run `revdepcheck::revdep_details(, "vetiver")` for more info
+
+</details>
+
+## In both
+
+*   checking tests ...
+    ```
+      Running ‘testthat.R’
+     ERROR
+    Running the tests in ‘tests/testthat.R’ failed.
+    Last 13 lines of output:
+      ══ Failed tests ════════════════════════════════════════════════════════════════
+      ── Error ('test-xgboost.R:9:1'): (code run outside of `test_that()`) ───────────
+      Error in `matrix(NA_real_, ncol = model$nfeatures, dimnames = list("", model$feature_names))`: non-numeric matrix extent
+      Backtrace:
+          ▆
+       1. └─vetiver::vetiver_model(cars_xgb, "cars2") at test-xgboost.R:9:1
+       2.   └─vetiver::vetiver_create_ptype(model, save_prototype, ...)
+       3.     ├─vetiver::vetiver_ptype(model, ...)
+       4.     └─vetiver:::vetiver_ptype.xgb.Booster(model, ...)
+       5.       └─base::matrix(...)
+      
+      [ FAIL 1 | WARN 2 | SKIP 70 | PASS 221 ]
+      Error:
+      ! Test failures.
+      Execution halted
     ```
 
