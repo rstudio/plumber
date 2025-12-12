@@ -6,6 +6,12 @@
   Streams](https://arrow.apache.org/docs/format/Columnar.html#serialization-and-interprocess-communication-ipc)
   ([@josiahparry](https://github.com/josiahparry)
   [\#968](https://github.com/rstudio/plumber/issues/968))
+- Fixed a bug where setting the `apiPath` option wouldn’t be honored
+  when running the app ([@thomasp85](https://github.com/thomasp85),
+  [\#836](https://github.com/rstudio/plumber/issues/836))
+- Removed deprecated `mockery` package dependency. Tests now use native
+  R closures for callback tracking.
+  ([\#1009](https://github.com/rstudio/plumber/issues/1009))
 
 ## plumber 1.3.0
 

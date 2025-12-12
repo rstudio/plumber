@@ -136,7 +136,7 @@ a logical. `TRUE` when endpoint matches the requested path.
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### Method [`new()`](https://rdrr.io/r/methods/new.html)
 
 Create a new `PlumberEndpoint` object
 
