@@ -55,6 +55,7 @@ Suggests:
     testthat (>= 0.11.0),
     utils,
     visNetwork,
+    withr,
     writexl,
     yaml
 ByteCompile: TRUE
