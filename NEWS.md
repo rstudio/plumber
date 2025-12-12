@@ -1,26 +1,37 @@
 # plumber (development version)
 
-* Fixes #956, allowing a port to be specified as an environment variable. User-provided ports must be between 1024 and 49151 (following [IANA guidelines](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml)) and may not be a known unsafe port. plumber will now throw an error if an invalid port is requested. (@shikokuchuo @gadenbuie #963)
-
-* Added support for graphic devices provided by ragg and svglite (@thomasp85 #964)
-
-* `parse_rds()`, `parse_feather()`, and `parse_parquet()` no longer writes data to disk during parsing (@thomasp85, #942)
+* Added support for [Arrow IPC Streams](https://arrow.apache.org/docs/format/Columnar.html#serialization-and-interprocess-communication-ipc) (@josiahparry #968)
 
 * Fixed a bug where setting the `apiPath` option wouldn't be honored when running the app (@thomasp85, #836)
 
-* Returning error messages are now turned off by default rather than being turned on if running interactively and turned off if not (@thomasp85, #962)
+# plumber 1.3.0
 
-* New serializers
+* The port many now be specified as an environment variable. User-provided ports must be between 1024 and 49151 (following [IANA guidelines](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml)) and may not be a known unsafe port. plumber will now throw an error if an invalid port is requested. (@shikokuchuo @gadenbuie #963)
+
+* Added support for graphic devices provided by {ragg} and {svglite} (@thomasp85 #964).
+* `parse_rds()`, `parse_feather()`, and `parse_parquet()` no longer writes data to disk during parsing (@thomasp85, #942).
+* Returning error messages are now turned off by default rather than being turned on if running interactively and turned off if not (@thomasp85, #962).
+
+* New serializers:
   * `serializer_excel()`: Return an object serialized by `writexl::write_xlsx` (@r2evans, #973).
 
-* New request body parsers
-  * `parser_excel()`: Parse request body as an excel workbook using `readxl::read_excel` (@r2evans, #973). This defaults to loading in the first worksheet only, you can use `@parse excel list(sheet=NA)` to import all worksheets. This always returns a list of frames, even if just one worksheet.
+* New request body parsers:
+  * `parser_excel()`: Parse request body as an excel workbook using `readxl::read_excel` (@r2evans, #973). This defaults to loading in the first worksheet only, you can use `@parse excel list(sheet=NA)` to import all worksheets. This always returns a list of frames, even if there is just one worksheet.
+
+* Mounts now have a dynamic `req$PATH_INFO` instead of a pre-computed value. (#888)
+
+* `validate_api_spec()` now uses `@redocly/cli` to validate the API spec. (#986)
+
+* Added `operationId` to each operation within the auto-generated OpenAPI output. The value is similar to the `PATH-VERB`, e.g. `/users/create-POST`. (#986)
+
+* Added support for graphic devices provided by ragg and svglite (@thomasp85 #964)
 
 # plumber 1.2.2
 
 * Allow to set plumber options using environment variables `?options_plumber`. (@meztez #934)
 * Add support for quoted boundary for multipart request parsing. (@meztez #924)
 * Fix #916, related to `parseUTF8` return value attribute `srcfile` on Windows. (#930)
+
 
 # plumber 1.2.1
 

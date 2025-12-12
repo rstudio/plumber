@@ -1,12 +1,7 @@
 context("Cookies")
 
-skip_if_no_cookie_support <- function() {
-  skip_if_not_installed("sodium")
-  skip_if_not_installed("base64enc")
-}
 
 test_that("cookies are parsed", {
-
   cookies <- parseCookies("spaced=cookie%2C%20here; another=2")
   expect_equal(names(cookies), c("spaced", "another"))
   expect_equal(cookies$spaced, "cookie, here")
@@ -17,7 +12,6 @@ test_that("cookies are parsed", {
   expect_equal(cookies$a, "zxcv=asdf")
   expect_equal(cookies$missingVal, "")
   expect_equal(cookies$b, "qwer=ttyui")
-
 })
 
 test_that("missing cookies are an empty list", {
@@ -49,9 +43,9 @@ test_that("cookies can convert to string", {
   expect_equal(cookieToStr("abc", 123), "abc=123")
   expect_equal(cookieToStr("complex", "string with spaces"), "complex=string%20with%20spaces")
   expect_equal(cookieToStr("complex2", "forbidden:,%/"), "complex2=forbidden%3A%2C%25%2F")
-  expect_equal(cookieToStr("abc", 123, path="/somepath"), "abc=123; Path=/somepath")
-  expect_equal(cookieToStr("abc", 123, http=TRUE, secure=TRUE), "abc=123; HttpOnly; Secure")
-  expect_equal(cookieToStr("abc", 123, http=TRUE, secure=TRUE, same_site="None"), "abc=123; HttpOnly; Secure; SameSite=None")
+  expect_equal(cookieToStr("abc", 123, path = "/somepath"), "abc=123; Path=/somepath")
+  expect_equal(cookieToStr("abc", 123, http = TRUE, secure = TRUE), "abc=123; HttpOnly; Secure")
+  expect_equal(cookieToStr("abc", 123, http = TRUE, secure = TRUE, same_site = "None"), "abc=123; HttpOnly; Secure; SameSite=None")
 
   now <- force(Sys.time())
   cookieToStr_ <- function(expiration, ...) {
@@ -65,7 +59,7 @@ test_that("cookies can convert to string", {
   }
   expect_cookie <- function(expiresSec) {
     expires <- now + expiresSec
-    expyStr <- format(expires, format="%a, %e %b %Y %T", tz="GMT", usetz=TRUE)
+    expyStr <- format(expires, format = "%a, %e %b %Y %T", tz = "GMT", usetz = TRUE)
 
     # When given as a number of seconds
     expect_equal(cookieToStr_(expiresSec), cookie_match(expyStr, expiresSec), label = "Raw seconds expiration cookie")
@@ -123,21 +117,30 @@ test_that("asCookieKey conforms entropy", {
     expect_length(key, 32)
   }
   expect_invalid_cookie <- function(secret) {
-    expect_error({
-      asCookieKey(secret)
-    }, "Illegal cookie")
+    expect_error(
+      {
+        asCookieKey(secret)
+      },
+      "Illegal cookie"
+    )
   }
   expect_legacy_cookie <- function(secret) {
-    expect_warning({
-      cookie <- asCookieKey(secret)
-    }, "Legacy cookie secret")
+    expect_warning(
+      {
+        cookie <- asCookieKey(secret)
+      },
+      "Legacy cookie secret"
+    )
     ret <- expect_cookie_key(cookie)
     invisible(ret)
   }
 
-  expect_warning({
-    expect_null(asCookieKey(NULL))
-  }, "Cookies will not be encrypted")
+  expect_warning(
+    {
+      expect_null(asCookieKey(NULL))
+    },
+    "Cookies will not be encrypted"
+  )
 
   # not char
   expect_invalid_cookie(42)
@@ -200,7 +203,6 @@ test_that("cookie encryption works", {
       expect_equal(x, maybeX)
     }
   }
-
 })
 
 test_that("cookie encyption fails smoothly", {
@@ -219,9 +221,12 @@ test_that("cookie encyption fails smoothly", {
     decodeCookie(garbage, NULL)
   }) # error from jsonlite::parse_json()
   # garbage in, key
-  expect_error({
-    decodeCookie(garbage, asCookieKey(random_cookie_key()))
-  }, "Could not separate")
+  expect_error(
+    {
+      decodeCookie(garbage, asCookieKey(random_cookie_key()))
+    },
+    "Could not separate"
+  )
 
   infoList <- list(
     # different cookies
@@ -249,15 +254,17 @@ test_that("cookie encyption fails smoothly", {
     keyB <- info$b
     err <- info$error
 
-    expect_error({
-      encrypted <- encodeCookie(x, keyA)
-      encryptedStr <- cookieToStr("cookieVal", encrypted)
+    expect_error(
+      {
+        encrypted <- encodeCookie(x, keyA)
+        encryptedStr <- cookieToStr("cookieVal", encrypted)
 
-      encryptedParsed <- parseCookies(encryptedStr)
-      maybeX <- decodeCookie(encryptedParsed$cookieVal, keyB)
-    }, err)
+        encryptedParsed <- parseCookies(encryptedStr)
+        maybeX <- decodeCookie(encryptedParsed$cookieVal, keyB)
+      },
+      err
+    )
   }
-
 })
 
 
@@ -266,7 +273,10 @@ test_that("large cookie size makes warning", {
 
   largeObj <- rbind(iris, iris)
   encrypted <- encodeCookie(largeObj, NULL)
-  expect_warning({
-    cookieToStr("cookieVal", encrypted)
-  }, "Cookie being saved is too large")
+  expect_warning(
+    {
+      cookieToStr("cookieVal", encrypted)
+    },
+    "Cookie being saved is too large"
+  )
 })

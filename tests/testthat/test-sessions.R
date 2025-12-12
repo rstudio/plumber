@@ -1,19 +1,19 @@
 context("Sessions")
 
-skip_if_no_cookie_support <- function() {
-  skip_if_not_installed("sodium")
-  skip_if_not_installed("base64enc")
-}
-
-
 make_req_cookie <- function(verb, path, cookie) {
   req <- new.env()
   req$REQUEST_METHOD <- toupper(verb)
   req$PATH_INFO <- path
-  req$rook.input <- list(read_lines = function() { "" },
-                         rewind = function() {},
-                         read = function() { charToRaw("") })
-  if (!missing(cookie)){
+  req$rook.input <- list(
+    read_lines = function() {
+      ""
+    },
+    rewind = function() {},
+    read = function() {
+      charToRaw("")
+    }
+  )
+  if (!missing(cookie)) {
     req$HTTP_COOKIE <- cookie
   }
   req
@@ -30,7 +30,10 @@ test_that("cookies are set", {
   skip_if_no_cookie_support()
 
   r <- pr()
-  expr <- expression(function(req, res){ req$session <- list(abc = 1234); TRUE })
+  expr <- expression(function(req, res) {
+    req$session <- list(abc = 1234)
+    TRUE
+  })
 
   r$handle("GET", "/", expr)
 
@@ -55,7 +58,10 @@ test_that("cookies are unset", {
   skip_if_no_cookie_support()
 
   r <- pr()
-  exprRemoveSession <- expression(function(req, res){ req$session <- NULL; TRUE })
+  exprRemoveSession <- expression(function(req, res) {
+    req$session <- NULL
+    TRUE
+  })
 
   r$handle("GET", "/", exprRemoveSession)
 
@@ -87,7 +93,9 @@ test_that("cookies are read", {
 
   r <- pr()
 
-  expr <- expression(function(req, res){ req$session$abc })
+  expr <- expression(function(req, res) {
+    req$session$abc
+  })
 
   r$handle("GET", "/", expr)
 
@@ -118,7 +126,9 @@ test_that("invalid cookies/JSON are handled", {
 
   r <- pr()
 
-  expr <- expression(function(req, res){ ifelse(is.null(req$session), "no session", req$session) })
+  expr <- expression(function(req, res) {
+    ifelse(is.null(req$session), "no session", req$session)
+  })
 
   r$handle("GET", "/", expr)
 
@@ -138,7 +148,7 @@ test_that("invalid cookies/JSON are handled", {
     r$serve(
       make_req_cookie(
         "GET", "/",
-        paste0('plcook=', encodedX)
+        paste0("plcook=", encodedX)
       ),
       res
     )
@@ -150,7 +160,10 @@ test_that("cookie attributes are set", {
   skip_if_no_cookie_support()
 
   r <- pr()
-  expr <- expression(function(req, res){ req$session <- list(abc = 1234); TRUE })
+  expr <- expression(function(req, res) {
+    req$session <- list(abc = 1234)
+    TRUE
+  })
 
   r$handle("GET", "/", expr)
 

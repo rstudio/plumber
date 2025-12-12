@@ -26,6 +26,7 @@ endpointSpecification <- function(routerEndpointEntry, path = routerEndpointEntr
     resps <- responsesSpecification(routerEndpointEntry)
 
     endptSpec <- list(
+      operationId = paste0(cleanedPath, "-", verb),
       summary = routerEndpointEntry$comments,
       description = routerEndpointEntry$description,
       responses = resps,

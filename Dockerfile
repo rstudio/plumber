@@ -2,7 +2,7 @@
 ARG R_VERSION=latest
 
 FROM rocker/r-ver:${R_VERSION}
-LABEL org.opencontainers.image.authors="barret@rstudio.com"
+LABEL org.opencontainers.image.authors="barret@posit.co"
 
 # BEGIN rstudio/plumber layers
 
@@ -19,14 +19,15 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
 # `rm` call removes install2.r's cache
 RUN install2.r --error --skipinstalled --ncpus -1 \
   remotes \
+  pak \
   && rm -rf /tmp/downloaded_packages
 
-## Remove this comment to always bust the Docker cache at this step
-## https://stackoverflow.com/a/55621942/591574
-#ADD https://github.com/rstudio/plumber/commits/ _docker_cache
+# ## Remove this comment to always bust the Docker cache at this step
+# ## https://stackoverflow.com/a/55621942/591574
+# ADD https://github.com/rstudio/plumber/commits/ _docker_cache
 
 ARG PLUMBER_REF=main
-RUN Rscript -e "remotes::install_github('rstudio/plumber@${PLUMBER_REF}')"
+RUN Rscript -e "pak::pkg_install('rstudio/plumber@${PLUMBER_REF}')"
 
 EXPOSE 8000
 ENTRYPOINT ["R", "-e", "pr <- plumber::plumb(rev(commandArgs())[1]); args <- list(host = '0.0.0.0', port = 8000); if (packageVersion('plumber') >= '1.0.0') { pr$setDocs(TRUE) } else { args$swagger <- TRUE }; do.call(pr$run, args)"]

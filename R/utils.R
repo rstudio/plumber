@@ -1,3 +1,6 @@
+#' @importFrom crayon silver
+NULL
+
 #' HTTP Date String
 #'
 #' Given a POSIXct object, return a date string in the format required for a

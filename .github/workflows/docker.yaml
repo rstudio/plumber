@@ -8,6 +8,8 @@ on:
       - "docker**"
   schedule:
     - cron:  '0 0 1 * *' # first of every month
+  workflow_dispatch:
+
 
 
 jobs:
@@ -23,9 +25,13 @@ jobs:
           - "latest"
 
         config:
-        - name: "v1.2.0"
+        - name: "v1.3.0"
           # always overwrite the latest version with the CRAN version
-          tags: "v1.2.0,latest"
+          tags: "v1.3.0,latest"
+          ref: "v1.3.0"
+
+        - name: "v1.2.0"
+          tags: "v1.2.0"
           ref: "v1.2.0"
 
         - name: "v1.1.0"
@@ -53,7 +59,7 @@ jobs:
 
     # https://github.com/marketplace/actions/publish-docker
     - name: rstudio/plumber
-      uses: elgohr/Publish-Docker-Github-Action@2.18
+      uses: elgohr/Publish-Docker-Github-Action@v5
       with:
         name: rstudio/plumber
         username: ${{ secrets.DOCKERHUB_USERNAME }}

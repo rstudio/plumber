@@ -1,16 +1,18 @@
 context("htmlwidgets serializer")
 
 # Render a simple HTML widget using the visNetwork package
-renderWidget <- function(){
+renderWidget <- function() {
   skip_if_not_installed("visNetwork")
+  skip_if_not_installed("htmlwidgets")
 
-  nodes <- data.frame(id = 1:6, title = paste("node", 1:6),
-                      shape = c("dot", "square"),
-                      size = 10:15, color = c("blue", "red"))
+  nodes <- data.frame(
+    id = 1:6, title = paste("node", 1:6),
+    shape = c("dot", "square"),
+    size = 10:15, color = c("blue", "red")
+  )
   edges <- data.frame(from = 1:5, to = c(5, 4, 6, 3, 3))
   visNetwork::visNetwork(nodes, edges) %>%
     visNetwork::visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)
-
 }
 
 test_that("htmlwidgets serialize properly", {
@@ -18,6 +20,7 @@ test_that("htmlwidgets serialize properly", {
   skip_on_cran()
   # Too many moving parts on an inconsistent os
   skip_on_os("windows")
+  skip_if_not_installed("htmlwidgets")
 
   w <- renderWidget()
   val <- serializer_htmlwidget()(w, list(), PlumberResponse$new(), stop)
@@ -28,14 +31,16 @@ test_that("htmlwidgets serialize properly", {
 })
 
 test_that("Errors call error handler", {
+  skip_if_not_installed("htmlwidgets")
+
   errors <- 0
-  errHandler <- function(req, res, err){
+  errHandler <- function(req, res, err) {
     errors <<- errors + 1
   }
 
   expect_equal(errors, 0)
   suppressWarnings(
-    serializer_htmlwidget()(parse(text="hi"), list(), PlumberResponse$new("htmlwidget"), errorHandler = errHandler)
+    serializer_htmlwidget()(parse(text = "hi"), list(), PlumberResponse$new("htmlwidget"), errorHandler = errHandler)
   )
   expect_equal(errors, 1)
 })

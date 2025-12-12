@@ -2,7 +2,6 @@ API's
 Api
 BMP
 BUGFIX
-CLI
 CORS
 CentOS
 Crypto
@@ -22,6 +21,7 @@ HTTPOnly
 HTTPS
 Hookable
 IANA
+IPC
 IPs
 IPv
 JSON
@@ -125,6 +125,7 @@ repo
 req
 retransmitted
 rstudio
+ruleset
 runnable
 scalability
 scalable

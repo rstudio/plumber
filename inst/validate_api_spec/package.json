@@ -1,7 +1,0 @@
-{
-  "private": true,
-  "devDependencies": {
-    "swagger-cli": "^4.0.4",
-    "openapi-types": ">=7"
-  }
-}
