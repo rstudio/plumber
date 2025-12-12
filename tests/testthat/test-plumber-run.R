@@ -42,35 +42,46 @@ test_that("`docs` does not not permanetly set pr information", {
 })
 
 test_that("`swaggerCallback` does not not permanetly set pr information", {
-  skip_if_not_installed("mockery", "0.4.2")
+  call_count <- 0
+  m <- function(url) {
+    call_count <<- call_count + 1
+    TRUE
+  }
 
-  m <- mockery::mock(TRUE, cycle = TRUE)
-  m() # call once so that `length(m)` > 0 as `length(m)` represents the number of calls to `m`
+  # Initialize call count
+  m("init")
+  expect_equal(call_count, 1)
+
   root <- pr() %>% pr_set_docs_callback(m)
+
   # m not used
   with_interrupt({
-    mockery::expect_called(m, 1)
+    expect_equal(call_count, 1)
     root %>% pr_run(swaggerCallback = NULL)
-    mockery::expect_called(m, 1)
+    expect_equal(call_count, 1)
   })
+
   # m not used
   with_interrupt({
-    mockery::expect_called(m, 1)
+    expect_equal(call_count, 1)
     root$run(swaggerCallback = NULL)
-    mockery::expect_called(m, 1)
+    expect_equal(call_count, 1)
   })
+
   # m is used
   with_interrupt({
-    mockery::expect_called(m, 1)
+    expect_equal(call_count, 1)
     root %>% pr_run(quiet = FALSE)
-    mockery::expect_called(m, 2)
+    expect_equal(call_count, 2)
   })
 })
 
 test_that("`swaggerCallback` can be set by option after the pr is created", {
-  skip_if_not_installed("mockery", "0.4.2")
-
-  m <- mockery::mock(TRUE)
+  call_count <- 0
+  m <- function(url) {
+    call_count <<- call_count + 1
+    TRUE
+  }
 
   # must initialize before options are set for this test
   root <- pr()
@@ -84,12 +95,11 @@ test_that("`swaggerCallback` can be set by option after the pr is created", {
       # set option after init
       options_plumber(docs.callback = m)
       with_interrupt({
-        mockery::expect_called(m, 0)
+        expect_equal(call_count, 0)
         pr_run(root)
       })
     }
   )
   # m is used
-  mockery::expect_called(m, 1)
-
+  expect_equal(call_count, 1)
 })
