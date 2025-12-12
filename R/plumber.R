@@ -253,7 +253,6 @@ Plumber <- R6Class(
         old_wd <- setwd(dirname(private$filename))
         on.exit({setwd(old_wd)}, add = TRUE)
       }
-
       if (isTRUE(docs_info$enabled)) {
         mount_docs(
           pr = self,
@@ -263,7 +262,7 @@ Plumber <- R6Class(
           callback = swaggerCallback,
           quiet = quiet
         )
-        on.exit(unmount_docs(self, docs_info), add = TRUE)
+        #on.exit(unmount_docs(self, docs_info), add = TRUE)
       }
 
       if (!isTRUE(quiet) && inform_debug && rlang::is_interactive()) {

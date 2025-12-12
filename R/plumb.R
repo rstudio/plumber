@@ -250,9 +250,18 @@ all_available_apis <- function() {
     }
   }
 
-  # do not check for size 0, as plumber contains apis.
-
-  apis <- do.call(rbind, ret)
+  if (length(ret) == 0) {
+    # No APIs found, return empty data frame with correct structure
+    apis <- data.frame(
+      package = character(0),
+      name = character(0),
+      source_directory = character(0),
+      stringsAsFactors = FALSE
+    )
+    class(apis) <- c("plumber_available_apis", class(apis))
+  } else {
+    apis <- do.call(rbind, ret)
+  }
 
   list(
     apis = apis, # will maintain class

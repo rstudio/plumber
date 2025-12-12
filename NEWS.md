@@ -1,6 +1,8 @@
 # plumber (development version)
 
 * Added support for [Arrow IPC Streams](https://arrow.apache.org/docs/format/Columnar.html#serialization-and-interprocess-communication-ipc) (@josiahparry #968)
+* Fixed a bug where setting the `apiPath` option wouldn't be honored when running the app (@thomasp85, #836)
+* Removed deprecated `mockery` package dependency. Tests now use native R closures for callback tracking. (#1009)
 
 # plumber 1.3.0
 

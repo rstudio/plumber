@@ -27,3 +27,5 @@ rsconnect
 ^legacy_support.txt$
 ^codecov\.yml$
 ^CRAN-SUBMISSION$
+^.claude$
+^CLAUDE.md$
