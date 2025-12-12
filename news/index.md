@@ -2,16 +2,23 @@
 
 ## plumber 1.3.1
 
-- Added support for [Arrow IPC
+### New features
+
+- `serializer_feather_stream()` and `parser_feather_stream()` now
+  support [Arrow IPC
   Streams](https://arrow.apache.org/docs/format/Columnar.html#serialization-and-interprocess-communication-ipc)
-  ([@josiahparry](https://github.com/josiahparry)
-  [\#968](https://github.com/rstudio/plumber/issues/968))
-- Fixed a bug where setting the `apiPath` option wouldn’t be honored
-  when running the app ([@thomasp85](https://github.com/thomasp85),
-  [\#836](https://github.com/rstudio/plumber/issues/836))
-- Removed deprecated `mockery` package dependency. Tests now use native
-  R closures for callback tracking.
-  ([\#1009](https://github.com/rstudio/plumber/issues/1009))
+  ([@josiahparry](https://github.com/josiahparry),
+  [\#968](https://github.com/rstudio/plumber/issues/968)).
+
+### Bug fixes and minor improvements
+
+- [`pr_run()`](https://www.rplumber.io/reference/pr_run.md) now
+  correctly honors the `apiPath` option when mounting documentation
+  ([@thomasp85](https://github.com/thomasp85),
+  [\#836](https://github.com/rstudio/plumber/issues/836)).
+
+- Added CI testing for only depends packages by request of CRAN
+  ([\#1006](https://github.com/rstudio/plumber/issues/1006)).
 
 ## plumber 1.3.0
 
