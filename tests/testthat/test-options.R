@@ -63,7 +63,7 @@ test_that("all options used are `options_plumber()` parameters", {
 test_that("Legacy swagger redirect can be disabled", {
   with_options(
     list(
-      plumber.legacyRedirets = get_option_or_env("plumber.legacyRedirects")
+      plumber.legacyRedirects = get_option_or_env("plumber.legacyRedirects")
     ), {
       options_plumber(legacyRedirects = TRUE)
       redirects <- swagger_redirects()
