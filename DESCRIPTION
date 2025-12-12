@@ -9,7 +9,8 @@ Authors@R: c(
     person("Bruno", "Tremblay", , "cran@neoxone.com", role = "ctb"),
     person("Frans", "van Dunné", , "frans@ixpantia.com", role = "ctb"),
     person("Sebastiaan", "Vandewoude", , "sebastiaanvandewoude@gmail.com", role = "ctb"),
-    person("Posit Software, PBC", role = c("cph", "fnd"))
+    person("Posit Software, PBC", role = c("cph", "fnd"),
+           comment = c(ROR = "03wc8by49"))
   )
 Description: Gives the ability to automatically generate and serve an HTTP
     API from R functions using the annotations in the R documentation
