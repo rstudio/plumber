@@ -1,6 +1,6 @@
 source("scripts/git_clean.R")
 
-if (!require("revdepcheck")) remotes::install_github("r-lib/revdepcheck")
+if (!require("revdepcheck")) pak::pkg_install("r-lib/revdepcheck")
 
 # revdepcheck::revdep_reset()
 revdepcheck::revdep_check(num_workers = 4)

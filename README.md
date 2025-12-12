@@ -91,7 +91,7 @@ install.packages("plumber")
 If you want to try out the latest development version, you can install it from GitHub.
 
 ```r
-remotes::install_github("rstudio/plumber")
+pak::pkg_install("rstudio/plumber")
 library(plumber)
 ```
 

@@ -41,7 +41,6 @@ Suggests:
     geojsonsf,
     htmlwidgets,
     later,
-    mockery (>= 0.4.2),
     ragg,
     rapidoc,
     readr,
