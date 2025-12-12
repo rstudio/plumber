@@ -1,6 +1,6 @@
 # Changelog
 
-## plumber (development version)
+## plumber 1.3.1
 
 - Added support for [Arrow IPC
   Streams](https://arrow.apache.org/docs/format/Columnar.html#serialization-and-interprocess-communication-ipc)
