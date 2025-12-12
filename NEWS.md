@@ -2,6 +2,8 @@
 
 * Added support for [Arrow IPC Streams](https://arrow.apache.org/docs/format/Columnar.html#serialization-and-interprocess-communication-ipc) (@josiahparry #968)
 
+* Removed deprecated `mockery` package dependency. Tests now use native R closures for callback tracking. (#1009)
+
 # plumber 1.3.0
 
 * The port many now be specified as an environment variable. User-provided ports must be between 1024 and 49151 (following [IANA guidelines](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml)) and may not be a known unsafe port. plumber will now throw an error if an invalid port is requested. (@shikokuchuo @gadenbuie #963)
