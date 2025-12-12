@@ -1,6 +1,5 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://www.rplumber.io/404.html</loc></url>
-<url><loc>https://www.rplumber.io/CLAUDE.html</loc></url>
 <url><loc>https://www.rplumber.io/CONTRIBUTING.html</loc></url>
 <url><loc>https://www.rplumber.io/LICENSE-text.html</loc></url>
 <url><loc>https://www.rplumber.io/PULL_REQUEST_TEMPLATE.html</loc></url>
@@ -17,7 +16,6 @@
 <url><loc>https://www.rplumber.io/articles/security.html</loc></url>
 <url><loc>https://www.rplumber.io/articles/tips-and-tricks.html</loc></url>
 <url><loc>https://www.rplumber.io/authors.html</loc></url>
-<url><loc>https://www.rplumber.io/copilot-instructions.html</loc></url>
 <url><loc>https://www.rplumber.io/index.html</loc></url>
 <url><loc>https://www.rplumber.io/news/index.html</loc></url>
 <url><loc>https://www.rplumber.io/reference/Hookable.html</loc></url>

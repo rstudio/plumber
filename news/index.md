@@ -7,10 +7,6 @@
   ([@josiahparry](https://github.com/josiahparry)
   [\#968](https://github.com/rstudio/plumber/issues/968))
 
-- Removed deprecated `mockery` package dependency. Tests now use native
-  R closures for callback tracking.
-  ([\#1009](https://github.com/rstudio/plumber/issues/1009))
-
 ## plumber 1.3.0
 
 CRAN release: 2025-02-19

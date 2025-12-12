@@ -36,7 +36,7 @@ Inherited methods
 
 ------------------------------------------------------------------------
 
-### Method [`new()`](https://rdrr.io/r/methods/new.html)
+### Method `new()`
 
 Initialize a new `hookable`. Throws deprecated warning prompting user to
 use [`Hookable`](https://www.rplumber.io/reference/Hookable.md)
@@ -110,7 +110,7 @@ Inherited methods
 
 ------------------------------------------------------------------------
 
-### Method [`new()`](https://rdrr.io/r/methods/new.html)
+### Method `new()`
 
 Initialize a new `plumber`. Throws deprecated warning prompting user to
 use [`Plumber`](https://www.rplumber.io/reference/Plumber.md)
