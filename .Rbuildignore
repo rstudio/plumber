@@ -28,3 +28,4 @@ rsconnect
 ^codecov\.yml$
 ^CRAN-SUBMISSION$
 ^.claude$
+^CLAUDE.md$

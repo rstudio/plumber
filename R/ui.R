@@ -111,13 +111,14 @@ mount_openapi <- function(pr, api_url) {
   }
   # http://spec.openapis.org/oas/v3.0.3#document-structure
   # "It is RECOMMENDED that the root OpenAPI document be named: openapi.json"
+  openapi_json_path <- paste0(get_option_or_env("plumber.apiPath", ""), "/openapi.json")
   for (ep in pr$endpoints[["__no-preempt__"]]) {
-    if (ep$path == "/openapi.json") {
+    if (ep$path == openapi_json_path) {
       message("Overwritting existing `/openapi.json` route. Use `$setApiSpec()` to define your OpenAPI Spec")
       break
     }
   }
-  pr$handle("GET", "/openapi.json", openapi_fun, serializer = serializer_unboxed_json())
+  pr$handle("GET", openapi_json_path, openapi_fun, serializer = serializer_unboxed_json())
 
   invisible()
 }
@@ -125,10 +126,10 @@ mount_openapi <- function(pr, api_url) {
 #' Mount OpenAPI Specification to a plumber router
 #' @noRd
 unmount_openapi <- function(pr) {
+  path <- get_option_or_env("plumber.apiPath", "")
+  pr$removeHandle("GET", paste0(path, "/openapi.json"))
 
-  pr$removeHandle("GET", "/openapi.json")
   invisible()
-
 }
 
 #' Add visual documentation for plumber to use
@@ -184,7 +185,7 @@ register_docs <- function(name, index, static = NULL) {
   stopifnot(is.function(index))
   if (!is.null(static)) stopifnot(is.function(static))
 
-  docs_root <- paste0("/__docs__/")
+  docs_root <- "/__docs__/"
   docs_paths <- c("/index.html", "/")
   mount_docs_func <- function(pr, api_url, ...) {
     # Save initial extra argument values
@@ -211,16 +212,16 @@ register_docs <- function(name, index, static = NULL) {
       message("")
     }
 
-    pr$mount(docs_root, docs_router)
+    pr$mount(
+      paste0(get_option_or_env("plumber.apiPath", ""), docs_root),
+      docs_router
+    )
 
     # add legacy swagger redirects (RStudio Connect)
     redirect_info <- swagger_redirects()
     for (path in names(redirect_info)) {
       if (router_has_route(pr, path, "GET")) {
         message("Overwriting existing GET endpoint: ", path, ". Disable by setting `options_plumber(legacyRedirects = FALSE)`")
-      }
-      if (router_has_route(pr, redirect_info[[path]]$route, "GET")) {
-        message("Overwriting existing GET endpoint: ", redirect_info[[path]]$route, ". Disable by setting `options_plumber(legacyRedirects = FALSE)`")
       }
       pr_get(pr, path, redirect_info[[path]]$handler)
     }
@@ -271,9 +272,11 @@ swagger_redirects <- function() {
       }
     )
   }
+
+  path <- get_option_or_env("plumber.apiPath", "")
   list(
-    "/__swagger__/" = to_route("../__docs__/"),
-    "/__swagger__/index.html"  = to_route("../__docs__/index.html")
+    "/__swagger__/" = to_route(paste0(path, "/__docs__/")),
+    "/__swagger__/index.html"  = to_route(paste0(path, "/__docs__/index.html"))
   )
 }
 
