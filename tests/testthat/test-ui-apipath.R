@@ -15,6 +15,8 @@ test_that("mount_openapi respects plumber.apiPath option", {
 })
 
 test_that("mount_openapi uses plumber.apiPath when set", {
+  skip_if_not_installed("withr")
+
   # Test with apiPath set
   withr::with_options(
     list(plumber.apiPath = "/api/v1"),
@@ -35,6 +37,8 @@ test_that("mount_openapi uses plumber.apiPath when set", {
 })
 
 test_that("mount_openapi works with nested apiPath", {
+  skip_if_not_installed("withr")
+
   withr::with_options(
     list(plumber.apiPath = "/api/v2/myapp"),
     {
@@ -78,6 +82,8 @@ test_that("unmount_openapi respects plumber.apiPath option", {
 })
 
 test_that("unmount_openapi uses plumber.apiPath when set", {
+  skip_if_not_installed("withr")
+
   withr::with_options(
     list(plumber.apiPath = "/api/v1"),
     {
@@ -129,6 +135,8 @@ test_that("register_docs mounts docs at correct path with apiPath", {
 })
 
 test_that("register_docs respects plumber.apiPath option", {
+  skip_if_not_installed("withr")
+
   withr::with_options(
     list(plumber.apiPath = "/api/v1"),
     {
@@ -156,6 +164,8 @@ test_that("register_docs respects plumber.apiPath option", {
 })
 
 test_that("swagger_redirects respects plumber.apiPath option", {
+  skip_if_not_installed("withr")
+
   # Ensure legacyRedirects is enabled for this test
   withr::with_options(
     list(
@@ -187,6 +197,7 @@ test_that("swagger_redirects respects plumber.apiPath option", {
 
 test_that("mount_docs integrates openapi and docs paths correctly", {
   skip_if_not_installed("swagger")
+  skip_if_not_installed("withr")
 
   # Test with apiPath set
   withr::with_options(
@@ -224,6 +235,8 @@ test_that("mount_docs integrates openapi and docs paths correctly", {
 })
 
 test_that("multiple sequential mount/unmount operations work correctly", {
+  skip_if_not_installed("withr")
+
   withr::with_options(
     list(plumber.apiPath = "/v1"),
     {
@@ -254,6 +267,8 @@ test_that("multiple sequential mount/unmount operations work correctly", {
 })
 
 test_that("apiPath works with environment variable", {
+  skip_if_not_installed("withr")
+
   withr::with_envvar(
     list(PLUMBER_APIPATH = "/env/path"),
     {
@@ -275,6 +290,8 @@ test_that("apiPath works with environment variable", {
 })
 
 test_that("empty apiPath works correctly", {
+  skip_if_not_installed("withr")
+
   withr::with_options(
     list(plumber.apiPath = ""),
     {
@@ -290,6 +307,8 @@ test_that("empty apiPath works correctly", {
 })
 
 test_that("apiPath with trailing slash is handled correctly", {
+  skip_if_not_installed("withr")
+
   withr::with_options(
     list(plumber.apiPath = "/api/v1/"),
     {
@@ -310,6 +329,8 @@ test_that("apiPath with trailing slash is handled correctly", {
 })
 
 test_that("overwriting message appears when route already exists with apiPath", {
+  skip_if_not_installed("withr")
+
   withr::with_options(
     list(plumber.apiPath = "/api"),
     {
