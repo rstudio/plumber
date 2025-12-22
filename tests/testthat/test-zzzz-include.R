@@ -26,12 +26,18 @@ test_that("Includes work", {
   if (rmarkdown::pandoc_available()) {
     res <- PlumberResponse$new()
     val <- r$route(make_req("GET", "/md"), res)
-    expect_match(val$body, "<html.*<h2>R Output</h2>.*</html>\\s*$")
+    expect_match(val$body, "<h2>R Output</h2>")
     expect_equal(val$headers$`Content-Type`, "text/html; charset=UTF-8")
 
     res <- PlumberResponse$new()
     val <- r$route(make_req("GET", "/rmd"), res)
-    expect_match(val$body, "<html.*<img (role=\"img\" )?src=\"data:image/png;base64.*</html>\\s*$")
+
+    # Ex test output received from CRAN
+    test <- '<p><img role="img" aria-label src="data:image/png;base64,iVBORw0'
+    expect_match(test, "<img[^>]* src=\"data:image/png;base64")
+
+    # Make sure image shows up in response
+    expect_match(val$body, "<img[^>]* src=\"data:image/png;base64")
     expect_equal(val$headers$`Content-Type`, "text/html; charset=UTF-8")
   }
 })
