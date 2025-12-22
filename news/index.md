@@ -2,6 +2,8 @@
 
 ## plumber 1.3.1
 
+CRAN release: 2025-12-13
+
 ### New features
 
 - `serializer_feather_stream()` and `parser_feather_stream()` now
