@@ -124,7 +124,7 @@ However, plots with more points will take more time to create.
 
 ![](security_files/figure-html/unnamed-chunk-4-1.png)
 
-This plot, with 10,000 points added, took 0.123 seconds to generate.
+This plot, with 10,000 points added, took 0.122 seconds to generate.
 While that doesn’t sound like much, if we exposed this API publicly on
 the Internet, an attacker could easily generate enough traffic on this
 endpoint to overwhelm the Plumber process. Even worse, an attacker could
