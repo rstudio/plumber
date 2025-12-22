@@ -1,4 +1,4 @@
-# plumber (development version)
+# plumber 1.3.2
 
 # plumber 1.3.1
 
