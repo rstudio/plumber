@@ -32,6 +32,7 @@ request will not ever be processed by more than one endpoint. You create
 an endpoint by annotating a function like so:
 
 ``` r
+
 #* Return "hello world"
 #* @get /hello
 function(){
@@ -70,6 +71,7 @@ function would be used to service any incoming `GET`, `POST`, or `PUT`
 request to `/cars`.
 
 ``` r
+
 #* @get /cars
 #* @post /cars
 #* @put /cars
@@ -108,6 +110,7 @@ external side-effect. One common use case is to use a filter as a
 request logger:
 
 ``` r
+
 #* Log some information about the incoming request
 #* @filter logger
 function(req){
@@ -134,6 +137,7 @@ A similar filter may mutate some state on the request or response object
 it’s given.
 
 ``` r
+
 #* @filter setuser
 function(req){
   un <- req$cookies$user
@@ -164,6 +168,7 @@ additional handlers. For example, a filter could be used to check that a
 user has authenticated.
 
 ``` r
+
 #* @filter checkAuth
 function(req, res){
   if (is.null(req$username)){
@@ -210,6 +215,7 @@ encounter, you can use a dynamic route to associate an endpoint with a
 variety of paths.
 
 ``` r
+
 users <- data.frame(
   uid=c(12,13),
   username=c("kim", "john")
@@ -234,6 +240,7 @@ parameter for the function (in this case, both `id`).
 You can even do more complex dynamic routes like:
 
 ``` r
+
 #* @get /user/<from>/connect/<to>
 function(from, to){
   # Do something with the `from` and `to` variables...
@@ -250,6 +257,7 @@ endpoints from query strings or dynamic paths will be character strings.
 For example, consider the following API.
 
 ``` r
+
 #* @get /type/<id>
 function(id){
   list(
@@ -273,6 +281,7 @@ parameter in your dynamic route, you can specify the desired type in the
 route itself.
 
 ``` r
+
 #* @get /user/<id:int>
 function(id){
   next <- id + 1
@@ -309,6 +318,7 @@ These servers are fairly simple to configure and integrate into your
 plumber application.
 
 ``` r
+
 #* @assets ./files/static
 list()
 ```
@@ -322,6 +332,7 @@ You can optionally provide an additional argument to configure the
 public path used for your server. For instance
 
 ``` r
+
 #* @assets ./files/static /static
 list()
 ```
@@ -331,6 +342,7 @@ would expose the local directory `files/static` not at `/public`, but at
 `/files/static` to `/` by using
 
 ``` r
+
 #* @assets ./files/static /
 list()
 ```
@@ -365,31 +377,31 @@ HTTP requests in Plumber are stored as environments and satisfy the
 interface](https://github.com/jeffreyhorner/Rook/blob/a5e45f751/README.md#the-environment).
 The expected objects for all HTTP requests are the following.
 
-| Name              | Example                                                                | Description                                                                                                                                                                                                                                                                                                                                                                       |
-|-------------------|------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `pr`              | [`plumber::pr()`](https://www.rplumber.io/reference/pr.md)             | The Plumber router that is processing the request                                                                                                                                                                                                                                                                                                                                 |
-| `cookies`         | `list(cook = "abc")`                                                   | A list of the cookies as described in [Cookies](#read-cookies)                                                                                                                                                                                                                                                                                                                    |
-| `httpuv.version`  | `"1.3.3"`                                                              | The version of the underlying [`httpuv` package](https://github.com/rstudio/httpuv)                                                                                                                                                                                                                                                                                               |
-| `PATH_INFO`       | `"/"`                                                                  | The path of the incoming HTTP request                                                                                                                                                                                                                                                                                                                                             |
-| `bodyRaw`         | `charToRaw("a=1&b=2")`                                                 | The [`raw()`](https://rdrr.io/r/base/raw.html), unparsed contents of the body of the request                                                                                                                                                                                                                                                                                      |
-| `body`            | `list(a = 1, b = 2)`                                                   | This value will typically be the same as `argsBody`. However, with content type `"multipart/*"`, `req$body` may contain detailed information, such as `name`, `content_type`, `content_disposition`, `filename`, `value` (which is a [`raw()`](https://rdrr.io/r/base/raw.html) vector), and `parsed` (parsed version of `value`).                                                |
-| `argsBody`        | `list(a = 1, b = 2)`                                                   | The parsed body output. Typically this is the same as `req$body` except when type is `"multipart/*"`.                                                                                                                                                                                                                                                                             |
-| `argsPath`        | `list(c = 3, d = 4)`                                                   | The values of the path arguments.                                                                                                                                                                                                                                                                                                                                                 |
-| `argsQuery`       | `list(e = 5, f = 6)`                                                   | The parsed query string output.                                                                                                                                                                                                                                                                                                                                                   |
-| `args`            | `list(req = req, res = res, e = 5, f = 6, c = 3, d = 4, a = 1, b = 2)` | In a route, the combined arguments of `list(req = req, res = res)`, `req$args` (added by filters), `req$argsQuery`, `req$argsPath`, and `req$argsBody`. In a filter, `req$args` is initialized to an empty list, so when processing filters `req$args` will only contain arguments set by previously processed filters as the route information will not have been processed yet. |
-| `QUERY_STRING`    | `"?a=123&b=abc"`                                                       | The query-string portion of the HTTP request                                                                                                                                                                                                                                                                                                                                      |
-| `REMOTE_ADDR`     | `"1.2.3.4"`                                                            | The IP address of the client making the request                                                                                                                                                                                                                                                                                                                                   |
-| `REMOTE_PORT`     | `"62108"`                                                              | The client port from which the request originated                                                                                                                                                                                                                                                                                                                                 |
-| `REQUEST_METHOD`  | `"GET"`                                                                | The method used for this HTTP request                                                                                                                                                                                                                                                                                                                                             |
-| `rook.errors`     | N/A                                                                    | See [Rook docs](https://github.com/jeffreyhorner/Rook/blob/a5e45f751/README.md#the-input-stream)                                                                                                                                                                                                                                                                                  |
-| `rook.input`      | N/A                                                                    | See [Rook docs](https://github.com/jeffreyhorner/Rook/blob/a5e45f751/README.md#the-error-stream)                                                                                                                                                                                                                                                                                  |
-| `rook.url_scheme` | `"http"`                                                               | The “scheme” (typically `http` or `https`)                                                                                                                                                                                                                                                                                                                                        |
-| `rook.version`    | `"1.1-0"`                                                              | The version of the rook specification which this environment satisfies                                                                                                                                                                                                                                                                                                            |
-| `SCRIPT_NAME`     | `""`                                                                   | Unused                                                                                                                                                                                                                                                                                                                                                                            |
-| `SERVER_NAME`     | `"127.0.0.1"`                                                          | The host portion of the incoming request. You may favor `HTTP_HOST`, if available.                                                                                                                                                                                                                                                                                                |
-| `SERVER_PORT`     | `"8000"`                                                               | The target port for the request                                                                                                                                                                                                                                                                                                                                                   |
-| `HTTP_*`          | `"HTTP_USER_AGENT"`                                                    | Entries for all of the HTTP headers sent with this request                                                                                                                                                                                                                                                                                                                        |
-| `postBody`        | `"a=1&b=2"`                                                            | The text contents of the body of the request. Despite the name, it is available for any HTTP method. It is recommended to disable this parsing, see [`?options_plumber`](https://www.rplumber.io/reference/options_plumber.md).                                                                                                                                                   |
+| Name | Example | Description |
+|----|----|----|
+| `pr` | [`plumber::pr()`](https://www.rplumber.io/reference/pr.md) | The Plumber router that is processing the request |
+| `cookies` | `list(cook = "abc")` | A list of the cookies as described in [Cookies](#read-cookies) |
+| `httpuv.version` | `"1.3.3"` | The version of the underlying [`httpuv` package](https://github.com/rstudio/httpuv) |
+| `PATH_INFO` | `"/"` | The path of the incoming HTTP request |
+| `bodyRaw` | `charToRaw("a=1&b=2")` | The [`raw()`](https://rdrr.io/r/base/raw.html), unparsed contents of the body of the request |
+| `body` | `list(a = 1, b = 2)` | This value will typically be the same as `argsBody`. However, with content type `"multipart/*"`, `req$body` may contain detailed information, such as `name`, `content_type`, `content_disposition`, `filename`, `value` (which is a [`raw()`](https://rdrr.io/r/base/raw.html) vector), and `parsed` (parsed version of `value`). |
+| `argsBody` | `list(a = 1, b = 2)` | The parsed body output. Typically this is the same as `req$body` except when type is `"multipart/*"`. |
+| `argsPath` | `list(c = 3, d = 4)` | The values of the path arguments. |
+| `argsQuery` | `list(e = 5, f = 6)` | The parsed query string output. |
+| `args` | `list(req = req, res = res, e = 5, f = 6, c = 3, d = 4, a = 1, b = 2)` | In a route, the combined arguments of `list(req = req, res = res)`, `req$args` (added by filters), `req$argsQuery`, `req$argsPath`, and `req$argsBody`. In a filter, `req$args` is initialized to an empty list, so when processing filters `req$args` will only contain arguments set by previously processed filters as the route information will not have been processed yet. |
+| `QUERY_STRING` | `"?a=123&b=abc"` | The query-string portion of the HTTP request |
+| `REMOTE_ADDR` | `"1.2.3.4"` | The IP address of the client making the request |
+| `REMOTE_PORT` | `"62108"` | The client port from which the request originated |
+| `REQUEST_METHOD` | `"GET"` | The method used for this HTTP request |
+| `rook.errors` | N/A | See [Rook docs](https://github.com/jeffreyhorner/Rook/blob/a5e45f751/README.md#the-input-stream) |
+| `rook.input` | N/A | See [Rook docs](https://github.com/jeffreyhorner/Rook/blob/a5e45f751/README.md#the-error-stream) |
+| `rook.url_scheme` | `"http"` | The “scheme” (typically `http` or `https`) |
+| `rook.version` | `"1.1-0"` | The version of the rook specification which this environment satisfies |
+| `SCRIPT_NAME` | `""` | Unused |
+| `SERVER_NAME` | `"127.0.0.1"` | The host portion of the incoming request. You may favor `HTTP_HOST`, if available. |
+| `SERVER_PORT` | `"8000"` | The target port for the request |
+| `HTTP_*` | `"HTTP_USER_AGENT"` | Entries for all of the HTTP headers sent with this request |
+| `postBody` | `"a=1&b=2"` | The text contents of the body of the request. Despite the name, it is available for any HTTP method. It is recommended to disable this parsing, see [`?options_plumber`](https://www.rplumber.io/reference/options_plumber.md). |
 
 ### Query Strings
 
@@ -408,6 +420,7 @@ defines a search API that mimics the example from
 receives.
 
 ``` r
+
 #* @get /
 search <- function(q="", pretty=0){
   paste0("The q parameter is '", q, "'. ",
@@ -479,6 +492,7 @@ browser, but you can use tools like `curl` on the command line or the
 examples below.
 
 ``` r
+
 #* @post /user
 function(req, id, name) {
   list(
@@ -559,6 +573,7 @@ is capitalized, and hyphens are substituted for underscores. e.g. the
 `Content-Type` HTTP header can be found as `req$HTTP_CONTENT_TYPE`.
 
 ``` r
+
 #* Return the value of a custom header
 #* @get /
 function(req){

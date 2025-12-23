@@ -13,19 +13,20 @@ by the content. It is recommended to use `#*` to differentiate them from
 Global annotations can be used anywhere in your plumber file. They are
 independent from other annotations and do not require an expression.
 
-| Annotation        | Argument            | Description/References                                                                                                                                                 |
-|-------------------|---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `@apiTitle`       | `Title`             | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object)                                                                                                         |
-| `@apiDescription` | `Description`       | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object)                                                                                                         |
-| `@apiTOS`         | `TOS link`          | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object)                                                                                                         |
-| `@apiContact`     | `Contact object`    | [Contact Object](http://spec.openapis.org/oas/v3.0.3#contact-object)                                                                                                   |
-| `@apiLicense`     | `License object`    | [License Object](http://spec.openapis.org/oas/v3.0.3#license-object)                                                                                                   |
-| `@apiVersion`     | `Version`           | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object)                                                                                                         |
-| `@apiTag`         | `Tag` `Description` | Can be repeated to add multiple tags. Quote with ” or ’ to use non word character (like spaces) in `Tag`. [Tag Object](http://spec.openapis.org/oas/v3.0.3#tag-object) |
+| Annotation | Argument | Description/References |
+|----|----|----|
+| `@apiTitle` | `Title` | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object) |
+| `@apiDescription` | `Description` | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object) |
+| `@apiTOS` | `TOS link` | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object) |
+| `@apiContact` | `Contact object` | [Contact Object](http://spec.openapis.org/oas/v3.0.3#contact-object) |
+| `@apiLicense` | `License object` | [License Object](http://spec.openapis.org/oas/v3.0.3#license-object) |
+| `@apiVersion` | `Version` | [Info Object](http://spec.openapis.org/oas/v3.0.3#info-object) |
+| `@apiTag` | `Tag` `Description` | Can be repeated to add multiple tags. Quote with ” or ’ to use non word character (like spaces) in `Tag`. [Tag Object](http://spec.openapis.org/oas/v3.0.3#tag-object) |
 
 ##### Annotations example
 
 ``` r
+
 #* @apiTitle Sample Pet Store App
 #* @apiDescription This is a sample server for a pet store.
 #* @apiTOS http://example.com/terms/
@@ -40,6 +41,7 @@ independent from other annotations and do not require an expression.
 ##### Equivalent programmatic usage
 
 ``` r
+
 pr() %>%
   pr_set_api_spec(function(spec) {
     spec$info <- list(
@@ -69,16 +71,16 @@ an expression.
 
 ### Endpoint
 
-| Annotation                                                                | Argument                             | Description/References                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-|---------------------------------------------------------------------------|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `@get`, `@post`, `@put`, `@use`, `@delete`, `@head`, `@options`, `@patch` | `Path`                               | [Endpoints](https://www.rplumber.io/articles/routing-and-input.html#endpoints), [Dynamic Routes](https://www.rplumber.io/articles/routing-and-input.html#dynamic-routes), [Typed Dynamic Routes](https://www.rplumber.io/articles/routing-and-input.html#typed-dynamic-routes)                                                                                                                                                                                                                                                                                                                                                          |
-| `@serializer`                                                             | `Alias` \[`Args list]`\]             | Some serializers accept arguments. See [serializers article](https://www.rplumber.io/articles/rendering-output.html#serializers) and [serializers reference](https://www.rplumber.io/reference/serializers.html). Aliases : `agg_jpeg`, `agg_png`, `agg_tiff`, `arrow_ipc_stream`, `bmp`, `cat`, `contentType`, `csv`, `device`, `excel`, `feather`, `format`, `geojson`, `html`, `htmlwidget`, `jpeg`, `json`, `null`, `octet`, `parquet`, `pdf`, `png`, `print`, `rds`, `svg`, `svglite`, `text`, `tiff`, `tsv`, `unboxedJSON`, `yaml` from [`registered_serializers()`](https://www.rplumber.io/reference/register_serializer.html). |
-| `@parser`                                                                 | `Alias` `[Args list]`                | Some parsers accept arguments. See [parsers reference](https://www.rplumber.io/reference/parsers.html). Can be repeated to allow multiple parsers on the same endpoint. Aliases : `all`, `arrow_ipc_stream`, `csv`, `excel`, `feather`, `form`, `geojson`, `json`, `multi`, `none`, `octet`, `parquet`, `rds`, `text`, `tsv`, `yaml` from [`registered_parsers()`](https://www.rplumber.io/reference/register_parser.html).                                                                                                                                                                                                             |
-| `@param`                                                                  | `Name`\[`:Type`(`*`) `Description`\] | Enclose `Type` between square brackets `[]` to indicate it is an array. Adding an asterisk indicates that the parameter is required. Can be repeated to define different parameters.                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `@response`                                                               | `Name` `Description`                 | Simple [Response object](http://spec.openapis.org/oas/v3.0.3#response-object). Can be repeated to define different responses.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| `@tag`                                                                    | `Tag`                                | Can be repeated to add multiple tags. Quote with ” or ’ to use non word character (like spaces) in `Tag`. [Tag field](http://spec.openapis.org/oas/v3.0.3#operation-object)                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| `@preempt`                                                                | `Filter`                             | Specify that this endpoint has to execute before `Filter`. [Filters](https://www.rplumber.io/articles/programmatic-usage.html#defining-filters)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| None                                                                      | `Comments`                           | First line without annotation will be mapped to [Summary field](http://spec.openapis.org/oas/v3.0.3#fixed-fields-6) subsequent lines will be mapped to [Description field](http://spec.openapis.org/oas/v3.0.3#fixed-fields-6).                                                                                                                                                                                                                                                                                                                                                                                                         |
+| Annotation | Argument | Description/References |
+|----|----|----|
+| `@get`, `@post`, `@put`, `@use`, `@delete`, `@head`, `@options`, `@patch` | `Path` | [Endpoints](https://www.rplumber.io/articles/routing-and-input.html#endpoints), [Dynamic Routes](https://www.rplumber.io/articles/routing-and-input.html#dynamic-routes), [Typed Dynamic Routes](https://www.rplumber.io/articles/routing-and-input.html#typed-dynamic-routes) |
+| `@serializer` | `Alias` \[`Args list]`\] | Some serializers accept arguments. See [serializers article](https://www.rplumber.io/articles/rendering-output.html#serializers) and [serializers reference](https://www.rplumber.io/reference/serializers.html). Aliases : `agg_jpeg`, `agg_png`, `agg_tiff`, `arrow_ipc_stream`, `bmp`, `cat`, `contentType`, `csv`, `device`, `excel`, `feather`, `format`, `geojson`, `html`, `htmlwidget`, `jpeg`, `json`, `null`, `octet`, `parquet`, `pdf`, `png`, `print`, `rds`, `svg`, `svglite`, `text`, `tiff`, `tsv`, `unboxedJSON`, `yaml` from [`registered_serializers()`](https://www.rplumber.io/reference/register_serializer.html). |
+| `@parser` | `Alias` `[Args list]` | Some parsers accept arguments. See [parsers reference](https://www.rplumber.io/reference/parsers.html). Can be repeated to allow multiple parsers on the same endpoint. Aliases : `all`, `arrow_ipc_stream`, `csv`, `excel`, `feather`, `form`, `geojson`, `json`, `multi`, `none`, `octet`, `parquet`, `rds`, `text`, `tsv`, `yaml` from [`registered_parsers()`](https://www.rplumber.io/reference/register_parser.html). |
+| `@param` | `Name`\[`:Type`(`*`) `Description`\] | Enclose `Type` between square brackets `[]` to indicate it is an array. Adding an asterisk indicates that the parameter is required. Can be repeated to define different parameters. |
+| `@response` | `Name` `Description` | Simple [Response object](http://spec.openapis.org/oas/v3.0.3#response-object). Can be repeated to define different responses. |
+| `@tag` | `Tag` | Can be repeated to add multiple tags. Quote with ” or ’ to use non word character (like spaces) in `Tag`. [Tag field](http://spec.openapis.org/oas/v3.0.3#operation-object) |
+| `@preempt` | `Filter` | Specify that this endpoint has to execute before `Filter`. [Filters](https://www.rplumber.io/articles/programmatic-usage.html#defining-filters) |
+| None | `Comments` | First line without annotation will be mapped to [Summary field](http://spec.openapis.org/oas/v3.0.3#fixed-fields-6) subsequent lines will be mapped to [Description field](http://spec.openapis.org/oas/v3.0.3#fixed-fields-6). |
 
 #### More details on `@param`
 
@@ -96,18 +98,19 @@ to block expression.
 Plumber parameter type to OpenAPI type reference. For programmatic use,
 pick the one with an asterisk.
 
-| Type                                            | OpenAPI                  | Availability    |
-|-------------------------------------------------|--------------------------|-----------------|
-| `bool`, `boolean`\*, `logical`                  | `boolean`                | `query`, `path` |
+| Type | OpenAPI | Availability |
+|----|----|----|
+| `bool`, `boolean`\*, `logical` | `boolean` | `query`, `path` |
 | `dbl`, `double`, `float`, `number`\*, `numeric` | `number` `format:double` | `query`, `path` |
-| `int`, `integer`\*                              | `integer` `format:int64` | `query`, `path` |
-| `chr`, `str`, `character`, `string`\*           | `string`                 | `query`, `path` |
-| `list`, `data.frame`, `df`, `object`\*          | `object`                 | `body`          |
-| `file`\*, `binary`                              | `string` `format:binary` | `body`          |
+| `int`, `integer`\* | `integer` `format:int64` | `query`, `path` |
+| `chr`, `str`, `character`, `string`\* | `string` | `query`, `path` |
+| `list`, `data.frame`, `df`, `object`\* | `object` | `body` |
+| `file`\*, `binary` | `string` `format:binary` | `body` |
 
 ##### Annotations example
 
 ``` r
+
 #* @get /query/parameters
 #* @serializer text
 #* @param name:str*
@@ -141,6 +144,7 @@ function(f) {
 ##### Equivalent programmatic usage
 
 ``` r
+
 text_handler <- function(name, age) { sprintf("%s is %i years old", name, max(age)) }
 qp_handler <- function(name, age) { age <- as.integer(age); text_handler(name, age) }
 file_handler <- function(file) { as_attachment(file[[1]], names(file)[1]) }
@@ -165,13 +169,14 @@ pr() %>%
 
 ### Filter
 
-| Annotation | Argument      | Description/References                                                     |
-|------------|---------------|----------------------------------------------------------------------------|
-| `@filter`  | `Filter name` | [Filters](https://www.rplumber.io/articles/routing-and-input.html#filters) |
+| Annotation | Argument | Description/References |
+|----|----|----|
+| `@filter` | `Filter name` | [Filters](https://www.rplumber.io/articles/routing-and-input.html#filters) |
 
 ##### Annotations example
 
 ``` r
+
 #* @filter logger
 function(req){
   cat(as.character(Sys.time()), "-",
@@ -184,6 +189,7 @@ function(req){
 ##### Equivalent programmatic usage
 
 ``` r
+
 pr() %>%
   pr_filter("logger", function(req){
     cat(as.character(Sys.time()), "-",
@@ -195,13 +201,14 @@ pr() %>%
 
 ### Static File Handler
 
-| Annotation | Arguments                    | Description/References                                                                      |
-|------------|------------------------------|---------------------------------------------------------------------------------------------|
-| `@assets`  | `Directory` \[`Mount path`\] | [Static files](https://www.rplumber.io/articles/routing-and-input.html#static-file-handler) |
+| Annotation | Arguments | Description/References |
+|----|----|----|
+| `@assets` | `Directory` \[`Mount path`\] | [Static files](https://www.rplumber.io/articles/routing-and-input.html#static-file-handler) |
 
 ##### Annotations example
 
 ``` r
+
 #* @assets ./files/static
 list()
 
@@ -215,6 +222,7 @@ list()
 ##### Equivalent programmatic usage (note that argument order is reversed)
 
 ``` r
+
 pr() %>%
   pr_static(direc = "./files/static")
 
@@ -227,13 +235,14 @@ pr() %>%
 
 ### Plumber Router Modifier
 
-| Annotation | Arguments | Description/References                                                                                                                                                                                                                                                                                              |
-|------------|-----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `@plumber` | None      | Modify plumber router from plumber file. The plumber router provided to the function **must** be returned. In most cases, anonymous functions are used following the `#* @plumber` annotation. However, named functions can also be used. When a named function is used, it must be referenced without parentheses. |
+| Annotation | Arguments | Description/References |
+|----|----|----|
+| `@plumber` | None | Modify plumber router from plumber file. The plumber router provided to the function **must** be returned. In most cases, anonymous functions are used following the `#* @plumber` annotation. However, named functions can also be used. When a named function is used, it must be referenced without parentheses. |
 
 ##### Annotations example
 
 ``` r
+
 #* @plumber
 function(pr) {
   pr %>%
@@ -255,6 +264,7 @@ debug_swagger
 ##### Equivalent programmatic usage
 
 ``` r
+
 pr() %>%
   pr_set_debug(TRUE) %>%
   pr_set_docs("swagger")

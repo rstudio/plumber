@@ -46,6 +46,7 @@ instance, to define a Plumber API that response to `GET` requests on `/`
 and `POST` requests on `/submit`, you could use the following code:
 
 ``` r
+
 pr() %>%
   pr_get("/", function(req, res){
     # ...
@@ -65,6 +66,7 @@ which serializer it should use. For instance, the following endpoint
 would use Plumber’s HTML serializer.
 
 ``` r
+
 pr() %>%
   pr_get("/", function(){
     "<html><h1>Programmatic Plumber!</h1></html>"
@@ -77,6 +79,7 @@ Use the [`filter()`](https://rdrr.io/r/stats/filter.html) method of a
 Plumber router to define a new filter:
 
 ``` r
+
 pr() %>%
   pr_filter("myFilter", function(req){
     req$filtered <- TRUE
@@ -122,6 +125,7 @@ which the names are the names of the hooks, and the values are the
 handlers themselves.
 
 ``` r
+
 pr() %>%
   pr_hook("preroute", function(req) {
     cat("Routing a request for", req$PATH_INFO, "...\n")
@@ -154,6 +158,7 @@ which is a great technique for decomposing large APIs into smaller
 files.
 
 ``` r
+
 root <- pr()
 
 users <- pr("users.R")
@@ -173,6 +178,7 @@ of Plumber routers created using
 example
 
 ``` r
+
 pr() %>%
   pr_static("/assets", "./myfiles") %>%
   pr_run()

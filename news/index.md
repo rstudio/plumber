@@ -2,6 +2,8 @@
 
 ## plumber 1.3.2
 
+CRAN release: 2025-12-23
+
 ### Bug fixes and minor improvements
 
 - R Markdown include tests now use more robust HTML pattern matching for

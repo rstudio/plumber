@@ -36,6 +36,7 @@ to two key stages: `"postroute"` and `"postserialize"`.
 For example, we can add these lines to our `plumber.R` file:
 
 ``` r
+
 #* @plumber
 function(pr) {
   pr %>%
@@ -67,6 +68,7 @@ function(pr) {
 If we were to execute a `GET` request on `/stage_debug`
 
 ``` r
+
 #* @get /stage_debug
 function(req, res) {
   return(42)
@@ -117,6 +119,7 @@ and get better acquainted with how things behave at a low level.
 Consider the following API endpoint:
 
 ``` r
+
 #* @get /
 function(req, res){
   browser()
@@ -136,6 +139,7 @@ You can use \[httpuv::randomPort()\] to define a range of port for
 Plumber to pick from when running an API.
 
 ``` r
+
 # plumber.R
 options("plumber.port" = httpuv::randomPort(min = 4000, max = 7000, n = 100))
 
@@ -145,6 +149,7 @@ options("plumber.port" = httpuv::randomPort(min = 4000, max = 7000, n = 100))
 or more programmatically
 
 ``` r
+
 pr() %>%
   pr_run(port = httpuv::randomPort(min = 4000, max = 7000, n = 100))
 ```

@@ -9,6 +9,7 @@ code as a service available to others on the Web. Plumber is best
 illustrated with an example:
 
 ``` r
+
 # plumber.R
 
 #* Echo the parameter that was sent in

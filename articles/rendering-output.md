@@ -10,21 +10,21 @@ object](https://www.rplumber.io/articles/routing-and-input.html#the-request-obje
 The response object, which is accessible as `res` from within plumber
 functions, contains the following objects:
 
-| Name      | Example                | Description                                                                                                                                                                      |
-|-----------|------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `headers` | `list(header = "abc")` | A list of HTTP headers to include in the response                                                                                                                                |
-| `body`    | `NULL`                 | This is set to the serialized output of the handler *unless* the response object is directly returned from the handler (see [bypassing serialization](#bypassing-serialization)) |
-| `status`  | `200`                  | The [HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) included in the response                                                                        |
+| Name | Example | Description |
+|----|----|----|
+| `headers` | `list(header = "abc")` | A list of HTTP headers to include in the response |
+| `body` | `NULL` | This is set to the serialized output of the handler *unless* the response object is directly returned from the handler (see [bypassing serialization](#bypassing-serialization)) |
+| `status` | `200` | The [HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) included in the response |
 
 The response object also contains the following methods that can be
 invoked:
 
-| Name           | Example                       | Description                                                                       |
-|----------------|-------------------------------|-----------------------------------------------------------------------------------|
-| `setCookie`    | `res$setCookie("foo", "bar")` | Sets an HTTP cookie on the client                                                 |
-| `removeCookie` | `res$removeCookie("foo")`     | Removes an HTTP cookie                                                            |
-| `setHeader`    | `res$setHeader("foo", "bar")` | Sets an HTTP header                                                               |
-| `toResponse`   | `res$toResponse()`            | Renders the response object as a list containing `status`, `headers`, and `body`. |
+| Name | Example | Description |
+|----|----|----|
+| `setCookie` | `res$setCookie("foo", "bar")` | Sets an HTTP cookie on the client |
+| `removeCookie` | `res$removeCookie("foo")` | Removes an HTTP cookie |
+| `setHeader` | `res$setHeader("foo", "bar")` | Sets an HTTP header |
+| `toResponse` | `res$toResponse()` | Renders the response object as a list containing `status`, `headers`, and `body`. |
 
 The other methods (`clone`, `initialize`, and `serializer`) should not
 be directly invoked on the response object.
@@ -51,6 +51,7 @@ You can also pass arguments to certain serializers to modify their
 behavior like in the example below.
 
 ``` r
+
 #* @serializer json list(na="string")
 ```
 
@@ -58,33 +59,33 @@ See the
 [Serialization](https://www.rplumber.io/reference/serializers.html)
 article for details.
 
-| Annotation                | Content Type                        | Description/References                                                                                         |
-|---------------------------|-------------------------------------|----------------------------------------------------------------------------------------------------------------|
-| `@serializer contentType` | (user supplied)                     | Send response with a particular `Content-Type` header                                                          |
-| `@serializer html`        | `text/html; charset=UTF-8`          | Passes response through without any additional serialization                                                   |
-| `@serializer json`        | `application/json`                  | Object processed with [`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html)   |
-| `@serializer unboxedJSON` | `application/json`                  | Object processed with `jsonlite::toJSON(auto_unbox=TRUE)`                                                      |
-| `@serializer rds`         | `application/rds`                   | Object processed with [`base::serialize()`](https://rdrr.io/r/base/serialize.html)                             |
-| `@serializer csv`         | `text/csv`                          | Object processed with [`readr::format_csv()`](https://readr.tidyverse.org/reference/format_delim.html)         |
-| `@serializer tsv`         | `text/tab-separated-values`         | Object processed with [`readr::format_tsv()`](https://readr.tidyverse.org/reference/format_delim.html)         |
-| `@serializer feather`     | `application/vnd.apache.arrow.file` | Object processed with [`arrow::write_feather()`](https://arrow.apache.org/docs/r/reference/write_feather.html) |
-| `@serializer parquet`     | `application/parquet`               | Object processed with [`arrow::write_parquet()`](https://arrow.apache.org/docs/r/reference/write_parquet.html) |
-| `@serializer yaml`        | `text/x-yaml`                       | Object processed with `yaml::as_yaml()`                                                                        |
-| `@serializer htmlwidget`  | `text/html; charset=utf-8`          | [`htmlwidgets::saveWidget()`](https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html)                             |
-| `@serializer text`        | `text/plain`                        | Text output processed by [`as.character()`](https://rdrr.io/r/base/character.html)                             |
-| `@serializer format`      | `text/plain`                        | Text output processed by [`format()`](https://rdrr.io/r/base/format.html)                                      |
-| `@serializer print`       | `text/plain`                        | Text output captured from [`print()`](https://rdrr.io/r/base/print.html)                                       |
-| `@serializer cat`         | `text/plain`                        | Text output captured from [`cat()`](https://rdrr.io/r/base/cat.html)                                           |
-| `@serializer jpeg`        | `image/jpeg`                        | Images created with [`jpeg()`](https://rdrr.io/r/grDevices/png.html)                                           |
-| `@serializer png`         | `image/png`                         | Images created with [`png()`](https://rdrr.io/r/grDevices/png.html)                                            |
-| `@serializer svg`         | `image/svg`                         | Images created with [`svg()`](https://rdrr.io/r/grDevices/cairo.html)                                          |
-| `@serializer bmp`         | `image/bmp`                         | Images created with [`bmp()`](https://rdrr.io/r/grDevices/png.html)                                            |
-| `@serializer tiff`        | `image/tiff`                        | Images created with [`tiff()`](https://rdrr.io/r/grDevices/png.html)                                           |
-| `@serializer pdf`         | `application/pdf`                   | PDF File created with [`pdf()`](https://rdrr.io/r/grDevices/pdf.html)                                          |
-| `@serializer agg_jpeg`    | `image/jpeg`                        | Images created with [`ragg::agg_jpeg()`](https://ragg.r-lib.org/reference/agg_jpeg.html)                       |
-| `@serializer agg_png`     | `image/png`                         | Images created with [`ragg::agg_png()`](https://ragg.r-lib.org/reference/agg_png.html)                         |
-| `@serializer agg_tiff`    | `image/tiff`                        | Images created with [`ragg::agg_tiff()`](https://ragg.r-lib.org/reference/agg_tiff.html)                       |
-| `@serializer svglite`     | `image/svg`                         | Images created with [`svglite::svglite()`](https://svglite.r-lib.org/reference/svglite.html)                   |
+| Annotation | Content Type | Description/References |
+|----|----|----|
+| `@serializer contentType` | (user supplied) | Send response with a particular `Content-Type` header |
+| `@serializer html` | `text/html; charset=UTF-8` | Passes response through without any additional serialization |
+| `@serializer json` | `application/json` | Object processed with [`jsonlite::toJSON()`](https://jeroen.r-universe.dev/jsonlite/reference/fromJSON.html) |
+| `@serializer unboxedJSON` | `application/json` | Object processed with `jsonlite::toJSON(auto_unbox=TRUE)` |
+| `@serializer rds` | `application/rds` | Object processed with [`base::serialize()`](https://rdrr.io/r/base/serialize.html) |
+| `@serializer csv` | `text/csv` | Object processed with [`readr::format_csv()`](https://readr.tidyverse.org/reference/format_delim.html) |
+| `@serializer tsv` | `text/tab-separated-values` | Object processed with [`readr::format_tsv()`](https://readr.tidyverse.org/reference/format_delim.html) |
+| `@serializer feather` | `application/vnd.apache.arrow.file` | Object processed with [`arrow::write_feather()`](https://arrow.apache.org/docs/r/reference/write_feather.html) |
+| `@serializer parquet` | `application/parquet` | Object processed with [`arrow::write_parquet()`](https://arrow.apache.org/docs/r/reference/write_parquet.html) |
+| `@serializer yaml` | `text/x-yaml` | Object processed with `yaml::as_yaml()` |
+| `@serializer htmlwidget` | `text/html; charset=utf-8` | [`htmlwidgets::saveWidget()`](https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html) |
+| `@serializer text` | `text/plain` | Text output processed by [`as.character()`](https://rdrr.io/r/base/character.html) |
+| `@serializer format` | `text/plain` | Text output processed by [`format()`](https://rdrr.io/r/base/format.html) |
+| `@serializer print` | `text/plain` | Text output captured from [`print()`](https://rdrr.io/r/base/print.html) |
+| `@serializer cat` | `text/plain` | Text output captured from [`cat()`](https://rdrr.io/r/base/cat.html) |
+| `@serializer jpeg` | `image/jpeg` | Images created with [`jpeg()`](https://rdrr.io/r/grDevices/png.html) |
+| `@serializer png` | `image/png` | Images created with [`png()`](https://rdrr.io/r/grDevices/png.html) |
+| `@serializer svg` | `image/svg` | Images created with [`svg()`](https://rdrr.io/r/grDevices/cairo.html) |
+| `@serializer bmp` | `image/bmp` | Images created with [`bmp()`](https://rdrr.io/r/grDevices/png.html) |
+| `@serializer tiff` | `image/tiff` | Images created with [`tiff()`](https://rdrr.io/r/grDevices/png.html) |
+| `@serializer pdf` | `application/pdf` | PDF File created with [`pdf()`](https://rdrr.io/r/grDevices/pdf.html) |
+| `@serializer agg_jpeg` | `image/jpeg` | Images created with [`ragg::agg_jpeg()`](https://ragg.r-lib.org/reference/agg_jpeg.html) |
+| `@serializer agg_png` | `image/png` | Images created with [`ragg::agg_png()`](https://ragg.r-lib.org/reference/agg_png.html) |
+| `@serializer agg_tiff` | `image/tiff` | Images created with [`ragg::agg_tiff()`](https://ragg.r-lib.org/reference/agg_tiff.html) |
+| `@serializer svglite` | `image/svg` | Images created with [`svglite::svglite()`](https://svglite.r-lib.org/reference/svglite.html) |
 
 ### Boxed vs Unboxed JSON
 
@@ -92,6 +93,7 @@ You may have noticed that API responses generated from Plumber render
 singular values (or “scalars”) as arrays. For instance:
 
 ``` r
+
 jsonlite::toJSON(list(a=5))
 ```
 
@@ -108,6 +110,7 @@ Consider the following API which returns all the letters
 lexicographically “higher” than the given letter.
 
 ``` r
+
 #* Get letters after a given letter
 #* @get /boxed
 function(letter="A"){
@@ -184,6 +187,7 @@ arguments that will be passed into these functions. This enables the
 creation of endpoints like:
 
 ``` r
+
 #* Example of customizing graphical output
 #* @serializer png list(width = 400, height = 500)
 #* @get /
@@ -215,6 +219,7 @@ without serialization. You can bypass serialization by returning the
 consider the following API.
 
 ``` r
+
 #* Endpoint that bypasses serialization
 #* @get /
 function(res){
@@ -234,6 +239,7 @@ contentType header. You can use this annotation when you want more
 control over the response that you send.
 
 ``` r
+
 #* @serializer contentType list(type="application/pdf")
 #* @get /pdf
 function(){
@@ -258,6 +264,7 @@ Plumber wraps each endpoint invocation so that it can gracefully capture
 errors.
 
 ``` r
+
 #* Example of throwing an error
 #* @get /simple
 function(){
@@ -298,6 +305,7 @@ more helpful error messages.
 A custom error handler can be set using the `setErrorHandler()` method:
 
 ``` r
+
 pr() %>%
   pr_get("/simple", function() stop("I'm an error!")) %>%
   pr_set_error(function(req, res, err){
@@ -314,6 +322,7 @@ error message, nothing is printed to the console. If we wanted to
 include the error in the console, we could do the following:
 
 ``` r
+
 pr() %>%
   pr_get("/simple", function() stop("I'm an error!")) %>%
   pr_set_error(function(req, res, err){
@@ -353,6 +362,7 @@ below will return a random letter, but it remembers your preferences on
 whether you like capitalized or lower-case letters.
 
 ``` r
+
 #* @put /preferences
 function(res, capital){
   if (missing(capital)){
@@ -449,6 +459,7 @@ constructing it. For example, you could run the following sequence of
 commands to create a router that supports encrypted session cookies.
 
 ``` r
+
 pr("myfile.R") %>%
   pr_cookie("mySecretHere", "cookieName") %>%
   pr_run()
@@ -474,6 +485,7 @@ As an example, we’ll store an encrypted cookie that counts how many
 times this client has visited a particular endpoint:
 
 ``` r
+
 #* @get /sessionCounter
 function(req){
   count <- 0

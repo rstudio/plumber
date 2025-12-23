@@ -7,6 +7,7 @@ Plumber calls [`source()`](https://rdrr.io/r/base/source.html) on that
 file which will evaluate any top-level code that you have defined.
 
 ``` r
+
 # Global code; gets executed at plumb() time.
 counter <- 0
 
@@ -112,6 +113,7 @@ is possible to share state using the environment associated with the
 Plumber router.
 
 ``` r
+
 # Global code; gets executed at plumb() time.
 counter <- 0
 
@@ -230,6 +232,7 @@ that need to be cleaned up when your Plumber process is being
 terminated. You can use the `exit` hook to define such a handler.
 
 ``` r
+
 pr("plumber.R") %>%
   pr_hook("exit", function(){
     print("Bye bye!")

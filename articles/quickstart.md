@@ -6,6 +6,7 @@ code with special annotations. The example below shows a file named
 API.
 
 ``` r
+
 # plumber.R
 
 #* Echo the parameter that was sent in
@@ -45,6 +46,7 @@ you have `plumber` installed, you can use the
 this R file into a Plumber API:
 
 ``` r
+
 root <- pr("plumber.R")
 root
 ```
@@ -54,6 +56,7 @@ The `pr` object now encapsulates all the logic represented in your
 [`pr_run()`](https://www.rplumber.io/reference/pr_run.md) method:
 
 ``` r
+
 root %>% pr_run()
 ```
 
@@ -116,6 +119,7 @@ Plumber to render the output as some other format such as HTML
 (`@serializer jpeg`).
 
 ``` r
+
 #* @get /hello
 #* @serializer html
 function(){

@@ -104,6 +104,7 @@ Plumber API to put safety guards around the work that an API request
 might instigate.
 
 ``` r
+
 #* This is an example of an UNSAFE endpoint which
 #* is vulnerable to a DOS attack.
 #* @get /
@@ -124,7 +125,7 @@ However, plots with more points will take more time to create.
 
 ![](security_files/figure-html/unnamed-chunk-4-1.png)
 
-This plot, with 10,000 points added, took 0.124 seconds to generate.
+This plot, with 10,000 points added, took 0.122 seconds to generate.
 While that doesn’t sound like much, if we exposed this API publicly on
 the Internet, an attacker could easily generate enough traffic on this
 endpoint to overwhelm the Plumber process. Even worse, an attacker could
@@ -137,6 +138,7 @@ The solution, in this case, is to ensure that we have reasonable safety
 guards in place for any user input.
 
 ``` r
+
 #* This is an example of an safe endpoint which
 #* checks user input to avoid a DOS attack
 #* @get /
@@ -171,6 +173,7 @@ particular directory and then returns its contents, you might naively
 implement it like so.
 
 ``` r
+
 #* This is an example of an UNSAFE endpoint which
 #* does not sanitize user input
 #* @get /
@@ -193,6 +196,7 @@ user input which will prevent users from being able to escape into a
 different directory.
 
 ``` r
+
 #* This is an example of an endpoint which
 #* checks user input.
 #* @get /
@@ -246,6 +250,7 @@ function that will forward the right headers to the API using a filter
 such as the following snippet.
 
 ``` r
+
 #* @filter cors
 cors <- function(res) {
     res$setHeader("Access-Control-Allow-Origin", "*")
@@ -258,6 +263,7 @@ requests. It’s possible to disable it for some, by appending the line
 `#* @preempt cors` before the declaration of a function like this :
 
 ``` r
+
 #* @preempt cors
 #* @get /sub
 cors_disabled <- function(a, b){

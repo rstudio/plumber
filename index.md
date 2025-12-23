@@ -5,6 +5,7 @@ existing R source code with `roxygen2`-like comments. Take a look at an
 example.
 
 ``` r
+
 # plumber.R
 
 #* Echo back the input
@@ -36,6 +37,7 @@ endpoints. You can use either `#*` as the prefix or `#'`, but we
 recommend the former since `#'` will collide with `roxygen2`.
 
 ``` r
+
 library(plumber)
 # 'plumber.R' is the location of the file shown above
 pr("plumber.R") %>%
@@ -71,6 +73,7 @@ You can install the latest stable version from CRAN using the following
 command:
 
 ``` r
+
 install.packages("plumber")
 ```
 
@@ -78,6 +81,7 @@ If you want to try out the latest development version, you can install
 it from GitHub.
 
 ``` r
+
 pak::pkg_install("rstudio/plumber")
 library(plumber)
 ```

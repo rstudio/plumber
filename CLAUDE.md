@@ -17,6 +17,7 @@ built-in Swagger UI.
 ### Package Development
 
 ``` r
+
 # Install development version
 pak::pkg_install("rstudio/plumber")
 
@@ -42,6 +43,7 @@ testthat::test_file("tests/testthat/test-plumber.R", filter = "routing")
 ### Running Example APIs
 
 ``` r
+
 # Run an example API from inst/plumber/
 pr("inst/plumber/10-welcome/plumber.R") %>% pr_run(port = 8000)
 
@@ -190,6 +192,7 @@ Built on the `promises` package for non-blocking execution:
 Regex-based path matching with type conversion:
 
 ``` r
+
 #* @get /users/<id:int>
 #* @get /files/<name:string>
 #* @get /data/<vals:[int]>     # Array of integers
@@ -276,6 +279,7 @@ Use `make_req()` from
 to create test requests:
 
 ``` r
+
 req <- make_req(verb = "POST", path = "/api/data", qs = "param=value", body = '{"key":"value"}')
 ```
 
@@ -299,6 +303,7 @@ Plumber supports both annotation-based and programmatic API definition:
 **Annotation-based (declarative):**
 
 ``` r
+
 #* @get /hello
 function(name = "world") {
   list(message = paste("Hello", name))
@@ -308,6 +313,7 @@ function(name = "world") {
 **Programmatic (imperative):**
 
 ``` r
+
 pr() %>%
   pr_get("/hello", function(name = "world") {
     list(message = paste("Hello", name))
@@ -322,6 +328,7 @@ programmatic for dynamic construction.
 Complex APIs can be composed from multiple routers:
 
 ``` r
+
 root <- pr()
 users_api <- pr("apis/users.R")
 products_api <- pr("apis/products.R")
@@ -341,6 +348,7 @@ For APIs requiring initialization, use `entrypoint.R` that returns a
 configured router:
 
 ``` r
+
 # inst/plumber/12-entrypoint/entrypoint.R
 function(port = 8000) {
   pr("plumber.R") %>%
@@ -385,6 +393,7 @@ Annotations are parsed top-to-bottom. Place route-modifying annotations
 before the HTTP verb:
 
 ``` r
+
 #* @serializer json     # ✓ Correct order
 #* @get /data
 ```
@@ -392,6 +401,7 @@ before the HTTP verb:
 Not:
 
 ``` r
+
 #* @get /data
 #* @serializer json     # ✗ Won't apply to this endpoint
 ```
@@ -403,6 +413,7 @@ Filters MUST call
 the pipeline:
 
 ``` r
+
 #* @filter logger
 function(req) {
   log(req$PATH_INFO)
@@ -415,6 +426,7 @@ function(req) {
 Extract path params with type conversion:
 
 ``` r
+
 #* @get /users/<id:int>    # ✓ Type specified
 function(id) {
   # id is already an integer

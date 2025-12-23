@@ -20,7 +20,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/rstudio/plumber/blob/rc-v1.3.2/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/rstudio/plumber/blob/main/DESCRIPTION)
 
 Schloerke B, Allen J (2025). *plumber: An API Generator for R*. R
 package version 1.3.2, <https://www.rplumber.io>.

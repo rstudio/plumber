@@ -117,6 +117,7 @@ R -e "rmarkdown::render('vignettes/quickstart.Rmd')"
 1.  **Basic Package Loading**: Verify the package loads without errors
 
     ``` r
+
     library(plumber)
     # Should load successfully with all dependencies
     ```
@@ -124,6 +125,7 @@ R -e "rmarkdown::render('vignettes/quickstart.Rmd')"
 2.  **Basic API Creation**: Test core plumber functionality
 
     ``` r
+
     library(plumber)
     pr <- pr()
     pr %>%
@@ -136,6 +138,7 @@ R -e "rmarkdown::render('vignettes/quickstart.Rmd')"
 3.  **Annotation Parsing**: Test that annotation-based APIs work
 
     ``` r
+
     library(plumber)
     pr("inst/plumber/01-append/plumber.R")
     # Should parse without errors
@@ -144,6 +147,7 @@ R -e "rmarkdown::render('vignettes/quickstart.Rmd')"
 4.  **Serialization**: Verify core serializers work
 
     ``` r
+
     library(plumber)
     pr() %>%
       pr_get("/json", function() list(data = 1:5), serializer = serializer_json()) %>%
@@ -154,6 +158,7 @@ R -e "rmarkdown::render('vignettes/quickstart.Rmd')"
 5.  **Integration Testing**: Verify core dependencies work together
 
     ``` r
+
     library(httpuv)
     library(jsonlite)
     library(plumber)
@@ -258,6 +263,7 @@ The package uses RStudio’s shiny-workflows for CI/CD
 1.  **Annotation-based** (recommended for file-based APIs):
 
     ``` r
+
     #* Description of endpoint
     #* @get /path
     #* @serializer json
@@ -269,6 +275,7 @@ The package uses RStudio’s shiny-workflows for CI/CD
 2.  **Programmatic** (recommended for dynamic APIs):
 
     ``` r
+
     pr() %>%
       pr_get("/path", function(param1, param2) {
         # Implementation
@@ -359,6 +366,7 @@ Annotations are parsed by `plumbBlock()` in `R/plumb-block.R`:
 HTTP verb:
 
 ``` r
+
 #* @serializer json     # ✓ Correct order
 #* @get /data
 ```
@@ -404,6 +412,7 @@ A common mistake is forgetting to call
 [`forward()`](https://www.rplumber.io/reference/forward.md) in filters:
 
 ``` r
+
 #* @filter logger
 function(req) {
   log(req$PATH_INFO)
