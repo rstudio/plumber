@@ -1,4 +1,9 @@
-# plumber (development version)
+# plumber 1.3.2
+
+## Bug fixes and minor improvements
+
+* R Markdown include tests now use more robust HTML pattern matching for
+  image source attributes (#1012).
 
 # plumber 1.3.1
 
