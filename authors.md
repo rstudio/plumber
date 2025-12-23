@@ -23,12 +23,12 @@ Source:
 [`DESCRIPTION`](https://github.com/rstudio/plumber/blob/main/DESCRIPTION)
 
 Schloerke B, Allen J (2025). *plumber: An API Generator for R*. R
-package version 1.3.2, <https://www.rplumber.io>.
+package version 1.3.2.9000, <https://www.rplumber.io>.
 
     @Manual{,
       title = {plumber: An API Generator for R},
       author = {Barret Schloerke and Jeff Allen},
       year = {2025},
-      note = {R package version 1.3.2},
+      note = {R package version 1.3.2.9000},
       url = {https://www.rplumber.io},
     }
