@@ -69,7 +69,7 @@ print(serializer_json)
 #>         toJSON(val, ...)
 #>     })
 #> }
-#> <bytecode: 0x56310ce52a58>
+#> <bytecode: 0x5594c8e56168>
 #> <environment: namespace:plumber>
 # serializer_content_type() calls `serializer_headers()` and supplies a serialization function
 print(serializer_content_type)
@@ -83,6 +83,6 @@ print(serializer_content_type)
 #>     stopifnot(nchar(type) > 0)
 #>     serializer_headers(list(`Content-Type` = type), serialize_fn)
 #> }
-#> <bytecode: 0x56310ce40080>
+#> <bytecode: 0x5594c8e48360>
 #> <environment: namespace:plumber>
 ```
