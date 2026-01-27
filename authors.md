@@ -20,15 +20,15 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/rstudio/plumber/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/rstudio/plumber/blob/rc-v1.3.3/DESCRIPTION)
 
-Schloerke B, Allen J (2025). *plumber: An API Generator for R*. R
+Schloerke B, Allen J (2026). *plumber: An API Generator for R*. R
 package version 1.3.2.9000, <https://www.rplumber.io>.
 
     @Manual{,
       title = {plumber: An API Generator for R},
       author = {Barret Schloerke and Jeff Allen},
-      year = {2025},
+      year = {2026},
       note = {R package version 1.3.2.9000},
       url = {https://www.rplumber.io},
     }
