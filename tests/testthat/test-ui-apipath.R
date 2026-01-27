@@ -176,7 +176,7 @@ test_that("swagger_redirects respects plumber.apiPath option", {
       # Test with default (empty) apiPath
       redirects <- swagger_redirects()
       expect_true("/__swagger__/" %in% names(redirects))
-      expect_equal(redirects[["/__swagger__/"]]$route, "/__docs__/")
+      expect_equal(redirects[["/__swagger__/"]]$route, "../__docs__/")
     }
   )
 
@@ -188,9 +188,11 @@ test_that("swagger_redirects respects plumber.apiPath option", {
     ),
     {
       redirects <- swagger_redirects()
-      expect_true("/__swagger__/" %in% names(redirects))
-      expect_equal(redirects[["/__swagger__/"]]$route, "/api/v1/__docs__/")
-      expect_equal(redirects[["/__swagger__/index.html"]]$route, "/api/v1/__docs__/index.html")
+      # With apiPath, redirect keys include the prefix
+      expect_true("/api/v1/__swagger__/" %in% names(redirects))
+      # Targets use relative paths
+      expect_equal(redirects[["/api/v1/__swagger__/"]]$route, "../__docs__/")
+      expect_equal(redirects[["/api/v1/__swagger__/index.html"]]$route, "../__docs__/index.html")
     }
   )
 })

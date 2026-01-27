@@ -293,10 +293,17 @@ swagger_redirects <- function() {
   }
 
   path <- get_option_or_env("plumber.apiPath", "")
-  list(
-    "/__swagger__/" = to_route(paste0(path, "/__docs__/")),
-    "/__swagger__/index.html"  = to_route(paste0(path, "/__docs__/index.html"))
-  )
+  # The swagger UI should exist at the `<API_PATH>/__swagger__/` path
+  # which should redirect to a sibling `__docs__/` path
+  swagger_base <- paste0(path, "/__swagger__/")
+
+  ret <- list()
+  ret[[swagger_base]] <-
+    to_route("../__docs__/")
+  ret[[paste0(swagger_base, "index.html")]] <-
+    to_route("../__docs__/index.html")
+
+  ret
 }
 
 
