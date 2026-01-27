@@ -3,7 +3,6 @@
 # Mount OpenAPI and Docs
 #' @noRd
 mount_docs <- function(pr, host, port, docs_info, callback, quiet = FALSE) {
-
   # return early if not enabled
   if (!isTRUE(docs_info$enabled)) {
     return()
@@ -14,9 +13,9 @@ mount_docs <- function(pr, host, port, docs_info, callback, quiet = FALSE) {
     "plumber.apiURL",
     urlHost(
       scheme = get_option_or_env("plumber.apiScheme", "http"),
-      host   = get_option_or_env("plumber.apiHost", host),
-      port   = get_option_or_env("plumber.apiPort", port),
-      path   = get_option_or_env("plumber.apiPath", ""),
+      host = get_option_or_env("plumber.apiHost", host),
+      port = get_option_or_env("plumber.apiPort", port),
+      path = get_option_or_env("plumber.apiPath", ""),
       changeHostLocation = TRUE
     )
   )
@@ -27,7 +26,9 @@ mount_docs <- function(pr, host, port, docs_info, callback, quiet = FALSE) {
   # Mount Docs
   if (length(registered_docs()) == 0) {
     if (!isTRUE(quiet)) {
-      message("No visual documentation options registered. See help(register_docs).")
+      message(
+        "No visual documentation options registered. See help(register_docs)."
+      )
     }
     return()
   }
@@ -48,7 +49,6 @@ mount_docs <- function(pr, host, port, docs_info, callback, quiet = FALSE) {
   }
 
   invisible()
-
 }
 
 # Check is Docs is available
@@ -57,7 +57,7 @@ is_docs_available <- function(docs) {
   if (isTRUE(docs %in% registered_docs())) {
     return(TRUE)
   } else {
-    message("Unknown docs \"", docs,"\". Maybe try library(", docs,").")
+    message("Unknown docs \"", docs, "\". Maybe try library(", docs, ").")
     return(FALSE)
   }
 }
@@ -65,7 +65,6 @@ is_docs_available <- function(docs) {
 # Unmount OpenAPI and Docs
 #' @noRd
 unmount_docs <- function(pr, docs_info) {
-
   # return early if not enabled
   if (!isTRUE(docs_info$enabled)) {
     return()
@@ -84,20 +83,20 @@ unmount_docs <- function(pr, docs_info) {
 #' Mount OpenAPI Specification to a plumber router
 #' @noRd
 mount_openapi <- function(pr, api_url) {
-
   spec <- pr$getApiSpec()
 
   # Create a function that's hardcoded to return the OpenAPI specification -- regardless of env.
   openapi_fun <- function(req) {
     # use the HTTP_REFERER so RSC can find the Docs location to ask
     ## (can't directly ask for 127.0.0.1)
-    if (is.null(get_option_or_env("plumber.apiURL")) &&
-        is.null(get_option_or_env("plumber.apiHost"))) {
+    if (
+      is.null(get_option_or_env("plumber.apiURL")) &&
+        is.null(get_option_or_env("plumber.apiHost"))
+    ) {
       if (is.null(req$HTTP_REFERER)) {
         # Prevent leaking host and port if option is not set
         api_url <- character(1)
-      }
-      else {
+      } else {
         # Use HTTP_REFERER as fallback
         api_url <- req$HTTP_REFERER
         api_url <- sub("(\\?.*)?$", "", api_url)
@@ -107,18 +106,28 @@ mount_openapi <- function(pr, api_url) {
     }
 
     utils::modifyList(list(servers = list(list(url = api_url))), spec)
-
   }
   # http://spec.openapis.org/oas/v3.0.3#document-structure
   # "It is RECOMMENDED that the root OpenAPI document be named: openapi.json"
-  openapi_json_path <- paste0(get_option_or_env("plumber.apiPath", ""), "/openapi.json")
+  # `plumber.apiPath` option is for the UI of the docs, not internal routing. Do not use it.
+  openapi_json_path <- paste0(
+    get_option_or_env("plumber.apiPath", ""),
+    "/openapi.json"
+  )
   for (ep in pr$endpoints[["__no-preempt__"]]) {
     if (ep$path == openapi_json_path) {
-      message("Overwritting existing `/openapi.json` route. Use `$setApiSpec()` to define your OpenAPI Spec")
+      message(
+        "Overwritting existing `/openapi.json` route. Use `$setApiSpec()` to define your OpenAPI Spec"
+      )
       break
     }
   }
-  pr$handle("GET", openapi_json_path, openapi_fun, serializer = serializer_unboxed_json())
+  pr$handle(
+    "GET",
+    openapi_json_path,
+    openapi_fun,
+    serializer = serializer_unboxed_json()
+  )
 
   invisible()
 }
@@ -179,11 +188,12 @@ unmount_openapi <- function(pr) {
 #' }
 #' @rdname register_docs
 register_docs <- function(name, index, static = NULL) {
-
   stopifnot(is.character(name) && length(name) == 1L)
   stopifnot(grepl("^[a-zA-Z0-9_]+$", name))
   stopifnot(is.function(index))
-  if (!is.null(static)) stopifnot(is.function(static))
+  if (!is.null(static)) {
+    stopifnot(is.function(static))
+  }
 
   docs_root <- "/__docs__/"
   docs_paths <- c("/index.html", "/")
@@ -201,7 +211,12 @@ register_docs <- function(name, index, static = NULL) {
 
     docs_router <- Plumber$new()
     for (path in docs_paths) {
-      docs_router$handle("GET", path, docs_index, serializer = serializer_html())
+      docs_router$handle(
+        "GET",
+        path,
+        docs_index,
+        serializer = serializer_html()
+      )
     }
     if (!is.null(static)) {
       docs_router$mount("/", PlumberStatic$new(static(...)))
@@ -221,7 +236,11 @@ register_docs <- function(name, index, static = NULL) {
     redirect_info <- swagger_redirects()
     for (path in names(redirect_info)) {
       if (router_has_route(pr, path, "GET")) {
-        message("Overwriting existing GET endpoint: ", path, ". Disable by setting `options_plumber(legacyRedirects = FALSE)`")
+        message(
+          "Overwriting existing GET endpoint: ",
+          path,
+          ". Disable by setting `options_plumber(legacyRedirects = FALSE)`"
+        )
       }
       pr_get(pr, path, redirect_info[[path]]$handler)
     }
@@ -274,18 +293,28 @@ swagger_redirects <- function() {
   }
 
   path <- get_option_or_env("plumber.apiPath", "")
-  list(
-    "/__swagger__/" = to_route(paste0(path, "/__docs__/")),
-    "/__swagger__/index.html"  = to_route(paste0(path, "/__docs__/index.html"))
-  )
+  # The swagger UI should exist at the `<API_PATH>/__swagger__/` path
+  # which should redirect to a sibling `__docs__/` path
+  swagger_base <- paste0(path, "/__swagger__/")
+
+  ret <- list()
+  ret[[swagger_base]] <-
+    to_route("../__docs__/")
+  ret[[paste0(swagger_base, "index.html")]] <-
+    to_route("../__docs__/index.html")
+
+  ret
 }
 
 
 register_swagger_docs_onLoad <- function() {
-  tryCatch({
-    do.call(register_docs, swagger::plumber_docs())
-  }, error = function(e) {
-    message("Could not register `swagger` docs. ", e)
-    NULL
-  })
+  tryCatch(
+    {
+      do.call(register_docs, swagger::plumber_docs())
+    },
+    error = function(e) {
+      message("Could not register `swagger` docs. ", e)
+      NULL
+    }
+  )
 }
