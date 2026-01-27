@@ -2,8 +2,8 @@
 
 ## Bug fixes and minor improvements
 
-* Swagger redirects (`/__swagger__/` → `/__docs__/`) now use relative paths
-  instead of absolute paths, ensuring compatibility with various hosting
+* Swagger documentation redirects from `/__swagger__/` to `/__docs__/` now
+  use relative paths, ensuring compatibility with various hosting
   environments including RStudio Connect (#1016, #1018).
 
 # plumber 1.3.2
