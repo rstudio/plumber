@@ -1,6 +1,10 @@
 # Changelog
 
+## plumber (development version)
+
 ## plumber 1.3.3
+
+CRAN release: 2026-01-28
 
 ### Bug fixes and minor improvements
 
