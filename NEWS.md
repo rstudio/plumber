@@ -1,4 +1,10 @@
-# plumber (development version)
+# plumber 1.3.3
+
+## Bug fixes and minor improvements
+
+* Swagger documentation redirects from `/__swagger__/` to `/__docs__/` now
+  use relative paths, ensuring compatibility with various hosting
+  environments including RStudio Connect (#1016, #1018).
 
 # plumber 1.3.2
 
