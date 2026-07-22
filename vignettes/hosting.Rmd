@@ -23,6 +23,19 @@ Once you have developed your Plumber API, the next step is to find a way to host
 
 For these reasons and more, you should consider setting up a separate server on which you can host your Plumber APIs. There are a variety of options that you can consider.
 
+## `_server.yml`
+
+Hosting platforms that implement the [`_server.yml` standard](https://plumber2.posit.co/articles/server_yml.html) can launch a Plumber API from this file at the application root:
+
+```yaml
+engine: plumber
+```
+
+Place `plumber.R` in the same directory. Alternatively, use an `entrypoint.R`
+file that returns a Plumber router. The hosting platform supplies the network
+host and port when it starts the API. If the application has no root `GET`
+route, Plumber redirects the application root to its visual documentation.
+
 ## Posit Connect {#posit-connect}
 
 [Posit Connect](https://posit.co/products/enterprise/connect/) is an enterprise publishing platform from Posit. It supports push-button publishing from the RStudio IDE of a variety of R content types including Plumber APIs. Unlike all the other options listed here, Posit Connect automatically manages the dependent packages and files your API has and recreates an environment closely mimicking your local development environment on the server.

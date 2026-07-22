@@ -1,5 +1,9 @@
 # plumber (development version)
 
+* Plumber can now serve `_server.yml` applications through its internal
+  server-engine entry point. Applications without a root route redirect to
+  their visual documentation (#1017).
+
 # plumber 1.3.3
 
 ## Bug fixes and minor improvements
