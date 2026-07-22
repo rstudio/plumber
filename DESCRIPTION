@@ -96,6 +96,7 @@ Collate:
     'pr.R'
     'pr_set.R'
     'serializer.R'
+    'server-yml.R'
     'session-cookie.R'
     'ui.R'
     'utf8.R'
